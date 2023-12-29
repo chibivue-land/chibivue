@@ -14,7 +14,7 @@ import {
   setText,
   on,
   createComponent,
-} from "chibivue";
+} from "@chibivue/runtime-vapor";
 
 // @ts-ignore
 import Counter from "./Counter.vue";
@@ -24,7 +24,7 @@ const t0 = () => template('<div><button id="btn-on-vapor">');
 const t1 = () =>
   template('<button id="parent-count-incrementor">parent-count-incrementor');
 
-export default ((self) => {
+export default ((self: any) => {
   /*
    *
    * compiled from scripts

@@ -39,7 +39,7 @@
     "examples/**/**.vue",
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "./**/node_modules",
+    "./**/dist"
   ]
 }
