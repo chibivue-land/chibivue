@@ -125,9 +125,9 @@ parse 関数では template の文字列をこの AST に変換するような�
 ## 本格的なパーサの実装
 
 ::: warning
-2023 年 11 月下旬に vuejs/core で [大規模なリファクタリング](https://github.com/vuejs/core/pull/9674) が行われました。  
-現在は vuejs/core の [ minor ブランチ](https://github.com/vuejs/core/tree/minor/packages/compiler-core) にマージされており、近いうちに main ブランチに取り込まれるでしょう。  
-このオンラインブックはそのリファクタリング以前の実装を参考にしていることに注意しくてださい。  
+2023 年 11 月下旬に vuejs/core で [パフォーマンス改善のための大規模なリライト](https://github.com/vuejs/core/pull/9674) が行われました。  
+これらは 2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) としてリリースされました。
+このオンラインブックはそのリライト以前の実装を参考にしていることに注意しくてださい。  
 然るべきタイミングでこのオンラインブックも追従する予定です。  
 :::
 

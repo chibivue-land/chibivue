@@ -126,10 +126,10 @@ In the parse function, we will implement the conversion of the template string i
 ## Implementation of a full-fledged parser
 
 ::: warning
-A major refactoring was conducted in late November 2023 in vuejs/core. You can find the details of the refactoring in this [pull request](https://github.com/vuejs/core/pull/9674).  
-Currently, it has been merged into the [minor branch of vuejs/core](https://github.com/vuejs/core/tree/minor/packages/compiler-core) and will soon be incorporated into the main branch.  
-Please note that this online book is referencing the implementation prior to this refactoring.  
-We plan to update this online book accordingly at the appropriate time.  
+In late November 2023, a major rewrite for performance improvement was conducted in [vuejs/core#9674](https://github.com/vuejs/core/pull/9674).   
+These changes were released as [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) in late December 2023.   
+Please note that this online book refers to the implementation prior to this rewrite.   
+We plan to update this online book accordingly at the appropriate timing.
 :::
 
 Implement it in `~/packages/compiler-core/parse.ts`.
