@@ -1,5 +1,11 @@
 # Effect Cleanup and Effect Scope
 
+::: warning
+[Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) was released at the end of December 2023, which includes [performance improvements for reactivity](https://github.com/vuejs/core/pull/5912).  
+You should note that this online book is referencing the previous implementation.  
+We plan to update this online book at the appropriate time.
+:::
+
 ## Cleanup of ReactiveEffect
 
 We haven't been cleaning up the effects we registered so far. Let's add cleanup processing to ReactiveEffect.

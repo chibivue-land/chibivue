@@ -196,6 +196,13 @@ This is the extent of understanding Proxy.
 
 ## Trying to achieve Reactivity System with Proxy
 
+::: warning
+[Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) was released at the end of December 2023, which includes [improvements to reactivity performance](https://github.com/vuejs/core/pull/5912).  
+You should note that this online book is referencing the previous implementation.  
+There are no major changes in this chapter, but the file structure may be slightly different and some code may have been modified.  
+This online book will be updated accordingly at the appropriate time.
+:::
+
 To clarify the purpose again, the purpose this time is to "execute `updateComponent` when the state is changed". Let me explain the implementation process using Proxy.
 
 First, Vue.js's Reactivity System involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect`.
