@@ -1,4 +1,11 @@
-import { Identifier, Node, Function } from "@babel/types";
+import {
+  Identifier,
+  ImportDefaultSpecifier,
+  ImportNamespaceSpecifier,
+  ImportSpecifier,
+  Function,
+  Node,
+} from "@babel/types";
 
 import { walk } from "estree-walker";
 
@@ -105,6 +112,17 @@ function markScopeIdentifier(
 export const isFunctionType = (node: Node): node is Function => {
   return /Function(?:Expression|Declaration)$|Method$/.test(node.type);
 };
+
+export function getImportedName(
+  specifier: ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+) {
+  if (specifier.type === "ImportSpecifier")
+    return specifier.imported.type === "Identifier"
+      ? specifier.imported.name
+      : specifier.imported.value;
+  else if (specifier.type === "ImportNamespaceSpecifier") return "*";
+  return "default";
+}
 
 export function isReferencedIdentifier(
   id: Identifier,
