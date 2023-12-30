@@ -73,7 +73,6 @@ Currently, the ReactiveEffect has the following interface (partially omitted):
 
 ```ts
 class ReactiveEffect {
-  deps: Dep[] = [];
   public fn: () => T,
 
   run() {}
@@ -83,7 +82,7 @@ class ReactiveEffect {
 With the implementation of the scheduler, let's make a slight change.  
 Currently, we register a function to `fn` as an effect, but this time, let's divide it into "actively executed effects" and "passively executed effects".  
 Reactive effects can be actively executed by the side that sets the effect, or they can be passively executed by being triggered by some external action after being added to a dependency (`dep`).  
-For the latter type of effect, which is added to multiple `deps` and triggered by multiple sources, scheduling is necessary (on the other hand, if it is explicitly called actively, such scheduling is not necessary).
+For the latter type of effect, which is added to multiple `depsMap` and triggered by multiple sources, scheduling is necessary (on the other hand, if it is explicitly called actively, such scheduling is not necessary).
 
 Let's consider a specific example. In the `setupRenderEffect` function of the renderer, you may have the following implementation:
 
@@ -116,7 +115,6 @@ In terms of implementation, in addition to `fn`, the `ReactiveEffect` will have 
 export type EffectScheduler = (...args: any[]) => any;
 
 export class ReactiveEffect<T = any> {
-  public deps: Dep[] = [];
   constructor(
     public fn: () => T,
     public scheduler: EffectScheduler | null = null

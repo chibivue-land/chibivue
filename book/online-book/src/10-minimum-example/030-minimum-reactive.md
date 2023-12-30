@@ -449,7 +449,6 @@ const targetMap = new WeakMap<any, KeyToDepMap>();
 export let activeEffect: ReactiveEffect | undefined;
 
 export class ReactiveEffect<T = any> {
-  public deps: Dep[] = [];
   constructor(public fn: () => T) {}
 
   run() {
@@ -476,7 +475,6 @@ export function track(target: object, key: unknown) {
 
   if (activeEffect) {
     dep.add(activeEffect);
-    activeEffect.deps.push(dep);
   }
 }
 

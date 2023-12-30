@@ -21,24 +21,12 @@ export class ReactiveEffect<T = any> {
   //.
   stop() {
     if (this.active) {
-      cleanupEffect(this);
       this.active = false;
     }
   }
 }
-
-function cleanupEffect(effect: ReactiveEffect) {
-  const { deps } = effect;
-  if (deps.length) {
-    for (let i = 0; i < deps.length; i++) {
-      deps[i].delete(effect);
-    }
-    deps.length = 0;
-  }
-}
 ```
 
-基本的な実装はこれで終わりで、stop メソッドが実行されたときに deps を全て削除してあげれば良いわけです。  
 ついでに、cleanUp 時に行いたい処理を登録できるような hooks の実装と、activeEffect が自身だった場合のハンドリングを追加しておきます。
 
 ```ts

@@ -8,7 +8,6 @@ export let activeEffect: ReactiveEffect | undefined;
 export type EffectScheduler = (...args: any[]) => any;
 
 export class ReactiveEffect<T = any> {
-  public deps: Dep[] = [];
   constructor(
     public fn: () => T,
     public scheduler: EffectScheduler | null = null
@@ -36,7 +35,6 @@ export function track(target: object, key: unknown) {
 
   if (activeEffect) {
     dep.add(activeEffect);
-    activeEffect.deps.push(dep);
   }
 }
 

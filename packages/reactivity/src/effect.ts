@@ -14,7 +14,6 @@ export const ITERATE_KEY = Symbol();
 
 export class ReactiveEffect<T = any> {
   active = true;
-  deps: Dep[] = [];
   parent: ReactiveEffect | undefined = undefined;
   computed?: ComputedRefImpl<T>;
 
@@ -52,22 +51,11 @@ export class ReactiveEffect<T = any> {
     if (activeEffect === this) {
       this.deferStop = true;
     } else if (this.active) {
-      cleanupEffect(this);
       if (this.onStop) {
         this.onStop();
       }
       this.active = false;
     }
-  }
-}
-
-function cleanupEffect(effect: ReactiveEffect) {
-  const { deps } = effect;
-  if (deps.length) {
-    for (let i = 0; i < deps.length; i++) {
-      deps[i].delete(effect);
-    }
-    deps.length = 0;
   }
 }
 
@@ -88,7 +76,6 @@ export function track(target: object, key: unknown) {
 export function trackEffects(dep: Dep) {
   if (activeEffect) {
     dep.add(activeEffect);
-    activeEffect.deps.push(dep);
   }
 }
 
