@@ -1,6 +1,6 @@
 import { parse } from "@babel/parser";
 import { Identifier, Node } from "@babel/types";
-import { makeMap } from "@chibivue/shared";
+import { genPropsAccessExp, hasOwn, makeMap } from "@chibivue/shared";
 
 import {
   NodeTypes,
@@ -13,6 +13,8 @@ import {
 import { walkIdentifiers } from "../babelUtils";
 import { NodeTransform, TransformContext } from "../transform";
 import { advancePositionWithClone, isSimpleIdentifier } from "../utils";
+import { BindingTypes } from "../options";
+import { UNREF } from "../runtimeHelpers";
 
 const isLiteralWhitelisted = makeMap("true,false,null,this");
 
@@ -56,7 +58,33 @@ export function processExpression(
 
   const rawExp = node.content;
 
-  const rewriteIdentifier = (raw: string) => {
+  const { inline, bindingMetadata } = ctx;
+
+  const rewriteIdentifier = (raw: string, parent?: Node, id?: Identifier) => {
+    const type = hasOwn(bindingMetadata, raw) && bindingMetadata[raw];
+    // x = y
+    const isAssignmentLVal =
+      parent && parent.type === "AssignmentExpression" && parent.left === id;
+    // x++
+    const isUpdateArg =
+      parent && parent.type === "UpdateExpression" && parent.argument === id;
+
+    if (inline) {
+      if (type === BindingTypes.SETUP_CONST) {
+        return raw;
+      } else if (type === BindingTypes.SETUP_REACTIVE_CONST) {
+        return raw;
+      } else if (type === BindingTypes.SETUP_REF) {
+        return `${raw}.value`;
+      } else if (type === BindingTypes.SETUP_MAYBE_REF) {
+        return isAssignmentLVal || isUpdateArg
+          ? `${raw}.value`
+          : `${ctx.helperString(UNREF)}(${raw})`;
+      } else if (type === BindingTypes.PROPS) {
+        return genPropsAccessExp(raw);
+      }
+    }
+
     return `_ctx.${raw}`;
   };
 

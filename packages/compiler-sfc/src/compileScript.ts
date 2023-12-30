@@ -30,7 +30,14 @@ export interface ImportBinding {
   isFromSetup: boolean;
 }
 
-export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
+export interface SFCScriptCompileOptions {
+  inlineTemplate?: boolean;
+}
+
+export function compileScript(
+  sfc: SFCDescriptor,
+  options: SFCScriptCompileOptions
+): SFCScriptBlock {
   let { script, scriptSetup, source } = sfc;
 
   // prettier-ignore
@@ -366,18 +373,20 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
 
   // 10. generate return statement
   let returned;
-  if (sfc.template) {
-    const { code, preamble } = compileTemplate({
-      source: sfc.template.content.trim(),
-      compilerOptions: { inline: true, bindingMetadata },
-    });
+  if (options.inlineTemplate) {
+    if (sfc.template) {
+      const { code, preamble } = compileTemplate({
+        source: sfc.template.content.trim(),
+        compilerOptions: { inline: true, bindingMetadata },
+      });
 
-    if (preamble) {
-      s.prepend(preamble);
+      if (preamble) {
+        s.prepend(preamble);
+      }
+      returned = code;
+    } else {
+      returned = `() => {}`;
     }
-    returned = code;
-  } else {
-    returned = `() => {}`;
   }
   s.appendRight(endOffset, `\nreturn ${returned}\n`);
 

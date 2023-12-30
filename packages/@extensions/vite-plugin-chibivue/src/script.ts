@@ -7,7 +7,9 @@ export function resolveScript(
 ): SFCScriptBlock | null {
   if (!descriptor.script && !descriptor.scriptSetup) return null;
   let resolved: SFCScriptBlock | null = null;
-  resolved = options.compiler.compileScript(descriptor);
+  resolved = options.compiler.compileScript(descriptor, {
+    inlineTemplate: isUseInlineTemplate(descriptor),
+  });
   return resolved;
 }
 

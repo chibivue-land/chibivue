@@ -39,6 +39,7 @@ export const transformFor = createStructuralDirectiveTransform(
       ) as ForCodegenNode;
 
       return () => {
+        // finish the codegen now that all children have been traversed
         const { children } = forNode;
         const childBlock = (children[0] as ElementNode)
           .codegenNode as VNodeCall;
@@ -66,8 +67,9 @@ export function processFor(
     context
   );
 
-  const { addIdentifiers, removeIdentifiers } = context;
+  const { addIdentifiers, removeIdentifiers, scopes } = context;
 
+  // TODO: error handling when parseResult is undefined
   const { source, value, key, index } = parseResult!;
 
   const forNode: ForNode = {
@@ -82,15 +84,18 @@ export function processFor(
 
   context.replaceNode(forNode);
 
-  if (!context.isBrowser) {
-    value && addIdentifiers(value);
-    key && addIdentifiers(key);
-    index && addIdentifiers(index);
-  }
+  // bookkeeping
+  scopes.vFor++;
+  // scope management
+  // inject identifiers to context
+  value && addIdentifiers(value);
+  key && addIdentifiers(key);
+  index && addIdentifiers(index);
 
   const onExit = processCodegen && processCodegen(forNode);
 
   return () => {
+    scopes.vFor--;
     value && removeIdentifiers(value);
     key && removeIdentifiers(key);
     index && removeIdentifiers(index);
@@ -132,12 +137,10 @@ export function parseForExpression(
     index: undefined,
   };
 
-  if (!context.isBrowser) {
-    result.source = processExpression(
-      result.source as SimpleExpressionNode,
-      context
-    );
-  }
+  result.source = processExpression(
+    result.source as SimpleExpressionNode,
+    context
+  );
 
   let valueContent = LHS.trim().replace(stripParensRE, "").trim();
   const iteratorMatch = valueContent.match(forIteratorRE);
@@ -150,9 +153,6 @@ export function parseForExpression(
     if (keyContent) {
       keyOffset = exp.indexOf(keyContent, trimmedOffset + valueContent.length);
       result.key = createAliasExpression(loc, keyContent, keyOffset);
-      if (!context.isBrowser) {
-        result.key = processExpression(result.key, context, true);
-      }
     }
 
     if (iteratorMatch[2]) {
@@ -168,17 +168,11 @@ export function parseForExpression(
               : trimmedOffset + valueContent.length
           )
         );
-        if (!context.isBrowser) {
-          result.index = processExpression(result.index, context, true);
-        }
       }
     }
-  }
 
-  if (valueContent) {
-    result.value = createAliasExpression(loc, valueContent, trimmedOffset);
-    if (!context.isBrowser) {
-      result.value = processExpression(result.value, context, true);
+    if (valueContent) {
+      result.value = createAliasExpression(loc, valueContent, trimmedOffset);
     }
   }
 

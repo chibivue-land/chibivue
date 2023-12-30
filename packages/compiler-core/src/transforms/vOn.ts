@@ -22,7 +22,7 @@ export interface VOnDirectiveNode extends DirectiveNode {
 
 export const transformOn: DirectiveTransform = (
   dir,
-  node,
+  _node,
   context,
   augmentor
 ) => {
@@ -78,6 +78,10 @@ export const transformOn: DirectiveTransform = (
       ),
     ],
   };
+
+  if (augmentor) {
+    ret = augmentor(ret);
+  }
 
   return ret;
 };
