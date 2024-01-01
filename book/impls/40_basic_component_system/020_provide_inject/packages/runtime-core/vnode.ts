@@ -1,5 +1,5 @@
 import { Ref } from "../reactivity";
-import { isObject, isString } from "../shared";
+import { isArray, isObject, isString } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { AppContext } from "./apiCreateApp";
 import { ComponentInternalInstance } from "./component";
@@ -56,6 +56,7 @@ export function createVNode(
     shapeFlag,
     appContext: null,
   };
+  normalizeChildren(vnode, children);
   return vnode;
 }
 
@@ -65,6 +66,20 @@ export function normalizeVNode(child: VNodeChild): VNode {
   } else {
     return createVNode(Text, null, String(child));
   }
+}
+
+export function normalizeChildren(vnode: VNode, children: unknown) {
+  let type = 0;
+  if (children == null) {
+    children = null;
+  } else if (isArray(children)) {
+    type = ShapeFlags.ARRAY_CHILDREN;
+  } else {
+    children = String(children);
+    type = ShapeFlags.TEXT_CHILDREN;
+  }
+  vnode.children = children as VNodeNormalizedChildren;
+  vnode.shapeFlag |= type;
 }
 
 export function isSameVNodeType(n1: VNode, n2: VNode): boolean {
