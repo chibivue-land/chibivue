@@ -1,4 +1,4 @@
-import { isArray } from "@chibivue/shared";
+import { isArray, isIntegerKey } from "@chibivue/shared";
 import { ComputedRefImpl } from "./computed";
 import { type Dep, createDep } from "./dep";
 import { type EffectScope, recordEffectScope } from "./effectScope";
@@ -60,6 +60,7 @@ export class ReactiveEffect<T = any> {
 }
 
 export function track(target: object, key: unknown) {
+  console.log("🚀 ~ file: effect.ts:63 ~ track ~ key:", key);
   let depsMap = targetMap.get(target);
   if (!depsMap) {
     targetMap.set(target, (depsMap = new Map()));
@@ -88,8 +89,16 @@ export function trigger(target: object, key?: unknown) {
     deps.push(depsMap.get(key));
   }
 
-  if (deps.length === 1 && deps[0]) {
-    triggerEffects(deps[0]);
+  if (!isArray(target)) {
+    deps.push(depsMap.get(ITERATE_KEY));
+  } else if (isIntegerKey(key)) {
+    deps.push(depsMap.get("length"));
+  }
+
+  for (const dep of deps) {
+    if (dep) {
+      triggerEffects(dep);
+    }
   }
 }
 

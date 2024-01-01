@@ -42,6 +42,12 @@ export const toRawType = (value: unknown): string => {
 export const isPlainObject = (val: unknown): val is object =>
   toTypeString(val) === "[object Object]";
 
+export const isIntegerKey = (key: unknown) =>
+  isString(key) &&
+  key !== "NaN" &&
+  key[0] !== "-" &&
+  "" + parseInt(key, 10) === key;
+
 const camelizeRE = /-(\w)/g;
 export const camelize = (str: string): string => {
   return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ""));

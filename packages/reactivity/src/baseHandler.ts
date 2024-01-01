@@ -1,5 +1,5 @@
 import { hasChanged, isObject } from "@chibivue/shared";
-import { track, trigger } from "./effect";
+import { ITERATE_KEY, track, trigger } from "./effect";
 import {
   ReactiveFlags,
   Target,
@@ -60,7 +60,14 @@ function createSetter(shallow = false) {
   };
 }
 
-export const mutableHandlers: ProxyHandler<object> = { get, set };
+export const mutableHandlers: ProxyHandler<object> = {
+  get,
+  set,
+  ownKeys(target) {
+    track(target, ITERATE_KEY);
+    return Reflect.ownKeys(target);
+  },
+};
 
 export const readonlyHandlers: ProxyHandler<object> = {
   get: readonlyGet,

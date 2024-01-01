@@ -1,5 +1,5 @@
-import { hasChanged, isObject } from "../shared";
-import { track, trigger } from "./effect";
+import { hasChanged, isArray, isObject } from "../shared";
+import { ITERATE_KEY, track, trigger } from "./effect";
 import {
   ReactiveFlags,
   Target,
@@ -60,7 +60,14 @@ function createSetter(shallow = false) {
   };
 }
 
-export const mutableHandlers: ProxyHandler<object> = { get, set };
+export const mutableHandlers: ProxyHandler<object> = {
+  get,
+  set,
+  ownKeys(target) {
+    track(target, isArray(target) ? "length" : ITERATE_KEY);
+    return Reflect.ownKeys(target);
+  },
+};
 
 export const readonlyHandlers: ProxyHandler<object> = {
   get: readonlyGet,

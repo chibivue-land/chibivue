@@ -258,7 +258,197 @@ app.mount("#app");
 Source code up to this point:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
 
-Support for Collection-based built-in objects
+## Handling Objects with Changing Keys
+
+Actually, the current implementation cannot handle objects with changing keys.
+This includes arrays as well.
+In other words, the following components do not work correctly:
+
+```ts
+const App = {
+  setup() {
+    const array = ref<number[]>([]);
+    const mutateArray = () => {
+      array.value.push(Date.now()); // No effect is triggered even when this is called (the key for set is "0")
+    };
+
+    const record = reactive<Record<string, number>>({});
+    const mutateRecord = () => {
+      record[Date.now().toString()] = Date.now(); // No effect is triggered even when the key is changed
+    };
+
+    return () =>
+      h("div", {}, [
+        h("p", {}, [`array: ${JSON.stringify(array.value)}`]),
+        h("button", { onClick: mutateArray }, ["update array"]),
+
+        h("p", {}, [`record: ${JSON.stringify(record)}`]),
+        h("button", { onClick: mutateRecord }, ["update record"]),
+      ]);
+  },
+};
+```
+
+How can we solve this?
+
+### For Arrays
+
+Arrays are essentially objects, so when a new element is added, its index is passed as the key to the `set` handler of the Proxy.
+
+```ts
+const p = new Proxy([], {
+  set(target, key, value, receiver) {
+    console.log(key); // ※
+    Reflect.set(target, key, value, receiver);
+    return true;
+  },
+});
+
+p.push(42); // 0
+```
+
+However, we cannot track each of these keys individually.
+Therefore, we can track the `length` of the array to trigger changes in the array.
+
+It is worth noting that the `length` is already being tracked.
+
+If you execute the following code in a browser or similar environment, you will see that `length` is called when the array is stringified using `JSON.stringify`.
+
+```ts
+const data = new Proxy([], {
+  get(target, key) {
+    console.log("get!", key);
+    return Reflect.get(target, key);
+  },
+});
+
+JSON.stringify(data);
+// get! length
+// get! toJSON
+```
+
+In other words, the `length` already has an effect registered. So, all we need to do is extract this effect and trigger it when an index is set.
+
+If the key is determined to be an index, we trigger the effect of `length`.
+Of course, there may be other dependencies, so we extract them into an array called `deps` and trigger the effects together.
+
+```ts
+export function trigger(target: object, key?: unknown) {
+  const depsMap = targetMap.get(target);
+  if (!depsMap) return;
+
+  let deps: (Dep | undefined)[] = [];
+  if (key !== void 0) {
+    deps.push(depsMap.get(key));
+  }
+
+  // This
+  if (isIntegerKey(key)) {
+    deps.push(depsMap.get("length"));
+  }
+
+  for (const dep of deps) {
+    if (dep) {
+      triggerEffects(dep);
+    }
+  }
+}
+```
+
+```ts
+// shared/general.ts
+export const isIntegerKey = (key: unknown) =>
+  isString(key) &&
+  key !== "NaN" &&
+  key[0] !== "-" &&
+  "" + parseInt(key, 10) === key;
+```
+
+Now, arrays should work correctly.
+
+### For Objects (Records)
+
+Next, let's consider objects. Unlike arrays, objects do not have the `length` property.
+
+We can make a small modification here.
+We can prepare a symbol called `ITERATE_KEY` and use it in a similar way to the `length` property for arrays.
+You may not understand what I mean, but since `depsMap` is just a Map, there is no problem using a symbol that we define as a key.
+
+The order of operations is slightly different from arrays, but let's start by considering the `trigger` function.
+We can implement it as if there is a `ITERATE_KEY` with registered effects.
+
+```ts
+export const ITERATE_KEY = Symbol();
+
+export function trigger(target: object, key?: unknown) {
+  const depsMap = targetMap.get(target);
+  if (!depsMap) return;
+
+  let deps: (Dep | undefined)[] = [];
+  if (key !== void 0) {
+    deps.push(depsMap.get(key));
+  }
+
+  if (!isArray(target)) {
+    // If it is not an array, trigger the effect registered with ITERATE_KEY
+    deps.push(depsMap.get(ITERATE_KEY));
+  } else if (isIntegerKey(key)) {
+    // New index added to array -> length changes
+    deps.push(depsMap.get("length"));
+  }
+
+  for (const dep of deps) {
+    if (dep) {
+      triggerEffects(dep);
+    }
+  }
+}
+```
+
+The problem is how to track effects for `ITERATE_KEY`.
+
+Here, we can use the `ownKeys` Proxy handler.
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/ownKeys
+
+`ownKeys` is called by functions like `Object.keys()` or `Reflect.ownKeys()`, but it is also called by `JSON.stringify`.
+
+You can confirm this by running the following code in a browser or similar environment:
+
+```ts
+const data = new Proxy(
+  {},
+  {
+    get(target, key) {
+      return Reflect.get(target, key);
+    },
+    ownKeys(target) {
+      console.log("ownKeys!!!");
+      return Reflect.ownKeys(target);
+    },
+  }
+);
+
+JSON.stringify(data);
+```
+
+We can use this to track `ITERATE_KEY`.
+For arrays, we don't need it, so we can simply track the `length`.
+
+```ts
+export const mutableHandlers: ProxyHandler<object> = {
+  // .
+  // .
+  ownKeys(target) {
+    track(target, isArray(target) ? "length" : ITERATE_KEY);
+    return Reflect.ownKeys(target);
+  },
+};
+```
+
+Now, we should be able to handle objects with changing keys!
+
+## Support for Collection-based built-in objects
 
 Currently, when looking at the implementation of reactive.ts, it only targets Object and Array.
 

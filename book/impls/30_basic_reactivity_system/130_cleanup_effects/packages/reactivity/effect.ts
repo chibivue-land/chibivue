@@ -1,4 +1,4 @@
-import { isArray } from "../shared";
+import { isArray, isIntegerKey } from "../shared";
 import { Dep, createDep } from "./dep";
 
 type KeyToDepMap = Map<any, Dep>;
@@ -77,11 +77,21 @@ export function trigger(target: object, key?: unknown) {
   const depsMap = targetMap.get(target);
   if (!depsMap) return;
 
-  const dep = depsMap.get(key);
+  let deps: (Dep | undefined)[] = [];
+  if (key !== void 0) {
+    deps.push(depsMap.get(key));
+  }
+  if (!isArray(target)) {
+    deps.push(depsMap.get(ITERATE_KEY));
+  } else if (isIntegerKey(key)) {
+    // new index added to array -> length changes
+    deps.push(depsMap.get("length"));
+  }
 
-  if (dep) {
-    const effects = [...dep];
-    triggerEffects(effects);
+  for (const dep of deps) {
+    if (dep) {
+      triggerEffects(dep);
+    }
   }
 }
 

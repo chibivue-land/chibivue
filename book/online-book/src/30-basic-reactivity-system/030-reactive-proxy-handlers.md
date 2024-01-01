@@ -258,6 +258,196 @@ app.mount("#app");
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
 
+## key が増減するオブジェクトに対応する
+
+実は、今の実装では key が増減するオブジェクトに対応できていません。
+この、「key が増減するオブジェクト」と言うのは配列も含みます。  
+要するに、以下のようなコンポーネントが正常に動作しません。
+
+```ts
+const App = {
+  setup() {
+    const array = ref<number[]>([]);
+    const mutateArray = () => {
+      array.value.push(Date.now()); // trigger しても何も effect がない (この時、set の key は "0")
+    };
+
+    const record = reactive<Record<string, number>>({});
+    const mutateRecord = () => {
+      record[Date.now().toString()] = Date.now(); // trigger しても何も effect がない (key 新しく設定された key)
+    };
+
+    return () =>
+      h("div", {}, [
+        h("p", {}, [`array: ${JSON.stringify(array.value)}`]),
+        h("button", { onClick: mutateArray }, ["update array"]),
+
+        h("p", {}, [`record: ${JSON.stringify(record)}`]),
+        h("button", { onClick: mutateRecord }, ["update record"]),
+      ]);
+  },
+};
+```
+
+これを解決するにはどうしたら良いでしょうか?
+
+### 配列の場合
+
+配列もいってしまえばオブジェクトなので、新しい要素を追加するとその index が key として Proxy の set の handler に入ってきます。
+
+```ts
+const p = new Proxy([], {
+  set(target, key, value, receiver) {
+    console.log(key); // ※
+    Reflect.set(target, key, value, receiver);
+    return true;
+  },
+});
+
+p.push(42); // 0
+```
+
+しかしこれらの key をそれぞれ track するわけにはいきません。
+そこで、length を track することで配列の変更をトリガーするようにします。
+
+length を track すると言いましたが、実はすでに track されるようになっています。
+
+以下のようなコードをブラウザなどで実行してみると JSON.stringify で配列を文字列化した際に length が呼ばれていることがわかります。
+
+```ts
+const data = new Proxy([], {
+  get(target, key) {
+    console.log("get!", key);
+    return Reflect.get(target, key);
+  },
+});
+
+JSON.stringify(data);
+// get! length
+// get! toJSON
+```
+
+つまりすでに length には effect が登録されているので、あとは index が set された時に、この effect を取り出して trigger してあげれば良いわけです。
+
+入ってきた key が index かどうかを判定して、index だった場合は length の effect を trigger するようにします。
+他にも dep がある可能性はもちろんあるので、 deps という配列に切り出して、effect を詰めてまとめて trigger してあげます。
+
+```ts
+export function trigger(target: object, key?: unknown) {
+  const depsMap = targetMap.get(target);
+  if (!depsMap) return;
+
+  let deps: (Dep | undefined)[] = [];
+  if (key !== void 0) {
+    deps.push(depsMap.get(key));
+  }
+
+  // これ
+  if (isIntegerKey(key)) {
+    deps.push(depsMap.get("length"));
+  }
+
+  for (const dep of deps) {
+    if (dep) {
+      triggerEffects(dep);
+    }
+  }
+}
+```
+
+```ts
+// shared/general.ts
+export const isIntegerKey = (key: unknown) =>
+  isString(key) &&
+  key !== "NaN" &&
+  key[0] !== "-" &&
+  "" + parseInt(key, 10) === key;
+```
+
+これで配列の場合は動くようになりました。
+
+### オブジェクト(レコード)の場合
+
+続いてはオブジェクトですが、配列とは違い length という情報は持っていません。
+
+これは一工夫します。  
+`ITERATE_KEY` というシンボルを用意してこれを配列の時の length のように使います。  
+何を言っているのかよく分からないかもしれませんが、depsMap はただの Map なので、別に勝手に用意したものを key として使っても問題ありません。
+
+配列の時と少し順番は変わりますが、まず trigger から考えてみます。
+あたかも `ITERATE_KEY` というものが存在し、そこに effect が登録されているかのような実装をしておけば OK です。
+
+```ts
+export const ITERATE_KEY = Symbol();
+
+export function trigger(target: object, key?: unknown) {
+  const depsMap = targetMap.get(target);
+  if (!depsMap) return;
+
+  let deps: (Dep | undefined)[] = [];
+  if (key !== void 0) {
+    deps.push(depsMap.get(key));
+  }
+
+  if (!isArray(target)) {
+    // 配列でない場合は、ITERATE_KEY に登録された effect を trigger する
+    deps.push(depsMap.get(ITERATE_KEY));
+  } else if (isIntegerKey(key)) {
+    // new index added to array -> length changes
+    deps.push(depsMap.get("length"));
+  }
+
+  for (const dep of deps) {
+    if (dep) {
+      triggerEffects(dep);
+    }
+  }
+}
+```
+
+問題は、この `ITERATE_KEY` に対してどう effect をトラックするかです。
+
+ここで、 `ownKeys` と言う Proxy ハンドラを利用します。
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/ownKeys
+
+ownKeys は `Object.keys()` や `Reflect.ownKeys()` などで呼ばれますが、実は `JSON.stringify` でも呼ばれます。
+
+試しに以下のコードをブラウザなどで動かしてみるとそれを確認できます。
+
+```ts
+const data = new Proxy(
+  {},
+  {
+    get(target, key) {
+      return Reflect.get(target, key);
+    },
+    ownKeys(target) {
+      console.log("ownKeys!!!");
+      return Reflect.ownKeys(target);
+    },
+  }
+);
+
+JSON.stringify(data);
+```
+
+あとはこれを利用して `ITERATE_KEY` を track すれば良いわけです。
+配列だった場合は、必要ないのでテキトーに length を track してあげます。
+
+```ts
+export const mutableHandlers: ProxyHandler<object> = {
+  // .
+  // .
+  ownKeys(target) {
+    track(target, isArray(target) ? "length" : ITERATE_KEY);
+    return Reflect.ownKeys(target);
+  },
+};
+```
+
+これでキーが増減するオブジェクトに対応でき多はずです！
+
 ## Collection 系の組み込みオブジェクトに対応する
 
 今、reactive.ts の実装を見てみると、Object と Array のみを対象としています。
