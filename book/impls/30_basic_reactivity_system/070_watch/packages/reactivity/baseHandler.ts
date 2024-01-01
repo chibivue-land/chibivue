@@ -1,4 +1,4 @@
-import { isObject } from "../shared";
+import { hasChanged, isObject } from "../shared";
 import { track, trigger } from "./effect";
 import { reactive } from "./reactive";
 
@@ -15,8 +15,11 @@ export const mutableHandlers: ProxyHandler<object> = {
   },
 
   set(target: object, key: string | symbol, value: unknown, receiver: object) {
+        let oldValue = (target as any)[key];
     Reflect.set(target, key, value, receiver);
-    trigger(target, key);
+    if (hasChanged(value, oldValue)) {
+      trigger(target, key);
+    }
     return true;
   },
 };

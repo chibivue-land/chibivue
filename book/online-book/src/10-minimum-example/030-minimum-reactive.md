@@ -517,11 +517,18 @@ export const mutableHandlers: ProxyHandler<object> = {
   },
 
   set(target: object, key: string | symbol, value: unknown, receiver: object) {
+    let oldValue = (target as any)[key];
     Reflect.set(target, key, value, receiver);
-    trigger(target, key);
+    // 値が変わったかどうかをチェックしてあげておく
+    if (hasChanged(value, oldValue)) {
+      trigger(target, key);
+    }
     return true;
   },
 };
+
+const hasChanged = (value: any, oldValue: any): boolean =>
+  !Object.is(value, oldValue);
 ```
 
 ここで、Reflect というものが登場していますが、Proxy と似た雰囲気のものなんですが、Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し、Reflect はあるオブジェクトに対する処理を行うものです。  

@@ -15,8 +15,14 @@ export const mutableHandlers: ProxyHandler<object> = {
   },
 
   set(target: object, key: string | symbol, value: unknown, receiver: object) {
+    let oldValue = (target as any)[key];
     Reflect.set(target, key, value, receiver);
-    trigger(target, key);
+    if (hasChanged(value, oldValue)) {
+      trigger(target, key);
+    }
     return true;
   },
 };
+
+const hasChanged = (value: any, oldValue: any): boolean =>
+  !Object.is(value, oldValue);
