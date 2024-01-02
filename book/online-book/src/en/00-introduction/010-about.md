@@ -148,3 +148,36 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together 👍.
 
 https://twitter.com/ubugeeei
+
+## 🦀 About the Discord Server
+
+We have created a Discord Server for this book! (2024/01/01)  
+Here, we share announcements, provide support for questions and tips related to this online book.  
+We also welcome casual conversations, so let's have fun communicating with other chibivue users.  
+Currently, most of the conversations are in Japanese as there are many Japanese speakers, but non-Japanese speakers are also welcome to join without hesitation! (It's completely fine to use your native language)
+
+### What we do roughly
+
+- Self-introduction (optional)
+- Announcements related to chibivue (such as updates)
+- Sharing tips
+- Answering questions
+- Responding to requests
+- Casual conversations
+- ubugeeei mutters to himself when working on chibivue (heckling is welcome)
+
+### How to join
+
+Here is the invitation link 👉 https://discord.gg/aVHvmbmSRy
+
+You can also join from the Discord button on the top right of this book's header.
+
+### Eligibility to join
+
+Anyone interested in chibivue (or ubugeeei, or this community)!  
+(Please refrain from joining solely for promotional purposes)
+
+### What we would like you to do when joining
+
+Please make sure to read general/rules thoroughly.
+Other than that, there are no specific requirements.

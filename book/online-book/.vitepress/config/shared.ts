@@ -69,6 +69,7 @@ export const sharedConfig = defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/Ubugeeei/chibivue" },
       { icon: "twitter", link: "https://twitter.com/ubugeeei" },
+      { icon: "discord", link: "https://discord.gg/aVHvmbmSRy" },
     ],
     editLink: {
       pattern:
