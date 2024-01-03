@@ -1,48 +1,48 @@
-import { ElementNode } from "./ast";
-import { TextModes } from "./parse";
-import { DirectiveTransform, NodeTransform } from "./transform";
+import { ElementNode } from './ast'
+import { TextModes } from './parse'
+import { DirectiveTransform, NodeTransform } from './transform'
 
 export interface ParserOptions {
-  isNativeTag?: (tag: string) => boolean;
-  delimiters?: [string, string];
-  decodeEntities?: (rawText: string, asAttr: boolean) => string;
+  isNativeTag?: (tag: string) => boolean
+  delimiters?: [string, string]
+  decodeEntities?: (rawText: string, asAttr: boolean) => string
   getTextMode?: (
     node: ElementNode,
-    parent: ElementNode | undefined
-  ) => TextModes;
+    parent: ElementNode | undefined,
+  ) => TextModes
 }
 
 export interface TransformOptions extends SharedTransformCodegenOptions {
-  nodeTransforms?: NodeTransform[];
-  directiveTransforms?: Record<string, DirectiveTransform | undefined>;
-  inline?: boolean;
-  bindingMetadata?: BindingMetadata;
+  nodeTransforms?: NodeTransform[]
+  directiveTransforms?: Record<string, DirectiveTransform | undefined>
+  inline?: boolean
+  bindingMetadata?: BindingMetadata
 }
 
 export type BindingMetadata = {
-  [key: string]: BindingTypes | undefined;
+  [key: string]: BindingTypes | undefined
 } & {
-  __isScriptSetup?: boolean;
-};
+  __isScriptSetup?: boolean
+}
 
 interface SharedTransformCodegenOptions {
-  isBrowser?: boolean;
+  isBrowser?: boolean
 }
 
 export const enum BindingTypes {
-  DATA = "data",
-  PROPS = "props",
-  SETUP_CONST = "setup-const",
-  SETUP_MAYBE_REF = "setup-maybe-ref",
-  SETUP_REF = "setup-ref",
-  SETUP_REACTIVE_CONST = "setup-reactive-const",
-  SETUP_LET = "setup-let",
-  LITERAL_CONST = "literal-const",
-  OPTIONS = "options",
+  DATA = 'data',
+  PROPS = 'props',
+  SETUP_CONST = 'setup-const',
+  SETUP_MAYBE_REF = 'setup-maybe-ref',
+  SETUP_REF = 'setup-ref',
+  SETUP_REACTIVE_CONST = 'setup-reactive-const',
+  SETUP_LET = 'setup-let',
+  LITERAL_CONST = 'literal-const',
+  OPTIONS = 'options',
 }
 
 export interface CodegenOptions extends SharedTransformCodegenOptions {
-  inline?: boolean;
+  inline?: boolean
 }
 
-export type CompilerOptions = ParserOptions & TransformOptions & CodegenOptions;
+export type CompilerOptions = ParserOptions & TransformOptions & CodegenOptions

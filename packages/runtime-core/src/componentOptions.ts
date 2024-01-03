@@ -1,4 +1,4 @@
-import { isFunction, isArray, isObject, isString } from "@chibivue/shared";
+import { isFunction, isArray, isObject, isString } from '@chibivue/shared'
 
 import {
   ComputedGetter,
@@ -7,9 +7,9 @@ import {
   computed,
   isRef,
   reactive,
-} from "@chibivue/reactivity";
+} from '@chibivue/reactivity'
 
-import { provide, inject } from "./apiInject";
+import { provide, inject } from './apiInject'
 import {
   onBeforeMount,
   onMounted,
@@ -17,26 +17,26 @@ import {
   onUpdated,
   onBeforeUnmount,
   onUnmounted,
-} from "./apiLifecycle";
-import { WatchCallback, WatchOptions, watch } from "./apiWatch";
+} from './apiLifecycle'
+import { WatchCallback, WatchOptions, watch } from './apiWatch'
 
 import {
   type ComponentInternalInstance,
   ConcreteComponent,
   SetupContext,
   Data,
-} from "./component";
+} from './component'
 import {
   ComponentPublicInstance,
   CreateComponentPublicInstance,
-} from "./componentPublicInstance";
-import { SlotsType } from "./componentSlots";
-import { PropType } from "./componentProps";
-import { EmitsOptions, ObjectEmitsOptions } from "./componentEmits";
+} from './componentPublicInstance'
+import { SlotsType } from './componentSlots'
+import { PropType } from './componentProps'
+import { EmitsOptions, ObjectEmitsOptions } from './componentEmits'
 
-import { VNodeChild, type VNode } from "./vnode";
+import { VNodeChild, type VNode } from './vnode'
 
-export type RenderFunction = () => VNodeChild;
+export type RenderFunction = () => VNodeChild
 
 export type ComponentOptions<
   P = {},
@@ -48,96 +48,103 @@ export type ComponentOptions<
   S extends SlotsType = {},
   E extends EmitsOptions = {},
   EE extends string = string,
-  II extends string = string
+  II extends string = string,
 > = {
-  name?: string;
-  props?: P;
-  data?: (this: ComponentPublicInstance<ResolveProps<P>, B>) => D;
-  computed?: C;
-  methods?: M;
-  watch?: ComponentWatchOptions;
-  provide?: ComponentProvideOptions;
-  inject?: I | II[];
-  emits?: ObjectEmitsOptions;
-  slots?: S;
-  setup?: (
-    props: ResolveProps<P>,
-    ctx: SetupContext<E, S>
-  ) => (() => VNode) | B;
+  name?: string
+  props?: P
+  data?: (this: ComponentPublicInstance<ResolveProps<P>, B>) => D
+  computed?: C
+  methods?: M
+  watch?: ComponentWatchOptions
+  provide?: ComponentProvideOptions
+  inject?: I | II[]
+  emits?: ObjectEmitsOptions
+  slots?: S
+  setup?: (props: ResolveProps<P>, ctx: SetupContext<E, S>) => (() => VNode) | B
   render?: (
-    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E, EE>
-  ) => VNode;
-  template?: string;
-  components?: Record<string, ConcreteComponent>;
+    ctx: CreateComponentPublicInstance<
+      ResolveProps<P>,
+      B,
+      D,
+      C,
+      M,
+      I,
+      S,
+      E,
+      EE
+    >,
+  ) => VNode
+  template?: string
+  components?: Record<string, ConcreteComponent>
 
-  beforeCreate?(): void;
-  created?(): void;
-  beforeMount?(): void;
-  mounted?(): void;
-  beforeUpdate?(): void;
-  updated?(): void;
-  beforeUnmount?(): void;
-  unmounted?(): void;
+  beforeCreate?(): void
+  created?(): void
+  beforeMount?(): void
+  mounted?(): void
+  beforeUpdate?(): void
+  updated?(): void
+  beforeUnmount?(): void
+  unmounted?(): void
 } & ThisType<
   CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E, EE>
->;
+>
 
-export type ResolveProps<T> = { [K in keyof T]: InferPropType<T[K]> };
-type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never;
+export type ResolveProps<T> = { [K in keyof T]: InferPropType<T[K]> }
+type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never
 
 export type ComputedOptions = Record<
   string,
   ComputedGetter<any> | WritableComputedOptions<any>
->;
+>
 
 export type ExtractComputedReturns<T extends any> = {
   [key in keyof T]: T[key] extends { get: (...args: any[]) => infer TReturn }
     ? TReturn
     : T[key] extends (...args: any[]) => infer TReturn
-    ? TReturn
-    : never;
-};
+      ? TReturn
+      : never
+}
 
 export interface MethodOptions {
-  [key: string]: Function;
+  [key: string]: Function
 }
 
 export type ObjectWatchOptionItem = {
-  handler: WatchCallback | string;
-} & WatchOptions;
+  handler: WatchCallback | string
+} & WatchOptions
 
-type WatchOptionItem = string | WatchCallback | ObjectWatchOptionItem;
+type WatchOptionItem = string | WatchCallback | ObjectWatchOptionItem
 
-type ComponentWatchOptionItem = WatchOptionItem | WatchOptionItem[];
+type ComponentWatchOptionItem = WatchOptionItem | WatchOptionItem[]
 
-type ComponentWatchOptions = Record<string, ComponentWatchOptionItem>;
+type ComponentWatchOptions = Record<string, ComponentWatchOptionItem>
 
-export type ComponentProvideOptions = ObjectProvideOptions | Function;
+export type ComponentProvideOptions = ObjectProvideOptions | Function
 
-type ObjectProvideOptions = Record<string | symbol, unknown>;
+type ObjectProvideOptions = Record<string | symbol, unknown>
 
 type ObjectInjectOptions = Record<
   string | symbol,
   string | symbol | { from?: string | symbol; default?: unknown }
->;
+>
 
-export type ComponentInjectOptions = string[] | ObjectInjectOptions;
+export type ComponentInjectOptions = string[] | ObjectInjectOptions
 
 export type InjectToObject<T extends ComponentInjectOptions> =
   T extends string[]
     ? {
-        [K in T[number]]?: unknown;
+        [K in T[number]]?: unknown
       }
     : T extends ObjectInjectOptions
-    ? {
-        [K in keyof T]?: unknown;
-      }
-    : never;
+      ? {
+          [K in keyof T]?: unknown
+        }
+      : never
 
 export function applyOptions(instance: ComponentInternalInstance) {
-  const { type: options } = instance;
-  const publicThis = instance.proxy! as any;
-  const ctx = instance.ctx;
+  const { type: options } = instance
+  const publicThis = instance.proxy! as any
+  const ctx = instance.ctx
 
   const {
     data: dataOptions,
@@ -154,105 +161,105 @@ export function applyOptions(instance: ComponentInternalInstance) {
     updated,
     beforeUnmount,
     unmounted,
-  } = options;
+  } = options
 
   if (injectOptions) {
-    resolveInjections(injectOptions, ctx);
+    resolveInjections(injectOptions, ctx)
   }
 
   if (methods) {
     for (const key in methods) {
-      const methodHandler = methods[key];
+      const methodHandler = methods[key]
       if (isFunction(methodHandler)) {
-        ctx[key] = methodHandler.bind(publicThis);
+        ctx[key] = methodHandler.bind(publicThis)
       }
     }
   }
 
   if (dataOptions) {
-    const data = dataOptions.call(publicThis);
-    instance.data = reactive(data);
+    const data = dataOptions.call(publicThis)
+    instance.data = reactive(data)
   }
 
   if (computedOptions) {
     for (const key in computedOptions) {
-      const opt = (computedOptions as ComputedOptions)[key];
+      const opt = (computedOptions as ComputedOptions)[key]
 
       const get = isFunction(opt)
         ? opt.bind(publicThis, publicThis)
         : isFunction(opt.get)
-        ? opt.get.bind(publicThis, publicThis)
-        : () => {};
+          ? opt.get.bind(publicThis, publicThis)
+          : () => {}
 
       const set =
         !isFunction(opt) && isFunction(opt.set)
           ? opt.set.bind(publicThis)
-          : () => {};
+          : () => {}
 
-      const c = computed({ get, set });
+      const c = computed({ get, set })
       Object.defineProperty(ctx, key, {
         enumerable: true,
         configurable: true,
         get: () => c.value,
-        set: (v) => (c.value = v),
-      });
+        set: v => (c.value = v),
+      })
     }
   }
 
   if (watchOptions) {
     for (const key in watchOptions) {
-      createWatcher(watchOptions[key], ctx, publicThis, key);
+      createWatcher(watchOptions[key], ctx, publicThis, key)
     }
   }
 
   if (provideOptions) {
     const provides = isFunction(provideOptions)
       ? provideOptions.call(publicThis)
-      : provideOptions;
-    Reflect.ownKeys(provides).forEach((key) => {
-      provide(key, provides[key]);
-    });
+      : provideOptions
+    Reflect.ownKeys(provides).forEach(key => {
+      provide(key, provides[key])
+    })
   }
 
-  created?.();
+  created?.()
 
   function registerLifecycleHook(
     register: Function,
-    hook?: Function | Function[]
+    hook?: Function | Function[],
   ) {
     if (isArray(hook)) {
-      hook.forEach((_hook) => register(_hook.bind(publicThis)));
+      hook.forEach(_hook => register(_hook.bind(publicThis)))
     } else if (hook) {
-      register(hook.bind(publicThis));
+      register(hook.bind(publicThis))
     }
   }
 
-  registerLifecycleHook(onBeforeMount, beforeMount);
-  registerLifecycleHook(onMounted, mounted);
-  registerLifecycleHook(onBeforeUpdate, beforeUpdate);
-  registerLifecycleHook(onUpdated, updated);
-  registerLifecycleHook(onBeforeUnmount, beforeUnmount);
-  registerLifecycleHook(onUnmounted, unmounted);
+  registerLifecycleHook(onBeforeMount, beforeMount)
+  registerLifecycleHook(onMounted, mounted)
+  registerLifecycleHook(onBeforeUpdate, beforeUpdate)
+  registerLifecycleHook(onUpdated, updated)
+  registerLifecycleHook(onBeforeUnmount, beforeUnmount)
+  registerLifecycleHook(onUnmounted, unmounted)
 }
 
 export function resolveInjections(
   injectOptions: ComponentInjectOptions,
-  ctx: any
+  ctx: any,
 ) {
   if (isArray(injectOptions)) {
-    injectOptions = normalizeInject(injectOptions)!;
+    injectOptions = normalizeInject(injectOptions)!
   }
   for (const key in injectOptions) {
-    const opt = injectOptions[key];
-    let injected: unknown;
+    const opt = injectOptions[key]
+    let injected: unknown
     if (isObject(opt)) {
-      if ("default" in opt) {
-        injected = inject(opt.from || key);
+      if ('default' in opt) {
+        injected = inject(opt.from || key)
       } else {
-        injected = inject(opt.from || key);
+        injected = inject(opt.from || key)
       }
     } else {
-      injected = inject(opt);
+      injected = inject(opt)
     }
     if (isRef(injected)) {
       // unwrap injected refs
@@ -260,50 +267,50 @@ export function resolveInjections(
         enumerable: true,
         configurable: true,
         get: () => (injected as Ref).value,
-        set: (v) => ((injected as Ref).value = v),
-      });
+        set: v => ((injected as Ref).value = v),
+      })
     } else {
-      ctx[key] = injected;
+      ctx[key] = injected
     }
   }
 }
 
 function normalizeInject(
-  raw: ComponentInjectOptions | undefined
+  raw: ComponentInjectOptions | undefined,
 ): ObjectInjectOptions | undefined {
   if (isArray(raw)) {
-    const res: ObjectInjectOptions = {};
+    const res: ObjectInjectOptions = {}
     for (let i = 0; i < raw.length; i++) {
-      res[raw[i]] = raw[i];
+      res[raw[i]] = raw[i]
     }
-    return res;
+    return res
   }
-  return raw;
+  return raw
 }
 
 export function createWatcher(
   raw: ComponentWatchOptionItem,
   ctx: Data,
   publicThis: ComponentPublicInstance,
-  key: string
+  key: string,
 ) {
-  const getter = () => (publicThis as any)[key];
+  const getter = () => (publicThis as any)[key]
   if (isString(raw)) {
-    const handler = ctx[raw];
+    const handler = ctx[raw]
     if (isFunction(handler)) {
-      watch(getter, handler as WatchCallback);
+      watch(getter, handler as WatchCallback)
     }
   } else if (isFunction(raw)) {
-    watch(getter, raw.bind(publicThis));
+    watch(getter, raw.bind(publicThis))
   } else if (isObject(raw)) {
     if (isArray(raw)) {
-      raw.forEach((r) => createWatcher(r, ctx, publicThis, key));
+      raw.forEach(r => createWatcher(r, ctx, publicThis, key))
     } else {
       const handler = isFunction(raw.handler)
         ? raw.handler.bind(publicThis)
-        : (ctx[raw.handler] as WatchCallback);
+        : (ctx[raw.handler] as WatchCallback)
       if (isFunction(handler)) {
-        watch(getter, handler, raw);
+        watch(getter, handler, raw)
       }
     }
   }

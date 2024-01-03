@@ -1,5 +1,5 @@
-import { isFunction } from "@chibivue/shared";
-import { EmitsOptions } from "./componentEmits";
+import { isFunction } from '@chibivue/shared'
+import { EmitsOptions } from './componentEmits'
 
 import {
   ComponentInjectOptions,
@@ -7,12 +7,12 @@ import {
   ComputedOptions,
   MethodOptions,
   ResolveProps,
-} from "./componentOptions";
+} from './componentOptions'
 import {
   ComponentPublicInstanceConstructor,
   CreateComponentPublicInstance,
-} from "./componentPublicInstance";
-import { SlotsType } from "./componentSlots";
+} from './componentPublicInstance'
+import { SlotsType } from './componentSlots'
 
 type DefineComponent<
   PropOptions = {},
@@ -24,7 +24,7 @@ type DefineComponent<
   S extends SlotsType = {},
   E extends EmitsOptions = {},
   EE extends string = string,
-  Props = ResolveProps<PropOptions>
+  Props = ResolveProps<PropOptions>,
 > = ComponentPublicInstanceConstructor<
   CreateComponentPublicInstance<Props, RawBindings, D, C, M, I, S, E, EE>,
   Props,
@@ -36,7 +36,7 @@ type DefineComponent<
   S,
   E,
   EE
->;
+>
 
 export function defineComponent<
   PropsOptions = {},
@@ -47,11 +47,21 @@ export function defineComponent<
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
   E extends EmitsOptions = {},
-  EE extends string = string
+  EE extends string = string,
 >(
   options:
     | ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>
-    | ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>["setup"]
+    | ComponentOptions<
+        PropsOptions,
+        RawBindings,
+        D,
+        C,
+        M,
+        I,
+        S,
+        E,
+        EE
+      >['setup'],
 ): DefineComponent<PropsOptions, RawBindings, D, C, M, I, S, E, EE> {
-  return isFunction(options) ? { setup: options } : (options as any);
+  return isFunction(options) ? { setup: options } : (options as any)
 }

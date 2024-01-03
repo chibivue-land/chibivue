@@ -1,33 +1,33 @@
-import { generate } from "./codegen";
-import { CompilerOptions } from "./options";
-import { baseParse } from "./parse";
-import { DirectiveTransform, NodeTransform, transform } from "./transform";
-import { transformElement } from "./transforms/transformElement";
-import { transformBind } from "./transforms/vBind";
+import { generate } from './codegen'
+import { CompilerOptions } from './options'
+import { baseParse } from './parse'
+import { DirectiveTransform, NodeTransform, transform } from './transform'
+import { transformElement } from './transforms/transformElement'
+import { transformBind } from './transforms/vBind'
 
 export type TransformPreset = [
   NodeTransform[],
-  Record<string, DirectiveTransform>
-];
+  Record<string, DirectiveTransform>,
+]
 
 export function getBaseTransformPreset(): TransformPreset {
-  return [[transformElement], { bind: transformBind }];
+  return [[transformElement], { bind: transformBind }]
 }
 
 export function baseCompile(
   template: string,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
-  const ast = baseParse(template.trim());
+  const ast = baseParse(template.trim())
 
-  const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();
+  const [nodeTransforms, directiveTransforms] = getBaseTransformPreset()
 
   transform(ast, {
     ...option,
     nodeTransforms: [...nodeTransforms],
     directiveTransforms: { ...directiveTransforms },
-  });
+  })
 
-  const code = generate(ast, option);
-  return code;
+  const code = generate(ast, option)
+  return code
 }

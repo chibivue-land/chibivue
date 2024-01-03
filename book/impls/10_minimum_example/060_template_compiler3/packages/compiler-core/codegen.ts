@@ -1,4 +1,4 @@
-import { toHandlerKey } from "../shared";
+import { toHandlerKey } from '../shared'
 import {
   AttributeNode,
   DirectiveNode,
@@ -7,62 +7,62 @@ import {
   NodeTypes,
   TemplateChildNode,
   TextNode,
-} from "./ast";
+} from './ast'
 
 export const generate = ({
   children,
 }: {
-  children: TemplateChildNode[];
+  children: TemplateChildNode[]
 }): string => {
   return `return function render(_ctx) {
   with (_ctx) {
     const { h } = ChibiVue;
     return ${genNode(children[0])};
   }
-}`;
-};
+}`
+}
 
 const genNode = (node: TemplateChildNode): string => {
   switch (node.type) {
     case NodeTypes.ELEMENT:
-      return genElement(node);
+      return genElement(node)
     case NodeTypes.TEXT:
-      return genText(node);
+      return genText(node)
     case NodeTypes.INTERPOLATION:
-      return genInterpolation(node);
+      return genInterpolation(node)
     default:
-      return "";
+      return ''
   }
-};
+}
 
 const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
-    .map((prop) => genProp(prop))
-    .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
-};
+    .map(prop => genProp(prop))
+    .join(', ')}}, [${el.children.map(it => genNode(it)).join(', ')}])`
+}
 
 const genProp = (prop: AttributeNode | DirectiveNode): string => {
   switch (prop.type) {
     case NodeTypes.ATTRIBUTE:
-      return `${prop.name}: "${prop.value?.content}"`;
+      return `${prop.name}: "${prop.value?.content}"`
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
-        case "on":
-          return `${toHandlerKey(prop.arg)}: ${prop.exp}`;
+        case 'on':
+          return `${toHandlerKey(prop.arg)}: ${prop.exp}`
         default:
           // TODO: other directives
-          throw new Error(`unexpected directive name. got "${prop.name}"`);
+          throw new Error(`unexpected directive name. got "${prop.name}"`)
       }
     }
     default:
-      throw new Error(`unexpected prop type.`);
+      throw new Error(`unexpected prop type.`)
   }
-};
+}
 
 const genText = (text: TextNode): string => {
-  return `\`${text.content}\``;
-};
+  return `\`${text.content}\``
+}
 
 const genInterpolation = (node: InterpolationNode): string => {
-  return `${node.content}`;
-};
+  return `${node.content}`
+}

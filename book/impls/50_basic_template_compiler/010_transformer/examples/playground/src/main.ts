@@ -1,9 +1,9 @@
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const count = ref(0);
-    return { count };
+    const count = ref(0)
+    return { count }
   },
 
   template: `
@@ -12,8 +12,8 @@ const App = defineComponent({
       <p> Count: {{ count }} </p>
     </div>
   `,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')

@@ -4,7 +4,7 @@ export default {
     card: { type: Object },
   },
   setup(props) {},
-};
+}
 </script>
 
 <template>

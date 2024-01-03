@@ -1,24 +1,24 @@
-import { isString } from "@chibivue/shared";
+import { isString } from '@chibivue/shared'
 
-import { RootNode } from "./ast";
-import { generate } from "./codegen";
-import { baseParse } from "./parse";
-import { DirectiveTransform, NodeTransform, transform } from "./transform";
+import { RootNode } from './ast'
+import { generate } from './codegen'
+import { baseParse } from './parse'
+import { DirectiveTransform, NodeTransform, transform } from './transform'
 
-import { transformElement } from "./transforms/transformElement";
-import { transformExpression } from "./transforms/transformExpression";
-import { transformFor } from "./transforms/vFor";
+import { transformElement } from './transforms/transformElement'
+import { transformExpression } from './transforms/transformExpression'
+import { transformFor } from './transforms/vFor'
 
-import { transformBind } from "./transforms/vBind";
-import { transformOn } from "./transforms/vOn";
-import { transformModel } from "./transforms/vModel";
-import { CompilerOptions } from "./options";
-import { transformIf } from "./transforms/vIf";
+import { transformBind } from './transforms/vBind'
+import { transformOn } from './transforms/vOn'
+import { transformModel } from './transforms/vModel'
+import { CompilerOptions } from './options'
+import { transformIf } from './transforms/vIf'
 
 export type TransformPreset = [
   NodeTransform[],
-  Record<string, DirectiveTransform>
-];
+  Record<string, DirectiveTransform>,
+]
 
 export function getBaseTransformPreset(): TransformPreset {
   return [
@@ -28,18 +28,18 @@ export function getBaseTransformPreset(): TransformPreset {
       bind: transformBind,
       model: transformModel,
     },
-  ];
+  ]
 }
 
 export function baseCompile(
   template: string | RootNode,
-  options: CompilerOptions
+  options: CompilerOptions,
 ) {
   // parse
-  const ast = isString(template) ? baseParse(template, options) : template;
+  const ast = isString(template) ? baseParse(template, options) : template
 
   // transform
-  const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();
+  const [nodeTransforms, directiveTransforms] = getBaseTransformPreset()
   transform(ast, {
     ...options,
     nodeTransforms: [...nodeTransforms, ...(options.nodeTransforms || [])],
@@ -47,10 +47,10 @@ export function baseCompile(
       ...directiveTransforms,
       ...(options.directiveTransforms || {}),
     },
-  });
+  })
 
   // codegen
-  const code = generate(ast, options);
+  const code = generate(ast, options)
 
-  return code;
+  return code
 }

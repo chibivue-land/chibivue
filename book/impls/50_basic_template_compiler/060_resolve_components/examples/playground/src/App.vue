@@ -1,11 +1,11 @@
 <script>
-import { defineComponent } from "chibivue";
+import { defineComponent } from 'chibivue'
 
-import Counter from "./components/Counter.vue";
+import Counter from './components/Counter.vue'
 
 export default defineComponent({
   components: { Counter },
-});
+})
 </script>
 
 <template>

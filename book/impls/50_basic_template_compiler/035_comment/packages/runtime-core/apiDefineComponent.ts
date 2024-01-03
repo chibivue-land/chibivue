@@ -1,16 +1,16 @@
-import { EmitsOptions } from "./componentEmits";
+import { EmitsOptions } from './componentEmits'
 import {
   ComponentInjectOptions,
   ComponentOptions,
   ComputedOptions,
   MethodOptions,
   ResolveProps,
-} from "./componentOptions";
+} from './componentOptions'
 import {
   ComponentPublicInstanceConstructor,
   CreateComponentPublicInstance,
-} from "./componentPublicInstance";
-import { SlotsType } from "./componentSlots";
+} from './componentPublicInstance'
+import { SlotsType } from './componentSlots'
 
 type DefineComponent<
   PropOptions = {},
@@ -22,7 +22,7 @@ type DefineComponent<
   S extends SlotsType = {},
   E extends EmitsOptions = {},
   EE extends string = string,
-  Props = ResolveProps<PropOptions>
+  Props = ResolveProps<PropOptions>,
 > = ComponentPublicInstanceConstructor<
   CreateComponentPublicInstance<Props, RawBindings, D, C, M, I, S, E, EE>,
   Props,
@@ -34,7 +34,7 @@ type DefineComponent<
   S,
   E,
   EE
->;
+>
 
 export function defineComponent<
   PropsOptions = {},
@@ -45,9 +45,9 @@ export function defineComponent<
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
   E extends EmitsOptions = {},
-  EE extends string = string
+  EE extends string = string,
 >(
-  options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>
+  options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>,
 ): DefineComponent<PropsOptions, RawBindings, D, C, M, I, S, E, EE> {
-  return options as any;
+  return options as any
 }

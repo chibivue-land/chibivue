@@ -1,6 +1,6 @@
-import { hasOwn } from "@chibivue/shared";
-import { Data, type ComponentInternalInstance } from "./component";
-import { EmitFn, EmitsOptions } from "./componentEmits";
+import { hasOwn } from '@chibivue/shared'
+import { Data, type ComponentInternalInstance } from './component'
+import { EmitFn, EmitsOptions } from './componentEmits'
 import {
   ComponentInjectOptions,
   ComputedOptions,
@@ -8,9 +8,9 @@ import {
   ExtractComputedReturns,
   InjectToObject,
   ResolveProps,
-} from "./componentOptions";
-import { SlotsType, UnwrapSlotsType } from "./componentSlots";
-import { nextTick } from "./scheduler";
+} from './componentOptions'
+import { SlotsType, UnwrapSlotsType } from './componentSlots'
+import { nextTick } from './scheduler'
 
 export type ComponentPublicInstanceConstructor<
   T extends ComponentPublicInstance<
@@ -32,10 +32,10 @@ export type ComponentPublicInstanceConstructor<
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
   E extends EmitsOptions = {},
-  EE extends string = string
+  EE extends string = string,
 > = {
-  new (...args: any[]): T;
-};
+  new (...args: any[]): T
+}
 
 export type CreateComponentPublicInstance<
   P = {},
@@ -46,8 +46,8 @@ export type CreateComponentPublicInstance<
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
   E extends EmitsOptions = {},
-  EE extends string = string
-> = ComponentPublicInstance<P, B, D, C, M, I, S, E, EE>;
+  EE extends string = string,
+> = ComponentPublicInstance<P, B, D, C, M, I, S, E, EE>
 
 export type ComponentPublicInstance<
   P = {},
@@ -58,75 +58,75 @@ export type ComponentPublicInstance<
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
   E extends EmitsOptions = {},
-  _EE extends string = string
+  _EE extends string = string,
 > = {
-  $: ComponentInternalInstance;
-  $data: D;
-  $props: ResolveProps<P>;
-  $slots: UnwrapSlotsType<S>;
-  $parent: ComponentPublicInstance | null;
-  $emit: EmitFn<E>;
-  $el: any;
-  $forceUpdate: () => void;
-  $nextTick: typeof nextTick;
+  $: ComponentInternalInstance
+  $data: D
+  $props: ResolveProps<P>
+  $slots: UnwrapSlotsType<S>
+  $parent: ComponentPublicInstance | null
+  $emit: EmitFn<E>
+  $el: any
+  $forceUpdate: () => void
+  $nextTick: typeof nextTick
 } & P &
   B &
   D &
   M &
   ExtractComputedReturns<C> &
-  InjectToObject<I>;
+  InjectToObject<I>
 
 export interface ComponentRenderContext {
-  [key: string]: any;
-  _: ComponentInternalInstance;
+  [key: string]: any
+  _: ComponentInternalInstance
 }
 
-const hasSetupBinding = (state: Data, key: string) => hasOwn(state, key);
+const hasSetupBinding = (state: Data, key: string) => hasOwn(state, key)
 
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get({ _: instance }: ComponentRenderContext, key: string) {
-    const { ctx, setupState, data, props } = instance;
+    const { ctx, setupState, data, props } = instance
 
-    let normalizedProps;
+    let normalizedProps
     if (hasSetupBinding(setupState, key)) {
-      return setupState[key];
+      return setupState[key]
     } else if (hasOwn(data, key)) {
-      return data[key];
+      return data[key]
     } else if (
       (normalizedProps = instance.propsOptions) &&
       hasOwn(normalizedProps, key)
     ) {
-      return props![key];
+      return props![key]
     } else if (hasOwn(ctx, key)) {
-      return ctx[key];
+      return ctx[key]
     }
   },
   set(
     { _: instance }: ComponentRenderContext,
     key: string,
-    value: any
+    value: any,
   ): boolean {
-    const { ctx, data, setupState } = instance;
+    const { ctx, data, setupState } = instance
     if (hasSetupBinding(setupState, key)) {
-      setupState[key] = value;
-      return true;
+      setupState[key] = value
+      return true
     } else if (hasOwn(data, key)) {
-      data[key] = value;
+      data[key] = value
     } else if (hasOwn(ctx, key)) {
-      ctx[key] = value;
+      ctx[key] = value
     }
-    return true;
+    return true
   },
 
   has(
     { _: { setupState, ctx, propsOptions } }: ComponentRenderContext,
-    key: string
+    key: string,
   ) {
-    let normalizedProps;
+    let normalizedProps
     return (
       hasOwn(setupState, key) ||
       ((normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key)) ||
       hasOwn(ctx, key)
-    );
+    )
   },
-};
+}

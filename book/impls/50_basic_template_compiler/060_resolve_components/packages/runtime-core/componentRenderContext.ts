@@ -1,11 +1,11 @@
-import { ComponentInternalInstance } from "./component";
+import { ComponentInternalInstance } from './component'
 
-export let currentRenderingInstance: ComponentInternalInstance | null = null;
+export let currentRenderingInstance: ComponentInternalInstance | null = null
 
 export function setCurrentRenderingInstance(
-  instance: ComponentInternalInstance | null
+  instance: ComponentInternalInstance | null,
 ): ComponentInternalInstance | null {
-  const prev = currentRenderingInstance;
-  currentRenderingInstance = instance;
-  return prev;
+  const prev = currentRenderingInstance
+  currentRenderingInstance = instance
+  return prev
 }

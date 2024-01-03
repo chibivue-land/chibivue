@@ -1,4 +1,4 @@
 export interface RouteLocationNormalizedLoaded {
-  fullPath: string;
-  component: any;
+  fullPath: string
+  component: any
 }

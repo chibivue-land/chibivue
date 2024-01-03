@@ -1,25 +1,25 @@
 <script>
-import { ref } from "chibivue";
+import { ref } from 'chibivue'
 </script>
 
 <script setup>
 // for v-on
 const handleClick = () => {
-  alert("clicked");
-};
+  alert('clicked')
+}
 
 // for v-bind
-const style = { color: "#876432", fontSize: "30px", "font-weight": "bold" };
+const style = { color: '#876432', fontSize: '30px', 'font-weight': 'bold' }
 
 // for v-for
 const list = [
-  { id: 1, text: "foo" },
-  { id: 2, text: "bar" },
-  { id: 3, text: "baz" },
-];
+  { id: 1, text: 'foo' },
+  { id: 2, text: 'bar' },
+  { id: 3, text: 'baz' },
+]
 
 // for v-model
-const input = ref("");
+const input = ref('')
 </script>
 
 <template>
@@ -53,7 +53,7 @@ const input = ref("");
 
 <style>
 #pages-directives button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   border: none;
   padding: 8px;
   width: 200px;

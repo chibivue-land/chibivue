@@ -1,1 +1,1 @@
-export * from "./runtime-dom";
+export * from './runtime-dom'

@@ -17,6 +17,7 @@
     "lightningcss",
     "nocheck",
     "paren",
+    "Parens",
     "RAWTEXT",
     "RCDATA",
     "tokei",

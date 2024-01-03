@@ -1,6 +1,6 @@
 <script setup>
-import { useRouter } from "chibivue-router";
-const router = useRouter();
+import { useRouter } from 'chibivue-router'
+const router = useRouter()
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const router = useRouter();
 <style>
 #pages-app {
   height: 100%;
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -48,7 +48,7 @@ const router = useRouter();
 }
 
 #pages-app header nav button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   text-decoration: underline;
   border: none;
   padding: 8px;

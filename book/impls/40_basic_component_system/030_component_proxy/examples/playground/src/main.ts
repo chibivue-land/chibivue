@@ -5,7 +5,7 @@ import {
   h,
   reactive,
   ref,
-} from "chibivue";
+} from 'chibivue'
 
 const Child = defineComponent({
   props: {
@@ -14,56 +14,56 @@ const Child = defineComponent({
     },
   },
   setup() {
-    const count = ref(0);
-    return { count };
+    const count = ref(0)
+    return { count }
   },
   render(ctx) {
-    return h("div", {}, [
-      h("p", {}, [`child count: ${ctx.count.value}`]),
+    return h('div', {}, [
+      h('p', {}, [`child count: ${ctx.count.value}`]),
       h(
-        "button",
+        'button',
         {
           onClick: () => ctx.count.value++,
           // ^?
         },
-        [`increment(child)`]
+        [`increment(child)`],
       ),
 
-      h("p", {}, [
+      h('p', {}, [
         `parent count: ${
           ctx.parentCount
           // ^?
         }`,
       ]),
-    ]);
+    ])
   },
-});
+})
 
 const Child2 = {
   setup() {
-    const state = reactive({ count: 0 });
-    return { state };
+    const state = reactive({ count: 0 })
+    return { state }
   },
   template: `
     <div>
       <p>child2 count: {{ state.count }}</p>
     </div>
     `,
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [
+      h('div', {}, [
+        h('p', {}, [
           h(Child, { parentCount: state.count }, []),
-          h("button", { onClick: () => state.count++ }, [`increment (parent)`]),
+          h('button', { onClick: () => state.count++ }, [`increment (parent)`]),
           h(Child2, {}, []),
         ]),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')

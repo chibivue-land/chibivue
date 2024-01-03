@@ -1,6 +1,6 @@
 <script setup>
-import { useCounterStore } from "../store/counter";
-const { count, increment } = useCounterStore();
+import { useCounterStore } from '../store/counter'
+const { count, increment } = useCounterStore()
 </script>
 
 <template>

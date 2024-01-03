@@ -1,6 +1,6 @@
 <script setup>
-import { useCounterStore } from "../store/count.store";
-const { count: todoMaxLength, increment, reset } = useCounterStore();
+import { useCounterStore } from '../store/count.store'
+const { count: todoMaxLength, increment, reset } = useCounterStore()
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const { count: todoMaxLength, increment, reset } = useCounterStore();
 
 <style>
 #pages-store button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   border: none;
   padding: 8px;
   width: 200px;

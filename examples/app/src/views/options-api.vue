@@ -1,26 +1,26 @@
 <script>
-import { defineComponent } from "chibivue";
+import { defineComponent } from 'chibivue'
 
 export default defineComponent({
   data() {
     return {
       count: 0,
-    };
+    }
   },
   methods: {
     increment() {
-      this.count++;
+      this.count++
     },
     reset() {
-      this.count = 0;
+      this.count = 0
     },
   },
   computed: {
     double() {
-      return this.count * 2;
+      return this.count * 2
     },
   },
-});
+})
 </script>
 
 <template>
@@ -35,7 +35,7 @@ export default defineComponent({
 
 <style>
 #pages-options-api button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   border: none;
   padding: 8px;
   width: 200px;

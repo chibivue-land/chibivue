@@ -1,6 +1,6 @@
 <script setup>
-import { useRouter } from "chibivue-router";
-const router = useRouter();
+import { useRouter } from 'chibivue-router'
+const router = useRouter()
 </script>
 
 <template>

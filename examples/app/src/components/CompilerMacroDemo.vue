@@ -1,14 +1,14 @@
 <script setup>
 const props = defineProps({
-  message: { type: String, default: "Hello World" },
-});
+  message: { type: String, default: 'Hello World' },
+})
 
-const emit = defineEmits({ "click:compiler-macro": null });
+const emit = defineEmits({ 'click:compiler-macro': null })
 
 const invokeEmit = () => {
-  console.log("props.message: ", props);
-  emit("click:compiler-macro", "Hello from CompilerMacroDemo");
-};
+  console.log('props.message: ', props)
+  emit('click:compiler-macro', 'Hello from CompilerMacroDemo')
+}
 </script>
 
 <template>

@@ -1,43 +1,43 @@
-import { toRaw } from "@chibivue/reactivity";
-import { IfAny, Prettify } from "@chibivue/shared";
-import { ComponentInternalInstance } from "./component";
-import { VNode, VNodeNormalizedChildren } from "./vnode";
+import { toRaw } from '@chibivue/reactivity'
+import { IfAny, Prettify } from '@chibivue/shared'
+import { ComponentInternalInstance } from './component'
+import { VNode, VNodeNormalizedChildren } from './vnode'
 
 export type Slot<T extends any = any> = (
   ...args: IfAny<T, any[], [T] | (T extends undefined ? [] : never)>
-) => VNode[];
+) => VNode[]
 
 export type InternalSlots = {
-  [name: string]: Slot | undefined;
-};
+  [name: string]: Slot | undefined
+}
 
-export type Slots = Readonly<InternalSlots>;
+export type Slots = Readonly<InternalSlots>
 
-declare const SlotSymbol: unique symbol;
+declare const SlotSymbol: unique symbol
 export type SlotsType<T extends Record<string, any> = Record<string, any>> = {
-  [SlotSymbol]?: T;
-};
+  [SlotSymbol]?: T
+}
 
 export type RawSlots = {
-  [name: string]: unknown;
-};
+  [name: string]: unknown
+}
 
 export type UnwrapSlotsType<
   S extends SlotsType,
-  T = NonNullable<S[typeof SlotSymbol]>
+  T = NonNullable<S[typeof SlotSymbol]>,
 > = [keyof S] extends [never]
   ? Slots
   : Readonly<
       Prettify<{
         [K in keyof T]: NonNullable<T[K]> extends (...args: any[]) => any
           ? T[K]
-          : Slot<T[K]>;
+          : Slot<T[K]>
       }>
-    >;
+    >
 
 export const initSlots = (
   instance: ComponentInternalInstance,
-  children: VNodeNormalizedChildren
+  children: VNodeNormalizedChildren,
 ) => {
-  instance.slots = toRaw(children as InternalSlots);
-};
+  instance.slots = toRaw(children as InternalSlots)
+}

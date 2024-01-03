@@ -1,4 +1,4 @@
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
 const app = createApp({
   template: `
@@ -22,6 +22,6 @@ const app = createApp({
     </div>
 
   `,
-});
+})
 
-app.mount("#app");
+app.mount('#app')

@@ -1,18 +1,18 @@
-import { InjectionKey } from "./apiInject";
-import { Component } from "./component";
-import { RootRenderFunction } from "./renderer";
-import { createVNode } from "./vnode";
+import { InjectionKey } from './apiInject'
+import { Component } from './component'
+import { RootRenderFunction } from './renderer'
+import { createVNode } from './vnode'
 
 export interface App<HostElement = any> {
-  component(name: string, component: Component): this;
-  mount(rootContainer: HostElement | string): void;
-  provide<T>(key: InjectionKey<T> | string, value: T): this;
+  component(name: string, component: Component): this
+  mount(rootContainer: HostElement | string): void
+  provide<T>(key: InjectionKey<T> | string, value: T): this
 }
 
 export interface AppContext {
-  app: App;
-  components: Record<string, Component>;
-  provides: Record<string | symbol, any>;
+  app: App
+  components: Record<string, Component>
+  provides: Record<string | symbol, any>
 }
 
 export function createAppContext(): AppContext {
@@ -20,38 +20,38 @@ export function createAppContext(): AppContext {
     app: null as any,
     provides: Object.create(null),
     components: {},
-  };
+  }
 }
 
 export type CreateAppFunction<HostElement> = (
-  rootComponent: Component
-) => App<HostElement>;
+  rootComponent: Component,
+) => App<HostElement>
 
 export function createAppAPI<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
-    const context = createAppContext();
+    const context = createAppContext()
 
     const app: App = (context.app = {
       mount(rootContainer: HostElement) {
-        const vnode = createVNode(rootComponent, {}, []);
-        vnode.appContext = context;
-        render(vnode, rootContainer);
+        const vnode = createVNode(rootComponent, {}, [])
+        vnode.appContext = context
+        render(vnode, rootContainer)
       },
 
       provide(key, value) {
-        context.provides[key as string | symbol] = value;
+        context.provides[key as string | symbol] = value
 
-        return app;
+        return app
       },
 
       component(name: string, component: Component): any {
-        context.components[name] = component;
-        return app;
+        context.components[name] = component
+        return app
       },
-    });
+    })
 
-    return app;
-  };
+    return app
+  }
 }

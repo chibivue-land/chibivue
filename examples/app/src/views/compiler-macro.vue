@@ -1,18 +1,18 @@
 <script>
-import { defineComponent, ref } from "chibivue";
-import CompilerMacroDemo from "../components/CompilerMacroDemo.vue";
+import { defineComponent, ref } from 'chibivue'
+import CompilerMacroDemo from '../components/CompilerMacroDemo.vue'
 
 export default defineComponent({
   components: { CompilerMacroDemo },
 
   setup() {
-    const message = ref("hello world");
+    const message = ref('hello world')
     const handleClick = (...args) => {
-      message.value = args.join(" ");
-    };
-    return { message, handleClick };
+      message.value = args.join(' ')
+    }
+    return { message, handleClick }
   },
-});
+})
 </script>
 
 <template>
@@ -24,7 +24,7 @@ export default defineComponent({
 
 <style>
 #compiler-macro button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   border: none;
   padding: 8px;
   width: 200px;

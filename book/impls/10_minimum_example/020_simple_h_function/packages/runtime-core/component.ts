@@ -1,3 +1,3 @@
-import { ComponentOptions } from "./componentOptions";
+import { ComponentOptions } from './componentOptions'
 
-export type Component = ComponentOptions;
+export type Component = ComponentOptions

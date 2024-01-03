@@ -1,30 +1,30 @@
-import { generate } from "./codegen";
-import { CompilerOptions } from "./options";
-import { baseParse } from "./parse";
-import { DirectiveTransform, NodeTransform, transform } from "./transform";
-import { transformElement } from "./transforms/transformElement";
-import { transformExpression } from "./transforms/transformExpression";
-import { transformBind } from "./transforms/vBind";
-import { transformFor } from "./transforms/vFor";
-import { transformIf } from "./transforms/vIf";
-import { transformOn } from "./transforms/vOn";
+import { generate } from './codegen'
+import { CompilerOptions } from './options'
+import { baseParse } from './parse'
+import { DirectiveTransform, NodeTransform, transform } from './transform'
+import { transformElement } from './transforms/transformElement'
+import { transformExpression } from './transforms/transformExpression'
+import { transformBind } from './transforms/vBind'
+import { transformFor } from './transforms/vFor'
+import { transformIf } from './transforms/vIf'
+import { transformOn } from './transforms/vOn'
 
 export type TransformPreset = [
   NodeTransform[],
-  Record<string, DirectiveTransform>
-];
+  Record<string, DirectiveTransform>,
+]
 
 export function getBaseTransformPreset(): TransformPreset {
   return [
     [transformIf, transformFor, transformExpression, transformElement],
     { bind: transformBind, on: transformOn },
-  ];
+  ]
 }
 
 export function baseCompile(template: string, option: CompilerOptions) {
-  const ast = baseParse(template.trim());
+  const ast = baseParse(template.trim())
 
-  const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();
+  const [nodeTransforms, directiveTransforms] = getBaseTransformPreset()
 
   transform(ast, {
     ...option,
@@ -33,8 +33,8 @@ export function baseCompile(template: string, option: CompilerOptions) {
       ...directiveTransforms,
       ...option.directiveTransforms,
     },
-  });
+  })
 
-  const code = generate(ast, option);
-  return code;
+  const code = generate(ast, option)
+  return code
 }

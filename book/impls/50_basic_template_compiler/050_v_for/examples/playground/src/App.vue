@@ -1,25 +1,25 @@
 <script>
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
-const genId = () => Math.random().toString(36).slice(2);
+const genId = () => Math.random().toString(36).slice(2)
 
 const FRUITS_FACTORIES = [
-  () => ({ id: genId(), name: "apple", color: "red" }),
-  () => ({ id: genId(), name: "banana", color: "yellow" }),
-  () => ({ id: genId(), name: "grape", color: "purple" }),
-];
+  () => ({ id: genId(), name: 'apple', color: 'red' }),
+  () => ({ id: genId(), name: 'banana', color: 'yellow' }),
+  () => ({ id: genId(), name: 'grape', color: 'purple' }),
+]
 
 export default {
   setup() {
-    const fruits = ref([...FRUITS_FACTORIES].map((f) => f()));
+    const fruits = ref([...FRUITS_FACTORIES].map(f => f()))
     const addFruit = () => {
       fruits.value.push(
-        FRUITS_FACTORIES[Math.floor(Math.random() * FRUITS_FACTORIES.length)]()
-      );
-    };
-    return { fruits, addFruit };
+        FRUITS_FACTORIES[Math.floor(Math.random() * FRUITS_FACTORIES.length)](),
+      )
+    }
+    return { fruits, addFruit }
   },
-};
+}
 </script>
 
 <template>

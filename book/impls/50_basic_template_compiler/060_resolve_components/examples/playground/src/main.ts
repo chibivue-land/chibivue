@@ -1,12 +1,12 @@
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
 // @ts-ignore
-import App from "./App.vue";
+import App from './App.vue'
 // @ts-ignore
-import Counter from "./components/Counter.vue";
+import Counter from './components/Counter.vue'
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.component("GlobalCounter", Counter);
+app.component('GlobalCounter', Counter)
 
-app.mount("#app");
+app.mount('#app')

@@ -60,6 +60,9 @@ importers:
       jiti:
         specifier: ^1.19.3
         version: 1.19.3
+      prettier:
+        specifier: ^3.1.1
+        version: 3.1.1
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -2720,6 +2723,12 @@ packages:
 
   /preact@10.16.0:
     resolution: {integrity: sha512-XTSj3dJ4roKIC93pald6rWuB2qQJO9gO2iLLyTe87MrjQN+HklueLsmskbywEWqCHlclgz3/M4YLL2iBr9UmMA==}
+    dev: true
+
+  /prettier@3.1.1:
+    resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /pretty-format@27.5.1:

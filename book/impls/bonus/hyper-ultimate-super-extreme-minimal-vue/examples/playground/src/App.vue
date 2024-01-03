@@ -1,13 +1,13 @@
 <script>
-import { reactive } from "hyper-ultimate-super-extreme-minimal-vue";
+import { reactive } from 'hyper-ultimate-super-extreme-minimal-vue'
 
 export default {
   setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => state.count++;
-    return { state, increment };
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
+    return { state, increment }
   },
-};
+}
 </script>
 
 <template>

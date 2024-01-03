@@ -1,0 +1,8 @@
+node_modules
+book/images
+book/online-book/cache
+
+dist
+*.md
+*.html
+pnpm-lock.yaml

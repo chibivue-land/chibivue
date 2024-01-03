@@ -1,15 +1,15 @@
 export interface SchedulerJob extends Function {
-  id?: number;
+  id?: number
 }
 
-const queue: SchedulerJob[] = [];
+const queue: SchedulerJob[] = []
 
-let flushIndex = 0;
+let flushIndex = 0
 
-let isFlushing = false;
-let isFlushPending = false;
+let isFlushing = false
+let isFlushPending = false
 
-const resolvedPromise = Promise.resolve() as Promise<any>;
+const resolvedPromise = Promise.resolve() as Promise<any>
 
 export function queueJob(job: SchedulerJob) {
   if (
@@ -17,43 +17,43 @@ export function queueJob(job: SchedulerJob) {
     !queue.includes(job, isFlushing ? flushIndex + 1 : flushIndex)
   ) {
     if (job.id == null) {
-      queue.push(job);
+      queue.push(job)
     } else {
-      queue.splice(findInsertionIndex(job.id), 0, job);
+      queue.splice(findInsertionIndex(job.id), 0, job)
     }
-    queueFlush();
+    queueFlush()
   }
 }
 
 function queueFlush() {
   if (!isFlushing && !isFlushPending) {
-    isFlushPending = true;
+    isFlushPending = true
     resolvedPromise.then(() => {
-      isFlushPending = false;
-      isFlushing = true;
-      queue.forEach((job) => {
-        job();
-      });
+      isFlushPending = false
+      isFlushing = true
+      queue.forEach(job => {
+        job()
+      })
 
-      flushIndex = 0;
-      queue.length = 0;
-      isFlushing = false;
-    });
+      flushIndex = 0
+      queue.length = 0
+      isFlushing = false
+    })
   }
 }
 
 function findInsertionIndex(id: number) {
-  let start = flushIndex + 1;
-  let end = queue.length;
+  let start = flushIndex + 1
+  let end = queue.length
 
   while (start < end) {
-    const middle = (start + end) >>> 1;
-    const middleJobId = getId(queue[middle]);
-    middleJobId < id ? (start = middle + 1) : (end = middle);
+    const middle = (start + end) >>> 1
+    const middleJobId = getId(queue[middle])
+    middleJobId < id ? (start = middle + 1) : (end = middle)
   }
 
-  return start;
+  return start
 }
 
 const getId = (job: SchedulerJob): number =>
-  job.id == null ? Infinity : job.id;
+  job.id == null ? Infinity : job.id

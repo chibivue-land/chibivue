@@ -1,26 +1,26 @@
 <script>
-import { defineComponent, reactive } from "chibivue";
-import SimpleCard from "../components/SimpleCard.vue";
-import SimpleBtn from "../components/SimpleBtn.vue";
+import { defineComponent, reactive } from 'chibivue'
+import SimpleCard from '../components/SimpleCard.vue'
+import SimpleBtn from '../components/SimpleBtn.vue'
 
 export default defineComponent({
   components: { SimpleCard, SimpleBtn },
   setup() {
     const card = reactive({
-      title: "Hello World",
-      content: "This is a simple card",
-    });
+      title: 'Hello World',
+      content: 'This is a simple card',
+    })
 
     const changeTitle = () => {
       card.title =
-        card.title === "Hello World!!!!!!!!!!!"
-          ? "Hello World??????????"
-          : "Hello World!!!!!!!!!!!";
-    };
+        card.title === 'Hello World!!!!!!!!!!!'
+          ? 'Hello World??????????'
+          : 'Hello World!!!!!!!!!!!'
+    }
 
-    return { card, changeTitle };
+    return { card, changeTitle }
   },
-});
+})
 </script>
 
 <template>
@@ -33,7 +33,7 @@ export default defineComponent({
 
 <style>
 #pages-props-emit button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   border: none;
   padding: 8px;
   width: 200px;

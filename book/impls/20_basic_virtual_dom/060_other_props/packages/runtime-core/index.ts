@@ -1,13 +1,13 @@
-export type { App, CreateAppFunction } from "./apiCreateApp";
-export { createAppAPI } from "./apiCreateApp";
+export type { App, CreateAppFunction } from './apiCreateApp'
+export { createAppAPI } from './apiCreateApp'
 
 export {
   registerRuntimeCompiler,
   type InternalRenderFunction,
-} from "./component";
+} from './component'
 
-export type { RendererOptions } from "./renderer";
-export { createRenderer } from "./renderer";
-export { h } from "./h";
+export type { RendererOptions } from './renderer'
+export { createRenderer } from './renderer'
+export { h } from './h'
 
-export { nextTick } from "./scheduler";
+export { nextTick } from './scheduler'

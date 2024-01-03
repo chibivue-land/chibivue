@@ -6,11 +6,11 @@ export default {
   },
   setup(_, { emit }) {
     const handleClick = () => {
-      emit("click:simple-btn", "Hello from SimpleBtn");
-    };
-    return { handleClick };
+      emit('click:simple-btn', 'Hello from SimpleBtn')
+    }
+    return { handleClick }
   },
-};
+}
 </script>
 
 <template>

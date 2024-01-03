@@ -1,15 +1,15 @@
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const count = ref(0);
+    const count = ref(0)
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${count.value}`]),
-        h("button", { onClick: () => count.value++ }, ["Increment"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${count.value}`]),
+        h('button', { onClick: () => count.value++ }, ['Increment']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')

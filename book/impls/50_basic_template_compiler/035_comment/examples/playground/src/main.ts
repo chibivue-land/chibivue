@@ -1,4 +1,4 @@
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent } from 'chibivue'
 
 const App = defineComponent({
   template: `
@@ -13,8 +13,8 @@ const App = defineComponent({
 
   <!-- this is footer -->
   <footer>footer</footer>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')

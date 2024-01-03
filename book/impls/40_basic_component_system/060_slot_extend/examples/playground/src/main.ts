@@ -1,17 +1,17 @@
-import { createApp, defineComponent, h } from "chibivue";
+import { createApp, defineComponent, h } from 'chibivue'
 
 const MyComponent = defineComponent({
   setup(_, { slots }) {
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         slots.default?.(),
-        h("br", {}, []),
+        h('br', {}, []),
         slots.myNamedSlot?.(),
-        h("br", {}, []),
-        slots.myScopedSlot2?.({ message: "hello!" }),
-      ]);
+        h('br', {}, []),
+        slots.myScopedSlot2?.({ message: 'hello!' }),
+      ])
   },
-});
+})
 
 const app = createApp({
   setup() {
@@ -20,13 +20,13 @@ const app = createApp({
         MyComponent,
         {},
         {
-          default: () => "hello",
-          myNamedSlot: () => "hello2",
+          default: () => 'hello',
+          myNamedSlot: () => 'hello2',
           myScopedSlot2: (scope: { message: string }) =>
             `message: ${scope.message}`,
-        }
-      );
+        },
+      )
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')

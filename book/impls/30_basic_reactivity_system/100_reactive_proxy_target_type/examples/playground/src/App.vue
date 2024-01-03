@@ -1,21 +1,21 @@
 <script>
-import { reactive } from "chibivue";
+import { reactive } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    const handleInput = (e) => {
-      state.input = e.target?.value ?? "";
-    };
+    const handleInput = e => {
+      state.input = e.target?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
-};
+}
 </script>
 
 <template>

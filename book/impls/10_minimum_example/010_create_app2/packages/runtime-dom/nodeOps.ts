@@ -1,7 +1,7 @@
-import { RendererOptions } from "../runtime-core";
+import { RendererOptions } from '../runtime-core'
 
 export const nodeOps: RendererOptions<Node> = {
   setElementText(node, text) {
-    node.textContent = text;
+    node.textContent = text
   },
-};
+}

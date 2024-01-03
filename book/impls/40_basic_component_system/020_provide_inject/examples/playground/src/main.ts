@@ -1,39 +1,32 @@
-import {
-  InjectionKey,
-  createApp,
-  h,
-  inject,
-  provide,
-  reactive,
-} from "chibivue";
+import { InjectionKey, createApp, h, inject, provide, reactive } from 'chibivue'
 
 const Child = {
   setup() {
-    const rootState = inject<{ count: number }>("RootState");
-    const logger = inject(LoggerKey);
+    const rootState = inject<{ count: number }>('RootState')
+    const logger = inject(LoggerKey)
 
     const action = () => {
-      rootState && rootState.count++;
-      logger?.("Hello from Child.");
-    };
+      rootState && rootState.count++
+      logger?.('Hello from Child.')
+    }
 
-    return () => h("button", { onClick: action }, ["action"]);
+    return () => h('button', { onClick: action }, ['action'])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 1 });
-    provide("RootState", state);
+    const state = reactive({ count: 1 })
+    provide('RootState', state)
 
     return () =>
-      h("div", {}, [h("p", {}, [`${state.count}`]), h(Child, {}, [])]);
+      h('div', {}, [h('p', {}, [`${state.count}`]), h(Child, {}, [])])
   },
-});
+})
 
-type Logger = (...args: any) => void;
-const LoggerKey = Symbol() as InjectionKey<Logger>;
+type Logger = (...args: any) => void
+const LoggerKey = Symbol() as InjectionKey<Logger>
 
-app.provide(LoggerKey, window.console.log);
+app.provide(LoggerKey, window.console.log)
 
-app.mount("#app");
+app.mount('#app')

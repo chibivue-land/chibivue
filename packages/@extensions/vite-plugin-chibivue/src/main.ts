@@ -1,85 +1,85 @@
-import type { SFCDescriptor } from "@chibivue/compiler-sfc";
-import { ResolvedOptions } from ".";
-import { createDescriptor } from "./utils/descriptorCache";
-import { isUseInlineTemplate, resolveScript } from "./script";
-import { transformTemplateInMain } from "./template";
+import type { SFCDescriptor } from '@chibivue/compiler-sfc'
+import { ResolvedOptions } from '.'
+import { createDescriptor } from './utils/descriptorCache'
+import { isUseInlineTemplate, resolveScript } from './script'
+import { transformTemplateInMain } from './template'
 
 export async function transformMain(
   code: string,
   filename: string,
-  options: ResolvedOptions
+  options: ResolvedOptions,
 ) {
-  const { descriptor } = createDescriptor(filename, code, options);
+  const { descriptor } = createDescriptor(filename, code, options)
 
   // script
-  const { code: scriptCode } = genScriptCode(descriptor, options);
+  const { code: scriptCode } = genScriptCode(descriptor, options)
 
   // template
   const hasTemplateImport =
-    descriptor.template && !isUseInlineTemplate(descriptor);
+    descriptor.template && !isUseInlineTemplate(descriptor)
 
-  let templateCode = "";
+  let templateCode = ''
 
   if (hasTemplateImport) {
-    const { code } = genTemplateCode(descriptor, options);
-    templateCode = code;
+    const { code } = genTemplateCode(descriptor, options)
+    templateCode = code
   }
 
-  const attachedProps: [string, string][] = [];
+  const attachedProps: [string, string][] = []
   if (templateCode) {
-    attachedProps.push(["render", "_sfc_render"]);
+    attachedProps.push(['render', '_sfc_render'])
   }
 
   // styles
-  const stylesCode = await genStyleCode(descriptor);
+  const stylesCode = await genStyleCode(descriptor)
 
-  const output: string[] = [scriptCode, templateCode, stylesCode];
-  output.push("\n");
+  const output: string[] = [scriptCode, templateCode, stylesCode]
+  output.push('\n')
 
   if (attachedProps.length) {
     output.push(
       `export default { ..._sfc_main, ${attachedProps
         .map(([k, v]) => `${k}: ${v}`)
-        .join(", ")} }`
-    );
+        .join(', ')} }`,
+    )
   } else {
-    output.push(`export default _sfc_main`);
+    output.push(`export default _sfc_main`)
   }
 
-  const resolvedCode = output.join("\n");
+  const resolvedCode = output.join('\n')
 
-  return { code: resolvedCode };
+  return { code: resolvedCode }
 }
 
 function genScriptCode(
   descriptor: SFCDescriptor,
-  options: ResolvedOptions
+  options: ResolvedOptions,
 ): {
-  code: string;
+  code: string
 } {
-  let scriptCode = `const _sfc_main = {}`;
-  const script = resolveScript(descriptor, options);
+  let scriptCode = `const _sfc_main = {}`
+  const script = resolveScript(descriptor, options)
   if (script) {
-    scriptCode = options.compiler.rewriteDefault(script.content, "_sfc_main");
+    scriptCode = options.compiler.rewriteDefault(script.content, '_sfc_main')
   }
 
-  return { code: scriptCode };
+  return { code: scriptCode }
 }
 
 async function genStyleCode(descriptor: SFCDescriptor): Promise<string> {
-  let stylesCode = ``;
+  let stylesCode = ``
 
   for (let i = 0; i < descriptor.styles.length; i++) {
-    const src = descriptor.filename;
-    const query = `?chibivue&type=style&index=${i}&lang.css`;
-    const styleRequest = src + query;
-    stylesCode += `\nimport ${JSON.stringify(styleRequest)}`;
+    const src = descriptor.filename
+    const query = `?chibivue&type=style&index=${i}&lang.css`
+    const styleRequest = src + query
+    stylesCode += `\nimport ${JSON.stringify(styleRequest)}`
   }
 
-  return stylesCode;
+  return stylesCode
 }
 
 function genTemplateCode(descriptor: SFCDescriptor, options: ResolvedOptions) {
-  const template = descriptor.template!;
-  return transformTemplateInMain(template.content.trim(), options);
+  const template = descriptor.template!
+  return transformTemplateInMain(template.content.trim(), options)
 }

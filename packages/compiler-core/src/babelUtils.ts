@@ -5,176 +5,177 @@ import {
   ImportSpecifier,
   Function,
   Node,
-} from "@babel/types";
+} from '@babel/types'
 
-import { walk } from "estree-walker";
+import { walk } from 'estree-walker'
 
 export function walkIdentifiers(
   root: Node,
   onIdentifier: (node: Identifier) => void,
   knownIds: Record<string, number> = Object.create(null),
-  parentStack: Node[] = []
+  parentStack: Node[] = [],
 ) {
-  (walk as any)(root, {
+  ;(walk as any)(root, {
     enter(node: Node, parent: Node | undefined) {
-      parent && parentStack.push(parent);
-      if (node.type === "Identifier") {
-        const isLocal = !!knownIds[node.name];
-        const isRefed = isReferencedIdentifier(node, parent!, parentStack);
+      parent && parentStack.push(parent)
+      if (node.type === 'Identifier') {
+        const isLocal = !!knownIds[node.name]
+        const isRefed = isReferencedIdentifier(node, parent!, parentStack)
         if (!isLocal && isRefed) {
-          onIdentifier(node);
+          onIdentifier(node)
         }
       } else if (isFunctionType(node)) {
-        walkFunctionParams(node, (id) =>
-          markScopeIdentifier(node, id, knownIds)
-        );
+        walkFunctionParams(node, id => markScopeIdentifier(node, id, knownIds))
       }
     },
     leave(_node: Node, parent: Node | undefined) {
-      parent && parentStack.pop();
+      parent && parentStack.pop()
     },
-  });
+  })
 }
 
 export function walkFunctionParams(
   node: Function,
-  onIdent: (id: Identifier) => void
+  onIdent: (id: Identifier) => void,
 ) {
   for (const p of node.params) {
     for (const id of extractIdentifiers(p)) {
-      onIdent(id);
+      onIdent(id)
     }
   }
 }
 
 export function extractIdentifiers(
   param: Node,
-  nodes: Identifier[] = []
+  nodes: Identifier[] = [],
 ): Identifier[] {
   switch (param.type) {
-    case "Identifier":
-      nodes.push(param);
-      break;
+    case 'Identifier':
+      nodes.push(param)
+      break
 
-    case "MemberExpression":
-      let object: any = param;
-      while (object.type === "MemberExpression") {
-        object = object.object;
+    case 'MemberExpression':
+      let object: any = param
+      while (object.type === 'MemberExpression') {
+        object = object.object
       }
-      nodes.push(object);
-      break;
+      nodes.push(object)
+      break
 
-    case "ObjectPattern":
+    case 'ObjectPattern':
       for (const prop of param.properties) {
-        if (prop.type === "RestElement") {
-          extractIdentifiers(prop.argument, nodes);
+        if (prop.type === 'RestElement') {
+          extractIdentifiers(prop.argument, nodes)
         } else {
-          extractIdentifiers(prop.value, nodes);
+          extractIdentifiers(prop.value, nodes)
         }
       }
-      break;
+      break
 
-    case "ArrayPattern":
-      param.elements.forEach((element) => {
-        if (element) extractIdentifiers(element, nodes);
-      });
-      break;
+    case 'ArrayPattern':
+      param.elements.forEach(element => {
+        if (element) extractIdentifiers(element, nodes)
+      })
+      break
 
-    case "RestElement":
-      extractIdentifiers(param.argument, nodes);
-      break;
+    case 'RestElement':
+      extractIdentifiers(param.argument, nodes)
+      break
 
-    case "AssignmentPattern":
-      extractIdentifiers(param.left, nodes);
-      break;
+    case 'AssignmentPattern':
+      extractIdentifiers(param.left, nodes)
+      break
   }
 
-  return nodes;
+  return nodes
 }
 
 function markScopeIdentifier(
   node: Node & { scopeIds?: Set<string> },
   child: Identifier,
-  knownIds: Record<string, number>
+  knownIds: Record<string, number>,
 ) {
-  const { name } = child;
+  const { name } = child
   if (node.scopeIds && node.scopeIds.has(name)) {
-    return;
+    return
   }
   if (name in knownIds) {
-    knownIds[name]++;
+    knownIds[name]++
   } else {
-    knownIds[name] = 1;
+    knownIds[name] = 1
   }
-  (node.scopeIds || (node.scopeIds = new Set())).add(name);
+  ;(node.scopeIds || (node.scopeIds = new Set())).add(name)
 }
 
 export const isFunctionType = (node: Node): node is Function => {
-  return /Function(?:Expression|Declaration)$|Method$/.test(node.type);
-};
+  return /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+}
 
 export function getImportedName(
-  specifier: ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+  specifier:
+    | ImportSpecifier
+    | ImportDefaultSpecifier
+    | ImportNamespaceSpecifier,
 ) {
-  if (specifier.type === "ImportSpecifier")
-    return specifier.imported.type === "Identifier"
+  if (specifier.type === 'ImportSpecifier')
+    return specifier.imported.type === 'Identifier'
       ? specifier.imported.name
-      : specifier.imported.value;
-  else if (specifier.type === "ImportNamespaceSpecifier") return "*";
-  return "default";
+      : specifier.imported.value
+  else if (specifier.type === 'ImportNamespaceSpecifier') return '*'
+  return 'default'
 }
 
 export function isReferencedIdentifier(
   id: Identifier,
   parent: Node | null,
-  parentStack: Node[]
+  parentStack: Node[],
 ) {
   if (!parent) {
-    return true;
+    return true
   }
 
   // is a special keyword but parsed as identifier
-  if (id.name === "arguments") {
-    return false;
+  if (id.name === 'arguments') {
+    return false
   }
 
   if (isReferenced(id, parent)) {
-    return true;
+    return true
   }
 
   // babel's isReferenced check returns false for ids being assigned to, so we
   // need to cover those cases here
   switch (parent.type) {
-    case "AssignmentExpression":
-    case "AssignmentPattern":
-      return true;
-    case "ObjectPattern":
-    case "ArrayPattern":
-      return isInDestructureAssignment(parent, parentStack);
+    case 'AssignmentExpression':
+    case 'AssignmentPattern':
+      return true
+    case 'ObjectPattern':
+    case 'ArrayPattern':
+      return isInDestructureAssignment(parent, parentStack)
   }
 
-  return false;
+  return false
 }
 
 export function isInDestructureAssignment(
   parent: Node,
-  parentStack: Node[]
+  parentStack: Node[],
 ): boolean {
   if (
     parent &&
-    (parent.type === "ObjectProperty" || parent.type === "ArrayPattern")
+    (parent.type === 'ObjectProperty' || parent.type === 'ArrayPattern')
   ) {
-    let i = parentStack.length;
+    let i = parentStack.length
     while (i--) {
-      const p = parentStack[i];
-      if (p.type === "AssignmentExpression") {
-        return true;
-      } else if (p.type !== "ObjectProperty" && !p.type.endsWith("Pattern")) {
-        break;
+      const p = parentStack[i]
+      if (p.type === 'AssignmentExpression') {
+        return true
+      } else if (p.type !== 'ObjectProperty' && !p.type.endsWith('Pattern')) {
+        break
       }
     }
   }
-  return false;
+  return false
 }
 
 /**
@@ -191,166 +192,166 @@ function isReferenced(node: Node, parent: Node, grandparent?: Node): boolean {
     // yes: PARENT[NODE]
     // yes: NODE.child
     // no: parent.NODE
-    case "MemberExpression":
-    case "OptionalMemberExpression":
+    case 'MemberExpression':
+    case 'OptionalMemberExpression':
       if (parent.property === node) {
-        return !!parent.computed;
+        return !!parent.computed
       }
-      return parent.object === node;
+      return parent.object === node
 
-    case "JSXMemberExpression":
-      return parent.object === node;
+    case 'JSXMemberExpression':
+      return parent.object === node
     // no: let NODE = init;
     // yes: let id = NODE;
-    case "VariableDeclarator":
-      return parent.init === node;
+    case 'VariableDeclarator':
+      return parent.init === node
 
     // yes: () => NODE
     // no: (NODE) => {}
-    case "ArrowFunctionExpression":
-      return parent.body === node;
+    case 'ArrowFunctionExpression':
+      return parent.body === node
 
     // no: class { #NODE; }
     // no: class { get #NODE() {} }
     // no: class { #NODE() {} }
     // no: class { fn() { return this.#NODE; } }
-    case "PrivateName":
-      return false;
+    case 'PrivateName':
+      return false
 
     // no: class { NODE() {} }
     // yes: class { [NODE]() {} }
     // no: class { foo(NODE) {} }
-    case "ClassMethod":
-    case "ClassPrivateMethod":
-    case "ObjectMethod":
+    case 'ClassMethod':
+    case 'ClassPrivateMethod':
+    case 'ObjectMethod':
       if (parent.key === node) {
-        return !!parent.computed;
+        return !!parent.computed
       }
-      return false;
+      return false
 
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
     // depends: { key: NODE }
-    case "ObjectProperty":
+    case 'ObjectProperty':
       if (parent.key === node) {
-        return !!parent.computed;
+        return !!parent.computed
       }
       // parent.value === node
-      return !grandparent || grandparent.type !== "ObjectPattern";
+      return !grandparent || grandparent.type !== 'ObjectPattern'
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
-    case "ClassProperty":
+    case 'ClassProperty':
       if (parent.key === node) {
-        return !!parent.computed;
+        return !!parent.computed
       }
-      return true;
-    case "ClassPrivateProperty":
-      return parent.key !== node;
+      return true
+    case 'ClassPrivateProperty':
+      return parent.key !== node
 
     // no: class NODE {}
     // yes: class Foo extends NODE {}
-    case "ClassDeclaration":
-    case "ClassExpression":
-      return parent.superClass === node;
+    case 'ClassDeclaration':
+    case 'ClassExpression':
+      return parent.superClass === node
 
     // yes: left = NODE;
     // no: NODE = right;
-    case "AssignmentExpression":
-      return parent.right === node;
+    case 'AssignmentExpression':
+      return parent.right === node
 
     // no: [NODE = foo] = [];
     // yes: [foo = NODE] = [];
-    case "AssignmentPattern":
-      return parent.right === node;
+    case 'AssignmentPattern':
+      return parent.right === node
 
     // no: NODE: for (;;) {}
-    case "LabeledStatement":
-      return false;
+    case 'LabeledStatement':
+      return false
 
     // no: try {} catch (NODE) {}
-    case "CatchClause":
-      return false;
+    case 'CatchClause':
+      return false
 
     // no: function foo(...NODE) {}
-    case "RestElement":
-      return false;
+    case 'RestElement':
+      return false
 
-    case "BreakStatement":
-    case "ContinueStatement":
-      return false;
+    case 'BreakStatement':
+    case 'ContinueStatement':
+      return false
 
     // no: function NODE() {}
     // no: function foo(NODE) {}
-    case "FunctionDeclaration":
-    case "FunctionExpression":
-      return false;
+    case 'FunctionDeclaration':
+    case 'FunctionExpression':
+      return false
 
     // no: export NODE from "foo";
     // no: export * as NODE from "foo";
-    case "ExportNamespaceSpecifier":
-    case "ExportDefaultSpecifier":
-      return false;
+    case 'ExportNamespaceSpecifier':
+    case 'ExportDefaultSpecifier':
+      return false
 
     // no: export { foo as NODE };
     // yes: export { NODE as foo };
     // no: export { NODE as foo } from "foo";
-    case "ExportSpecifier":
+    case 'ExportSpecifier':
       // @ts-expect-error
       if (grandparent?.source) {
-        return false;
+        return false
       }
-      return parent.local === node;
+      return parent.local === node
 
     // no: import NODE from "foo";
     // no: import * as NODE from "foo";
     // no: import { NODE as foo } from "foo";
     // no: import { foo as NODE } from "foo";
     // no: import NODE from "bar";
-    case "ImportDefaultSpecifier":
-    case "ImportNamespaceSpecifier":
-    case "ImportSpecifier":
-      return false;
+    case 'ImportDefaultSpecifier':
+    case 'ImportNamespaceSpecifier':
+    case 'ImportSpecifier':
+      return false
 
     // no: import "foo" assert { NODE: "json" }
-    case "ImportAttribute":
-      return false;
+    case 'ImportAttribute':
+      return false
 
     // no: <div NODE="foo" />
-    case "JSXAttribute":
-      return false;
+    case 'JSXAttribute':
+      return false
 
     // no: [NODE] = [];
     // no: ({ NODE }) = [];
-    case "ObjectPattern":
-    case "ArrayPattern":
-      return false;
+    case 'ObjectPattern':
+    case 'ArrayPattern':
+      return false
 
     // no: new.NODE
     // no: NODE.target
-    case "MetaProperty":
-      return false;
+    case 'MetaProperty':
+      return false
 
     // yes: type X = { someProperty: NODE }
     // no: type X = { NODE: OtherType }
-    case "ObjectTypeProperty":
-      return parent.key !== node;
+    case 'ObjectTypeProperty':
+      return parent.key !== node
 
     // yes: enum X { Foo = NODE }
     // no: enum X { NODE }
-    case "TSEnumMember":
-      return parent.id !== node;
+    case 'TSEnumMember':
+      return parent.id !== node
 
     // yes: { [NODE]: value }
     // no: { NODE: value }
-    case "TSPropertySignature":
+    case 'TSPropertySignature':
       if (parent.key === node) {
-        return !!parent.computed;
+        return !!parent.computed
       }
 
-      return true;
+      return true
   }
 
-  return true;
+  return true
 }

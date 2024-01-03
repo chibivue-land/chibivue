@@ -3,22 +3,22 @@ import type {
   DirectiveTransform,
   ParserOptions,
   RootNode,
-} from "@chibivue/compiler-core";
-import { baseCompile, baseParse } from "@chibivue/compiler-core";
+} from '@chibivue/compiler-core'
+import { baseCompile, baseParse } from '@chibivue/compiler-core'
 
-import { CodegenResult } from "./codegen";
-import { parserOptions } from "./parserOptions";
-import { transformModel } from "./transforms/vModel";
-import { transformOn } from "./transforms/vOn";
+import { CodegenResult } from './codegen'
+import { parserOptions } from './parserOptions'
+import { transformModel } from './transforms/vModel'
+import { transformOn } from './transforms/vOn'
 
 export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
   on: transformOn,
   model: transformModel, // override compiler-core
-};
+}
 
 export function compile(
   template: string,
-  options: CompilerOptions
+  options: CompilerOptions,
 ): CodegenResult {
   return baseCompile(template, {
     ...options,
@@ -27,9 +27,9 @@ export function compile(
       ...options.directiveTransforms,
       ...DOMDirectiveTransforms,
     },
-  }) as any;
+  }) as any
 }
 
 export function parse(template: string, options: ParserOptions = {}): RootNode {
-  return baseParse(template, { ...options, ...parserOptions });
+  return baseParse(template, { ...options, ...parserOptions })
 }

@@ -1,19 +1,19 @@
 <script>
-import { ref, reactive, computed } from "chibivue";
+import { ref, reactive, computed } from 'chibivue'
 </script>
 
 <script setup>
-const count = ref(0);
+const count = ref(0)
 const increment = () => {
-  count.value++;
-};
+  count.value++
+}
 
-const count2 = reactive({ value: 0 });
+const count2 = reactive({ value: 0 })
 const increment2 = () => {
-  count2.value++;
-};
+  count2.value++
+}
 
-const double = computed(() => count.value * 2);
+const double = computed(() => count.value * 2)
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const double = computed(() => count.value * 2);
 
 <style>
 #pages-state button {
-  font-family: "Hannotate SC";
+  font-family: 'Hannotate SC';
   border: none;
   padding: 8px;
   width: 200px;

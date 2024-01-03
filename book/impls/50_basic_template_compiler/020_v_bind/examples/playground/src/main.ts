@@ -1,9 +1,9 @@
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const bind = { id: "some-id", class: "some-class", style: "color: red" };
-    return { count: 1, bind };
+    const bind = { id: 'some-id', class: 'some-class', style: 'color: red' }
+    return { count: 1, bind }
   },
 
   template: `<div>
@@ -22,8 +22,8 @@ const App = defineComponent({
   <p :class="{ 'my-class': true }"> :class="{ 'my-class': true }" </p>
   <p :class="{ 'my-class': false }"> :class="{ 'my-class': false }" </p>
 </div>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')

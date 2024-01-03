@@ -1,38 +1,38 @@
-import { ReactiveEffect } from "../reactivity";
-import { emit } from "./componentEmits";
-import { ComponentOptions } from "./componentOptions";
-import { Props } from "./componentProps";
-import { VNode, VNodeChild } from "./vnode";
+import { ReactiveEffect } from '../reactivity'
+import { emit } from './componentEmits'
+import { ComponentOptions } from './componentOptions'
+import { Props } from './componentProps'
+import { VNode, VNodeChild } from './vnode'
 
-export type Component = ComponentOptions;
+export type Component = ComponentOptions
 
-export type Data = Record<string, unknown>;
+export type Data = Record<string, unknown>
 
 export interface ComponentInternalInstance {
-  type: Component;
+  type: Component
 
-  vnode: VNode;
-  subTree: VNode;
-  next: VNode | null;
-  effect: ReactiveEffect;
-  render: InternalRenderFunction;
-  update: () => void;
+  vnode: VNode
+  subTree: VNode
+  next: VNode | null
+  effect: ReactiveEffect
+  render: InternalRenderFunction
+  update: () => void
 
-  propsOptions: Props;
-  props: Data;
-  emit: (event: string, ...args: any[]) => void;
+  propsOptions: Props
+  props: Data
+  emit: (event: string, ...args: any[]) => void
 
-  isMounted: boolean;
+  isMounted: boolean
 }
 
 export type InternalRenderFunction = {
-  (): VNodeChild;
-};
+  (): VNodeChild
+}
 
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component;
+  const type = vnode.type as Component
 
   const instance: ComponentInternalInstance = {
     type,
@@ -49,8 +49,8 @@ export function createComponentInstance(
     emit: null!, // to be set immediately
 
     isMounted: false,
-  };
+  }
 
-  instance.emit = emit.bind(null, instance);
-  return instance;
+  instance.emit = emit.bind(null, instance)
+  return instance
 }

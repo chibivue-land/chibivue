@@ -1,3 +1,3 @@
 export type ComponentOptions = {
-  render?: Function;
-};
+  render?: Function
+}
