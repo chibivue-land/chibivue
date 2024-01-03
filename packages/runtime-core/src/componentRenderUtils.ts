@@ -1,6 +1,6 @@
 import { type ComponentInternalInstance } from './component'
 import { setCurrentRenderingInstance } from './componentRenderContext'
-import { normalizeVNode, type VNode } from './vnode'
+import { type VNode, normalizeVNode } from './vnode'
 
 export function renderComponentRoot(
   instance: ComponentInternalInstance,

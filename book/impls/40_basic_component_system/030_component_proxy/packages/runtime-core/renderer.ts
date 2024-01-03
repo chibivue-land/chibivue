@@ -14,7 +14,7 @@ import {
   queueJob,
   queuePostFlushCb,
 } from './scheduler'
-import { VNode, Text, normalizeVNode, isSameVNodeType } from './vnode'
+import { Text, VNode, isSameVNodeType, normalizeVNode } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: VNode | null,

@@ -1,4 +1,4 @@
-import { App, reactive, ref, computed } from 'chibivue'
+import { App, computed, reactive, ref } from 'chibivue'
 import {
   routeLocationKey,
   routerKey,

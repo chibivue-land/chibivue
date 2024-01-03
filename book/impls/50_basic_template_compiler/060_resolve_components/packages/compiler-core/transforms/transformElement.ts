@@ -1,6 +1,9 @@
 import {
   CallExpression,
+  ComponentNode,
   DirectiveNode,
+  ElementNode,
+  ElementTypes,
   ExpressionNode,
   NodeTypes,
   ObjectExpression,
@@ -11,9 +14,6 @@ import {
   createObjectProperty,
   createSimpleExpression,
   createVNodeCall,
-  ComponentNode,
-  ElementNode,
-  ElementTypes,
 } from '../ast'
 import {
   MERGE_PROPS,

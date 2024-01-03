@@ -6,7 +6,7 @@ import {
   createComponentInstance,
 } from './component'
 import { initProps, updateProps } from './componentProps'
-import { VNode, Text, normalizeVNode, createVNode } from './vnode'
+import { Text, VNode, createVNode, normalizeVNode } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: Component,

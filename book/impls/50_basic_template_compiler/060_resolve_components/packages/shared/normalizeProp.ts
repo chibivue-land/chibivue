@@ -1,4 +1,4 @@
-import { isString, isArray, isObject } from './general'
+import { isArray, isObject, isString } from './general'
 
 export type NormalizedStyle = Record<string, string | number>
 

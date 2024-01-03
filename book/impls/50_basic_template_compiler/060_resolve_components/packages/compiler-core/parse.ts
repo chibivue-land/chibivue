@@ -2,6 +2,8 @@ import {
   AttributeNode,
   CommentNode,
   DirectiveNode,
+  ElementNode,
+  ElementTypes,
   ExpressionNode,
   InterpolationNode,
   NodeTypes,
@@ -11,8 +13,6 @@ import {
   TemplateChildNode,
   TextNode,
   createRoot,
-  ElementNode,
-  ElementTypes,
 } from './ast'
 import { ParserOptions } from './options'
 import { advancePositionWithClone } from './utils'

@@ -1,4 +1,4 @@
-import { createApp, h, reactive, nextTick } from 'chibivue'
+import { createApp, h, nextTick, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {

@@ -1,12 +1,12 @@
 import { hasOwn } from '@chibivue/shared'
-import { Data, type ComponentInternalInstance } from './component'
+import { type ComponentInternalInstance, Data } from './component'
 import { EmitFn, EmitsOptions } from './componentEmits'
 import {
   ComponentInjectOptions,
   ComputedOptions,
-  MethodOptions,
   ExtractComputedReturns,
   InjectToObject,
+  MethodOptions,
   ResolveProps,
 } from './componentOptions'
 import { SlotsType, UnwrapSlotsType } from './componentSlots'

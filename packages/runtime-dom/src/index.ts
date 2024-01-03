@@ -1,6 +1,6 @@
 import type {
-  RootRenderFunction,
   CreateAppFunction,
+  RootRenderFunction,
 } from '@chibivue/runtime-core'
 import { createRenderer } from '@chibivue/runtime-core'
 import { isString } from '@chibivue/shared'

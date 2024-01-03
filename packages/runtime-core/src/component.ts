@@ -2,7 +2,7 @@ import {
   type VaporComponentInternalInstance,
   isVapor,
 } from '@chibivue/runtime-vapor'
-import { proxyRefs, ReactiveEffect, EffectScope } from '@chibivue/reactivity'
+import { EffectScope, ReactiveEffect, proxyRefs } from '@chibivue/reactivity'
 import { isFunction, isObject } from '@chibivue/shared'
 
 import { AppContext, createAppContext } from './apiCreateApp'

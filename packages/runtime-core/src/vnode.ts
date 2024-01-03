@@ -11,7 +11,7 @@ import {
   normalizeStyle,
 } from '@chibivue/shared'
 import { currentRenderingInstance } from './componentRenderContext'
-import { Data, type ComponentInternalInstance, Component } from './component'
+import { Component, type ComponentInternalInstance, Data } from './component'
 import { type ComponentPublicInstance } from './componentPublicInstance'
 import { AppContext } from './apiCreateApp'
 import { DirectiveBinding } from './directives'

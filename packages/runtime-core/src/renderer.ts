@@ -9,29 +9,29 @@ import { ShapeFlags, invokeArrayFns, isFunction } from '@chibivue/shared'
 import { createAppAPI } from './apiCreateApp'
 import {
   type ComponentInternalInstance,
+  type Data,
   createComponentInstance,
   setupComponent,
-  Data,
 } from './component'
 import { updateProps } from './componentProps'
 import { renderComponentRoot } from './componentRenderUtils'
 import { invokeDirectiveHook } from './directives'
 import { setRef } from './rendererTemplateRef'
 import {
-  SchedulerJob,
+  type SchedulerJob,
   flushPostFlushCbs,
   flushPreFlushCbs,
   queueJob,
   queuePostFlushCb,
 } from './scheduler'
 import {
+  Comment,
+  Fragment,
   Text,
-  normalizeVNode,
   type VNode,
   type VNodeArrayChildren,
   isSameVNodeType,
-  Fragment,
-  Comment,
+  normalizeVNode,
 } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (

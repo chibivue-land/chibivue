@@ -2,12 +2,12 @@ import { parse } from '@babel/parser'
 import { Identifier, Node } from '@babel/types'
 
 import {
+  CompoundExpressionNode,
+  ExpressionNode,
   NodeTypes,
   SimpleExpressionNode,
-  ExpressionNode,
-  CompoundExpressionNode,
-  createSimpleExpression,
   createCompoundExpression,
+  createSimpleExpression,
 } from '../ast'
 import { walkIdentifiers } from '../babelUtils'
 import { NodeTransform, TransformContext } from '../transform'

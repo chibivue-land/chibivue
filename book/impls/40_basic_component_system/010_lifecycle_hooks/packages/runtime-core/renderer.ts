@@ -16,11 +16,11 @@ import {
   queuePostFlushCb,
 } from './scheduler'
 import {
-  VNode,
   Text,
-  normalizeVNode,
+  VNode,
   createVNode,
   isSameVNodeType,
+  normalizeVNode,
 } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (

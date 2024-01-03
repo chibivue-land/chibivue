@@ -1,5 +1,5 @@
 import { type ComputedRef, inject } from 'chibivue'
-import { routerKey, routeLocationKey } from './injectionSymbols'
+import { routeLocationKey, routerKey } from './injectionSymbols'
 import { Router } from './router'
 import { RouteLocationNormalizedLoaded } from './types'
 

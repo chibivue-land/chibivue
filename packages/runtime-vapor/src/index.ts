@@ -1,4 +1,4 @@
-import type { VNode, RootRenderFunction } from '@chibivue/runtime-core'
+import type { RootRenderFunction, VNode } from '@chibivue/runtime-core'
 import { createRenderer } from '@chibivue/runtime-core'
 import { nodeOps, patchProp } from '@chibivue/runtime-dom'
 

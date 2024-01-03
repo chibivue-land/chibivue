@@ -1,6 +1,6 @@
 import { ReactiveEffect } from '../reactivity'
 import { Component } from './component'
-import { VNode, Text, normalizeVNode } from './vnode'
+import { Text, VNode, normalizeVNode } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: Component,

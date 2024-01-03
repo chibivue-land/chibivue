@@ -1,4 +1,4 @@
-import { isFunction, isArray, isObject, isString } from '@chibivue/shared'
+import { isArray, isFunction, isObject, isString } from '@chibivue/shared'
 
 import {
   ComputedGetter,
@@ -9,22 +9,22 @@ import {
   reactive,
 } from '@chibivue/reactivity'
 
-import { provide, inject } from './apiInject'
+import { inject, provide } from './apiInject'
 import {
   onBeforeMount,
-  onMounted,
-  onBeforeUpdate,
-  onUpdated,
   onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
   onUnmounted,
+  onUpdated,
 } from './apiLifecycle'
 import { WatchCallback, WatchOptions, watch } from './apiWatch'
 
 import {
   type ComponentInternalInstance,
   ConcreteComponent,
-  SetupContext,
   Data,
+  SetupContext,
 } from './component'
 import {
   ComponentPublicInstance,
@@ -34,7 +34,7 @@ import { SlotsType } from './componentSlots'
 import { PropType } from './componentProps'
 import { EmitsOptions, ObjectEmitsOptions } from './componentEmits'
 
-import { VNodeChild, type VNode } from './vnode'
+import { type VNode, VNodeChild } from './vnode'
 
 export type RenderFunction = () => VNodeChild
 

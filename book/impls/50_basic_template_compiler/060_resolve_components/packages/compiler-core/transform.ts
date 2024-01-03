@@ -1,14 +1,14 @@
 import { isArray, isString } from '../shared'
 import {
+  DirectiveNode,
+  ElementNode,
+  ExpressionNode,
   NodeTypes,
-  RootNode,
-  TemplateChildNode,
   ParentNode,
   Property,
-  DirectiveNode,
+  RootNode,
+  TemplateChildNode,
   createVNodeCall,
-  ExpressionNode,
-  ElementNode,
 } from './ast'
 import { TransformOptions } from './options'
 import { CREATE_COMMENT, FRAGMENT, helperNameMap } from './runtimeHelpers'

@@ -1,9 +1,9 @@
 import {
+  Function,
   Identifier,
   ImportDefaultSpecifier,
   ImportNamespaceSpecifier,
   ImportSpecifier,
-  Function,
   Node,
 } from '@babel/types'
 

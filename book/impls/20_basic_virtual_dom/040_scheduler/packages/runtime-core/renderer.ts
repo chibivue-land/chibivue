@@ -9,11 +9,11 @@ import {
 import { updateProps } from './componentProps'
 import { SchedulerJob, queueJob } from './scheduler'
 import {
-  VNode,
   Text,
-  normalizeVNode,
+  VNode,
   createVNode,
   isSameVNodeType,
+  normalizeVNode,
 } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (

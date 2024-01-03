@@ -1,4 +1,4 @@
-import { ref, computed, h, defineComponent } from 'chibivue'
+import { computed, defineComponent, h, ref } from 'chibivue'
 
 export default defineComponent(() => {
   const count = ref(0)

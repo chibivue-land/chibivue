@@ -1,4 +1,4 @@
-import type { VNode, AppContext } from '@chibivue/runtime-core'
+import type { AppContext, VNode } from '@chibivue/runtime-core'
 import { createAppContext } from '@chibivue/runtime-core'
 
 import type {
@@ -7,9 +7,9 @@ import type {
   LifecycleHook,
 } from '@chibivue/runtime-core'
 import {
-  unsetCurrentInstance,
-  setCurrentInstance,
   LifecycleHooks,
+  setCurrentInstance,
+  unsetCurrentInstance,
 } from '@chibivue/runtime-core'
 
 import { type VaporNode } from '.'

@@ -2,18 +2,18 @@ import {
   type Ref,
   effect,
   h,
-  onMounted,
-  onBeforeMount,
-  ref,
   inject,
+  onBeforeMount,
+  onMounted,
+  ref,
 } from 'chibivue'
 
 import {
   type VaporComponent,
-  template,
-  setText,
-  on,
   createComponent,
+  on,
+  setText,
+  template,
 } from '@chibivue/runtime-vapor'
 
 // @ts-ignore

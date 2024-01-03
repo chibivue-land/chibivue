@@ -10,11 +10,11 @@ import { updateProps } from './componentProps'
 import { setRef } from './rendererTemplateRef'
 import { SchedulerJob, queueJob } from './scheduler'
 import {
-  VNode,
   Text,
-  normalizeVNode,
+  VNode,
   createVNode,
   isSameVNodeType,
+  normalizeVNode,
 } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (

@@ -1,12 +1,12 @@
 import { isArray, isString } from '../shared'
 import {
+  DirectiveNode,
+  ElementNode,
   NodeTypes,
-  RootNode,
-  TemplateChildNode,
   ParentNode,
   Property,
-  ElementNode,
-  DirectiveNode,
+  RootNode,
+  TemplateChildNode,
 } from './ast'
 import { TransformOptions } from './options'
 import { helperNameMap } from './runtimeHelpers'

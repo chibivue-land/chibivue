@@ -1,20 +1,20 @@
 import { parse as _parse } from '@babel/parser'
 import {
-  Statement,
-  ObjectExpression,
-  Node,
-  Declaration,
-  CallExpression,
-  Identifier,
-  ObjectPattern,
   ArrayPattern,
+  CallExpression,
+  Declaration,
   ExportSpecifier,
+  Identifier,
   LVal,
+  Node,
+  ObjectExpression,
+  ObjectPattern,
+  Statement,
 } from '@babel/types'
 import MagicString from 'magic-string'
 
 import type { BindingMetadata } from '@chibivue/compiler-core'
-import { getImportedName, BindingTypes } from '@chibivue/compiler-core'
+import { BindingTypes, getImportedName } from '@chibivue/compiler-core'
 
 import { SFCDescriptor, SFCScriptBlock } from './parse'
 import { compileTemplate } from './compileTemplate'
