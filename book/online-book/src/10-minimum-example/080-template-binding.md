@@ -25,6 +25,7 @@ const app = createApp({
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -368,6 +369,7 @@ const app = createApp({
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -505,6 +507,7 @@ const app = createApp({
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -662,6 +665,7 @@ const app = createApp({
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
