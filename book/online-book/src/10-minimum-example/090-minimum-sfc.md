@@ -294,7 +294,11 @@ export default {
 
     <br />
 
-    <input @input="handleInput" />
+    <label>
+      Input Data
+      <input @input="handleInput" />
+    </label>
+
     <p>input value: {{ state.input }}</p>
   </div>
 </template>

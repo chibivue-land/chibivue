@@ -43,7 +43,10 @@ const input = ref("");
     <hr />
 
     <h3>v-model</h3>
-    <input v-model="input" />
+    <label>
+      Input Data
+      <input v-model="input" />
+    </label>
     <p>value: "{{ input }}"</p>
   </div>
 </template>

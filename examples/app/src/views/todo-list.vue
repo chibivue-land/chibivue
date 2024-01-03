@@ -55,7 +55,9 @@ const removeTodo = (id) => {
     <h1>todo app</h1>
     <div>
       <p>todo max length: {{ todoMaxLength }} (global counter)</p>
+      <label for="new-todo-input" style="display: none"> new todo </label>
       <input
+        id="new-todo-input"
         v-model="newTodo"
         type="text"
         placeholder="Enter a new todo"
@@ -65,9 +67,13 @@ const removeTodo = (id) => {
     </div>
     <ul>
       <li v-for="(todo, i) in todos" :key="todo.id">
+        <label :for="`todo-${todo.id}-check`" style="display: none"
+          >todo check</label
+        >
         <input
           class="toggle-todo-completion"
           type="checkbox"
+          :id="`todo-${todo.id}-check`"
           :value="todo.completed"
           @change="toggleTodoCompletion(todo.id)"
         />

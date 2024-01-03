@@ -102,7 +102,11 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 
       <br />
 
-      <input @input="handleInput" />
+      <label>
+        Input Data
+        <input @input="handleInput" />
+      </label>
+
       <p>input value: {{ state.input }}</p>
     </div>
   </template>

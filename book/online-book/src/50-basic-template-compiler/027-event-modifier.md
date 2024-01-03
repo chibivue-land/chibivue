@@ -32,7 +32,10 @@ const App = defineComponent({
 
   template: `<div>
     <form @submit.prevent="submit">
-      <input :value="buffer" @input="handleInput" />
+      <label>
+        Input Data
+        <input :value="buffer" @input="handleInput" />
+      </label>
       <button>submit</button>
     </form>
     <p>inputText: {{ inputText }}</p>
