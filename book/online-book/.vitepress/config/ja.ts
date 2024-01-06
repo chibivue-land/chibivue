@@ -207,7 +207,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Basic SFC Compiler',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: '🚧 script setup に対応する',
@@ -229,7 +229,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Web Application Essentials',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: '🚧 Plugin',

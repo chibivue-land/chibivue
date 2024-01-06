@@ -210,7 +210,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Basic SFC Compiler',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: 'Supporting script setup',
@@ -232,7 +232,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Web Application Essentials',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: '🚧 Plugin',
