@@ -42,7 +42,7 @@ export function createRenderer(options: RendererOptions) {
       hostPatchProp(el, key, value)
     })
 
-    for (let child of vnode.children) {
+    for (const child of vnode.children) {
       const childEl = renderVNode(child)
       hostInsert(childEl, el)
     }

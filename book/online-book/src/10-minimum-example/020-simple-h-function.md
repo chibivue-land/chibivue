@@ -175,7 +175,7 @@ export function createRenderer(options: RendererOptions) {
     if (typeof vnode === "string") return hostCreateText(vnode);
     const el = hostCreateElement(vnode.type);
 
-    for (let child of vnode.children) {
+    for (const child of vnode.children) {
       const childEl = renderVNode(child);
       hostInsert(childEl, el);
     }
