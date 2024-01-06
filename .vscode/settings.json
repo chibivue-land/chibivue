@@ -32,6 +32,7 @@
     "book": "resource",
     "impls": "vue",
     "online-book": "vuepress",
+    "vuejs-core": "vue",
     "@extensions": "lib"
   },
   "material-icon-theme.files.associations": {}

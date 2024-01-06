@@ -4,10 +4,5 @@ const count = ref(0)
 </script>
 
 <template>
-  <div>
-    <p>{{ count }}</p>
-    <button @click="count++">increment</button>
-  </div>
+  <button @click="count++">{{ count }}</button>
 </template>
-
-<style></style>

@@ -1,40 +1,34 @@
-import fs from 'fs'
-import fse from 'fs-extra'
+import fs from 'node:fs'
+import path from 'node:path'
 
-const red = (s: string) => `\x1b[31m${s}\x1b[0m`
-const green = (s: string) => `\x1b[32m${s}\x1b[0m`
-const blue = (s: string) => `\x1b[34m${s}\x1b[0m`
+import { fileURLToPath } from 'node:url'
 
-const targetDirPath = 'example/vue'
+import { t } from 'chainsi'
+import { locale } from './locale'
+import { getVuejsCorePathInteract } from './prompt'
+import { generate } from './generate'
 
-// check if target path is empty
-if (!targetDirPath) {
-  console.log('Please specify the target path!')
-  process.exit(1)
-}
+const TARGET_DIR_PATH = 'examples/vuejs-core'
+const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))
 
-// check if target path exists. auto create if not
-if (fs.existsSync(targetDirPath)) {
-  const files = fs.readdirSync(targetDirPath)
-  if (files.length) {
-    console.log('')
-    console.log(`${red('Oops!')} Target directory is not empty!`)
-    console.log('')
-    process.exit(1)
+await (async function main() {
+  checkTargetDirExist()
+  const templateVars = new Map<string, string>()
+  const userInputVuejsCorePath = await getVuejsCorePathInteract()
+  templateVars.set('vuejs_core_absolute_path', userInputVuejsCorePath)
+  const templateDirPath = path.resolve(dirname, './template')
+  await generate(templateDirPath, TARGET_DIR_PATH, templateVars)
+  console.log(locale.success.generate.$t(`./${TARGET_DIR_PATH}`))
+})()
+
+function checkTargetDirExist() {
+  if (fs.existsSync(TARGET_DIR_PATH)) {
+    const files = fs.readdirSync(TARGET_DIR_PATH)
+    if (files.length) {
+      console.log(`\n${locale.errors.targetDirHasAlreadyExist.$t()}\n`)
+      process.exit(1)
+    }
+  } else {
+    fs.mkdirSync(TARGET_DIR_PATH, { recursive: true })
   }
-} else {
-  fs.mkdirSync(targetDirPath, { recursive: true })
 }
-
-// copy template files
-const templateDirPath = `tools/vue-playground/template`
-fse.copySync(templateDirPath, targetDirPath)
-
-// message
-console.log('')
-console.log('----------------------------------------------------------')
-console.log(
-  `${green('chibivue project created!')} ${blue('>>>')} ${targetDirPath}`,
-)
-console.log(`Enjoy your learning! 😎`)
-console.log('----------------------------------------------------------')

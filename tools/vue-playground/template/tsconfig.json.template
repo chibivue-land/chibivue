@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "paths": {
+      "vue": [
+        "<%= vuejs_core_absolute_path %>/packages/vue/src"
+      ],
+      "@vue/*": [
+        "<%= vuejs_core_absolute_path %>/packages/*/src"
+      ],
+    },
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Bundler",
+  },
+  "include": [
+    "src",
+    "vite.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
+}

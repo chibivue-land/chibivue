@@ -1,7 +1,7 @@
 node_modules
 dist
 examples/playground
-examples/vue
+examples/vuejs-core
 .env
 tools/translator/ja2en/input.md
 tools/translator/ja2en/output.md

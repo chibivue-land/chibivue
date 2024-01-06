@@ -1,0 +1,1 @@
+export * from '<%= vuejs_core_absolute_path %>/packages/vue/src'

@@ -1,13 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue + TS</title>
+    <title>vuejs/core</title>
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+    <script type="module" src="./src/main.ts"></script>
+
+    <!-- OR -->
+    <!-- <script type="module">
+      import { createApp, ref } from "./vue-standalone.js";
+      createApp({
+        setup() {
+          const count = ref(0);
+          return { count };
+        },
+        template: `<button @click="count++">{{ count }}</button>`
+      }).mount("#app");
+    </script> -->
 </html>
