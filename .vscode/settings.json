@@ -20,6 +20,7 @@
     "Parens",
     "RAWTEXT",
     "RCDATA",
+    "textlint",
     "tokei",
     "unref",
     "vdom",

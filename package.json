@@ -13,6 +13,7 @@
     "dev:setup": "tsx tools/chibivue-playground/main.ts",
     "build": "tsx build",
     "lint": "eslint --cache --ext .js,.ts,.tsx . --ignore-path .gitignore",
+    "lint:text": "textlint book",
     "format": "prettier --write --cache .",
     "format-check": "prettier --check --cache .",
     "test": "vitest",
@@ -35,6 +36,9 @@
     "*.ts": [
       "eslint --fix",
       "prettier --parser=typescript --write"
+    ],
+    "*.md": [
+      "textlint"
     ]
   },
   "author": "Ubugeeei <ubuge1122@gmail.com>",
@@ -59,6 +63,8 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
     "rimraf": "^5.0.5",
+    "textlint": "^13.4.1",
+    "textlint-rule-ja-space-between-half-and-full-width": "^2.3.0",
     "tsx": "^4.7.0",
     "typescript": "^5.2.2",
     "vite-hyper-config": "^0.2.1",
