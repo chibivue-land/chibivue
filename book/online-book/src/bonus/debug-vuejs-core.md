@@ -74,13 +74,6 @@ nr setup:vue
 
 <video src="https://github.com/Ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
 
-
-
-
-
-
-
-
 あとは起動したい時に以下のコマンドで起動して、vuejs/core のソースコードをいじりながら動作を確認する事ができます。
 
 ```bash

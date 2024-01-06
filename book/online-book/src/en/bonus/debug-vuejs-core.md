@@ -74,13 +74,6 @@ This will create a Vue project in the chibivue repository that points to the loc
 
 <video src="https://github.com/Ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
 
-
-
-
-
-
-
-
 Then, when you want to start, you can start it with the following command and check the operation while modifying the vuejs/core source code.
 
 ```bash
