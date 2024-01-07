@@ -31,16 +31,16 @@ v-if や v-for は単にその要素の属性(+イベントに対する振舞い
 v-if / v-else-if / v-else を組み合わせて FizzBuzz が実装できるようなものを考えてみましょう。
 
 ```ts
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const n = ref(1);
+    const n = ref(1)
     const inc = () => {
-      n.value++;
-    };
+      n.value++
+    }
 
-    return { n, inc };
+    return { n, inc }
   },
 
   template: `
@@ -50,11 +50,11 @@ const App = defineComponent({
     <p v-else-if="n % 3 === 0">Fizz</p>
     <p v-else>{{ n }}</p>
   `,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 今回はまず初めに、どういうコードを生成したいかについても考えてみようかと思います。
@@ -70,22 +70,22 @@ function render(_ctx) {
       createVNode: _createVNode,
       createCommentVNode: _createCommentVNode,
       Fragment: _Fragment,
-    } = ChibiVue;
+    } = ChibiVue
 
     return _createVNode(_Fragment, null, [
       _createVNode(
-        "button",
-        _normalizeProps({ [_toHandlerKey("click")]: inc }),
-        "inc"
+        'button',
+        _normalizeProps({ [_toHandlerKey('click')]: inc }),
+        'inc',
       ),
       n % 5 === 0 && n % 3 === 0
-        ? _createVNode("p", null, "FizzBuzz")
+        ? _createVNode('p', null, 'FizzBuzz')
         : n % 5 === 0
-        ? _createVNode("p", null, "Buzz")
-        : n % 3 === 0
-        ? _createVNode("p", null, "Fizz")
-        : _createVNode("p", null, n),
-    ]);
+          ? _createVNode('p', null, 'Buzz')
+          : n % 3 === 0
+            ? _createVNode('p', null, 'Fizz')
+            : _createVNode('p', null, n),
+    ])
   }
 }
 ```
@@ -119,9 +119,9 @@ export interface TransformContext extends Required<TransformOptions> {
   // .
   // .
   // .
-  replaceNode(node: TemplateChildNode): void; // 追加
-  removeNode(node?: TemplateChildNode): void; // 追加
-  onNodeRemoved(): void; // 追加
+  replaceNode(node: TemplateChildNode): void // 追加
+  removeNode(node?: TemplateChildNode): void // 追加
+  onNodeRemoved(): void // 追加
 }
 ```
 
@@ -138,14 +138,14 @@ traverseChildren の方で現在の parent と children の index は保持す�
 ```ts
 export function traverseChildren(
   parent: ParentNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
   for (let i = 0; i < parent.children.length; i++) {
-    const child = parent.children[i];
-    if (isString(child)) continue;
-    context.parent = parent; // これ
-    context.childIndex = i; // これ
-    traverseNode(child, context);
+    const child = parent.children[i]
+    if (isString(child)) continue
+    context.parent = parent // これ
+    context.childIndex = i // これ
+    traverseNode(child, context)
   }
 }
 ```
@@ -155,7 +155,7 @@ export function traverseChildren(
 ```ts
 export function createTransformContext(
   root: RootNode,
-  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions
+  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions,
 ): TransformContext {
   const context: TransformContext = {
     // .
@@ -164,36 +164,36 @@ export function createTransformContext(
 
     // Node を受け取って currentNode と 該当の parent の children をその Node に置き換えます
     replaceNode(node) {
-      context.parent!.children[context.childIndex] = context.currentNode = node;
+      context.parent!.children[context.childIndex] = context.currentNode = node
     },
 
     // Node を受け取って currentNode と 該当の parent の children からその Node を削除します
     removeNode(node) {
-      const list = context.parent!.children;
+      const list = context.parent!.children
       const removalIndex = node
         ? list.indexOf(node)
         : context.currentNode
-        ? context.childIndex
-        : -1;
+          ? context.childIndex
+          : -1
       if (!node || node === context.currentNode) {
         // current node removed
-        context.currentNode = null;
-        context.onNodeRemoved();
+        context.currentNode = null
+        context.onNodeRemoved()
       } else {
         // sibling node removed
         if (context.childIndex > removalIndex) {
-          context.childIndex--;
-          context.onNodeRemoved();
+          context.childIndex--
+          context.onNodeRemoved()
         }
       }
-      context.parent!.children.splice(removalIndex, 1);
+      context.parent!.children.splice(removalIndex, 1)
     },
 
     // こちらは replaceNode 等を実際に使用する際に登録するようにします
     onNodeRemoved: () => {},
-  };
+  }
 
-  return context;
+  return context
 }
 ```
 
@@ -204,19 +204,19 @@ Node が削除されると index が変わってしまうので、Node が 削�
 ```ts
 export function traverseChildren(
   parent: ParentNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
-  let i = 0; // これ
+  let i = 0 // これ
   const nodeRemoved = () => {
-    i--; // これ
-  };
+    i-- // これ
+  }
   for (; i < parent.children.length; i++) {
-    const child = parent.children[i];
-    if (isString(child)) continue;
-    context.parent = parent;
-    context.childIndex = i;
-    context.onNodeRemoved = nodeRemoved; // これ
-    traverseNode(child, context);
+    const child = parent.children[i]
+    if (isString(child)) continue
+    context.parent = parent
+    context.childIndex = i
+    context.onNodeRemoved = nodeRemoved // これ
+    traverseNode(child, context)
   }
 }
 ```
@@ -234,37 +234,37 @@ v-if や v-for といったディレクティブを実装するにあたって�
 export type StructuralDirectiveTransform = (
   node: ElementNode,
   dir: DirectiveNode,
-  context: TransformContext
-) => void | (() => void);
+  context: TransformContext,
+) => void | (() => void)
 
 export function createStructuralDirectiveTransform(
   // name は正規表現にも対応しています。
   // v-if の transformer でいうと、 `/^(if|else|else-if)$/` のようなものを受け取れる想定です。
   name: string | RegExp,
-  fn: StructuralDirectiveTransform
+  fn: StructuralDirectiveTransform,
 ): NodeTransform {
   const matches = isString(name)
     ? (n: string) => n === name
-    : (n: string) => name.test(n);
+    : (n: string) => name.test(n)
 
   return (node, context) => {
     if (node.type === NodeTypes.ELEMENT) {
       // NodeTypes.ELEMENT のみに作用
-      const { props } = node;
-      const exitFns = [];
+      const { props } = node
+      const exitFns = []
       for (let i = 0; i < props.length; i++) {
-        const prop = props[i];
+        const prop = props[i]
         if (prop.type === NodeTypes.DIRECTIVE && matches(prop.name)) {
           // NodeTypes.DIRECTIVE かつ name が一致するものに対して transformer を実行
-          props.splice(i, 1);
-          i--;
-          const onExit = fn(node, prop, context);
-          if (onExit) exitFns.push(onExit);
+          props.splice(i, 1)
+          i--
+          const onExit = fn(node, prop, context)
+          if (onExit) exitFns.push(onExit)
         }
       }
-      return exitFns;
+      return exitFns
     }
-  };
+  }
 }
 ```
 
@@ -291,22 +291,22 @@ function render(_ctx) {
       createVNode: _createVNode,
       createCommentVNode: _createCommentVNode,
       Fragment: _Fragment,
-    } = ChibiVue;
+    } = ChibiVue
 
     return _createVNode(_Fragment, null, [
       _createVNode(
-        "button",
-        _normalizeProps({ [_toHandlerKey("click")]: inc }),
-        "inc"
+        'button',
+        _normalizeProps({ [_toHandlerKey('click')]: inc }),
+        'inc',
       ),
       n % 5 === 0 && n % 3 === 0
-        ? _createVNode("p", null, "FizzBuzz")
+        ? _createVNode('p', null, 'FizzBuzz')
         : n % 5 === 0
-        ? _createVNode("p", null, "Buzz")
-        : n % 3 === 0
-        ? _createVNode("p", null, "Fizz")
-        : _createVNode("p", null, n),
-    ]);
+          ? _createVNode('p', null, 'Buzz')
+          : n % 3 === 0
+            ? _createVNode('p', null, 'Fizz')
+            : _createVNode('p', null, n),
+    ])
   }
 }
 ```
@@ -335,11 +335,11 @@ export const enum NodeTypes {
 }
 
 export interface ConditionalExpression extends Node {
-  type: NodeTypes.JS_CONDITIONAL_EXPRESSION;
-  test: JSChildNode;
-  consequent: JSChildNode;
-  alternate: JSChildNode;
-  newline: boolean; // これは codegen のフォーマット用なのであまり気にしなくていいです
+  type: NodeTypes.JS_CONDITIONAL_EXPRESSION
+  test: JSChildNode
+  consequent: JSChildNode
+  alternate: JSChildNode
+  newline: boolean // これは codegen のフォーマット用なのであまり気にしなくていいです
 }
 
 export type JSChildNode =
@@ -348,13 +348,13 @@ export type JSChildNode =
   | ObjectExpression
   | ArrayExpression
   | ConditionalExpression // 追加
-  | ExpressionNode;
+  | ExpressionNode
 
 export function createConditionalExpression(
-  test: ConditionalExpression["test"],
-  consequent: ConditionalExpression["consequent"],
-  alternate: ConditionalExpression["alternate"],
-  newline = true
+  test: ConditionalExpression['test'],
+  consequent: ConditionalExpression['consequent'],
+  alternate: ConditionalExpression['alternate'],
+  newline = true,
 ): ConditionalExpression {
   return {
     type: NodeTypes.JS_CONDITIONAL_EXPRESSION,
@@ -363,7 +363,7 @@ export function createConditionalExpression(
     alternate,
     newline,
     loc: locStub,
-  };
+  }
 }
 ```
 
@@ -379,28 +379,28 @@ export const enum NodeTypes {
 }
 
 export interface IfNode extends Node {
-  type: NodeTypes.IF;
-  branches: IfBranchNode[];
-  codegenNode?: IfConditionalExpression;
+  type: NodeTypes.IF
+  branches: IfBranchNode[]
+  codegenNode?: IfConditionalExpression
 }
 
 export interface IfConditionalExpression extends ConditionalExpression {
-  consequent: VNodeCall;
-  alternate: VNodeCall | IfConditionalExpression;
+  consequent: VNodeCall
+  alternate: VNodeCall | IfConditionalExpression
 }
 
 export interface IfBranchNode extends Node {
-  type: NodeTypes.IF_BRANCH;
-  condition: ExpressionNode | undefined; // else
-  children: TemplateChildNode[];
-  userKey?: AttributeNode | DirectiveNode;
+  type: NodeTypes.IF_BRANCH
+  condition: ExpressionNode | undefined // else
+  children: TemplateChildNode[]
+  userKey?: AttributeNode | DirectiveNode
 }
 
 export type ParentNode =
   | RootNode
   | ElementNode
   // 追加
-  | IfBranchNode;
+  | IfBranchNode
 ```
 
 ### transformer の実装
@@ -437,19 +437,19 @@ export const transformIf = createStructuralDirectiveTransform(
         if (isRoot) {
           ifNode.codegenNode = createCodegenNodeForBranch(
             branch,
-            context
-          ) as IfConditionalExpression;
+            context,
+          ) as IfConditionalExpression
         } else {
-          const parentCondition = getParentCondition(ifNode.codegenNode!);
+          const parentCondition = getParentCondition(ifNode.codegenNode!)
           parentCondition.alternate = createCodegenNodeForBranch(
             branch,
-            context
-          );
+            context,
+          )
         }
-      };
-    });
-  }
-);
+      }
+    })
+  },
+)
 
 export function processIf(
   node: ElementNode,
@@ -458,8 +458,8 @@ export function processIf(
   processCodegen?: (
     node: IfNode,
     branch: IfBranchNode,
-    isRoot: boolean
-  ) => (() => void) | undefined
+    isRoot: boolean,
+  ) => (() => void) | undefined,
 ) {
   // TODO:
 }
@@ -471,7 +471,7 @@ export function processIf(
 // branch の codegenNode 生成
 function createCodegenNodeForBranch(
   branch: IfBranchNode,
-  context: TransformContext
+  context: TransformContext,
 ): IfConditionalExpression | VNodeCall {
   if (branch.condition) {
     return createConditionalExpression(
@@ -481,34 +481,34 @@ function createCodegenNodeForBranch(
       // v-else-if や v-if が来た時に alternate を対象の Node に書き換えます。
       // `parentCondition.alternate = createCodegenNodeForBranch(branch, context);` の部分です
       // もし、v-else-if や v-else がこなかった場合には、このまま CREATE_COMMENT の Node になります。
-      createCallExpression(context.helper(CREATE_COMMENT), ['""', "true"])
-    ) as IfConditionalExpression;
+      createCallExpression(context.helper(CREATE_COMMENT), ['""', 'true']),
+    ) as IfConditionalExpression
   } else {
-    return createChildrenCodegenNode(branch, context);
+    return createChildrenCodegenNode(branch, context)
   }
 }
 
 function createChildrenCodegenNode(
   branch: IfBranchNode,
-  context: TransformContext
+  context: TransformContext,
 ): VNodeCall {
   // branch から vnode call を取り出すだけ
-  const { children } = branch;
-  const firstChild = children[0];
-  const vnodeCall = (firstChild as ElementNode).codegenNode as VNodeCall;
-  return vnodeCall;
+  const { children } = branch
+  const firstChild = children[0]
+  const vnodeCall = (firstChild as ElementNode).codegenNode as VNodeCall
+  return vnodeCall
 }
 
 function getParentCondition(
-  node: IfConditionalExpression
+  node: IfConditionalExpression,
 ): IfConditionalExpression {
   // node から辿って 末端の Node を取得する
   while (true) {
     if (node.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
       if (node.alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
-        node = node.alternate;
+        node = node.alternate
       } else {
-        return node;
+        return node
       }
     }
   }
@@ -543,24 +543,24 @@ export function processIf(
   processCodegen?: (
     node: IfNode,
     branch: IfBranchNode,
-    isRoot: boolean
-  ) => (() => void) | undefined
+    isRoot: boolean,
+  ) => (() => void) | undefined,
 ) {
   // あらかじめ、exp には processExpression を実行しておきます。
   if (!context.isBrowser && dir.exp) {
-    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
+    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context)
   }
 
-  if (dir.name === "if") {
-    const branch = createIfBranch(node, dir);
+  if (dir.name === 'if') {
+    const branch = createIfBranch(node, dir)
     const ifNode: IfNode = {
       type: NodeTypes.IF,
       loc: node.loc,
       branches: [branch],
-    };
-    context.replaceNode(ifNode);
+    }
+    context.replaceNode(ifNode)
     if (processCodegen) {
-      return processCodegen(ifNode, branch, true);
+      return processCodegen(ifNode, branch, true)
     }
   } else {
     // TODO:
@@ -571,9 +571,9 @@ function createIfBranch(node: ElementNode, dir: DirectiveNode): IfBranchNode {
   return {
     type: NodeTypes.IF_BRANCH,
     loc: node.loc,
-    condition: dir.name === "else" ? undefined : dir.exp,
+    condition: dir.name === 'else' ? undefined : dir.exp,
     children: [node],
-  };
+  }
 }
 ```
 
@@ -584,16 +584,16 @@ context から parent の children を辿って siblings を取得し、
 この際、コメントや空のテキストは削除してしまいます。
 
 ```ts
-if (dir.name === "if") {
+if (dir.name === 'if') {
   /** 省略 */
 } else {
-  const siblings = context.parent!.children;
-  let i = siblings.indexOf(node);
+  const siblings = context.parent!.children
+  let i = siblings.indexOf(node)
   while (i-- >= -1) {
-    const sibling = siblings[i];
+    const sibling = siblings[i]
     if (sibling && sibling.type === NodeTypes.COMMENT) {
-      context.removeNode(sibling);
-      continue;
+      context.removeNode(sibling)
+      continue
     }
 
     if (
@@ -601,20 +601,20 @@ if (dir.name === "if") {
       sibling.type === NodeTypes.TEXT &&
       !sibling.content.trim().length
     ) {
-      context.removeNode(sibling);
-      continue;
+      context.removeNode(sibling)
+      continue
     }
 
     if (sibling && sibling.type === NodeTypes.IF) {
-      context.removeNode();
-      const branch = createIfBranch(node, dir);
-      sibling.branches.push(branch);
-      const onExit = processCodegen && processCodegen(sibling, branch, false);
-      traverseNode(branch, context);
-      if (onExit) onExit();
-      context.currentNode = null;
+      context.removeNode()
+      const branch = createIfBranch(node, dir)
+      sibling.branches.push(branch)
+      const onExit = processCodegen && processCodegen(sibling, branch, false)
+      traverseNode(branch, context)
+      if (onExit) onExit()
+      context.currentNode = null
     }
-    break;
+    break
   }
 }
 ```
@@ -635,7 +635,7 @@ IfBranch も traverseChildren の対象にしてあげます。
 ```ts
 export function traverseNode(
   node: RootNode | TemplateChildNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
   // .
   // .
@@ -646,15 +646,15 @@ export function traverseNode(
     // 追加
     case NodeTypes.IF:
       for (let i = 0; i < node.branches.length; i++) {
-        traverseNode(node.branches[i], context);
+        traverseNode(node.branches[i], context)
       }
-      break;
+      break
 
     case NodeTypes.IF_BRANCH: // 追加
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
-      traverseChildren(node, context);
-      break;
+      traverseChildren(node, context)
+      break
   }
 }
 ```
@@ -666,7 +666,7 @@ export function getBaseTransformPreset(): TransformPreset {
   return [
     [transformIf, transformElement],
     { bind: transformBind, on: transformOn },
-  ];
+  ]
 }
 ```
 
@@ -682,58 +682,58 @@ export function getBaseTransformPreset(): TransformPreset {
 const genNode = (
   node: CodegenNode,
   context: CodegenContext,
-  option: CompilerOptions
+  option: CompilerOptions,
 ) => {
   switch (node.type) {
     case NodeTypes.ELEMENT:
     case NodeTypes.IF: // ここを追加するのを忘れずに！
-      genNode(node.codegenNode!, context, option);
-      break;
+      genNode(node.codegenNode!, context, option)
+      break
     // .
     // .
     // .
     case NodeTypes.JS_CONDITIONAL_EXPRESSION:
-      genConditionalExpression(node, context, option);
-      break;
+      genConditionalExpression(node, context, option)
+      break
     /* istanbul ignore next */
     case NodeTypes.IF_BRANCH:
       // noop
-      break;
+      break
   }
-};
+}
 
 function genConditionalExpression(
   node: ConditionalExpression,
   context: CodegenContext,
-  option: CompilerOptions
+  option: CompilerOptions,
 ) {
-  const { test, consequent, alternate, newline: needNewline } = node;
-  const { push, indent, deindent, newline } = context;
+  const { test, consequent, alternate, newline: needNewline } = node
+  const { push, indent, deindent, newline } = context
   if (test.type === NodeTypes.SIMPLE_EXPRESSION) {
-    genExpression(test, context);
+    genExpression(test, context)
   } else {
-    push(`(`);
-    genNode(test, context, option);
-    push(`)`);
+    push(`(`)
+    genNode(test, context, option)
+    push(`)`)
   }
-  needNewline && indent();
-  context.indentLevel++;
-  needNewline || push(` `);
-  push(`? `);
-  genNode(consequent, context, option);
-  context.indentLevel--;
-  needNewline && newline();
-  needNewline || push(` `);
-  push(`: `);
-  const isNested = alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION;
+  needNewline && indent()
+  context.indentLevel++
+  needNewline || push(` `)
+  push(`? `)
+  genNode(consequent, context, option)
+  context.indentLevel--
+  needNewline && newline()
+  needNewline || push(` `)
+  push(`: `)
+  const isNested = alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION
   if (!isNested) {
-    context.indentLevel++;
+    context.indentLevel++
   }
-  genNode(alternate, context, option);
+  genNode(alternate, context, option)
   if (!isNested) {
-    context.indentLevel--;
+    context.indentLevel--
   }
-  needNewline && deindent(true /* without newline */);
+  needNewline && deindent(true /* without newline */)
 }
 ```
 

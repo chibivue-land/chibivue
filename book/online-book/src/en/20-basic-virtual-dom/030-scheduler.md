@@ -5,30 +5,30 @@
 First, take a look at this code:
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
     const state = reactive({
-      message: "Hello World",
-    });
+      message: 'Hello World',
+    })
     const updateState = () => {
-      state.message = "Hello ChibiVue!";
-      state.message = "Hello ChibiVue!!";
-    };
+      state.message = 'Hello ChibiVue!'
+      state.message = 'Hello ChibiVue!!'
+    }
 
     return () => {
-      console.log("😎 rendered!");
+      console.log('😎 rendered!')
 
-      return h("div", { id: "app" }, [
-        h("p", {}, [`message: ${state.message}`]),
-        h("button", { onClick: updateState }, ["update"]),
-      ]);
-    };
+      return h('div', { id: 'app' }, [
+        h('p', {}, [`message: ${state.message}`]),
+        h('button', { onClick: updateState }, ['update']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 When the button is clicked, the `set` function is called twice on `state.message`, so naturally, the `trigger` function will be executed twice as well. This means that the Virtual DOM will be computed twice and the patching will be performed twice.
@@ -44,10 +44,10 @@ Specifically, we will have a queue to manage jobs. Each job has an ID, and when 
 
 ```ts
 export interface SchedulerJob extends Function {
-  id?: number;
+  id?: number
 }
 
-const queue: SchedulerJob[] = [];
+const queue: SchedulerJob[] = []
 
 export function queueJob(job: SchedulerJob) {
   if (
@@ -55,11 +55,11 @@ export function queueJob(job: SchedulerJob) {
     !queue.includes(job, isFlushing ? flushIndex + 1 : flushIndex)
   ) {
     if (job.id == null) {
-      queue.push(job);
+      queue.push(job)
     } else {
-      queue.splice(findInsertionIndex(job.id), 0, job);
+      queue.splice(findInsertionIndex(job.id), 0, job)
     }
-    queueFlush();
+    queueFlush()
   }
 }
 ```
@@ -87,9 +87,9 @@ For the latter type of effect, which is added to multiple `depsMap` and triggere
 Let's consider a specific example. In the `setupRenderEffect` function of the renderer, you may have the following implementation:
 
 ```ts
-const effect = (instance.effect = new ReactiveEffect(() => componentUpdateFn));
-const update = (instance.update = () => effect.run());
-update();
+const effect = (instance.effect = new ReactiveEffect(() => componentUpdateFn))
+const update = (instance.update = () => effect.run())
+update()
 ```
 
 The `effect` created here, which is a `reactiveEffect`, will later be tracked by a reactive object when the `setup` function is executed. This clearly requires implementation of scheduling (because it will be triggered from various places).  
@@ -102,11 +102,11 @@ As the final interface in this chapter, it will look like this:
 ```ts
 // The first argument of ReactiveEffect is the actively executed effect, and the second argument is the passively executed effect
 const effect = (instance.effect = new ReactiveEffect(componentUpdateFn, () =>
-  queueJob(update)
-));
-const update: SchedulerJob = (instance.update = () => effect.run());
-update.id = instance.uid;
-update();
+  queueJob(update),
+))
+const update: SchedulerJob = (instance.update = () => effect.run())
+update.id = instance.uid
+update()
 ```
 
 In terms of implementation, in addition to `fn`, the `ReactiveEffect` will have a `scheduler` function, and in the `triggerEffect` function, the scheduler will be executed first if it exists.
@@ -125,9 +125,9 @@ export class ReactiveEffect<T = any> {
 ```ts
 function triggerEffect(effect: ReactiveEffect) {
   if (effect.scheduler) {
-    effect.scheduler();
+    effect.scheduler()
   } else {
-    effect.run(); // If there is no scheduler, execute the effect normally
+    effect.run() // If there is no scheduler, execute the effect normally
   }
 }
 ```
@@ -144,32 +144,32 @@ Source code up to this point:
 If you have read the source code when implementing the scheduler, you may have noticed the appearance of "nextTick" and wondered if it is used here. First, let's talk about the task we want to achieve this time. Please take a look at this code:
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
     const state = reactive({
       count: 0,
-    });
+    })
     const updateState = () => {
-      state.count++;
+      state.count++
 
-      const p = document.getElementById("count-p");
+      const p = document.getElementById('count-p')
       if (p) {
-        console.log("😎 p.textContent", p.textContent);
+        console.log('😎 p.textContent', p.textContent)
       }
-    };
+    }
 
     return () => {
-      return h("div", { id: "app" }, [
-        h("p", { id: "count-p" }, [`${state.count}`]),
-        h("button", { onClick: updateState }, ["update"]),
-      ]);
-    };
+      return h('div', { id: 'app' }, [
+        h('p', { id: 'count-p' }, [`${state.count}`]),
+        h('button', { onClick: updateState }, ['update']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Try clicking this button and take a look at the console.
@@ -187,43 +187,43 @@ https://vuejs.org/api/general.html#nexttick
 ```ts
 export function nextTick<T = void>(
   this: T,
-  fn?: (this: T) => void
+  fn?: (this: T) => void,
 ): Promise<void> {
-  const p = currentFlushPromise || resolvedPromise;
-  return fn ? p.then(this ? fn.bind(this) : fn) : p;
+  const p = currentFlushPromise || resolvedPromise
+  return fn ? p.then(this ? fn.bind(this) : fn) : p
 }
 ```
 
 When the job is completed (the promise is resolved), the callback passed to "nextTick" is executed. (If there is no job in the queue, it is connected to "then" of "resolvedPromise") Naturally, "nextTick" itself also returns a Promise, so as a developer interface, you can pass a callback or await "nextTick".
 
 ```ts
-import { createApp, h, reactive, nextTick } from "chibivue";
+import { createApp, h, reactive, nextTick } from 'chibivue'
 
 const app = createApp({
   setup() {
     const state = reactive({
       count: 0,
-    });
+    })
     const updateState = async () => {
-      state.count++;
+      state.count++
 
-      await nextTick(); // Wait
-      const p = document.getElementById("count-p");
+      await nextTick() // Wait
+      const p = document.getElementById('count-p')
       if (p) {
-        console.log("😎 p.textContent", p.textContent);
+        console.log('😎 p.textContent', p.textContent)
       }
-    };
+    }
 
     return () => {
-      return h("div", { id: "app" }, [
-        h("p", { id: "count-p" }, [`${state.count}`]),
-        h("button", { onClick: updateState }, ["update"]),
-      ]);
-    };
+      return h('div', { id: 'app' }, [
+        h('p', { id: 'count-p' }, [`${state.count}`]),
+        h('button', { onClick: updateState }, ['update']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Now, let's actually rewrite the implementation of the current scheduler to keep "currentFlushPromise" and implement "nextTick"!

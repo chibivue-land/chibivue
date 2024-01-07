@@ -60,15 +60,15 @@
 
 ```vue
 <script>
-import { reactive } from "hyper-ultimate-super-extreme-minimal-vue";
+import { reactive } from 'hyper-ultimate-super-extreme-minimal-vue'
 
 export default {
   setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => state.count++;
-    return { state, increment };
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
+    return { state, increment }
   },
-};
+}
 </script>
 
 <template>
@@ -77,11 +77,11 @@ export default {
 ```
 
 ```ts
-import { createApp } from "hyper-ultimate-super-extreme-minimal-vue";
+import { createApp } from 'hyper-ultimate-super-extreme-minimal-vue'
 
 // @ts-ignore
-import App from "./App.vue";
+import App from './App.vue'
 
-const app = createApp(App);
-app.mount("#app");
+const app = createApp(App)
+app.mount('#app')
 ```

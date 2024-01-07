@@ -26,24 +26,24 @@ https://github.com/vuejs/core/blob/main/packages/shared/src/shapeFlags.ts
 
 ```ts
 const vnode = {
-  type: "div",
+  type: 'div',
   children: [
-    { type: "p", children: ["hello"] },
-    { type: "p", children: ["hello"] },
+    { type: 'p', children: ['hello'] },
+    { type: 'p', children: ['hello'] },
   ],
-};
+}
 ```
 
 まず、フラグの初期値は 0 です。(簡略化のため 8bit で説明しています。)
 
 ```ts
-let shape = 0b0000_0000;
+let shape = 0b0000_0000
 ```
 
 ここで、この VNode は element であり、子要素を配列で持っているので ELEMENT というフラグと ARRAY_CHILDREN というフラグが立ちます。
 
 ```ts
-shape = shape | ShapeFlags.ELEMENT | ELEMENT.ARRAY_CHILDREN; // 0x00010001
+shape = shape | ShapeFlags.ELEMENT | ELEMENT.ARRAY_CHILDREN // 0x00010001
 ```
 
 これにより、shape というただ一つの数値で「element でありかつ、子要素を配列を持っている」という情報を表現できました。  
@@ -72,7 +72,7 @@ export const enum ShapeFlags {
 - runtime-core/vnode.ts で vnode に shape を定義
   ```ts
   export interface VNode<HostNode = any> {
-    shapeFlag: number;
+    shapeFlag: number
   }
   ```
   を追加し、createVNode などで flag を算出してください。

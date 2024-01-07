@@ -31,12 +31,12 @@ https://vuejs.org/api/reactivity-core.html#ref
 コードベースで説明しておくと、
 
 ```ts
-const count = ref(0);
-count.value++; // effect (性質 1 )
+const count = ref(0)
+count.value++ // effect (性質 1 )
 
-const state = ref({ count: 0 });
-state.value = { count: 1 }; // effect (性質 1 )
-state.value.count++; // effect (性質 2 )
+const state = ref({ count: 0 })
+state.value = { count: 1 } // effect (性質 1 )
+state.value.count++ // effect (性質 2 )
 ```
 
 ということです。
@@ -48,21 +48,21 @@ ref は `{ value: x }` という reactive オブジェクトを生成するわ�
 
 ```ts
 class RefImpl<T> {
-  private _value: T;
-  public dep?: Dep = undefined;
+  private _value: T
+  public dep?: Dep = undefined
 
   get value() {
-    trackRefValue(this);
+    trackRefValue(this)
   }
 
   set value(newVal) {
-    this._value = toReactive(v);
-    triggerRefValue(this);
+    this._value = toReactive(v)
+    triggerRefValue(this)
   }
 }
 
 const toReactive = <T extends unknown>(value: T): T =>
-  isObject(value) ? reactive(value) : value;
+  isObject(value) ? reactive(value) : value
 ```
 
 実際にソースコードを見ながら ref を実装してみましょう！  
@@ -72,21 +72,21 @@ const toReactive = <T extends unknown>(value: T): T =>
 (※注: template のコンパイラは別で ref に対応する必要があるので動きません)
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const count = ref(0);
+    const count = ref(0)
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${count.value}`]),
-        h("button", { onClick: () => count.value++ }, ["Increment"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${count.value}`]),
+        h('button', { onClick: () => count.value++ }, ['Increment']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  
@@ -107,40 +107,40 @@ app.mount("#app");
 以下のようなソースコードが動かせるようになれば OK です！
 
 ```ts
-import { createApp, h, shallowRef } from "chibivue";
+import { createApp, h, shallowRef } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = shallowRef({ count: 0 });
+    const state = shallowRef({ count: 0 })
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.value.count}`]),
+      h('div', {}, [
+        h('p', {}, [`count: ${state.value.count}`]),
 
         h(
-          "button",
+          'button',
           {
             onClick: () => {
-              state.value = { count: state.value.count + 1 };
+              state.value = { count: state.value.count + 1 }
             },
           },
-          ["increment"]
+          ['increment'],
         ),
 
         h(
-          "button", // clickしても描画は更新されない
+          'button', // clickしても描画は更新されない
           {
             onClick: () => {
-              state.value.count++;
+              state.value.count++
             },
           },
-          ["not trigger ..."]
+          ['not trigger ...'],
         ),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ### triggerRef
@@ -152,49 +152,49 @@ app.mount("#app");
 https://vuejs.org/api/reactivity-advanced.html#triggerref
 
 ```ts
-import { createApp, h, shallowRef, triggerRef } from "chibivue";
+import { createApp, h, shallowRef, triggerRef } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = shallowRef({ count: 0 });
+    const state = shallowRef({ count: 0 })
     const forceUpdate = () => {
-      triggerRef(state);
-    };
+      triggerRef(state)
+    }
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.value.count}`]),
+      h('div', {}, [
+        h('p', {}, [`count: ${state.value.count}`]),
 
         h(
-          "button",
+          'button',
           {
             onClick: () => {
-              state.value = { count: state.value.count + 1 };
+              state.value = { count: state.value.count + 1 }
             },
           },
-          ["increment"]
+          ['increment'],
         ),
 
         h(
-          "button", // clickしても描画は更新されない
+          'button', // clickしても描画は更新されない
           {
             onClick: () => {
-              state.value.count++;
+              state.value.count++
             },
           },
-          ["not trigger ..."]
+          ['not trigger ...'],
         ),
 
         h(
-          "button", // 描画が今の state.value.count が持つ値に更新される
+          'button', // 描画が今の state.value.count が持つ値に更新される
           { onClick: forceUpdate },
-          ["force update !"]
+          ['force update !'],
         ),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  
@@ -209,32 +209,32 @@ https://vuejs.org/api/reactivity-utilities.html#toref
 props の特定のプロパティを ref に変換したりする際によく利用します。
 
 ```ts
-const count = toRef(props, "count");
-console.log(count.value);
+const count = toRef(props, 'count')
+console.log(count.value)
 ```
 
 toRef によって作られた ref は元の reactive オブジェクトと同期され、
 この ref に変更を加えると元の reactive オブジェクトも更新され、元の reactive オブジェクトに変更があるとこの ref も更新されます.
 
 ```ts
-import { createApp, h, reactive, toRef } from "chibivue";
+import { createApp, h, reactive, toRef } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
-    const stateCountRef = toRef(state, "count");
+    const state = reactive({ count: 0 })
+    const stateCountRef = toRef(state, 'count')
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`state.count: ${state.count}`]),
-        h("p", {}, [`stateCountRef.value: ${stateCountRef.value}`]),
-        h("button", { onClick: () => state.count++ }, ["updateState"]),
-        h("button", { onClick: () => stateCountRef.value++ }, ["updateRef"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`state.count: ${state.count}`]),
+        h('p', {}, [`stateCountRef.value: ${stateCountRef.value}`]),
+        h('button', { onClick: () => state.count++ }, ['updateState']),
+        h('button', { onClick: () => stateCountRef.value++ }, ['updateRef']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ソースコードを読みつつ実装していきましょう！
@@ -252,28 +252,28 @@ reactive オブジェクトの全てのプロパティの ref を生成します
 https://vuejs.org/api/reactivity-utilities.html#torefs
 
 ```ts
-import { createApp, h, reactive, toRefs } from "chibivue";
+import { createApp, h, reactive, toRefs } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ foo: 1, bar: 2 });
-    const stateAsRefs = toRefs(state);
+    const state = reactive({ foo: 1, bar: 2 })
+    const stateAsRefs = toRefs(state)
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`[state]: foo: ${state.foo}, bar: ${state.bar}`]),
-        h("p", {}, [
+      h('div', {}, [
+        h('p', {}, [`[state]: foo: ${state.foo}, bar: ${state.bar}`]),
+        h('p', {}, [
           `[stateAsRefs]: foo: ${stateAsRefs.foo.value}, bar: ${stateAsRefs.bar.value}`,
         ]),
-        h("button", { onClick: () => state.foo++ }, ["update state.foo"]),
-        h("button", { onClick: () => stateAsRefs.bar.value++ }, [
-          "update stateAsRefs.bar.value",
+        h('button', { onClick: () => state.foo++ }, ['update state.foo']),
+        h('button', { onClick: () => stateAsRefs.bar.value++ }, [
+          'update stateAsRefs.bar.value',
         ]),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 こちらは toRef の実装を使って簡単に実装できるかと思います。

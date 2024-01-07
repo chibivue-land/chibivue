@@ -7,16 +7,16 @@
 以下のような開発者インタフェースを目指します。
 
 ```ts
-import { createApp, reactive } from "chibivue";
+import { createApp, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
 
   template: `
@@ -41,9 +41,9 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 setup から return した値をテンプレートに記述して扱えるようにしたいのですが、このことをこれからは「テンプレートバインディング」であったり、単に「バインディング」という言葉で表現することにします。  
@@ -55,12 +55,12 @@ setup から return した値をテンプレートに記述して扱えるよう
 export type ComponentOptions = {
   setup?: (
     props: Record<string, any>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function | Record<string, unknown> | void; // Record<string, unknown>も返しうるように
+    ctx: { emit: (event: string, ...args: any[]) => void },
+  ) => Function | Record<string, unknown> | void // Record<string, unknown>も返しうるように
   // .
   // .
   // .
-};
+}
 ```
 
 ```ts
@@ -68,26 +68,26 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  setupState: Data; // setup の結果はオブジェクトの場合はここに格納することにする
+  setupState: Data // setup の結果はオブジェクトの場合はここに格納することにする
 }
 ```
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode;
-  initProps(instance, props);
+  const { props } = instance.vnode
+  initProps(instance, props)
 
-  const component = instance.type as Component;
+  const component = instance.type as Component
   if (component.setup) {
     const setupResult = component.setup(instance.props, {
       emit: instance.emit,
-    }) as InternalRenderFunction;
+    }) as InternalRenderFunction
 
     // setupResultの型によって分岐をする
-    if (typeof setupResult === "function") {
-      instance.render = setupResult;
-    } else if (typeof setupResult === "object" && setupResult !== null) {
-      instance.setupState = setupResult;
+    if (typeof setupResult === 'function') {
+      instance.render = setupResult
+    } else if (typeof setupResult === 'object' && setupResult !== null) {
+      instance.setupState = setupResult
     } else {
       // do nothing
     }
@@ -95,7 +95,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // .
   // .
   // .
-};
+}
 ```
 
 伴って、これ以降、setup で定義されるデータのことを`setupState`と呼ぶことにします。
@@ -106,10 +106,10 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return () => h("div", {}, [state.message]);
+    const state = reactive({ message: 'hello' })
+    return () => h('div', {}, [state.message])
   },
-});
+})
 ```
 
 まぁ、バインドというより普通に render 関数がクロージャを形成し変数を参照しているだけです。  
@@ -118,13 +118,13 @@ const app = createApp({
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return { state };
+    const state = reactive({ message: 'hello' })
+    return { state }
   },
 
   // これはrender関数に変換される
-  template: "<div>{{ state.message }}</div>",
-});
+  template: '<div>{{ state.message }}</div>',
+})
 ```
 
 template は h 関数を使った render 関数として compile され、instance.render に突っ込まれるわけなので、イメージ的には以下のようなコードと同等になります。
@@ -132,14 +132,14 @@ template は h 関数を使った render 関数として compile され、instan
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return { state };
+    const state = reactive({ message: 'hello' })
+    return { state }
   },
 
   render() {
-    return h("div", {}, [state.message]);
+    return h('div', {}, [state.message])
   },
-});
+})
 ```
 
 当然、render 関数内では `state` という変数は定義されていません。  
@@ -152,16 +152,16 @@ const app = createApp({
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return { state };
+    const state = reactive({ message: 'hello' })
+    return { state }
   },
 
   render(ctx) {
     with (ctx) {
-      return h("div", {}, [state.message]);
+      return h('div', {}, [state.message])
     }
   },
-});
+})
 ```
 
 with 文についてあまりよく知らない方も少なくないんじゃないかと思います。
@@ -190,10 +190,10 @@ with 文は、文に対するスコープチェーンを拡張します。
 以下のような挙動をとります。
 
 ```ts
-const obj = { a: 1, b: 2 };
+const obj = { a: 1, b: 2 }
 
 with (obj) {
-  console.log(a, b); // 1, 2
+  console.log(a, b) // 1, 2
 }
 ```
 
@@ -215,21 +215,21 @@ with の引数として、state を持つ親オブジェクトを渡してあげ
 以下のような関数にコンパイルして、
 
 ```ts
-(_ctx) => {
+_ctx => {
   with (_ctx) {
-    return h("div", {}, [
-      h("p", {}, [state.message]),
-      h("button", { onClick: changeMessage }, ["click me"]),
-    ]);
+    return h('div', {}, [
+      h('p', {}, [state.message]),
+      h('button', { onClick: changeMessage }, ['click me']),
+    ])
   }
-};
+}
 ```
 
 この関数に setupState を渡してあげることです。
 
 ```ts
-const setupState = setup();
-render(setupState);
+const setupState = setup()
+render(setupState)
 ```
 
 ## マスタッシュ構文の実装
@@ -250,11 +250,11 @@ export const enum NodeTypes {
   ATTRIBUTE,
 }
 
-export type TemplateChildNode = ElementNode | TextNode | InterpolationNode; // InterpolationNodeを追加
+export type TemplateChildNode = ElementNode | TextNode | InterpolationNode // InterpolationNodeを追加
 
 export interface InterpolationNode extends Node {
-  type: NodeTypes.INTERPOLATION;
-  content: string; // マスタッシュの中に記述された内容 (今回は setup で定義された単一の変数名がここに入る)
+  type: NodeTypes.INTERPOLATION
+  content: string // マスタッシュの中に記述された内容 (今回は setup で定義された単一の変数名がここに入る)
 }
 ```
 
@@ -287,38 +287,38 @@ function parseChildren(
 
 ```ts
 function parseInterpolation(
-  context: ParserContext
+  context: ParserContext,
 ): InterpolationNode | undefined {
-  const [open, close] = ["{{", "}}"];
-  const closeIndex = context.source.indexOf(close, open.length);
-  if (closeIndex === -1) return undefined;
+  const [open, close] = ['{{', '}}']
+  const closeIndex = context.source.indexOf(close, open.length)
+  if (closeIndex === -1) return undefined
 
-  const start = getCursor(context);
-  advanceBy(context, open.length);
+  const start = getCursor(context)
+  advanceBy(context, open.length)
 
-  const innerStart = getCursor(context);
-  const innerEnd = getCursor(context);
-  const rawContentLength = closeIndex - open.length;
-  const rawContent = context.source.slice(0, rawContentLength);
-  const preTrimContent = parseTextData(context, rawContentLength);
+  const innerStart = getCursor(context)
+  const innerEnd = getCursor(context)
+  const rawContentLength = closeIndex - open.length
+  const rawContent = context.source.slice(0, rawContentLength)
+  const preTrimContent = parseTextData(context, rawContentLength)
 
-  const content = preTrimContent.trim();
+  const content = preTrimContent.trim()
 
-  const startOffset = preTrimContent.indexOf(content);
+  const startOffset = preTrimContent.indexOf(content)
 
   if (startOffset > 0) {
-    advancePositionWithMutation(innerStart, rawContent, startOffset);
+    advancePositionWithMutation(innerStart, rawContent, startOffset)
   }
   const endOffset =
-    rawContentLength - (preTrimContent.length - content.length - startOffset);
-  advancePositionWithMutation(innerEnd, rawContent, endOffset);
-  advanceBy(context, close.length);
+    rawContentLength - (preTrimContent.length - content.length - startOffset)
+  advancePositionWithMutation(innerEnd, rawContent, endOffset)
+  advanceBy(context, close.length)
 
   return {
     type: NodeTypes.INTERPOLATION,
     content,
     loc: getSelection(context, start),
-  };
+  }
 }
 ```
 
@@ -326,25 +326,25 @@ Text 中に <span v-pre>`{{`</span> が出現することもあるので parseTe
 
 ```ts
 function parseText(context: ParserContext): TextNode {
-  const endTokens = ["<", "{{"]; // {{ が出現したらparseTextは終わり
+  const endTokens = ['<', '{{'] // {{ が出現したらparseTextは終わり
 
-  let endIndex = context.source.length;
+  let endIndex = context.source.length
 
   for (let i = 0; i < endTokens.length; i++) {
-    const index = context.source.indexOf(endTokens[i], 1);
+    const index = context.source.indexOf(endTokens[i], 1)
     if (index !== -1 && endIndex > index) {
-      endIndex = index;
+      endIndex = index
     }
   }
 
-  const start = getCursor(context);
-  const content = parseTextData(context, endIndex);
+  const start = getCursor(context)
+  const content = parseTextData(context, endIndex)
 
   return {
     type: NodeTypes.TEXT,
     content,
     loc: getSelection(context, start),
-  };
+  }
 }
 ```
 
@@ -356,12 +356,12 @@ function parseText(context: ParserContext): TextNode {
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
   template: `
     <div class="container" style="text-align: center">
@@ -385,7 +385,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 ![parse_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/parse_interpolation.png)
@@ -399,30 +399,30 @@ render 関数の中身を with 文で囲ってあげます。
 export const generate = ({
   children,
 }: {
-  children: TemplateChildNode[];
+  children: TemplateChildNode[]
 }): string => {
   return `return function render(_ctx) {
   with (_ctx) {
     const { h } = ChibiVue;
     return ${genNode(children[0])};
   }
-}`;
-};
+}`
+}
 
 const genNode = (node: TemplateChildNode): string => {
   switch (node.type) {
     // .
     // .
     case NodeTypes.INTERPOLATION:
-      return genInterpolation(node);
+      return genInterpolation(node)
     // .
     // .
   }
-};
+}
 
 const genInterpolation = (node: InterpolationNode): string => {
-  return `${node.content}`;
-};
+  return `${node.content}`
+}
 ```
 
 あとは、実際に render 関数を実行する際に引数として setupState を渡してあげましょう。
@@ -431,8 +431,8 @@ const genInterpolation = (node: InterpolationNode): string => {
 
 ```ts
 export type InternalRenderFunction = {
-  (ctx: Data): VNodeChild; // 引数でctxを受け取れるように
-};
+  (ctx: Data): VNodeChild // 引数でctxを受け取れるように
+}
 ```
 
 `~/packages/runtime-core/renderer.ts`
@@ -441,15 +441,15 @@ export type InternalRenderFunction = {
 const setupRenderEffect = (
   instance: ComponentInternalInstance,
   initialVNode: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   const componentUpdateFn = () => {
-    const { render, setupState } = instance;
+    const { render, setupState } = instance
     if (!instance.isMounted) {
       // .
       // .
       // .
-      const subTree = (instance.subTree = normalizeVNode(render(setupState))); // setupStateを渡す
+      const subTree = (instance.subTree = normalizeVNode(render(setupState))) // setupStateを渡す
       // .
       // .
       // .
@@ -457,13 +457,13 @@ const setupRenderEffect = (
       // .
       // .
       // .
-      const nextTree = normalizeVNode(render(setupState)); // setupStateを渡す
+      const nextTree = normalizeVNode(render(setupState)) // setupStateを渡す
       // .
       // .
       // .
     }
-  };
-};
+  }
+}
 ```
 
 ここまで来ればレンダリングできるようになっているはずです。確認してみましょう！
@@ -481,12 +481,12 @@ const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
     .map(({ name, value }) =>
       // props 名が @click だった場合にonClickに変換する
-      name === "@click"
+      name === '@click'
         ? `onClick: ${value?.content}`
-        : `${name}: "${value?.content}"`
+        : `${name}: "${value?.content}"`,
     )
-    .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
-};
+    .join(', ')}}, [${el.children.map(it => genNode(it)).join(', ')}])`
+}
 ```
 
 動作を確認してみましょう。
@@ -494,12 +494,12 @@ const genElement = (el: ElementNode): string => {
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
   template: `
     <div class="container" style="text-align: center">
@@ -523,7 +523,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 動きましたね！　やったね！　完成！
@@ -544,20 +544,20 @@ export const enum NodeTypes {
 }
 
 export interface ElementNode extends Node {
-  type: NodeTypes.ELEMENT;
-  tag: string;
-  props: Array<AttributeNode | DirectiveNode>; // props は Attribute と DirectiveNode のユニオンの配列にする
+  type: NodeTypes.ELEMENT
+  tag: string
+  props: Array<AttributeNode | DirectiveNode> // props は Attribute と DirectiveNode のユニオンの配列にする
   // .
   // .
 }
 
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE;
+  type: NodeTypes.DIRECTIVE
   // v-name:arg="exp" というような形式で表すことにする。
   // eg. v-on:click="increment"の場合は { name: "on", arg: "click", exp="increment" }
-  name: string;
-  arg: string;
-  exp: string;
+  name: string
+  arg: string
+  exp: string
 }
 ```
 
@@ -617,27 +617,27 @@ function parseAttribute(
 ```ts
 const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
-    .map((prop) => genProp(prop))
-    .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
-};
+    .map(prop => genProp(prop))
+    .join(', ')}}, [${el.children.map(it => genNode(it)).join(', ')}])`
+}
 
 const genProp = (prop: AttributeNode | DirectiveNode): string => {
   switch (prop.type) {
     case NodeTypes.ATTRIBUTE:
-      return `${prop.name}: "${prop.value?.content}"`;
+      return `${prop.name}: "${prop.value?.content}"`
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
-        case "on":
-          return `${toHandlerKey(prop.arg)}: ${prop.exp}`;
+        case 'on':
+          return `${toHandlerKey(prop.arg)}: ${prop.exp}`
         default:
           // TODO: other directives
-          throw new Error(`unexpected directive name. got "${prop.name}"`);
+          throw new Error(`unexpected directive name. got "${prop.name}"`)
       }
     }
     default:
-      throw new Error(`unexpected prop type.`);
+      throw new Error(`unexpected prop type.`)
   }
-};
+}
 ```
 
 さて、playground で動作を確認してみましょう。
@@ -646,17 +646,17 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     const handleInput = (e: InputEvent) => {
-      state.input = (e.target as HTMLInputElement)?.value ?? "";
-    };
+      state.input = (e.target as HTMLInputElement)?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
 
   template: `
@@ -690,7 +690,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 ![compile_directives](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_directives.png)

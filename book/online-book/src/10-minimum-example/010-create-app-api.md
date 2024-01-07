@@ -29,37 +29,37 @@
 ```
 
 ```ts
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
 
-const app = createApp(App);
-app.mount("#app");
+const app = createApp(App)
+app.mount('#app')
 ```
 
 2. template オプションを使用する
 
 ```ts
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
 const app = createApp({
-  template: "<div>Hello world.</div>",
-});
+  template: '<div>Hello world.</div>',
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 3. render オプションと h 関数を利用する
 
 ```ts
-import { createApp, h } from "vue";
+import { createApp, h } from 'vue'
 
 const app = createApp({
   render() {
-    return h("div", {}, ["Hello world."]);
+    return h('div', {}, ['Hello world.'])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 他にもありますが、このような 3 つの開発者インタフェースについて考えてみます。  
@@ -85,15 +85,15 @@ app.mount("#app");
 イメージ ↓
 
 ```ts
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
 const app = createApp({
   render() {
-    return "Hello world.";
+    return 'Hello world.'
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ## 早速実装
@@ -103,23 +103,23 @@ app.mount("#app");
 
 ```ts
 export type Options = {
-  render: () => string;
-};
+  render: () => string
+}
 
 export type App = {
-  mount: (selector: string) => void;
-};
+  mount: (selector: string) => void
+}
 
 export const createApp = (options: Options): App => {
   return {
-    mount: (selector) => {
-      const root = document.querySelector(selector);
+    mount: selector => {
+      const root = document.querySelector(selector)
       if (root) {
-        root.innerHTML = options.render();
+        root.innerHTML = options.render()
       }
     },
-  };
-};
+  }
+}
 ```
 
 とても簡単ですね。playground の方で試してみましょう。
@@ -127,15 +127,15 @@ export const createApp = (options: Options): App => {
 `~/examples/playground/src/main.ts`
 
 ```ts
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
 const app = createApp({
   render() {
-    return "Hello world.";
+    return 'Hello world.'
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 画面にメッセージを表示することができました! やったね!
@@ -204,14 +204,14 @@ touch packages/runtime-dom/nodeOps.ts
 // これは先ほどのコード
 export const createApp = (options: Options): App => {
   return {
-    mount: (selector) => {
-      const root = document.querySelector(selector);
+    mount: selector => {
+      const root = document.querySelector(selector)
       if (root) {
-        root.innerHTML = options.render(); // レンダリング
+        root.innerHTML = options.render() // レンダリング
       }
     },
-  };
-};
+  }
+}
 ```
 
 ここまでではコードも少なく、全く複雑ではないので一見問題ないように見えます。  
@@ -236,11 +236,11 @@ Vue.js ではこのレンダリングを担う部分を`renderer`として切り
 
 ```ts
 export interface RendererOptions<HostNode = RendererNode> {
-  setElementText(node: HostNode, text: string): void;
+  setElementText(node: HostNode, text: string): void
 }
 
 export interface RendererNode {
-  [key: string]: any;
+  [key: string]: any
 }
 
 export interface RendererElement extends RendererNode {}
@@ -254,30 +254,30 @@ RendererNode と RendererElement については一旦気にしないでくだ�
 ```ts
 export type RootRenderFunction<HostElement = RendererElement> = (
   message: string,
-  container: HostElement
-) => void;
+  container: HostElement,
+) => void
 
 export function createRenderer(options: RendererOptions) {
-  const { setElementText: hostSetElementText } = options;
+  const { setElementText: hostSetElementText } = options
 
   const render: RootRenderFunction = (message, container) => {
-    hostSetElementText(container, message); // 今回はメッセージを挿入するだけなのでこういう実装になっている
-  };
+    hostSetElementText(container, message) // 今回はメッセージを挿入するだけなのでこういう実装になっている
+  }
 
-  return { render };
+  return { render }
 }
 ```
 
 続いて、`runtime-dom/nodeOps` 側の実装です。
 
 ```ts
-import { RendererOptions } from "../runtime-core";
+import { RendererOptions } from '../runtime-core'
 
 export const nodeOps: RendererOptions<Node> = {
   setElementText(node, text) {
-    node.textContent = text;
+    node.textContent = text
   },
-};
+}
 ```
 
 特に難しいことはないと思います。
@@ -285,10 +285,10 @@ export const nodeOps: RendererOptions<Node> = {
 それでは、`runtime-dom/index.ts` で renderer を完成させましょう。
 
 ```ts
-import { createRenderer } from "../runtime-core";
-import { nodeOps } from "./nodeOps";
+import { createRenderer } from '../runtime-core'
+import { nodeOps } from './nodeOps'
 
-const { render } = createRenderer(nodeOps);
+const { render } = createRenderer(nodeOps)
 ```
 
 これで renderer 部分のリファクタは終わりです。
@@ -324,30 +324,30 @@ DI と DIP は慣れていないと難しい概念かもしれませんが、よ
 ```ts
 // ~/packages/runtime-core apiCreateApp.ts
 
-import { Component } from "./component";
-import { RootRenderFunction } from "./renderer";
+import { Component } from './component'
+import { RootRenderFunction } from './renderer'
 
 export interface App<HostElement = any> {
-  mount(rootContainer: HostElement | string): void;
+  mount(rootContainer: HostElement | string): void
 }
 
 export type CreateAppFunction<HostElement> = (
-  rootComponent: Component
-) => App<HostElement>;
+  rootComponent: Component,
+) => App<HostElement>
 
 export function createAppAPI<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
     const app: App = {
       mount(rootContainer: HostElement) {
-        const message = rootComponent.render!();
-        render(message, rootContainer);
+        const message = rootComponent.render!()
+        render(message, rootContainer)
       },
-    };
+    }
 
-    return app;
-  };
+    return app
+  }
 }
 ```
 
@@ -358,23 +358,23 @@ import {
   CreateAppFunction,
   createAppAPI,
   createRenderer,
-} from "../runtime-core";
-import { nodeOps } from "./nodeOps";
+} from '../runtime-core'
+import { nodeOps } from './nodeOps'
 
-const { render } = createRenderer(nodeOps);
-const _createApp = createAppAPI(render);
+const { render } = createRenderer(nodeOps)
+const _createApp = createAppAPI(render)
 
 export const createApp = ((...args) => {
-  const app = _createApp(...args);
-  const { mount } = app;
+  const app = _createApp(...args)
+  const { mount } = app
   app.mount = (selector: string) => {
-    const container = document.querySelector(selector);
-    if (!container) return;
-    mount(container);
-  };
+    const container = document.querySelector(selector)
+    if (!container) return
+    mount(container)
+  }
 
-  return app;
-}) as CreateAppFunction<Element>;
+  return app
+}) as CreateAppFunction<Element>
 ```
 
 多少`~/packages/runtime-core/component.ts`等に型を移動してますが、その辺はあまり重要ではないのでソースコードを参照してもらえればと思います。(本家 Vue.js に合わせているだけです。)

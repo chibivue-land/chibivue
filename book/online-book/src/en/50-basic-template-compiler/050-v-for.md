@@ -15,27 +15,27 @@ It's a bit long, but this time, let's aim for the following developer interface:
 
 ```vue
 <script>
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
-const genId = () => Math.random().toString(36).slice(2);
+const genId = () => Math.random().toString(36).slice(2)
 
 const FRUITS_FACTORIES = [
-  () => ({ id: genId(), name: "apple", color: "red" }),
-  () => ({ id: genId(), name: "banana", color: "yellow" }),
-  () => ({ id: genId(), name: "grape", color: "purple" }),
-];
+  () => ({ id: genId(), name: 'apple', color: 'red' }),
+  () => ({ id: genId(), name: 'banana', color: 'yellow' }),
+  () => ({ id: genId(), name: 'grape', color: 'purple' }),
+]
 
 export default {
   setup() {
-    const fruits = ref([...FRUITS_FACTORIES].map((f) => f()));
+    const fruits = ref([...FRUITS_FACTORIES].map(f => f()))
     const addFruit = () => {
       fruits.value.push(
-        FRUITS_FACTORIES[Math.floor(Math.random() * FRUITS_FACTORIES.length)]()
-      );
-    };
-    return { fruits, addFruit };
+        FRUITS_FACTORIES[Math.floor(Math.random() * FRUITS_FACTORIES.length)](),
+      )
+    }
+    return { fruits, addFruit }
   },
-};
+}
 </script>
 
 <template>
@@ -113,8 +113,8 @@ Example 1:
 h(
   _Fragment,
   null,
-  _renderList(fruits, (fruit) => h("li", { key: fruit.id }, fruit.name))
-);
+  _renderList(fruits, fruit => h('li', { key: fruit.id }, fruit.name)),
+)
 ```
 
 Example 2:
@@ -131,8 +131,8 @@ Example 2:
 h(
   _Fragment,
   null,
-  _renderList(fruits, (fruit) => h("li", { key: fruit.id }, fruit.name))
-);
+  _renderList(fruits, fruit => h('li', { key: fruit.id }, fruit.name)),
+)
 ```
 
 Example 3:
@@ -147,8 +147,8 @@ Example 3:
 h(
   _Fragment,
   null,
-  _renderList(fruits, ({ name, id }) => h("li", { key: id }, name))
-);
+  _renderList(fruits, ({ name, id }) => h('li', { key: id }, name)),
+)
 ```
 
 In the future, the values passed as the first argument to renderList are expected to be not only arrays but also numbers and objects. However, for now, let's assume that only arrays are expected. The implementation of the \_renderList function itself can be understood as something similar to Array.prototype.map. As for values other than arrays, you just need to normalize them in \_renderList, so let's forget about them for now (just focus on arrays).
@@ -170,12 +170,12 @@ h(
     _ctx.fruits, // It's okay to have a prefix for fruits because it is bound from _ctx
     ({ name, id }) =>
       h(
-        "li",
+        'li',
         { key: _ctx.id }, // It's not okay to have _ctx here
-        _ctx.name // It's not okay to have _ctx here
-      )
-  )
-);
+        _ctx.name, // It's not okay to have _ctx here
+      ),
+  ),
+)
 ```
 
 ```ts
@@ -187,12 +187,12 @@ h(
     _ctx.fruits, // It's okay to have a prefix for fruits because it is bound from _ctx
     ({ name, id }) =>
       h(
-        "li",
+        'li',
         { key: id }, // It's not okay to have _ctx here
-        name // It's not okay to have _ctx here
-      )
-  )
-);
+        name, // It's not okay to have _ctx here
+      ),
+  ),
+)
 ```
 
 There are various definitions of local variables, from example 1 to 3.
@@ -221,41 +221,41 @@ export type ParentNode =
   | RootNode
   | ElementNode
   | ForNode // [!code ++]
-  | IfBranchNode;
+  | IfBranchNode
 
 export interface ForNode extends Node {
-  type: NodeTypes.FOR;
-  source: ExpressionNode;
-  valueAlias: ExpressionNode | undefined;
-  keyAlias: ExpressionNode | undefined;
-  children: TemplateChildNode[];
-  parseResult: ForParseResult; // To be explained later
-  codegenNode?: ForCodegenNode;
+  type: NodeTypes.FOR
+  source: ExpressionNode
+  valueAlias: ExpressionNode | undefined
+  keyAlias: ExpressionNode | undefined
+  children: TemplateChildNode[]
+  parseResult: ForParseResult // To be explained later
+  codegenNode?: ForCodegenNode
 }
 
 export interface ForCodegenNode extends VNodeCall {
-  isBlock: true;
-  tag: typeof FRAGMENT;
-  props: undefined;
-  children: ForRenderListExpression;
+  isBlock: true
+  tag: typeof FRAGMENT
+  props: undefined
+  children: ForRenderListExpression
 }
 
 export interface ForRenderListExpression extends CallExpression {
-  callee: typeof RENDER_LIST; // To be explained later
-  arguments: [ExpressionNode, ForIteratorExpression];
+  callee: typeof RENDER_LIST // To be explained later
+  arguments: [ExpressionNode, ForIteratorExpression]
 }
 
 // Also support function expressions because callback functions are used as the second argument of renderList.
 export interface FunctionExpression extends Node {
-  type: NodeTypes.JS_FUNCTION_EXPRESSION;
-  params: ExpressionNode | string | (ExpressionNode | string)[] | undefined;
-  returns?: TemplateChildNode | TemplateChildNode[] | JSChildNode;
-  newline: boolean;
+  type: NodeTypes.JS_FUNCTION_EXPRESSION
+  params: ExpressionNode | string | (ExpressionNode | string)[] | undefined
+  returns?: TemplateChildNode | TemplateChildNode[] | JSChildNode
+  newline: boolean
 }
 
 // In the case of v-for, the return is fixed, so it is represented as an AST for that purpose.
 export interface ForIteratorExpression extends FunctionExpression {
-  returns: VNodeCall;
+  returns: VNodeCall
 }
 
 export type JSChildNode =
@@ -265,7 +265,7 @@ export type JSChildNode =
   | ArrayExpression
   | ConditionalExpression
   | ExpressionNode
-  | FunctionExpression; // [!code ++]
+  | FunctionExpression // [!code ++]
 ```
 
 Regarding `RENDER_LIST`, as usual, add it to `runtimeHelpers`.
@@ -275,7 +275,7 @@ Regarding `RENDER_LIST`, as usual, add it to `runtimeHelpers`.
 // .
 // .
 // .
-export const RENDER_LIST = Symbol(); // [!code ++]
+export const RENDER_LIST = Symbol() // [!code ++]
 
 export const helperNameMap: Record<symbol, string> = {
   // .
@@ -283,17 +283,17 @@ export const helperNameMap: Record<symbol, string> = {
   [RENDER_LIST]: `renderList`, // [!code ++]
   // .
   // .
-};
+}
 ```
 
 As for `ForParseResult`, its definition is in `transform/vFor`.
 
 ```ts
 export interface ForParseResult {
-  source: ExpressionNode;
-  value: ExpressionNode | undefined;
-  key: ExpressionNode | undefined;
-  index: ExpressionNode | undefined;
+  source: ExpressionNode
+  value: ExpressionNode | undefined
+  key: ExpressionNode | undefined
+  index: ExpressionNode | undefined
 }
 ```
 
@@ -330,8 +330,8 @@ switch (node.type) {
   // .
   // .
   case NodeTypes.JS_FUNCTION_EXPRESSION: // [!code ++]
-    genFunctionExpression(node, context, option); // [!code ++]
-    break; // [!code ++]
+    genFunctionExpression(node, context, option) // [!code ++]
+    break // [!code ++]
   // .
   // .
   // .
@@ -340,35 +340,35 @@ switch (node.type) {
 function genFunctionExpression(
   node: FunctionExpression,
   context: CodegenContext,
-  option: CompilerOptions
+  option: CompilerOptions,
 ) {
-  const { push, indent, deindent } = context;
-  const { params, returns, newline } = node;
+  const { push, indent, deindent } = context
+  const { params, returns, newline } = node
 
-  push(`(`, node);
+  push(`(`, node)
   if (isArray(params)) {
-    genNodeList(params, context, option);
+    genNodeList(params, context, option)
   } else if (params) {
-    genNode(params, context, option);
+    genNode(params, context, option)
   }
-  push(`) => `);
+  push(`) => `)
   if (newline) {
-    push(`{`);
-    indent();
+    push(`{`)
+    indent()
   }
   if (returns) {
     if (newline) {
-      push(`return `);
+      push(`return `)
     }
     if (isArray(returns)) {
-      genNodeListAsArray(returns, context, option);
+      genNodeListAsArray(returns, context, option)
     } else {
-      genNode(returns, context, option);
+      genNode(returns, context, option)
     }
   }
   if (newline) {
-    deindent();
-    push(`}`);
+    deindent()
+    push(`}`)
   }
 }
 ```
@@ -386,13 +386,13 @@ As we did with `v-on`, in the case of `v-for`, the timing to execute `processExp
 ```ts
 export const transformExpression: NodeTransform = (node, ctx) => {
   if (node.type === NodeTypes.INTERPOLATION) {
-    node.content = processExpression(node.content as SimpleExpressionNode, ctx);
+    node.content = processExpression(node.content as SimpleExpressionNode, ctx)
   } else if (node.type === NodeTypes.ELEMENT) {
     for (let i = 0; i < node.props.length; i++) {
-      const dir = node.props[i];
+      const dir = node.props[i]
       if (
         dir.type === NodeTypes.DIRECTIVE &&
-        dir.name !== "for" // [!code ++]
+        dir.name !== 'for' // [!code ++]
       ) {
         // .
         // .
@@ -400,7 +400,7 @@ export const transformExpression: NodeTransform = (node, ctx) => {
       }
     }
   }
-};
+}
 ```
 
 ### Collecting Identifiers
@@ -421,22 +421,22 @@ and destructuring assignments like `{ id, name, color }` will be added to `Compo
 
 ```ts
 export interface SimpleExpressionNode extends Node {
-  type: NodeTypes.SIMPLE_EXPRESSION;
-  content: string;
-  isStatic: boolean;
-  identifiers?: string[]; // [!code ++]
+  type: NodeTypes.SIMPLE_EXPRESSION
+  content: string
+  isStatic: boolean
+  identifiers?: string[] // [!code ++]
 }
 
 export interface CompoundExpressionNode extends Node {
-  type: NodeTypes.COMPOUND_EXPRESSION;
+  type: NodeTypes.COMPOUND_EXPRESSION
   children: (
     | SimpleExpressionNode
     | CompoundExpressionNode
     | InterpolationNode
     | TextNode
     | string
-  )[];
-  identifiers?: string[]; // [!code ++]
+  )[]
+  identifiers?: string[] // [!code ++]
 }
 ```
 
@@ -449,8 +449,8 @@ export interface TransformContext extends Required<TransformOptions> {
   // .
   // .
   // .
-  addIdentifiers(exp: ExpressionNode | string): void;
-  removeIdentifiers(exp: ExpressionNode | string): void;
+  addIdentifiers(exp: ExpressionNode | string): void
+  removeIdentifiers(exp: ExpressionNode | string): void
   // .
   // .
   // .
@@ -463,29 +463,29 @@ const context: TransformContext = {
   addIdentifiers(exp) {
     if (!isBrowser) {
       if (isString(exp)) {
-        addId(exp);
+        addId(exp)
       } else if (exp.identifiers) {
-        exp.identifiers.forEach(addId);
+        exp.identifiers.forEach(addId)
       } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-        addId(exp.content);
+        addId(exp.content)
       }
     }
   },
   removeIdentifiers(exp) {
     if (!isBrowser) {
       if (isString(exp)) {
-        removeId(exp);
+        removeId(exp)
       } else if (exp.identifiers) {
-        exp.identifiers.forEach(removeId);
+        exp.identifiers.forEach(removeId)
       } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-        removeId(exp.content);
+        removeId(exp.content)
       }
     }
   },
   // .
   // .
   // .
-};
+}
 ```
 
 Now, let's implement the logic to collect identifiers in the `processExpression` function.
@@ -498,18 +498,18 @@ In the `processExpression` function, define an option called `asParams`, and if 
 export function processExpression(
   node: SimpleExpressionNode,
   ctx: TransformContext,
-  asParams = false // [!code ++]
+  asParams = false, // [!code ++]
 ) {
   // .
   if (isSimpleIdentifier(rawExp)) {
-    const isScopeVarReference = ctx.identifiers[rawExp];
+    const isScopeVarReference = ctx.identifiers[rawExp]
     if (
       !asParams && // [!code ++]
       !isScopeVarReference
     ) {
-      node.content = rewriteIdentifier(rawExp);
+      node.content = rewriteIdentifier(rawExp)
     } // [!code ++]
-    return node;
+    return node
 
     // .
   }
@@ -524,18 +524,18 @@ Since we assume local variables defined as function arguments, we will convert t
 
 ```ts
 // Convert asParams like function arguments
-const source = `(${rawExp})${asParams ? `=>{}` : ``}`;
+const source = `(${rawExp})${asParams ? `=>{}` : ``}`
 
 // walkIdentifiers is slightly more complex.
 export function walkIdentifiers(
   root: Node,
   onIdentifier: (node: Identifier) => void,
   knownIds: Record<string, number> = Object.create(null),
-  parentStack: Node[] = []
+  parentStack: Node[] = [],
 ) {
   // .
 
-  (walk as any)(root, {
+  ;(walk as any)(root, {
     // prettier-ignore
     enter(node: Node, parent: Node | undefined) {
       parent && parentStack.push(parent);
@@ -553,12 +553,12 @@ export function walkIdentifiers(
         );
       }
     },
-  });
+  })
 }
 
 export const isFunctionType = (node: Node): node is Function => {
-  return /Function(?:Expression|Declaration)$|Method$/.test(node.type);
-};
+  return /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+}
 ```
 
 What we are doing here is simply walking the arguments if node is a function and collecting identifiers into `identifiers`.
@@ -568,24 +568,24 @@ In the caller of `walkIdentifiers`, we define `knownIds` and pass it to `walkIde
 After collecting in `walkIdentifiers`, finally, we generate identifiers based on `knownIds` when generating CompoundExpression.
 
 ```ts
-const knownIds: Record<string, number> = Object.create(ctx.identifiers);
+const knownIds: Record<string, number> = Object.create(ctx.identifiers)
 
 walkIdentifiers(
   ast,
-  (node) => {
-    node.name = rewriteIdentifier(node.name);
-    ids.push(node as QualifiedId);
+  node => {
+    node.name = rewriteIdentifier(node.name)
+    ids.push(node as QualifiedId)
   },
   knownIds, // pass
-  parentStack
-);
+  parentStack,
+)
 
 // .
 // .
 // .
 
-ret.identifiers = Object.keys(knownIds); // generate identifiers based on knownIds
-return ret;
+ret.identifiers = Object.keys(knownIds) // generate identifiers based on knownIds
+return ret
 ```
 
 Although the file is a bit out of order, `walkFunctionParams` and `markScopeIdentifier` simply walk through the parameters and add `Node.name` to `knownIds`.
@@ -593,11 +593,11 @@ Although the file is a bit out of order, `walkFunctionParams` and `markScopeIden
 ```ts
 export function walkFunctionParams(
   node: Function,
-  onIdent: (id: Identifier) => void
+  onIdent: (id: Identifier) => void,
 ) {
   for (const p of node.params) {
     for (const id of extractIdentifiers(p)) {
-      onIdent(id);
+      onIdent(id)
     }
   }
 }
@@ -605,18 +605,18 @@ export function walkFunctionParams(
 function markScopeIdentifier(
   node: Node & { scopeIds?: Set<string> },
   child: Identifier,
-  knownIds: Record<string, number>
+  knownIds: Record<string, number>,
 ) {
-  const { name } = child;
+  const { name } = child
   if (node.scopeIds && node.scopeIds.has(name)) {
-    return;
+    return
   }
   if (name in knownIds) {
-    knownIds[name]++;
+    knownIds[name]++
   } else {
-    knownIds[name] = 1;
+    knownIds[name] = 1
   }
-  (node.scopeIds || (node.scopeIds = new Set())).add(name);
+  ;(node.scopeIds || (node.scopeIds = new Set())).add(name)
 }
 ```
 
@@ -636,56 +636,55 @@ I think it would be easier to understand if I write an explanation with code, so
 // It executes processFor at the appropriate place and generates codegenNode at the appropriate place.
 // processFor is the most complex implementation.
 export const transformFor = createStructuralDirectiveTransform(
-  "for",
+  'for',
   (node, dir, context) => {
-    return processFor(node, dir, context, (forNode) => {
+    return processFor(node, dir, context, forNode => {
       // As expected, generate code to call renderList.
       const renderExp = createCallExpression(context.helper(RENDER_LIST), [
         forNode.source,
-      ]) as ForRenderListExpression;
+      ]) as ForRenderListExpression
 
       // Generate codegenNode for the Fragment that serves as the container for v-for.
       forNode.codegenNode = createVNodeCall(
         context,
         context.helper(FRAGMENT),
         undefined,
-        renderExp
-      ) as ForCodegenNode;
+        renderExp,
+      ) as ForCodegenNode
 
       // codegen process (executed after parse and identifier collection in processFor)
       return () => {
-        const { children } = forNode;
-        const childBlock = (children[0] as ElementNode)
-          .codegenNode as VNodeCall;
+        const { children } = forNode
+        const childBlock = (children[0] as ElementNode).codegenNode as VNodeCall
 
         renderExp.arguments.push(
           createFunctionExpression(
             createForLoopParams(forNode.parseResult),
             childBlock,
-            true /* force newline */
-          ) as ForIteratorExpression
-        );
-      };
-    });
-  }
-);
+            true /* force newline */,
+          ) as ForIteratorExpression,
+        )
+      }
+    })
+  },
+)
 
 export function processFor(
   node: ElementNode,
   dir: DirectiveNode,
   context: TransformContext,
-  processCodegen?: (forNode: ForNode) => (() => void) | undefined
+  processCodegen?: (forNode: ForNode) => (() => void) | undefined,
 ) {
   // Parse the expression of v-for.
   // At the parseResult stage, identifiers of each Node have already been collected.
   const parseResult = parseForExpression(
     dir.exp as SimpleExpressionNode,
-    context
-  );
+    context,
+  )
 
-  const { addIdentifiers, removeIdentifiers } = context;
+  const { addIdentifiers, removeIdentifiers } = context
 
-  const { source, value, key, index } = parseResult!;
+  const { source, value, key, index } = parseResult!
 
   const forNode: ForNode = {
     type: NodeTypes.FOR,
@@ -695,90 +694,90 @@ export function processFor(
     keyAlias: key,
     parseResult: parseResult!,
     children: [node],
-  };
+  }
 
   // Replace the Node with forNode.
-  context.replaceNode(forNode);
+  context.replaceNode(forNode)
 
   if (!context.isBrowser) {
     // Add the collected identifiers to the context.
-    value && addIdentifiers(value);
-    key && addIdentifiers(key);
-    index && addIdentifiers(index);
+    value && addIdentifiers(value)
+    key && addIdentifiers(key)
+    index && addIdentifiers(index)
   }
 
   // Generate code (this allows skipping the addition of the prefix to local variables)
-  const onExit = processCodegen && processCodegen(forNode);
+  const onExit = processCodegen && processCodegen(forNode)
 
   return () => {
-    value && removeIdentifiers(value);
-    key && removeIdentifiers(key);
-    index && removeIdentifiers(index);
+    value && removeIdentifiers(value)
+    key && removeIdentifiers(key)
+    index && removeIdentifiers(index)
 
-    if (onExit) onExit();
-  };
+    if (onExit) onExit()
+  }
 }
 
 // Parse the expression given to v-for using regular expressions.
-const forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/;
-const forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/;
-const stripParensRE = /^\(|\)$/g;
+const forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/
+const forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/
+const stripParensRE = /^\(|\)$/g
 
 export interface ForParseResult {
-  source: ExpressionNode;
-  value: ExpressionNode | undefined;
-  key: ExpressionNode | undefined;
-  index: ExpressionNode | undefined;
+  source: ExpressionNode
+  value: ExpressionNode | undefined
+  key: ExpressionNode | undefined
+  index: ExpressionNode | undefined
 }
 
 export function parseForExpression(
   input: SimpleExpressionNode,
-  context: TransformContext
+  context: TransformContext,
 ): ForParseResult | undefined {
-  const loc = input.loc;
-  const exp = input.content;
-  const inMatch = exp.match(forAliasRE);
+  const loc = input.loc
+  const exp = input.content
+  const inMatch = exp.match(forAliasRE)
 
-  if (!inMatch) return;
+  if (!inMatch) return
 
-  const [, LHS, RHS] = inMatch;
+  const [, LHS, RHS] = inMatch
   const result: ForParseResult = {
     source: createAliasExpression(
       loc,
       RHS.trim(),
-      exp.indexOf(RHS, LHS.length)
+      exp.indexOf(RHS, LHS.length),
     ),
     value: undefined,
     key: undefined,
     index: undefined,
-  };
+  }
 
   if (!context.isBrowser) {
     result.source = processExpression(
       result.source as SimpleExpressionNode,
-      context
-    );
+      context,
+    )
   }
 
-  let valueContent = LHS.trim().replace(stripParensRE, "").trim();
-  const iteratorMatch = valueContent.match(forIteratorRE);
-  const trimmedOffset = LHS.indexOf(valueContent);
+  let valueContent = LHS.trim().replace(stripParensRE, '').trim()
+  const iteratorMatch = valueContent.match(forIteratorRE)
+  const trimmedOffset = LHS.indexOf(valueContent)
 
   if (iteratorMatch) {
-    valueContent = valueContent.replace(forIteratorRE, "").trim();
-    const keyContent = iteratorMatch[1].trim();
-    let keyOffset: number | undefined;
+    valueContent = valueContent.replace(forIteratorRE, '').trim()
+    const keyContent = iteratorMatch[1].trim()
+    let keyOffset: number | undefined
     if (keyContent) {
-      keyOffset = exp.indexOf(keyContent, trimmedOffset + valueContent.length);
-      result.key = createAliasExpression(loc, keyContent, keyOffset);
+      keyOffset = exp.indexOf(keyContent, trimmedOffset + valueContent.length)
+      result.key = createAliasExpression(loc, keyContent, keyOffset)
       if (!context.isBrowser) {
         // If not in browser mode, set asParams to true and collect identifiers of key.
-        result.key = processExpression(result.key, context, true);
+        result.key = processExpression(result.key, context, true)
       }
     }
 
     if (iteratorMatch[2]) {
-      const indexContent = iteratorMatch[2].trim();
+      const indexContent = iteratorMatch[2].trim()
       if (indexContent) {
         result.index = createAliasExpression(
           loc,
@@ -787,57 +786,57 @@ export function parseForExpression(
             indexContent,
             result.key
               ? keyOffset! + keyContent.length
-              : trimmedOffset + valueContent.length
-          )
-        );
+              : trimmedOffset + valueContent.length,
+          ),
+        )
         if (!context.isBrowser) {
           // If not in browser mode, set asParams to true and collect identifiers of index.
-          result.index = processExpression(result.index, context, true);
+          result.index = processExpression(result.index, context, true)
         }
       }
     }
   }
 
   if (valueContent) {
-    result.value = createAliasExpression(loc, valueContent, trimmedOffset);
+    result.value = createAliasExpression(loc, valueContent, trimmedOffset)
     if (!context.isBrowser) {
       // If not in browser mode, set asParams to true and collect identifiers of value.
-      result.value = processExpression(result.value, context, true);
+      result.value = processExpression(result.value, context, true)
     }
   }
 
-  return result;
+  return result
 }
 
 function createAliasExpression(
   range: SourceLocation,
   content: string,
-  offset: number
+  offset: number,
 ): SimpleExpressionNode {
   return createSimpleExpression(
     content,
     false,
-    getInnerRange(range, offset, content.length)
-  );
+    getInnerRange(range, offset, content.length),
+  )
 }
 
 export function createForLoopParams(
   { value, key, index }: ForParseResult,
-  memoArgs: ExpressionNode[] = []
+  memoArgs: ExpressionNode[] = [],
 ): ExpressionNode[] {
-  return createParamsList([value, key, index, ...memoArgs]);
+  return createParamsList([value, key, index, ...memoArgs])
 }
 
 function createParamsList(
-  args: (ExpressionNode | undefined)[]
+  args: (ExpressionNode | undefined)[],
 ): ExpressionNode[] {
-  let i = args.length;
+  let i = args.length
   while (i--) {
-    if (args[i]) break;
+    if (args[i]) break
   }
   return args
     .slice(0, i + 1)
-    .map((arg, i) => arg || createSimpleExpression(`_`.repeat(i + 1), false));
+    .map((arg, i) => arg || createSimpleExpression(`_`.repeat(i + 1), false))
 }
 ```
 

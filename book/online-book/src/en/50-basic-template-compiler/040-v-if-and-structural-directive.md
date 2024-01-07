@@ -31,16 +31,16 @@ v-if and v-for are directives that not only change the attributes (and behavior 
 Let's think about how to combine v-if / v-else-if / v-else to implement FizzBuzz.
 
 ```ts
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const n = ref(1);
+    const n = ref(1)
     const inc = () => {
-      n.value++;
-    };
+      n.value++
+    }
 
-    return { n, inc };
+    return { n, inc }
   },
 
   template: `
@@ -50,11 +50,11 @@ const App = defineComponent({
     <p v-else-if="n % 3 === 0">Fizz</p>
     <p v-else>{{ n }}</p>
   `,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 First, let's think about the code we want to generate.
@@ -70,22 +70,22 @@ function render(_ctx) {
       createVNode: _createVNode,
       createCommentVNode: _createCommentVNode,
       Fragment: _Fragment,
-    } = ChibiVue;
+    } = ChibiVue
 
     return _createVNode(_Fragment, null, [
       _createVNode(
-        "button",
-        _normalizeProps({ [_toHandlerKey("click")]: inc }),
-        "inc"
+        'button',
+        _normalizeProps({ [_toHandlerKey('click')]: inc }),
+        'inc',
       ),
       n % 5 === 0 && n % 3 === 0
-        ? _createVNode("p", null, "FizzBuzz")
+        ? _createVNode('p', null, 'FizzBuzz')
         : n % 5 === 0
-        ? _createVNode("p", null, "Buzz")
-        : n % 3 === 0
-        ? _createVNode("p", null, "Fizz")
-        : _createVNode("p", null, n),
-    ]);
+          ? _createVNode('p', null, 'Buzz')
+          : n % 3 === 0
+            ? _createVNode('p', null, 'Fizz')
+            : _createVNode('p', null, n),
+    ])
   }
 }
 ```
@@ -119,9 +119,9 @@ export interface TransformContext extends Required<TransformOptions> {
   // .
   // .
   // .
-  replaceNode(node: TemplateChildNode): void; // Added
-  removeNode(node?: TemplateChildNode): void; // Added
-  onNodeRemoved(): void; // Added
+  replaceNode(node: TemplateChildNode): void // Added
+  removeNode(node?: TemplateChildNode): void // Added
+  onNodeRemoved(): void // Added
 }
 ```
 
@@ -138,14 +138,14 @@ I think you have already implemented it, but I will explain it just in case beca
 ```ts
 export function traverseChildren(
   parent: ParentNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
   for (let i = 0; i < parent.children.length; i++) {
-    const child = parent.children[i];
-    if (isString(child)) continue;
-    context.parent = parent; // This
-    context.childIndex = i; // This
-    traverseNode(child, context);
+    const child = parent.children[i]
+    if (isString(child)) continue
+    context.parent = parent // This
+    context.childIndex = i // This
+    traverseNode(child, context)
   }
 }
 ```
@@ -155,7 +155,7 @@ export function traverseChildren(
 ```ts
 export function createTransformContext(
   root: RootNode,
-  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions
+  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions,
 ): TransformContext {
   const context: TransformContext = {
     // .
@@ -164,36 +164,36 @@ export function createTransformContext(
 
     // Replaces the current node and the corresponding parent's children with the given node
     replaceNode(node) {
-      context.parent!.children[context.childIndex] = context.currentNode = node;
+      context.parent!.children[context.childIndex] = context.currentNode = node
     },
 
     // Removes the given node from the current node's parent's children
     removeNode(node) {
-      const list = context.parent!.children;
+      const list = context.parent!.children
       const removalIndex = node
         ? list.indexOf(node)
         : context.currentNode
-        ? context.childIndex
-        : -1;
+          ? context.childIndex
+          : -1
       if (!node || node === context.currentNode) {
         // current node removed
-        context.currentNode = null;
-        context.onNodeRemoved();
+        context.currentNode = null
+        context.onNodeRemoved()
       } else {
         // sibling node removed
         if (context.childIndex > removalIndex) {
-          context.childIndex--;
-          context.onNodeRemoved();
+          context.childIndex--
+          context.onNodeRemoved()
         }
       }
-      context.parent!.children.splice(removalIndex, 1);
+      context.parent!.children.splice(removalIndex, 1)
     },
 
     // This is registered when using replaceNode, etc.
     onNodeRemoved: () => {},
-  };
+  }
 
-  return context;
+  return context
 }
 ```
 
@@ -204,19 +204,19 @@ Since the index changes when a node is removed, decrease the index when a node i
 ```ts
 export function traverseChildren(
   parent: ParentNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
-  let i = 0; // This
+  let i = 0 // This
   const nodeRemoved = () => {
-    i--; // This
-  };
+    i-- // This
+  }
   for (; i < parent.children.length; i++) {
-    const child = parent.children[i];
-    if (isString(child)) continue;
-    context.parent = parent;
-    context.childIndex = i;
-    context.onNodeRemoved = nodeRemoved; // This
-    traverseNode(child, context);
+    const child = parent.children[i]
+    if (isString(child)) continue
+    context.parent = parent
+    context.childIndex = i
+    context.onNodeRemoved = nodeRemoved // This
+    traverseNode(child, context)
   }
 }
 ```
@@ -234,37 +234,37 @@ Well, the implementation itself is not big, so I think it would be easier to und
 export type StructuralDirectiveTransform = (
   node: ElementNode,
   dir: DirectiveNode,
-  context: TransformContext
-) => void | (() => void);
+  context: TransformContext,
+) => void | (() => void)
 
 export function createStructuralDirectiveTransform(
   // The name also supports regular expressions.
   // For example, in the transformer for v-if, it is assumed to receive something like /^(if|else|else-if)$/.
   name: string | RegExp,
-  fn: StructuralDirectiveTransform
+  fn: StructuralDirectiveTransform,
 ): NodeTransform {
   const matches = isString(name)
     ? (n: string) => n === name
-    : (n: string) => name.test(n);
+    : (n: string) => name.test(n)
 
   return (node, context) => {
     if (node.type === NodeTypes.ELEMENT) {
       // Only act on NodeTypes.ELEMENT
-      const { props } = node;
-      const exitFns = [];
+      const { props } = node
+      const exitFns = []
       for (let i = 0; i < props.length; i++) {
-        const prop = props[i];
+        const prop = props[i]
         if (prop.type === NodeTypes.DIRECTIVE && matches(prop.name)) {
           // Execute the transformer for NodeTypes.DIRECTIVE that matches the name
-          props.splice(i, 1);
-          i--;
-          const onExit = fn(node, prop, context);
-          if (onExit) exitFns.push(onExit);
+          props.splice(i, 1)
+          i--
+          const onExit = fn(node, prop, context)
+          if (onExit) exitFns.push(onExit)
         }
       }
-      return exitFns;
+      return exitFns
     }
-  };
+  }
 }
 ```
 
@@ -291,22 +291,22 @@ function render(_ctx) {
       createVNode: _createVNode,
       createCommentVNode: _createCommentVNode,
       Fragment: _Fragment,
-    } = ChibiVue;
+    } = ChibiVue
 
     return _createVNode(_Fragment, null, [
       _createVNode(
-        "button",
-        _normalizeProps({ [_toHandlerKey("click")]: inc }),
-        "inc"
+        'button',
+        _normalizeProps({ [_toHandlerKey('click')]: inc }),
+        'inc',
       ),
       n % 5 === 0 && n % 3 === 0
-        ? _createVNode("p", null, "FizzBuzz")
+        ? _createVNode('p', null, 'FizzBuzz')
         : n % 5 === 0
-        ? _createVNode("p", null, "Buzz")
-        : n % 3 === 0
-        ? _createVNode("p", null, "Fizz")
-        : _createVNode("p", null, n),
-    ]);
+          ? _createVNode('p', null, 'Buzz')
+          : n % 3 === 0
+            ? _createVNode('p', null, 'Fizz')
+            : _createVNode('p', null, n),
+    ])
   }
 }
 ```
@@ -335,11 +335,11 @@ export const enum NodeTypes {
 }
 
 export interface ConditionalExpression extends Node {
-  type: NodeTypes.JS_CONDITIONAL_EXPRESSION;
-  test: JSChildNode;
-  consequent: JSChildNode;
-  alternate: JSChildNode;
-  newline: boolean;
+  type: NodeTypes.JS_CONDITIONAL_EXPRESSION
+  test: JSChildNode
+  consequent: JSChildNode
+  alternate: JSChildNode
+  newline: boolean
 }
 
 export type JSChildNode =
@@ -348,13 +348,13 @@ export type JSChildNode =
   | ObjectExpression
   | ArrayExpression
   | ConditionalExpression
-  | ExpressionNode;
+  | ExpressionNode
 
 export function createConditionalExpression(
-  test: ConditionalExpression["test"],
-  consequent: ConditionalExpression["consequent"],
-  alternate: ConditionalExpression["alternate"],
-  newline = true
+  test: ConditionalExpression['test'],
+  consequent: ConditionalExpression['consequent'],
+  alternate: ConditionalExpression['alternate'],
+  newline = true,
 ): ConditionalExpression {
   return {
     type: NodeTypes.JS_CONDITIONAL_EXPRESSION,
@@ -363,7 +363,7 @@ export function createConditionalExpression(
     alternate,
     newline,
     loc: locStub,
-  };
+  }
 }
 ```
 
@@ -379,24 +379,24 @@ export const enum NodeTypes {
 }
 
 export interface IfNode extends Node {
-  type: NodeTypes.IF;
-  branches: IfBranchNode[];
-  codegenNode?: IfConditionalExpression;
+  type: NodeTypes.IF
+  branches: IfBranchNode[]
+  codegenNode?: IfConditionalExpression
 }
 
 export interface IfConditionalExpression extends ConditionalExpression {
-  consequent: VNodeCall;
-  alternate: VNodeCall | IfConditionalExpression;
+  consequent: VNodeCall
+  alternate: VNodeCall | IfConditionalExpression
 }
 
 export interface IfBranchNode extends Node {
-  type: NodeTypes.IF_BRANCH;
-  condition: ExpressionNode | undefined;
-  children: TemplateChildNode[];
-  userKey?: AttributeNode | DirectiveNode;
+  type: NodeTypes.IF_BRANCH
+  condition: ExpressionNode | undefined
+  children: TemplateChildNode[]
+  userKey?: AttributeNode | DirectiveNode
 }
 
-export type ParentNode = RootNode | ElementNode | IfBranchNode;
+export type ParentNode = RootNode | ElementNode | IfBranchNode
 ```
 
 ### Implementation of the transformer
@@ -422,19 +422,19 @@ export const transformIf = createStructuralDirectiveTransform(
         if (isRoot) {
           ifNode.codegenNode = createCodegenNodeForBranch(
             branch,
-            context
-          ) as IfConditionalExpression;
+            context,
+          ) as IfConditionalExpression
         } else {
-          const parentCondition = getParentCondition(ifNode.codegenNode!);
+          const parentCondition = getParentCondition(ifNode.codegenNode!)
           parentCondition.alternate = createCodegenNodeForBranch(
             branch,
-            context
-          );
+            context,
+          )
         }
-      };
-    });
-  }
-);
+      }
+    })
+  },
+)
 
 export function processIf(
   node: ElementNode,
@@ -443,8 +443,8 @@ export function processIf(
   processCodegen?: (
     node: IfNode,
     branch: IfBranchNode,
-    isRoot: boolean
-  ) => (() => void) | undefined
+    isRoot: boolean,
+  ) => (() => void) | undefined,
 ) {
   // TODO:
 }
@@ -456,7 +456,7 @@ export function processIf(
 // Generate codegenNode for branch
 function createCodegenNodeForBranch(
   branch: IfBranchNode,
-  context: TransformContext
+  context: TransformContext,
 ): IfConditionalExpression | VNodeCall {
   if (branch.condition) {
     return createConditionalExpression(
@@ -466,34 +466,34 @@ function createCodegenNodeForBranch(
       // It will be replaced with the target Node when v-else-if or v-else is encountered.
       // This is the part where `parentCondition.alternate = createCodegenNodeForBranch(branch, context);` is written.
       // If v-else-if or v-else is not encountered, it will remain as a CREATE_COMMENT Node.
-      createCallExpression(context.helper(CREATE_COMMENT), ['""', "true"])
-    ) as IfConditionalExpression;
+      createCallExpression(context.helper(CREATE_COMMENT), ['""', 'true']),
+    ) as IfConditionalExpression
   } else {
-    return createChildrenCodegenNode(branch, context);
+    return createChildrenCodegenNode(branch, context)
   }
 }
 
 function createChildrenCodegenNode(
   branch: IfBranchNode,
-  context: TransformContext
+  context: TransformContext,
 ): VNodeCall {
   // Just extract vnode call from the branch
-  const { children } = branch;
-  const firstChild = children[0];
-  const vnodeCall = (firstChild as ElementNode).codegenNode as VNodeCall;
-  return vnodeCall;
+  const { children } = branch
+  const firstChild = children[0]
+  const vnodeCall = (firstChild as ElementNode).codegenNode as VNodeCall
+  return vnodeCall
 }
 
 function getParentCondition(
-  node: IfConditionalExpression
+  node: IfConditionalExpression,
 ): IfConditionalExpression {
   // Get the end Node by tracing from the node
   while (true) {
     if (node.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
       if (node.alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
-        node = node.alternate;
+        node = node.alternate
       } else {
-        return node;
+        return node
       }
     }
   }
@@ -528,24 +528,24 @@ export function processIf(
   processCodegen?: (
     node: IfNode,
     branch: IfBranchNode,
-    isRoot: boolean
-  ) => (() => void) | undefined
+    isRoot: boolean,
+  ) => (() => void) | undefined,
 ) {
   // We will run processExpression on exp in advance.
   if (!context.isBrowser && dir.exp) {
-    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
+    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context)
   }
 
-  if (dir.name === "if") {
-    const branch = createIfBranch(node, dir);
+  if (dir.name === 'if') {
+    const branch = createIfBranch(node, dir)
     const ifNode: IfNode = {
       type: NodeTypes.IF,
       loc: node.loc,
       branches: [branch],
-    };
-    context.replaceNode(ifNode);
+    }
+    context.replaceNode(ifNode)
     if (processCodegen) {
-      return processCodegen(ifNode, branch, true);
+      return processCodegen(ifNode, branch, true)
     }
   } else {
     // TODO:
@@ -556,9 +556,9 @@ function createIfBranch(node: ElementNode, dir: DirectiveNode): IfBranchNode {
   return {
     type: NodeTypes.IF_BRANCH,
     loc: node.loc,
-    condition: dir.name === "else" ? undefined : dir.exp,
+    condition: dir.name === 'else' ? undefined : dir.exp,
     children: [node],
-  };
+  }
 }
 ```
 
@@ -569,16 +569,16 @@ We will loop through the nodes (starting from the current node itself) and gener
 During this process, comments and empty texts will be removed.
 
 ```ts
-if (dir.name === "if") {
+if (dir.name === 'if') {
   /** omitted */
 } else {
-  const siblings = context.parent!.children;
-  let i = siblings.indexOf(node);
+  const siblings = context.parent!.children
+  let i = siblings.indexOf(node)
   while (i-- >= -1) {
-    const sibling = siblings[i];
+    const sibling = siblings[i]
     if (sibling && sibling.type === NodeTypes.COMMENT) {
-      context.removeNode(sibling);
-      continue;
+      context.removeNode(sibling)
+      continue
     }
 
     if (
@@ -586,20 +586,20 @@ if (dir.name === "if") {
       sibling.type === NodeTypes.TEXT &&
       !sibling.content.trim().length
     ) {
-      context.removeNode(sibling);
-      continue;
+      context.removeNode(sibling)
+      continue
     }
 
     if (sibling && sibling.type === NodeTypes.IF) {
-      context.removeNode();
-      const branch = createIfBranch(node, dir);
-      sibling.branches.push(branch);
-      const onExit = processCodegen && processCodegen(sibling, branch, false);
-      traverseNode(branch, context);
-      if (onExit) onExit();
-      context.currentNode = null;
+      context.removeNode()
+      const branch = createIfBranch(node, dir)
+      sibling.branches.push(branch)
+      const onExit = processCodegen && processCodegen(sibling, branch, false)
+      traverseNode(branch, context)
+      if (onExit) onExit()
+      context.currentNode = null
     }
-    break;
+    break
   }
 }
 ```
@@ -620,7 +620,7 @@ We will also include IfBranch as a target for traverseChildren.
 ```ts
 export function traverseNode(
   node: RootNode | TemplateChildNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
   // .
   // .
@@ -631,15 +631,15 @@ export function traverseNode(
     // Added
     case NodeTypes.IF:
       for (let i = 0; i < node.branches.length; i++) {
-        traverseNode(node.branches[i], context);
+        traverseNode(node.branches[i], context)
       }
-      break;
+      break
 
     case NodeTypes.IF_BRANCH: // Added
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
-      traverseChildren(node, context);
-      break;
+      traverseChildren(node, context)
+      break
   }
 }
 ```
@@ -651,7 +651,7 @@ export function getBaseTransformPreset(): TransformPreset {
   return [
     [transformIf, transformElement],
     { bind: transformBind, on: transformOn },
-  ];
+  ]
 }
 ```
 
@@ -667,58 +667,58 @@ The rest is easy. Just generate code based on the Node of ConditionalExpression.
 const genNode = (
   node: CodegenNode,
   context: CodegenContext,
-  option: CompilerOptions
+  option: CompilerOptions,
 ) => {
   switch (node.type) {
     case NodeTypes.ELEMENT:
     case NodeTypes.IF: // Don't forget to add this!
-      genNode(node.codegenNode!, context, option);
-      break;
+      genNode(node.codegenNode!, context, option)
+      break
     // .
     // .
     // .
     case NodeTypes.JS_CONDITIONAL_EXPRESSION:
-      genConditionalExpression(node, context, option);
-      break;
+      genConditionalExpression(node, context, option)
+      break
     /* istanbul ignore next */
     case NodeTypes.IF_BRANCH:
       // noop
-      break;
+      break
   }
-};
+}
 
 function genConditionalExpression(
   node: ConditionalExpression,
   context: CodegenContext,
-  option: CompilerOptions
+  option: CompilerOptions,
 ) {
-  const { test, consequent, alternate, newline: needNewline } = node;
-  const { push, indent, deindent, newline } = context;
+  const { test, consequent, alternate, newline: needNewline } = node
+  const { push, indent, deindent, newline } = context
   if (test.type === NodeTypes.SIMPLE_EXPRESSION) {
-    genExpression(test, context);
+    genExpression(test, context)
   } else {
-    push(`(`);
-    genNode(test, context, option);
-    push(`)`);
+    push(`(`)
+    genNode(test, context, option)
+    push(`)`)
   }
-  needNewline && indent();
-  context.indentLevel++;
-  needNewline || push(` `);
-  push(`? `);
-  genNode(consequent, context, option);
-  context.indentLevel--;
-  needNewline && newline();
-  needNewline || push(` `);
-  push(`: `);
-  const isNested = alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION;
+  needNewline && indent()
+  context.indentLevel++
+  needNewline || push(` `)
+  push(`? `)
+  genNode(consequent, context, option)
+  context.indentLevel--
+  needNewline && newline()
+  needNewline || push(` `)
+  push(`: `)
+  const isNested = alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION
   if (!isNested) {
-    context.indentLevel++;
+    context.indentLevel++
   }
-  genNode(alternate, context, option);
+  genNode(alternate, context, option)
   if (!isNested) {
-    context.indentLevel--;
+    context.indentLevel--
   }
-  needNewline && deindent(true /* without newline */);
+  needNewline && deindent(true /* without newline */)
 }
 ```
 

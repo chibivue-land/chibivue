@@ -13,15 +13,15 @@ https://vuejs.org/guide/extras/render-function.html#passing-slots
 ```ts
 const MyComponent = defineComponent({
   setup(_, { slots }) {
-    return () => h("div", {}, [slots.default()]);
+    return () => h('div', {}, [slots.default()])
   },
-});
+})
 
 const app = createApp({
   setup() {
-    return () => h(MyComponent, {}, () => "hello");
+    return () => h(MyComponent, {}, () => 'hello')
   },
-});
+})
 ```
 
 仕組みは単純で、スロットの定義側では、setupContext として slots を受け取れるようにしておき、使用する側で h 関数でコンポーネントをレンダリングする際に、children としてレンダー関数を渡すだけです。
@@ -52,15 +52,15 @@ https://vuejs.org/guide/components/slots.html#scoped-slots
 const MyComponent = defineComponent({
   setup(_, { slots }) {
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         slots.default?.(),
-        h("br", {}, []),
+        h('br', {}, []),
         slots.myNamedSlot?.(),
-        h("br", {}, []),
-        slots.myScopedSlot2?.({ message: "hello!" }),
-      ]);
+        h('br', {}, []),
+        slots.myScopedSlot2?.({ message: 'hello!' }),
+      ])
   },
-});
+})
 
 const app = createApp({
   setup() {
@@ -69,14 +69,14 @@ const app = createApp({
         MyComponent,
         {},
         {
-          default: () => "hello",
-          myNamedSlot: () => "hello2",
+          default: () => 'hello',
+          myNamedSlot: () => 'hello2',
           myScopedSlot2: (scope: { message: string }) =>
             `message: ${scope.message}`,
-        }
-      );
+        },
+      )
   },
-});
+})
 ```
 
 ここまでのソースコード:  

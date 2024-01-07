@@ -15,14 +15,14 @@ https://vuejs.org/api/options-misc.html#components
 
 ```vue
 <script>
-import MyComponent from "./MyComponent.vue";
+import MyComponent from './MyComponent.vue'
 
 export default {
   components: {
     MyComponent,
     MyComponent2: MyComponent,
   },
-};
+}
 </script>
 
 <template>
@@ -40,14 +40,14 @@ components オプションに指定したオブジェクトの key 名が、テ�
 https://vuejs.org/guide/components/registration.html#global-registration
 
 ```ts
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
-const app = createApp({});
+const app = createApp({})
 
 app
-  .component("ComponentA", ComponentA)
-  .component("ComponentB", ComponentB)
-  .component("ComponentC", ComponentC);
+  .component('ComponentA', ComponentA)
+  .component('ComponentB', ComponentB)
+  .component('ComponentC', ComponentC)
 ```
 
 ### 3. 動的コンポーネント + is 属性
@@ -58,17 +58,17 @@ https://vuejs.org/api/built-in-special-elements.html#component
 
 ```vue
 <script>
-import Foo from "./Foo.vue";
-import Bar from "./Bar.vue";
+import Foo from './Foo.vue'
+import Bar from './Bar.vue'
 
 export default {
   components: { Foo, Bar },
   data() {
     return {
-      view: "Foo",
-    };
+      view: 'Foo',
+    }
   },
-};
+}
 </script>
 
 <template>
@@ -82,7 +82,7 @@ script setup では、import したコンポーネントをそのまま使用す
 
 ```vue
 <script setup>
-import MyComponent from "./MyComponent.vue";
+import MyComponent from './MyComponent.vue'
 </script>
 
 <template>
@@ -110,11 +110,11 @@ import MyComponent from "./MyComponent.vue";
 
 ```vue
 <script>
-import MyComponent from "./MyComponent.vue";
+import MyComponent from './MyComponent.vue'
 
 export default defineComponent({
   components: { MyComponent },
-});
+})
 </script>
 
 <template>
@@ -130,11 +130,11 @@ function render(_ctx) {
     resolveComponent: _resolveComponent,
     createVNode: _createVNode,
     Fragment: _Fragment,
-  } = ChibiVue;
+  } = ChibiVue
 
-  const _component_MyComponent = _resolveComponent("MyComponent");
+  const _component_MyComponent = _resolveComponent('MyComponent')
 
-  return _createVNode(_Fragment, null, _createVNode(_component_MyComponent));
+  return _createVNode(_Fragment, null, _createVNode(_component_MyComponent))
 }
 ```
 
@@ -160,25 +160,25 @@ export const enum ElementTypes {
   COMPONENT,
 }
 
-export type ElementNode = PlainElementNode | ComponentNode;
+export type ElementNode = PlainElementNode | ComponentNode
 
 export interface BaseElementNode extends Node {
-  type: NodeTypes.ELEMENT;
-  tag: string;
-  tagType: ElementTypes;
-  isSelfClosing: boolean;
-  props: Array<AttributeNode | DirectiveNode>;
-  children: TemplateChildNode[];
+  type: NodeTypes.ELEMENT
+  tag: string
+  tagType: ElementTypes
+  isSelfClosing: boolean
+  props: Array<AttributeNode | DirectiveNode>
+  children: TemplateChildNode[]
 }
 
 export interface PlainElementNode extends BaseElementNode {
-  tagType: ElementTypes.ELEMENT;
-  codegenNode: VNodeCall | SimpleExpressionNode | undefined;
+  tagType: ElementTypes.ELEMENT
+  codegenNode: VNodeCall | SimpleExpressionNode | undefined
 }
 
 export interface ComponentNode extends BaseElementNode {
-  tagType: ElementTypes.COMPONENT;
-  codegenNode: VNodeCall | undefined;
+  tagType: ElementTypes.COMPONENT
+  codegenNode: VNodeCall | undefined
 }
 ```
 
@@ -212,26 +212,26 @@ export interface ComponentNode extends BaseElementNode {
 これからのことも考えて、オプションは色々後から追加しやすいようにしておきます。
 
 ```ts
-type OptionalOptions = "isNativeTag"; // | TODO: 今後増やしていく (かも)
+type OptionalOptions = 'isNativeTag' // | TODO: 今後増やしていく (かも)
 
 type MergedParserOptions = Omit<Required<ParserOptions>, OptionalOptions> &
-  Pick<ParserOptions, OptionalOptions>;
+  Pick<ParserOptions, OptionalOptions>
 
 export interface ParserContext {
   // .
   // .
-  options: MergedParserOptions; // [!code ++]
+  options: MergedParserOptions // [!code ++]
   // .
   // .
 }
 
 function createParserContext(
   content: string,
-  rawOptions: ParserOptions // [!code ++]
+  rawOptions: ParserOptions, // [!code ++]
 ): ParserContext {
-  const options = Object.assign({}, defaultParserOptions); // [!code ++]
+  const options = Object.assign({}, defaultParserOptions) // [!code ++]
 
-  let key: keyof ParserOptions; // [!code ++]
+  let key: keyof ParserOptions // [!code ++]
   // prettier-ignore
   for (key in rawOptions) { // [!code ++]
     options[key] = // [!code ++]
@@ -247,15 +247,15 @@ function createParserContext(
 
 export const baseParse = (
   content: string,
-  options: ParserOptions = {} // [!code ++]
+  options: ParserOptions = {}, // [!code ++]
 ): RootNode => {
   const context = createParserContext(
     content,
-    options // [!code ++]
-  );
-  const children = parseChildren(context, []);
-  return createRoot(children);
-};
+    options, // [!code ++]
+  )
+  const children = parseChildren(context, [])
+  return createRoot(children)
+}
 ```
 
 さてさて、そうしましたら、 compiler-dom の方でネイティブなタグ名を列挙して、それをオプションとして渡してあげます。
@@ -263,21 +263,21 @@ export const baseParse = (
 compiler-dom と言いましたが、実は列挙自体は shared/domTagConfig.ts で行われています。
 
 ```ts
-import { makeMap } from "./makeMap";
+import { makeMap } from './makeMap'
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element
 const HTML_TAGS =
-  "html,body,base,head,link,meta,style,title,address,article,aside,footer," +
-  "header,hgroup,h1,h2,h3,h4,h5,h6,nav,section,div,dd,dl,dt,figcaption," +
-  "figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code," +
-  "data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup," +
-  "time,u,var,wbr,area,audio,map,track,video,embed,object,param,source," +
-  "canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td," +
-  "th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup," +
-  "option,output,progress,select,textarea,details,dialog,menu," +
-  "summary,template,blockquote,iframe,tfoot";
+  'html,body,base,head,link,meta,style,title,address,article,aside,footer,' +
+  'header,hgroup,h1,h2,h3,h4,h5,h6,nav,section,div,dd,dl,dt,figcaption,' +
+  'figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code,' +
+  'data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup,' +
+  'time,u,var,wbr,area,audio,map,track,video,embed,object,param,source,' +
+  'canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td,' +
+  'th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup,' +
+  'option,output,progress,select,textarea,details,dialog,menu,' +
+  'summary,template,blockquote,iframe,tfoot'
 
-export const isHTMLTag = makeMap(HTML_TAGS);
+export const isHTMLTag = makeMap(HTML_TAGS)
 ```
 
 なんとも禍々しいですね！！
@@ -291,18 +291,18 @@ compiler-dom/parserOptions.ts を作成し、コンパイラに渡します。
 ```ts
 // compiler-dom/parserOptions.ts
 
-import { ParserOptions } from "../compiler-core";
-import { isHTMLTag, isSVGTag } from "../shared/domTagConfig";
+import { ParserOptions } from '../compiler-core'
+import { isHTMLTag, isSVGTag } from '../shared/domTagConfig'
 
 export const parserOptions: ParserOptions = {
-  isNativeTag: (tag) => isHTMLTag(tag) || isSVGTag(tag),
-};
+  isNativeTag: tag => isHTMLTag(tag) || isSVGTag(tag),
+}
 ```
 
 ```ts
 export function compile(template: string, option?: CompilerOptions) {
-  const defaultOption = { isBrowser: true };
-  if (option) Object.assign(defaultOption, option);
+  const defaultOption = { isBrowser: true }
+  if (option) Object.assign(defaultOption, option)
   return baseCompile(
     template,
     Object.assign(
@@ -311,9 +311,9 @@ export function compile(template: string, option?: CompilerOptions) {
       defaultOption,
       {
         directiveTransforms: DOMDirectiveTransforms,
-      }
-    )
-  );
+      },
+    ),
+  )
 }
 ```
 
@@ -324,11 +324,11 @@ export function compile(template: string, option?: CompilerOptions) {
 ```ts
 function parseElement(
   context: ParserContext,
-  ancestors: ElementNode[]
+  ancestors: ElementNode[],
 ): ElementNode | undefined {
   // .
   // .
-  let tagType = ElementTypes.ELEMENT; // [!code ++]
+  let tagType = ElementTypes.ELEMENT // [!code ++]
   // prettier-ignore
   if (isComponent(tag, context)) { // [!code ++]
     tagType = ElementTypes.COMPONENT;// [!code ++]
@@ -338,18 +338,18 @@ function parseElement(
     // .
     tagType, // [!code ++]
     // .
-  };
+  }
 }
 
 function isComponent(tag: string, context: ParserContext) {
-  const options = context.options;
+  const options = context.options
   if (
     // NOTE: Vue.js では、先頭が大文字のタグはコンポーネントとして扱われるようです。
     // ref: https://github.com/vuejs/core/blob/32bdc5d1900ceb8df1e8ee33ea65af7b4da61051/packages/compiler-core/src/parse.ts#L662
     /^[A-Z]/.test(tag) ||
     (options.isNativeTag && !options.isNativeTag(tag))
   ) {
-    return true;
+    return true
   }
 }
 ```
@@ -373,22 +373,22 @@ export const transformElement: NodeTransform = (node, context) => {
     // .
     // .
 
-    const isComponent = node.tagType === ElementTypes.COMPONENT; // [!code ++]
+    const isComponent = node.tagType === ElementTypes.COMPONENT // [!code ++]
 
     const vnodeTag = isComponent // [!code ++]
       ? resolveComponentType(node as ComponentNode, context) // [!code ++]
-      : `"${tag}"`; // [!code ++]
+      : `"${tag}"` // [!code ++]
 
     // .
     // .
-  };
-};
+  }
+}
 
 function resolveComponentType(node: ComponentNode, context: TransformContext) {
-  let { tag } = node;
-  context.helper(RESOLVE_COMPONENT);
-  context.components.add(tag); // 後述
-  return toValidAssetId(tag, `component`);
+  let { tag } = node
+  context.helper(RESOLVE_COMPONENT)
+  context.components.add(tag) // 後述
+  return toValidAssetId(tag, `component`)
 }
 ```
 
@@ -396,11 +396,11 @@ function resolveComponentType(node: ComponentNode, context: TransformContext) {
 // util.ts
 export function toValidAssetId(
   name: string,
-  type: "component" // | TODO:
+  type: 'component', // | TODO:
 ): string {
   return `_${type}_${name.replace(/[^\w]/g, (searchValue, replaceValue) => {
-    return searchValue === "-" ? "_" : name.charCodeAt(replaceValue).toString();
-  })}`;
+    return searchValue === '-' ? '_' : name.charCodeAt(replaceValue).toString()
+  })}`
 }
 ```
 
@@ -409,7 +409,7 @@ context の方にも登録できるようにしておきます。
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
   // .
-  components: Set<string>; // [!code ++]
+  components: Set<string> // [!code ++]
   // .
 }
 
@@ -419,13 +419,13 @@ export function createTransformContext(
     nodeTransforms = [],
     directiveTransforms = {},
     isBrowser = false,
-  }: TransformOptions
+  }: TransformOptions,
 ): TransformContext {
   const context: TransformContext = {
     // .
     components: new Set(), // [!code ++]
     // .
-  };
+  }
 }
 ```
 
@@ -433,21 +433,21 @@ export function createTransformContext(
 
 ```ts
 export interface RootNode extends Node {
-  type: NodeTypes.ROOT;
-  children: TemplateChildNode[];
-  codegenNode?: TemplateChildNode | VNodeCall;
-  helpers: Set<symbol>;
-  components: string[]; // [!code ++]
+  type: NodeTypes.ROOT
+  children: TemplateChildNode[]
+  codegenNode?: TemplateChildNode | VNodeCall
+  helpers: Set<symbol>
+  components: string[] // [!code ++]
 }
 ```
 
 ```ts
 export function transform(root: RootNode, options: TransformOptions) {
-  const context = createTransformContext(root, options);
-  traverseNode(root, context);
-  createRootCodegen(root, context);
-  root.helpers = new Set([...context.helpers.keys()]);
-  root.components = [...context.components]; // [!code ++]
+  const context = createTransformContext(root, options)
+  traverseNode(root, context)
+  createRootCodegen(root, context)
+  root.helpers = new Set([...context.helpers.keys()])
+  root.components = [...context.components] // [!code ++]
 }
 ```
 
@@ -462,7 +462,7 @@ export function transform(root: RootNode, options: TransformOptions) {
 export const generate = (ast: RootNode, option: CompilerOptions): string => {
   // .
   // .
-  genFunctionPreamble(ast, context); // NOTE: 将来的には関数の外に出す
+  genFunctionPreamble(ast, context) // NOTE: 将来的には関数の外に出す
 
   // prettier-ignore
   if (ast.components.length) { // [!code ++]
@@ -471,26 +471,28 @@ export const generate = (ast: RootNode, option: CompilerOptions): string => {
     newline(); // [!code ++]
   } // [!code ++]
 
-  push(`return `);
+  push(`return `)
   // .
   // .
-};
+}
 
 function genAssets(
   assets: string[],
-  type: "component" /* TODO: */,
-  { helper, push, newline }: CodegenContext
+  type: 'component' /* TODO: */,
+  { helper, push, newline }: CodegenContext,
 ) {
-  if (type === "component") {
-    const resolver = helper(RESOLVE_COMPONENT);
+  if (type === 'component') {
+    const resolver = helper(RESOLVE_COMPONENT)
     for (let i = 0; i < assets.length; i++) {
-      let id = assets[i];
+      let id = assets[i]
 
       push(
-        `const ${toValidAssetId(id, type)} = ${resolver}(${JSON.stringify(id)})`
-      );
+        `const ${toValidAssetId(id, type)} = ${resolver}(${JSON.stringify(
+          id,
+        )})`,
+      )
       if (i < assets.length - 1) {
-        newline();
+        newline()
       }
     }
   }
@@ -511,9 +513,9 @@ export type ComponentOptions<
   // .
 > = {
   // .
-  components?: Record<string, Component>;
+  components?: Record<string, Component>
   // .
-};
+}
 ```
 
 #### app のオプションとして components を追加できるように
@@ -523,7 +525,7 @@ export type ComponentOptions<
 ```ts
 export interface AppContext {
   // .
-  components: Record<string, Component>; // [!code ++]
+  components: Record<string, Component> // [!code ++]
   // .
 }
 
@@ -532,11 +534,11 @@ export function createAppContext(): AppContext {
     // .
     components: {}, // [!code ++]
     // .
-  };
+  }
 }
 
 export function createAppAPI<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
     // .
@@ -547,8 +549,8 @@ export function createAppAPI<HostElement>(
         context.components[name] = component; // [!code ++]
         return app; // [!code ++]
       },
-    });
-  };
+    })
+  }
 }
 ```
 
@@ -562,18 +564,18 @@ export function createAppAPI<HostElement>(
 // runtime-core/helpers/componentAssets.ts
 
 export function resolveComponent(name: string): ConcreteComponent | string {
-  const instance = currentInstance || currentRenderingInstance; // 後述
+  const instance = currentInstance || currentRenderingInstance // 後述
   if (instance) {
-    const Component = instance.type;
+    const Component = instance.type
     const res =
       // local registration
       resolve((Component as ComponentOptions).components, name) ||
       // global registration
-      resolve(instance.appContext.components, name);
-    return res;
+      resolve(instance.appContext.components, name)
+    return res
   }
 
-  return name;
+  return name
 }
 
 function resolve(registry: Record<string, any> | undefined, name: string) {
@@ -582,7 +584,7 @@ function resolve(registry: Record<string, any> | undefined, name: string) {
     (registry[name] ||
       registry[camelize(name)] ||
       registry[capitalize(camelize(name))])
-  );
+  )
 }
 ```
 
@@ -596,14 +598,14 @@ resolveComponent ではローカル登録されたコンポーネントを辿る
 ```ts
 // runtime-core/componentRenderContexts.ts
 
-export let currentRenderingInstance: ComponentInternalInstance | null = null;
+export let currentRenderingInstance: ComponentInternalInstance | null = null
 
 export function setCurrentRenderingInstance(
-  instance: ComponentInternalInstance | null
+  instance: ComponentInternalInstance | null,
 ): ComponentInternalInstance | null {
-  const prev = currentRenderingInstance;
-  currentRenderingInstance = instance;
-  return prev;
+  const prev = currentRenderingInstance
+  currentRenderingInstance = instance
+  return prev
 }
 ```
 
@@ -614,20 +616,20 @@ const setupRenderEffect = (
   instance: ComponentInternalInstance,
   initialVNode: VNode,
   container: RendererElement,
-  anchor: RendererElement | null
+  anchor: RendererElement | null,
 ) => {
   const componentUpdateFn = () => {
     // .
     // .
-    const prev = setCurrentRenderingInstance(instance); // [!code ++]
-    const subTree = (instance.subTree = normalizeVNode(render(proxy!))); // [!code ++]
-    setCurrentRenderingInstance(prev); // [!code ++]
+    const prev = setCurrentRenderingInstance(instance) // [!code ++]
+    const subTree = (instance.subTree = normalizeVNode(render(proxy!))) // [!code ++]
+    setCurrentRenderingInstance(prev) // [!code ++]
     // .
     // .
-  };
+  }
   // .
   // .
-};
+}
 ```
 
 ## いざ動かしてみる
@@ -637,27 +639,27 @@ const setupRenderEffect = (
 実際にプレイグラウンドの方で動かしてみましょう！
 
 ```ts
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
-import App from "./App.vue";
-import Counter from "./components/Counter.vue";
+import App from './App.vue'
+import Counter from './components/Counter.vue'
 
-const app = createApp(App);
-app.component("GlobalCounter", Counter);
-app.mount("#app");
+const app = createApp(App)
+app.component('GlobalCounter', Counter)
+app.mount('#app')
 ```
 
 App.vue
 
 ```vue
 <script>
-import Counter from "./components/Counter.vue";
+import Counter from './components/Counter.vue'
 
-import { defineComponent } from "chibivue";
+import { defineComponent } from 'chibivue'
 
 export default defineComponent({
   components: { Counter },
-});
+})
 </script>
 
 <template>
@@ -671,14 +673,14 @@ components/Counter.vue
 
 ```vue
 <script>
-import { ref, defineComponent } from "chibivue";
+import { ref, defineComponent } from 'chibivue'
 
 export default defineComponent({
   setup() {
-    const count = ref(0);
-    return { count };
+    const count = ref(0)
+    return { count }
   },
-});
+})
 </script>
 
 <template>

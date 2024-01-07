@@ -18,17 +18,17 @@ Computed has two signatures: read-only and writable.
 function computed<T>(
   getter: () => T,
   // see "Computed Debugging" link below
-  debuggerOptions?: DebuggerOptions
-): Readonly<Ref<Readonly<T>>>;
+  debuggerOptions?: DebuggerOptions,
+): Readonly<Ref<Readonly<T>>>
 
 // writable
 function computed<T>(
   options: {
-    get: () => T;
-    set: (value: T) => void;
+    get: () => T
+    set: (value: T) => void
   },
-  debuggerOptions?: DebuggerOptions
-): Ref<T>;
+  debuggerOptions?: DebuggerOptions,
+): Ref<T>
 ```
 
 The official implementation is a bit complex, but let's start with a simple structure.
@@ -40,7 +40,7 @@ export class ComputedRefImpl<T> {
   constructor(private getter: ComputedGetter<T>) {}
 
   get value() {
-    return this.getter();
+    return this.getter()
   }
 
   set value() {}
@@ -58,26 +58,26 @@ Here's an example of how it works:
 
 ```ts
 export class ComputedRefImpl<T> {
-  public dep?: Dep = undefined;
-  private _value!: T;
-  public readonly effect: ReactiveEffect<T>;
-  public _dirty = true;
+  public dep?: Dep = undefined
+  private _value!: T
+  public readonly effect: ReactiveEffect<T>
+  public _dirty = true
 
   constructor(getter: ComputedGetter<T>) {
     this.effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
-        this._dirty = true;
+        this._dirty = true
       }
-    });
+    })
   }
 
   get value() {
-    trackRefValue(this);
+    trackRefValue(this)
     if (this._dirty) {
-      this._dirty = false;
-      this._value = this.effect.run();
+      this._dirty = false
+      this._value = this.effect.run()
     }
-    return this._value;
+    return this._value
   }
 }
 ```
@@ -90,8 +90,8 @@ This is the basic flow. When implementing, there are a few points to note, so le
 - When updating the `_dirty` flag to true, trigger the dependencies it has.
   ```ts
   if (!this._dirty) {
-    this._dirty = true;
-    triggerRefValue(this);
+    this._dirty = true
+    triggerRefValue(this)
   }
   ```
 - Since computed is classified as `ref`, mark `__v_isRef` as true.
@@ -100,42 +100,42 @@ This is the basic flow. When implementing, there are a few points to note, so le
 Now that we are ready, let's implement it! If the code below works as expected, it's OK! (Please make sure that only the computed dependencies are triggered!)
 
 ```ts
-import { computed, createApp, h, reactive, ref } from "chibivue";
+import { computed, createApp, h, reactive, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const count = reactive({ value: 0 });
-    const count2 = reactive({ value: 0 });
+    const count = reactive({ value: 0 })
+    const count2 = reactive({ value: 0 })
     const double = computed(() => {
-      console.log("computed");
-      return count.value * 2;
-    });
+      console.log('computed')
+      return count.value * 2
+    })
     const doubleDouble = computed(() => {
-      console.log("computed (doubleDouble)");
-      return double.value * 2;
-    });
+      console.log('computed (doubleDouble)')
+      return double.value * 2
+    })
 
-    const countRef = ref(0);
+    const countRef = ref(0)
     const doubleCountRef = computed(() => {
-      console.log("computed (doubleCountRef)");
-      return countRef.value * 2;
-    });
+      console.log('computed (doubleCountRef)')
+      return countRef.value * 2
+    })
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${count.value}`]),
-        h("p", {}, [`count2: ${count2.value}`]),
-        h("p", {}, [`double: ${double.value}`]),
-        h("p", {}, [`doubleDouble: ${doubleDouble.value}`]),
-        h("p", {}, [`doubleCountRef: ${doubleCountRef.value}`]),
-        h("button", { onClick: () => count.value++ }, ["update count"]),
-        h("button", { onClick: () => count2.value++ }, ["update count2"]),
-        h("button", { onClick: () => countRef.value++ }, ["update countRef"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${count.value}`]),
+        h('p', {}, [`count2: ${count2.value}`]),
+        h('p', {}, [`double: ${double.value}`]),
+        h('p', {}, [`doubleDouble: ${doubleDouble.value}`]),
+        h('p', {}, [`doubleCountRef: ${doubleCountRef.value}`]),
+        h('button', { onClick: () => count.value++ }, ['update count']),
+        h('button', { onClick: () => count2.value++ }, ['update count2']),
+        h('button', { onClick: () => countRef.value++ }, ['update countRef']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Source code up to this point:
@@ -151,25 +151,25 @@ There are various forms of the watch API. Let's start by implementing the simple
 First, let's aim for the code below to work.
 
 ```ts
-import { createApp, h, reactive, watch } from "chibivue";
+import { createApp, h, reactive, watch } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     watch(
       () => state.count,
-      () => alert("state.count was changed!")
-    );
+      () => alert('state.count was changed!'),
+    )
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: () => state.count++ }, ["update state"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: () => state.count++ }, ['update state']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 The implementation of watch is not in reactivity, but in runtime-core (apiWatch.ts).
@@ -178,15 +178,15 @@ It may look a bit complex because there are various APIs mixed together, but it'
 I have already implemented the signature of the target API (watch function) below, so please try implementing it. I believe you can do it if you have acquired the knowledge of reactivity so far!
 
 ```ts
-export type WatchEffect = (onCleanup: OnCleanup) => void;
+export type WatchEffect = (onCleanup: OnCleanup) => void
 
-export type WatchSource<T = any> = () => T;
+export type WatchSource<T = any> = () => T
 
-type OnCleanup = (cleanupFn: () => void) => void;
+type OnCleanup = (cleanupFn: () => void) => void
 
 export function watch<T>(
   source: WatchSource<T>,
-  cb: (newValue: T, oldValue: T) => void
+  cb: (newValue: T, oldValue: T) => void,
 ) {
   // TODO:
 }
@@ -201,55 +201,55 @@ Once you have the base, it's just a matter of extending it. There is no need for
 
 - Watching ref
   ```ts
-  const count = ref(0);
+  const count = ref(0)
   watch(count, () => {
     /** some effects */
-  });
+  })
   ```
 - Watching multiple sources
 
   ```ts
-  const count = ref(0);
-  const count2 = ref(0);
-  const count3 = ref(0);
+  const count = ref(0)
+  const count2 = ref(0)
+  const count3 = ref(0)
   watch([count, count2, count3], () => {
     /** some effects */
-  });
+  })
   ```
 
 - Immediate
 
   ```ts
-  const count = ref(0);
+  const count = ref(0)
   watch(
     count,
     () => {
       /** some effects */
     },
-    { immediate: true }
-  );
+    { immediate: true },
+  )
   ```
 
 - Deep
 
   ```ts
-  const state = reactive({ count: 0 });
+  const state = reactive({ count: 0 })
   watch(
     () => state,
     () => {
       /** some effects */
     },
-    { deep: true }
-  );
+    { deep: true },
+  )
   ```
 
 - Reactive object
 
   ```ts
-  const state = reactive({ count: 0 });
+  const state = reactive({ count: 0 })
   watch(state, () => {
     /** some effects */
-  }); // automatically in deep mode
+  }) // automatically in deep mode
   ```
 
 Source code up to this point:
@@ -262,12 +262,12 @@ https://vuejs.org/api/reactivity-core.html#watcheffect
 Implementing watchEffect is easy using the watch implementation.
 
 ```ts
-const count = ref(0);
+const count = ref(0)
 
-watchEffect(() => console.log(count.value));
+watchEffect(() => console.log(count.value))
 // -> logs 0
 
-count.value++;
+count.value++
 // -> logs 1
 ```
 

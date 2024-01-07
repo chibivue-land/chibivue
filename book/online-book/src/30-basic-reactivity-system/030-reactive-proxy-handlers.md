@@ -12,27 +12,27 @@
 まずは以下のコードを動かしてみてください。
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const getRef = () => {
       inputRef.value = document.getElementById(
-        "my-input"
-      ) as HTMLInputElement | null;
-      console.log(inputRef.value);
-    };
+        'my-input',
+      ) as HTMLInputElement | null
+      console.log(inputRef.value)
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { id: "my-input" }, []),
-        h("button", { onClick: getRef }, ["getRef"]),
-      ]);
+      h('div', {}, [
+        h('input', { id: 'my-input' }, []),
+        h('button', { onClick: getRef }, ['getRef']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 コンソールを見てみると、以下のようになっていることが観測できるかと思います。
@@ -42,31 +42,31 @@ app.mount("#app");
 ここで、focus をする処理を加えてみましょう。
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const getRef = () => {
       inputRef.value = document.getElementById(
-        "my-input"
-      ) as HTMLInputElement | null;
-      console.log(inputRef.value);
-    };
+        'my-input',
+      ) as HTMLInputElement | null
+      console.log(inputRef.value)
+    }
     const focus = () => {
-      inputRef.value?.focus();
-    };
+      inputRef.value?.focus()
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { id: "my-input" }, []),
-        h("button", { onClick: getRef }, ["getRef"]),
-        h("button", { onClick: focus }, ["focus"]),
-      ]);
+      h('div', {}, [
+        h('input', { id: 'my-input' }, []),
+        h('button', { onClick: getRef }, ['getRef']),
+        h('button', { onClick: focus }, ['focus']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 なんと、エラーになってしまいます。
@@ -83,31 +83,31 @@ Proxy を生成してしまうと値は当然元のオブジェクトではな�
 先ほどのコードで、Object.prototype.toString を使うと HTMLInputElement はどのように判定されるかみてみましょう。
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const getRef = () => {
       inputRef.value = document.getElementById(
-        "my-input"
-      ) as HTMLInputElement | null;
-      console.log(inputRef.value?.toString());
-    };
+        'my-input',
+      ) as HTMLInputElement | null
+      console.log(inputRef.value?.toString())
+    }
     const focus = () => {
-      inputRef.value?.focus();
-    };
+      inputRef.value?.focus()
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { id: "my-input" }, []),
-        h("button", { onClick: getRef }, ["getRef"]),
-        h("button", { onClick: focus }, ["focus"]),
-      ]);
+      h('div', {}, [
+        h('input', { id: 'my-input' }, []),
+        h('button', { onClick: getRef }, ['getRef']),
+        h('button', { onClick: focus }, ['focus']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ![element_to_string](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/element_to_string.png)
@@ -116,14 +116,14 @@ app.mount("#app");
 
 ```ts
 // shared/general.ts
-export const objectToString = Object.prototype.toString; // isMapやisSetなどで既出
+export const objectToString = Object.prototype.toString // isMapやisSetなどで既出
 export const toTypeString = (value: unknown): string =>
-  objectToString.call(value);
+  objectToString.call(value)
 
 // 今回追加する関数
 export const toRawType = (value: unknown): string => {
-  return toTypeString(value).slice(8, -1);
-};
+  return toTypeString(value).slice(8, -1)
+}
 ```
 
 slice しているのは、`[Object hoge]`の hoge に当たる文字列を取得するためです。
@@ -141,30 +141,30 @@ const enum TargetType {
 
 function targetTypeMap(rawType: string) {
   switch (rawType) {
-    case "Object":
-    case "Array":
-      return TargetType.COMMON;
+    case 'Object':
+    case 'Array':
+      return TargetType.COMMON
     default:
-      return TargetType.INVALID;
+      return TargetType.INVALID
   }
 }
 
 function getTargetType<T extends object>(value: T) {
   return !Object.isExtensible(value)
     ? TargetType.INVALID
-    : targetTypeMap(toRawType(value));
+    : targetTypeMap(toRawType(value))
 }
 ```
 
 ```ts
 export function reactive<T extends object>(target: T): T {
-  const targetType = getTargetType(target);
+  const targetType = getTargetType(target)
   if (targetType === TargetType.INVALID) {
-    return target;
+    return target
   }
 
-  const proxy = new Proxy(target, mutableHandlers);
-  return proxy as T;
+  const proxy = new Proxy(target, mutableHandlers)
+  return proxy as T
 }
 ```
 
@@ -183,24 +183,24 @@ https://vuejs.org/guide/essentials/template-refs.html
 目標は以下のようなコードが動くようになることです。
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const focus = () => {
-      inputRef.value?.focus();
-    };
+      inputRef.value?.focus()
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { ref: inputRef }, []),
-        h("button", { onClick: focus }, ["focus"]),
-      ]);
+      h('div', {}, [
+        h('input', { ref: inputRef }, []),
+        h('button', { onClick: focus }, ['focus']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでやってきたみなさんならば、実装方法はもう見えてるかと思います。
@@ -210,8 +210,8 @@ app.mount("#app");
 export interface VNode<HostNode = any> {
   // .
   // .
-  key: string | number | symbol | null;
-  ref: Ref | null; // これ
+  key: string | number | symbol | null
+  ref: Ref | null // これ
   // .
   // .
 }
@@ -224,35 +224,35 @@ export interface VNode<HostNode = any> {
 (※ ここは本当はコンポーネントの proxy を渡すべきなんですが、まだ未実装のため setupContext ということにしています。)
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const Child = {
   setup() {
-    const action = () => alert("clicked!");
-    return { action };
+    const action = () => alert('clicked!')
+    return { action }
   },
 
   template: `<button @click="action">action (child)</button>`,
-};
+}
 
 const app = createApp({
   setup() {
-    const childRef = ref<any>(null);
+    const childRef = ref<any>(null)
     const childAction = () => {
-      childRef.value?.action();
-    };
+      childRef.value?.action()
+    }
 
     return () =>
-      h("div", {}, [
-        h("div", {}, [
+      h('div', {}, [
+        h('div', {}, [
           h(Child, { ref: childRef }, []),
-          h("button", { onClick: childAction }, ["action (parent)"]),
+          h('button', { onClick: childAction }, ['action (parent)']),
         ]),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  
@@ -267,26 +267,26 @@ app.mount("#app");
 ```ts
 const App = {
   setup() {
-    const array = ref<number[]>([]);
+    const array = ref<number[]>([])
     const mutateArray = () => {
-      array.value.push(Date.now()); // trigger しても何も effect がない (この時、set の key は "0")
-    };
+      array.value.push(Date.now()) // trigger しても何も effect がない (この時、set の key は "0")
+    }
 
-    const record = reactive<Record<string, number>>({});
+    const record = reactive<Record<string, number>>({})
     const mutateRecord = () => {
-      record[Date.now().toString()] = Date.now(); // trigger しても何も effect がない (key 新しく設定された key)
-    };
+      record[Date.now().toString()] = Date.now() // trigger しても何も effect がない (key 新しく設定された key)
+    }
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`array: ${JSON.stringify(array.value)}`]),
-        h("button", { onClick: mutateArray }, ["update array"]),
+      h('div', {}, [
+        h('p', {}, [`array: ${JSON.stringify(array.value)}`]),
+        h('button', { onClick: mutateArray }, ['update array']),
 
-        h("p", {}, [`record: ${JSON.stringify(record)}`]),
-        h("button", { onClick: mutateRecord }, ["update record"]),
-      ]);
+        h('p', {}, [`record: ${JSON.stringify(record)}`]),
+        h('button', { onClick: mutateRecord }, ['update record']),
+      ])
   },
-};
+}
 ```
 
 これを解決するにはどうしたら良いでしょうか?
@@ -298,13 +298,13 @@ const App = {
 ```ts
 const p = new Proxy([], {
   set(target, key, value, receiver) {
-    console.log(key); // ※
-    Reflect.set(target, key, value, receiver);
-    return true;
+    console.log(key) // ※
+    Reflect.set(target, key, value, receiver)
+    return true
   },
-});
+})
 
-p.push(42); // 0
+p.push(42) // 0
 ```
 
 しかしこれらの key をそれぞれ track するわけにはいきません。
@@ -317,12 +317,12 @@ length を track すると言いましたが、実はすでに track される�
 ```ts
 const data = new Proxy([], {
   get(target, key) {
-    console.log("get!", key);
-    return Reflect.get(target, key);
+    console.log('get!', key)
+    return Reflect.get(target, key)
   },
-});
+})
 
-JSON.stringify(data);
+JSON.stringify(data)
 // get! length
 // get! toJSON
 ```
@@ -334,22 +334,22 @@ JSON.stringify(data);
 
 ```ts
 export function trigger(target: object, key?: unknown) {
-  const depsMap = targetMap.get(target);
-  if (!depsMap) return;
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
 
-  let deps: (Dep | undefined)[] = [];
+  let deps: (Dep | undefined)[] = []
   if (key !== void 0) {
-    deps.push(depsMap.get(key));
+    deps.push(depsMap.get(key))
   }
 
   // これ
   if (isIntegerKey(key)) {
-    deps.push(depsMap.get("length"));
+    deps.push(depsMap.get('length'))
   }
 
   for (const dep of deps) {
     if (dep) {
-      triggerEffects(dep);
+      triggerEffects(dep)
     }
   }
 }
@@ -359,9 +359,9 @@ export function trigger(target: object, key?: unknown) {
 // shared/general.ts
 export const isIntegerKey = (key: unknown) =>
   isString(key) &&
-  key !== "NaN" &&
-  key[0] !== "-" &&
-  "" + parseInt(key, 10) === key;
+  key !== 'NaN' &&
+  key[0] !== '-' &&
+  '' + parseInt(key, 10) === key
 ```
 
 これで配列の場合は動くようになりました。
@@ -378,28 +378,28 @@ export const isIntegerKey = (key: unknown) =>
 あたかも `ITERATE_KEY` というものが存在し、そこに effect が登録されているかのような実装をしておけば OK です。
 
 ```ts
-export const ITERATE_KEY = Symbol();
+export const ITERATE_KEY = Symbol()
 
 export function trigger(target: object, key?: unknown) {
-  const depsMap = targetMap.get(target);
-  if (!depsMap) return;
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
 
-  let deps: (Dep | undefined)[] = [];
+  let deps: (Dep | undefined)[] = []
   if (key !== void 0) {
-    deps.push(depsMap.get(key));
+    deps.push(depsMap.get(key))
   }
 
   if (!isArray(target)) {
     // 配列でない場合は、ITERATE_KEY に登録された effect を trigger する
-    deps.push(depsMap.get(ITERATE_KEY));
+    deps.push(depsMap.get(ITERATE_KEY))
   } else if (isIntegerKey(key)) {
     // new index added to array -> length changes
-    deps.push(depsMap.get("length"));
+    deps.push(depsMap.get('length'))
   }
 
   for (const dep of deps) {
     if (dep) {
-      triggerEffects(dep);
+      triggerEffects(dep)
     }
   }
 }
@@ -420,16 +420,16 @@ const data = new Proxy(
   {},
   {
     get(target, key) {
-      return Reflect.get(target, key);
+      return Reflect.get(target, key)
     },
     ownKeys(target) {
-      console.log("ownKeys!!!");
-      return Reflect.ownKeys(target);
+      console.log('ownKeys!!!')
+      return Reflect.ownKeys(target)
     },
-  }
-);
+  },
+)
 
-JSON.stringify(data);
+JSON.stringify(data)
 ```
 
 あとはこれを利用して `ITERATE_KEY` を track すれば良いわけです。
@@ -440,10 +440,10 @@ export const mutableHandlers: ProxyHandler<object> = {
   // .
   // .
   ownKeys(target) {
-    track(target, isArray(target) ? "length" : ITERATE_KEY);
-    return Reflect.ownKeys(target);
+    track(target, isArray(target) ? 'length' : ITERATE_KEY)
+    return Reflect.ownKeys(target)
   },
-};
+}
 ```
 
 これでキーが増減するオブジェクトに対応でき多はずです！
@@ -455,11 +455,11 @@ export const mutableHandlers: ProxyHandler<object> = {
 ```ts
 function targetTypeMap(rawType: string) {
   switch (rawType) {
-    case "Object":
-    case "Array":
-      return TargetType.COMMON;
+    case 'Object':
+    case 'Array':
+      return TargetType.COMMON
     default:
-      return TargetType.INVALID;
+      return TargetType.INVALID
   }
 }
 ```
@@ -475,28 +475,28 @@ https://github.com/vuejs/core/blob/9f8e98af891f456cc8cc9019a31704e5534d1f08/pack
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ map: new Map(), set: new Set() });
+    const state = reactive({ map: new Map(), set: new Set() })
 
     return () =>
-      h("div", {}, [
-        h("h1", {}, [`ReactiveCollection`]),
+      h('div', {}, [
+        h('h1', {}, [`ReactiveCollection`]),
 
-        h("p", {}, [
+        h('p', {}, [
           `map (${state.map.size}): ${JSON.stringify([...state.map])}`,
         ]),
-        h("button", { onClick: () => state.map.set(Date.now(), "item") }, [
-          "update map",
+        h('button', { onClick: () => state.map.set(Date.now(), 'item') }, [
+          'update map',
         ]),
 
-        h("p", {}, [
+        h('p', {}, [
           `set (${state.set.size}): ${JSON.stringify([...state.set])}`,
         ]),
-        h("button", { onClick: () => state.set.add("item") }, ["update set"]),
-      ]);
+        h('button', { onClick: () => state.set.add('item') }, ['update set']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 collectionHandlers では、add や set, delete といったメソッドの getter にハンドラを実装します。  
@@ -510,11 +510,11 @@ TargetType を判別し、collection 型の場合 h にはこのハンドラを�
 
 ```ts
 export const enum ReactiveFlags {
-  RAW = "__v_raw",
+  RAW = '__v_raw',
 }
 
 export interface Target {
-  [ReactiveFlags.RAW]?: any;
+  [ReactiveFlags.RAW]?: any
 }
 ```
 
@@ -525,8 +525,8 @@ getter に入ってきたの key が ReactiveFlags.RAW の場合には Proxy で
 
 ```ts
 export function toRaw<T>(observed: T): T {
-  const raw = observed && (observed as Target)[ReactiveFlags.RAW];
-  return raw ? toRaw(raw) : observed;
+  const raw = observed && (observed as Target)[ReactiveFlags.RAW]
+  return raw ? toRaw(raw) : observed
 }
 ```
 

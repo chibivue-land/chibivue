@@ -10,23 +10,23 @@ DirectiveTransform takes DirectiveNode and ElementNode as arguments and returns 
 export type DirectiveTransform = (
   dir: DirectiveNode,
   node: ElementNode,
-  context: TransformContext
-) => DirectiveTransformResult;
+  context: TransformContext,
+) => DirectiveTransformResult
 
 export interface DirectiveTransformResult {
-  props: Property[];
+  props: Property[]
 }
 ```
 
 First, let's check the developer interface we are aiming for this time.
 
 ```ts
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const bind = { id: "some-id", class: "some-class", style: "color: red" };
-    return { count: 1, bind };
+    const bind = { id: 'some-id', class: 'some-class', style: 'color: red' }
+    return { count: 1, bind }
   },
 
   template: `<div>
@@ -46,11 +46,11 @@ const App = defineComponent({
   <p :class="{ 'my-class': true }"> :class="{ 'my-class': true }" </p>
   <p :class="{ 'my-class': false }"> :class="{ 'my-class': false }" </p>
 </div>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 There are various notations for v-bind. Please refer to the official documentation for details.  
@@ -64,10 +64,10 @@ First, let's modify the AST. Currently, both exp and arg are simple strings, so 
 
 ```ts
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE;
-  name: string;
-  exp: ExpressionNode | undefined; // here
-  arg: ExpressionNode | undefined; // here
+  type: NodeTypes.DIRECTIVE
+  name: string
+  exp: ExpressionNode | undefined // here
+  arg: ExpressionNode | undefined // here
 }
 ```
 
@@ -97,48 +97,48 @@ Since the code is a bit long, I will explain it while writing comments in the co
 ```ts
 function parseAttribute(
   context: ParserContext,
-  nameSet: Set<string>
+  nameSet: Set<string>,
 ): AttributeNode | DirectiveNode {
   // .
   // .
   // .
   // .
   // directive
-  const loc = getSelection(context, start);
+  const loc = getSelection(context, start)
   // The regular expression here is borrowed from the original source
   if (/^(v-[A-Za-z0-9-]|:|\.|@|#)/.test(name)) {
     const match =
       // The regular expression here is borrowed from the original source
       /(?:^v-([a-z0-9-]+))?(?:(?::|^\.|^@|^#)(\[[^\]]+\]|[^\.]+))?(.+)?$/i.exec(
-        name
-      )!;
+        name,
+      )!
 
     // Check the match of the name part and treat it as "bind" if it starts with ":"
     let dirName =
       match[1] ||
-      (startsWith(name, ":") ? "bind" : startsWith(name, "@") ? "on" : "");
+      (startsWith(name, ':') ? 'bind' : startsWith(name, '@') ? 'on' : '')
 
-    let arg: ExpressionNode | undefined;
+    let arg: ExpressionNode | undefined
 
     if (match[2]) {
-      const startOffset = name.lastIndexOf(match[2]);
+      const startOffset = name.lastIndexOf(match[2])
       const loc = getSelection(
         context,
         getNewPosition(context, start, startOffset),
-        getNewPosition(context, start, startOffset + match[2].length)
-      );
+        getNewPosition(context, start, startOffset + match[2].length),
+      )
 
-      let content = match[2];
-      let isStatic = true;
+      let content = match[2]
+      let isStatic = true
 
       // If it is a dynamic argument like "[arg]", set isStatic to false and extract the content as the content
-      if (content.startsWith("[")) {
-        isStatic = false;
-        if (!content.endsWith("]")) {
-          console.error(`Invalid dynamic argument expression: ${content}`);
-          content = content.slice(1);
+      if (content.startsWith('[')) {
+        isStatic = false
+        if (!content.endsWith(']')) {
+          console.error(`Invalid dynamic argument expression: ${content}`)
+          content = content.slice(1)
         } else {
-          content = content.slice(1, content.length - 1);
+          content = content.slice(1, content.length - 1)
         }
       }
 
@@ -147,7 +147,7 @@ function parseAttribute(
         content,
         isStatic,
         loc,
-      };
+      }
     }
 
     return {
@@ -161,7 +161,7 @@ function parseAttribute(
       },
       loc,
       arg,
-    };
+    }
   }
 }
 ```
@@ -193,7 +193,7 @@ into an object (actually a Codegen Node representing this object) like
 
 ```ts
 {
-  id: count;
+  id: count
 }
 ```
 
@@ -212,7 +212,7 @@ As you can see from the flow, transformElement checks the arg of the directive a
 ↓
 
 ```ts
-h("p", mergeProps(bindingObject, { class: "my-class" }), "hello");
+h('p', mergeProps(bindingObject, { class: 'my-class' }), 'hello')
 ```
 
 Also, for class and style, they have various developer interfaces, so they need to be normalized.  

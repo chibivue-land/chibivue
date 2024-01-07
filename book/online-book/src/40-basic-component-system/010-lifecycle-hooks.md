@@ -13,12 +13,12 @@ API 自体は runtime-core/apiLifecycle.ts に実装していきます。
 イメージ ↓
 
 ```ts
-const queue: SchedulerJob[] = []; // 既存実装
-const pendingPostFlushCbs: SchedulerJob[] = []; // 今回新しく作る queue
+const queue: SchedulerJob[] = [] // 既存実装
+const pendingPostFlushCbs: SchedulerJob[] = [] // 今回新しく作る queue
 
 function queueFlush() {
-  queue.forEach((job) => job());
-  flushPostFlushCbs(); // queue の flush の後で flush する
+  queue.forEach(job => job())
+  flushPostFlushCbs() // queue の flush の後で flush する
 }
 ```
 
@@ -47,58 +47,58 @@ import {
   onUnmounted,
   onUpdated,
   ref,
-} from "chibivue";
+} from 'chibivue'
 
 const Child = {
   setup() {
-    const count = ref(0);
+    const count = ref(0)
     onBeforeMount(() => {
-      console.log("onBeforeMount");
-    });
+      console.log('onBeforeMount')
+    })
 
     onUnmounted(() => {
-      console.log("onUnmounted");
-    });
+      console.log('onUnmounted')
+    })
 
     onBeforeUnmount(() => {
-      console.log("onBeforeUnmount");
-    });
+      console.log('onBeforeUnmount')
+    })
 
     onBeforeUpdate(() => {
-      console.log("onBeforeUpdate");
-    });
+      console.log('onBeforeUpdate')
+    })
 
     onUpdated(() => {
-      console.log("onUpdated");
-    });
+      console.log('onUpdated')
+    })
 
     onMounted(() => {
-      console.log("onMounted");
-    });
+      console.log('onMounted')
+    })
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`${count.value}`]),
-        h("button", { onClick: () => count.value++ }, ["increment"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`${count.value}`]),
+        h('button', { onClick: () => count.value++ }, ['increment']),
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const mountFlag = ref(true);
+    const mountFlag = ref(true)
 
     return () =>
-      h("div", {}, [
-        h("button", { onClick: () => (mountFlag.value = !mountFlag.value) }, [
-          "toggle",
+      h('div', {}, [
+        h('button', { onClick: () => (mountFlag.value = !mountFlag.value) }, [
+          'toggle',
         ]),
-        mountFlag.value ? h(Child, {}, []) : h("p", {}, ["unmounted"]),
-      ]);
+        mountFlag.value ? h(Child, {}, []) : h('p', {}, ['unmounted']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  

@@ -29,8 +29,8 @@ const app = createApp({
     </div>
 
   `,
-});
-app.mount("#app");
+})
+app.mount('#app')
 ```
 
 しかしこれだけ複雑なものは正規表現でパースするのは厳しいのです。なので、ここからは本格的にパーサを実装していこうと思います。
@@ -49,10 +49,10 @@ AST の定義はそれぞれの言語が各自で定義します。
 
 ```ts
 type ParseResult = {
-  tag: string;
-  props: Record<string, string>;
-  textContent: string;
-};
+  tag: string
+  props: Record<string, string>
+  textContent: string
+}
 ```
 
 これを拡張して、もっと複雑な表現を行えるような定義にしてみます。
@@ -75,48 +75,48 @@ export const enum NodeTypes {
 // loc というのは location のことで、この Node がソースコード(テンプレート文字列)のどこに該当するかの情報を保持します。
 // (何行目のどこにあるかなど)
 export interface Node {
-  type: NodeTypes;
-  loc: SourceLocation;
+  type: NodeTypes
+  loc: SourceLocation
 }
 
 // Element の Node です。
 export interface ElementNode extends Node {
-  type: NodeTypes.ELEMENT;
-  tag: string; // eg. "div"
-  props: Array<AttributeNode>; // eg. { name: "class", value: { content: "container" } }
-  children: TemplateChildNode[];
-  isSelfClosing: boolean; // eg. <img /> -> true
+  type: NodeTypes.ELEMENT
+  tag: string // eg. "div"
+  props: Array<AttributeNode> // eg. { name: "class", value: { content: "container" } }
+  children: TemplateChildNode[]
+  isSelfClosing: boolean // eg. <img /> -> true
 }
 
 // ElementNode が持つ属性です。
 // ただの Record<string, string> と表現してしまってもいいのですが、
 // Vue に倣って name(string) と value(TextNode) を持つようにしています。
 export interface AttributeNode extends Node {
-  type: NodeTypes.ATTRIBUTE;
-  name: string;
-  value: TextNode | undefined;
+  type: NodeTypes.ATTRIBUTE
+  name: string
+  value: TextNode | undefined
 }
 
-export type TemplateChildNode = ElementNode | TextNode;
+export type TemplateChildNode = ElementNode | TextNode
 
 export interface TextNode extends Node {
-  type: NodeTypes.TEXT;
-  content: string;
+  type: NodeTypes.TEXT
+  content: string
 }
 
 // location の情報です。 Node はこの情報を持ちます。
 // start, end に位置情報が入ります。
 // source には実際のコード(文字列)が入ります。
 export interface SourceLocation {
-  start: Position;
-  end: Position;
-  source: string;
+  start: Position
+  end: Position
+  source: string
 }
 
 export interface Position {
-  offset: number; // from start of file
-  line: number;
-  column: number;
+  offset: number // from start of file
+  line: number
+  column: number
 }
 ```
 
@@ -140,14 +140,14 @@ parse 関数では template の文字列をこの AST に変換するような�
 今実装してある baseParse の内容は一旦消して、戻り値の型も以下のようにします。
 
 ```ts
-import { TemplateChildNode } from "./ast";
+import { TemplateChildNode } from './ast'
 
 export const baseParse = (
-  content: string
+  content: string,
 ): { children: TemplateChildNode[] } => {
   // TODO:
-  return { children: [] };
-};
+  return { children: [] }
+}
 ```
 
 ## Context
@@ -157,14 +157,14 @@ export const baseParse = (
 ```ts
 export interface ParserContext {
   // 元々のテンプレート文字列
-  readonly originalSource: string;
+  readonly originalSource: string
 
-  source: string;
+  source: string
 
   // このパーサが読み取っている現在地
-  offset: number;
-  line: number;
-  column: number;
+  offset: number
+  line: number
+  column: number
 }
 
 function createParserContext(content: string): ParserContext {
@@ -174,17 +174,17 @@ function createParserContext(content: string): ParserContext {
     column: 1,
     line: 1,
     offset: 0,
-  };
+  }
 }
 
 export const baseParse = (
-  content: string
+  content: string,
 ): { children: TemplateChildNode[] } => {
-  const context = createParserContext(content); // contextを生成
+  const context = createParserContext(content) // contextを生成
 
   // TODO:
-  return { children: [] };
-};
+  return { children: [] }
+}
 ```
 
 ## parseChildren
@@ -195,87 +195,87 @@ export const baseParse = (
 
 ```ts
 export const baseParse = (
-  content: string
+  content: string,
 ): { children: TemplateChildNode[] } => {
-  const context = createParserContext(content);
-  const children = parseChildren(context, []); // 子ノードをパースする
-  return { children: children };
-};
+  const context = createParserContext(content)
+  const children = parseChildren(context, []) // 子ノードをパースする
+  return { children: children }
+}
 
 function parseChildren(
   context: ParserContext,
 
   // HTMLは再起的な構造を持っているので、祖先要素をスタックとして持っておいて、子にネストして行くたびにpushしていきます。
   // endタグを見つけるとparseChildrenが終了してancestorsをpopする感じです。
-  ancestors: ElementNode[]
+  ancestors: ElementNode[],
 ): TemplateChildNode[] {
-  const nodes: TemplateChildNode[] = [];
+  const nodes: TemplateChildNode[] = []
 
   while (!isEnd(context, ancestors)) {
-    const s = context.source;
-    let node: TemplateChildNode | undefined = undefined;
+    const s = context.source
+    let node: TemplateChildNode | undefined = undefined
 
-    if (s[0] === "<") {
+    if (s[0] === '<') {
       // sが"<"で始まり、かつ次の文字がアルファベットの場合は要素としてパースします。
       if (/[a-z]/i.test(s[1])) {
-        node = parseElement(context, ancestors); // TODO: これから実装します。
+        node = parseElement(context, ancestors) // TODO: これから実装します。
       }
     }
 
     if (!node) {
       //　上記の条件に当てはまらなかった場合位はTextNodeとしてパースします。
-      node = parseText(context); // TODO: これから実装します。
+      node = parseText(context) // TODO: これから実装します。
     }
 
-    pushNode(nodes, node);
+    pushNode(nodes, node)
   }
 
-  return nodes;
+  return nodes
 }
 
 // 子要素パースの while を判定(パース終了)するための関数
 function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
-  const s = context.source;
+  const s = context.source
 
   // sが"</"で始まり、かつその後にancestorsのタグ名が続くことを判定し、閉じタグがあるか(parseChildrenが終了するべきか)を判定します。
-  if (startsWith(s, "</")) {
+  if (startsWith(s, '</')) {
     for (let i = ancestors.length - 1; i >= 0; --i) {
       if (startsWithEndTagOpen(s, ancestors[i].tag)) {
-        return true;
+        return true
       }
     }
   }
 
-  return !s;
+  return !s
 }
 
 function startsWith(source: string, searchString: string): boolean {
-  return source.startsWith(searchString);
+  return source.startsWith(searchString)
 }
 
 function pushNode(nodes: TemplateChildNode[], node: TemplateChildNode): void {
   // nodeTypeがTextのものが連続している場合は結合してあげます
   if (node.type === NodeTypes.TEXT) {
-    const prev = last(nodes);
+    const prev = last(nodes)
     if (prev && prev.type === NodeTypes.TEXT) {
-      prev.content += node.content;
-      return;
+      prev.content += node.content
+      return
     }
   }
 
-  nodes.push(node);
+  nodes.push(node)
 }
 
 function last<T>(xs: T[]): T | undefined {
-  return xs[xs.length - 1];
+  return xs[xs.length - 1]
 }
 
 function startsWithEndTagOpen(source: string, tag: string): boolean {
   return (
-    startsWith(source, "</") &&
+    startsWith(source, '</') &&
     source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase() &&
-    /[\t\r\n\f />]/.test(source[2 + tag.length] || ">")
-  );
+    /[\t\r\n\f />]/.test(source[2 + tag.length] || '>')
+  )
 }
 ```
 
@@ -288,38 +288,38 @@ function startsWithEndTagOpen(source: string, tag: string): boolean {
 ```ts
 function parseText(context: ParserContext): TextNode {
   // "<" (タグの開始(開始タグ終了タグ問わず))まで読み進め、何文字読んだかを元にTextデータの終了時点のindexを算出します。
-  const endToken = "<";
-  let endIndex = context.source.length;
-  const index = context.source.indexOf(endToken, 1);
+  const endToken = '<'
+  let endIndex = context.source.length
+  const index = context.source.indexOf(endToken, 1)
   if (index !== -1 && endIndex > index) {
-    endIndex = index;
+    endIndex = index
   }
 
-  const start = getCursor(context); // これは loc 用
+  const start = getCursor(context) // これは loc 用
 
   // endIndexの情報を元に Text データをパースします。
-  const content = parseTextData(context, endIndex);
+  const content = parseTextData(context, endIndex)
 
   return {
     type: NodeTypes.TEXT,
     content,
     loc: getSelection(context, start),
-  };
+  }
 }
 
 // content と length を元に text を抽出します。
 function parseTextData(context: ParserContext, length: number): string {
-  const rawText = context.source.slice(0, length);
-  advanceBy(context, length);
-  return rawText;
+  const rawText = context.source.slice(0, length)
+  advanceBy(context, length)
+  return rawText
 }
 
 // -------------------- 以下からはユーティリティです。(parseElementなどでも使う) --------------------
 
 function advanceBy(context: ParserContext, numberOfCharacters: number): void {
-  const { source } = context;
-  advancePositionWithMutation(context, source, numberOfCharacters);
-  context.source = source.slice(numberOfCharacters);
+  const { source } = context
+  advancePositionWithMutation(context, source, numberOfCharacters)
+  context.source = source.slice(numberOfCharacters)
 }
 
 // 少し長いですが、やっていることは単純で、 pos の計算を行っています。
@@ -327,43 +327,43 @@ function advanceBy(context: ParserContext, numberOfCharacters: number): void {
 function advancePositionWithMutation(
   pos: Position,
   source: string,
-  numberOfCharacters: number = source.length
+  numberOfCharacters: number = source.length,
 ): Position {
-  let linesCount = 0;
-  let lastNewLinePos = -1;
+  let linesCount = 0
+  let lastNewLinePos = -1
   for (let i = 0; i < numberOfCharacters; i++) {
     if (source.charCodeAt(i) === 10 /* newline char code */) {
-      linesCount++;
-      lastNewLinePos = i;
+      linesCount++
+      lastNewLinePos = i
     }
   }
 
-  pos.offset += numberOfCharacters;
-  pos.line += linesCount;
+  pos.offset += numberOfCharacters
+  pos.line += linesCount
   pos.column =
     lastNewLinePos === -1
       ? pos.column + numberOfCharacters
-      : numberOfCharacters - lastNewLinePos;
+      : numberOfCharacters - lastNewLinePos
 
-  return pos;
+  return pos
 }
 
 function getCursor(context: ParserContext): Position {
-  const { column, line, offset } = context;
-  return { column, line, offset };
+  const { column, line, offset } = context
+  return { column, line, offset }
 }
 
 function getSelection(
   context: ParserContext,
   start: Position,
-  end?: Position
+  end?: Position,
 ): SourceLocation {
-  end = end || getCursor(context);
+  end = end || getCursor(context)
   return {
     start,
     end,
     source: context.originalSource.slice(start.offset, end.offset),
-  };
+  }
 }
 ```
 
@@ -381,29 +381,29 @@ const enum TagType {
 
 function parseElement(
   context: ParserContext,
-  ancestors: ElementNode[]
+  ancestors: ElementNode[],
 ): ElementNode | undefined {
   // Start tag.
-  const element = parseTag(context, TagType.Start); // TODO:
+  const element = parseTag(context, TagType.Start) // TODO:
 
   // <img /> のような self closing の要素の場合にはここで終了です。( children も end タグもないので)
   if (element.isSelfClosing) {
-    return element;
+    return element
   }
 
   // Children.
-  ancestors.push(element);
-  const children = parseChildren(context, ancestors);
-  ancestors.pop();
+  ancestors.push(element)
+  const children = parseChildren(context, ancestors)
+  ancestors.pop()
 
-  element.children = children;
+  element.children = children
 
   // End tag.
   if (startsWithEndTagOpen(context.source, element.tag)) {
-    parseTag(context, TagType.End); // TODO:
+    parseTag(context, TagType.End) // TODO:
   }
 
-  return element;
+  return element
 }
 ```
 
@@ -415,22 +415,22 @@ parseTag を実装していきます。
 ```ts
 function parseTag(context: ParserContext, type: TagType): ElementNode {
   // Tag open.
-  const start = getCursor(context);
-  const match = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(context.source)!;
-  const tag = match[1];
+  const start = getCursor(context)
+  const match = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(context.source)!
+  const tag = match[1]
 
-  advanceBy(context, match[0].length);
-  advanceSpaces(context);
+  advanceBy(context, match[0].length)
+  advanceSpaces(context)
 
   // Attributes.
-  let props = parseAttributes(context, type);
+  let props = parseAttributes(context, type)
 
   // Tag close.
-  let isSelfClosing = false;
+  let isSelfClosing = false
 
   // 属性まで読み進めた時点で、次が "/>" だった場合は SelfClosing とする
-  isSelfClosing = startsWith(context.source, "/>");
-  advanceBy(context, isSelfClosing ? 2 : 1);
+  isSelfClosing = startsWith(context.source, '/>')
+  advanceBy(context, isSelfClosing ? 2 : 1)
 
   return {
     type: NodeTypes.ELEMENT,
@@ -439,70 +439,70 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
     children: [],
     isSelfClosing,
     loc: getSelection(context, start),
-  };
+  }
 }
 
 // 属性全体(複数属性)のパース
 // eg. `id="app" class="container" style="color: red"`
 function parseAttributes(
   context: ParserContext,
-  type: TagType
+  type: TagType,
 ): AttributeNode[] {
-  const props = [];
-  const attributeNames = new Set<string>();
-  s;
+  const props = []
+  const attributeNames = new Set<string>()
+  s
 
   // タグが終わるまで読み続ける
   while (
     context.source.length > 0 &&
-    !startsWith(context.source, ">") &&
-    !startsWith(context.source, "/>")
+    !startsWith(context.source, '>') &&
+    !startsWith(context.source, '/>')
   ) {
-    const attr = parseAttribute(context, attributeNames);
+    const attr = parseAttribute(context, attributeNames)
 
     if (type === TagType.Start) {
-      props.push(attr);
+      props.push(attr)
     }
 
-    advanceSpaces(context); // スペースは読み飛ばす
+    advanceSpaces(context) // スペースは読み飛ばす
   }
 
-  return props;
+  return props
 }
 
 type AttributeValue =
   | {
-      content: string;
-      loc: SourceLocation;
+      content: string
+      loc: SourceLocation
     }
-  | undefined;
+  | undefined
 
 // 属性一つのパース
 // eg. `id="app"`
 function parseAttribute(
   context: ParserContext,
-  nameSet: Set<string>
+  nameSet: Set<string>,
 ): AttributeNode {
   // Name.
-  const start = getCursor(context);
-  const match = /^[^\t\r\n\f />][^\t\r\n\f />=]*/.exec(context.source)!;
-  const name = match[0];
+  const start = getCursor(context)
+  const match = /^[^\t\r\n\f />][^\t\r\n\f />=]*/.exec(context.source)!
+  const name = match[0]
 
-  nameSet.add(name);
+  nameSet.add(name)
 
-  advanceBy(context, name.length);
+  advanceBy(context, name.length)
 
   // Value
-  let value: AttributeValue = undefined;
+  let value: AttributeValue = undefined
 
   if (/^[\t\r\n\f ]*=/.test(context.source)) {
-    advanceSpaces(context);
-    advanceBy(context, 1);
-    advanceSpaces(context);
-    value = parseAttributeValue(context);
+    advanceSpaces(context)
+    advanceBy(context, 1)
+    advanceSpaces(context)
+    value = parseAttributeValue(context)
   }
 
-  const loc = getSelection(context, start);
+  const loc = getSelection(context, start)
 
   return {
     type: NodeTypes.ATTRIBUTE,
@@ -513,39 +513,39 @@ function parseAttribute(
       loc: value.loc,
     },
     loc,
-  };
+  }
 }
 
 // 属性のvalueをパース
 // valueのクォートはシングルでもダブルでもパースできるように実装しています。
 // これも頑張ってクォートで囲まれたvalueを取り出したりしているだけです。
 function parseAttributeValue(context: ParserContext): AttributeValue {
-  const start = getCursor(context);
-  let content: string;
+  const start = getCursor(context)
+  let content: string
 
-  const quote = context.source[0];
-  const isQuoted = quote === `"` || quote === `'`;
+  const quote = context.source[0]
+  const isQuoted = quote === `"` || quote === `'`
   if (isQuoted) {
     // Quoted value.
-    advanceBy(context, 1);
+    advanceBy(context, 1)
 
-    const endIndex = context.source.indexOf(quote);
+    const endIndex = context.source.indexOf(quote)
     if (endIndex === -1) {
-      content = parseTextData(context, context.source.length);
+      content = parseTextData(context, context.source.length)
     } else {
-      content = parseTextData(context, endIndex);
-      advanceBy(context, 1);
+      content = parseTextData(context, endIndex)
+      advanceBy(context, 1)
     }
   } else {
     // Unquoted
-    const match = /^[^\t\r\n\f >]+/.exec(context.source);
+    const match = /^[^\t\r\n\f >]+/.exec(context.source)
     if (!match) {
-      return undefined;
+      return undefined
     }
-    content = parseTextData(context, match[0].length);
+    content = parseTextData(context, match[0].length)
   }
 
-  return { content, loc: getSelection(context, start) };
+  return { content, loc: getSelection(context, start) }
 }
 ```
 
@@ -580,24 +580,24 @@ const app = createApp({
       </style>
     </div>
   `,
-});
-app.mount("#app");
+})
+app.mount('#app')
 ```
 
 `~/packages/compiler-core/compile.ts`
 
 ```ts
 export function baseCompile(template: string) {
-  const parseResult = baseParse(template.trim()); // templateはトリムしておく
+  const parseResult = baseParse(template.trim()) // templateはトリムしておく
   console.log(
-    "🚀 ~ file: compile.ts:6 ~ baseCompile ~ parseResult:",
-    parseResult
-  );
+    '🚀 ~ file: compile.ts:6 ~ baseCompile ~ parseResult:',
+    parseResult,
+  )
 
   // TODO: codegen
   // const code = generate(parseResult);
   // return code;
-  return "";
+  return ''
 }
 ```
 
@@ -615,39 +615,39 @@ export function baseCompile(template: string) {
 先にコードをお見せしてしまいます。
 
 ```ts
-import { ElementNode, NodeTypes, TemplateChildNode, TextNode } from "./ast";
+import { ElementNode, NodeTypes, TemplateChildNode, TextNode } from './ast'
 
 export const generate = ({
   children,
 }: {
-  children: TemplateChildNode[];
+  children: TemplateChildNode[]
 }): string => {
   return `return function render() {
   const { h } = ChibiVue;
   return ${genNode(children[0])};
-}`;
-};
+}`
+}
 
 const genNode = (node: TemplateChildNode): string => {
   switch (node.type) {
     case NodeTypes.ELEMENT:
-      return genElement(node);
+      return genElement(node)
     case NodeTypes.TEXT:
-      return genText(node);
+      return genText(node)
     default:
-      return "";
+      return ''
   }
-};
+}
 
 const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
     .map(({ name, value }) => `${name}: "${value?.content}"`)
-    .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
-};
+    .join(', ')}}, [${el.children.map(it => genNode(it)).join(', ')}])`
+}
 
 const genText = (text: TextNode): string => {
-  return `\`${text.content}\``;
-};
+  return `\`${text.content}\``
+}
 ```
 
 以上で動くようなものは作れます。
@@ -656,16 +656,16 @@ const genText = (text: TextNode): string => {
 
 ```ts
 export function baseCompile(template: string) {
-  const parseResult = baseParse(template.trim());
-  const code = generate(parseResult);
-  return code;
+  const parseResult = baseParse(template.trim())
+  const code = generate(parseResult)
+  return code
 }
 ```
 
 playground
 
 ```ts
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
 const app = createApp({
   template: `
@@ -688,9 +688,9 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ![render_template](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_template.png)
@@ -705,28 +705,28 @@ export type ComponentOptions = {
   // .
   setup?: (
     props: Record<string, any>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function | void; // voidも許可する
+    ctx: { emit: (event: string, ...args: any[]) => void },
+  ) => Function | void // voidも許可する
   // .
   // .
   // .
-};
+}
 ```
 
 ```ts
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
 const app = createApp({
   setup() {
     // マウント後に DOM 操作をしたいので Promise.resolve で処理を遅らせる
     Promise.resolve(() => {
-      const btn = document.getElementById("btn");
+      const btn = document.getElementById('btn')
       btn &&
-        btn.addEventListener("click", () => {
-          const h2 = document.getElementById("hello");
-          h2 && (h2.textContent += "!");
-        });
-    });
+        btn.addEventListener('click', () => {
+          const h2 = document.getElementById('hello')
+          h2 && (h2.textContent += '!')
+        })
+    })
   },
 
   template: `
@@ -751,9 +751,9 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 これで正常に動作していることを確認します。  

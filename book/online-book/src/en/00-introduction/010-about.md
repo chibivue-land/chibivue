@@ -69,23 +69,23 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 
   ```vue
   <script>
-  import { reactive } from "chibivue";
+  import { reactive } from 'chibivue'
 
   export default {
     setup() {
-      const state = reactive({ message: "Hello, chibivue!", input: "" });
+      const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
       const changeMessage = () => {
-        state.message += "!";
-      };
+        state.message += '!'
+      }
 
-      const handleInput = (e) => {
-        state.input = e.target?.value ?? "";
-      };
+      const handleInput = e => {
+        state.input = e.target?.value ?? ''
+      }
 
-      return { state, changeMessage, handleInput };
+      return { state, changeMessage, handleInput }
     },
-  };
+  }
   </script>
 
   <template>
@@ -122,12 +122,12 @@ Since this book has turned out quite voluminous, I've set achievement milestones
   ```
 
   ```ts
-  import { createApp } from "chibivue";
-  import App from "./App.vue";
+  import { createApp } from 'chibivue'
+  import App from './App.vue'
 
-  const app = createApp(App);
+  const app = createApp(App)
 
-  app.mount("#app");
+  app.mount('#app')
   ```
 
 - **Basic Virtual DOM Section**  

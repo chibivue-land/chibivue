@@ -38,14 +38,14 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // .
 
   if (render) {
-    instance.render = render as InternalRenderFunction;
+    instance.render = render as InternalRenderFunction
   }
   // ↑ This is the existing implementation
 
-  setCurrentInstance(instance);
-  applyOptions(instance);
-  unsetCurrentInstance();
-};
+  setCurrentInstance(instance)
+  applyOptions(instance)
+  unsetCurrentInstance()
+}
 ```
 
 In the Options API, the developer interface frequently deals with "this".
@@ -53,15 +53,15 @@ In the Options API, the developer interface frequently deals with "this".
 ```ts
 const App = defineComponent({
   data() {
-    return { message: "hello" };
+    return { message: 'hello' }
   },
 
   methods: {
     greet() {
-      console.log(this.message); // Like this
+      console.log(this.message) // Like this
     },
   },
-});
+})
 ```
 
 Internally, "this" refers to the component's proxy in the Options API, and when applying options, this proxy is bound.
@@ -70,17 +70,17 @@ Implementation example ↓
 
 ```ts
 export function applyOptions(instance: ComponentInternalInstance) {
-  const { type: options } = instance;
-  const publicThis = instance.proxy! as any;
-  const ctx = instance.ctx;
+  const { type: options } = instance
+  const publicThis = instance.proxy! as any
+  const ctx = instance.ctx
 
-  const { methods } = options;
+  const { methods } = options
 
   if (methods) {
     for (const key in methods) {
-      const methodHandler = methods[key];
+      const methodHandler = methods[key]
       if (isFunction(methodHandler)) {
-        ctx[key] = methodHandler.bind(publicThis);
+        ctx[key] = methodHandler.bind(publicThis)
       }
     }
   }
@@ -108,22 +108,22 @@ Of course, this applies not only to "data" but also to those defined in "compute
 ```ts
 const App = defineComponent({
   data() {
-    return { count: 0 };
+    return { count: 0 }
   },
 
   methods: {
     myMethod() {
-      this.count; // number
-      this.myComputed; // number
+      this.count // number
+      this.myComputed // number
     },
   },
 
   computed: {
     myComputed() {
-      return this.count; // number
+      return this.count // number
     },
   },
-});
+})
 ```
 
 To achieve this, you need to implement a somewhat complex type puzzle (relay with many generics).
@@ -154,7 +154,7 @@ Of course, in "defineComponent" as well, we accept "D" and "M" to relay the user
 ```ts
 export function defineComponent<
   D = {},
-  M extends MethodOptions = MethodOptions
+  M extends MethodOptions = MethodOptions,
 >(options: ComponentOptions<D, M>) {}
 ```
 
@@ -165,20 +165,20 @@ First, "D" and "M" are merged into "ComponentPublicInstance" (merged into the pr
 ```ts
 type ComponentPublicInstance<
   D = {},
-  M extends MethodOptions = MethodOptions
+  M extends MethodOptions = MethodOptions,
 > = {
   /** Various types that public instance has */
 } & D &
-  M;
+  M
 ```
 
 Once we have this, we mix the instance type into "this" in "ComponentOptions".
 
 ```ts
 type ComponentOptions<D = {}, M extends MethodOptions = MethodOptions> = {
-  data?: () => D;
-  methods?: M;
-} & ThisType<ComponentPublicInstance<D, M>>;
+  data?: () => D
+  methods?: M
+} & ThisType<ComponentPublicInstance<D, M>>
 ```
 
 By doing this, we can infer the properties defined in "data" and "method" from "this" in the options.

@@ -13,22 +13,22 @@ Let's consider the following code (including parts that are not implemented in c
 export default defineComponent({
   props: { parentCount: { type: Number, default: 0 } },
   data() {
-    return { dataState: { count: 0 } };
+    return { dataState: { count: 0 } }
   },
   methods: {
     incrementData() {
-      this.dataState.count++;
+      this.dataState.count++
     },
   },
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
-    return { state, increment };
+    return { state, increment }
   },
-});
+})
 </script>
 
 <template>
@@ -54,7 +54,7 @@ Let's consider another example.
 
 ```vue
 <script setup>
-const ChildRef = ref();
+const ChildRef = ref()
 
 // Access to methods and data of the component
 // ChildRef.value?.incrementData
@@ -75,7 +75,7 @@ In other words, the template (render function) and ref refer to instance.proxy.
 
 ```ts
 interface ComponentInternalInstance {
-  proxy: ComponentPublicInstance | null;
+  proxy: ComponentPublicInstance | null
 }
 ```
 
@@ -84,16 +84,16 @@ The implementation of this proxy is done using Proxy, and it is roughly as follo
 ```ts
 instance.proxy = instance.proxy = new Proxy(
   instance,
-  PublicInstanceProxyHandlers
-);
+  PublicInstanceProxyHandlers,
+)
 
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get(instance: ComponentRenderContext, key: string) {
-    const { setupState, ctx, props } = instance;
+    const { setupState, ctx, props } = instance
 
     // Check setupState -> props -> ctx in order based on the key and return the value if it exists
   },
-};
+}
 ```
 
 Let's implement this Proxy!
@@ -118,7 +118,7 @@ At the moment, emit is working, but it is implemented somewhat roughly.
 ```ts
 const setupResult = component.setup(instance.props, {
   emit: instance.emit,
-});
+})
 ```
 
 Let's define the SetupContext interface properly and represent it as an object that the instance holds.
@@ -128,12 +128,12 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  setupContext: SetupContext | null; // Added
+  setupContext: SetupContext | null // Added
 }
 
 export type SetupContext = {
-  emit: (e: string, ...args: any[]) => void;
-};
+  emit: (e: string, ...args: any[]) => void
+}
 ```
 
 Then, when creating an instance, generate the setupContext and pass this object as the second argument when executing the setup function.
@@ -149,45 +149,45 @@ Let's aim for a developer interface like the following:
 ```ts
 const Child = defineComponent({
   setup(_, { expose }) {
-    const count = ref(0);
-    const count2 = ref(0);
-    expose({ count });
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    expose({ count })
+    return { count, count2 }
   },
   template: `<p>hello</p>`,
-});
+})
 
 const Child2 = defineComponent({
   setup() {
-    const count = ref(0);
-    const count2 = ref(0);
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    return { count, count2 }
   },
   template: `<p>hello</p>`,
-});
+})
 
 const app = createApp({
   setup() {
-    const child = ref();
-    const child2 = ref();
+    const child = ref()
+    const child2 = ref()
 
     const log = () => {
       console.log(
         child.value.count,
         child.value.count2, // cannot access
         child2.value.count,
-        child2.value.count2
-      );
-    };
+        child2.value.count2,
+      )
+    }
 
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         h(Child, { ref: child }, []),
         h(Child2, { ref: child2 }, []),
-        h("button", { onClick: log }, ["log"]),
-      ]);
+        h('button', { onClick: log }, ['log']),
+      ])
   },
-});
+})
 ```
 
 For components that do not use expose, everything is still public by default.
@@ -199,7 +199,7 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  exposed: Record<string, any> | null; // added
+  exposed: Record<string, any> | null // added
 }
 ```
 
@@ -217,15 +217,15 @@ This allows us to eliminate the redundancy of ref-specific values when writing t
 const shallowUnwrapHandlers: ProxyHandler<any> = {
   get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),
   set: (target, key, value, receiver) => {
-    const oldValue = target[key];
+    const oldValue = target[key]
     if (isRef(oldValue) && !isRef(value)) {
-      oldValue.value = value;
-      return true;
+      oldValue.value = value
+      return true
     } else {
-      return Reflect.set(target, key, value, receiver);
+      return Reflect.set(target, key, value, receiver)
     }
   },
-};
+}
 ```
 
 ```vue
@@ -238,49 +238,49 @@ const shallowUnwrapHandlers: ProxyHandler<any> = {
 If you implement it up to this point, the following code should work.
 
 ```ts
-import { createApp, defineComponent, h, ref } from "chibivue";
+import { createApp, defineComponent, h, ref } from 'chibivue'
 
 const Child = defineComponent({
   setup(_, { expose }) {
-    const count = ref(0);
-    const count2 = ref(0);
-    expose({ count });
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    expose({ count })
+    return { count, count2 }
   },
   template: `<p>child {{ count }} {{ count2 }}</p>`,
-});
+})
 
 const Child2 = defineComponent({
   setup() {
-    const count = ref(0);
-    const count2 = ref(0);
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    return { count, count2 }
   },
   template: `<p>child2 {{ count }} {{ count2 }}</p>`,
-});
+})
 
 const app = createApp({
   setup() {
-    const child = ref();
-    const child2 = ref();
+    const child = ref()
+    const child2 = ref()
 
     const increment = () => {
-      child.value.count++;
-      child.value.count2++; // cannot access
-      child2.value.count++;
-      child2.value.count2++;
-    };
+      child.value.count++
+      child.value.count2++ // cannot access
+      child2.value.count++
+      child2.value.count2++
+    }
 
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         h(Child, { ref: child }, []),
         h(Child2, { ref: child2 }, []),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
+        h('button', { onClick: increment }, ['increment']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ## Template Binding and with Statement
@@ -291,11 +291,11 @@ Let's try running the following code:
 ```ts
 const Child2 = {
   setup() {
-    const state = reactive({ count: 0 });
-    return { state };
+    const state = reactive({ count: 0 })
+    return { state }
   },
   template: `<p>child2 count: {{ state.count }}</p>`,
-};
+}
 ```
 
 It's just a simple code, but it doesn't work.  
@@ -317,16 +317,16 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   // .
   has(
     { _: { setupState, ctx, propsOptions } }: ComponentRenderContext,
-    key: string
+    key: string,
   ) {
-    let normalizedProps;
+    let normalizedProps
     return (
       hasOwn(setupState, key) ||
       ((normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key)) ||
       hasOwn(ctx, key)
-    );
+    )
   },
-};
+}
 ```
 
 If it works correctly, it should work fine!

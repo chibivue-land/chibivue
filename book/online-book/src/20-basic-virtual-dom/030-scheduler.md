@@ -5,30 +5,30 @@
 まずはこのコードをご覧ください。
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
     const state = reactive({
-      message: "Hello World",
-    });
+      message: 'Hello World',
+    })
     const updateState = () => {
-      state.message = "Hello ChibiVue!";
-      state.message = "Hello ChibiVue!!";
-    };
+      state.message = 'Hello ChibiVue!'
+      state.message = 'Hello ChibiVue!!'
+    }
 
     return () => {
-      console.log("😎 rendered!");
+      console.log('😎 rendered!')
 
-      return h("div", { id: "app" }, [
-        h("p", {}, [`message: ${state.message}`]),
-        h("button", { onClick: updateState }, ["update"]),
-      ]);
-    };
+      return h('div', { id: 'app' }, [
+        h('p', {}, [`message: ${state.message}`]),
+        h('button', { onClick: updateState }, ['update']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ボタンをクリックすると、state.message に対して 2 回 set が起こるので、当然 2 回 trigger が実行されることになります。
@@ -46,10 +46,10 @@ Vue のスケジューラの役割の一つとして、リアクティブな作�
 
 ```ts
 export interface SchedulerJob extends Function {
-  id?: number;
+  id?: number
 }
 
-const queue: SchedulerJob[] = [];
+const queue: SchedulerJob[] = []
 
 export function queueJob(job: SchedulerJob) {
   if (
@@ -57,11 +57,11 @@ export function queueJob(job: SchedulerJob) {
     !queue.includes(job, isFlushing ? flushIndex + 1 : flushIndex)
   ) {
     if (job.id == null) {
-      queue.push(job);
+      queue.push(job)
     } else {
-      queue.splice(findInsertionIndex(job.id), 0, job);
+      queue.splice(findInsertionIndex(job.id), 0, job)
     }
-    queueFlush();
+    queueFlush()
   }
 }
 ```
@@ -89,9 +89,9 @@ Reactive な作用として扱うものは、作用を設定した側で能動�
 具体例を考えてみましょう。今実際に renderer の setupRenderEffect では以下のような実装があるかと思います。
 
 ```ts
-const effect = (instance.effect = new ReactiveEffect(() => componentUpdateFn));
-const update = (instance.update = () => effect.run());
-update();
+const effect = (instance.effect = new ReactiveEffect(() => componentUpdateFn))
+const update = (instance.update = () => effect.run())
+update()
 ```
 
 ここで生成した effect という reactiveEffect はのちに setup の実行によって getter が走った reactive なオブジェクトに track されるわけですが、これは明らかにスケジューリングの実装が必要です。(バラバラにいろんなところから trigger されるため)  
@@ -104,11 +104,11 @@ update();
 ```ts
 // ReactiveEffectの第 1 引数が能動的な作用, 第 2 引数が受動的な作用
 const effect = (instance.effect = new ReactiveEffect(componentUpdateFn, () =>
-  queueJob(update)
-));
-const update: SchedulerJob = (instance.update = () => effect.run());
-update.id = instance.uid;
-update();
+  queueJob(update),
+))
+const update: SchedulerJob = (instance.update = () => effect.run())
+update.id = instance.uid
+update()
 ```
 
 実装的には、ReactiveEffect に fn とは別に scheduler という関数をもち、trigger では scheduler を優先して実行するようにします。
@@ -127,9 +127,9 @@ export class ReactiveEffect<T = any> {
 ```ts
 function triggerEffect(effect: ReactiveEffect) {
   if (effect.scheduler) {
-    effect.scheduler();
+    effect.scheduler()
   } else {
-    effect.run(); // なければ通常の作用を実行する
+    effect.run() // なければ通常の作用を実行する
   }
 }
 ```
@@ -147,32 +147,32 @@ function triggerEffect(effect: ReactiveEffect) {
 まずは今回実現したい課題についてです。こちらのコードをご覧ください。
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
     const state = reactive({
       count: 0,
-    });
+    })
     const updateState = () => {
-      state.count++;
+      state.count++
 
-      const p = document.getElementById("count-p");
+      const p = document.getElementById('count-p')
       if (p) {
-        console.log("😎 p.textContent", p.textContent);
+        console.log('😎 p.textContent', p.textContent)
       }
-    };
+    }
 
     return () => {
-      return h("div", { id: "app" }, [
-        h("p", { id: "count-p" }, [`${state.count}`]),
-        h("button", { onClick: updateState }, ["update"]),
-      ]);
-    };
+      return h('div', { id: 'app' }, [
+        h('p', { id: 'count-p' }, [`${state.count}`]),
+        h('button', { onClick: updateState }, ['update']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 こちらのボタンをクリックしてみてコンソールを覗いてみましょう。
@@ -192,10 +192,10 @@ nextTick の実装方法ですが、非常に単純で、スケジューラ内�
 ```ts
 export function nextTick<T = void>(
   this: T,
-  fn?: (this: T) => void
+  fn?: (this: T) => void,
 ): Promise<void> {
-  const p = currentFlushPromise || resolvedPromise;
-  return fn ? p.then(this ? fn.bind(this) : fn) : p;
+  const p = currentFlushPromise || resolvedPromise
+  return fn ? p.then(this ? fn.bind(this) : fn) : p
 }
 ```
 
@@ -203,33 +203,33 @@ export function nextTick<T = void>(
 当然、この nextTick 自体も Promise を返すため、開発者インタフェースとしては、コールバックに渡すのもよし、nextTick を await するのもよし、といった感じになっているわけです。
 
 ```ts
-import { createApp, h, reactive, nextTick } from "chibivue";
+import { createApp, h, reactive, nextTick } from 'chibivue'
 
 const app = createApp({
   setup() {
     const state = reactive({
       count: 0,
-    });
+    })
     const updateState = async () => {
-      state.count++;
+      state.count++
 
-      await nextTick(); // 待つ
-      const p = document.getElementById("count-p");
+      await nextTick() // 待つ
+      const p = document.getElementById('count-p')
       if (p) {
-        console.log("😎 p.textContent", p.textContent);
+        console.log('😎 p.textContent', p.textContent)
       }
-    };
+    }
 
     return () => {
-      return h("div", { id: "app" }, [
-        h("p", { id: "count-p" }, [`${state.count}`]),
-        h("button", { onClick: updateState }, ["update"]),
-      ]);
-    };
+      return h('div', { id: 'app' }, [
+        h('p', { id: 'count-p' }, [`${state.count}`]),
+        h('button', { onClick: updateState }, ['update']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ![next_tick](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/next_tick.png)

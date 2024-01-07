@@ -13,15 +13,15 @@ https://vuejs.org/guide/extras/render-function.html#passing-slots
 ```ts
 const MyComponent = defineComponent({
   setup(_, { slots }) {
-    return () => h("div", {}, [slots.default()]);
+    return () => h('div', {}, [slots.default()])
   },
-});
+})
 
 const app = createApp({
   setup() {
-    return () => h(MyComponent, {}, () => "hello");
+    return () => h(MyComponent, {}, () => 'hello')
   },
-});
+})
 ```
 
 The mechanism is simple. On the slot definition side, we make sure to receive slots as setupContext, and when rendering the component with the h function on the usage side, we simply pass the render function as children.
@@ -52,15 +52,15 @@ https://vuejs.org/guide/components/slots.html#scoped-slots
 const MyComponent = defineComponent({
   setup(_, { slots }) {
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         slots.default?.(),
-        h("br", {}, []),
+        h('br', {}, []),
         slots.myNamedSlot?.(),
-        h("br", {}, []),
-        slots.myScopedSlot2?.({ message: "hello!" }),
-      ]);
+        h('br', {}, []),
+        slots.myScopedSlot2?.({ message: 'hello!' }),
+      ])
   },
-});
+})
 
 const app = createApp({
   setup() {
@@ -69,14 +69,14 @@ const app = createApp({
         MyComponent,
         {},
         {
-          default: () => "hello",
-          myNamedSlot: () => "hello2",
+          default: () => 'hello',
+          myNamedSlot: () => 'hello2',
           myScopedSlot2: (scope: { message: string }) =>
             `message: ${scope.message}`,
-        }
-      );
+        },
+      )
   },
-});
+})
 ```
 
 Source code up to this point:

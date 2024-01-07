@@ -15,13 +15,13 @@ ReactiveEffect に自身がアクティブかどうかというフラグを持�
 
 ```ts
 export class ReactiveEffect<T = any> {
-  active = true; // 追加
+  active = true // 追加
   //.
   //.
   //.
   stop() {
     if (this.active) {
-      this.active = false;
+      this.active = false
     }
   }
 }
@@ -31,25 +31,25 @@ export class ReactiveEffect<T = any> {
 
 ```ts
 export class ReactiveEffect<T = any> {
-  private deferStop?: boolean; // 追加
-  onStop?: () => void; // 追加
-  parent: ReactiveEffect | undefined = undefined; // 追加 (finallyで参照したいので)
+  private deferStop?: boolean // 追加
+  onStop?: () => void // 追加
+  parent: ReactiveEffect | undefined = undefined // 追加 (finallyで参照したいので)
 
   run() {
     if (!this.active) {
-      return this.fn(); // active が false な場合は単に関数を実行するだけに
+      return this.fn() // active が false な場合は単に関数を実行するだけに
     }
 
     try {
-      this.parent = activeEffect;
-      activeEffect = this;
-      const res = this.fn();
-      return res;
+      this.parent = activeEffect
+      activeEffect = this
+      const res = this.fn()
+      return res
     } finally {
-      activeEffect = this.parent;
-      this.parent = undefined;
+      activeEffect = this.parent
+      this.parent = undefined
       if (this.deferStop) {
-        this.stop();
+        this.stop()
       }
     }
   }
@@ -57,11 +57,11 @@ export class ReactiveEffect<T = any> {
   stop() {
     if (activeEffect === this) {
       // activeEffectが自身だった場合はrunが終わった最後にstopするようにフラグを立てる
-      this.deferStop = true;
+      this.deferStop = true
     } else if (this.active) {
       // ...
       if (this.onStop) {
-        this.onStop(); // 登録されたフックを実行
+        this.onStop() // 登録されたフックを実行
       }
       // ...
     }
@@ -74,33 +74,33 @@ ReactiveEffect にクリーンアップ処理が登録できたので、つい�
 以下のようなコードが動くようになれば OK です。
 
 ```ts
-import { createApp, h, reactive, watch } from "chibivue";
+import { createApp, h, reactive, watch } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
     const unwatch = watch(
       () => state.count,
       (newValue, oldValue, cleanup) => {
-        alert(`New value: ${newValue}, old value: ${oldValue}`);
-        cleanup(() => alert("Clean Up!"));
-      }
-    );
+        alert(`New value: ${newValue}, old value: ${oldValue}`)
+        cleanup(() => alert('Clean Up!'))
+      },
+    )
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, [`increment`]),
-        h("button", { onClick: unwatch }, [`unwatch`]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, [`increment`]),
+        h('button', { onClick: unwatch }, [`unwatch`]),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  
@@ -113,21 +113,21 @@ app.mount("#app");
 愚直に実装しようと思うと、以下のようになってしまいます。
 
 ```ts
-let disposables = [];
+let disposables = []
 
-const counter = ref(0);
+const counter = ref(0)
 
-const doubled = computed(() => counter.value * 2);
-disposables.push(() => stop(doubled.effect));
+const doubled = computed(() => counter.value * 2)
+disposables.push(() => stop(doubled.effect))
 
-const stopWatch = watchEffect(() => console.log(`counter: ${counter.value}`));
-disposables.push(stopWatch);
+const stopWatch = watchEffect(() => console.log(`counter: ${counter.value}`))
+disposables.push(stopWatch)
 ```
 
 ```ts
 // cleanup effects
-disposables.forEach((f) => f());
-disposables = [];
+disposables.forEach(f => f())
+disposables = []
 ```
 
 このような管理はめんどくさいですし、必ずどこかでミスります。
@@ -138,18 +138,18 @@ https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-sco
 イメージ的には 1 インスタンス 1 EffectScope を持つ感じで、具体的には以下のようなインタフェースになっています。
 
 ```ts
-const scope = effectScope();
+const scope = effectScope()
 
 scope.run(() => {
-  const doubled = computed(() => counter.value * 2);
+  const doubled = computed(() => counter.value * 2)
 
-  watch(doubled, () => console.log(doubled.value));
+  watch(doubled, () => console.log(doubled.value))
 
-  watchEffect(() => console.log("Count: ", doubled.value));
-});
+  watchEffect(() => console.log('Count: ', doubled.value))
+})
 
 // to dispose all effects in the scope
-scope.stop();
+scope.stop()
 ```
 
 引用元: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
@@ -163,7 +163,7 @@ https://ja.vuejs.org/api/reactivity-advanced.html#effectscope
 
 ```ts
 export interface ComponentInternalInstance {
-  scope: EffectScope;
+  scope: EffectScope
 }
 ```
 
@@ -187,12 +187,12 @@ on/off メソッドは、自身を activeEffectScope として持ち上げたり
 少しわかりづらいので、イメージをソースコードで書くと、
 
 ```ts
-instance.scope.on();
+instance.scope.on()
 
 /** computed や watch などの何らかの ReactiveEffect が生成される */
-setup();
+setup()
 
-instance.scope.off();
+instance.scope.off()
 ```
 
 このようにすることで、生成された effect を instance の EffectScope に収集しておくことができるというわけです。  

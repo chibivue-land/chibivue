@@ -13,25 +13,25 @@ First, let's think about what kind of developer interface it will be, as usual.
 How about something like this?
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
 
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
+      h('div', { id: 'my-app' }, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 If you are used to developing with Single File Components (SFC), this may look a little unfamiliar.  
@@ -73,9 +73,9 @@ Edit `~/packages/runtime-core/componentOptions.ts`:
 
 ```ts
 export type ComponentOptions = {
-  render?: Function;
-  setup?: () => Function; // Added
-};
+  render?: Function
+  setup?: () => Function // Added
+}
 ```
 
 Then use it:
@@ -85,22 +85,22 @@ Then use it:
 
 const app: App = {
   mount(rootContainer: HostElement) {
-    const componentRender = rootComponent.setup!();
+    const componentRender = rootComponent.setup!()
 
     const updateComponent = () => {
-      const vnode = componentRender();
-      render(vnode, rootContainer);
-    };
+      const vnode = componentRender()
+      render(vnode, rootContainer)
+    }
 
-    updateComponent();
+    updateComponent()
   },
-};
+}
 ```
 
 ```ts
 // playground
 
-import { createApp, h } from "chibivue";
+import { createApp, h } from 'chibivue'
 
 const app = createApp({
   setup() {
@@ -108,23 +108,23 @@ const app = createApp({
     // const state = reactive({ count: 0 })
 
     return function render() {
-      return h("div", { id: "my-app" }, [
-        h("p", { style: "color: red; font-weight: bold;" }, ["Hello world."]),
+      return h('div', { id: 'my-app' }, [
+        h('p', { style: 'color: red; font-weight: bold;' }, ['Hello world.']),
         h(
-          "button",
+          'button',
           {
             onClick() {
-              alert("Hello world!");
+              alert('Hello world!')
             },
           },
-          ["click me!"]
+          ['click me!'],
         ),
-      ]);
-    };
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Well, that's it.  
@@ -145,8 +145,8 @@ Proxy is a very interesting object.
 You can use it by passing an object as an argument and using `new` like this:
 
 ```ts
-const o = new Proxy({ value: 1 });
-console.log(o.value); // 1
+const o = new Proxy({ value: 1 })
+console.log(o.value) // 1
 ```
 
 In this example, `o` behaves almost the same as a normal object.
@@ -160,11 +160,11 @@ const o = new Proxy(
 
   {
     get(target, key, receiver) {
-      console.log(`target:${target}, key: ${key}`);
-      return target[key];
+      console.log(`target:${target}, key: ${key}`)
+      return target[key]
     },
-  }
-);
+  },
+)
 ```
 
 In this example, we are writing settings for the generated object.
@@ -182,12 +182,12 @@ const o = new Proxy(
   { value: 1, value2: 2 },
   {
     set(target, key, value, receiver) {
-      console.log("hello from setter");
-      target[key] = value;
-      return true;
+      console.log('hello from setter')
+      target[key] = value
+      return true
     },
-  }
-);
+  },
+)
 ```
 
 ![proxy_set](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_set.png)
@@ -213,19 +213,19 @@ Target refers to the object you want to make reactive, and dep refers to the eff
 In code, it looks like this:
 
 ```ts
-type Target = any; // any target
-type TargetKey = any; // any key that the target has
+type Target = any // any target
+type TargetKey = any // any key that the target has
 
-const targetMap = new WeakMap<Target, KeyToDepMap>(); // defined as a global variable in this module
+const targetMap = new WeakMap<Target, KeyToDepMap>() // defined as a global variable in this module
 
-type KeyToDepMap = Map<TargetKey, Dep>; // a map of target's key and effect
+type KeyToDepMap = Map<TargetKey, Dep> // a map of target's key and effect
 
-type Dep = Set<ReactiveEffect>; // dep has multiple ReactiveEffects
+type Dep = Set<ReactiveEffect> // dep has multiple ReactiveEffects
 
 class ReactiveEffect {
   constructor(
     // here, you give the function you want to actually apply as an effect (in this case, updateComponent)
-    public fn: () => T
+    public fn: () => T,
   ) {}
 }
 ```
@@ -252,16 +252,16 @@ const state = new Proxy(
   { count: 1 },
   {
     get(target, key, receiver) {
-      track(target, key);
-      return target[key];
+      track(target, key)
+      return target[key]
     },
     set(target, key, value, receiver) {
-      target[key] = value;
-      trigger(target, key);
-      return true;
+      target[key] = value
+      trigger(target, key)
+      return true
     },
-  }
-);
+  },
+)
 ```
 
 The API for generating this Proxy is the reactive function.
@@ -270,15 +270,15 @@ The API for generating this Proxy is the reactive function.
 function reactive<T>(target: T) {
   return new Proxy(target, {
     get(target, key, receiver) {
-      track(target, key);
-      return target[key];
+      track(target, key)
+      return target[key]
     },
     set(target, key, value, receiver) {
-      target[key] = value;
-      trigger(target, key);
-      return true;
+      target[key] = value
+      trigger(target, key)
+      return true
     },
-  });
+  })
 }
 ```
 
@@ -289,17 +289,17 @@ The answer is the concept of `activeEffect`.
 This is also defined as a global variable in this module, just like targetMap, and is set in the `run` method of ReactiveEffect.
 
 ```ts
-let activeEffect: ReactiveEffect | undefined;
+let activeEffect: ReactiveEffect | undefined
 
 class ReactiveEffect {
   constructor(
     // here, you give the function you want to actually apply as an effect (in this case, updateComponent)
-    public fn: () => T
+    public fn: () => T,
   ) {}
 
   run() {
-    activeEffect = this;
-    return this.fn();
+    activeEffect = this
+    return this.fn()
   }
 }
 ```
@@ -334,17 +334,17 @@ Internally, this is how reactivity is formed.
 // Implementation inside chibivue
 const app: App = {
   mount(rootContainer: HostElement) {
-    const componentRender = rootComponent.setup!();
+    const componentRender = rootComponent.setup!()
 
     const updateComponent = () => {
-      const vnode = componentRender();
-      render(vnode, rootContainer);
-    };
+      const vnode = componentRender()
+      render(vnode, rootContainer)
+    }
 
-    const effect = new ReactiveEffect(updateComponent);
-    effect.run();
+    const effect = new ReactiveEffect(updateComponent)
+    effect.run()
   },
-};
+}
 ```
 
 To explain step by step, first, the `setup` function is executed.
@@ -376,14 +376,14 @@ As usual, `index.ts` just exports, so I won't explain it in detail. Export what 
 Next is `dep.ts`.
 
 ```ts
-import { type ReactiveEffect } from "./effect";
+import { type ReactiveEffect } from './effect'
 
-export type Dep = Set<ReactiveEffect>;
+export type Dep = Set<ReactiveEffect>
 
 export const createDep = (effects?: ReactiveEffect[]): Dep => {
-  const dep: Dep = new Set<ReactiveEffect>(effects);
-  return dep;
-};
+  const dep: Dep = new Set<ReactiveEffect>(effects)
+  return dep
+}
 ```
 
 There is no definition of `effect` yet, but we will implement it later, so it's okay.
@@ -391,12 +391,12 @@ There is no definition of `effect` yet, but we will implement it later, so it's 
 Next is `effect.ts`.
 
 ```ts
-import { Dep, createDep } from "./dep";
+import { Dep, createDep } from './dep'
 
-type KeyToDepMap = Map<any, Dep>;
-const targetMap = new WeakMap<any, KeyToDepMap>();
+type KeyToDepMap = Map<any, Dep>
+const targetMap = new WeakMap<any, KeyToDepMap>()
 
-export let activeEffect: ReactiveEffect | undefined;
+export let activeEffect: ReactiveEffect | undefined
 
 export class ReactiveEffect<T = any> {
   constructor(public fn: () => T) {}
@@ -404,40 +404,40 @@ export class ReactiveEffect<T = any> {
   run() {
     // ※ Save the activeEffect before executing fn and restore it after execution.
     // If you don't do this, it will be overwritten one after another and behave unexpectedly. (Let's restore it to its original state when you're done)
-    let parent: ReactiveEffect | undefined = activeEffect;
-    activeEffect = this;
-    const res = this.fn();
-    activeEffect = parent;
-    return res;
+    let parent: ReactiveEffect | undefined = activeEffect
+    activeEffect = this
+    const res = this.fn()
+    activeEffect = parent
+    return res
   }
 }
 
 export function track(target: object, key: unknown) {
-  let depsMap = targetMap.get(target);
+  let depsMap = targetMap.get(target)
   if (!depsMap) {
-    targetMap.set(target, (depsMap = new Map()));
+    targetMap.set(target, (depsMap = new Map()))
   }
 
-  let dep = depsMap.get(key);
+  let dep = depsMap.get(key)
   if (!dep) {
-    depsMap.set(key, (dep = createDep()));
+    depsMap.set(key, (dep = createDep()))
   }
 
   if (activeEffect) {
-    dep.add(activeEffect);
+    dep.add(activeEffect)
   }
 }
 
 export function trigger(target: object, key?: unknown) {
-  const depsMap = targetMap.get(target);
-  if (!depsMap) return;
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
 
-  const dep = depsMap.get(key);
+  const dep = depsMap.get(key)
 
   if (dep) {
-    const effects = [...dep];
+    const effects = [...dep]
     for (const effect of effects) {
-      effect.run();
+      effect.run()
     }
   }
 }
@@ -450,35 +450,35 @@ Well, you can implement it directly in `reactive`, but I followed the original V
 In reality, there are various proxies such as `readonly` and `shallow`, so the idea is to implement the handlers for those proxies here. (We won't do it this time, though)
 
 ```ts
-import { track, trigger } from "./effect";
-import { reactive } from "./reactive";
+import { track, trigger } from './effect'
+import { reactive } from './reactive'
 
 export const mutableHandlers: ProxyHandler<object> = {
   get(target: object, key: string | symbol, receiver: object) {
-    track(target, key);
+    track(target, key)
 
-    const res = Reflect.get(target, key, receiver);
+    const res = Reflect.get(target, key, receiver)
     // If it is an object, make it reactive (this allows nested objects to be reactive as well).
-    if (res !== null && typeof res === "object") {
-      return reactive(res);
+    if (res !== null && typeof res === 'object') {
+      return reactive(res)
     }
 
-    return res;
+    return res
   },
 
   set(target: object, key: string | symbol, value: unknown, receiver: object) {
-    let oldValue = (target as any)[key];
-    Reflect.set(target, key, value, receiver);
+    let oldValue = (target as any)[key]
+    Reflect.set(target, key, value, receiver)
     // check if the value has changed
     if (hasChanged(value, oldValue)) {
-      trigger(target, key);
+      trigger(target, key)
     }
-    return true;
+    return true
   },
-};
+}
 
 const hasChanged = (value: any, oldValue: any): boolean =>
-  !Object.is(value, oldValue);
+  !Object.is(value, oldValue)
 ```
 
 Here, `Reflect` appears, which is similar to `Proxy`, but while `Proxy` is for writing meta settings for objects, `Reflect` is for performing operations on existing objects.
@@ -489,11 +489,11 @@ For now, it's okay to understand that `Proxy` is for meta settings at the stage 
 Next is `reactive.ts`.
 
 ```ts
-import { mutableHandlers } from "./baseHandler";
+import { mutableHandlers } from './baseHandler'
 
 export function reactive<T extends object>(target: T): T {
-  const proxy = new Proxy(target, mutableHandlers);
-  return proxy as T;
+  const proxy = new Proxy(target, mutableHandlers)
+  return proxy as T
 }
 ```
 
@@ -501,55 +501,55 @@ Now that the implementation of `reactive` is complete, let's try using them when
 `~/packages/runtime-core/apiCreateApp.ts`.
 
 ```ts
-import { ReactiveEffect } from "../reactivity";
+import { ReactiveEffect } from '../reactivity'
 
 export function createAppAPI<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
     const app: App = {
       mount(rootContainer: HostElement) {
-        const componentRender = rootComponent.setup!();
+        const componentRender = rootComponent.setup!()
 
         const updateComponent = () => {
-          const vnode = componentRender();
-          render(vnode, rootContainer);
-        };
+          const vnode = componentRender()
+          render(vnode, rootContainer)
+        }
 
         // From here
-        const effect = new ReactiveEffect(updateComponent);
-        effect.run();
+        const effect = new ReactiveEffect(updateComponent)
+        effect.run()
         // To here
       },
-    };
+    }
 
-    return app;
-  };
+    return app
+  }
 }
 ```
 
 Now, let's try it in the playground.
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
     return function render() {
-      return h("div", { id: "my-app" }, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
-    };
+      return h('div', { id: 'my-app' }, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Oops...
@@ -562,10 +562,10 @@ Modify the `render` function in `~/packages/runtime-core/renderer.ts` like this:
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
-  while (container.firstChild) container.removeChild(container.firstChild); // Add code to remove all elements
-  const el = renderVNode(vnode);
-  hostInsert(el, container);
-};
+  while (container.firstChild) container.removeChild(container.firstChild) // Add code to remove all elements
+  const el = renderVNode(vnode)
+  hostInsert(el, container)
+}
 ```
 
 Now, how about this?

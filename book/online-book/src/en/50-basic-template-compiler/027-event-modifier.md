@@ -11,23 +11,23 @@ https://vuejs.org/guide/essentials/event-handling.html
 This time, let's aim for the following developer interface.
 
 ```ts
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const inputText = ref("");
+    const inputText = ref('')
 
-    const buffer = ref("");
+    const buffer = ref('')
     const handleInput = (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      buffer.value = target.value;
-    };
+      const target = e.target as HTMLInputElement
+      buffer.value = target.value
+    }
     const submit = () => {
-      inputText.value = buffer.value;
-      buffer.value = "";
-    };
+      inputText.value = buffer.value
+      buffer.value = ''
+    }
 
-    return { inputText, buffer, handleInput, submit };
+    return { inputText, buffer, handleInput, submit }
   },
 
   template: `<div>
@@ -40,11 +40,11 @@ const App = defineComponent({
     </form>
     <p>inputText: {{ inputText }}</p>
 </div>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 In particular, please pay attention to the following part.
@@ -65,11 +65,11 @@ First, let's take a look at the AST. It's very simple, just add a property calle
 
 ```ts
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE;
-  name: string;
-  exp: ExpressionNode | undefined;
-  arg: ExpressionNode | undefined;
-  modifiers: string[]; // Add this
+  type: NodeTypes.DIRECTIVE
+  name: string
+  exp: ExpressionNode | undefined
+  arg: ExpressionNode | undefined
+  modifiers: string[] // Add this
 }
 ```
 
@@ -80,12 +80,12 @@ Actually, it's very easy because it's already included in the regular expression
 ```ts
 function parseAttribute(
   context: ParserContext,
-  nameSet: Set<string>
+  nameSet: Set<string>,
 ): AttributeNode | DirectiveNode {
   // .
   // .
   // .
-  const modifiers = match[3] ? match[3].slice(1).split(".") : []; // Extract modifiers from the match result
+  const modifiers = match[3] ? match[3].slice(1).split('.') : [] // Extract modifiers from the match result
   return {
     type: NodeTypes.DIRECTIVE,
     name: dirName,
@@ -98,7 +98,7 @@ function parseAttribute(
     loc,
     arg,
     modifiers, // Include in the return
-  };
+  }
 }
 ```
 
@@ -134,8 +134,8 @@ export type DirectiveTransform = (
   dir: DirectiveNode,
   node: ElementNode,
   context: TransformContext,
-  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult // Added
-) => DirectiveTransformResult;
+  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult, // Added
+) => DirectiveTransformResult
 ```
 
 I added `augmentor`.  
@@ -148,16 +148,16 @@ In compiler-dom, we will implement a transformer that wraps the transformers imp
 
 // Implementation on the compiler-dom side
 
-import { transformOn as baseTransformOn } from "compiler-core";
+import { transformOn as baseTransformOn } from 'compiler-core'
 
 export const transformOn: DirectiveTransform = (dir, node, context) => {
   return baseTransformOn(dir, node, context, () => {
     /** Implement compiler-dom's own implementation here */
     return {
       /** */
-    };
-  });
-};
+    }
+  })
+}
 ```
 
 And if you pass this `transformOn` implemented on the compiler-dom side as an option to the compiler, it will be OK.  
@@ -179,21 +179,21 @@ This time, we will implement the "event modifier". Let's start by extracting it 
 ```ts
 const isEventModifier = makeMap(
   // event propagation management
-  `stop,prevent,self`
-);
+  `stop,prevent,self`,
+)
 
 const resolveModifiers = (modifiers: string[]) => {
-  const eventModifiers = [];
+  const eventModifiers = []
 
   for (let i = 0; i < modifiers.length; i++) {
-    const modifier = modifiers[i];
+    const modifier = modifiers[i]
     if (isEventModifier(modifier)) {
-      eventModifiers.push(modifier);
+      eventModifiers.push(modifier)
     }
   }
 
-  return { eventModifiers };
-};
+  return { eventModifiers }
+}
 ```
 
 Now that we have extracted `eventModifiers`, how should we use it? In conclusion, we will implement a helper function called `withModifiers` on the runtime-dom side and transform it into an expression that calls that function.
@@ -201,30 +201,30 @@ Now that we have extracted `eventModifiers`, how should we use it? In conclusion
 ```ts
 // runtime-dom/runtimeHelpers.ts
 
-export const V_ON_WITH_MODIFIERS = Symbol();
+export const V_ON_WITH_MODIFIERS = Symbol()
 ```
 
 ```ts
 export const transformOn: DirectiveTransform = (dir, node, context) => {
-  return baseTransform(dir, node, context, (baseResult) => {
-    const { modifiers } = dir;
-    if (!modifiers.length) return baseResult;
+  return baseTransform(dir, node, context, baseResult => {
+    const { modifiers } = dir
+    if (!modifiers.length) return baseResult
 
-    let { key, value: handlerExp } = baseResult.props[0];
-    const { eventModifiers } = resolveModifiers(modifiers);
+    let { key, value: handlerExp } = baseResult.props[0]
+    const { eventModifiers } = resolveModifiers(modifiers)
 
     if (eventModifiers.length) {
       handlerExp = createCallExpression(context.helper(V_ON_WITH_MODIFIERS), [
         handlerExp,
         JSON.stringify(eventModifiers),
-      ]);
+      ])
     }
 
     return {
       props: [createObjectProperty(key, handlerExp)],
-    };
-  });
-};
+    }
+  })
+}
 ```
 
 With this, the implementation of the transformer is almost complete.
@@ -241,20 +241,20 @@ Implement a guard function for event modifiers and implement it so that it runs 
 
 ```ts
 const modifierGuards: Record<string, (e: Event) => void | boolean> = {
-  stop: (e) => e.stopPropagation(),
-  prevent: (e) => e.preventDefault(),
-  self: (e) => e.target !== e.currentTarget,
-};
+  stop: e => e.stopPropagation(),
+  prevent: e => e.preventDefault(),
+  self: e => e.target !== e.currentTarget,
+}
 
 export const withModifiers = (fn: Function, modifiers: string[]) => {
   return (event: Event, ...args: unknown[]) => {
     for (let i = 0; i < modifiers.length; i++) {
-      const guard = modifierGuards[modifiers[i]];
-      if (guard && guard(event)) return;
+      const guard = modifierGuards[modifiers[i]]
+      if (guard && guard(event)) return
     }
-    return fn(event, ...args);
-  };
-};
+    return fn(event, ...args)
+  }
+}
 ```
 
 That's the end of the implementation.
@@ -272,9 +272,9 @@ The basic implementation approach is the same.
 Let's classify the modifiers as follows:
 
 ```ts
-const keyModifiers = [];
-const nonKeyModifiers = [];
-const eventOptionModifiers = [];
+const keyModifiers = []
+const nonKeyModifiers = []
+const eventOptionModifiers = []
 ```
 
 Then, generate the necessary maps and classify them with `resolveModifiers`.

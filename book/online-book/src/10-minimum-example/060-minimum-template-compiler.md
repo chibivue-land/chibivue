@@ -19,35 +19,35 @@ const MyComponent: Component = {
 
   setup(props: any, { emit }: any) {
     return () =>
-      h("div", {}, [
-        h("p", {}, [`someMessage: ${props.someMessage}`]),
-        h("button", { onClick: () => emit("click:change-message") }, [
-          "change message",
+      h('div', {}, [
+        h('p', {}, [`someMessage: ${props.someMessage}`]),
+        h('button', { onClick: () => emit('click:change-message') }, [
+          'change message',
         ]),
-      ]);
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(
           MyComponent,
           {
-            "some-message": state.message,
-            "onClick:change-message": changeMessage,
+            'some-message': state.message,
+            'onClick:change-message': changeMessage,
           },
-          []
+          [],
         ),
-      ]);
+      ])
   },
-});
+})
 ```
 
 現状だと、View の部分は h 関数を使って構築しています。より生の HTML に近づけるために template オプションに template を描けるようにしたいです。
@@ -56,7 +56,7 @@ const app = createApp({
 1. 単純なタグとメッセージ、静的な属性を描画できるように
 
 ```ts
-const app = createApp({ template: `<p class="hello">Hello World</p>` });
+const app = createApp({ template: `<p class="hello">Hello World</p>` })
 ```
 
 2. もう少し複雑な HTML を描画できるように
@@ -69,7 +69,7 @@ const app = createApp({
       <button> click me! </button>
     </div>
   `,
-});
+})
 ```
 
 3. setup 関数で定義したものを使えるようにしたい
@@ -77,12 +77,12 @@ const app = createApp({
 ```ts
 const app = createApp({
   setup() {
-    const count = ref(0);
+    const count = ref(0)
     const increment = () => {
-      count.value++;
-    };
+      count.value++
+    }
 
-    return { count, increment };
+    return { count, increment }
   },
 
   template: `
@@ -91,7 +91,7 @@ const app = createApp({
       <button v-on:click="increment"> click me! </button>
     </div>
   `,
-});
+})
 ```
 
 それぞれでさらに小さく分割はしていくのですが、おおまかにこの 3 ステップに分割してみます。  
@@ -102,7 +102,7 @@ const app = createApp({
 さて、今回目指す開発者インタフェースは以下のようなものです。
 
 ```ts
-const app = createApp({ template: `<p class="hello">Hello World</p>` });
+const app = createApp({ template: `<p class="hello">Hello World</p>` })
 ```
 
 ここでまず、コンパイラとはいったいなんなのかという話だけしておきます。  
@@ -129,7 +129,7 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` });
 このようなコードを、
 
 ```ts
-const app = createApp({ template: `<p class="hello">Hello World</p>` });
+const app = createApp({ template: `<p class="hello">Hello World</p>` })
 ```
 
 このように翻訳(コンパイル)する機能を実装したいです。
@@ -137,17 +137,17 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` });
 ```ts
 const app = createApp({
   render() {
-    return h("p", { class: "hello" }, ["Hello World"]);
+    return h('p', { class: 'hello' }, ['Hello World'])
   },
-});
+})
 ```
 
 もう少しスコープを狭めるなら、この部分です。
 
 ```ts
-`<p class="hello">Hello World</p>`;
+;`<p class="hello">Hello World</p>`
 // ↓
-h("p", { class: "hello" }, ["Hello World"]);
+h('p', { class: 'hello' }, ['Hello World'])
 ```
 
 いくつかのフェーズに分けて、段階的に実装を進めていきましょう。
@@ -164,10 +164,10 @@ h("p", { class: "hello" }, ["Hello World"]);
 解析(parse)は渡された文字列から必要な情報を解析します。以下のようなイメージをしてもらえれば OK です。
 
 ```ts
-const { tag, props, textContent } = parse(`<p class="hello">Hello World</p>`);
-console.log(tag); // "p"
-console.log(prop); // { class: "hello" }
-console.log(textContent); // "Hello World"
+const { tag, props, textContent } = parse(`<p class="hello">Hello World</p>`)
+console.log(tag) // "p"
+console.log(prop) // { class: "hello" }
+console.log(textContent) // "Hello World"
 ```
 
 ### コード生成
@@ -175,8 +175,8 @@ console.log(textContent); // "Hello World"
 コード生成(codegen)では parse の結果をもとにコード(文字列)を生成します。
 
 ```ts
-const code = codegen({ tag, props, textContent });
-console.log(code); // "h('p', { class: 'hello' }, ['Hello World']);"
+const code = codegen({ tag, props, textContent })
+console.log(code) // "h('p', { class: 'hello' }, ['Hello World']);"
 ```
 
 ### 関数オブジェクト生成
@@ -185,50 +185,50 @@ codegen で生成したコード(文字列)をもとに実際に実行可能な�
 JavaScript では、Function コンストラクタを利用することで文字列から関数を生成することが可能です。
 
 ```ts
-const f = new Function("return 1");
-console.log(f()); // 1
+const f = new Function('return 1')
+console.log(f()) // 1
 
 // 引数を定義する場合はこんな感じ
-const add = new Function("a", "b", "return a + b");
-console.log(add(1, 1)); // 2
+const add = new Function('a', 'b', 'return a + b')
+console.log(add(1, 1)) // 2
 ```
 
 これを利用して関数を生成します。
 ここで一点注意点があるのですが、生成した関数はその中で定義された変数しか扱うことができないので、h 関数などの読み込みもこれに含んであげます。
 
 ```ts
-import * as runtimeDom from "./runtime-dom";
-const render = new Function("ChibiVue", code)(runtimeDom);
+import * as runtimeDom from './runtime-dom'
+const render = new Function('ChibiVue', code)(runtimeDom)
 ```
 
 こうすると、ChibiVue という名前で runtimeDom を受け取ることができるので、codegen の段階で以下のように h 関数を読み込めるようにしておきます。
 
 ```ts
-const code = codegen({ tag, props, textContent });
-console.log(code); // "return () => { const { h } = ChibiVue; return h('p', { class: 'hello' }, ['Hello World']); }"
+const code = codegen({ tag, props, textContent })
+console.log(code) // "return () => { const { h } = ChibiVue; return h('p', { class: 'hello' }, ['Hello World']); }"
 ```
 
 つまり、先ほど、
 
 ```ts
-`<p class="hello">Hello World</p>`;
+;`<p class="hello">Hello World</p>`
 // ↓
-h("p", { class: "hello" }, ["Hello World"]);
+h('p', { class: 'hello' }, ['Hello World'])
 ```
 
 のように変換すると言いましたが、正確には、
 
 ```ts
-`<p class="hello">Hello World</p>`;
+;`<p class="hello">Hello World</p>`
 
 // ↓
 
-(ChibiVue) => {
+ChibiVue => {
   return () => {
-    const { h } = ChibiVue;
-    return h("p", { class: "hello" }, ["Hello World"]);
-  };
-};
+    const { h } = ChibiVue
+    return h('p', { class: 'hello' }, ['Hello World'])
+  }
+}
 ```
 
 のように変換し、runtimeDom を渡して render 関数を生成します。
@@ -240,7 +240,7 @@ const code = `
       const { h } = ChibiVue;
       return h("p", { class: "hello" }, ["Hello World"]);
   };
-`;
+`
 ```
 
 という文字列を生成することです。
@@ -264,21 +264,21 @@ index.ts は例の如く export するためだけに利用します。
 
 ```ts
 export const baseParse = (
-  content: string
+  content: string,
 ): { tag: string; props: Record<string, string>; textContent: string } => {
-  const matched = content.match(/<(\w+)\s+([^>]*)>([^<]*)<\/\1>/);
-  if (!matched) return { tag: "", props: {}, textContent: "" };
+  const matched = content.match(/<(\w+)\s+([^>]*)>([^<]*)<\/\1>/)
+  if (!matched) return { tag: '', props: {}, textContent: '' }
 
-  const [_, tag, attrs, textContent] = matched;
+  const [_, tag, attrs, textContent] = matched
 
-  const props: Record<string, string> = {};
+  const props: Record<string, string> = {}
   attrs.replace(/(\w+)=["']([^"']*)["']/g, (_, key: string, value: string) => {
-    props[key] = value;
-    return "";
-  });
+    props[key] = value
+    return ''
+  })
 
-  return { tag, props, textContent };
-};
+  return { tag, props, textContent }
+}
 ```
 
 正規表現を使った非常に簡素なパーサではありますが、初めての実装としては十分です。
@@ -292,30 +292,30 @@ export const generate = ({
   props,
   textContent,
 }: {
-  tag: string;
-  props: Record<string, string>;
-  textContent: string;
+  tag: string
+  props: Record<string, string>
+  textContent: string
 }): string => {
   return `return () => {
   const { h } = ChibiVue;
   return h("${tag}", { ${Object.entries(props)
     .map(([k, v]) => `${k}: "${v}"`)
-    .join(", ")} }, ["${textContent}"]);
-}`;
-};
+    .join(', ')} }, ["${textContent}"]);
+}`
+}
 ```
 
 それでは、これらを組み合わせて template から関数の文字列を生成する関数を実装します。`packages/compiler-core/compile.ts`というファイルを新たに作成します。
 `packages/compiler-core/codegen.ts`
 
 ```ts
-import { generate } from "./codegen";
-import { baseParse } from "./parse";
+import { generate } from './codegen'
+import { baseParse } from './parse'
 
 export function baseCompile(template: string) {
-  const parseResult = baseParse(template);
-  const code = generate(parseResult);
-  return code;
+  const parseResult = baseParse(template)
+  const code = generate(parseResult)
+  return code
 }
 ```
 
@@ -329,8 +329,8 @@ export function baseCompile(template: string) {
 template オプションとはちょうど今我々が実装しているものです。
 
 ```ts
-const app = createApp({ template: `<p class="hello">Hello World</p>` });
-app.mount("#app");
+const app = createApp({ template: `<p class="hello">Hello World</p>` })
+app.mount('#app')
 ```
 
 ```html
@@ -340,8 +340,8 @@ app.mount("#app");
 html として与えられるテンプレートというのは html に Vue の template を書くような開発者インタフェースです。(CDN 経由などでサクッと HTML に盛り込むのに便利です。)
 
 ```ts
-const app = createApp();
-app.mount("#app");
+const app = createApp()
+app.mount('#app')
 ```
 
 ```html
@@ -368,9 +368,9 @@ export default {}
 ```
 
 ```ts
-import App from "App.vue";
-const app = createApp(App);
-app.mount("#app");
+import App from 'App.vue'
+const app = createApp(App)
+app.mount('#app')
 ```
 
 ```html
@@ -424,10 +424,10 @@ touch packages/compiler-dom/index.ts
 `packages/compiler-dom/index.ts`に実装します。
 
 ```ts
-import { baseCompile } from "../compiler-core";
+import { baseCompile } from '../compiler-core'
 
 export function compile(template: string) {
-  return baseCompile(template);
+  return baseCompile(template)
 }
 ```
 
@@ -440,40 +440,37 @@ export function compile(template: string) {
 `package/runtime-core/component.ts`
 
 ```ts
-type CompileFunction = (template: string) => InternalRenderFunction;
-let compile: CompileFunction | undefined;
+type CompileFunction = (template: string) => InternalRenderFunction
+let compile: CompileFunction | undefined
 
 export function registerRuntimeCompiler(_compile: any) {
-  compile = _compile;
+  compile = _compile
 }
 ```
 
 それでは、`package/index.ts`で関数の生成をして、登録してあげましょう。
 
 ```ts
-import { compile } from "./compiler-dom";
-import {
-  InternalRenderFunction,
-  registerRuntimeCompiler,
-} from "./runtime-core";
-import * as runtimeDom from "./runtime-dom";
+import { compile } from './compiler-dom'
+import { InternalRenderFunction, registerRuntimeCompiler } from './runtime-core'
+import * as runtimeDom from './runtime-dom'
 
 function compileToFunction(template: string): InternalRenderFunction {
-  const code = compile(template);
-  return new Function("ChibiVue", code)(runtimeDom);
+  const code = compile(template)
+  return new Function('ChibiVue', code)(runtimeDom)
 }
 
-registerRuntimeCompiler(compileToFunction);
+registerRuntimeCompiler(compileToFunction)
 
-export * from "./runtime-core";
-export * from "./runtime-dom";
-export * from "./reactivity";
+export * from './runtime-core'
+export * from './runtime-dom'
+export * from './reactivity'
 ```
 
 ※ runtimeDom には h 関数を含める必要があるので `runtime-dom`で export するのを忘れないようにしてください。
 
 ```ts
-export { h } from "../runtime-core";
+export { h } from '../runtime-core'
 ```
 
 さて、コンパイラの登録ができたので実際にコンパイルを実行したいです。
@@ -481,14 +478,14 @@ export { h } from "../runtime-core";
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>;
+  props?: Record<string, any>
   setup?: (
     props: Record<string, any>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function;
-  render?: Function;
-  template?: string; // 追加
-};
+    ctx: { emit: (event: string, ...args: any[]) => void },
+  ) => Function
+  render?: Function
+  template?: string // 追加
+}
 ```
 
 肝心のコンパイルですが、renderer を少しリファクタする必要があります。
@@ -496,21 +493,21 @@ export type ComponentOptions = {
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
 
   // ----------------------- ここから
-  const { props } = instance.vnode;
-  initProps(instance, props);
-  const component = initialVNode.type as Component;
+  const { props } = instance.vnode
+  initProps(instance, props)
+  const component = initialVNode.type as Component
   if (component.setup) {
     instance.render = component.setup(instance.props, {
       emit: instance.emit,
-    }) as InternalRenderFunction;
+    }) as InternalRenderFunction
   }
   // ----------------------- ここまで
 
-  setupRenderEffect(instance, initialVNode, container);
-};
+  setupRenderEffect(instance, initialVNode, container)
+}
 ```
 
 `mountComponent`の上記に示した部分を`package/runtime-core/component.ts`に切り出します。
@@ -519,16 +516,16 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode;
-  initProps(instance, props);
+  const { props } = instance.vnode
+  initProps(instance, props)
 
-  const component = instance.type as Component;
+  const component = instance.type as Component
   if (component.setup) {
     instance.render = component.setup(instance.props, {
       emit: instance.emit,
-    }) as InternalRenderFunction;
+    }) as InternalRenderFunction
   }
-};
+}
 ```
 
 `package/runtime-core/renderer.ts`
@@ -537,40 +534,40 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   // prettier-ignore
   const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(initialVNode));
-  setupComponent(instance);
-  setupRenderEffect(instance, initialVNode, container);
-};
+  setupComponent(instance)
+  setupRenderEffect(instance, initialVNode, container)
+}
 ```
 
 それでは、setupComponent 内でコンパイルを実行していきましょう。
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode;
-  initProps(instance, props);
+  const { props } = instance.vnode
+  initProps(instance, props)
 
-  const component = instance.type as Component;
+  const component = instance.type as Component
   if (component.setup) {
     instance.render = component.setup(instance.props, {
       emit: instance.emit,
-    }) as InternalRenderFunction;
+    }) as InternalRenderFunction
   }
 
   // ------------------------ ここ
   if (compile && !component.render) {
-    const template = component.template ?? "";
+    const template = component.template ?? ''
     if (template) {
-      instance.render = compile(template);
+      instance.render = compile(template)
     }
   }
-};
+}
 ```
 
 これで template オプションで渡した簡素な HTML がコンパイルできるようになったはずなので playground で試してみましょう！
 
 ```ts
-const app = createApp({ template: `<p class="hello">Hello World</p>` });
-app.mount("#app");
+const app = createApp({ template: `<p class="hello">Hello World</p>` })
+app.mount('#app')
 ```
 
 ![simple_template_compiler](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler.png)
@@ -580,8 +577,8 @@ app.mount("#app");
 ```ts
 const app = createApp({
   template: `<b class="hello" style="color: red;">Hello World!!</b>`,
-});
-app.mount("#app");
+})
+app.mount('#app')
 ```
 
 ![simple_template_compiler2](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler2.png)

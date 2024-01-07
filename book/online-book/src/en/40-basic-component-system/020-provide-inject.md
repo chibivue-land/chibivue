@@ -14,13 +14,13 @@ const app = createApp({
     //.
     //.
     //.
-    provide("key", someValue); // This is a case where provide is called from the component
+    provide('key', someValue) // This is a case where provide is called from the component
     //.
     //.
   },
-});
+})
 
-app.provide("key2", someValue2); // Provide on the App
+app.provide('key2', someValue2) // Provide on the App
 ```
 
 Now, where should we store what was provided by app? Since app is not a component, it's a problem.
@@ -38,42 +38,42 @@ export interface InjectionKey<_T> extends Symbol {}
 
 export function provide<T, K = InjectionKey<T> | string | number>(
   key: K,
-  value: K extends InjectionKey<infer V> ? V : T
-);
+  value: K extends InjectionKey<infer V> ? V : T,
+)
 
-export function inject<T>(key: InjectionKey<T> | string): T | undefined;
-export function inject<T>(key: InjectionKey<T> | string, defaultValue: T): T;
+export function inject<T>(key: InjectionKey<T> | string): T | undefined
+export function inject<T>(key: InjectionKey<T> | string, defaultValue: T): T
 ```
 
 ```ts
 const Child = {
   setup() {
-    const rootState = inject<{ count: number }>("RootState");
-    const logger = inject(LoggerKey);
+    const rootState = inject<{ count: number }>('RootState')
+    const logger = inject(LoggerKey)
 
     const action = () => {
-      rootState && rootState.count++;
-      logger?.("Hello from Child.");
-    };
+      rootState && rootState.count++
+      logger?.('Hello from Child.')
+    }
 
-    return () => h("button", { onClick: action }, ["action"]);
+    return () => h('button', { onClick: action }, ['action'])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 1 });
-    provide("RootState", state);
+    const state = reactive({ count: 1 })
+    provide('RootState', state)
 
     return () =>
-      h("div", {}, [h("p", {}, [`${state.count}`]), h(Child, {}, [])]);
+      h('div', {}, [h('p', {}, [`${state.count}`]), h(Child, {}, [])])
   },
-});
+})
 
-type Logger = (...args: any) => void;
-const LoggerKey = Symbol() as InjectionKey<Logger>;
+type Logger = (...args: any) => void
+const LoggerKey = Symbol() as InjectionKey<Logger>
 
-app.provide(LoggerKey, window.console.log);
+app.provide(LoggerKey, window.console.log)
 ```
 
 Source code so far:  

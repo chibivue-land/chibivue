@@ -15,13 +15,13 @@ Add a flag to ReactiveEffect to indicate whether it is active or not, and in the
 
 ```ts
 export class ReactiveEffect<T = any> {
-  active = true; // Added
+  active = true // Added
   //.
   //.
   //.
   stop() {
     if (this.active) {
-      this.active = false;
+      this.active = false
     }
   }
 }
@@ -32,25 +32,25 @@ Additionally, let's add an implementation of hooks that allows us to register th
 
 ```ts
 export class ReactiveEffect<T = any> {
-  private deferStop?: boolean; // Added
-  onStop?: () => void; // Added
-  parent: ReactiveEffect | undefined = undefined; // Added (to be referenced in finally)
+  private deferStop?: boolean // Added
+  onStop?: () => void // Added
+  parent: ReactiveEffect | undefined = undefined // Added (to be referenced in finally)
 
   run() {
     if (!this.active) {
-      return this.fn(); // If active is false, simply execute the function
+      return this.fn() // If active is false, simply execute the function
     }
 
     try {
-      this.parent = activeEffect;
-      activeEffect = this;
-      const res = this.fn();
-      return res;
+      this.parent = activeEffect
+      activeEffect = this
+      const res = this.fn()
+      return res
     } finally {
-      activeEffect = this.parent;
-      this.parent = undefined;
+      activeEffect = this.parent
+      this.parent = undefined
       if (this.deferStop) {
-        this.stop();
+        this.stop()
       }
     }
   }
@@ -58,11 +58,11 @@ export class ReactiveEffect<T = any> {
   stop() {
     if (activeEffect === this) {
       // If activeEffect is itself, set a flag to stop after run is finished
-      this.deferStop = true;
+      this.deferStop = true
     } else if (this.active) {
       // ...
       if (this.onStop) {
-        this.onStop(); // Execute registered hooks
+        this.onStop() // Execute registered hooks
       }
       // ...
     }
@@ -75,33 +75,33 @@ Now that we have added cleanup processing to ReactiveEffect, let's also implemen
 If the following code works, it's OK.
 
 ```ts
-import { createApp, h, reactive, watch } from "chibivue";
+import { createApp, h, reactive, watch } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
     const unwatch = watch(
       () => state.count,
       (newValue, oldValue, cleanup) => {
-        alert(`New value: ${newValue}, old value: ${oldValue}`);
-        cleanup(() => alert("Clean Up!"));
-      }
-    );
+        alert(`New value: ${newValue}, old value: ${oldValue}`)
+        cleanup(() => alert('Clean Up!'))
+      },
+    )
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, [`increment`]),
-        h("button", { onClick: unwatch }, [`unwatch`]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, [`increment`]),
+        h('button', { onClick: unwatch }, [`unwatch`]),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Source code so far:  
@@ -112,21 +112,21 @@ Source code so far:
 Now that we can clean up effects, we want to clean up unnecessary effects when a component is unmounted. However, it is a bit cumbersome to collect a large number of effects, whether it's watch or computed. If we try to implement it straightforwardly, it will look like this:
 
 ```ts
-let disposables = [];
+let disposables = []
 
-const counter = ref(0);
+const counter = ref(0)
 
-const doubled = computed(() => counter.value * 2);
-disposables.push(() => stop(doubled.effect));
+const doubled = computed(() => counter.value * 2)
+disposables.push(() => stop(doubled.effect))
 
-const stopWatch = watchEffect(() => console.log(`counter: ${counter.value}`));
-disposables.push(stopWatch);
+const stopWatch = watchEffect(() => console.log(`counter: ${counter.value}`))
+disposables.push(stopWatch)
 ```
 
 ```ts
 // cleanup effects
-disposables.forEach((f) => f());
-disposables = [];
+disposables.forEach(f => f())
+disposables = []
 ```
 
 This kind of management is cumbersome and prone to mistakes.
@@ -137,18 +137,18 @@ https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-sco
 The idea is to have one EffectScope per instance, and specifically, it has the following interface:
 
 ```ts
-const scope = effectScope();
+const scope = effectScope()
 
 scope.run(() => {
-  const doubled = computed(() => counter.value * 2);
+  const doubled = computed(() => counter.value * 2)
 
-  watch(doubled, () => console.log(doubled.value));
+  watch(doubled, () => console.log(doubled.value))
 
-  watchEffect(() => console.log("Count: ", doubled.value));
-});
+  watchEffect(() => console.log('Count: ', doubled.value))
+})
 
 // to dispose all effects in the scope
-scope.stop();
+scope.stop()
 ```
 
 Quoted from: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
@@ -162,7 +162,7 @@ As mentioned earlier, we will have one EffectScope per instance.
 
 ```ts
 export interface ComponentInternalInstance {
-  scope: EffectScope;
+  scope: EffectScope
 }
 ```
 
@@ -186,12 +186,12 @@ And when a ReactiveEffect is created, it is registered in `activeEffectScope`.
 Since it may be a little difficult to understand, if we write the image in source code,
 
 ```ts
-instance.scope.on();
+instance.scope.on()
 
 /** Some ReactiveEffect such as computed or watch is created */
-setup();
+setup()
 
-instance.scope.off();
+instance.scope.off()
 ```
 
 With this, we can collect the generated effects in the EffectScope of the instance.  

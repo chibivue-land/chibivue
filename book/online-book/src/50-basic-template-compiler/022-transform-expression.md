@@ -6,17 +6,17 @@
 
 ```vue
 <script>
-import { ref } from "chibivue";
+import { ref } from 'chibivue'
 
 export default {
   setup() {
-    const count = ref(0);
+    const count = ref(0)
     const increment = () => {
-      count.value++;
-    };
-    return { count, increment };
+      count.value++
+    }
+    return { count, increment }
   },
-};
+}
 </script>
 
 <template>
@@ -35,29 +35,29 @@ export default {
 ```js
 const _sfc_main = {
   setup() {
-    const count = ref(0);
+    const count = ref(0)
     const increment = () => {
-      count.value++;
-    };
-    return { count, increment };
+      count.value++
+    }
+    return { count, increment }
   },
-};
+}
 
 function render(_ctx) {
   const { h, mergeProps, normalizeProps, normalizeClass, normalizeStyle } =
-    ChibiVue;
+    ChibiVue
 
-  return h("div", null, [
-    "\n    ",
-    h("button", normalizeProps({ onClick: increment }), [
-      "count + count is: ",
+  return h('div', null, [
+    '\n    ',
+    h('button', normalizeProps({ onClick: increment }), [
+      'count + count is: ',
       _ctx.count + count,
     ]),
-    "\n  ",
-  ]);
+    '\n  ',
+  ])
 }
 
-export default { ..._sfc_main, render };
+export default { ..._sfc_main, render }
 ```
 
 - 上手くいっていないポイント 1  
@@ -75,29 +75,29 @@ export default { ..._sfc_main, render };
 ```js
 const _sfc_main = {
   setup() {
-    const count = ref(0);
+    const count = ref(0)
     const increment = () => {
-      count.value++;
-    };
-    return { count, increment };
+      count.value++
+    }
+    return { count, increment }
   },
-};
+}
 
 function render(_ctx) {
   const { h, mergeProps, normalizeProps, normalizeClass, normalizeStyle } =
-    ChibiVue;
+    ChibiVue
 
-  return h("div", null, [
-    "\n    ",
-    h("button", normalizeProps({ onClick: _ctx.increment }), [
-      "count + count is: ",
+  return h('div', null, [
+    '\n    ',
+    h('button', normalizeProps({ onClick: _ctx.increment }), [
+      'count + count is: ',
       _ctx.count + _ctx.count,
     ]),
-    "\n  ",
-  ]);
+    '\n  ',
+  ])
 }
 
-export default { ..._sfc_main, render };
+export default { ..._sfc_main, render }
 ```
 
 :::
@@ -124,14 +124,14 @@ export default { ..._sfc_main, render };
 いわゆる式と文です。
 
 ```ts
-1; // これは Expression
-ident; // これは Expression
-func(); // これは Expression
-ident + func(); // これは Expression
+1 // これは Expression
+ident // これは Expression
+func() // これは Expression
+ident + func() // これは Expression
 
-let a; // これは Statement
-if (!a) a = 1; // これは Statement
-for (let i = 0; i < 10; i++) a++; // これは Statement
+let a // これは Statement
+if (!a) a = 1 // これは Statement
+for (let i = 0; i < 10; i++) a++ // これは Statement
 ```
 
 今回考えたいのは Expression (式)です。  
@@ -141,10 +141,10 @@ Expression にはさまざまな種類があります。Identifier というの�
 ExpressionNode 上のあらゆる Identifier というのは、
 
 ```ts
-1; // なし
-ident; // ident --- (1)
-func(); // func --- (2)
-ident + func(); // ident, func --- (3)
+1 // なし
+ident // ident --- (1)
+func() // func --- (2)
+ident + func() // ident, func --- (3)
 ```
 
 のようなもので、(1) に関してはそれ単体が Identifier であり、(2) は CallExpression の callee が Identifier、  
@@ -178,21 +178,21 @@ ni -D @babel/types # これも
 ```
 
 ```ts
-import { Identifier, Node } from "@babel/types";
+import { Identifier, Node } from '@babel/types'
 
-import { walk } from "estree-walker";
+import { walk } from 'estree-walker'
 
 export function walkIdentifiers(
   root: Node,
-  onIdentifier: (node: Identifier) => void
+  onIdentifier: (node: Identifier) => void,
 ) {
-  (walk as any)(root, {
+  ;(walk as any)(root, {
     enter(node: Node) {
-      if (node.type === "Identifier") {
-        onIdentifier(node);
+      if (node.type === 'Identifier') {
+        onIdentifier(node)
       }
     },
-  });
+  })
 }
 ```
 
@@ -208,9 +208,9 @@ export function walkIdentifiers(
 
 ```ts
 export interface InterpolationNode extends Node {
-  type: NodeTypes.INTERPOLATION;
-  content: string; // [!code --]
-  content: ExpressionNode; // [!code ++]
+  type: NodeTypes.INTERPOLATION
+  content: string // [!code --]
+  content: ExpressionNode // [!code ++]
 }
 ```
 
@@ -218,7 +218,7 @@ export interface InterpolationNode extends Node {
 
 ```ts
 function parseInterpolation(
-  context: ParserContext
+  context: ParserContext,
 ): InterpolationNode | undefined {
   // .
   // .
@@ -232,7 +232,7 @@ function parseInterpolation(
       loc: getSelection(context, innerStart, innerEnd),
     },
     loc: getSelection(context, start),
-  };
+  }
 }
 ```
 
@@ -242,25 +242,25 @@ function parseInterpolation(
 transformExpression では、INTERPOLATION と DIRECTIVE が持つ ExpressionNode を処理します。
 
 ```ts
-export const transformExpression: NodeTransform = (node) => {
+export const transformExpression: NodeTransform = node => {
   if (node.type === NodeTypes.INTERPOLATION) {
-    node.content = processExpression(node.content as SimpleExpressionNode);
+    node.content = processExpression(node.content as SimpleExpressionNode)
   } else if (node.type === NodeTypes.ELEMENT) {
     for (let i = 0; i < node.props.length; i++) {
-      const dir = node.props[i];
+      const dir = node.props[i]
       if (dir.type === NodeTypes.DIRECTIVE) {
-        const exp = dir.exp;
-        const arg = dir.arg;
+        const exp = dir.exp
+        const arg = dir.arg
         if (exp && exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-          dir.exp = processExpression(exp);
+          dir.exp = processExpression(exp)
         }
         if (arg && arg.type === NodeTypes.SIMPLE_EXPRESSION && !arg.isStatic) {
-          dir.arg = processExpression(arg);
+          dir.arg = processExpression(arg)
         }
       }
     }
   }
-};
+}
 
 export function processExpression(node: SimpleExpressionNode): ExpressionNode {
   // TODO:
@@ -278,29 +278,29 @@ node が単体の Identifier だった場合はそのままこの関数を適用
 また、true や false などのリテラルはそのままにしておきたいので、リテラルのホワイトリストを作成しておきます。
 
 ```ts
-const isLiteralWhitelisted = makeMap("true,false,null,this");
+const isLiteralWhitelisted = makeMap('true,false,null,this')
 
 export function processExpression(
   node: SimpleExpressionNode,
-  ctx: TransformContext
+  ctx: TransformContext,
 ): ExpressionNode {
   if (ctx.isBrowser) {
     // ブラウザの場合には何もしない
-    return node;
+    return node
   }
 
-  const rawExp = node.content;
+  const rawExp = node.content
 
   const rewriteIdentifier = (raw: string) => {
-    return `_ctx.${raw}`;
-  };
+    return `_ctx.${raw}`
+  }
 
   if (isSimpleIdentifier(rawExp)) {
-    const isLiteral = isLiteralWhitelisted(rawExp);
+    const isLiteral = isLiteralWhitelisted(rawExp)
     if (!isLiteral) {
-      node.content = rewriteIdentifier(rawExp);
+      node.content = rewriteIdentifier(rawExp)
     }
-    return node;
+    return node
   }
 
   // TODO:
@@ -312,16 +312,14 @@ makeMap とは vuejs/core で実装されている存在チェック用のヘル
 ```ts
 export function makeMap(
   str: string,
-  expectsLowerCase?: boolean
+  expectsLowerCase?: boolean,
 ): (key: string) => boolean {
-  const map: Record<string, boolean> = Object.create(null);
-  const list: Array<string> = str.split(",");
+  const map: Record<string, boolean> = Object.create(null)
+  const list: Array<string> = str.split(',')
   for (let i = 0; i < list.length; i++) {
-    map[list[i]] = true;
+    map[list[i]] = true
   }
-  return expectsLowerCase
-    ? (val) => !!map[val.toLowerCase()]
-    : (val) => !!map[val];
+  return expectsLowerCase ? val => !!map[val.toLowerCase()] : val => !!map[val]
 }
 ```
 
@@ -340,27 +338,27 @@ estree を得ることができればあとはそれを先ほど作ったユー�
 この際に、ids という配列に収集していきます。
 
 ```ts
-import { parse } from "@babel/parser";
-import { Identifier } from "@babel/types";
-import { walkIdentifiers } from "../babelUtils";
+import { parse } from '@babel/parser'
+import { Identifier } from '@babel/types'
+import { walkIdentifiers } from '../babelUtils'
 
 interface PrefixMeta {
-  start: number;
-  end: number;
+  start: number
+  end: number
 }
 
 export function processExpression(node: SimpleExpressionNode): ExpressionNode {
   // .
   // .
   // .
-  const ast = parse(`(${rawExp})`).program; // ※ この ast は estree のことです。
-  type QualifiedId = Identifier & PrefixMeta;
-  const ids: QualifiedId[] = [];
+  const ast = parse(`(${rawExp})`).program // ※ この ast は estree のことです。
+  type QualifiedId = Identifier & PrefixMeta
+  const ids: QualifiedId[] = []
 
-  walkIdentifiers(ast, (node) => {
-    node.name = rewriteIdentifier(node.name);
-    ids.push(node as QualifiedId);
-  });
+  walkIdentifiers(ast, node => {
+    node.name = rewriteIdentifier(node.name)
+    ids.push(node as QualifiedId)
+  })
 
   // TODO:
 }
@@ -377,14 +375,14 @@ Compound には「配合」「複合」といった意味が含まれます。
 
 ```ts
 export interface CompoundExpressionNode extends Node {
-  type: NodeTypes.COMPOUND_EXPRESSION;
+  type: NodeTypes.COMPOUND_EXPRESSION
   children: (
     | SimpleExpressionNode
     | CompoundExpressionNode
     | InterpolationNode
     | TextNode
     | string
-  )[];
+  )[]
 }
 ```
 
@@ -394,7 +392,7 @@ children は上記のような配列をとります。
 以下のような式が以下のような CompoundExpressionNode に解析されます。
 
 ```ts
-count * 2;
+count * 2
 ```
 
 ```json
@@ -424,38 +422,38 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
   // .
   // .
   // .
-  const children: CompoundExpressionNode["children"] = [];
-  ids.sort((a, b) => a.start - b.start);
+  const children: CompoundExpressionNode['children'] = []
+  ids.sort((a, b) => a.start - b.start)
   ids.forEach((id, i) => {
-    const start = id.start - 1;
-    const end = id.end - 1;
-    const last = ids[i - 1];
-    const leadingText = rawExp.slice(last ? last.end - 1 : 0, start);
+    const start = id.start - 1
+    const end = id.end - 1
+    const last = ids[i - 1]
+    const leadingText = rawExp.slice(last ? last.end - 1 : 0, start)
     if (leadingText.length) {
-      children.push(leadingText);
+      children.push(leadingText)
     }
 
-    const source = rawExp.slice(start, end);
+    const source = rawExp.slice(start, end)
     children.push(
       createSimpleExpression(id.name, false, {
         source,
         start: advancePositionWithClone(node.loc.start, source, start),
         end: advancePositionWithClone(node.loc.start, source, end),
-      })
-    );
+      }),
+    )
     if (i === ids.length - 1 && end < rawExp.length) {
-      children.push(rawExp.slice(end));
+      children.push(rawExp.slice(end))
     }
-  });
+  })
 
-  let ret;
+  let ret
   if (children.length) {
-    ret = createCompoundExpression(children, node.loc);
+    ret = createCompoundExpression(children, node.loc)
   } else {
-    ret = node;
+    ret = node
   }
 
-  return ret;
+  return ret
 }
 ```
 
@@ -468,24 +466,24 @@ CompoundExpressionNode を生成することができるようになったので
 function genInterpolation(
   node: InterpolationNode,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
-  genNode(node.content, context, option);
+  genNode(node.content, context, option)
 }
 
 function genCompoundExpression(
   node: CompoundExpressionNode,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
   for (let i = 0; i < node.children!.length; i++) {
-    const child = node.children![i];
+    const child = node.children![i]
     if (isString(child)) {
       // string の場合にはそのまま push
-      context.push(child);
+      context.push(child)
     } else {
       // それ以外は Node を codegen する
-      genNode(child, context, option);
+      genNode(child, context, option)
     }
   }
 }
@@ -500,19 +498,19 @@ function genCompoundExpression(
 ```ts
 // transformExpressionを追加する
 export function getBaseTransformPreset(): TransformPreset {
-  return [[transformElement], { bind: transformBind }]; // [!code --]
-  return [[transformExpression, transformElement], { bind: transformBind }]; // [!code ++]
+  return [[transformElement], { bind: transformBind }] // [!code --]
+  return [[transformExpression, transformElement], { bind: transformBind }] // [!code ++]
 }
 ```
 
 ```ts
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const count = ref(3);
-    const getMsg = (count: number) => `Count: ${count}`;
-    return { count, getMsg };
+    const count = ref(3)
+    const getMsg = (count: number) => `Count: ${count}`
+    return { count, getMsg }
   },
 
   template: `
@@ -520,11 +518,11 @@ const App = defineComponent({
       <p> {{ 'Message is "' + getMsg(count) + '"'}} </p>
     </div>
   `,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/022_transform_expression)

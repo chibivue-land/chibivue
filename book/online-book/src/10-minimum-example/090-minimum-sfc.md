@@ -14,14 +14,14 @@
 <script>
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
-};
+}
 </script>
 
 <template>
@@ -53,26 +53,26 @@ export default {
 ```ts
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
 
   render(_ctx) {
-    return h("div", { class: "container", style: "text-align: center" }, [
-      h("h2", `message: ${_ctx.state.message}`),
-      h("img", {
-        width: "150px",
-        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png",
+    return h('div', { class: 'container', style: 'text-align: center' }, [
+      h('h2', `message: ${_ctx.state.message}`),
+      h('img', {
+        width: '150px',
+        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png',
       }),
-      h("p", [h("b", "chibivue"), " is the minimal Vue.js"]),
-      h("button", { onClick: _ctx.changeMessage }, "click me!"),
-    ]);
+      h('p', [h('b', 'chibivue'), ' is the minimal Vue.js']),
+      h('button', { onClick: _ctx.changeMessage }, 'click me!'),
+    ])
   },
-};
+}
 ```
 
 (えっスタイルは!? と思った方もいるかもしれませんが、一旦そのことは忘れて template と script について考えてみましょう。)
@@ -84,10 +84,10 @@ export default {
 この時に、`.vue` というファイルが解決される際にコンパイルをして、結果を App にバインドさせるようなプラグインを書きます。
 
 ```ts
-import App from "./App.vue"; // App.vueが読み込まれるときにコンパイル
+import App from './App.vue' // App.vueが読み込まれるときにコンパイル
 
-const app = createApp(App);
-app.mount("#app");
+const app = createApp(App)
+app.mount('#app')
 ```
 
 さまざまなビルドツールがありますが、今回は vite のプラグインを書いてみます。
@@ -109,13 +109,13 @@ ni
 作った PJ の vite.config.ts を見てみましょう。
 
 ```ts
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-});
+})
 ```
 
 何やら@vitejs/plugin-vue を plugin に追加しているのがわかるかと思います。  
@@ -124,32 +124,32 @@ export default defineConfig({
 このプロジェクトで簡単なプラグインを作ってみましょう。
 
 ```ts
-import { defineConfig, Plugin } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig, Plugin } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
-});
+})
 
 function myPlugin(): Plugin {
   return {
-    name: "vite:my-plugin",
+    name: 'vite:my-plugin',
 
     transform(code, id) {
-      if (id.endsWith(".sample.js")) {
-        let result = "";
+      if (id.endsWith('.sample.js')) {
+        let result = ''
 
         for (let i = 0; i < 100; i++) {
-          result += `console.log("HelloWorld from plugin! (${i})");\n`;
+          result += `console.log("HelloWorld from plugin! (${i})");\n`
         }
 
-        result += code;
+        result += code
 
-        return { code: result };
+        return { code: result }
       }
     },
-  };
+  }
 }
 ```
 
@@ -176,27 +176,27 @@ touch src/plugin.sample.js
 function fizzbuzz(n) {
   for (let i = 1; i <= n; i++) {
     i % 3 === 0 && i % 5 === 0
-      ? console.log("fizzbuzz")
+      ? console.log('fizzbuzz')
       : i % 3 === 0
-      ? console.log("fizz")
-      : i % 5 === 0
-      ? console.log("buzz")
-      : console.log(i);
+        ? console.log('fizz')
+        : i % 5 === 0
+          ? console.log('buzz')
+          : console.log(i)
   }
 }
 
-fizzbuzz(Math.floor(Math.random() * 100) + 1);
+fizzbuzz(Math.floor(Math.random() * 100) + 1)
 ```
 
 `~/plugin-sample/src/main.ts`
 
 ```ts
-import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
-import "./plugin.sample.js"; // 追加
+import { createApp } from 'vue'
+import './style.css'
+import App from './App.vue'
+import './plugin.sample.js' // 追加
 
-createApp(App).mount("#app");
+createApp(App).mount('#app')
 ```
 
 ブラウザで確認してみましょう。
@@ -237,16 +237,16 @@ touch packages/@extensions/vite-plugin-chibivue/index.ts
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
 ```ts
-import type { Plugin } from "vite";
+import type { Plugin } from 'vite'
 
 export default function vitePluginChibivue(): Plugin {
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      return { code };
+      return { code }
     },
-  };
+  }
 }
 ```
 
@@ -262,22 +262,22 @@ touch playground/src/App.vue
 
 ```vue
 <script>
-import { reactive } from "chibivue";
+import { reactive } from 'chibivue'
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    const handleInput = (e) => {
-      state.input = e.target?.value ?? "";
-    };
+    const handleInput = e => {
+      state.input = e.target?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
-};
+}
 </script>
 
 <template>
@@ -316,19 +316,19 @@ export default {
 `playground/src/main.ts`
 
 ```ts
-import { createApp } from "chibivue";
-import App from "./App.vue";
+import { createApp } from 'chibivue'
+import App from './App.vue'
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 `playground/vite.config.js`
 
 ```ts
-import { defineConfig } from "vite";
-import chibivue from "../../packages/@extensions/vite-plugin-chibivue";
+import { defineConfig } from 'vite'
+import chibivue from '../../packages/@extensions/vite-plugin-chibivue'
 
 export default defineConfig({
   resolve: {
@@ -337,7 +337,7 @@ export default defineConfig({
     },
   },
   plugins: [chibivue()],
-});
+})
 ```
 
 この状態で起動してみましょう。
@@ -355,20 +355,20 @@ sample でやったように id で分岐を書いてもいいのですが、せ
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
 ```ts
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
+import type { Plugin } from 'vite'
+import { createFilter } from 'vite'
 
 export default function vitePluginChibivue(): Plugin {
-  const filter = createFilter(/\.vue$/);
+  const filter = createFilter(/\.vue$/)
 
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      if (!filter(id)) return;
-      return { code: `export default {}` };
+      if (!filter(id)) return
+      return { code: `export default {}` }
     },
-  };
+  }
 }
 ```
 
@@ -427,33 +427,33 @@ touch packages/compiler-sfc/parse.ts
 `packages/compiler-sfc/parse.ts`
 
 ```ts
-import { SourceLocation } from "../compiler-core";
+import { SourceLocation } from '../compiler-core'
 
 export interface SFCDescriptor {
-  id: string;
-  filename: string;
-  source: string;
-  template: SFCTemplateBlock | null;
-  script: SFCScriptBlock | null;
-  styles: SFCStyleBlock[];
+  id: string
+  filename: string
+  source: string
+  template: SFCTemplateBlock | null
+  script: SFCScriptBlock | null
+  styles: SFCStyleBlock[]
 }
 
 export interface SFCBlock {
-  type: string;
-  content: string;
-  loc: SourceLocation;
+  type: string
+  content: string
+  loc: SourceLocation
 }
 
 export interface SFCTemplateBlock extends SFCBlock {
-  type: "template";
+  type: 'template'
 }
 
 export interface SFCScriptBlock extends SFCBlock {
-  type: "script";
+  type: 'script'
 }
 
 export declare interface SFCStyleBlock extends SFCBlock {
-  type: "style";
+  type: 'style'
 }
 ```
 
@@ -468,15 +468,15 @@ export declare interface SFCStyleBlock extends SFCBlock {
 `~/packages/compiler-dom/index.ts`
 
 ```ts
-import { baseCompile, baseParse } from "../compiler-core";
+import { baseCompile, baseParse } from '../compiler-core'
 
 export function compile(template: string) {
-  return baseCompile(template);
+  return baseCompile(template)
 }
 
 // パーサをexportしてあげる
 export function parse(template: string) {
-  return baseParse(template);
+  return baseParse(template)
 }
 ```
 
@@ -490,11 +490,11 @@ touch packages/compiler-sfc/compileTemplate.ts
 `~/packages/compiler-sfc/compileTemplate.ts`
 
 ```ts
-import { TemplateChildNode } from "../compiler-core";
+import { TemplateChildNode } from '../compiler-core'
 
 export interface TemplateCompiler {
-  compile(template: string): string;
-  parse(template: string): { children: TemplateChildNode[] };
+  compile(template: string): string
+  parse(template: string): { children: TemplateChildNode[] }
 }
 ```
 
@@ -503,9 +503,9 @@ export interface TemplateCompiler {
 `packages/compiler-sfc/parse.ts`
 
 ```ts
-import { ElementNode, NodeTypes, SourceLocation } from "../compiler-core";
-import * as CompilerDOM from "../compiler-dom";
-import { TemplateCompiler } from "./compileTemplate";
+import { ElementNode, NodeTypes, SourceLocation } from '../compiler-core'
+import * as CompilerDOM from '../compiler-dom'
+import { TemplateCompiler } from './compileTemplate'
 
 /**
  * =========
@@ -514,20 +514,20 @@ import { TemplateCompiler } from "./compileTemplate";
  */
 
 export interface SFCParseOptions {
-  filename?: string;
-  sourceRoot?: string;
-  compiler?: TemplateCompiler;
+  filename?: string
+  sourceRoot?: string
+  compiler?: TemplateCompiler
 }
 
 export interface SFCParseResult {
-  descriptor: SFCDescriptor;
+  descriptor: SFCDescriptor
 }
 
-export const DEFAULT_FILENAME = "anonymous.vue";
+export const DEFAULT_FILENAME = 'anonymous.vue'
 
 export function parse(
   source: string,
-  { filename = DEFAULT_FILENAME, compiler = CompilerDOM }: SFCParseOptions = {}
+  { filename = DEFAULT_FILENAME, compiler = CompilerDOM }: SFCParseOptions = {},
 ): SFCParseResult {
   const descriptor: SFCDescriptor = {
     id: undefined!,
@@ -536,47 +536,47 @@ export function parse(
     template: null,
     script: null,
     styles: [],
-  };
+  }
 
-  const ast = compiler.parse(source);
-  ast.children.forEach((node) => {
-    if (node.type !== NodeTypes.ELEMENT) return;
+  const ast = compiler.parse(source)
+  ast.children.forEach(node => {
+    if (node.type !== NodeTypes.ELEMENT) return
 
     switch (node.tag) {
-      case "template": {
-        descriptor.template = createBlock(node, source) as SFCTemplateBlock;
-        break;
+      case 'template': {
+        descriptor.template = createBlock(node, source) as SFCTemplateBlock
+        break
       }
-      case "script": {
-        const scriptBlock = createBlock(node, source) as SFCScriptBlock;
-        descriptor.script = scriptBlock;
-        break;
+      case 'script': {
+        const scriptBlock = createBlock(node, source) as SFCScriptBlock
+        descriptor.script = scriptBlock
+        break
       }
-      case "style": {
-        descriptor.styles.push(createBlock(node, source) as SFCStyleBlock);
-        break;
+      case 'style': {
+        descriptor.styles.push(createBlock(node, source) as SFCStyleBlock)
+        break
       }
       default: {
-        break;
+        break
       }
     }
-  });
+  })
 
-  return { descriptor };
+  return { descriptor }
 }
 
 function createBlock(node: ElementNode, source: string): SFCBlock {
-  const type = node.tag;
+  const type = node.tag
 
-  let { start, end } = node.loc;
-  start = node.children[0].loc.start;
-  end = node.children[node.children.length - 1].loc.end;
-  const content = source.slice(start.offset, end.offset);
+  let { start, end } = node.loc
+  start = node.children[0].loc.start
+  end = node.children[node.children.length - 1].loc.end
+  const content = source.slice(start.offset, end.offset)
 
-  const loc = { source: content, start, end };
-  const block: SFCBlock = { type, content, loc };
+  const loc = { source: content, start, end }
+  const block: SFCBlock = { type, content, loc }
 
-  return block;
+  return block
 }
 ```
 
@@ -586,7 +586,7 @@ function createBlock(node: ElementNode, source: string): SFCBlock {
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
 ```ts
-import { parse } from "../../compiler-sfc";
+import { parse } from '../../compiler-sfc'
 
 export default function vitePluginChibivue(): Plugin {
   //.
@@ -597,15 +597,15 @@ export default function vitePluginChibivue(): Plugin {
     //.
     //.
     transform(code, id) {
-      if (!filter(id)) return;
-      const { descriptor } = parse(code, { filename: id });
+      if (!filter(id)) return
+      const { descriptor } = parse(code, { filename: id })
       console.log(
-        "🚀 ~ file: index.ts:14 ~ transform ~ descriptor:",
-        descriptor
-      );
-      return { code: `export default {}` };
+        '🚀 ~ file: index.ts:14 ~ transform ~ descriptor:',
+        descriptor,
+      )
+      return { code: `export default {}` }
     },
-  };
+  }
 }
 ```
 
@@ -633,15 +633,15 @@ export default function vitePluginChibivue(): Plugin {
 export const generate = ({
   children,
 }: {
-  children: TemplateChildNode[];
+  children: TemplateChildNode[]
 }): string => {
   return `return function render(_ctx) {
   with (_ctx) {
     const { h } = ChibiVue;
     return ${genNode(children[0])};
   }
-}`;
-};
+}`
+}
 ```
 
 これは Function コンストラクタで new する前提の物になってしまっているので先頭に return がついてしまっています。
@@ -658,17 +658,17 @@ touch packages/compiler-core/options.ts
 
 ```ts
 export type CompilerOptions = {
-  isBrowser?: boolean;
-};
+  isBrowser?: boolean
+}
 ```
 
 `~/packages/compiler-dom/index.ts`
 
 ```ts
 export function compile(template: string, option?: CompilerOptions) {
-  const defaultOption: Required<CompilerOptions> = { isBrowser: true };
-  if (option) Object.assign(defaultOption, option);
-  return baseCompile(template, defaultOption);
+  const defaultOption: Required<CompilerOptions> = { isBrowser: true }
+  if (option) Object.assign(defaultOption, option)
+  return baseCompile(template, defaultOption)
 }
 ```
 
@@ -677,11 +677,11 @@ export function compile(template: string, option?: CompilerOptions) {
 ```ts
 export function baseCompile(
   template: string,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
-  const parseResult = baseParse(template.trim());
-  const code = generate(parseResult, option);
-  return code;
+  const parseResult = baseParse(template.trim())
+  const code = generate(parseResult, option)
+  return code
 }
 ```
 
@@ -692,49 +692,49 @@ export const generate = (
   {
     children,
   }: {
-    children: TemplateChildNode[];
+    children: TemplateChildNode[]
   },
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
-  return `${option.isBrowser ? "return " : ""}function render(_ctx) {
+  return `${option.isBrowser ? 'return ' : ''}function render(_ctx) {
   const { h } = ChibiVue;
   return ${genNode(children[0])};
-}`;
-};
+}`
+}
 ```
 
 ついでに import 文を足しておきました。output という配列にソースコードを詰めていく感じにも変更してます。
 
 ```ts
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
-import { parse } from "../../compiler-sfc";
-import { compile } from "../../compiler-dom";
+import type { Plugin } from 'vite'
+import { createFilter } from 'vite'
+import { parse } from '../../compiler-sfc'
+import { compile } from '../../compiler-dom'
 
 export default function vitePluginChibivue(): Plugin {
-  const filter = createFilter(/\.vue$/);
+  const filter = createFilter(/\.vue$/)
 
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      if (!filter(id)) return;
+      if (!filter(id)) return
 
-      const outputs = [];
-      outputs.push("import * as ChibiVue from 'chibivue'\n");
+      const outputs = []
+      outputs.push("import * as ChibiVue from 'chibivue'\n")
 
-      const { descriptor } = parse(code, { filename: id });
-      const templateCode = compile(descriptor.template?.content ?? "", {
+      const { descriptor } = parse(code, { filename: id })
+      const templateCode = compile(descriptor.template?.content ?? '', {
         isBrowser: false,
-      });
-      outputs.push(templateCode);
+      })
+      outputs.push(templateCode)
 
-      outputs.push("\n");
-      outputs.push(`export default { render }`);
+      outputs.push('\n')
+      outputs.push(`export default { render }`)
 
-      return { code: outputs.join("\n") };
+      return { code: outputs.join('\n') }
     },
-  };
+  }
 }
 ```
 
@@ -764,18 +764,18 @@ export const generate = (
   {
     children,
   }: {
-    children: TemplateChildNode[];
+    children: TemplateChildNode[]
   },
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
   // isBrowser が false の場合は with 文を含まないコードを生成する
-  return `${option.isBrowser ? "return " : ""}function render(_ctx) {
-    ${option.isBrowser ? "with (_ctx) {" : ""}
+  return `${option.isBrowser ? 'return ' : ''}function render(_ctx) {
+    ${option.isBrowser ? 'with (_ctx) {' : ''}
       const { h } = ChibiVue;
       return ${genNode(children[0], option)};
-    ${option.isBrowser ? "}" : ""}
-}`;
-};
+    ${option.isBrowser ? '}' : ''}
+}`
+}
 
 // .
 // .
@@ -783,26 +783,26 @@ export const generate = (
 
 const genProp = (
   prop: AttributeNode | DirectiveNode,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
   switch (prop.type) {
     case NodeTypes.ATTRIBUTE:
-      return `${prop.name}: "${prop.value?.content}"`;
+      return `${prop.name}: "${prop.value?.content}"`
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
-        case "on":
+        case 'on':
           return `${toHandlerKey(prop.arg)}: ${
-            option.isBrowser ? "" : "_ctx." // -------------------- ここ
-          }${prop.exp}`;
+            option.isBrowser ? '' : '_ctx.' // -------------------- ここ
+          }${prop.exp}`
         default:
           // TODO: other directives
-          throw new Error(`unexpected directive name. got "${prop.name}"`);
+          throw new Error(`unexpected directive name. got "${prop.name}"`)
       }
     }
     default:
-      throw new Error(`unexpected prop type.`);
+      throw new Error(`unexpected prop type.`)
   }
-};
+}
 
 // .
 // .
@@ -810,10 +810,10 @@ const genProp = (
 
 const genInterpolation = (
   node: InterpolationNode,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
-  return `${option.isBrowser ? "" : "_ctx."}${node.content}`; // ------------ ここ
-};
+  return `${option.isBrowser ? '' : '_ctx.'}${node.content}` // ------------ ここ
+}
 ```
 
 ![compile_sfc_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_sfc_render.png)
@@ -830,7 +830,7 @@ const genInterpolation = (
 ```ts
 export default {
   setup() {},
-};
+}
 ```
 
 これらを先ほど生成した render 関数といい感じに mix して export したいのですが、どうにか
@@ -849,9 +849,9 @@ export default {
 ```ts
 const _sfc_main = {
   setup() {},
-};
+}
 
-export default { ..._sfc_main, render };
+export default { ..._sfc_main, render }
 ```
 
 ## 外部ライブラリを使う
@@ -880,7 +880,7 @@ Babel はコンパイラとしての役割を持つので、もちろん内部�
 
 ```ts
 interface Program {
-  body: Statement[];
+  body: Statement[]
 }
 ```
 
@@ -902,7 +902,7 @@ interface ForStatement extends Statement {
 }
 
 interface BlockStatement extends Statement {
-  body: Statement[];
+  body: Statement[]
 }
 // 他にもたくさんある
 ```
@@ -913,18 +913,18 @@ interface BlockStatement extends Statement {
 interface Expression {}
 
 interface BinaryExpression extends Expression {
-  operator: "+" | "-" | "*" | "/"; // 他にもたくさんあるが省略
-  left: Expression;
-  right: Expression;
+  operator: '+' | '-' | '*' | '/' // 他にもたくさんあるが省略
+  left: Expression
+  right: Expression
 }
 
 interface ObjectExpression extends Expression {
-  properties: Property[]; // 省略
+  properties: Property[] // 省略
 }
 
 interface CallExpression extends Expression {
-  callee: Expression;
-  arguments: Expression[];
+  callee: Expression
+  arguments: Expression[]
 }
 
 // 他にもたくさんある
@@ -934,9 +934,9 @@ if 文について考えると、このような構造をとることがわか�
 
 ```ts
 interface IfStatement extends Statement {
-  test: Expression; // 条件値
-  consequent: Statement; // 条件値がtrueの場合に実行される文
-  alternate: Statement | null; // 条件値がfalseの場合に実行される文
+  test: Expression // 条件値
+  consequent: Statement // 条件値がtrueの場合に実行される文
+  alternate: Statement | null // 条件値がfalseの場合に実行される文
 }
 ```
 
@@ -953,17 +953,17 @@ https://github.com/rich-harris/magic-string
 こちらは文字列操作を便利にするライブラリです。
 
 ```ts
-const input = "Hello";
-const s = new MagicString(input);
+const input = 'Hello'
+const s = new MagicString(input)
 ```
 
 のようにインスタンスを生成し、そのインスタンスに生えている便利なメソッドを利用して文字列操作をしていきます。
 いくつか例をあげます。
 
 ```ts
-s.append("!!!"); // 末尾に追加する
-s.prepend("message: "); // 先頭に追加する
-s.overwrite(9, 13, "こんにちは"); // 範囲を指定して上書き
+s.append('!!!') // 末尾に追加する
+s.prepend('message: ') // 先頭に追加する
+s.overwrite(9, 13, 'こんにちは') // 範囲を指定して上書き
 ```
 
 特に無理して使う必要はないのですが、本家の Vue に合わせて使うことにします。
@@ -978,7 +978,7 @@ Babel にしろ magic-string にしろ、実際の使い方等は実装の段階
 export default {
   setup() {},
   // その他のオプション
-};
+}
 ```
 
 というコードを、
@@ -987,9 +987,9 @@ export default {
 const _sfc_main = {
   setup() {},
   // その他のオプション
-};
+}
 
-export default { ..._sfc_main, render };
+export default { ..._sfc_main, render }
 ```
 
 というふうに書き換えたいわけです。
@@ -1018,7 +1018,7 @@ input に対象のソースコード、as に最終的にバインドしたい�
 ```ts
 export function rewriteDefault(input: string, as: string): string {
   // TODO:
-  return "";
+  return ''
 }
 ```
 
@@ -1026,37 +1026,37 @@ export function rewriteDefault(input: string, as: string): string {
 export が存在しないわけなので、からのオブジェクトをバインドして終了です。
 
 ```ts
-const defaultExportRE = /((?:^|\n|;)\s*)export(\s*)default/;
-const namedDefaultExportRE = /((?:^|\n|;)\s*)export(.+)(?:as)?(\s*)default/s;
+const defaultExportRE = /((?:^|\n|;)\s*)export(\s*)default/
+const namedDefaultExportRE = /((?:^|\n|;)\s*)export(.+)(?:as)?(\s*)default/s
 
 export function rewriteDefault(input: string, as: string): string {
   if (!hasDefaultExport(input)) {
-    return input + `\nconst ${as} = {}`;
+    return input + `\nconst ${as} = {}`
   }
 
   // TODO:
-  return "";
+  return ''
 }
 
 export function hasDefaultExport(input: string): boolean {
-  return defaultExportRE.test(input) || namedDefaultExportRE.test(input);
+  return defaultExportRE.test(input) || namedDefaultExportRE.test(input)
 }
 ```
 
 ここで Babel パーサと magic-string の登場です。
 
 ```ts
-import { parse } from "@babel/parser";
-import MagicString from "magic-string";
+import { parse } from '@babel/parser'
+import MagicString from 'magic-string'
 // .
 // .
 export function hasDefaultExport(input: string): boolean {
   // .
   // .
-  const s = new MagicString(input);
+  const s = new MagicString(input)
   const ast = parse(input, {
-    sourceType: "module",
-  }).program.body;
+    sourceType: 'module',
+  }).program.body
   // .
   // .
 }
@@ -1070,19 +1070,19 @@ export function hasDefaultExport(input: string): boolean {
 export function hasDefaultExport(input: string): boolean {
   // .
   // .
-  ast.forEach((node) => {
+  ast.forEach(node => {
     // default exportの場合
-    if (node.type === "ExportDefaultDeclaration") {
-      if (node.declaration.type === "ClassDeclaration") {
+    if (node.type === 'ExportDefaultDeclaration') {
+      if (node.declaration.type === 'ClassDeclaration') {
         // `export default class Hoge {}` だった場合は、`class Hoge {}` に置き換える
-        s.overwrite(node.start!, node.declaration.id.start!, `class `);
+        s.overwrite(node.start!, node.declaration.id.start!, `class `)
         // その上で、`const ${as} = Hoge;` というようなコードを末尾に追加してあげればOK.
-        s.append(`\nconst ${as} = ${node.declaration.id.name}`);
+        s.append(`\nconst ${as} = ${node.declaration.id.name}`)
       } else {
         // それ以外の default exportは宣言部分を変数宣言に置き換えてあげればOk.
         // eg 1) `export default { setup() {}, }`  ->  `const ${as} = { setup() {}, }`
         // eg 2) `export default Hoge`  ->  `const ${as} = Hoge`
-        s.overwrite(node.start!, node.declaration.start!, `const ${as} = `);
+        s.overwrite(node.start!, node.declaration.start!, `const ${as} = `)
       }
     }
 
@@ -1091,26 +1091,26 @@ export function hasDefaultExport(input: string): boolean {
     //   1. `export { default } from "source";`のような宣言の場合
     //   2. `export { hoge as default }` from 'source' のような宣言の場合
     //   3. `export { hoge as default }` のような宣言の場合
-    if (node.type === "ExportNamedDeclaration") {
+    if (node.type === 'ExportNamedDeclaration') {
       for (const specifier of node.specifiers) {
         if (
-          specifier.type === "ExportSpecifier" &&
-          specifier.exported.type === "Identifier" &&
-          specifier.exported.name === "default"
+          specifier.type === 'ExportSpecifier' &&
+          specifier.exported.type === 'Identifier' &&
+          specifier.exported.name === 'default'
         ) {
           // `from`というキーワードがある場合
           if (node.source) {
-            if (specifier.local.name === "default") {
+            if (specifier.local.name === 'default') {
               // 1. `export { default } from "source";`のような宣言の場合
               // この場合はimport文に抜き出して名前をつけてあげ、最終的な変数にバインドする
               // eg) `export { default } from "source";`  ->  `import { default as __VUE_DEFAULT__ } from 'source'; const ${as} = __VUE_DEFAULT__`
-              const end = specifierEnd(input, specifier.local.end!, node.end!);
+              const end = specifierEnd(input, specifier.local.end!, node.end!)
               s.prepend(
-                `import { default as __VUE_DEFAULT__ } from '${node.source.value}'\n`
-              );
-              s.overwrite(specifier.start!, end, ``);
-              s.append(`\nconst ${as} = __VUE_DEFAULT__`);
-              continue;
+                `import { default as __VUE_DEFAULT__ } from '${node.source.value}'\n`,
+              )
+              s.overwrite(specifier.start!, end, ``)
+              s.append(`\nconst ${as} = __VUE_DEFAULT__`)
+              continue
             } else {
               // 2. `export { hoge as default }` from 'source' のような宣言の場合
               // この場合は一度全てのspecifierをそのままimport文に書き換え、as defaultになっている変数を最終的な変数にバインドする
@@ -1118,29 +1118,29 @@ export function hasDefaultExport(input: string): boolean {
               const end = specifierEnd(
                 input,
                 specifier.exported.end!,
-                node.end!
-              );
+                node.end!,
+              )
               s.prepend(
                 `import { ${input.slice(
                   specifier.local.start!,
-                  specifier.local.end!
-                )} } from '${node.source.value}'\n`
-              );
+                  specifier.local.end!,
+                )} } from '${node.source.value}'\n`,
+              )
 
               // 3. `export { hoge as default }`のような宣言の場合
               // この場合は単純に最終的な変数にバインドしてあげる
-              s.overwrite(specifier.start!, end, ``);
-              s.append(`\nconst ${as} = ${specifier.local.name}`);
-              continue;
+              s.overwrite(specifier.start!, end, ``)
+              s.append(`\nconst ${as} = ${specifier.local.name}`)
+              continue
             }
           }
-          const end = specifierEnd(input, specifier.end!, node.end!);
-          s.overwrite(specifier.start!, end, ``);
-          s.append(`\nconst ${as} = ${specifier.local.name}`);
+          const end = specifierEnd(input, specifier.end!, node.end!)
+          s.overwrite(specifier.start!, end, ``)
+          s.append(`\nconst ${as} = ${specifier.local.name}`)
         }
       }
     }
-  });
+  })
   // .
   // .
 }
@@ -1148,65 +1148,65 @@ export function hasDefaultExport(input: string): boolean {
 // 宣言文の終端を算出する
 function specifierEnd(input: string, end: number, nodeEnd: number | null) {
   // export { default   , foo } ...
-  let hasCommas = false;
-  let oldEnd = end;
+  let hasCommas = false
+  let oldEnd = end
   while (end < nodeEnd!) {
     if (/\s/.test(input.charAt(end))) {
-      end++;
-    } else if (input.charAt(end) === ",") {
-      end++;
-      hasCommas = true;
-      break;
-    } else if (input.charAt(end) === "}") {
-      break;
+      end++
+    } else if (input.charAt(end) === ',') {
+      end++
+      hasCommas = true
+      break
+    } else if (input.charAt(end) === '}') {
+      break
     }
   }
-  return hasCommas ? end : oldEnd;
+  return hasCommas ? end : oldEnd
 }
 ```
 
 これで default export の書き換えができるようになりました。実際に plugin で使ってみましょう。
 
 ```ts
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
-import { parse, rewriteDefault } from "../../compiler-sfc";
-import { compile } from "../../compiler-dom";
+import type { Plugin } from 'vite'
+import { createFilter } from 'vite'
+import { parse, rewriteDefault } from '../../compiler-sfc'
+import { compile } from '../../compiler-dom'
 
 export default function vitePluginChibivue(): Plugin {
-  const filter = createFilter(/\.vue$/);
+  const filter = createFilter(/\.vue$/)
 
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      if (!filter(id)) return;
+      if (!filter(id)) return
 
-      const outputs = [];
-      outputs.push("import * as ChibiVue from 'chibivue'");
+      const outputs = []
+      outputs.push("import * as ChibiVue from 'chibivue'")
 
-      const { descriptor } = parse(code, { filename: id });
+      const { descriptor } = parse(code, { filename: id })
 
       // --------------------------- ここから
-      const SFC_MAIN = "_sfc_main";
+      const SFC_MAIN = '_sfc_main'
       const scriptCode = rewriteDefault(
-        descriptor.script?.content ?? "",
-        SFC_MAIN
-      );
-      outputs.push(scriptCode);
+        descriptor.script?.content ?? '',
+        SFC_MAIN,
+      )
+      outputs.push(scriptCode)
       // --------------------------- ここまで
 
-      const templateCode = compile(descriptor.template?.content ?? "", {
+      const templateCode = compile(descriptor.template?.content ?? '', {
         isBrowser: false,
-      });
-      outputs.push(templateCode);
+      })
+      outputs.push(templateCode)
 
-      outputs.push("\n");
-      outputs.push(`export default { ...${SFC_MAIN}, render }`); // ここ
+      outputs.push('\n')
+      outputs.push(`export default { ...${SFC_MAIN}, render }`) // ここ
 
-      return { code: outputs.join("\n") };
+      return { code: outputs.join('\n') }
     },
-  };
+  }
 }
 ```
 
@@ -1220,11 +1220,11 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // .
   // .
   // componentのrenderオプションをインスタンスに
-  const { render } = component;
+  const { render } = component
   if (render) {
-    instance.render = render as InternalRenderFunction;
+    instance.render = render as InternalRenderFunction
   }
-};
+}
 ```
 
 これでレンダリングができるようになっているはずです!!！
@@ -1240,7 +1240,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 スタイルも対応してしまいます。vite では css という拡張子のファイルを import することでスタイルを読み込めるようになっています。
 
 ```js
-import "app.css";
+import 'app.css'
 ```
 
 vite の仮想モジュールという機能を使って SFC から仮想的な CSS ファイルを作り、アウトプットの JS ファイルの import 文に追加する方針で実装してみます。  
@@ -1249,21 +1249,21 @@ vite では`load`と`resolve`というオプションを使って仮想モジュ
 
 ```ts
 export default function myPlugin() {
-  const virtualModuleId = "virtual:my-module";
+  const virtualModuleId = 'virtual:my-module'
 
   return {
-    name: "my-plugin", // 必須、警告やエラーで表示されます
+    name: 'my-plugin', // 必須、警告やエラーで表示されます
     resolveId(id) {
       if (id === virtualModuleId) {
-        return virtualModuleId;
+        return virtualModuleId
       }
     },
     load(id) {
       if (id === virtualModuleId) {
-        return `export const msg = "from virtual module"`;
+        return `export const msg = "from virtual module"`
       }
     },
-  };
+  }
 }
 ```
 
@@ -1271,7 +1271,7 @@ resolve に解決したいモジュールの id を任意に設定し、load で
 上記の例だと、`virtual:my-module`というファイルは実際には存在しませんが、
 
 ```ts
-import { msg } from "virtual:my-module";
+import { msg } from 'virtual:my-module'
 ```
 
 のように書くと`export const msg = "from virtual module"`が load されます。
@@ -1298,34 +1298,34 @@ export default function vitePluginChibivue(): Plugin {
     //  ,
     resolveId(id) {
       // このidは実際には存在しないパスだが、loadで仮想的にハンドリングするのでidを返してあげる (読み込み可能だということにする)
-      if (id.match(/\.vue\.css$/)) return id;
+      if (id.match(/\.vue\.css$/)) return id
 
       // ここでreturnされないidに関しては、実際にそのファイルが存在していたらそのファイルが解決されるし、存在していなければ存在しないというエラーになる
     },
     load(id) {
       // .vue.cssがloadされた (importが宣言され、読み込まれた) ときのハンドリング
       if (id.match(/\.vue\.css$/)) {
-        const filename = id.replace(/\.css$/, "");
-        const content = fs.readFileSync("." + filename, "utf-8"); // 普通にSFCファイルを取得
-        const { descriptor } = parse(content, { filename }); //  SFCをパース
+        const filename = id.replace(/\.css$/, '')
+        const content = fs.readFileSync('.' + filename, 'utf-8') // 普通にSFCファイルを取得
+        const { descriptor } = parse(content, { filename }) //  SFCをパース
 
         // contentをjoinsして結果とする。
-        const styles = descriptor.styles.map((it) => it.content).join("\n");
-        return { code: styles };
+        const styles = descriptor.styles.map(it => it.content).join('\n')
+        return { code: styles }
       }
     },
 
     transform(code, id) {
-      if (!filter(id)) return;
+      if (!filter(id)) return
 
-      const outputs = [];
-      outputs.push("import * as ChibiVue from 'chibivue'");
-      outputs.push(`import '${id}.css'`); // ${id}.cssのimport文を宣言しておく
+      const outputs = []
+      outputs.push("import * as ChibiVue from 'chibivue'")
+      outputs.push(`import '${id}.css'`) // ${id}.cssのimport文を宣言しておく
       //  ,
       //  ,
       //  ,
     },
-  };
+  }
 }
 ```
 

@@ -38,14 +38,14 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // .
 
   if (render) {
-    instance.render = render as InternalRenderFunction;
+    instance.render = render as InternalRenderFunction
   }
   // ↑ ここまでは既存実装
 
-  setCurrentInstance(instance);
-  applyOptions(instance);
-  unsetCurrentInstance();
-};
+  setCurrentInstance(instance)
+  applyOptions(instance)
+  unsetCurrentInstance()
+}
 ```
 
 Options API では this を頻繁に扱うような開発者インタフェースになっています。
@@ -53,15 +53,15 @@ Options API では this を頻繁に扱うような開発者インタフェー�
 ```ts
 const App = defineComponent({
   data() {
-    return { message: "hello" };
+    return { message: 'hello' }
   },
 
   methods: {
     greet() {
-      console.log(this.message); // こういうやつ
+      console.log(this.message) // こういうやつ
     },
   },
-});
+})
 ```
 
 この this は内部的にはコンポーネントの proxy を指すようになっていて、オプションを apply する際にこの proxy を bind しています。
@@ -70,17 +70,17 @@ const App = defineComponent({
 
 ```ts
 export function applyOptions(instance: ComponentInternalInstance) {
-  const { type: options } = instance;
-  const publicThis = instance.proxy! as any;
-  const ctx = instance.ctx;
+  const { type: options } = instance
+  const publicThis = instance.proxy! as any
+  const ctx = instance.ctx
 
-  const { methods } = options;
+  const { methods } = options
 
   if (methods) {
     for (const key in methods) {
-      const methodHandler = methods[key];
+      const methodHandler = methods[key]
       if (isFunction(methodHandler)) {
-        ctx[key] = methodHandler.bind(publicThis);
+        ctx[key] = methodHandler.bind(publicThis)
       }
     }
   }
@@ -108,22 +108,22 @@ applyOptions が実行される前には setCurrentInstance によってイン�
 ```ts
 const App = defineComponent({
   data() {
-    return { count: 0 };
+    return { count: 0 }
   },
 
   methods: {
     myMethod() {
-      this.count; // number
-      this.myComputed; // number
+      this.count // number
+      this.myComputed // number
     },
   },
 
   computed: {
     myComputed() {
-      return this.count; // number
+      return this.count // number
     },
   },
-});
+})
 ```
 
 これを実現するには少々複雑な型パズルを実装する必要があります。(たくさんジェネリクスでバケツリレーします。)
@@ -155,7 +155,7 @@ interface MethodOptions {
 ```ts
 export function defineComponent<
   D = {},
-  M extends MethodOptions = MethodOptions
+  M extends MethodOptions = MethodOptions,
 >(options: ComponentOptions<D, M>) {}
 ```
 
@@ -166,20 +166,20 @@ export function defineComponent<
 ```ts
 type ComponentPublicInstance<
   D = {},
-  M extends MethodOptions = MethodOptions
+  M extends MethodOptions = MethodOptions,
 > = {
   /** public instance が持ついろんな型 */
 } & D &
-  M;
+  M
 ```
 
 ここまでできたら、ComponentOptions の this にインスタンスの型を混ぜ込みます。
 
 ```ts
 type ComponentOptions<D = {}, M extends MethodOptions = MethodOptions> = {
-  data?: () => D;
-  methods?: M;
-} & ThisType<ComponentPublicInstance<D, M>>;
+  data?: () => D
+  methods?: M
+} & ThisType<ComponentPublicInstance<D, M>>
 ```
 
 こうしておくことで、option 中の this から data や method に定義したプロパティを推論することができます。

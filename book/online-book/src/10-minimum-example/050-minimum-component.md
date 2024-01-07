@@ -9,20 +9,20 @@
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
-  const componentRender = rootComponent.setup!();
+  const componentRender = rootComponent.setup!()
 
-  let n1: VNode | null = null;
-  let n2: VNode = null!;
+  let n1: VNode | null = null
+  let n2: VNode = null!
 
   const updateComponent = () => {
-    const n2 = componentRender();
-    patch(n1, n2, container);
-    n1 = n2;
-  };
+    const n2 = componentRender()
+    patch(n1, n2, container)
+    n1 = n2
+  }
 
-  const effect = new ReactiveEffect(updateComponent);
-  effect.run();
-};
+  const effect = new ReactiveEffect(updateComponent)
+  effect.run()
+}
 ```
 
 render 関数内にルートコンポーネントに関する情報を直接定義してしまっています。  
@@ -36,19 +36,19 @@ render 関数内にルートコンポーネントに関する情報を直接定�
 
 ```ts
 export interface ComponentInternalInstance {
-  type: Component; // 元となるユーザー定義のコンポーネント (旧 rootComponent (実際にはルートコンポーネントだけじゃないけど))
-  vnode: VNode; // 後述
-  subTree: VNode; // 旧 n1
-  next: VNode | null; // 旧 n2
-  effect: ReactiveEffect; // 旧 effect
-  render: InternalRenderFunction; // 旧 componentRender
-  update: () => void; // 旧updateComponent
-  isMounted: boolean;
+  type: Component // 元となるユーザー定義のコンポーネント (旧 rootComponent (実際にはルートコンポーネントだけじゃないけど))
+  vnode: VNode // 後述
+  subTree: VNode // 旧 n1
+  next: VNode | null // 旧 n2
+  effect: ReactiveEffect // 旧 effect
+  render: InternalRenderFunction // 旧 componentRender
+  update: () => void // 旧updateComponent
+  isMounted: boolean
 }
 
 export type InternalRenderFunction = {
-  (): VNodeChild;
-};
+  (): VNodeChild
+}
 ```
 
 このインスタンスが持つ vnode と subTree と next は少しややこしいのですが、
@@ -60,15 +60,15 @@ export type InternalRenderFunction = {
 ```ts
 const MyComponent = {
   setup() {
-    return h("p", {}, ["hello"]);
+    return h('p', {}, ['hello'])
   },
-};
+}
 
 const App = {
   setup() {
-    return h(MyComponent, {}, []);
+    return h(MyComponent, {}, [])
   },
-};
+}
 ```
 
 のように利用し、  
@@ -79,7 +79,7 @@ MyComponent のインスタンスを instance とすると、instance.vnode に�
 `~/packages/runtime-core/vnode.ts`
 
 ```ts
-export type VNodeTypes = string | typeof Text | object; // objectを追加;
+export type VNodeTypes = string | typeof Text | object // objectを追加;
 ```
 
 `~/packages/runtime-core/h.ts`
@@ -98,7 +98,7 @@ export interface VNode<HostNode = any> {
   // .
   // .
   // .
-  component: ComponentInternalInstance | null; // 追加
+  component: ComponentInternalInstance | null // 追加
 }
 ```
 
@@ -108,38 +108,38 @@ export interface VNode<HostNode = any> {
 
 ```ts
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-  const { type } = n2;
+  const { type } = n2
   if (type === Text) {
-    processText(n1, n2, container);
-  } else if (typeof type === "string") {
-    processElement(n1, n2, container);
-  } else if (typeof type === "object") {
+    processText(n1, n2, container)
+  } else if (typeof type === 'string') {
+    processElement(n1, n2, container)
+  } else if (typeof type === 'object') {
     // 分岐を追加
-    processComponent(n1, n2, container);
+    processComponent(n1, n2, container)
   } else {
     // do nothing
   }
-};
+}
 
 const processComponent = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 == null) {
-    mountComponent(n2, container);
+    mountComponent(n2, container)
   } else {
-    updateComponent(n1, n2);
+    updateComponent(n1, n2)
   }
-};
+}
 
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   // TODO:
-};
+}
 
 const updateComponent = (n1: VNode, n2: VNode) => {
   // TODO:
-};
+}
 ```
 
 では、mountComponent から見てみましょう。  
@@ -153,9 +153,9 @@ const updateComponent = (n1: VNode, n2: VNode) => {
 
 ```ts
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component;
+  const type = vnode.type as Component
 
   const instance: ComponentInternalInstance = {
     type,
@@ -166,9 +166,9 @@ export function createComponentInstance(
     update: null!,
     render: null!,
     isMounted: false,
-  };
+  }
 
-  return instance;
+  return instance
 }
 ```
 
@@ -177,10 +177,10 @@ export function createComponentInstance(
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
   // TODO: setup component
   // TODO: setup effect
-};
+}
 ```
 
 続いて setup です。これは今まで render に直接書いていた処理をここで行うようにして、変数ではなくインスタンスに保持させてしまえば OK です。
@@ -188,15 +188,15 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
 
-  const component = initialVNode.type as Component;
+  const component = initialVNode.type as Component
   if (component.setup) {
-    instance.render = component.setup() as InternalRenderFunction;
+    instance.render = component.setup() as InternalRenderFunction
   }
 
   // TODO: setup effect
-};
+}
 ```
 
 最後に、effect の形成なのですが、少し長くなりそうなので setupRenderEffect という関数にまとめてしまいます。  
@@ -205,56 +205,56 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
 
-  const component = initialVNode.type as Component;
+  const component = initialVNode.type as Component
   if (component.setup) {
-    instance.render = component.setup() as InternalRenderFunction;
+    instance.render = component.setup() as InternalRenderFunction
   }
 
-  setupRenderEffect(instance, initialVNode, container);
-};
+  setupRenderEffect(instance, initialVNode, container)
+}
 
 const setupRenderEffect = (
   instance: ComponentInternalInstance,
   initialVNode: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   const componentUpdateFn = () => {
-    const { render } = instance;
+    const { render } = instance
 
     if (!instance.isMounted) {
       // mount process
-      const subTree = (instance.subTree = normalizeVNode(render()));
-      patch(null, subTree, container);
-      initialVNode.el = subTree.el;
-      instance.isMounted = true;
+      const subTree = (instance.subTree = normalizeVNode(render()))
+      patch(null, subTree, container)
+      initialVNode.el = subTree.el
+      instance.isMounted = true
     } else {
       // patch process
-      let { next, vnode } = instance;
+      let { next, vnode } = instance
 
       if (next) {
-        next.el = vnode.el;
-        next.component = instance;
-        instance.vnode = next;
-        instance.next = null;
+        next.el = vnode.el
+        next.component = instance
+        instance.vnode = next
+        instance.next = null
       } else {
-        next = vnode;
+        next = vnode
       }
 
-      const prevTree = instance.subTree;
-      const nextTree = normalizeVNode(render());
-      instance.subTree = nextTree;
+      const prevTree = instance.subTree
+      const nextTree = normalizeVNode(render())
+      instance.subTree = nextTree
 
-      patch(prevTree, nextTree, hostParentNode(prevTree.el!)!); // ※ 1
-      next.el = nextTree.el;
+      patch(prevTree, nextTree, hostParentNode(prevTree.el!)!) // ※ 1
+      next.el = nextTree.el
     }
-  };
+  }
 
-  const effect = (instance.effect = new ReactiveEffect(componentUpdateFn));
-  const update = (instance.update = () => effect.run()); // instance.updateに登録
-  update();
-};
+  const effect = (instance.effect = new ReactiveEffect(componentUpdateFn))
+  const update = (instance.update = () => effect.run()) // instance.updateに登録
+  update()
+}
 ```
 
 ※ 1: nodeOps に親 Node を取得するための`parentNode`という関数を実装してください。
@@ -270,52 +270,52 @@ setupRenderEffect でインスタンスの update メソッドとして更新の
 
 ```ts
 const updateComponent = (n1: VNode, n2: VNode) => {
-  const instance = (n2.component = n1.component)!;
-  instance.next = n2;
-  instance.update();
-};
+  const instance = (n2.component = n1.component)!
+  instance.next = n2
+  instance.update()
+}
 ```
 
 最後に、今まで render 関数に定義していた実装は不要になるので消してしまいます。
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
-  const vnode = createVNode(rootComponent, {}, []);
-  patch(null, vnode, container);
-};
+  const vnode = createVNode(rootComponent, {}, [])
+  patch(null, vnode, container)
+}
 ```
 
 これで Component をレンダリングすることができました。試しに playground コンポーネントを作ってみてみましょう。  
 このように、コンポーネントに分割してレンダリングができるようになっているかと思います。
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const CounterComponent = {
   setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => state.count++;
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(CounterComponent, {}, []),
         h(CounterComponent, {}, []),
         h(CounterComponent, {}, []),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  
@@ -337,64 +337,64 @@ const MyComponent = {
   props: { message: { type: String } },
 
   setup(props) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+    return () => h('div', { id: 'my-app' }, [`message: ${props.message}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(MyComponent, { message: state.message }, []),
-      ]);
+      ])
   },
-});
+})
 ```
 
 これを元に ComponentInternalInstance に持たせたい情報を考えてみます。
 `props: { message: { type: String } }`のように指定された props の定義と、props の値を実際に保持するプロパティが必要なので以下のように追加します。
 
 ```ts
-export type Data = Record<string, unknown>;
+export type Data = Record<string, unknown>
 
 export interface ComponentInternalInstance {
   // .
   // .
   // .
-  propsOptions: Props; // `props: { message: { type: String } }` のようなオブジェクトを保持
+  propsOptions: Props // `props: { message: { type: String } }` のようなオブジェクトを保持
 
-  props: Data; // 実際に親から渡されたデータを保持 (今回の場合、 `{ message: "hello" }` のような感じになる)
+  props: Data // 実際に親から渡されたデータを保持 (今回の場合、 `{ message: "hello" }` のような感じになる)
 }
 ```
 
 `~/packages/runtime-core/componentProps.ts`というファイルを以下の内容で新たに作成します。
 
 ```ts
-export type Props = Record<string, PropOptions | null>;
+export type Props = Record<string, PropOptions | null>
 
 export interface PropOptions<T = any> {
-  type?: PropType<T> | true | null;
-  required?: boolean;
-  default?: null | undefined | object;
+  type?: PropType<T> | true | null
+  required?: boolean
+  default?: null | undefined | object
 }
 
-export type PropType<T> = { new (...args: any[]): T & {} };
+export type PropType<T> = { new (...args: any[]): T & {} }
 ```
 
 ユーザーがコンポーネントを実装する際のオプションにも追加します。
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>; // 追加
-  setup?: () => Function;
-  render?: Function;
-};
+  props?: Record<string, any> // 追加
+  setup?: () => Function
+  render?: Function
+}
 ```
 
 オプションから渡された props の定義を createComponentInstance でインスタンスを生成する際に propsOptions にセットします。
@@ -421,25 +421,25 @@ export function createComponentInstance(
 ```ts
 export function initProps(
   instance: ComponentInternalInstance,
-  rawProps: Data | null
+  rawProps: Data | null,
 ) {
-  const props: Data = {};
-  setFullProps(instance, rawProps, props);
-  instance.props = reactive(props);
+  const props: Data = {}
+  setFullProps(instance, rawProps, props)
+  instance.props = reactive(props)
 }
 
 function setFullProps(
   instance: ComponentInternalInstance,
   rawProps: Data | null,
-  props: Data
+  props: Data,
 ) {
-  const options = instance.propsOptions;
+  const options = instance.propsOptions
 
   if (rawProps) {
     for (let key in rawProps) {
-      const value = rawProps[key];
+      const value = rawProps[key]
       if (options && options.hasOwnProperty(key)) {
-        props[key] = value;
+        props[key] = value
       }
     }
   }
@@ -470,10 +470,10 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>;
-  setup?: (props: Record<string, any>) => Function; // propsを受け取るように
-  render?: Function;
-};
+  props?: Record<string, any>
+  setup?: (props: Record<string, any>) => Function // propsを受け取るように
+  render?: Function
+}
 ```
 
 この時点で props を子コンポーネントに渡せるようになっているはずなので playground で確認してみましょう。
@@ -483,20 +483,20 @@ const MyComponent = {
   props: { message: { type: String } },
 
   setup(props: { message: string }) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+    return () => h('div', { id: 'my-app' }, [`message: ${props.message}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(MyComponent, { message: state.message }, []),
-      ]);
+      ])
   },
-});
+})
 ```
 
 しかし、実はこれだけでは不十分で、props を変更した際に描画が更新されません。
@@ -506,24 +506,24 @@ const MyComponent = {
   props: { message: { type: String } },
 
   setup(props: { message: string }) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+    return () => h('div', { id: 'my-app' }, [`message: ${props.message}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(MyComponent, { message: state.message }, []),
-        h("button", { onClick: changeMessage }, ["change message"]),
-      ]);
+        h('button', { onClick: changeMessage }, ['change message']),
+      ])
   },
-});
+})
 ```
 
 このようなコンポーネントを動作させるために、componentProps.ts に `updateProps` を実装し、コンポーネントが update する際に実行してあげます。
@@ -533,10 +533,10 @@ const app = createApp({
 ```ts
 export function updateProps(
   instance: ComponentInternalInstance,
-  rawProps: Data | null
+  rawProps: Data | null,
 ) {
-  const { props } = instance;
-  Object.assign(props, rawProps);
+  const { props } = instance
+  Object.assign(props, rawProps)
 }
 ```
 
@@ -583,16 +583,16 @@ const setupRenderEffect = (
 `~/packages/shared/general.ts`
 
 ```ts
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+const hasOwnProperty = Object.prototype.hasOwnProperty
 export const hasOwn = (
   val: object,
-  key: string | symbol
-): key is keyof typeof val => hasOwnProperty.call(val, key);
+  key: string | symbol,
+): key is keyof typeof val => hasOwnProperty.call(val, key)
 
-const camelizeRE = /-(\w)/g;
+const camelizeRE = /-(\w)/g
 export const camelize = (str: string): string => {
-  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ""));
-};
+  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
+}
 ```
 
 componentProps.ts で camelize してあげましょう。
@@ -600,30 +600,30 @@ componentProps.ts で camelize してあげましょう。
 ```ts
 export function updateProps(
   instance: ComponentInternalInstance,
-  rawProps: Data | null
+  rawProps: Data | null,
 ) {
-  const { props } = instance;
+  const { props } = instance
   // -------------------------------------------------------------- ここ
   Object.entries(rawProps ?? {}).forEach(([key, value]) => {
-    props[camelize(key)] = value;
-  });
+    props[camelize(key)] = value
+  })
 }
 
 function setFullProps(
   instance: ComponentInternalInstance,
   rawProps: Data | null,
-  props: Data
+  props: Data,
 ) {
-  const options = instance.propsOptions;
+  const options = instance.propsOptions
 
   if (rawProps) {
     for (let key in rawProps) {
-      const value = rawProps[key];
+      const value = rawProps[key]
       // -------------------------------------------------------------- ここ
       // kebab -> camel
-      let camelKey;
+      let camelKey
       if (options && hasOwn(options, (camelKey = camelize(key)))) {
-        props[camelKey] = value;
+        props[camelKey] = value
       }
     }
   }
@@ -637,24 +637,24 @@ const MyComponent = {
   props: { someMessage: { type: String } },
 
   setup(props: { someMessage: string }) {
-    return () => h("div", {}, [`someMessage: ${props.someMessage}`]);
+    return () => h('div', {}, [`someMessage: ${props.someMessage}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
-        h(MyComponent, { "some-message": state.message }, []),
-        h("button", { onClick: changeMessage }, ["change message"]),
-      ]);
+      h('div', { id: 'my-app' }, [
+        h(MyComponent, { 'some-message': state.message }, []),
+        h('button', { onClick: changeMessage }, ['change message']),
+      ])
   },
-});
+})
 ```
 
 ## Emits
@@ -670,35 +670,35 @@ const MyComponent: Component = {
 
   setup(props: any, { emit }: any) {
     return () =>
-      h("div", {}, [
-        h("p", {}, [`someMessage: ${props.someMessage}`]),
-        h("button", { onClick: () => emit("click:change-message") }, [
-          "change message",
+      h('div', {}, [
+        h('p', {}, [`someMessage: ${props.someMessage}`]),
+        h('button', { onClick: () => emit('click:change-message') }, [
+          'change message',
         ]),
-      ]);
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(
           MyComponent,
           {
-            "some-message": state.message,
-            "onClick:change-message": changeMessage,
+            'some-message': state.message,
+            'onClick:change-message': changeMessage,
           },
-          []
+          [],
         ),
-      ]);
+      ])
   },
-});
+})
 ```
 
 props の時と同じように、`~/packages/runtime-core/componentEmits.ts`というファイルを作成してそこに実装していきます。
@@ -713,13 +713,13 @@ export function emit(
   event: string,
   ...rawArgs: any[]
 ) {
-  const props = instance.vnode.props || {};
-  let args = rawArgs;
+  const props = instance.vnode.props || {}
+  let args = rawArgs
 
   let handler =
-    props[toHandlerKey(event)] || props[toHandlerKey(camelize(event))];
+    props[toHandlerKey(event)] || props[toHandlerKey(camelize(event))]
 
-  if (handler) handler(...args);
+  if (handler) handler(...args)
 }
 ```
 
@@ -727,10 +727,9 @@ export function emit(
 
 ```ts
 export const capitalize = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1);
+  str.charAt(0).toUpperCase() + str.slice(1)
 
-export const toHandlerKey = (str: string) =>
-  str ? `on${capitalize(str)}` : ``;
+export const toHandlerKey = (str: string) => (str ? `on${capitalize(str)}` : ``)
 ```
 
 `~/packages/runtime-core/component.ts`
@@ -740,23 +739,23 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  emit: (event: string, ...args: any[]) => void;
+  emit: (event: string, ...args: any[]) => void
 }
 
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component;
+  const type = vnode.type as Component
 
   const instance: ComponentInternalInstance = {
     // .
     // .
     // .
     emit: null!, // to be set immediately
-  };
+  }
 
-  instance.emit = emit.bind(null, instance);
-  return instance;
+  instance.emit = emit.bind(null, instance)
+  return instance
 }
 ```
 
@@ -766,13 +765,13 @@ export function createComponentInstance(
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>;
+  props?: Record<string, any>
   setup?: (
     props: Record<string, any>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function; // ctx.emitを受け取れるように
-  render?: Function;
-};
+    ctx: { emit: (event: string, ...args: any[]) => void },
+  ) => Function // ctx.emitを受け取れるように
+  render?: Function
+}
 ```
 
 ```ts

@@ -11,23 +11,23 @@ https://ja.vuejs.org/guide/essentials/event-handling.html#event-modifiers
 今回は以下のような開発者インターフェースを目指してみましょう。
 
 ```ts
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const inputText = ref("");
+    const inputText = ref('')
 
-    const buffer = ref("");
+    const buffer = ref('');
     const handleInput = (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      buffer.value = target.value;
-    };
+      const target = e.target as HTMLInputElement
+      buffer.value = target.value
+    }
     const submit = () => {
-      inputText.value = buffer.value;
-      buffer.value = "";
+      inputText.value = buffer.value
+      buffer.value = ''
     };
 
-    return { inputText, buffer, handleInput,fun submit };
+    return { inputText, buffer, handleInput,fun submit }
   },
 
   template: `<div>
@@ -42,9 +42,9 @@ const App = defineComponent({
 </div>`,
 });
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 特に、以下の部分に注目してください。
@@ -65,11 +65,11 @@ app.mount("#app");
 
 ```ts
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE;
-  name: string;
-  exp: ExpressionNode | undefined;
-  arg: ExpressionNode | undefined;
-  modifiers: string[]; // ここを追加
+  type: NodeTypes.DIRECTIVE
+  name: string
+  exp: ExpressionNode | undefined
+  arg: ExpressionNode | undefined
+  modifiers: string[] // ここを追加
 }
 ```
 
@@ -80,12 +80,12 @@ export interface DirectiveNode extends Node {
 ```ts
 function parseAttribute(
   context: ParserContext,
-  nameSet: Set<string>
+  nameSet: Set<string>,
 ): AttributeNode | DirectiveNode {
   // .
   // .
   // .
-  const modifiers = match[3] ? match[3].slice(1).split(".") : []; // match 結果から修飾子を取り出す
+  const modifiers = match[3] ? match[3].slice(1).split('.') : [] // match 結果から修飾子を取り出す
   return {
     type: NodeTypes.DIRECTIVE,
     name: dirName,
@@ -98,7 +98,7 @@ function parseAttribute(
     loc,
     arg,
     modifiers, // return に含める
-  };
+  }
 }
 ```
 
@@ -134,8 +134,8 @@ export type DirectiveTransform = (
   dir: DirectiveNode,
   node: ElementNode,
   context: TransformContext,
-  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult // 追加
-) => DirectiveTransformResult;
+  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult, // 追加
+) => DirectiveTransformResult
 ```
 
 augmentor というものを追加してみました。  
@@ -148,16 +148,16 @@ compiler-dom の方では、compiler-core で実装した transformer をラッ�
 
 // compiler-dom側の実装
 
-import { transformOn as baseTransformOn } from "compiler-core";
+import { transformOn as baseTransformOn } from 'compiler-core'
 
 export const transformOn: DirectiveTransform = (dir, node, context) => {
   return baseTransformOn(dir, node, context, () => {
     /** ここに compiler-dom の独自の実装 */
     return {
       /** */
-    };
-  });
-};
+    }
+  })
+}
 ```
 
 そして、この compiler-dom 側で実装した `transformOn` を compiler のオプションとして渡してあげれば OK です。  
@@ -181,21 +181,21 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 ```ts
 const isEventModifier = makeMap(
   // event propagation management
-  `stop,prevent,self`
-);
+  `stop,prevent,self`,
+)
 
 const resolveModifiers = (modifiers: string[]) => {
-  const eventModifiers = [];
+  const eventModifiers = []
 
   for (let i = 0; i < modifiers.length; i++) {
-    const modifier = modifiers[i];
+    const modifier = modifiers[i]
     if (isEventModifier(modifier)) {
-      eventModifiers.push(modifier);
+      eventModifiers.push(modifier)
     }
   }
 
-  return { eventModifiers };
-};
+  return { eventModifiers }
+}
 ```
 
 eventModifiers を抽出できたところでこれをどう使いましょうか。
@@ -204,30 +204,30 @@ eventModifiers を抽出できたところでこれをどう使いましょう�
 ```ts
 // runtime-dom/runtimeHelpers.ts
 
-export const V_ON_WITH_MODIFIERS = Symbol();
+export const V_ON_WITH_MODIFIERS = Symbol()
 ```
 
 ```ts
 export const transformOn: DirectiveTransform = (dir, node, context) => {
-  return baseTransform(dir, node, context, (baseResult) => {
-    const { modifiers } = dir;
-    if (!modifiers.length) return baseResult;
+  return baseTransform(dir, node, context, baseResult => {
+    const { modifiers } = dir
+    if (!modifiers.length) return baseResult
 
-    let { key, value: handlerExp } = baseResult.props[0];
-    const { eventModifiers } = resolveModifiers(modifiers);
+    let { key, value: handlerExp } = baseResult.props[0]
+    const { eventModifiers } = resolveModifiers(modifiers)
 
     if (eventModifiers.length) {
       handlerExp = createCallExpression(context.helper(V_ON_WITH_MODIFIERS), [
         handlerExp,
         JSON.stringify(eventModifiers),
-      ]);
+      ])
     }
 
     return {
       props: [createObjectProperty(key, handlerExp)],
-    };
-  });
-};
+    }
+  })
+}
 ```
 
 これで transform 側の実装は概ね終わりです。
@@ -244,20 +244,20 @@ runtime-dom/directives/vOn.ts に実装を進めていきます。
 
 ```ts
 const modifierGuards: Record<string, (e: Event) => void | boolean> = {
-  stop: (e) => e.stopPropagation(),
-  prevent: (e) => e.preventDefault(),
-  self: (e) => e.target !== e.currentTarget,
-};
+  stop: e => e.stopPropagation(),
+  prevent: e => e.preventDefault(),
+  self: e => e.target !== e.currentTarget,
+}
 
 export const withModifiers = (fn: Function, modifiers: string[]) => {
   return (event: Event, ...args: unknown[]) => {
     for (let i = 0; i < modifiers.length; i++) {
-      const guard = modifierGuards[modifiers[i]];
-      if (guard && guard(event)) return;
+      const guard = modifierGuards[modifiers[i]]
+      if (guard && guard(event)) return
     }
-    return fn(event, ...args);
-  };
-};
+    return fn(event, ...args)
+  }
+}
 ```
 
 これで実装はおしまいです。
@@ -276,9 +276,9 @@ export const withModifiers = (fn: Function, modifiers: string[]) => {
 修飾子を以下のように分類してみましょう。
 
 ```ts
-const keyModifiers = [];
-const nonKeyModifiers = [];
-const eventOptionModifiers = [];
+const keyModifiers = []
+const nonKeyModifiers = []
+const eventOptionModifiers = []
 ```
 
 あとはこれに必要な map を生成して、resolveModifiers でこれらに分類できれば OK です。

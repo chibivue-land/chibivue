@@ -14,14 +14,14 @@ In the current implementation, patchChildren is implemented as follows:
 
 ```ts
 const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
-  const c1 = n1.children as VNode[];
-  const c2 = n2.children as VNode[];
+  const c1 = n1.children as VNode[]
+  const c2 = n2.children as VNode[]
 
   for (let i = 0; i < c2.length; i++) {
-    const child = (c2[i] = normalizeVNode(c2[i]));
-    patch(c1[i], child, container);
+    const child = (c2[i] = normalizeVNode(c2[i]))
+    patch(c1[i], child, container)
   }
-};
+}
 ```
 
 This loops based on the length of c2 (i.e., the next vnode).
@@ -39,28 +39,28 @@ When it becomes like this, the first to third elements are simply updated, and t
 Let's see it in action.
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ list: ["a", "b", "c", "d"] });
+    const state = reactive({ list: ['a', 'b', 'c', 'd'] })
     const updateList = () => {
-      state.list = ["e", "f", "g"];
-    };
+      state.list = ['e', 'f', 'g']
+    }
 
     return () =>
-      h("div", { id: "app" }, [
+      h('div', { id: 'app' }, [
         h(
-          "ul",
+          'ul',
           {},
-          state.list.map((item) => h("li", {}, [item]))
+          state.list.map(item => h('li', {}, [item])),
         ),
-        h("button", { onClick: updateList }, ["update"]),
-      ]);
+        h('button', { onClick: updateList }, ['update']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 When you click the update button, it should look like this:
@@ -95,19 +95,19 @@ And the function that implements these is `patchKeyedChildren`. (Let's search fo
 The approach is to first generate a map of keys and indexes for the new nodes.
 
 ```ts
-let i = 0;
-const l2 = c2.length;
-const e1 = c1.length - 1; // end index of prev node
-const e2 = l2 - 1; // end index of next node
+let i = 0
+const l2 = c2.length
+const e1 = c1.length - 1 // end index of prev node
+const e2 = l2 - 1 // end index of next node
 
-const s1 = i; // start index of prev node
-const s2 = i; // start index of next node
+const s1 = i // start index of prev node
+const s2 = i // start index of next node
 
-const keyToNewIndexMap: Map<string | number | symbol, number> = new Map();
+const keyToNewIndexMap: Map<string | number | symbol, number> = new Map()
 for (i = s2; i <= e2; i++) {
-  const nextChild = (c2[i] = normalizeVNode(c2[i]));
+  const nextChild = (c2[i] = normalizeVNode(c2[i]))
   if (nextChild.key != null) {
-    keyToNewIndexMap.set(nextChild.key, i);
+    keyToNewIndexMap.set(nextChild.key, i)
   }
 }
 ```
@@ -129,29 +129,29 @@ At this point, if there are new elements to be mounted or if there is a need to 
 Roughly speaking, it looks like this ↓ (I'm skipping a lot of details. Please read vuejs/core's renderer.ts for more details.)
 
 ```ts
-const toBePatched = e2 + 1;
-const newIndexToOldIndexMap = new Array(toBePatched); // map of new index to old index
-for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0;
+const toBePatched = e2 + 1
+const newIndexToOldIndexMap = new Array(toBePatched) // map of new index to old index
+for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
 
 // Loop based on e1 (old len)
 for (i = 0; i <= e1; i++) {
-  const prevChild = c1[i];
-  newIndex = keyToNewIndexMap.get(prevChild.key);
+  const prevChild = c1[i]
+  newIndex = keyToNewIndexMap.get(prevChild.key)
   if (newIndex === undefined) {
     // If it does not exist in the new one, unmount it
-    unmount(prevChild);
+    unmount(prevChild)
   } else {
-    newIndexToOldIndexMap[newIndex] = i + 1; // Form the map
-    patch(prevChild, c2[newIndex] as VNode, container); // Patch
+    newIndexToOldIndexMap[newIndex] = i + 1 // Form the map
+    patch(prevChild, c2[newIndex] as VNode, container) // Patch
   }
 }
 
 for (i = toBePatched - 1; i >= 0; i--) {
-  const nextIndex = i;
-  const nextChild = c2[nextIndex] as VNode;
+  const nextIndex = i
+  const nextChild = c2[nextIndex] as VNode
   if (newIndexToOldIndexMap[i] === 0) {
     // If the map does not exist (remains the initial value), it means it needs to be newly mounted. (In fact, it exists and is not in the old one)
-    patch(null, nextChild, container, anchor);
+    patch(null, nextChild, container, anchor)
   }
 }
 ```
@@ -167,14 +167,14 @@ Currently, we only update each element based on key matching, so if an element i
 First, let's talk about how to move elements. We specify the anchor in the `insert` function of `nodeOps`. The anchor, as the name suggests, is an anchor point, and if you look at the `insert` method implemented in runtime-dom, you can see that it is implemented with the `insertBefore` method.
 
 ```ts
-export const nodeOps: Omit<RendererOptions, "patchProp"> = {
+export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
   // .
   // .
   // .
   insert: (child, parent, anchor) => {
-    parent.insertBefore(child, anchor || null);
+    parent.insertBefore(child, anchor || null)
   },
-};
+}
 ```
 
 By passing the node as the second argument to this method, the node will be inserted right before that node.  
@@ -222,44 +222,44 @@ By the way, here's an example function:
 
 ```ts
 function getSequence(arr: number[]): number[] {
-  const p = arr.slice();
-  const result = [0];
-  let i, j, u, v, c;
-  const len = arr.length;
+  const p = arr.slice()
+  const result = [0]
+  let i, j, u, v, c
+  const len = arr.length
   for (i = 0; i < len; i++) {
-    const arrI = arr[i];
+    const arrI = arr[i]
     if (arrI !== 0) {
-      j = result[result.length - 1];
+      j = result[result.length - 1]
       if (arr[j] < arrI) {
-        p[i] = j;
-        result.push(i);
-        continue;
+        p[i] = j
+        result.push(i)
+        continue
       }
-      u = 0;
-      v = result.length - 1;
+      u = 0
+      v = result.length - 1
       while (u < v) {
-        c = (u + v) >> 1;
+        c = (u + v) >> 1
         if (arr[result[c]] < arrI) {
-          u = c + 1;
+          u = c + 1
         } else {
-          v = c;
+          v = c
         }
       }
       if (arrI < arr[result[u]]) {
         if (u > 0) {
-          p[i] = result[u - 1];
+          p[i] = result[u - 1]
         }
-        result[u] = i;
+        result[u] = i
       }
     }
   }
-  u = result.length;
-  v = result[u - 1];
+  u = result.length
+  v = result[u - 1]
   while (u-- > 0) {
-    result[u] = v;
-    v = p[v];
+    result[u] = v
+    v = p[v]
   }
-  return result;
+  return result
 }
 ```
 
@@ -272,19 +272,19 @@ Here's a concrete example to make it easier to understand.
 Let's consider two arrays of VNodes, `c1` and `c2`. `c1` represents the state before the update, and `c2` represents the state after the update. Each VNode has a `key` attribute (in reality, it holds more information).
 
 ```js
-c1 = [{ key: "a" }, { key: "b" }, { key: "c" }, { key: "d" }];
-c2 = [{ key: "a" }, { key: "b" }, { key: "d" }, { key: "c" }];
+c1 = [{ key: 'a' }, { key: 'b' }, { key: 'c' }, { key: 'd' }]
+c2 = [{ key: 'a' }, { key: 'b' }, { key: 'd' }, { key: 'c' }]
 ```
 
 First, let's generate `keyToNewIndexMap` based on `c2` (a map of keys to indices in `c2`).
 ※ This is the code introduced earlier.
 
 ```ts
-const keyToNewIndexMap: Map<string | number | symbol, number> = new Map();
+const keyToNewIndexMap: Map<string | number | symbol, number> = new Map()
 for (i = 0; i <= e2; i++) {
-  const nextChild = (c2[i] = normalizeVNode(c2[i]));
+  const nextChild = (c2[i] = normalizeVNode(c2[i]))
   if (nextChild.key != null) {
-    keyToNewIndexMap.set(nextChild.key, i);
+    keyToNewIndexMap.set(nextChild.key, i)
   }
 }
 
@@ -297,9 +297,9 @@ Next, let's generate `newIndexToOldIndexMap`.
 ```ts
 // Initialization
 
-const toBePatched = c2.length;
-const newIndexToOldIndexMap = new Array(toBePatched); // Map of new indices to old indices
-for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0;
+const toBePatched = c2.length
+const newIndexToOldIndexMap = new Array(toBePatched) // Map of new indices to old indices
+for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
 
 // newIndexToOldIndexMap = [0, 0, 0, 0]
 ```
@@ -309,14 +309,14 @@ for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0;
 
 // Loop based on e1 (old len)
 for (i = 0; i <= e1; i++) {
-  const prevChild = c1[i];
-  newIndex = keyToNewIndexMap.get(prevChild.key);
+  const prevChild = c1[i]
+  newIndex = keyToNewIndexMap.get(prevChild.key)
   if (newIndex === undefined) {
     // If it doesn't exist in the new array, unmount it
-    unmount(prevChild);
+    unmount(prevChild)
   } else {
-    newIndexToOldIndexMap[newIndex] = i + 1; // Form the map
-    patch(prevChild, c2[newIndex] as VNode, container); // Perform patch
+    newIndexToOldIndexMap[newIndex] = i + 1 // Form the map
+    patch(prevChild, c2[newIndex] as VNode, container) // Perform patch
   }
 }
 
@@ -326,27 +326,27 @@ for (i = 0; i <= e1; i++) {
 Then, obtain the longest increasing subsequence from the obtained `newIndexToOldIndexMap` (new implementation starts here).
 
 ```ts
-const increasingNewIndexSequence = getSequence(newIndexToOldIndexMap);
+const increasingNewIndexSequence = getSequence(newIndexToOldIndexMap)
 // increasingNewIndexSequence  = [0, 1, 3]
 ```
 
 ```ts
-j = increasingNewIndexSequence.length - 1;
+j = increasingNewIndexSequence.length - 1
 for (i = toBePatched - 1; i >= 0; i--) {
-  const nextIndex = i;
-  const nextChild = c2[nextIndex] as VNode;
+  const nextIndex = i
+  const nextChild = c2[nextIndex] as VNode
   const anchor =
-    nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor; // ※ parentAnchor はとりあえず引数で受け取った anchor だと思ってもらえれば。
+    nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor // ※ parentAnchor はとりあえず引数で受け取った anchor だと思ってもらえれば。
 
   if (newIndexToOldIndexMap[i] === 0) {
     // newIndexToOldIndexMap は初期値が 0 なので、0 の場合は古い要素への map が存在しない、つまり新しい要素だというふうに判定している。
-    patch(null, nextChild, container, anchor);
+    patch(null, nextChild, container, anchor)
   } else {
     // i と increasingNewIndexSequence[j] が一致しなければ move する
     if (j < 0 || i !== increasingNewIndexSequence[j]) {
-      move(nextChild, container, anchor);
+      move(nextChild, container, anchor)
     } else {
-      j--;
+      j--
     }
   }
 }

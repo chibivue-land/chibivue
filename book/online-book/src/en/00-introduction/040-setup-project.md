@@ -121,8 +121,8 @@ Contents of packages/index.ts
 
 ```ts
 export const helloChibivue = () => {
-  console.log("Hello chibivue!");
-};
+  console.log('Hello chibivue!')
+}
 ```
 
 ### ### Building the Playground Side
@@ -154,15 +154,15 @@ Contents of src/main.ts
 ※ For now, there will be an error after "from," but we will address this in the upcoming steps, so it's not a problem.
 
 ```ts
-import { helloChibivue } from "chibivue";
+import { helloChibivue } from 'chibivue'
 
-helloChibivue();
+helloChibivue()
 ```
 
 Modify index.html as follows.
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -187,7 +187,7 @@ touch vite.config.js
 Contents of vite.config.js
 
 ```ts
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   resolve: {
@@ -195,7 +195,7 @@ export default defineConfig({
       chibivue: `${process.cwd()}/../../packages`,
     },
   },
-});
+})
 ```
 
 Modify tsconfig.json as follows.
@@ -206,10 +206,7 @@ Modify tsconfig.json as follows.
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    "lib": ["ESNext", "DOM"],
     "moduleResolution": "Node",
     "strict": true,
     "resolveJsonModule": true,
@@ -221,14 +218,10 @@ Modify tsconfig.json as follows.
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "paths": {
-      "chibivue": [
-        "../../packages"
-      ],
+      "chibivue": ["../../packages"]
     }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
 ```
 

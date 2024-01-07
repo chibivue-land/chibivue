@@ -24,37 +24,37 @@ What we need to be careful about here is that Vue.js has multiple developer inte
 ```
 
 ```ts
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
 
-const app = createApp(App);
-app.mount("#app");
+const app = createApp(App)
+app.mount('#app')
 ```
 
 2. Use the template option
 
 ```ts
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
 const app = createApp({
-  template: "<div>Hello world.</div>",
-});
+  template: '<div>Hello world.</div>',
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 3. Use the render option and h function
 
 ```ts
-import { createApp, h } from "vue";
+import { createApp, h } from 'vue'
 
 const app = createApp({
   render() {
-    return h("div", {}, ["Hello world."]);
+    return h('div', {}, ['Hello world.'])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 There are other options as well, but let's consider these three developer interfaces. Which one is closest to raw JavaScript? The answer is "using the render option and h function" (option 3). Option 1 requires the implementation of the SFC compiler and bundler, and option 2 requires compiling the HTML passed to the template (converting it to JavaScript code) in order to work.
@@ -72,15 +72,15 @@ Although we aim for the form of option 3, we still don't understand the h functi
 Image ↓
 
 ```ts
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
 const app = createApp({
   render() {
-    return "Hello world.";
+    return 'Hello world.'
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ## Implementing it right away
@@ -89,23 +89,23 @@ Let's create the createApp function in `~/packages/index.ts`. (We will remove he
 
 ```ts
 export type Options = {
-  render: () => string;
-};
+  render: () => string
+}
 
 export type App = {
-  mount: (selector: string) => void;
-};
+  mount: (selector: string) => void
+}
 
 export const createApp = (options: Options): App => {
   return {
-    mount: (selector) => {
-      const root = document.querySelector(selector);
+    mount: selector => {
+      const root = document.querySelector(selector)
       if (root) {
-        root.innerHTML = options.render();
+        root.innerHTML = options.render()
       }
     },
-  };
-};
+  }
+}
 ```
 
 It's very simple. Let's try it in the playground.
@@ -113,15 +113,15 @@ It's very simple. Let's try it in the playground.
 `~/examples/playground/src/main.ts`
 
 ```ts
-import { createApp } from "chibivue";
+import { createApp } from 'chibivue'
 
 const app = createApp({
   render() {
-    return "Hello world.";
+    return 'Hello world.'
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 We were able to display the message on the screen! Well done!
@@ -182,14 +182,14 @@ As mentioned earlier, Vue.js separates the parts that depend on the DOM from the
 // This is the code from earlier
 export const createApp = (options: Options): App => {
   return {
-    mount: (selector) => {
-      const root = document.querySelector(selector);
+    mount: selector => {
+      const root = document.querySelector(selector)
       if (root) {
-        root.innerHTML = options.render(); // Rendering
+        root.innerHTML = options.render() // Rendering
       }
     },
-  };
-};
+  }
+}
 ```
 
 At this point, the code is short and not complex at all, so it seems fine at first glance. However, it will become much more complex as we write the patch rendering logic for the Virtual DOM in the future. In Vue.js, this part responsible for rendering is separated as "renderer". That is "runtime-core/renderer.ts". When it comes to rendering, it is easy to imagine that it depends on the API (document) that controls the DOM in the browser in an SPA (creating elements, setting text, etc.). Therefore, in order to separate this part that depends on the DOM from the core rendering logic of Vue.js, some tricks have been made. Here's how it works:
@@ -207,11 +207,11 @@ First, implement the interface for the object used for node (not limited to DOM)
 
 ```ts
 export interface RendererOptions<HostNode = RendererNode> {
-  setElementText(node: HostNode, text: string): void;
+  setElementText(node: HostNode, text: string): void
 }
 
 export interface RendererNode {
-  [key: string]: any;
+  [key: string]: any
 }
 
 export interface RendererElement extends RendererNode {}
@@ -225,30 +225,30 @@ Implement the renderer factory function in this file, which takes `RendererOptio
 ```ts
 export type RootRenderFunction<HostElement = RendererElement> = (
   message: string,
-  container: HostElement
-) => void;
+  container: HostElement,
+) => void
 
 export function createRenderer(options: RendererOptions) {
-  const { setElementText: hostSetElementText } = options;
+  const { setElementText: hostSetElementText } = options
 
   const render: RootRenderFunction = (message, container) => {
-    hostSetElementText(container, message); // In this case, we are simply inserting the message, so the implementation is like this
-  };
+    hostSetElementText(container, message) // In this case, we are simply inserting the message, so the implementation is like this
+  }
 
-  return { render };
+  return { render }
 }
 ```
 
 Next, implement the `nodeOps` in `runtime-dom/nodeOps`.
 
 ```ts
-import { RendererOptions } from "../runtime-core";
+import { RendererOptions } from '../runtime-core'
 
 export const nodeOps: RendererOptions<Node> = {
   setElementText(node, text) {
-    node.textContent = text;
+    node.textContent = text
   },
-};
+}
 ```
 
 There is nothing particularly difficult here.
@@ -256,10 +256,10 @@ There is nothing particularly difficult here.
 Now, let's complete the renderer in `runtime-dom/index.ts`.
 
 ```ts
-import { createRenderer } from "../runtime-core";
-import { nodeOps } from "./nodeOps";
+import { createRenderer } from '../runtime-core'
+import { nodeOps } from './nodeOps'
 
-const { render } = createRenderer(nodeOps);
+const { render } = createRenderer(nodeOps)
 ```
 
 With this, the refactoring of the renderer is complete.
@@ -287,30 +287,30 @@ However, it's a simple task. We just need to implement the factory function for 
 ```ts
 // ~/packages/runtime-core apiCreateApp.ts
 
-import { Component } from "./component";
-import { RootRenderFunction } from "./renderer";
+import { Component } from './component'
+import { RootRenderFunction } from './renderer'
 
 export interface App<HostElement = any> {
-  mount(rootContainer: HostElement | string): void;
+  mount(rootContainer: HostElement | string): void
 }
 
 export type CreateAppFunction<HostElement> = (
-  rootComponent: Component
-) => App<HostElement>;
+  rootComponent: Component,
+) => App<HostElement>
 
 export function createAppAPI<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
     const app: App = {
       mount(rootContainer: HostElement) {
-        const message = rootComponent.render!();
-        render(message, rootContainer);
+        const message = rootComponent.render!()
+        render(message, rootContainer)
       },
-    };
+    }
 
-    return app;
-  };
+    return app
+  }
 }
 ```
 
@@ -321,23 +321,23 @@ import {
   CreateAppFunction,
   createAppAPI,
   createRenderer,
-} from "../runtime-core";
-import { nodeOps } from "./nodeOps";
+} from '../runtime-core'
+import { nodeOps } from './nodeOps'
 
-const { render } = createRenderer(nodeOps);
-const _createApp = createAppAPI(render);
+const { render } = createRenderer(nodeOps)
+const _createApp = createAppAPI(render)
 
 export const createApp = ((...args) => {
-  const app = _createApp(...args);
-  const { mount } = app;
+  const app = _createApp(...args)
+  const { mount } = app
   app.mount = (selector: string) => {
-    const container = document.querySelector(selector);
-    if (!container) return;
-    mount(container);
-  };
+    const container = document.querySelector(selector)
+    if (!container) return
+    mount(container)
+  }
 
-  return app;
-}) as CreateAppFunction<Element>;
+  return app
+}) as CreateAppFunction<Element>
 ```
 
 I moved the types to `~/packages/runtime-core/component.ts`, but that's not important, so please refer to the source code (it's just aligning with the original Vue.js).

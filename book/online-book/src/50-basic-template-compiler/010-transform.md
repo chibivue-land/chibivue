@@ -11,11 +11,11 @@ Minimum Example 部門でやったところから少し時間が空いてしま�
 ```ts
 export function baseCompile(
   template: string,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
-  const ast = baseParse(template.trim());
-  const code = generate(ast, option);
-  return code;
+  const ast = baseParse(template.trim())
+  const code = generate(ast, option)
+  return code
 }
 ```
 
@@ -29,12 +29,12 @@ https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/pack
 ```ts
 export function baseCompile(
   template: string,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
-  const ast = baseParse(template.trim());
-  transform(ast);
-  const code = generate(ast, option);
-  return code;
+  const ast = baseParse(template.trim())
+  transform(ast)
+  const code = generate(ast, option)
+  return code
 }
 ```
 
@@ -61,13 +61,13 @@ Vue.js のテンプレートコンパイラは、Template を解析した結果�
 
 ```ts
 interface ElementNode {
-  tag: string;
-  props: object /** 省略 */;
-  children: (ElementNode | TextNode | InterpolationNode)[];
+  tag: string
+  props: object /** 省略 */
+  children: (ElementNode | TextNode | InterpolationNode)[]
 }
 
 interface TextNode {
-  content: string;
+  content: string
 }
 ```
 
@@ -83,23 +83,23 @@ interface TextNode {
 以下のようなものだと思います。
 
 ```ts
-h("p", {}, ["hello"]);
+h('p', {}, ['hello'])
 ```
 
 これを表す AST だということです。つまり、生成されるべき JavaScript を表現するための AST で、概ね以下のようなオブジェクトです。
 
 ```ts
 interface VNodeCall {
-  tag: string;
-  props: PropsExpression;
+  tag: string
+  props: PropsExpression
   children:
     | TemplateChildNode[] // multiple children
     | TemplateTextChildNode // single text child
-    | undefined;
+    | undefined
 }
 
-type PropsExpression = ObjectExpression | CallExpression | ExpressionNode;
-type TemplateChildNode = ElementNode | InterpolationNode | TextNode;
+type PropsExpression = ObjectExpression | CallExpression | ExpressionNode
+type TemplateChildNode = ElementNode | InterpolationNode | TextNode
 ```
 
 ```json
@@ -131,45 +131,45 @@ https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/pack
 
 ```ts
 export interface SimpleExpressionNode extends Node {
-  type: NodeTypes.SIMPLE_EXPRESSION;
-  content: string;
-  isStatic: boolean;
-  identifiers?: string[];
+  type: NodeTypes.SIMPLE_EXPRESSION
+  content: string
+  isStatic: boolean
+  identifiers?: string[]
 }
 
 // h関数をcallしている式を表すNodeです。
 // `h("p", { class: 'message'}, ["hello"])` のようなものを想定しています。
 export interface VNodeCall extends Node {
-  type: NodeTypes.VNODE_CALL;
-  tag: string | symbol;
-  props: ObjectExpression | undefined; // NOTE: ソースコードでは PropsExpression として実装しています (今後拡張があるので)
+  type: NodeTypes.VNODE_CALL
+  tag: string | symbol
+  props: ObjectExpression | undefined // NOTE: ソースコードでは PropsExpression として実装しています (今後拡張があるので)
   children:
     | TemplateChildNode[] // multiple children
     | TemplateTextChildNode
-    | undefined;
+    | undefined
 }
 
 export type JSChildNode =
   | VNodeCall
   | ObjectExpression
   | ArrayExpression
-  | ExpressionNode;
+  | ExpressionNode
 
 // JavaScript の Object を想定しているNodeです。 VNodeCall の props などが持つことになります。
 export interface ObjectExpression extends Node {
-  type: NodeTypes.JS_OBJECT_EXPRESSION;
-  properties: Array<Property>;
+  type: NodeTypes.JS_OBJECT_EXPRESSION
+  properties: Array<Property>
 }
 export interface Property extends Node {
-  type: NodeTypes.JS_PROPERTY;
-  key: ExpressionNode;
-  value: JSChildNode;
+  type: NodeTypes.JS_PROPERTY
+  key: ExpressionNode
+  value: JSChildNode
 }
 
 // JavaScript の Array を想定しているNodeです。 VNodeCall の children などが持つことになります。
 export interface ArrayExpression extends Node {
-  type: NodeTypes.JS_ARRAY_EXPRESSION;
-  elements: Array<string | Node>;
+  type: NodeTypes.JS_ARRAY_EXPRESSION
+  elements: Array<string | Node>
 }
 ```
 
@@ -182,8 +182,8 @@ transformer の実装をしていく前に設計についてです。
 ```ts
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,
-  context: TransformContext
-) => void | (() => void) | (() => void)[];
+  context: TransformContext,
+) => void | (() => void) | (() => void)[]
 
 // TODO:
 // export type DirectiveTransform = (
@@ -191,7 +191,7 @@ export type NodeTransform = (
 //   node: ElementNode,
 //   context: TransformContext,
 // ) => DirectiveTransformResult;
-export type DirectiveTransform = Function;
+export type DirectiveTransform = Function
 ```
 
 DirectiveTransform の方はのちのチャプターのディレクティブを実装していくところで取り上げるのでとりあえず Function というふうにしておきます。  
@@ -232,9 +232,9 @@ DirectiveTransform <|.. other_directive_transformers
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
-  currentNode: RootNode | TemplateChildNode | null;
-  parent: ParentNode | null;
-  childIndex: number;
+  currentNode: RootNode | TemplateChildNode | null
+  parent: ParentNode | null
+  childIndex: number
 }
 ```
 
@@ -247,8 +247,8 @@ export interface TransformContext extends Required<TransformOptions> {
 
 ```ts
 export function transform(root: RootNode, options: TransformOptions) {
-  const context = createTransformContext(root, options);
-  traverseNode(root, context);
+  const context = createTransformContext(root, options)
+  traverseNode(root, context)
 }
 ```
 
@@ -259,58 +259,58 @@ traverseNode では、基本的には context に保存してある nodeTransfor
 ```ts
 export function traverseNode(
   node: RootNode | TemplateChildNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
-  context.currentNode = node;
+  context.currentNode = node
 
-  const { nodeTransforms } = context;
-  const exitFns = []; // transform後に行いたい処理
+  const { nodeTransforms } = context
+  const exitFns = [] // transform後に行いたい処理
   for (let i = 0; i < nodeTransforms.length; i++) {
-    const onExit = nodeTransforms[i](node, context);
+    const onExit = nodeTransforms[i](node, context)
 
     // transform後に行いたい処理を登録しておく
     if (onExit) {
       if (isArray(onExit)) {
-        exitFns.push(...onExit);
+        exitFns.push(...onExit)
       } else {
-        exitFns.push(onExit);
+        exitFns.push(onExit)
       }
     }
     if (!context.currentNode) {
-      return;
+      return
     } else {
-      node = context.currentNode;
+      node = context.currentNode
     }
   }
 
   switch (node.type) {
     case NodeTypes.INTERPOLATION:
-      break;
+      break
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
-      traverseChildren(node, context);
-      break;
+      traverseChildren(node, context)
+      break
   }
 
-  context.currentNode = node;
+  context.currentNode = node
 
   // transform後に行いたい処理を実行
-  let i = exitFns.length;
+  let i = exitFns.length
   while (i--) {
-    exitFns[i](); // transformが終わったことを前提にした処理を実行することができる
+    exitFns[i]() // transformが終わったことを前提にした処理を実行することができる
   }
 }
 
 export function traverseChildren(
   parent: ParentNode,
-  context: TransformContext
+  context: TransformContext,
 ) {
   for (let i = 0; i < parent.children.length; i++) {
-    const child = parent.children[i];
-    if (isString(child)) continue;
-    context.parent = parent;
-    context.childIndex = i;
-    traverseNode(child, context);
+    const child = parent.children[i]
+    if (isString(child)) continue
+    context.parent = parent
+    context.childIndex = i
+    traverseNode(child, context)
   }
 }
 ```
@@ -321,24 +321,24 @@ transformElement では主に NodeTypes.ELEMENT の node を VNodeCall に変換
 
 ```ts
 export interface ElementNode extends Node {
-  type: NodeTypes.ELEMENT;
-  tag: string;
-  props: Array<AttributeNode | DirectiveNode>;
-  children: TemplateChildNode[];
-  isSelfClosing: boolean;
-  codegenNode: VNodeCall | SimpleExpressionNode | undefined;
+  type: NodeTypes.ELEMENT
+  tag: string
+  props: Array<AttributeNode | DirectiveNode>
+  children: TemplateChildNode[]
+  isSelfClosing: boolean
+  codegenNode: VNodeCall | SimpleExpressionNode | undefined
 }
 
 // ↓↓↓↓↓↓ 変換 ↓↓↓↓↓↓ //
 
 export interface VNodeCall extends Node {
-  type: NodeTypes.VNODE_CALL;
-  tag: string | symbol;
-  props: PropsExpression | undefined;
+  type: NodeTypes.VNODE_CALL
+  tag: string | symbol
+  props: PropsExpression | undefined
   children:
     | TemplateChildNode[] // multiple children
     | TemplateTextChildNode
-    | undefined;
+    | undefined
 }
 ```
 
@@ -348,77 +348,77 @@ export interface VNodeCall extends Node {
 ```ts
 export const transformElement: NodeTransform = (node, context) => {
   return function postTransformElement() {
-    node = context.currentNode!;
+    node = context.currentNode!
 
-    if (node.type !== NodeTypes.ELEMENT) return;
+    if (node.type !== NodeTypes.ELEMENT) return
 
-    const { tag, props } = node;
+    const { tag, props } = node
 
-    const vnodeTag = `"${tag}"`;
-    let vnodeProps: VNodeCall["props"];
-    let vnodeChildren: VNodeCall["children"];
+    const vnodeTag = `"${tag}"`
+    let vnodeProps: VNodeCall['props']
+    let vnodeChildren: VNodeCall['children']
 
     // props
     if (props.length > 0) {
-      const propsBuildResult = buildProps(node);
-      vnodeProps = propsBuildResult.props;
+      const propsBuildResult = buildProps(node)
+      vnodeProps = propsBuildResult.props
     }
 
     // children
     if (node.children.length > 0) {
       if (node.children.length === 1) {
-        const child = node.children[0];
-        const type = child.type;
-        const hasDynamicTextChild = type === NodeTypes.INTERPOLATION;
+        const child = node.children[0]
+        const type = child.type
+        const hasDynamicTextChild = type === NodeTypes.INTERPOLATION
 
         if (hasDynamicTextChild || type === NodeTypes.TEXT) {
-          vnodeChildren = child as TemplateTextChildNode;
+          vnodeChildren = child as TemplateTextChildNode
         } else {
-          vnodeChildren = node.children;
+          vnodeChildren = node.children
         }
       } else {
-        vnodeChildren = node.children;
+        vnodeChildren = node.children
       }
     }
 
-    node.codegenNode = createVNodeCall(vnodeTag, vnodeProps, vnodeChildren);
-  };
-};
+    node.codegenNode = createVNodeCall(vnodeTag, vnodeProps, vnodeChildren)
+  }
+}
 
 export function buildProps(node: ElementNode): {
-  props: PropsExpression | undefined;
-  directives: DirectiveNode[];
+  props: PropsExpression | undefined
+  directives: DirectiveNode[]
 } {
-  const { props } = node;
-  let properties: ObjectExpression["properties"] = [];
-  const runtimeDirectives: DirectiveNode[] = [];
+  const { props } = node
+  let properties: ObjectExpression['properties'] = []
+  const runtimeDirectives: DirectiveNode[] = []
 
   for (let i = 0; i < props.length; i++) {
-    const prop = props[i];
+    const prop = props[i]
     if (prop.type === NodeTypes.ATTRIBUTE) {
-      const { name, value } = prop;
+      const { name, value } = prop
 
       properties.push(
         createObjectProperty(
           createSimpleExpression(name, true),
-          createSimpleExpression(value ? value.content : "", true)
-        )
-      );
+          createSimpleExpression(value ? value.content : '', true),
+        ),
+      )
     } else {
       // directives
       // TODO:
     }
   }
 
-  let propsExpression: PropsExpression | undefined = undefined;
+  let propsExpression: PropsExpression | undefined = undefined
   if (properties.length) {
-    propsExpression = createObjectExpression(properties);
+    propsExpression = createObjectExpression(properties)
   }
 
   return {
     props: propsExpression,
     directives: runtimeDirectives,
-  };
+  }
 }
 ```
 
@@ -434,16 +434,16 @@ Codegen の方でも Codegen 用の context を持つことにして、生成し
 
 ```ts
 export interface CodegenContext {
-  source: string;
-  code: string;
-  indentLevel: number;
-  line: 1;
-  column: 1;
-  offset: 0;
-  push(code: string, node?: CodegenNode): void;
-  indent(): void;
-  deindent(withoutNewLine?: boolean): void;
-  newline(): void;
+  source: string
+  code: string
+  indentLevel: number
+  line: 1
+  column: 1
+  offset: 0
+  push(code: string, node?: CodegenNode): void
+  indent(): void
+  deindent(withoutNewLine?: boolean): void
+  newline(): void
 }
 ```
 
@@ -452,12 +452,12 @@ export interface CodegenContext {
 概ね以下のようなコードが動いていれば OK です！
 
 ```ts
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const count = ref(0);
-    return { count };
+    const count = ref(0)
+    return { count }
   },
 
   template: `
@@ -466,11 +466,11 @@ const App = defineComponent({
       <p> Count: {{ count }} </p>
     </div>
   `,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  

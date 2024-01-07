@@ -5,17 +5,17 @@
 以下のようなコードを playground で実行してみましょう。
 
 ```ts
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent } from 'chibivue'
 
 const App = defineComponent({
   template: `<header>header</header>
 <main>main</main>
 <footer>footer</footer>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 以下のようなエラーが出てしまうかと思います。
@@ -48,19 +48,19 @@ return の先がおかしなことになってしまっていますね。今の 
 ```ts
 return function render(_ctx) {
   with (_ctx) {
-    const { createVNode: _createVNode, Fragment: _Fragment } = ChibiVue;
+    const { createVNode: _createVNode, Fragment: _Fragment } = ChibiVue
 
     return _createVNode(_Fragment, null, [
       [
-        _createVNode("header", null, "header"),
-        "\n  ",
-        _createVNode("main", null, "main"),
-        "\n  ",
-        _createVNode("footer", null, "footer"),
+        _createVNode('header', null, 'header'),
+        '\n  ',
+        _createVNode('main', null, 'main'),
+        '\n  ',
+        _createVNode('footer', null, 'footer'),
       ],
-    ]);
+    ])
   }
-};
+}
 ```
 
 この `Fragment` というものは Vue で定義されている symbol です。  
@@ -91,14 +91,14 @@ patch 関数に fragment の時の分岐を追加します。
 
 ```ts
 if (type === Text) {
-  processText(n1, n2, container, anchor);
+  processText(n1, n2, container, anchor)
 } else if (shapeFlag & ShapeFlags.ELEMENT) {
-  processElement(n1, n2, container, anchor, parentComponent);
+  processElement(n1, n2, container, anchor, parentComponent)
 } else if (type === Fragment) {
   // ここ
-  processFragment(n1, n2, container, anchor, parentComponent);
+  processFragment(n1, n2, container, anchor, parentComponent)
 } else if (shapeFlag & ShapeFlags.COMPONENT) {
-  processComponent(n1, n2, container, anchor, parentComponent);
+  processComponent(n1, n2, container, anchor, parentComponent)
 } else {
   // do nothing
 }
@@ -115,7 +115,7 @@ export interface VNode<HostNode = any> {
   // .
   // .
   // .
-  anchor: HostNode | null; // fragment anchor // 追加
+  anchor: HostNode | null // fragment anchor // 追加
   // .
   // .
 }
@@ -131,24 +131,24 @@ const processFragment = (
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent: ComponentInternalInstance | null
+  parentComponent: ComponentInternalInstance | null,
 ) => {
-  const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(""))!;
-  const fragmentEndAnchor = (n2.anchor = n1 ? n1.anchor : hostCreateText(""))!;
+  const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(''))!
+  const fragmentEndAnchor = (n2.anchor = n1 ? n1.anchor : hostCreateText(''))!
 
   if (n1 == null) {
-    hostInsert(fragmentStartAnchor, container, anchor);
-    hostInsert(fragmentEndAnchor, container, anchor);
+    hostInsert(fragmentStartAnchor, container, anchor)
+    hostInsert(fragmentEndAnchor, container, anchor)
     mountChildren(
       n2.children as VNode[],
       container,
       fragmentEndAnchor,
-      parentComponent
-    );
+      parentComponent,
+    )
   } else {
-    patchChildren(n1, n2, container, fragmentEndAnchor, parentComponent);
+    patchChildren(n1, n2, container, fragmentEndAnchor, parentComponent)
   }
-};
+}
 ```
 
 更新時、fragment の要素が変動する際も注意します。
@@ -157,50 +157,50 @@ const processFragment = (
 const move = (
   vnode: VNode,
   container: RendererElement,
-  anchor: RendererElement | null
+  anchor: RendererElement | null,
 ) => {
-  const { type, children, el, shapeFlag } = vnode;
+  const { type, children, el, shapeFlag } = vnode
 
   // .
   // .
 
   if (type === Fragment) {
-    hostInsert(el!, container, anchor);
+    hostInsert(el!, container, anchor)
     for (let i = 0; i < (children as VNode[]).length; i++) {
-      move((children as VNode[])[i], container, anchor);
+      move((children as VNode[])[i], container, anchor)
     }
-    hostInsert(vnode.anchor!, container, anchor); // アンカーを挿入
-    return;
+    hostInsert(vnode.anchor!, container, anchor) // アンカーを挿入
+    return
   }
   // .
   // .
   // .
-};
+}
 ```
 
 unmount 時も anchor を頼りに要素を削除していきます。
 
 ```ts
 const remove = (vnode: VNode) => {
-  const { el, type, anchor } = vnode;
+  const { el, type, anchor } = vnode
   if (type === Fragment) {
-    removeFragment(el!, anchor!);
+    removeFragment(el!, anchor!)
   }
 
   // .
   // .
   // .
-};
+}
 
 const removeFragment = (cur: RendererNode, end: RendererNode) => {
-  let next;
+  let next
   while (cur !== end) {
-    next = hostNextSibling(cur)!; // ※ nodeOps に追加しましょう！
-    hostRemove(cur);
-    cur = next;
+    next = hostNextSibling(cur)! // ※ nodeOps に追加しましょう！
+    hostRemove(cur)
+    cur = next
   }
-  hostRemove(end);
-};
+  hostRemove(end)
+}
 ```
 
 ## 動作を見てみる
@@ -208,17 +208,17 @@ const removeFragment = (cur: RendererNode, end: RendererNode) => {
 先ほどのコードはきちんと動くようになっているはずです。
 
 ```ts
-import { Fragment, createApp, defineComponent, h, ref } from "chibivue";
+import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'
 
 const App = defineComponent({
   template: `<header>header</header>
 <main>main</main>
 <footer>footer</footer>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 現状だと、v-for ディレクティブなどが使えないことから、template で fragment を使いつつ要素の個数を変化させるような記述ができないので、
@@ -226,7 +226,7 @@ app.mount("#app");
 擬似的に コンパイル後のコードを書いて動作を見てみましょう。
 
 ```ts
-import { Fragment, createApp, defineComponent, h, ref } from "chibivue";
+import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'
 
 // const App = defineComponent({
 //   template: `<header>header</header>
@@ -236,21 +236,21 @@ import { Fragment, createApp, defineComponent, h, ref } from "chibivue";
 
 const App = defineComponent({
   setup() {
-    const list = ref([0]);
+    const list = ref([0])
     const update = () => {
-      list.value = [...list.value, list.value.length];
-    };
+      list.value = [...list.value, list.value.length]
+    }
     return () =>
       h(Fragment, {}, [
-        h("button", { onClick: update }, "update"),
-        ...list.value.map((i) => h("div", {}, i)),
-      ]);
+        h('button', { onClick: update }, 'update'),
+        ...list.value.map(i => h('div', {}, i)),
+      ])
   },
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ちゃんと動作しているようです！

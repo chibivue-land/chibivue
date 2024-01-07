@@ -14,8 +14,8 @@
 n1 と n2 を元に更新しましょう。
 
 ```ts
-const oldProps = n1.props || {};
-const newProps = n2.props || {};
+const oldProps = n1.props || {}
+const newProps = n2.props || {}
 ```
 
 n1 に存在していて n2n に存在しない props は削除です。  

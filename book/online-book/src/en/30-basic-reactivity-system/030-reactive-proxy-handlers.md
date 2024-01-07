@@ -12,27 +12,27 @@ Now, let's solve a problem with the current Reactivity System.
 First, try running the following code.
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const getRef = () => {
       inputRef.value = document.getElementById(
-        "my-input"
-      ) as HTMLInputElement | null;
-      console.log(inputRef.value);
-    };
+        'my-input',
+      ) as HTMLInputElement | null
+      console.log(inputRef.value)
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { id: "my-input" }, []),
-        h("button", { onClick: getRef }, ["getRef"]),
-      ]);
+      h('div', {}, [
+        h('input', { id: 'my-input' }, []),
+        h('button', { onClick: getRef }, ['getRef']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 If you check the console, you should see the following result:
@@ -42,31 +42,31 @@ If you check the console, you should see the following result:
 Now, let's add a focus function.
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const getRef = () => {
       inputRef.value = document.getElementById(
-        "my-input"
-      ) as HTMLInputElement | null;
-      console.log(inputRef.value);
-    };
+        'my-input',
+      ) as HTMLInputElement | null
+      console.log(inputRef.value)
+    }
     const focus = () => {
-      inputRef.value?.focus();
-    };
+      inputRef.value?.focus()
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { id: "my-input" }, []),
-        h("button", { onClick: getRef }, ["getRef"]),
-        h("button", { onClick: focus }, ["focus"]),
-      ]);
+      h('div', {}, [
+        h('input', { id: 'my-input' }, []),
+        h('button', { onClick: getRef }, ['getRef']),
+        h('button', { onClick: focus }, ['focus']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Surprisingly, it throws an error.
@@ -83,31 +83,31 @@ The determination method is very simple. Use `Object.prototype.toString`.
 Let's see how `Object.prototype.toString` determines an HTMLInputElement in the code above.
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const getRef = () => {
       inputRef.value = document.getElementById(
-        "my-input"
-      ) as HTMLInputElement | null;
-      console.log(inputRef.value?.toString());
-    };
+        'my-input',
+      ) as HTMLInputElement | null
+      console.log(inputRef.value?.toString())
+    }
     const focus = () => {
-      inputRef.value?.focus();
-    };
+      inputRef.value?.focus()
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { id: "my-input" }, []),
-        h("button", { onClick: getRef }, ["getRef"]),
-        h("button", { onClick: focus }, ["focus"]),
-      ]);
+      h('div', {}, [
+        h('input', { id: 'my-input' }, []),
+        h('button', { onClick: getRef }, ['getRef']),
+        h('button', { onClick: focus }, ['focus']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ![element_to_string](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/element_to_string.png)
@@ -116,14 +116,14 @@ This allows us to determine the type of the object. Although it is somewhat hard
 
 ```ts
 // shared/general.ts
-export const objectToString = Object.prototype.toString; // already used in isMap and isSet
+export const objectToString = Object.prototype.toString // already used in isMap and isSet
 export const toTypeString = (value: unknown): string =>
-  objectToString.call(value);
+  objectToString.call(value)
 
 // Function to be added this time
 export const toRawType = (value: unknown): string => {
-  return toTypeString(value).slice(8, -1);
-};
+  return toTypeString(value).slice(8, -1)
+}
 ```
 
 The reason for using `slice` is to obtain the string corresponding to `hoge` in `[Object hoge]`.
@@ -141,30 +141,30 @@ const enum TargetType {
 
 function targetTypeMap(rawType: string) {
   switch (rawType) {
-    case "Object":
-    case "Array":
-      return TargetType.COMMON;
+    case 'Object':
+    case 'Array':
+      return TargetType.COMMON
     default:
-      return TargetType.INVALID;
+      return TargetType.INVALID
   }
 }
 
 function getTargetType<T extends object>(value: T) {
   return !Object.isExtensible(value)
     ? TargetType.INVALID
-    : targetTypeMap(toRawType(value));
+    : targetTypeMap(toRawType(value))
 }
 ```
 
 ```ts
 export function reactive<T extends object>(target: T): T {
-  const targetType = getTargetType(target);
+  const targetType = getTargetType(target)
   if (targetType === TargetType.INVALID) {
-    return target;
+    return target
   }
 
-  const proxy = new Proxy(target, mutableHandlers);
-  return proxy as T;
+  const proxy = new Proxy(target, mutableHandlers)
+  return proxy as T
 }
 ```
 
@@ -183,24 +183,24 @@ https://vuejs.org/guide/essentials/template-refs.html
 The goal is to make the following code work:
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const inputRef = ref<HTMLInputElement | null>(null);
+    const inputRef = ref<HTMLInputElement | null>(null)
     const focus = () => {
-      inputRef.value?.focus();
-    };
+      inputRef.value?.focus()
+    }
 
     return () =>
-      h("div", {}, [
-        h("input", { ref: inputRef }, []),
-        h("button", { onClick: focus }, ["focus"]),
-      ]);
+      h('div', {}, [
+        h('input', { ref: inputRef }, []),
+        h('button', { onClick: focus }, ['focus']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 If you've come this far, you probably already see how to implement it.
@@ -210,8 +210,8 @@ Yes, just add ref to VNode and inject the value during rendering.
 export interface VNode<HostNode = any> {
   // .
   // .
-  key: string | number | symbol | null;
-  ref: Ref | null; // This
+  key: string | number | symbol | null
+  ref: Ref | null // This
   // .
   // .
 }
@@ -224,35 +224,35 @@ By the way, if it is a component, assign the component's `setupContext` to the r
 (Note: In reality, you should pass the component's proxy, but it is not yet implemented, so we are using `setupContext` for now.)
 
 ```ts
-import { createApp, h, ref } from "chibivue";
+import { createApp, h, ref } from 'chibivue'
 
 const Child = {
   setup() {
-    const action = () => alert("clicked!");
-    return { action };
+    const action = () => alert('clicked!')
+    return { action }
   },
 
   template: `<button @click="action">action (child)</button>`,
-};
+}
 
 const app = createApp({
   setup() {
-    const childRef = ref<any>(null);
+    const childRef = ref<any>(null)
     const childAction = () => {
-      childRef.value?.action();
-    };
+      childRef.value?.action()
+    }
 
     return () =>
-      h("div", {}, [
-        h("div", {}, [
+      h('div', {}, [
+        h('div', {}, [
           h(Child, { ref: childRef }, []),
-          h("button", { onClick: childAction }, ["action (parent)"]),
+          h('button', { onClick: childAction }, ['action (parent)']),
         ]),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Source code up to this point:  
@@ -267,26 +267,26 @@ In other words, the following components do not work correctly:
 ```ts
 const App = {
   setup() {
-    const array = ref<number[]>([]);
+    const array = ref<number[]>([])
     const mutateArray = () => {
-      array.value.push(Date.now()); // No effect is triggered even when this is called (the key for set is "0")
-    };
+      array.value.push(Date.now()) // No effect is triggered even when this is called (the key for set is "0")
+    }
 
-    const record = reactive<Record<string, number>>({});
+    const record = reactive<Record<string, number>>({})
     const mutateRecord = () => {
-      record[Date.now().toString()] = Date.now(); // No effect is triggered even when the key is changed
-    };
+      record[Date.now().toString()] = Date.now() // No effect is triggered even when the key is changed
+    }
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`array: ${JSON.stringify(array.value)}`]),
-        h("button", { onClick: mutateArray }, ["update array"]),
+      h('div', {}, [
+        h('p', {}, [`array: ${JSON.stringify(array.value)}`]),
+        h('button', { onClick: mutateArray }, ['update array']),
 
-        h("p", {}, [`record: ${JSON.stringify(record)}`]),
-        h("button", { onClick: mutateRecord }, ["update record"]),
-      ]);
+        h('p', {}, [`record: ${JSON.stringify(record)}`]),
+        h('button', { onClick: mutateRecord }, ['update record']),
+      ])
   },
-};
+}
 ```
 
 How can we solve this?
@@ -298,13 +298,13 @@ Arrays are essentially objects, so when a new element is added, its index is pas
 ```ts
 const p = new Proxy([], {
   set(target, key, value, receiver) {
-    console.log(key); // ※
-    Reflect.set(target, key, value, receiver);
-    return true;
+    console.log(key) // ※
+    Reflect.set(target, key, value, receiver)
+    return true
   },
-});
+})
 
-p.push(42); // 0
+p.push(42) // 0
 ```
 
 However, we cannot track each of these keys individually.
@@ -317,12 +317,12 @@ If you execute the following code in a browser or similar environment, you will 
 ```ts
 const data = new Proxy([], {
   get(target, key) {
-    console.log("get!", key);
-    return Reflect.get(target, key);
+    console.log('get!', key)
+    return Reflect.get(target, key)
   },
-});
+})
 
-JSON.stringify(data);
+JSON.stringify(data)
 // get! length
 // get! toJSON
 ```
@@ -334,22 +334,22 @@ Of course, there may be other dependencies, so we extract them into an array cal
 
 ```ts
 export function trigger(target: object, key?: unknown) {
-  const depsMap = targetMap.get(target);
-  if (!depsMap) return;
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
 
-  let deps: (Dep | undefined)[] = [];
+  let deps: (Dep | undefined)[] = []
   if (key !== void 0) {
-    deps.push(depsMap.get(key));
+    deps.push(depsMap.get(key))
   }
 
   // This
   if (isIntegerKey(key)) {
-    deps.push(depsMap.get("length"));
+    deps.push(depsMap.get('length'))
   }
 
   for (const dep of deps) {
     if (dep) {
-      triggerEffects(dep);
+      triggerEffects(dep)
     }
   }
 }
@@ -359,9 +359,9 @@ export function trigger(target: object, key?: unknown) {
 // shared/general.ts
 export const isIntegerKey = (key: unknown) =>
   isString(key) &&
-  key !== "NaN" &&
-  key[0] !== "-" &&
-  "" + parseInt(key, 10) === key;
+  key !== 'NaN' &&
+  key[0] !== '-' &&
+  '' + parseInt(key, 10) === key
 ```
 
 Now, arrays should work correctly.
@@ -378,28 +378,28 @@ The order of operations is slightly different from arrays, but let's start by co
 We can implement it as if there is a `ITERATE_KEY` with registered effects.
 
 ```ts
-export const ITERATE_KEY = Symbol();
+export const ITERATE_KEY = Symbol()
 
 export function trigger(target: object, key?: unknown) {
-  const depsMap = targetMap.get(target);
-  if (!depsMap) return;
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
 
-  let deps: (Dep | undefined)[] = [];
+  let deps: (Dep | undefined)[] = []
   if (key !== void 0) {
-    deps.push(depsMap.get(key));
+    deps.push(depsMap.get(key))
   }
 
   if (!isArray(target)) {
     // If it is not an array, trigger the effect registered with ITERATE_KEY
-    deps.push(depsMap.get(ITERATE_KEY));
+    deps.push(depsMap.get(ITERATE_KEY))
   } else if (isIntegerKey(key)) {
     // New index added to array -> length changes
-    deps.push(depsMap.get("length"));
+    deps.push(depsMap.get('length'))
   }
 
   for (const dep of deps) {
     if (dep) {
-      triggerEffects(dep);
+      triggerEffects(dep)
     }
   }
 }
@@ -420,16 +420,16 @@ const data = new Proxy(
   {},
   {
     get(target, key) {
-      return Reflect.get(target, key);
+      return Reflect.get(target, key)
     },
     ownKeys(target) {
-      console.log("ownKeys!!!");
-      return Reflect.ownKeys(target);
+      console.log('ownKeys!!!')
+      return Reflect.ownKeys(target)
     },
-  }
-);
+  },
+)
 
-JSON.stringify(data);
+JSON.stringify(data)
 ```
 
 We can use this to track `ITERATE_KEY`.
@@ -440,10 +440,10 @@ export const mutableHandlers: ProxyHandler<object> = {
   // .
   // .
   ownKeys(target) {
-    track(target, isArray(target) ? "length" : ITERATE_KEY);
-    return Reflect.ownKeys(target);
+    track(target, isArray(target) ? 'length' : ITERATE_KEY)
+    return Reflect.ownKeys(target)
   },
-};
+}
 ```
 
 Now, we should be able to handle objects with changing keys!
@@ -455,11 +455,11 @@ Currently, when looking at the implementation of reactive.ts, it only targets Ob
 ```ts
 function targetTypeMap(rawType: string) {
   switch (rawType) {
-    case "Object":
-    case "Array":
-      return TargetType.COMMON;
+    case 'Object':
+    case 'Array':
+      return TargetType.COMMON
     default:
-      return TargetType.INVALID;
+      return TargetType.INVALID
   }
 }
 ```
@@ -475,28 +475,28 @@ Here, we will implement this `collectionHandlers` and aim for the following code
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ map: new Map(), set: new Set() });
+    const state = reactive({ map: new Map(), set: new Set() })
 
     return () =>
-      h("div", {}, [
-        h("h1", {}, [`ReactiveCollection`]),
+      h('div', {}, [
+        h('h1', {}, [`ReactiveCollection`]),
 
-        h("p", {}, [
+        h('p', {}, [
           `map (${state.map.size}): ${JSON.stringify([...state.map])}`,
         ]),
-        h("button", { onClick: () => state.map.set(Date.now(), "item") }, [
-          "update map",
+        h('button', { onClick: () => state.map.set(Date.now(), 'item') }, [
+          'update map',
         ]),
 
-        h("p", {}, [
+        h('p', {}, [
           `set (${state.set.size}): ${JSON.stringify([...state.set])}`,
         ]),
-        h("button", { onClick: () => state.set.add("item") }, ["update set"]),
-      ]);
+        h('button', { onClick: () => state.set.add('item') }, ['update set']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 In `collectionHandlers`, we implement handlers for methods such as add, set, and delete.  
@@ -510,11 +510,11 @@ To avoid this, we change the structure to have the raw data attached to the targ
 
 ```ts
 export const enum ReactiveFlags {
-  RAW = "__v_raw",
+  RAW = '__v_raw',
 }
 
 export interface Target {
-  [ReactiveFlags.RAW]?: any;
+  [ReactiveFlags.RAW]?: any
 }
 ```
 
@@ -525,8 +525,8 @@ Along with this, we also implement a function called `toRaw` that recursively re
 
 ```ts
 export function toRaw<T>(observed: T): T {
-  const raw = observed && (observed as Target)[ReactiveFlags.RAW];
-  return raw ? toRaw(raw) : observed;
+  const raw = observed && (observed as Target)[ReactiveFlags.RAW]
+  return raw ? toRaw(raw) : observed
 }
 ```
 

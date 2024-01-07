@@ -13,25 +13,25 @@
 以下のようなのはどうでしょうか?
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
 
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
+      h('div', { id: 'my-app' }, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 普段 SFC を利用した開発を行っている方は少々見慣れないかもしれません。  
@@ -73,9 +73,9 @@ setup オプションをを受け取り実行し、あとはそれをこれま�
 
 ```ts
 export type ComponentOptions = {
-  render?: Function;
-  setup?: () => Function; // 追加
-};
+  render?: Function
+  setup?: () => Function // 追加
+}
 ```
 
 あとはそれを使うように各コードを修正します。
@@ -85,22 +85,22 @@ export type ComponentOptions = {
 
 const app: App = {
   mount(rootContainer: HostElement) {
-    const componentRender = rootComponent.setup!();
+    const componentRender = rootComponent.setup!()
 
     const updateComponent = () => {
-      const vnode = componentRender();
-      render(vnode, rootContainer);
-    };
+      const vnode = componentRender()
+      render(vnode, rootContainer)
+    }
 
-    updateComponent();
+    updateComponent()
   },
-};
+}
 ```
 
 ```ts
 // playground
 
-import { createApp, h } from "chibivue";
+import { createApp, h } from 'chibivue'
 
 const app = createApp({
   setup() {
@@ -108,23 +108,23 @@ const app = createApp({
     // const state = reactive({ count: 0 })
 
     return function render() {
-      return h("div", { id: "my-app" }, [
-        h("p", { style: "color: red; font-weight: bold;" }, ["Hello world."]),
+      return h('div', { id: 'my-app' }, [
+        h('p', { style: 'color: red; font-weight: bold;' }, ['Hello world.']),
         h(
-          "button",
+          'button',
           {
             onClick() {
-              alert("Hello world!");
+              alert('Hello world!')
             },
           },
-          ["click me!"]
+          ['click me!'],
         ),
-      ]);
-    };
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 まあ、これだけです。
@@ -145,8 +145,8 @@ Proxy はとても面白いオブジェクトです。
 以下のように、引数にオブジェクトを渡し、new することで使います。
 
 ```ts
-const o = new Proxy({ value: 1 });
-console.log(o.value); // 1
+const o = new Proxy({ value: 1 })
+console.log(o.value) // 1
 ```
 
 この例だと、`o` は通常のオブジェクトとほぼ同じ動作をします。
@@ -160,11 +160,11 @@ const o = new Proxy(
 
   {
     get(target, key, receiver) {
-      console.log(`target:${target}, key: ${key}`);
-      return target[key];
+      console.log(`target:${target}, key: ${key}`)
+      return target[key]
     },
-  }
-);
+  },
+)
 ```
 
 この例では生成するオブジェクトに対する設定を書き込んでいます。  
@@ -182,12 +182,12 @@ const o = new Proxy(
   { value: 1, value2: 2 },
   {
     set(target, key, value, receiver) {
-      console.log("hello from setter");
-      target[key] = value;
-      return true;
+      console.log('hello from setter')
+      target[key] = value
+      return true
     },
-  }
-);
+  },
+)
 ```
 
 ![proxy_set](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_set.png)
@@ -214,19 +214,19 @@ target というのはリアクティブにしたいオブジェクト、dep と
 コードで表すとこういう感じになります。
 
 ```ts
-type Target = any; // 任意のtarget
-type TargetKey = any; // targetが持つ任意のkey
+type Target = any // 任意のtarget
+type TargetKey = any // targetが持つ任意のkey
 
-const targetMap = new WeakMap<Target, KeyToDepMap>(); // このモジュール内のグローバル変数として定義
+const targetMap = new WeakMap<Target, KeyToDepMap>() // このモジュール内のグローバル変数として定義
 
-type KeyToDepMap = Map<TargetKey, Dep>; // targetのkeyと作用のマップ
+type KeyToDepMap = Map<TargetKey, Dep> // targetのkeyと作用のマップ
 
-type Dep = Set<ReactiveEffect>; // depはReactiveEffectというものを複数持っている
+type Dep = Set<ReactiveEffect> // depはReactiveEffectというものを複数持っている
 
 class ReactiveEffect {
   constructor(
     // ここに実際に作用させたい関数を持たせます。 (今回でいうと、updateComponent)
-    public fn: () => T
+    public fn: () => T,
   ) {}
 }
 ```
@@ -253,16 +253,16 @@ const state = new Proxy(
   { count: 1 },
   {
     get(target, key, receiver) {
-      track(target, key);
-      return target[key];
+      track(target, key)
+      return target[key]
     },
     set(target, key, value, receiver) {
-      target[key] = value;
-      trigger(target, key);
-      return true;
+      target[key] = value
+      trigger(target, key)
+      return true
     },
-  }
-);
+  },
+)
 ```
 
 この Proxy 生成のための API が reactive 関数です。
@@ -271,15 +271,15 @@ const state = new Proxy(
 function reactive<T>(target: T) {
   return new Proxy(target, {
     get(target, key, receiver) {
-      track(target, key);
-      return target[key];
+      track(target, key)
+      return target[key]
     },
     set(target, key, value, receiver) {
-      target[key] = value;
-      trigger(target, key);
-      return true;
+      target[key] = value
+      trigger(target, key)
+      return true
     },
-  });
+  })
 }
 ```
 
@@ -290,17 +290,17 @@ function reactive<T>(target: T) {
 これは、targetMap と同様、このモジュール内のグローバル変数として定義されていて、ReactiveEffect の `run` というメソッドで随時設定されます。
 
 ```ts
-let activeEffect: ReactiveEffect | undefined;
+let activeEffect: ReactiveEffect | undefined
 
 class ReactiveEffect {
   constructor(
     // ここに実際に作用させたい関数を持たせます。 (今回でいうと、updateComponent)
-    public fn: () => T
+    public fn: () => T,
   ) {}
 
   run() {
-    activeEffect = this;
-    return this.fn();
+    activeEffect = this
+    return this.fn()
   }
 }
 ```
@@ -335,46 +335,46 @@ class ReactiveEffect {
 // chibivue 内部実装
 const app: App = {
   mount(rootContainer: HostElement) {
-    const componentRender = rootComponent.setup!();
+    const componentRender = rootComponent.setup!()
 
     const updateComponent = () => {
-      const vnode = componentRender();
-      render(vnode, rootContainer);
-    };
+      const vnode = componentRender()
+      render(vnode, rootContainer)
+    }
 
-    const effect = new ReactiveEffect(updateComponent);
-    effect.run();
+    const effect = new ReactiveEffect(updateComponent)
+    effect.run()
   },
-};
+}
 ```
 
 順を追って説明すると、まず、`setup` 関数が実行されます。
 この時点で reactive proxy が生成されます。つまり、ここで作られた proxy に対してこれから何か操作があると proxy で設定した通り動作をとります。
 
 ```ts
-const state = reactive({ count: 0 }); // proxyの生成
+const state = reactive({ count: 0 }) // proxyの生成
 ```
 
 次に、`updateComponent` を渡して `ReactiveEffect` (Observer 側)を生成します。
 
 ```ts
-const effect = new ReactiveEffect(updateComponent);
+const effect = new ReactiveEffect(updateComponent)
 ```
 
 この `updateComponent` で使っている `componentRender` は `setup` の`戻り値`の関数です。そしてこの関数は proxy によって作られたオブジェクトを参照しています。
 
 ```ts
 function render() {
-  return h("div", { id: "my-app" }, [
-    h("p", {}, [`count: ${state.count}`]), // proxy によって作られたオブジェクトを参照している
+  return h('div', { id: 'my-app' }, [
+    h('p', {}, [`count: ${state.count}`]), // proxy によって作られたオブジェクトを参照している
     h(
-      "button",
+      'button',
       {
         onClick: increment,
       },
-      ["increment"]
+      ['increment'],
     ),
-  ]);
+  ])
 }
 ```
 
@@ -382,7 +382,7 @@ function render() {
 この状況下で、effect を実行してみます。
 
 ```ts
-effect.run();
+effect.run()
 ```
 
 そうすると、まず `activeEffect` に `updateComponent` が設定されます。  
@@ -426,14 +426,14 @@ touch packages/reactivity/baseHandler.ts
 dep.ts からです。
 
 ```ts
-import { type ReactiveEffect } from "./effect";
+import { type ReactiveEffect } from './effect'
 
-export type Dep = Set<ReactiveEffect>;
+export type Dep = Set<ReactiveEffect>
 
 export const createDep = (effects?: ReactiveEffect[]): Dep => {
-  const dep: Dep = new Set<ReactiveEffect>(effects);
-  return dep;
-};
+  const dep: Dep = new Set<ReactiveEffect>(effects)
+  return dep
+}
 ```
 
 effect の定義がないですがこれから実装するので Ok です。
@@ -441,12 +441,12 @@ effect の定義がないですがこれから実装するので Ok です。
 続いて effect.ts です。
 
 ```ts
-import { Dep, createDep } from "./dep";
+import { Dep, createDep } from './dep'
 
-type KeyToDepMap = Map<any, Dep>;
-const targetMap = new WeakMap<any, KeyToDepMap>();
+type KeyToDepMap = Map<any, Dep>
+const targetMap = new WeakMap<any, KeyToDepMap>()
 
-export let activeEffect: ReactiveEffect | undefined;
+export let activeEffect: ReactiveEffect | undefined
 
 export class ReactiveEffect<T = any> {
   constructor(public fn: () => T) {}
@@ -454,40 +454,40 @@ export class ReactiveEffect<T = any> {
   run() {
     // ※ fnを実行する前のactiveEffectを保持しておいて、実行が終わった後元に戻します。
     // これをやらないと、どんどん上書きしてしまって、意図しない挙動をしてしまいます。(用が済んだら元に戻そう)
-    let parent: ReactiveEffect | undefined = activeEffect;
-    activeEffect = this;
-    const res = this.fn();
-    activeEffect = parent;
-    return res;
+    let parent: ReactiveEffect | undefined = activeEffect
+    activeEffect = this
+    const res = this.fn()
+    activeEffect = parent
+    return res
   }
 }
 
 export function track(target: object, key: unknown) {
-  let depsMap = targetMap.get(target);
+  let depsMap = targetMap.get(target)
   if (!depsMap) {
-    targetMap.set(target, (depsMap = new Map()));
+    targetMap.set(target, (depsMap = new Map()))
   }
 
-  let dep = depsMap.get(key);
+  let dep = depsMap.get(key)
   if (!dep) {
-    depsMap.set(key, (dep = createDep()));
+    depsMap.set(key, (dep = createDep()))
   }
 
   if (activeEffect) {
-    dep.add(activeEffect);
+    dep.add(activeEffect)
   }
 }
 
 export function trigger(target: object, key?: unknown) {
-  const depsMap = targetMap.get(target);
-  if (!depsMap) return;
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
 
-  const dep = depsMap.get(key);
+  const dep = depsMap.get(key)
 
   if (dep) {
-    const effects = [...dep];
+    const effects = [...dep]
     for (const effect of effects) {
-      effect.run();
+      effect.run()
     }
   }
 }
@@ -500,35 +500,35 @@ track と trigger の中身についてこれまで解説していないので�
 実際には readonly や shallow などさまざまなプロキシが存在するのでそれらのハンドラをここに実装するイメージです。(今回はやりませんが)
 
 ```ts
-import { track, trigger } from "./effect";
-import { reactive } from "./reactive";
+import { track, trigger } from './effect'
+import { reactive } from './reactive'
 
 export const mutableHandlers: ProxyHandler<object> = {
   get(target: object, key: string | symbol, receiver: object) {
-    track(target, key);
+    track(target, key)
 
-    const res = Reflect.get(target, key, receiver);
+    const res = Reflect.get(target, key, receiver)
     // objectの場合はreactiveにしてあげる (これにより、ネストしたオブジェクトもリアクティブにすることができます。)
-    if (res !== null && typeof res === "object") {
-      return reactive(res);
+    if (res !== null && typeof res === 'object') {
+      return reactive(res)
     }
 
-    return res;
+    return res
   },
 
   set(target: object, key: string | symbol, value: unknown, receiver: object) {
-    let oldValue = (target as any)[key];
-    Reflect.set(target, key, value, receiver);
+    let oldValue = (target as any)[key]
+    Reflect.set(target, key, value, receiver)
     // 値が変わったかどうかをチェックしてあげておく
     if (hasChanged(value, oldValue)) {
-      trigger(target, key);
+      trigger(target, key)
     }
-    return true;
+    return true
   },
-};
+}
 
 const hasChanged = (value: any, oldValue: any): boolean =>
-  !Object.is(value, oldValue);
+  !Object.is(value, oldValue)
 ```
 
 ここで、Reflect というものが登場していますが、Proxy と似た雰囲気のものなんですが、Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し、Reflect はあるオブジェクトに対する処理を行うものです。  
@@ -539,11 +539,11 @@ Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処�
 続いて reactive.ts です。
 
 ```ts
-import { mutableHandlers } from "./baseHandler";
+import { mutableHandlers } from './baseHandler'
 
 export function reactive<T extends object>(target: T): T {
-  const proxy = new Proxy(target, mutableHandlers);
-  return proxy as T;
+  const proxy = new Proxy(target, mutableHandlers)
+  return proxy as T
 }
 ```
 
@@ -551,55 +551,55 @@ export function reactive<T extends object>(target: T): T {
 `~/packages/runtime-core/apiCreateApp.ts`です。
 
 ```ts
-import { ReactiveEffect } from "../reactivity";
+import { ReactiveEffect } from '../reactivity'
 
 export function createAppAPI<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
     const app: App = {
       mount(rootContainer: HostElement) {
-        const componentRender = rootComponent.setup!();
+        const componentRender = rootComponent.setup!()
 
         const updateComponent = () => {
-          const vnode = componentRender();
-          render(vnode, rootContainer);
-        };
+          const vnode = componentRender()
+          render(vnode, rootContainer)
+        }
 
         // ここから
-        const effect = new ReactiveEffect(updateComponent);
-        effect.run();
+        const effect = new ReactiveEffect(updateComponent)
+        effect.run()
         // ここまで
       },
-    };
+    }
 
-    return app;
-  };
+    return app
+  }
 }
 ```
 
 さて、あとは playground で試してみましょう。
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
     return function render() {
-      return h("div", { id: "my-app" }, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
-    };
+      return h('div', { id: 'my-app' }, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
+    }
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ![reactive_example_mistake](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example_mistake.png)
@@ -615,10 +615,10 @@ app.mount("#app");
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
-  while (container.firstChild) container.removeChild(container.firstChild); // 全消し処理を追加
-  const el = renderVNode(vnode);
-  hostInsert(el, container);
-};
+  while (container.firstChild) container.removeChild(container.firstChild) // 全消し処理を追加
+  const el = renderVNode(vnode)
+  hostInsert(el, container)
+}
 ```
 
 さてこれでどうでしょう。

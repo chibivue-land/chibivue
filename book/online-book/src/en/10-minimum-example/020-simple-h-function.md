@@ -5,15 +5,15 @@
 So far, we have made the following source code work:
 
 ```ts
-import { createApp } from "vue";
+import { createApp } from 'vue'
 
 const app = createApp({
   render() {
-    return "Hello world.";
+    return 'Hello world.'
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 This is a function that simply renders "Hello World." on the screen.  
@@ -27,18 +27,18 @@ Quote: https://vuejs.org/guide/extras/render-function.html#creating-vnodes
 Let's take a look at the h function in Vue.js.
 
 ```ts
-import { createApp, h } from "vue";
+import { createApp, h } from 'vue'
 
 const app = createApp({
   render() {
-    return h("div", {}, [
-      h("p", {}, ["HelloWorld"]),
-      h("button", {}, ["click me!"]),
-    ]);
+    return h('div', {}, [
+      h('p', {}, ['HelloWorld']),
+      h('button', {}, ['click me!']),
+    ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 As a basic usage of the h function, you specify the tag name as the first argument, attributes as the second argument, and an array of child elements as the third argument.  
@@ -53,7 +53,7 @@ This means that the `h` function returns some kind of object and uses that resul
 Since it is difficult to understand with complex child elements, let's consider the result of implementing a simple h function.
 
 ```ts
-const result = h("div", { class: "container" }, ["hello"]);
+const result = h('div', { class: 'container' }, ['hello'])
 ```
 
 What kind of result should be stored in `result`? (How should we format the result and how should we render it?)
@@ -62,10 +62,10 @@ Let's assume that the following object is stored in `result`:
 
 ```ts
 const result = {
-  type: "div",
-  props: { class: "container" },
-  children: ["hello"],
-};
+  type: 'div',
+  props: { class: 'container' },
+  children: ['hello'],
+}
 ```
 
 In other words, we will receive an object similar to the one above from the render function and use it to perform DOM operations and render it.
@@ -74,10 +74,10 @@ The image is like this (inside the `mount` of `createApp`):
 ```ts
 const app: App = {
   mount(rootContainer: HostElement) {
-    const node = rootComponent.render!();
-    render(node, rootContainer);
+    const node = rootComponent.render!()
+    render(node, rootContainer)
   },
-};
+}
 ```
 
 Well, the only thing that has changed is that we changed the `message` string to an `node` object.  
@@ -100,13 +100,13 @@ Define the types in vnode.ts. This is all we will do in vnode.ts.
 
 ```ts
 export interface VNode {
-  type: string;
-  props: VNodeProps;
-  children: (VNode | string)[];
+  type: string
+  props: VNodeProps
+  children: (VNode | string)[]
 }
 
 export interface VNodeProps {
-  [key: string]: any;
+  [key: string]: any
 }
 ```
 
@@ -116,24 +116,24 @@ Next, implement the function body in h.ts.
 export function h(
   type: string,
   props: VNodeProps,
-  children: (VNode | string)[]
+  children: (VNode | string)[],
 ) {
-  return { type, props, children };
+  return { type, props, children }
 }
 ```
 
 For now, let's try using the h function in the playground.
 
 ```ts
-import { createApp, h } from "chibivue";
+import { createApp, h } from 'chibivue'
 
 const app = createApp({
   render() {
-    return h("div", {}, ["Hello world."]);
+    return h('div', {}, ['Hello world.'])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 The display on the screen is broken, but if you add a log in apiCreateApp, you can see that it is working as expected.
@@ -151,13 +151,13 @@ Implement `createElement`, `createText`, and `insert` in RendererOptions.
 
 ```ts
 export interface RendererOptions<HostNode = RendererNode> {
-  createElement(type: string): HostNode; // Added
+  createElement(type: string): HostNode // Added
 
-  createText(text: string): HostNode; // Added
+  createText(text: string): HostNode // Added
 
-  setElementText(node: HostNode, text: string): void;
+  setElementText(node: HostNode, text: string): void
 
-  insert(child: HostNode, parent: HostNode, anchor?: HostNode | null): void; // Added
+  insert(child: HostNode, parent: HostNode, anchor?: HostNode | null): void // Added
 }
 ```
 
@@ -169,26 +169,26 @@ export function createRenderer(options: RendererOptions) {
     createElement: hostCreateElement,
     createText: hostCreateText,
     insert: hostInsert,
-  } = options;
+  } = options
 
   function renderVNode(vnode: VNode | string) {
-    if (typeof vnode === "string") return hostCreateText(vnode);
-    const el = hostCreateElement(vnode.type);
+    if (typeof vnode === 'string') return hostCreateText(vnode)
+    const el = hostCreateElement(vnode.type)
 
     for (const child of vnode.children) {
-      const childEl = renderVNode(child);
-      hostInsert(childEl, el);
+      const childEl = renderVNode(child)
+      hostInsert(childEl, el)
     }
 
-    return el;
+    return el
   }
 
   const render: RootRenderFunction = (vnode, container) => {
-    const el = renderVNode(vnode);
-    hostInsert(el, container);
-  };
+    const el = renderVNode(vnode)
+    hostInsert(el, container)
+  }
 
-  return { render };
+  return { render }
 }
 ```
 
@@ -197,42 +197,42 @@ In the nodeOps of runtime-dom, define the actual DOM operations.
 ```ts
 export const nodeOps: RendererOptions<Node> = {
   // Added
-  createElement: (tagName) => {
-    return document.createElement(tagName);
+  createElement: tagName => {
+    return document.createElement(tagName)
   },
 
   // Added
   createText: (text: string) => {
-    return document.createTextNode(text);
+    return document.createTextNode(text)
   },
 
   setElementText(node, text) {
-    node.textContent = text;
+    node.textContent = text
   },
 
   // Added
   insert: (child, parent, anchor) => {
-    parent.insertBefore(child, anchor || null);
+    parent.insertBefore(child, anchor || null)
   },
-};
+}
 ```
 
 Well, at this point, you should be able to render elements on the screen.
 Try writing and testing various things in the playground!
 
 ```ts
-import { createApp, h } from "chibivue";
+import { createApp, h } from 'chibivue'
 
 const app = createApp({
   render() {
-    return h("div", {}, [
-      h("p", {}, ["Hello world."]),
-      h("button", {}, ["click me!"]),
-    ]);
+    return h('div', {}, [
+      h('p', {}, ['Hello world.']),
+      h('button', {}, ['click me!']),
+    ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Yay! Now we can use the h function to render various tags!
@@ -270,18 +270,18 @@ touch packages/runtime-dom/patchProp.ts
 Contents of `runtime-dom/patchProp.ts`
 
 ```ts
-type DOMRendererOptions = RendererOptions<Node, Element>;
+type DOMRendererOptions = RendererOptions<Node, Element>
 
-const onRE = /^on[^a-z]/;
-export const isOn = (key: string) => onRE.test(key);
+const onRE = /^on[^a-z]/
+export const isOn = (key: string) => onRE.test(key)
 
-export const patchProp: DOMRendererOptions["patchProp"] = (el, key, value) => {
+export const patchProp: DOMRendererOptions['patchProp'] = (el, key, value) => {
   if (isOn(key)) {
     // patchEvent(el, key, value); // We will implement this later
   } else {
     // patchAttr(el, key, value); // We will implement this later
   }
-};
+}
 ```
 
 Since the type of patchProp is not defined in RendererOptions, let's define it.
@@ -314,7 +314,7 @@ export const nodeOps: Omit<RendererOptions, "patchProp"> = {
 Then, when generating the renderer in `runtime-dom/index`, let's change it to pass patchProp together.
 
 ```ts
-const { render } = createRenderer({ ...nodeOps, patchProp });
+const { render } = createRenderer({ ...nodeOps, patchProp })
 ```
 
 ## Event handlers
@@ -331,63 +331,63 @@ Implement events.ts.
 
 ```ts
 interface Invoker extends EventListener {
-  value: EventValue;
+  value: EventValue
 }
 
-type EventValue = Function;
+type EventValue = Function
 
 export function addEventListener(
   el: Element,
   event: string,
-  handler: EventListener
+  handler: EventListener,
 ) {
-  el.addEventListener(event, handler);
+  el.addEventListener(event, handler)
 }
 
 export function removeEventListener(
   el: Element,
   event: string,
-  handler: EventListener
+  handler: EventListener,
 ) {
-  el.removeEventListener(event, handler);
+  el.removeEventListener(event, handler)
 }
 
 export function patchEvent(
   el: Element & { _vei?: Record<string, Invoker | undefined> },
   rawName: string,
-  value: EventValue | null
+  value: EventValue | null,
 ) {
   // vei = vue event invokers
-  const invokers = el._vei || (el._vei = {});
-  const existingInvoker = invokers[rawName];
+  const invokers = el._vei || (el._vei = {})
+  const existingInvoker = invokers[rawName]
 
   if (value && existingInvoker) {
     // patch
-    existingInvoker.value = value;
+    existingInvoker.value = value
   } else {
-    const name = parseName(rawName);
+    const name = parseName(rawName)
     if (value) {
       // add
-      const invoker = (invokers[rawName] = createInvoker(value));
-      addEventListener(el, name, invoker);
+      const invoker = (invokers[rawName] = createInvoker(value))
+      addEventListener(el, name, invoker)
     } else if (existingInvoker) {
       // remove
-      removeEventListener(el, name, existingInvoker);
-      invokers[rawName] = undefined;
+      removeEventListener(el, name, existingInvoker)
+      invokers[rawName] = undefined
     }
   }
 }
 
 function parseName(rowName: string): string {
-  return rowName.slice(2).toLocaleLowerCase();
+  return rowName.slice(2).toLocaleLowerCase()
 }
 
 function createInvoker(initialValue: EventValue) {
   const invoker: Invoker = (e: Event) => {
-    invoker.value(e);
-  };
-  invoker.value = initialValue;
-  return invoker;
+    invoker.value(e)
+  }
+  invoker.value = initialValue
+  return invoker
 }
 ```
 
@@ -406,13 +406,13 @@ Now let's incorporate it into patchProps and try using it in renderVNode.
 patchProps
 
 ```ts
-export const patchProp: DOMRendererOptions["patchProp"] = (el, key, value) => {
+export const patchProp: DOMRendererOptions['patchProp'] = (el, key, value) => {
   if (isOn(key)) {
-    patchEvent(el, key, value);
+    patchEvent(el, key, value)
   } else {
     // patchAttr(el, key, value); // We will implement this later
   }
-};
+}
 ```
 
 renderVNode in runtime-core/renderer.ts
@@ -443,26 +443,26 @@ renderVNode in runtime-core/renderer.ts
 Now let's run it in the playground. I will try to display a simple alert.
 
 ```ts
-import { createApp, h } from "chibivue";
+import { createApp, h } from 'chibivue'
 
 const app = createApp({
   render() {
-    return h("div", {}, [
-      h("p", {}, ["Hello world."]),
+    return h('div', {}, [
+      h('p', {}, ['Hello world.']),
       h(
-        "button",
+        'button',
         {
           onClick() {
-            alert("Hello world!");
+            alert('Hello world!')
           },
         },
-        ["click me!"]
+        ['click me!'],
       ),
-    ]);
+    ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 We can now register event handlers with the h function!
@@ -477,26 +477,26 @@ I would like you to try it yourself. The answer will be attached at the end of t
 Once you can make this code work, you have reached the goal.
 
 ```ts
-import { createApp, h } from "chibivue";
+import { createApp, h } from 'chibivue'
 
 const app = createApp({
   render() {
-    return h("div", { id: "my-app" }, [
-      h("p", { style: "color: red; font-weight: bold;" }, ["Hello world."]),
+    return h('div', { id: 'my-app' }, [
+      h('p', { style: 'color: red; font-weight: bold;' }, ['Hello world.']),
       h(
-        "button",
+        'button',
         {
           onClick() {
-            alert("Hello world!");
+            alert('Hello world!')
           },
         },
-        ["click me!"]
+        ['click me!'],
       ),
-    ]);
+    ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ![simple_h_function_attr](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function_attr.png)

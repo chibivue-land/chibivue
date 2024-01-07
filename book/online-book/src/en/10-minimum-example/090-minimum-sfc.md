@@ -14,14 +14,14 @@ You just need to convert the following SFC code:
 <script>
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
-};
+}
 </script>
 
 <template>
@@ -53,26 +53,26 @@ into the following JS code:
 ```ts
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
 
   render(_ctx) {
-    return h("div", { class: "container", style: "text-align: center" }, [
-      h("h2", `message: ${_ctx.state.message}`),
-      h("img", {
-        width: "150px",
-        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png",
+    return h('div', { class: 'container', style: 'text-align: center' }, [
+      h('h2', `message: ${_ctx.state.message}`),
+      h('img', {
+        width: '150px',
+        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png',
       }),
-      h("p", [h("b", "chibivue"), " is the minimal Vue.js"]),
-      h("button", { onClick: _ctx.changeMessage }, "click me!"),
-    ]);
+      h('p', [h('b', 'chibivue'), ' is the minimal Vue.js']),
+      h('button', { onClick: _ctx.changeMessage }, 'click me!'),
+    ])
   },
-};
+}
 ```
 
 (You may be wondering about the styles! But for now, let's forget about that and focus on the template and script.)
@@ -84,10 +84,10 @@ In most cases, SFC is imported and used from other files.
 At this time, we write a plugin that compiles the `.vue` file when it is resolved and binds the result to the App.
 
 ```ts
-import App from "./App.vue"; // Compile when App.vue is imported
+import App from './App.vue' // Compile when App.vue is imported
 
-const app = createApp(App);
-app.mount("#app");
+const app = createApp(App)
+app.mount('#app')
 ```
 
 There are various build tools, but this time let's try writing a plugin for Vite.
@@ -108,13 +108,13 @@ ni
 Let's take a look at the vite.config.ts file of the created project.
 
 ```ts
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-});
+})
 ```
 
 You can see that it adds `@vitejs/plugin-vue` to the plugins.
@@ -123,32 +123,32 @@ This plugin implements the SFC compiler according to the Vite plugin API, and co
 Let's try creating a simple plugin in this project.
 
 ```ts
-import { defineConfig, Plugin } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig, Plugin } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
-});
+})
 
 function myPlugin(): Plugin {
   return {
-    name: "vite:my-plugin",
+    name: 'vite:my-plugin',
 
     transform(code, id) {
-      if (id.endsWith(".sample.js")) {
-        let result = "";
+      if (id.endsWith('.sample.js')) {
+        let result = ''
 
         for (let i = 0; i < 100; i++) {
-          result += `console.log("HelloWorld from plugin! (${i})");\n`;
+          result += `console.log("HelloWorld from plugin! (${i})");\n`
         }
 
-        result += code;
+        result += code
 
-        return { code: result };
+        return { code: result }
       }
     },
-  };
+  }
 }
 ```
 
@@ -175,27 +175,27 @@ touch src/plugin.sample.js
 function fizzbuzz(n) {
   for (let i = 1; i <= n; i++) {
     i % 3 === 0 && i % 5 === 0
-      ? console.log("fizzbuzz")
+      ? console.log('fizzbuzz')
       : i % 3 === 0
-      ? console.log("fizz")
-      : i % 5 === 0
-      ? console.log("buzz")
-      : console.log(i);
+        ? console.log('fizz')
+        : i % 5 === 0
+          ? console.log('buzz')
+          : console.log(i)
   }
 }
 
-fizzbuzz(Math.floor(Math.random() * 100) + 1);
+fizzbuzz(Math.floor(Math.random() * 100) + 1)
 ```
 
 `~/plugin-sample/src/main.ts`
 
 ```ts
-import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
-import "./plugin.sample.js"; // 追加
+import { createApp } from 'vue'
+import './style.css'
+import App from './App.vue'
+import './plugin.sample.js' // 追加
 
-createApp(App).mount("#app");
+createApp(App).mount('#app')
 ```
 
 Let's check it in the browser.
@@ -236,16 +236,16 @@ touch packages/@extensions/vite-plugin-chibivue/index.ts
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
 ```ts
-import type { Plugin } from "vite";
+import type { Plugin } from 'vite'
 
 export default function vitePluginChibivue(): Plugin {
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      return { code };
+      return { code }
     },
-  };
+  }
 }
 ```
 
@@ -261,22 +261,22 @@ touch playground/src/App.vue
 
 ```vue
 <script>
-import { reactive } from "chibivue";
+import { reactive } from 'chibivue'
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    const handleInput = (e) => {
-      state.input = e.target?.value ?? "";
-    };
+    const handleInput = e => {
+      state.input = e.target?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
-};
+}
 </script>
 
 <template>
@@ -315,19 +315,19 @@ export default {
 `playground/src/main.ts`
 
 ```ts
-import { createApp } from "chibivue";
-import App from "./App.vue";
+import { createApp } from 'chibivue'
+import App from './App.vue'
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 `playground/vite.config.js`
 
 ```ts
-import { defineConfig } from "vite";
-import chibivue from "../../packages/@extensions/vite-plugin-chibivue";
+import { defineConfig } from 'vite'
+import chibivue from '../../packages/@extensions/vite-plugin-chibivue'
 
 export default defineConfig({
   resolve: {
@@ -336,7 +336,7 @@ export default defineConfig({
     },
   },
   plugins: [chibivue()],
-});
+})
 ```
 
 Let's try starting in this state.
@@ -354,20 +354,20 @@ We can write a branching statement with `id` as we did in the sample, but since 
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
 ```ts
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
+import type { Plugin } from 'vite'
+import { createFilter } from 'vite'
 
 export default function vitePluginChibivue(): Plugin {
-  const filter = createFilter(/\.vue$/);
+  const filter = createFilter(/\.vue$/)
 
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      if (!filter(id)) return;
-      return { code: `export default {}` };
+      if (!filter(id)) return
+      return { code: `export default {}` }
     },
-  };
+  }
 }
 ```
 
@@ -426,33 +426,33 @@ touch packages/compiler-sfc/parse.ts
 `packages/compiler-sfc/parse.ts`
 
 ```ts
-import { SourceLocation } from "../compiler-core";
+import { SourceLocation } from '../compiler-core'
 
 export interface SFCDescriptor {
-  id: string;
-  filename: string;
-  source: string;
-  template: SFCTemplateBlock | null;
-  script: SFCScriptBlock | null;
-  styles: SFCStyleBlock[];
+  id: string
+  filename: string
+  source: string
+  template: SFCTemplateBlock | null
+  script: SFCScriptBlock | null
+  styles: SFCStyleBlock[]
 }
 
 export interface SFCBlock {
-  type: string;
-  content: string;
-  loc: SourceLocation;
+  type: string
+  content: string
+  loc: SourceLocation
 }
 
 export interface SFCTemplateBlock extends SFCBlock {
-  type: "template";
+  type: 'template'
 }
 
 export interface SFCScriptBlock extends SFCBlock {
-  type: "script";
+  type: 'script'
 }
 
 export declare interface SFCStyleBlock extends SFCBlock {
-  type: "style";
+  type: 'style'
 }
 ```
 
@@ -467,15 +467,15 @@ First, as a preparation, export the template parser we created earlier.
 `~/packages/compiler-dom/index.ts`
 
 ```ts
-import { baseCompile, baseParse } from "../compiler-core";
+import { baseCompile, baseParse } from '../compiler-core'
 
 export function compile(template: string) {
-  return baseCompile(template);
+  return baseCompile(template)
 }
 
 // Export the parser
 export function parse(template: string) {
-  return baseParse(template);
+  return baseParse(template)
 }
 ```
 
@@ -489,11 +489,11 @@ touch packages/compiler-sfc/compileTemplate.ts
 `~/packages/compiler-sfc/compileTemplate.ts`
 
 ```ts
-import { TemplateChildNode } from "../compiler-core";
+import { TemplateChildNode } from '../compiler-core'
 
 export interface TemplateCompiler {
-  compile(template: string): string;
-  parse(template: string): { children: TemplateChildNode[] };
+  compile(template: string): string
+  parse(template: string): { children: TemplateChildNode[] }
 }
 ```
 
@@ -502,25 +502,25 @@ Then, just implement the parser.
 `packages/compiler-sfc/parse.ts`
 
 ```ts
-import { ElementNode, NodeTypes, SourceLocation } from "../compiler-core";
-import * as CompilerDOM from "../compiler-dom";
-import { TemplateCompiler } from "./compileTemplate";
+import { ElementNode, NodeTypes, SourceLocation } from '../compiler-core'
+import * as CompilerDOM from '../compiler-dom'
+import { TemplateCompiler } from './compileTemplate'
 
 export interface SFCParseOptions {
-  filename?: string;
-  sourceRoot?: string;
-  compiler?: TemplateCompiler;
+  filename?: string
+  sourceRoot?: string
+  compiler?: TemplateCompiler
 }
 
 export interface SFCParseResult {
-  descriptor: SFCDescriptor;
+  descriptor: SFCDescriptor
 }
 
-export const DEFAULT_FILENAME = "anonymous.vue";
+export const DEFAULT_FILENAME = 'anonymous.vue'
 
 export function parse(
   source: string,
-  { filename = DEFAULT_FILENAME, compiler = CompilerDOM }: SFCParseOptions = {}
+  { filename = DEFAULT_FILENAME, compiler = CompilerDOM }: SFCParseOptions = {},
 ): SFCParseResult {
   const descriptor: SFCDescriptor = {
     id: undefined!,
@@ -529,47 +529,47 @@ export function parse(
     template: null,
     script: null,
     styles: [],
-  };
+  }
 
-  const ast = compiler.parse(source);
-  ast.children.forEach((node) => {
-    if (node.type !== NodeTypes.ELEMENT) return;
+  const ast = compiler.parse(source)
+  ast.children.forEach(node => {
+    if (node.type !== NodeTypes.ELEMENT) return
 
     switch (node.tag) {
-      case "template": {
-        descriptor.template = createBlock(node, source) as SFCTemplateBlock;
-        break;
+      case 'template': {
+        descriptor.template = createBlock(node, source) as SFCTemplateBlock
+        break
       }
-      case "script": {
-        const scriptBlock = createBlock(node, source) as SFCScriptBlock;
-        descriptor.script = scriptBlock;
-        break;
+      case 'script': {
+        const scriptBlock = createBlock(node, source) as SFCScriptBlock
+        descriptor.script = scriptBlock
+        break
       }
-      case "style": {
-        descriptor.styles.push(createBlock(node, source) as SFCStyleBlock);
-        break;
+      case 'style': {
+        descriptor.styles.push(createBlock(node, source) as SFCStyleBlock)
+        break
       }
       default: {
-        break;
+        break
       }
     }
-  });
+  })
 
-  return { descriptor };
+  return { descriptor }
 }
 
 function createBlock(node: ElementNode, source: string): SFCBlock {
-  const type = node.tag;
+  const type = node.tag
 
-  let { start, end } = node.loc;
-  start = node.children[0].loc.start;
-  end = node.children[node.children.length - 1].loc.end;
-  const content = source.slice(start.offset, end.offset);
+  let { start, end } = node.loc
+  start = node.children[0].loc.start
+  end = node.children[node.children.length - 1].loc.end
+  const content = source.slice(start.offset, end.offset)
 
-  const loc = { source: content, start, end };
-  const block: SFCBlock = { type, content, loc };
+  const loc = { source: content, start, end }
+  const block: SFCBlock = { type, content, loc }
 
-  return block;
+  return block
 }
 ```
 
@@ -578,7 +578,7 @@ I think it's easy for everyone who has implemented the parser so far. Let's actu
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
 ```ts
-import { parse } from "../../compiler-sfc";
+import { parse } from '../../compiler-sfc'
 
 export default function vitePluginChibivue(): Plugin {
   //.
@@ -589,15 +589,15 @@ export default function vitePluginChibivue(): Plugin {
     //.
     //.
     transform(code, id) {
-      if (!filter(id)) return;
-      const { descriptor } = parse(code, { filename: id });
+      if (!filter(id)) return
+      const { descriptor } = parse(code, { filename: id })
       console.log(
-        "🚀 ~ file: index.ts:14 ~ transform ~ descriptor:",
-        descriptor
-      );
-      return { code: `export default {}` };
+        '🚀 ~ file: index.ts:14 ~ transform ~ descriptor:',
+        descriptor,
+      )
+      return { code: `export default {}` }
     },
-  };
+  }
 }
 ```
 
@@ -625,15 +625,15 @@ However, as you can see from the following code,
 export const generate = ({
   children,
 }: {
-  children: TemplateChildNode[];
+  children: TemplateChildNode[]
 }): string => {
   return `return function render(_ctx) {
   with (_ctx) {
     const { h } = ChibiVue;
     return ${genNode(children[0])};
   }
-}`;
-};
+}`
+}
 ```
 
 This assumes that it will be used with the Function constructor, so it includes the `return` statement at the beginning.  
@@ -650,17 +650,17 @@ touch packages/compiler-core/options.ts
 
 ```ts
 export type CompilerOptions = {
-  isBrowser?: boolean;
-};
+  isBrowser?: boolean
+}
 ```
 
 `~/packages/compiler-dom/index.ts`
 
 ```ts
 export function compile(template: string, option?: CompilerOptions) {
-  const defaultOption: Required<CompilerOptions> = { isBrowser: true };
-  if (option) Object.assign(defaultOption, option);
-  return baseCompile(template, defaultOption);
+  const defaultOption: Required<CompilerOptions> = { isBrowser: true }
+  if (option) Object.assign(defaultOption, option)
+  return baseCompile(template, defaultOption)
 }
 ```
 
@@ -669,11 +669,11 @@ export function compile(template: string, option?: CompilerOptions) {
 ```ts
 export function baseCompile(
   template: string,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ) {
-  const parseResult = baseParse(template.trim());
-  const code = generate(parseResult, option);
-  return code;
+  const parseResult = baseParse(template.trim())
+  const code = generate(parseResult, option)
+  return code
 }
 ```
 
@@ -684,49 +684,49 @@ export const generate = (
   {
     children,
   }: {
-    children: TemplateChildNode[];
+    children: TemplateChildNode[]
   },
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
-  return `${option.isBrowser ? "return " : ""}function render(_ctx) {
+  return `${option.isBrowser ? 'return ' : ''}function render(_ctx) {
   const { h } = ChibiVue;
   return ${genNode(children[0])};
-}`;
-};
+}`
+}
 ```
 
 I also added the import statement. I changed it to add the generated source code to the `output` array.
 
 ```ts
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
-import { parse } from "../../compiler-sfc";
-import { compile } from "../../compiler-dom";
+import type { Plugin } from 'vite'
+import { createFilter } from 'vite'
+import { parse } from '../../compiler-sfc'
+import { compile } from '../../compiler-dom'
 
 export default function vitePluginChibivue(): Plugin {
-  const filter = createFilter(/\.vue$/);
+  const filter = createFilter(/\.vue$/)
 
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      if (!filter(id)) return;
+      if (!filter(id)) return
 
-      const outputs = [];
-      outputs.push("import * as ChibiVue from 'chibivue'\n");
+      const outputs = []
+      outputs.push("import * as ChibiVue from 'chibivue'\n")
 
-      const { descriptor } = parse(code, { filename: id });
-      const templateCode = compile(descriptor.template?.content ?? "", {
+      const { descriptor } = parse(code, { filename: id })
+      const templateCode = compile(descriptor.template?.content ?? '', {
         isBrowser: false,
-      });
-      outputs.push(templateCode);
+      })
+      outputs.push(templateCode)
 
-      outputs.push("\n");
-      outputs.push(`export default { render }`);
+      outputs.push('\n')
+      outputs.push(`export default { render }`)
 
-      return { code: outputs.join("\n") };
+      return { code: outputs.join('\n') }
     },
-  };
+  }
 }
 ```
 
@@ -754,18 +754,18 @@ export const generate = (
   {
     children,
   }: {
-    children: TemplateChildNode[];
+    children: TemplateChildNode[]
   },
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
   // Generate code that does not include the `with` statement when `isBrowser` is false
-  return `${option.isBrowser ? "return " : ""}function render(_ctx) {
-    ${option.isBrowser ? "with (_ctx) {" : ""}
+  return `${option.isBrowser ? 'return ' : ''}function render(_ctx) {
+    ${option.isBrowser ? 'with (_ctx) {' : ''}
       const { h } = ChibiVue;
       return ${genNode(children[0], option)};
-    ${option.isBrowser ? "}" : ""}
-}`;
-};
+    ${option.isBrowser ? '}' : ''}
+}`
+}
 
 // .
 // .
@@ -773,26 +773,26 @@ export const generate = (
 
 const genProp = (
   prop: AttributeNode | DirectiveNode,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
   switch (prop.type) {
     case NodeTypes.ATTRIBUTE:
-      return `${prop.name}: "${prop.value?.content}"`;
+      return `${prop.name}: "${prop.value?.content}"`
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
-        case "on":
+        case 'on':
           return `${toHandlerKey(prop.arg)}: ${
-            option.isBrowser ? "" : "_ctx." // -------------------- Here
-          }${prop.exp}`;
+            option.isBrowser ? '' : '_ctx.' // -------------------- Here
+          }${prop.exp}`
         default:
           // TODO: other directives
-          throw new Error(`unexpected directive name. got "${prop.name}"`);
+          throw new Error(`unexpected directive name. got "${prop.name}"`)
       }
     }
     default:
-      throw new Error(`unexpected prop type.`);
+      throw new Error(`unexpected prop type.`)
   }
-};
+}
 
 // .
 // .
@@ -800,10 +800,10 @@ const genProp = (
 
 const genInterpolation = (
   node: InterpolationNode,
-  option: Required<CompilerOptions>
+  option: Required<CompilerOptions>,
 ): string => {
-  return `${option.isBrowser ? "" : "_ctx."}${node.content}`; // ------------ Here
-};
+  return `${option.isBrowser ? '' : '_ctx.'}${node.content}` // ------------ Here
+}
 ```
 
 ![compile_sfc_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_sfc_render.png)
@@ -820,7 +820,7 @@ Now, the original script section of SFC looks like this:
 ```ts
 export default {
   setup() {},
-};
+}
 ```
 
 I want to extract only the following part:
@@ -838,9 +838,9 @@ If I can extract this part, I can mix it nicely with the previously generated re
 ```ts
 const _sfc_main = {
   setup() {},
-};
+}
 
-export default { ..._sfc_main, render };
+export default { ..._sfc_main, render }
 ```
 
 ## Using external libraries
@@ -860,7 +860,7 @@ You may have heard of Babel if you are familiar with JavaScript. Babel is a tool
 
 ```ts
 interface Program {
-  body: Statement[];
+  body: Statement[]
 }
 ```
 
@@ -882,7 +882,7 @@ interface ForStatement extends Statement {
 }
 
 interface BlockStatement extends Statement {
-  body: Statement[];
+  body: Statement[]
 }
 // There are many more
 ```
@@ -893,18 +893,18 @@ Statements usually have an "expression" in most cases. An expression is somethin
 interface Expression {}
 
 interface BinaryExpression extends Expression {
-  operator: "+" | "-" | "*" | "/"; // There are many more, but omitted
-  left: Expression;
-  right: Expression;
+  operator: '+' | '-' | '*' | '/' // There are many more, but omitted
+  left: Expression
+  right: Expression
 }
 
 interface ObjectExpression extends Expression {
-  properties: Property[]; // omitted
+  properties: Property[] // omitted
 }
 
 interface CallExpression extends Expression {
-  callee: Expression;
-  arguments: Expression[];
+  callee: Expression
+  arguments: Expression[]
 }
 
 // There are many more
@@ -914,9 +914,9 @@ If we consider an if statement, it has the following structure:
 
 ```ts
 interface IfStatement extends Statement {
-  test: Expression; // condition
-  consequent: Statement; // statements to be executed if the condition is true
-  alternate: Statement | null; // statements to be executed if the condition is false
+  test: Expression // condition
+  consequent: Statement // statements to be executed if the condition is true
+  alternate: Statement | null // statements to be executed if the condition is false
 }
 ```
 
@@ -931,16 +931,16 @@ https://github.com/rich-harris/magic-string
 There is another library I want to use. This library is also used by the official Vue. It is a library that makes string manipulation easier.
 
 ```ts
-const input = "Hello";
-const s = new MagicString(input);
+const input = 'Hello'
+const s = new MagicString(input)
 ```
 
 You can generate an instance like this and use the convenient methods provided by the instance to manipulate strings. Here are some examples:
 
 ```ts
-s.append("!!!"); // Append to the end
-s.prepend("message: "); // Prepend to the beginning
-s.overwrite(9, 13, "こんにちは"); // Overwrite within a range
+s.append('!!!') // Append to the end
+s.prepend('message: ') // Prepend to the beginning
+s.overwrite(9, 13, 'こんにちは') // Overwrite within a range
 ```
 
 There is no need to use it forcefully, but I will use it to align with the official Vue.
@@ -955,7 +955,7 @@ To recap the current goal:
 export default {
   setup() {},
   // Other options
-};
+}
 ```
 
 I want to rewrite the code above to:
@@ -964,9 +964,9 @@ I want to rewrite the code above to:
 const _sfc_main = {
   setup() {},
   // Other options
-};
+}
 
-export default { ..._sfc_main, render };
+export default { ..._sfc_main, render }
 ```
 
 In other words, if I can extract the export target from the original code's export statement and assign it to a variable called `_sfc_main`, I will achieve the goal.
@@ -993,27 +993,27 @@ Return the converted source code as the return value.
 ```ts
 export function rewriteDefault(input: string, as: string): string {
   // TODO:
-  return "";
+  return ''
 }
 ```
 
 First, let's handle the case where the export declaration does not exist. Since there is no export, bind an empty object and finish.
 
 ```ts
-const defaultExportRE = /((?:^|\n|;)\s*)export(\s*)default/;
-const namedDefaultExportRE = /((?:^|\n|;)\s*)export(.+)(?:as)?(\s*)default/s;
+const defaultExportRE = /((?:^|\n|;)\s*)export(\s*)default/
+const namedDefaultExportRE = /((?:^|\n|;)\s*)export(.+)(?:as)?(\s*)default/s
 
 export function rewriteDefault(input: string, as: string): string {
   if (!hasDefaultExport(input)) {
-    return input + `\nconst ${as} = {}`;
+    return input + `\nconst ${as} = {}`
   }
 
   // TODO:
-  return "";
+  return ''
 }
 
 export function hasDefaultExport(input: string): boolean {
-  return defaultExportRE.test(input) || namedDefaultExportRE.test(input);
+  return defaultExportRE.test(input) || namedDefaultExportRE.test(input)
 }
 ```
 
@@ -1022,17 +1022,17 @@ Here is the translation of the given Japanese text:
 Here comes the Babel parser and magic-string.
 
 ```ts
-import { parse } from "@babel/parser";
-import MagicString from "magic-string";
+import { parse } from '@babel/parser'
+import MagicString from 'magic-string'
 // .
 // .
 export function hasDefaultExport(input: string): boolean {
   // .
   // .
-  const s = new MagicString(input);
+  const s = new MagicString(input)
   const ast = parse(input, {
-    sourceType: "module",
-  }).program.body;
+    sourceType: 'module',
+  }).program.body
   // .
   // .
 }
@@ -1044,19 +1044,19 @@ From here, we will manipulate the string `s` based on the JavaScript AST (Abstra
 export function hasDefaultExport(input: string): boolean {
   // .
   // .
-  ast.forEach((node) => {
+  ast.forEach(node => {
     // In case of default export
-    if (node.type === "ExportDefaultDeclaration") {
-      if (node.declaration.type === "ClassDeclaration") {
+    if (node.type === 'ExportDefaultDeclaration') {
+      if (node.declaration.type === 'ClassDeclaration') {
         // If it is `export default class Hoge {}`, replace it with `class Hoge {}`
-        s.overwrite(node.start!, node.declaration.id.start!, `class `);
+        s.overwrite(node.start!, node.declaration.id.start!, `class `)
         // Then, add code like `const ${as} = Hoge;` at the end.
-        s.append(`\nconst ${as} = ${node.declaration.id.name}`);
+        s.append(`\nconst ${as} = ${node.declaration.id.name}`)
       } else {
         // For other default exports, replace the declaration part with a variable declaration.
         // eg 1) `export default { setup() {}, }`  ->  `const ${as} = { setup() {}, }`
         // eg 2) `export default Hoge`  ->  `const ${as} = Hoge`
-        s.overwrite(node.start!, node.declaration.start!, `const ${as} = `);
+        s.overwrite(node.start!, node.declaration.start!, `const ${as} = `)
       }
     }
 
@@ -1065,26 +1065,26 @@ export function hasDefaultExport(input: string): boolean {
     //   1. In the case of declaration like `export { default } from "source";`
     //   2. In the case of declaration like `export { hoge as default }` from 'source'
     //   3. In the case of declaration like `export { hoge as default }`
-    if (node.type === "ExportNamedDeclaration") {
+    if (node.type === 'ExportNamedDeclaration') {
       for (const specifier of node.specifiers) {
         if (
-          specifier.type === "ExportSpecifier" &&
-          specifier.exported.type === "Identifier" &&
-          specifier.exported.name === "default"
+          specifier.type === 'ExportSpecifier' &&
+          specifier.exported.type === 'Identifier' &&
+          specifier.exported.name === 'default'
         ) {
           // If there is a keyword `from`
           if (node.source) {
-            if (specifier.local.name === "default") {
+            if (specifier.local.name === 'default') {
               // 1. In the case of declaration like `export { default } from "source";`
               // In this case, extract it into an import statement and give it a name, then bind it to the final variable.
               // eg) `export { default } from "source";`  ->  `import { default as __VUE_DEFAULT__ } from 'source'; const ${as} = __VUE_DEFAULT__`
-              const end = specifierEnd(input, specifier.local.end!, node.end!);
+              const end = specifierEnd(input, specifier.local.end!, node.end!)
               s.prepend(
-                `import { default as __VUE_DEFAULT__ } from '${node.source.value}'\n`
-              );
-              s.overwrite(specifier.start!, end, ``);
-              s.append(`\nconst ${as} = __VUE_DEFAULT__`);
-              continue;
+                `import { default as __VUE_DEFAULT__ } from '${node.source.value}'\n`,
+              )
+              s.overwrite(specifier.start!, end, ``)
+              s.append(`\nconst ${as} = __VUE_DEFAULT__`)
+              continue
             } else {
               // 2. In the case of declaration like `export { hoge as default }` from 'source'
               // In this case, rewrite all specifiers as they are in the import statement, and bind the variable that is as default to the final variable.
@@ -1092,29 +1092,29 @@ export function hasDefaultExport(input: string): boolean {
               const end = specifierEnd(
                 input,
                 specifier.exported.end!,
-                node.end!
-              );
+                node.end!,
+              )
               s.prepend(
                 `import { ${input.slice(
                   specifier.local.start!,
-                  specifier.local.end!
-                )} } from '${node.source.value}'\n`
-              );
+                  specifier.local.end!,
+                )} } from '${node.source.value}'\n`,
+              )
 
               // 3. In the case of declaration like `export { hoge as default }`
               // In this case, simply bind it to the final variable.
-              s.overwrite(specifier.start!, end, ``);
-              s.append(`\nconst ${as} = ${specifier.local.name}`);
-              continue;
+              s.overwrite(specifier.start!, end, ``)
+              s.append(`\nconst ${as} = ${specifier.local.name}`)
+              continue
             }
           }
-          const end = specifierEnd(input, specifier.end!, node.end!);
-          s.overwrite(specifier.start!, end, ``);
-          s.append(`\nconst ${as} = ${specifier.local.name}`);
+          const end = specifierEnd(input, specifier.end!, node.end!)
+          s.overwrite(specifier.start!, end, ``)
+          s.append(`\nconst ${as} = ${specifier.local.name}`)
         }
       }
     }
-  });
+  })
   // .
   // .
 }
@@ -1122,65 +1122,65 @@ export function hasDefaultExport(input: string): boolean {
 // Calculate the end of the declaration statement
 function specifierEnd(input: string, end: number, nodeEnd: number | null) {
   // export { default   , foo } ...
-  let hasCommas = false;
-  let oldEnd = end;
+  let hasCommas = false
+  let oldEnd = end
   while (end < nodeEnd!) {
     if (/\s/.test(input.charAt(end))) {
-      end++;
-    } else if (input.charAt(end) === ",") {
-      end++;
-      hasCommas = true;
-      break;
-    } else if (input.charAt(end) === "}") {
-      break;
+      end++
+    } else if (input.charAt(end) === ',') {
+      end++
+      hasCommas = true
+      break
+    } else if (input.charAt(end) === '}') {
+      break
     }
   }
-  return hasCommas ? end : oldEnd;
+  return hasCommas ? end : oldEnd
 }
 ```
 
 Now you can rewrite the default export. Let's try using it in a plugin.
 
 ```ts
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
-import { parse, rewriteDefault } from "../../compiler-sfc";
-import { compile } from "../../compiler-dom";
+import type { Plugin } from 'vite'
+import { createFilter } from 'vite'
+import { parse, rewriteDefault } from '../../compiler-sfc'
+import { compile } from '../../compiler-dom'
 
 export default function vitePluginChibivue(): Plugin {
-  const filter = createFilter(/\.vue$/);
+  const filter = createFilter(/\.vue$/)
 
   return {
-    name: "vite:chibivue",
+    name: 'vite:chibivue',
 
     transform(code, id) {
-      if (!filter(id)) return;
+      if (!filter(id)) return
 
-      const outputs = [];
-      outputs.push("import * as ChibiVue from 'chibivue'");
+      const outputs = []
+      outputs.push("import * as ChibiVue from 'chibivue'")
 
-      const { descriptor } = parse(code, { filename: id });
+      const { descriptor } = parse(code, { filename: id })
 
       // --------------------------- From here
-      const SFC_MAIN = "_sfc_main";
+      const SFC_MAIN = '_sfc_main'
       const scriptCode = rewriteDefault(
-        descriptor.script?.content ?? "",
-        SFC_MAIN
-      );
-      outputs.push(scriptCode);
+        descriptor.script?.content ?? '',
+        SFC_MAIN,
+      )
+      outputs.push(scriptCode)
       // --------------------------- To here
 
-      const templateCode = compile(descriptor.template?.content ?? "", {
+      const templateCode = compile(descriptor.template?.content ?? '', {
         isBrowser: false,
-      });
-      outputs.push(templateCode);
+      })
+      outputs.push(templateCode)
 
-      outputs.push("\n");
-      outputs.push(`export default { ...${SFC_MAIN}, render }`); // Here
+      outputs.push('\n')
+      outputs.push(`export default { ...${SFC_MAIN}, render }`) // Here
 
-      return { code: outputs.join("\n") };
+      return { code: outputs.join('\n') }
     },
-  };
+  }
 }
 ```
 
@@ -1194,11 +1194,11 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // .
   // .
   // Add the component's render option to the instance
-  const { render } = component;
+  const { render } = component
   if (render) {
-    instance.render = render as InternalRenderFunction;
+    instance.render = render as InternalRenderFunction
   }
-};
+}
 ```
 
 Now you should be able to render!!!
@@ -1214,28 +1214,28 @@ The styles are not applied because they are not supported, but now you can rende
 Let's also support styles. In Vite, you can import CSS files by using the `.css` extension.
 
 ```js
-import "app.css";
+import 'app.css'
 ```
 
 We will implement this by using Vite's virtual modules. Virtual modules allow you to keep non-existent files in memory as if they exist. You can use the `load` and `resolve` options to implement virtual modules.
 
 ```ts
 export default function myPlugin() {
-  const virtualModuleId = "virtual:my-module";
+  const virtualModuleId = 'virtual:my-module'
 
   return {
-    name: "my-plugin", // Required, displayed in warnings and errors
+    name: 'my-plugin', // Required, displayed in warnings and errors
     resolveId(id) {
       if (id === virtualModuleId) {
-        return virtualModuleId;
+        return virtualModuleId
       }
     },
     load(id) {
       if (id === virtualModuleId) {
-        return `export const msg = "from virtual module"`;
+        return `export const msg = "from virtual module"`
       }
     },
-  };
+  }
 }
 ```
 
@@ -1256,34 +1256,34 @@ export default function vitePluginChibivue(): Plugin {
     //  ,
     resolveId(id) {
       // This ID is a non-existent path, but we handle it virtually in load, so we return the ID to indicate that it can be loaded
-      if (id.match(/\.vue\.css$/)) return id;
+      if (id.match(/\.vue\.css$/)) return id
 
       // For IDs that are not returned here, if the file actually exists, the file will be resolved, and if it does not exist, an error will be thrown
     },
     load(id) {
       // Handling when .vue.css is loaded (when import is declared and loaded)
       if (id.match(/\.vue\.css$/)) {
-        const filename = id.replace(/\.css$/, "");
-        const content = fs.readFileSync("." + filename, "utf-8"); // Retrieve the SFC file normally
-        const { descriptor } = parse(content, { filename }); // Parse the SFC
+        const filename = id.replace(/\.css$/, '')
+        const content = fs.readFileSync('.' + filename, 'utf-8') // Retrieve the SFC file normally
+        const { descriptor } = parse(content, { filename }) // Parse the SFC
 
         // Join the content and return it as the result
-        const styles = descriptor.styles.map((it) => it.content).join("\n");
-        return { code: styles };
+        const styles = descriptor.styles.map(it => it.content).join('\n')
+        return { code: styles }
       }
     },
 
     transform(code, id) {
-      if (!filter(id)) return;
+      if (!filter(id)) return
 
-      const outputs = [];
-      outputs.push("import * as ChibiVue from 'chibivue'");
-      outputs.push(`import '${id}.css'`); // Declare the import statement for ${id}.css
+      const outputs = []
+      outputs.push("import * as ChibiVue from 'chibivue'")
+      outputs.push(`import '${id}.css'`) // Declare the import statement for ${id}.css
       //  ,
       //  ,
       //  ,
     },
-  };
+  }
 }
 ```
 

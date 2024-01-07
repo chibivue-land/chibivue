@@ -7,7 +7,6 @@
 
 (手軽な順番で紹介していきます。)
 
-
 ## SFC Playground を活用する
 
 これは最も手軽な方法です。公式ドキュメントからもリンクされているほど、広く知られている方法です。
@@ -67,10 +66,10 @@ nr setup:vue
 
 # 💁 input your local vuejs/core absolute path:
 #   e.g. /Users/ubugeeei/oss/vuejs-core
-#   > 
+#   >
 ```
 
-これで chibivue のリポジトリ内に ローカルの vuejs/core を指すような vue のプロジェクトが作成されます。  
+これで chibivue のリポジトリ内に ローカルの vuejs/core を指すような vue のプロジェクトが作成されます。
 
 <video src="https://github.com/Ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
 
@@ -87,7 +86,6 @@ playground 側の HMR はもちろん、
 vuejs/core のコードをいじっても HMR が効きます。
 
 <video src="https://github.com/Ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
-
 
 ---
 

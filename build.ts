@@ -103,7 +103,6 @@ export const clearMain = () =>
   Object.entries(PACKAGES)
     .map(([pkg]) => `packages/${pkg}/dist`)
     .map(dir => rimraf(dir))
-
 ;(async function main() {
   console.log('clear dist...')
   await Promise.allSettled([...clearMain()])

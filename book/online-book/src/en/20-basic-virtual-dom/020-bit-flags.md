@@ -23,24 +23,24 @@ Let's consider the following VNode as an example:
 
 ```ts
 const vnode = {
-  type: "div",
+  type: 'div',
   children: [
-    { type: "p", children: ["hello"] },
-    { type: "p", children: ["hello"] },
+    { type: 'p', children: ['hello'] },
+    { type: 'p', children: ['hello'] },
   ],
-};
+}
 ```
 
 First, the initial value of the flag is 0. (For simplicity, this explanation is given using 8 bits.)
 
 ```ts
-let shape = 0b0000_0000;
+let shape = 0b0000_0000
 ```
 
 Now, this VNode is an element and has an array of children, so the ELEMENT flag and the ARRAY_CHILDREN flag are set.
 
 ```ts
-shape = shape | ShapeFlags.ELEMENT | ELEMENT.ARRAY_CHILDREN; // 0x00010001
+shape = shape | ShapeFlags.ELEMENT | ELEMENT.ARRAY_CHILDREN // 0x00010001
 ```
 
 With this, we can represent the information that this VNode is an element and has an array of children using just one number called "shape". We can efficiently manage the types of VNodes by using this in branching in the renderer or other parts of the code.
@@ -68,7 +68,7 @@ Here's what you need to do:
 - Define the shape in runtime-core/vnode.ts
   ```ts
   export interface VNode<HostNode = any> {
-    shapeFlag: number;
+    shapeFlag: number
   }
   ```
   Add this and calculate the flag in functions like createVNode.

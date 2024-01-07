@@ -13,22 +13,22 @@
 export default defineComponent({
   props: { parentCount: { type: Number, default: 0 } },
   data() {
-    return { dataState: { count: 0 } };
+    return { dataState: { count: 0 } }
   },
   methods: {
     incrementData() {
-      this.dataState.count++;
+      this.dataState.count++
     },
   },
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     const increment = () => {
-      state.count++;
-    };
+      state.count++
+    }
 
-    return { state, increment };
+    return { state, increment }
   },
-});
+})
 </script>
 
 <template>
@@ -54,7 +54,7 @@ export default defineComponent({
 
 ```vue
 <script setup>
-const ChildRef = ref();
+const ChildRef = ref()
 
 // コンポーネントが持つメソッドやデータにアクセスできる
 // ChildRef.value?.incrementData
@@ -75,7 +75,7 @@ const ChildRef = ref();
 
 ```ts
 interface ComponentInternalInstance {
-  proxy: ComponentPublicInstance | null;
+  proxy: ComponentPublicInstance | null
 }
 ```
 
@@ -84,16 +84,16 @@ interface ComponentInternalInstance {
 ```ts
 instance.proxy = instance.proxy = new Proxy(
   instance,
-  PublicInstanceProxyHandlers
-);
+  PublicInstanceProxyHandlers,
+)
 
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get(instance: ComponentRenderContext, key: string) {
-    const { setupState, ctx, props } = instance;
+    const { setupState, ctx, props } = instance
 
     // key を元に setupState -> props -> ctx の順にチェックして存在していれば値を返す
   },
-};
+}
 ```
 
 実際にこの Proxy を実装してみましょう！
@@ -118,7 +118,7 @@ Vue には setupContext という概念があります。これは setup 内に�
 ```ts
 const setupResult = component.setup(instance.props, {
   emit: instance.emit,
-});
+})
 ```
 
 SetupContext というインタフェースをきちんと定義して、インスタンスが持つオブジェクトとして表現しましょう。
@@ -128,12 +128,12 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  setupContext: SetupContext | null; // 追加
+  setupContext: SetupContext | null // 追加
 }
 
 export type SetupContext = {
-  emit: (e: string, ...args: any[]) => void;
-};
+  emit: (e: string, ...args: any[]) => void
+}
 ```
 
 そして、インスタンスを生成する際に setupContext を生成し、setup 関数を実行する際の第二引数にこのオブジェクトを渡すようにしましょう。
@@ -149,45 +149,45 @@ expose は、パブリックなプロパティを明示できる関数です。
 ```ts
 const Child = defineComponent({
   setup(_, { expose }) {
-    const count = ref(0);
-    const count2 = ref(0);
-    expose({ count });
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    expose({ count })
+    return { count, count2 }
   },
   template: `<p>hello</p>`,
-});
+})
 
 const Child2 = defineComponent({
   setup() {
-    const count = ref(0);
-    const count2 = ref(0);
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    return { count, count2 }
   },
   template: `<p>hello</p>`,
-});
+})
 
 const app = createApp({
   setup() {
-    const child = ref();
-    const child2 = ref();
+    const child = ref()
+    const child2 = ref()
 
     const log = () => {
       console.log(
         child.value.count,
         child.value.count2, // cannot access
         child2.value.count,
-        child2.value.count2
-      );
-    };
+        child2.value.count2,
+      )
+    }
 
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         h(Child, { ref: child }, []),
         h(Child2, { ref: child2 }, []),
-        h("button", { onClick: log }, ["log"]),
-      ]);
+        h('button', { onClick: log }, ['log']),
+      ])
   },
-});
+})
 ```
 
 expose を使用しないコンポーネントでは今まで通り、デフォルトで全てが public です。
@@ -199,7 +199,7 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  exposed: Record<string, any> | null; // 追加
+  exposed: Record<string, any> | null // 追加
 }
 ```
 
@@ -217,15 +217,15 @@ export interface ComponentInternalInstance {
 const shallowUnwrapHandlers: ProxyHandler<any> = {
   get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),
   set: (target, key, value, receiver) => {
-    const oldValue = target[key];
+    const oldValue = target[key]
     if (isRef(oldValue) && !isRef(value)) {
-      oldValue.value = value;
-      return true;
+      oldValue.value = value
+      return true
     } else {
-      return Reflect.set(target, key, value, receiver);
+      return Reflect.set(target, key, value, receiver)
     }
   },
-};
+}
 ```
 
 ```vue
@@ -238,49 +238,49 @@ const shallowUnwrapHandlers: ProxyHandler<any> = {
 ここまで実装すると以下のようなコードが動くようになるはずです。
 
 ```ts
-import { createApp, defineComponent, h, ref } from "chibivue";
+import { createApp, defineComponent, h, ref } from 'chibivue'
 
 const Child = defineComponent({
   setup(_, { expose }) {
-    const count = ref(0);
-    const count2 = ref(0);
-    expose({ count });
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    expose({ count })
+    return { count, count2 }
   },
   template: `<p>child {{ count }} {{ count2 }}</p>`,
-});
+})
 
 const Child2 = defineComponent({
   setup() {
-    const count = ref(0);
-    const count2 = ref(0);
-    return { count, count2 };
+    const count = ref(0)
+    const count2 = ref(0)
+    return { count, count2 }
   },
   template: `<p>child2 {{ count }} {{ count2 }}</p>`,
-});
+})
 
 const app = createApp({
   setup() {
-    const child = ref();
-    const child2 = ref();
+    const child = ref()
+    const child2 = ref()
 
     const increment = () => {
-      child.value.count++;
-      child.value.count2++; // cannot access
-      child2.value.count++;
-      child2.value.count2++;
-    };
+      child.value.count++
+      child.value.count2++ // cannot access
+      child2.value.count++
+      child2.value.count2++
+    }
 
     return () =>
-      h("div", {}, [
+      h('div', {}, [
         h(Child, { ref: child }, []),
         h(Child2, { ref: child2 }, []),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
+        h('button', { onClick: increment }, ['increment']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ## Template へのバインディングと with 文
@@ -291,11 +291,11 @@ app.mount("#app");
 ```ts
 const Child2 = {
   setup() {
-    const state = reactive({ count: 0 });
-    return { state };
+    const state = reactive({ count: 0 })
+    return { state }
   },
   template: `<p>child2 count: {{ state.count }}</p>`,
-};
+}
 ```
 
 なんの変哲もないコードですが、実はこれは動きません。  
@@ -317,16 +317,16 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   // .
   has(
     { _: { setupState, ctx, propsOptions } }: ComponentRenderContext,
-    key: string
+    key: string,
   ) {
-    let normalizedProps;
+    let normalizedProps
     return (
       hasOwn(setupState, key) ||
       ((normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key)) ||
       hasOwn(ctx, key)
-    );
+    )
   },
-};
+}
 ```
 
 これで正常に動くようになれば OK です！

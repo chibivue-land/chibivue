@@ -32,14 +32,14 @@ Vue.js is a component-oriented framework. Depending on the user's requirements, 
 It tracks the state held by components and updates the screen when changes occur. This monitoring and responding mechanism is called reactivity.
 
 ```ts
-import { ref } from "vue";
+import { ref } from 'vue'
 
-const count = ref(0);
+const count = ref(0)
 
 // When this function is executed, the screen displaying the count will also update
 const increment = () => {
-  count.value++;
-};
+  count.value++
+}
 ```
 
 (It's fascinating how the screen updates just by changing a value, right?)

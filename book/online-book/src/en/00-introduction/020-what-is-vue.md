@@ -20,15 +20,15 @@ For this, I believe it's clearer to directly quote the official words without ad
 > Here's a minimal example:
 >
 > ```ts
-> import { createApp } from "vue";
+> import { createApp } from 'vue'
 >
 > createApp({
 >   data() {
 >     return {
 >       count: 0,
->     };
+>     }
 >   },
-> }).mount("#app");
+> }).mount('#app')
 > ```
 >
 > ```html

@@ -6,10 +6,10 @@ By introducing the Reactivity System in the previous chapter, we were able to dy
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
-  while (container.firstChild) container.removeChild(container.firstChild);
-  const el = renderVNode(vnode);
-  hostInsert(el, container);
-};
+  while (container.firstChild) container.removeChild(container.firstChild)
+  const el = renderVNode(vnode)
+  hostInsert(el, container)
+}
 ```
 
 Some people may have noticed in the previous chapter that there is a lot of waste in this function.
@@ -19,17 +19,17 @@ Take a look at the playground.
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => state.count++;
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
 
     return function render() {
-      return h("div", { id: "my-app" }, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
-    };
+      return h('div', { id: 'my-app' }, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
+    }
   },
-});
+})
 ```
 
 The problem is that only the part that changes when increment is executed is the `count: ${state.count}` part, but in renderVNode, all the DOM elements are removed and recreated from scratch. This feels very wasteful. Although it seems to be working fine for now because it is still small, you can easily imagine that performance will be greatly reduced if you have to recreate a complex DOM from scratch every time you develop a web application. Therefore, since we already have a Virtual DOM, we want to implement an implementation that compares the current Virtual DOM with the previous one and only updates the parts where there are differences using DOM operations. Now, this is the main theme of this chapter.
@@ -94,10 +94,10 @@ This is not directly related to the main topic, but let's do a slight refactorin
 export function createVNode(
   type: VNodeTypes,
   props: VNodeProps | null,
-  children: unknown
+  children: unknown,
 ): VNode {
-  const vnode: VNode = { type, props, children: [] };
-  return vnode;
+  const vnode: VNode = { type, props, children: [] }
+  return vnode
 }
 ```
 
@@ -107,9 +107,9 @@ Change h function as well.
 export function h(
   type: string,
   props: VNodeProps,
-  children: (VNode | string)[]
+  children: (VNode | string)[],
 ) {
-  return createVNode(type, props, children);
+  return createVNode(type, props, children)
 }
 ```
 
@@ -174,35 +174,35 @@ First, let's take a look at the design of the patch function in the codebase. (W
 const patch = (
   n1: VNode | string | null,
   n2: VNode | string,
-  container: HostElement
+  container: HostElement,
 ) => {
-  const { type } = n2;
+  const { type } = n2
   if (type === Text) {
-    processText(n1, n2, container);
+    processText(n1, n2, container)
   } else {
-    processElement(n1, n2, container);
+    processElement(n1, n2, container)
   }
-};
+}
 
 const processElement = (
   n1: VNode | null,
   n2: VNode,
-  container: HostElement
+  container: HostElement,
 ) => {
   if (n1 === null) {
-    mountElement(n2, container);
+    mountElement(n2, container)
   } else {
-    patchElement(n1, n2);
+    patchElement(n1, n2)
   }
-};
+}
 
 const processText = (n1: string | null, n2: string, container: HostElement) => {
   if (n1 === null) {
-    mountText(n2, container);
+    mountText(n2, container)
   } else {
-    patchText(n1, n2);
+    patchText(n1, n2)
   }
-};
+}
 ```
 
 ## Actual implementation
@@ -213,10 +213,10 @@ Now let's actually implement the patch function for the Virtual DOM. First, we w
 
 ```ts
 export interface VNode<HostNode = RendererNode> {
-  type: VNodeTypes;
-  props: VNodeProps | null;
-  children: VNodeNormalizedChildren;
-  el: HostNode | undefined; // [!code ++]
+  type: VNodeTypes
+  props: VNodeProps | null
+  children: VNodeNormalizedChildren
+  el: HostNode | undefined // [!code ++]
 }
 ```
 
@@ -229,13 +229,13 @@ export function createRenderer(options: RendererOptions) {
   // .
 
   const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-    const { type } = n2;
+    const { type } = n2
     if (type === Text) {
       // processText(n1, n2, container);
     } else {
       // processElement(n1, n2, container);
     }
-  };
+  }
 }
 ```
 
@@ -245,30 +245,30 @@ Let's start implementing from `processElement` and `mountElement`.
 const processElement = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 === null) {
-    mountElement(n2, container);
+    mountElement(n2, container)
   } else {
     // patchElement(n1, n2);
   }
-};
+}
 
 const mountElement = (vnode: VNode, container: RendererElement) => {
-  let el: RendererElement;
-  const { type, props } = vnode;
-  el = vnode.el = hostCreateElement(type as string);
+  let el: RendererElement
+  const { type, props } = vnode
+  el = vnode.el = hostCreateElement(type as string)
 
-  mountChildren(vnode.children, el); // TODO:
+  mountChildren(vnode.children, el) // TODO:
 
   if (props) {
     for (const key in props) {
-      hostPatchProp(el, key, props[key]);
+      hostPatchProp(el, key, props[key])
     }
   }
 
-  hostInsert(el, container);
-};
+  hostInsert(el, container)
+}
 ```
 
 Since it is an element, we also need to mount its children. Let's use the `normalize` function we created earlier.
@@ -276,10 +276,10 @@ Since it is an element, we also need to mount its children. Let's use the `norma
 ```ts
 const mountChildren = (children: VNode[], container: RendererElement) => {
   for (let i = 0; i < children.length; i++) {
-    const child = (children[i] = normalizeVNode(children[i]));
-    patch(null, child, container);
+    const child = (children[i] = normalizeVNode(children[i]))
+    patch(null, child, container)
   }
-};
+}
 ```
 
 With this, we have implemented the mounting of elements. Next, let's move on to mounting Text. However, this is just a simple DOM operation. In the design explanation, we divided it into `mountText` and `patchText` functions, but since there is not much processing and it is not expected to become more complex in the future, let's write it directly.
@@ -288,14 +288,14 @@ With this, we have implemented the mounting of elements. Next, let's move on to 
 const processText = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 == null) {
-    hostInsert((n2.el = hostCreateText(n2.children as string)), container);
+    hostInsert((n2.el = hostCreateText(n2.children as string)), container)
   } else {
     // TODO: patch
   }
-};
+}
 ```
 
 Now, with the mounting of the initial render completed, let's move some of the processing from the `mount` function in `createAppAPI` to the `render` function so that we can hold two vnodes. Specifically, we pass `rootComponent` to the `render` function and perform ReactiveEffect registration inside it.
@@ -305,27 +305,27 @@ return function createApp(rootComponent) {
   const app: App = {
     mount(rootContainer: HostElement) {
       // Just pass rootComponent
-      render(rootComponent, rootContainer);
+      render(rootComponent, rootContainer)
     },
-  };
-};
+  }
+}
 ```
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
-  const componentRender = rootComponent.setup!();
+  const componentRender = rootComponent.setup!()
 
-  let n1: VNode | null = null;
+  let n1: VNode | null = null
 
   const updateComponent = () => {
-    const n2 = componentRender();
-    patch(n1, n2, container);
-    n1 = n2;
-  };
+    const n2 = componentRender()
+    patch(n1, n2, container)
+    n1 = n2
+  }
 
-  const effect = new ReactiveEffect(updateComponent);
-  effect.run();
-};
+  const effect = new ReactiveEffect(updateComponent)
+  effect.run()
+}
 ```
 
 Now, let's try to render in the playground to see if it works!
@@ -336,28 +336,28 @@ So, let's continue writing the patch function.
 
 ```ts
 const patchElement = (n1: VNode, n2: VNode) => {
-  const el = (n2.el = n1.el!);
+  const el = (n2.el = n1.el!)
 
-  const props = n2.props;
+  const props = n2.props
 
-  patchChildren(n1, n2, el);
+  patchChildren(n1, n2, el)
 
   for (const key in props) {
     if (props[key] !== n1.props[key]) {
-      hostPatchProp(el, key, props[key]);
+      hostPatchProp(el, key, props[key])
     }
   }
-};
+}
 
 const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
-  const c1 = n1.children as VNode[];
-  const c2 = n2.children as VNode[];
+  const c1 = n1.children as VNode[]
+  const c2 = n2.children as VNode[]
 
   for (let i = 0; i < c2.length; i++) {
-    const child = (c2[i] = normalizeVNode(c2[i]));
-    patch(c1[i], child, container);
+    const child = (c2[i] = normalizeVNode(c2[i]))
+    patch(c1[i], child, container)
   }
-};
+}
 ```
 
 The same goes for Text nodes.
@@ -366,18 +366,18 @@ The same goes for Text nodes.
 const processText = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 == null) {
-    hostInsert((n2.el = hostCreateText(n2.children as string)), container);
+    hostInsert((n2.el = hostCreateText(n2.children as string)), container)
   } else {
     // Add patch logic
-    const el = (n2.el = n1.el!);
+    const el = (n2.el = n1.el!)
     if (n2.children !== n1.children) {
-      hostSetText(el, n2.children as string);
+      hostSetText(el, n2.children as string)
     }
   }
-};
+}
 ```
 
 ※ Regarding patchChildren, normally we need to handle dynamic-length child elements by adding key attributes, but since we are implementing a small Virtual DOM, we won't cover the practicality of that here. If you are interested, please refer to the Basic Virtual DOM section. Here, we aim to understand the implementation and role of Virtual DOM up to a certain extent.

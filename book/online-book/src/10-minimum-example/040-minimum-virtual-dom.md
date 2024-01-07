@@ -7,10 +7,10 @@
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
-  while (container.firstChild) container.removeChild(container.firstChild);
-  const el = renderVNode(vnode);
-  hostInsert(el, container);
-};
+  while (container.firstChild) container.removeChild(container.firstChild)
+  const el = renderVNode(vnode)
+  hostInsert(el, container)
+}
 ```
 
 前のチャプターの時点で「これはヤバそうだ」と気づいた人ももしかしたらいるかもしれません。
@@ -21,17 +21,17 @@ playground を見てみてください。
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => state.count++;
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
 
     return function render() {
-      return h("div", { id: "my-app" }, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
-    };
+      return h('div', { id: 'my-app' }, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
+    }
   },
-});
+})
 ```
 
 何がまずいかというと、increment を実行した時に変化する部分は、`count: ${state.count}` の部分だけなのに、renderVNode では一度全ての DOM を削除し、1 から再生成しているのです。  
@@ -104,10 +104,10 @@ vnode.ts に createVNode と言う関数を作っておいて、h 関数から�
 export function createVNode(
   type: VNodeTypes,
   props: VNodeProps | null,
-  children: unknown
+  children: unknown,
 ): VNode {
-  const vnode: VNode = { type, props, children };
-  return vnode;
+  const vnode: VNode = { type, props, children }
+  return vnode
 }
 ```
 
@@ -117,9 +117,9 @@ h 関数も変更
 export function h(
   type: string,
   props: VNodeProps,
-  children: (VNode | string)[]
+  children: (VNode | string)[],
 ) {
-  return createVNode(type, props, children);
+  return createVNode(type, props, children)
 }
 ```
 
@@ -192,35 +192,35 @@ patch 関数でやりたいことは 2 つの vnode の比較なので、便宜�
 const patch = (
   n1: VNode | string | null,
   n2: VNode | string,
-  container: HostElement
+  container: HostElement,
 ) => {
-  const { type } = n2;
+  const { type } = n2
   if (type === Text) {
-    processText(n1, n2, container);
+    processText(n1, n2, container)
   } else {
-    processElement(n1, n2, container);
+    processElement(n1, n2, container)
   }
-};
+}
 
 const processElement = (
   n1: VNode | null,
   n2: VNode,
-  container: HostElement
+  container: HostElement,
 ) => {
   if (n1 === null) {
-    mountElement(n2, container);
+    mountElement(n2, container)
   } else {
-    patchElement(n1, n2);
+    patchElement(n1, n2)
   }
-};
+}
 
 const processText = (n1: string | null, n2: string, container: HostElement) => {
   if (n1 === null) {
-    mountText(n2, container);
+    mountText(n2, container)
   } else {
-    patchText(n1, n2);
+    patchText(n1, n2)
   }
-};
+}
 ```
 
 ## 実際に実装してみる
@@ -232,10 +232,10 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 
 ```ts
 export interface VNode<HostNode = RendererNode> {
-  type: VNodeTypes;
-  props: VNodeProps | null;
-  children: VNodeNormalizedChildren;
-  el: HostNode | undefined; // [!code ++]
+  type: VNodeTypes
+  props: VNodeProps | null
+  children: VNodeNormalizedChildren
+  el: HostNode | undefined // [!code ++]
 }
 ```
 
@@ -250,13 +250,13 @@ export function createRenderer(options: RendererOptions) {
   // .
 
   const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-    const { type } = n2;
+    const { type } = n2
     if (type === Text) {
       // processText(n1, n2, container);
     } else {
       // processElement(n1, n2, container);
     }
-  };
+  }
 }
 ```
 
@@ -266,30 +266,30 @@ processElement の mountElement から実装していきます。
 const processElement = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 === null) {
-    mountElement(n2, container);
+    mountElement(n2, container)
   } else {
     // patchElement(n1, n2);
   }
-};
+}
 
 const mountElement = (vnode: VNode, container: RendererElement) => {
-  let el: RendererElement;
-  const { type, props } = vnode;
-  el = vnode.el = hostCreateElement(type as string);
+  let el: RendererElement
+  const { type, props } = vnode
+  el = vnode.el = hostCreateElement(type as string)
 
-  mountChildren(vnode.children, el); // TODO:
+  mountChildren(vnode.children, el) // TODO:
 
   if (props) {
     for (const key in props) {
-      hostPatchProp(el, key, props[key]);
+      hostPatchProp(el, key, props[key])
     }
   }
 
-  hostInsert(el, container);
-};
+  hostInsert(el, container)
+}
 ```
 
 要素なので、当然子要素のマウントも必要です。
@@ -298,10 +298,10 @@ const mountElement = (vnode: VNode, container: RendererElement) => {
 ```ts
 const mountChildren = (children: VNode[], container: RendererElement) => {
   for (let i = 0; i < children.length; i++) {
-    const child = (children[i] = normalizeVNode(children[i]));
-    patch(null, child, container);
+    const child = (children[i] = normalizeVNode(children[i]))
+    patch(null, child, container)
   }
-};
+}
 ```
 
 ここまでで要素のマウントは実装できました。  
@@ -312,14 +312,14 @@ const mountChildren = (children: VNode[], container: RendererElement) => {
 const processText = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 == null) {
-    hostInsert((n2.el = hostCreateText(n2.children as string)), container);
+    hostInsert((n2.el = hostCreateText(n2.children as string)), container)
   } else {
     // TODO: patch
   }
-};
+}
 ```
 
 一旦ここまでで、初回のマウントはできるようになったはずなので、render 関数で patch 関数を使用して playground で試してみましょう!  
@@ -331,27 +331,27 @@ return function createApp(rootComponent) {
   const app: App = {
     mount(rootContainer: HostElement) {
       // rootComponentを渡すだけに
-      render(rootComponent, rootContainer);
+      render(rootComponent, rootContainer)
     },
-  };
-};
+  }
+}
 ```
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
-  const componentRender = rootComponent.setup!();
+  const componentRender = rootComponent.setup!()
 
-  let n1: VNode | null = null;
+  let n1: VNode | null = null
 
   const updateComponent = () => {
-    const n2 = componentRender();
-    patch(n1, n2, container);
-    n1 = n2;
-  };
+    const n2 = componentRender()
+    patch(n1, n2, container)
+    n1 = n2
+  }
 
-  const effect = new ReactiveEffect(updateComponent);
-  effect.run();
-};
+  const effect = new ReactiveEffect(updateComponent)
+  effect.run()
+}
 ```
 
 ここまでできたら playground で描画できるかどうか試してみましょう！
@@ -362,28 +362,28 @@ const render: RootRenderFunction = (rootComponent, container) => {
 
 ```ts
 const patchElement = (n1: VNode, n2: VNode) => {
-  const el = (n2.el = n1.el!);
+  const el = (n2.el = n1.el!)
 
-  const props = n2.props;
+  const props = n2.props
 
-  patchChildren(n1, n2, el);
+  patchChildren(n1, n2, el)
 
   for (const key in props) {
     if (props[key] !== n1.props[key]) {
-      hostPatchProp(el, key, props[key]);
+      hostPatchProp(el, key, props[key])
     }
   }
-};
+}
 
 const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
-  const c1 = n1.children as VNode[];
-  const c2 = n2.children as VNode[];
+  const c1 = n1.children as VNode[]
+  const c2 = n2.children as VNode[]
 
   for (let i = 0; i < c2.length; i++) {
-    const child = (c2[i] = normalizeVNode(c2[i]));
-    patch(c1[i], child, container);
+    const child = (c2[i] = normalizeVNode(c2[i]))
+    patch(c1[i], child, container)
   }
-};
+}
 ```
 
 Text も同様に。
@@ -392,18 +392,18 @@ Text も同様に。
 const processText = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 == null) {
-    hostInsert((n2.el = hostCreateText(n2.children as string)), container);
+    hostInsert((n2.el = hostCreateText(n2.children as string)), container)
   } else {
     // patchの処理を追加
-    const el = (n2.el = n1.el!);
+    const el = (n2.el = n1.el!)
     if (n2.children !== n1.children) {
-      hostSetText(el, n2.children as string);
+      hostSetText(el, n2.children as string)
     }
   }
-};
+}
 ```
 
 ※ patchChildren に関して、本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけないのですが、今回は小さく Virtual DOM を実装するのでその辺の実用性については触れません。  

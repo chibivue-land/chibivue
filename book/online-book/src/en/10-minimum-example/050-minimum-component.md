@@ -9,20 +9,20 @@ First, let's review the parts that are currently messy in the existing implement
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
-  const componentRender = rootComponent.setup!();
+  const componentRender = rootComponent.setup!()
 
-  let n1: VNode | null = null;
-  let n2: VNode = null!;
+  let n1: VNode | null = null
+  let n2: VNode = null!
 
   const updateComponent = () => {
-    const n2 = componentRender();
-    patch(n1, n2, container);
-    n1 = n2;
-  };
+    const n2 = componentRender()
+    patch(n1, n2, container)
+    n1 = n2
+  }
 
-  const effect = new ReactiveEffect(updateComponent);
-  effect.run();
-};
+  const effect = new ReactiveEffect(updateComponent)
+  effect.run()
+}
 ```
 
 In the render function, information about the root component is directly defined.
@@ -35,19 +35,19 @@ Let's define something called `ComponentInternalInstance` in `~/packages/runtime
 
 ```ts
 export interface ComponentInternalInstance {
-  type: Component; // The original user-defined component (old rootComponent (actually not just the root component))
-  vnode: VNode; // To be explained later
-  subTree: VNode; // Old n1
-  next: VNode | null; // Old n2
-  effect: ReactiveEffect; // Old effect
-  render: InternalRenderFunction; // Old componentRender
-  update: () => void; // Old updateComponent
-  isMounted: boolean;
+  type: Component // The original user-defined component (old rootComponent (actually not just the root component))
+  vnode: VNode // To be explained later
+  subTree: VNode // Old n1
+  next: VNode | null // Old n2
+  effect: ReactiveEffect // Old effect
+  render: InternalRenderFunction // Old componentRender
+  update: () => void // Old updateComponent
+  isMounted: boolean
 }
 
 export type InternalRenderFunction = {
-  (): VNodeChild;
-};
+  (): VNodeChild
+}
 ```
 
 The vnode, subTree, and next properties that this instance has are a bit complicated,
@@ -60,15 +60,15 @@ In terms of image,
 ```ts
 const MyComponent = {
   setup() {
-    return h("p", {}, ["hello"]);
+    return h('p', {}, ['hello'])
   },
-};
+}
 
 const App = {
   setup() {
-    return h(MyComponent, {}, []);
+    return h(MyComponent, {}, [])
   },
-};
+}
 ```
 
 You can use it like this,
@@ -79,7 +79,7 @@ However, it's just a matter of receiving an object that defines the component as
 In `~/packages/runtime-core/vnode.ts`
 
 ```ts
-export type VNodeTypes = string | typeof Text | object; // Add object;
+export type VNodeTypes = string | typeof Text | object // Add object;
 ```
 
 In `~/packages/runtime-core/h.ts`
@@ -98,7 +98,7 @@ export interface VNode<HostNode = any> {
   // .
   // .
   // .
-  component: ComponentInternalInstance | null; // Add
+  component: ComponentInternalInstance | null // Add
 }
 ```
 
@@ -108,38 +108,38 @@ First, let's start with an overview and detailed explanation.
 
 ```ts
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-  const { type } = n2;
+  const { type } = n2
   if (type === Text) {
-    processText(n1, n2, container);
-  } else if (typeof type === "string") {
-    processElement(n1, n2, container);
-  } else if (typeof type === "object") {
+    processText(n1, n2, container)
+  } else if (typeof type === 'string') {
+    processElement(n1, n2, container)
+  } else if (typeof type === 'object') {
     // Add branching
-    processComponent(n1, n2, container);
+    processComponent(n1, n2, container)
   } else {
     // do nothing
   }
-};
+}
 
 const processComponent = (
   n1: VNode | null,
   n2: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   if (n1 == null) {
-    mountComponent(n2, container);
+    mountComponent(n2, container)
   } else {
-    updateComponent(n1, n2);
+    updateComponent(n1, n2)
   }
-};
+}
 
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   // TODO:
-};
+}
 
 const updateComponent = (n1: VNode, n2: VNode) => {
   // TODO:
-};
+}
 ```
 
 Now, let's take a look at `mountComponent`. There are three things to do.
@@ -152,9 +152,9 @@ First, let's implement a function in `component.ts` to create an instance of the
 
 ```ts
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component;
+  const type = vnode.type as Component
 
   const instance: ComponentInternalInstance = {
     type,
@@ -165,9 +165,9 @@ export function createComponentInstance(
     update: null!,
     render: null!,
     isMounted: false,
-  };
+  }
 
-  return instance;
+  return instance
 }
 ```
 
@@ -176,10 +176,10 @@ Although the type of each property is non-null, we initialize them with null whe
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
   // TODO: setup component
   // TODO: setup effect
-};
+}
 ```
 
 Next is the `setup` function. We need to move the code that was previously written directly in the `render` function to here and store the result in the instance instead of using variables.
@@ -187,15 +187,15 @@ Next is the `setup` function. We need to move the code that was previously writt
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
 
-  const component = initialVNode.type as Component;
+  const component = initialVNode.type as Component
   if (component.setup) {
-    instance.render = component.setup() as InternalRenderFunction;
+    instance.render = component.setup() as InternalRenderFunction
   }
 
   // TODO: setup effect
-};
+}
 ```
 
 Finally, let's combine the code for creating the effect into a function called `setupRenderEffect`. Again, the main task is to move the code that was previously implemented directly in the `render` function to here, while utilizing the state of the instance.
@@ -203,56 +203,56 @@ Finally, let's combine the code for creating the effect into a function called `
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
   const instance: ComponentInternalInstance = (initialVNode.component =
-    createComponentInstance(initialVNode));
+    createComponentInstance(initialVNode))
 
-  const component = initialVNode.type as Component;
+  const component = initialVNode.type as Component
   if (component.setup) {
-    instance.render = component.setup() as InternalRenderFunction;
+    instance.render = component.setup() as InternalRenderFunction
   }
 
-  setupRenderEffect(instance, initialVNode, container);
-};
+  setupRenderEffect(instance, initialVNode, container)
+}
 
 const setupRenderEffect = (
   instance: ComponentInternalInstance,
   initialVNode: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   const componentUpdateFn = () => {
-    const { render } = instance;
+    const { render } = instance
 
     if (!instance.isMounted) {
       // mount process
-      const subTree = (instance.subTree = normalizeVNode(render()));
-      patch(null, subTree, container);
-      initialVNode.el = subTree.el;
-      instance.isMounted = true;
+      const subTree = (instance.subTree = normalizeVNode(render()))
+      patch(null, subTree, container)
+      initialVNode.el = subTree.el
+      instance.isMounted = true
     } else {
       // patch process
-      let { next, vnode } = instance;
+      let { next, vnode } = instance
 
       if (next) {
-        next.el = vnode.el;
-        next.component = instance;
-        instance.vnode = next;
-        instance.next = null;
+        next.el = vnode.el
+        next.component = instance
+        instance.vnode = next
+        instance.next = null
       } else {
-        next = vnode;
+        next = vnode
       }
 
-      const prevTree = instance.subTree;
-      const nextTree = normalizeVNode(render());
-      instance.subTree = nextTree;
+      const prevTree = instance.subTree
+      const nextTree = normalizeVNode(render())
+      instance.subTree = nextTree
 
-      patch(prevTree, nextTree, hostParentNode(prevTree.el!)!); // ※ 1
-      next.el = nextTree.el;
+      patch(prevTree, nextTree, hostParentNode(prevTree.el!)!) // ※ 1
+      next.el = nextTree.el
     }
-  };
+  }
 
-  const effect = (instance.effect = new ReactiveEffect(componentUpdateFn));
-  const update = (instance.update = () => effect.run()); // Register to instance.update
-  update();
-};
+  const effect = (instance.effect = new ReactiveEffect(componentUpdateFn))
+  const update = (instance.update = () => effect.run()) // Register to instance.update
+  update()
+}
 ```
 
 ※ 1: Please implement a function called `parentNode` in `nodeOps` that retrieves the parent Node.
@@ -268,52 +268,52 @@ In the `setupRenderEffect` function, a function for updating is registered as th
 
 ```ts
 const updateComponent = (n1: VNode, n2: VNode) => {
-  const instance = (n2.component = n1.component)!;
-  instance.next = n2;
-  instance.update();
-};
+  const instance = (n2.component = n1.component)!
+  instance.next = n2
+  instance.update()
+}
 ```
 
 Finally, since the implementation that was defined in the `render` function so far is no longer needed, we will remove it.
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
-  const vnode = createVNode(rootComponent, {}, []);
-  patch(null, vnode, container);
-};
+  const vnode = createVNode(rootComponent, {}, [])
+  patch(null, vnode, container)
+}
 ```
 
 Now we can render components. Let's try creating a `playground` component as an example.
 In this way, we can divide the rendering into components.
 
 ```ts
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive } from 'chibivue'
 
 const CounterComponent = {
   setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => state.count++;
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, ["increment"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: increment }, ['increment']),
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(CounterComponent, {}, []),
         h(CounterComponent, {}, []),
         h(CounterComponent, {}, []),
-      ]);
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Source code up to this point:
@@ -335,64 +335,64 @@ const MyComponent = {
   props: { message: { type: String } },
 
   setup(props) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+    return () => h('div', { id: 'my-app' }, [`message: ${props.message}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(MyComponent, { message: state.message }, []),
-      ]);
+      ])
   },
-});
+})
 ```
 
 Based on this, let's think about the information we want to have in `ComponentInternalInstance`.
 We need the definition of props specified as `props: { message: { type: String } }`, and a property to actually hold the props value, so we add the following:
 
 ```ts
-export type Data = Record<string, unknown>;
+export type Data = Record<string, unknown>
 
 export interface ComponentInternalInstance {
   // .
   // .
   // .
-  propsOptions: Props; // Holds an object like `props: { message: { type: String } }`
+  propsOptions: Props // Holds an object like `props: { message: { type: String } }`
 
-  props: Data; // Holds the actual data passed from the parent (in this case, it will be something like `{ message: "hello" }`)
+  props: Data // Holds the actual data passed from the parent (in this case, it will be something like `{ message: "hello" }`)
 }
 ```
 
 Create a new file called `~/packages/runtime-core/componentProps.ts` with the following content:
 
 ```ts
-export type Props = Record<string, PropOptions | null>;
+export type Props = Record<string, PropOptions | null>
 
 export interface PropOptions<T = any> {
-  type?: PropType<T> | true | null;
-  required?: boolean;
-  default?: null | undefined | object;
+  type?: PropType<T> | true | null
+  required?: boolean
+  default?: null | undefined | object
 }
 
-export type PropType<T> = { new (...args: any[]): T & {} };
+export type PropType<T> = { new (...args: any[]): T & {} }
 ```
 
 Add it to the options when implementing the component.
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>; // Added
-  setup?: () => Function;
-  render?: Function;
-};
+  props?: Record<string, any> // Added
+  setup?: () => Function
+  render?: Function
+}
 ```
 
 When generating an instance with `createComponentInstance`, set the propsOptions to the instance when generating the instance.
@@ -420,25 +420,25 @@ Implement a function called `initProps` in `componentProps.ts` that performs thi
 ```ts
 export function initProps(
   instance: ComponentInternalInstance,
-  rawProps: Data | null
+  rawProps: Data | null,
 ) {
-  const props: Data = {};
-  setFullProps(instance, rawProps, props);
-  instance.props = reactive(props);
+  const props: Data = {}
+  setFullProps(instance, rawProps, props)
+  instance.props = reactive(props)
 }
 
 function setFullProps(
   instance: ComponentInternalInstance,
   rawProps: Data | null,
-  props: Data
+  props: Data,
 ) {
-  const options = instance.propsOptions;
+  const options = instance.propsOptions
 
   if (rawProps) {
     for (let key in rawProps) {
-      const value = rawProps[key];
+      const value = rawProps[key]
       if (options && options.hasOwnProperty(key)) {
-        props[key] = value;
+        props[key] = value
       }
     }
   }
@@ -469,10 +469,10 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>;
-  setup?: (props: Record<string, any>) => Function; // Receive props
-  render?: Function;
-};
+  props?: Record<string, any>
+  setup?: (props: Record<string, any>) => Function // Receive props
+  render?: Function
+}
 ```
 
 At this point, props should be passed to the child component, so let's check it in the playground.
@@ -482,20 +482,20 @@ const MyComponent = {
   props: { message: { type: String } },
 
   setup(props: { message: string }) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+    return () => h('div', { id: 'my-app' }, [`message: ${props.message}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(MyComponent, { message: state.message }, []),
-      ]);
+      ])
   },
-});
+})
 ```
 
 However, this is not enough, as the rendering is not updated when props are changed.
@@ -505,24 +505,24 @@ const MyComponent = {
   props: { message: { type: String } },
 
   setup(props: { message: string }) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+    return () => h('div', { id: 'my-app' }, [`message: ${props.message}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(MyComponent, { message: state.message }, []),
-        h("button", { onClick: changeMessage }, ["change message"]),
-      ]);
+        h('button', { onClick: changeMessage }, ['change message']),
+      ])
   },
-});
+})
 ```
 
 To make this component work, we need to implement `updateProps` in `componentProps.ts` and execute it when the component updates.
@@ -532,10 +532,10 @@ To make this component work, we need to implement `updateProps` in `componentPro
 ```ts
 export function updateProps(
   instance: ComponentInternalInstance,
-  rawProps: Data | null
+  rawProps: Data | null,
 ) {
-  const { props } = instance;
-  Object.assign(props, rawProps);
+  const { props } = instance
+  Object.assign(props, rawProps)
 }
 ```
 
@@ -581,16 +581,16 @@ Following the original Vue, let's implement `hasOwn` and `camelize`.
 `~/packages/shared/general.ts`
 
 ```ts
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+const hasOwnProperty = Object.prototype.hasOwnProperty
 export const hasOwn = (
   val: object,
-  key: string | symbol
-): key is keyof typeof val => hasOwnProperty.call(val, key);
+  key: string | symbol,
+): key is keyof typeof val => hasOwnProperty.call(val, key)
 
-const camelizeRE = /-(\w)/g;
+const camelizeRE = /-(\w)/g
 export const camelize = (str: string): string => {
-  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ""));
-};
+  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''))
+}
 ```
 
 Let's use `camelize` in `componentProps.ts`.
@@ -598,30 +598,30 @@ Let's use `camelize` in `componentProps.ts`.
 ```ts
 export function updateProps(
   instance: ComponentInternalInstance,
-  rawProps: Data | null
+  rawProps: Data | null,
 ) {
-  const { props } = instance;
+  const { props } = instance
   // -------------------------------------------------------------- here
   Object.entries(rawProps ?? {}).forEach(([key, value]) => {
-    props[camelize(key)] = value;
-  });
+    props[camelize(key)] = value
+  })
 }
 
 function setFullProps(
   instance: ComponentInternalInstance,
   rawProps: Data | null,
-  props: Data
+  props: Data,
 ) {
-  const options = instance.propsOptions;
+  const options = instance.propsOptions
 
   if (rawProps) {
     for (let key in rawProps) {
-      const value = rawProps[key];
+      const value = rawProps[key]
       // -------------------------------------------------------------- here
       // kebab -> camel
-      let camelKey;
+      let camelKey
       if (options && hasOwn(options, (camelKey = camelize(key)))) {
-        props[camelKey] = value;
+        props[camelKey] = value
       }
     }
   }
@@ -635,24 +635,24 @@ const MyComponent = {
   props: { someMessage: { type: String } },
 
   setup(props: { someMessage: string }) {
-    return () => h("div", {}, [`someMessage: ${props.someMessage}`]);
+    return () => h('div', {}, [`someMessage: ${props.someMessage}`])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
-        h(MyComponent, { "some-message": state.message }, []),
-        h("button", { onClick: changeMessage }, ["change message"]),
-      ]);
+      h('div', { id: 'my-app' }, [
+        h(MyComponent, { 'some-message': state.message }, []),
+        h('button', { onClick: changeMessage }, ['change message']),
+      ])
   },
-});
+})
 ```
 
 ## Emits
@@ -668,35 +668,35 @@ const MyComponent: Component = {
 
   setup(props: any, { emit }: any) {
     return () =>
-      h("div", {}, [
-        h("p", {}, [`someMessage: ${props.someMessage}`]),
-        h("button", { onClick: () => emit("click:change-message") }, [
-          "change message",
+      h('div', {}, [
+        h('p', {}, [`someMessage: ${props.someMessage}`]),
+        h('button', { onClick: () => emit('click:change-message') }, [
+          'change message',
         ]),
-      ]);
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(
           MyComponent,
           {
-            "some-message": state.message,
-            "onClick:change-message": changeMessage,
+            'some-message': state.message,
+            'onClick:change-message': changeMessage,
           },
-          []
+          [],
         ),
-      ]);
+      ])
   },
-});
+})
 ```
 
 Similar to props, let's create a file called `~/packages/runtime-core/componentEmits.ts` and implement it there.
@@ -709,13 +709,13 @@ export function emit(
   event: string,
   ...rawArgs: any[]
 ) {
-  const props = instance.vnode.props || {};
-  let args = rawArgs;
+  const props = instance.vnode.props || {}
+  let args = rawArgs
 
   let handler =
-    props[toHandlerKey(event)] || props[toHandlerKey(camelize(event))];
+    props[toHandlerKey(event)] || props[toHandlerKey(camelize(event))]
 
-  if (handler) handler(...args);
+  if (handler) handler(...args)
 }
 ```
 
@@ -723,10 +723,9 @@ export function emit(
 
 ```ts
 export const capitalize = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1);
+  str.charAt(0).toUpperCase() + str.slice(1)
 
-export const toHandlerKey = (str: string) =>
-  str ? `on${capitalize(str)}` : ``;
+export const toHandlerKey = (str: string) => (str ? `on${capitalize(str)}` : ``)
 ```
 
 `~/packages/runtime-core/component.ts`
@@ -736,23 +735,23 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  emit: (event: string, ...args: any[]) => void;
+  emit: (event: string, ...args: any[]) => void
 }
 
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component;
+  const type = vnode.type as Component
 
   const instance: ComponentInternalInstance = {
     // .
     // .
     // .
     emit: null!, // to be set immediately
-  };
+  }
 
-  instance.emit = emit.bind(null, instance);
-  return instance;
+  instance.emit = emit.bind(null, instance)
+  return instance
 }
 ```
 
@@ -762,13 +761,13 @@ You can pass this to the setup function.
 
 ```ts
 export type ComponentOptions = {
-  props?: Record<string, any>;
+  props?: Record<string, any>
   setup?: (
     props: Record<string, any>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function; // To receive ctx.emit
-  render?: Function;
-};
+    ctx: { emit: (event: string, ...args: any[]) => void },
+  ) => Function // To receive ctx.emit
+  render?: Function
+}
 ```
 
 ```ts

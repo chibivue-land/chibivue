@@ -1,5 +1,3 @@
-
-
 # ちょっと一息
 
 ## Minimal Example 部門はここまで！
@@ -38,122 +36,122 @@ h 関数の実装を通して、宣言的 UI はどうやって実現されて�
 
 ```ts
 // 内部的に {tag, props, children} のようなオブジェクトを生成し、それを元にDOM操作をしている
-h("div", { id: "my-app" }, [
-  h("p", {}, ["Hello!"]),
+h('div', { id: 'my-app' }, [
+  h('p', {}, ['Hello!']),
   h(
-    "button",
+    'button',
     {
       onClick: () => {
-        alert("hello");
+        alert('hello')
       },
     },
-    ["Click me!"]
+    ['Click me!'],
   ),
-]);
+])
 ```
 
-ここで初めて Virtual DOM  のようなものが登場しました。
+ここで初めて Virtual DOM のようなものが登場しました。
 
-##  Reactivity System とは何か、どうやって画面を動的に更新していくかということが分かった
+## Reactivity System とは何か、どうやって画面を動的に更新していくかということが分かった
 
 Vue の醍醐味である、Reactivity System がどのような実装で成り立っているのか、そもそも Reactivity System とはなんのことなのか、ということについて理解しました
 
 ```ts
-const targetMap = new WeakMap<any, KeyToDepMap>();
+const targetMap = new WeakMap<any, KeyToDepMap>()
 
 function reactive<T extends object>(target: T): T {
   const proxy = new Proxy(target, {
     get(target: object, key: string | symbol, receiver: object) {
-      track(target, key);
-      return Reflect.get(target, key, receiver);
+      track(target, key)
+      return Reflect.get(target, key, receiver)
     },
 
     set(
       target: object,
       key: string | symbol,
       value: unknown,
-      receiver: object
+      receiver: object,
     ) {
-      Reflect.set(target, key, value, receiver);
-      trigger(target, key);
-      return true;
+      Reflect.set(target, key, value, receiver)
+      trigger(target, key)
+      return true
     },
-  });
+  })
 }
 ```
 
 ```ts
 const component = {
   setup() {
-    const state = reactive({ count: 0 }); // create proxy
+    const state = reactive({ count: 0 }) // create proxy
 
     const increment = () => {
-      state.count++; // trigger
-    };
+      state.count++ // trigger
+    }
 
-    () => {
-      return h("p", {}, `${state.count}`); // track
-    };
+    ;() => {
+      return h('p', {}, `${state.count}`) // track
+    }
   },
-};
+}
 ```
 
 ## Virtual DOM とはなんなのか、何が嬉しいのか、どうやって実装するのかが分かった
 
-h 関数を使ったレンダリングの改善として、 Virtual DOM  の比較による効率的なレンダリングの方法について理解しました。
+h 関数を使ったレンダリングの改善として、 Virtual DOM の比較による効率的なレンダリングの方法について理解しました。
 
 ```ts
 // 仮想DOMのinterface
 export interface VNode<HostNode = any> {
-  type: string | typeof Text | object;
-  props: VNodeProps | null;
-  children: VNodeNormalizedChildren;
-  el: HostNode | undefined;
+  type: string | typeof Text | object
+  props: VNodeProps | null
+  children: VNodeNormalizedChildren
+  el: HostNode | undefined
 }
 
 // まず、render関数が呼ばれる
 const render: RootRenderFunction = (rootComponent, container) => {
-  const vnode = createVNode(rootComponent, {}, []);
+  const vnode = createVNode(rootComponent, {}, [])
   // 初回は n1 が null. この場合は各自 process で mount が走る
-  patch(null, vnode, container);
-};
+  patch(null, vnode, container)
+}
 
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-  const { type } = n2;
+  const { type } = n2
   if (type === Text) {
-    processText(n1, n2, container);
-  } else if (typeof type === "string") {
-    processElement(n1, n2, container);
-  } else if (typeof type === "object") {
-    processComponent(n1, n2, container);
+    processText(n1, n2, container)
+  } else if (typeof type === 'string') {
+    processElement(n1, n2, container)
+  } else if (typeof type === 'object') {
+    processComponent(n1, n2, container)
   } else {
     // do nothing
   }
-};
+}
 
 // 2回目以降はひとつ前のVNodeと現在のVNodeをpatch関数に渡すことで差分を更新する
-const nextVNode = component.render();
-patch(prevVNode, nextVNode);
+const nextVNode = component.render()
+patch(prevVNode, nextVNode)
 ```
 
 ## コンポーネントの構造とコンポーネント間でのやりとりをどう実現するのかが分かった。
 
 ```ts
 export interface ComponentInternalInstance {
-  type: Component;
+  type: Component
 
-  vnode: VNode;
-  subTree: VNode;
-  next: VNode | null;
-  effect: ReactiveEffect;
-  render: InternalRenderFunction;
-  update: () => void;
+  vnode: VNode
+  subTree: VNode
+  next: VNode | null
+  effect: ReactiveEffect
+  render: InternalRenderFunction
+  update: () => void
 
-  propsOptions: Props;
-  props: Data;
-  emit: (event: string, ...args: any[]) => void;
+  propsOptions: Props
+  props: Data
+  emit: (event: string, ...args: any[]) => void
 
-  isMounted: boolean;
+  isMounted: boolean
 }
 ```
 
@@ -163,35 +161,35 @@ const MyComponent = {
 
   setup(props: any, { emit }: any) {
     return () =>
-      h("div", {}, [
-        h("p", {}, [`someMessage: ${props.someMessage}`]),
-        h("button", { onClick: () => emit("click:change-message") }, [
-          "change message",
+      h('div', {}, [
+        h('p', {}, [`someMessage: ${props.someMessage}`]),
+        h('button', { onClick: () => emit('click:change-message') }, [
+          'change message',
         ]),
-      ]);
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(
           MyComponent,
           {
-            "some-message": state.message,
-            "onClick:change-message": changeMessage,
+            'some-message': state.message,
+            'onClick:change-message': changeMessage,
           },
-          []
+          [],
         ),
-      ]);
+      ])
   },
-});
+})
 ```
 
 ## コンパイラとは何か、テンプレートの機能はどう実現されているのかが分かった
@@ -201,17 +199,17 @@ const app = createApp({
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     const handleInput = (e: InputEvent) => {
-      state.input = (e.target as HTMLInputElement)?.value ?? "";
-    };
+      state.input = (e.target as HTMLInputElement)?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
 
   template: `
@@ -245,7 +243,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 ## Vite プラグインを通して SFC コンパイラの実現方法について理解した。
@@ -255,23 +253,23 @@ vite プラグインでどういうことができるのか、transform や仮�
 
 ```vue
 <script>
-import { reactive } from "chibivue";
+import { reactive } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    const handleInput = (e) => {
-      state.input = e.target?.value ?? "";
-    };
+    const handleInput = e => {
+      state.input = e.target?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
-};
+}
 </script>
 
 <template>
@@ -357,5 +355,3 @@ Minimal Example 部門ではかなり細かめに実装の手順について説�
 (け、決して、細かく書くのが面倒臭くなってきたとか、そういうことではないですからね！　)  
 まあ、本を読んでその通りに実装するのは最初のうちは楽しいですが、ある程度形になってきたら自分でやってみるほうが楽しいですし、より深い理解にもつながるかと思います。  
 ここから先はこの本はある種のガイドライン程度に捉えて貰って、本編は Vue 本家にあります！
-
-

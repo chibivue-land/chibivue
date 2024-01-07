@@ -18,17 +18,17 @@ computed には読み取り専用と書き込み可能の 2 つのシグネチ�
 function computed<T>(
   getter: () => T,
   // see "Computed Debugging" link below
-  debuggerOptions?: DebuggerOptions
-): Readonly<Ref<Readonly<T>>>;
+  debuggerOptions?: DebuggerOptions,
+): Readonly<Ref<Readonly<T>>>
 
 // writable
 function computed<T>(
   options: {
-    get: () => T;
-    set: (value: T) => void;
+    get: () => T
+    set: (value: T) => void
   },
-  debuggerOptions?: DebuggerOptions
-): Ref<T>;
+  debuggerOptions?: DebuggerOptions,
+): Ref<T>
 ```
 
 本家の実装は短いながらに少しだけ複雑なので、まずはシンプルな構成を考えてみましょう。
@@ -40,7 +40,7 @@ export class ComputedRefImpl<T> {
   constructor(private getter: ComputedGetter<T>) {}
 
   get value() {
-    return this.getter();
+    return this.getter()
   }
 
   set value() {}
@@ -58,26 +58,26 @@ export class ComputedRefImpl<T> {
 
 ```ts
 export class ComputedRefImpl<T> {
-  public dep?: Dep = undefined;
-  private _value!: T;
-  public readonly effect: ReactiveEffect<T>;
-  public _dirty = true;
+  public dep?: Dep = undefined
+  private _value!: T
+  public readonly effect: ReactiveEffect<T>
+  public _dirty = true
 
   constructor(getter: ComputedGetter<T>) {
     this.effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
-        this._dirty = true;
+        this._dirty = true
       }
-    });
+    })
   }
 
   get value() {
-    trackRefValue(this);
+    trackRefValue(this)
     if (this._dirty) {
-      this._dirty = false;
-      this._value = this.effect.run();
+      this._dirty = false
+      this._value = this.effect.run()
     }
-    return this._value;
+    return this._value
   }
 }
 ```
@@ -90,8 +90,8 @@ computed は実は遅延評価のような性質を持っており、再計算�
 - \_dirty フラグを true に書き換えた段階で自信が持つ依存関係は trigger してしまう
   ```ts
   if (!this._dirty) {
-    this._dirty = true;
-    triggerRefValue(this);
+    this._dirty = true
+    triggerRefValue(this)
   }
   ```
 - computed も分類的には`ref`なので、`__v_isRef`を true にマークしておく
@@ -101,42 +101,42 @@ computed は実は遅延評価のような性質を持っており、再計算�
 以下のようなコードが期待通りに動けば OK です！　(それぞれ、依存している computed だけが発火することを確認してください！　)
 
 ```ts
-import { computed, createApp, h, reactive, ref } from "chibivue";
+import { computed, createApp, h, reactive, ref } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const count = reactive({ value: 0 });
-    const count2 = reactive({ value: 0 });
+    const count = reactive({ value: 0 })
+    const count2 = reactive({ value: 0 })
     const double = computed(() => {
-      console.log("computed");
-      return count.value * 2;
-    });
+      console.log('computed')
+      return count.value * 2
+    })
     const doubleDouble = computed(() => {
-      console.log("computed (doubleDouble)");
-      return double.value * 2;
-    });
+      console.log('computed (doubleDouble)')
+      return double.value * 2
+    })
 
-    const countRef = ref(0);
+    const countRef = ref(0)
     const doubleCountRef = computed(() => {
-      console.log("computed (doubleCountRef)");
-      return countRef.value * 2;
-    });
+      console.log('computed (doubleCountRef)')
+      return countRef.value * 2
+    })
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${count.value}`]),
-        h("p", {}, [`count2: ${count2.value}`]),
-        h("p", {}, [`double: ${double.value}`]),
-        h("p", {}, [`doubleDouble: ${doubleDouble.value}`]),
-        h("p", {}, [`doubleCountRef: ${doubleCountRef.value}`]),
-        h("button", { onClick: () => count.value++ }, ["update count"]),
-        h("button", { onClick: () => count2.value++ }, ["update count2"]),
-        h("button", { onClick: () => countRef.value++ }, ["update countRef"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${count.value}`]),
+        h('p', {}, [`count2: ${count2.value}`]),
+        h('p', {}, [`double: ${double.value}`]),
+        h('p', {}, [`doubleDouble: ${doubleDouble.value}`]),
+        h('p', {}, [`doubleCountRef: ${doubleCountRef.value}`]),
+        h('button', { onClick: () => count.value++ }, ['update count']),
+        h('button', { onClick: () => count2.value++ }, ['update count2']),
+        h('button', { onClick: () => countRef.value++ }, ['update countRef']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ここまでのソースコード:  
@@ -152,25 +152,25 @@ watch にもいろんな形式の api があります。まずは最も単純な
 まずは、以下のようなコードが動くことを目指します。
 
 ```ts
-import { createApp, h, reactive, watch } from "chibivue";
+import { createApp, h, reactive, watch } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const state = reactive({ count: 0 })
     watch(
       () => state.count,
-      () => alert("state.count was changed!")
-    );
+      () => alert('state.count was changed!'),
+    )
 
     return () =>
-      h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: () => state.count++ }, ["update state"]),
-      ]);
+      h('div', {}, [
+        h('p', {}, [`count: ${state.count}`]),
+        h('button', { onClick: () => state.count++ }, ['update state']),
+      ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 watch の実装は reactivity ではなく、runtime-core の方に実装していきます (apiWatch.ts)。
@@ -180,15 +180,15 @@ watch の実装は reactivity ではなく、runtime-core の方に実装して�
 今までリアクティビティの知識を培ってきたみなさんなら実装できると思います！
 
 ```ts
-export type WatchEffect = (onCleanup: OnCleanup) => void;
+export type WatchEffect = (onCleanup: OnCleanup) => void
 
-export type WatchSource<T = any> = () => T;
+export type WatchSource<T = any> = () => T
 
-type OnCleanup = (cleanupFn: () => void) => void;
+type OnCleanup = (cleanupFn: () => void) => void
 
 export function watch<T>(
   source: WatchSource<T>,
-  cb: (newValue: T, oldValue: T) => void
+  cb: (newValue: T, oldValue: T) => void,
 ) {
   // TODO:
 }
@@ -203,56 +203,56 @@ export function watch<T>(
 
 - ref の監視
   ```ts
-  const count = ref(0);
+  const count = ref(0)
   watch(count, () => {
     /** some effects */
-  });
+  })
   ```
 - 複数の source の監視
 
   ```ts
-  const count = ref(0);
-  const count2 = ref(0);
-  const count3 = ref(0);
+  const count = ref(0)
+  const count2 = ref(0)
+  const count3 = ref(0)
   watch([count, count2, count3], () => {
     /** some effects */
-  });
-  ``;
+  })
+  ;``
   ```
 
 - immediate
 
   ```ts
-  const count = ref(0);
+  const count = ref(0)
   watch(
     count,
     () => {
       /** some effects */
     },
-    { immediate: true }
-  );
+    { immediate: true },
+  )
   ```
 
 - deep
 
   ```ts
-  const state = reactive({ count: 0 });
+  const state = reactive({ count: 0 })
   watch(
     () => state,
     () => {
       /** some effects */
     },
-    { deep: true }
-  );
+    { deep: true },
+  )
   ```
 
 - reactive object
 
   ```ts
-  const state = reactive({ count: 0 });
+  const state = reactive({ count: 0 })
   watch(state, () => {
     /** some effects */
-  }); // automatically in deep mode
+  }) // automatically in deep mode
   ```
 
 ここまでのソースコード:
@@ -265,12 +265,12 @@ https://vuejs.org/api/reactivity-core.html#watcheffect
 watch の実装を使えば watchEffect の実装は簡単です。
 
 ```ts
-const count = ref(0);
+const count = ref(0)
 
-watchEffect(() => console.log(count.value));
+watchEffect(() => console.log(count.value))
 // -> logs 0
 
-count.value++;
+count.value++
 // -> logs 1
 ```
 

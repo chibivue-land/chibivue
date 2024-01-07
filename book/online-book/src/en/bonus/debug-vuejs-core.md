@@ -7,7 +7,6 @@ Therefore, we will introduce several methods for debugging the original source c
 
 (We will introduce them in an easy-to-understand order.)
 
-
 ## Utilizing SFC Playground
 
 This is the easiest method. It is widely known and even linked from the official documentation.
@@ -67,7 +66,7 @@ nr setup:vue
 
 # 💁 input your local vuejs/core absolute path:
 #   e.g. /Users/ubugeeei/oss/vuejs-core
-#   > 
+#   >
 ```
 
 This will create a Vue project in the chibivue repository that points to the local vuejs/core source code.
@@ -87,7 +86,6 @@ Of course, HMR on the playground side,
 Even if you modify the vuejs/core code, HMR will work.
 
 <video src="https://github.com/Ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
-
 
 ---
 

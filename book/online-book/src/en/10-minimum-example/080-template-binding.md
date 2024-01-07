@@ -7,29 +7,29 @@ In reality, we want to write event handlers and text content in the template sec
 We aim for a developer interface like the following.
 
 ```ts
-import { createApp, reactive, h } from "chibivue";
+import { createApp, reactive, h } from 'chibivue'
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
 
   render() {
-    return h("div", { class: "container", style: "text-align: center" }, [
-      h("h2", {}, `message: ${this.state.message}`),
-      h("img", {
-        width: "150px",
-        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png",
+    return h('div', { class: 'container', style: 'text-align: center' }, [
+      h('h2', {}, `message: ${this.state.message}`),
+      h('img', {
+        width: '150px',
+        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png',
       }),
-      h("p", {}, [h("b", {}, "chibivue"), " is the minimal Vue.js"]),
-      h("button", { onclick: this.changeMessage }, "click me!"),
+      h('p', {}, [h('b', {}, 'chibivue'), ' is the minimal Vue.js']),
+      h('button', { onclick: this.changeMessage }, 'click me!'),
       h(
-        "style",
+        'style',
         {},
         `
         .container {
@@ -38,13 +38,13 @@ const app = createApp({
           background-color: #becdbe;
           color: #2c3e50;
         }
-      `
+      `,
       ),
-    ]);
+    ])
   },
-});
+})
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 Now, I want to be able to handle the values returned from the `setup` function in the template. From now on, I will refer to this as "template binding" or simply "binding". I am going to implement the binding, but before implementing event handlers and mustache syntax, there are a few things I want to do.
@@ -55,13 +55,13 @@ I mentioned the value returned from `setup`, but currently the return value of `
 export type ComponentOptions = {
   setup?: (
     props: Record<string, any>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function | Record<string, unknown> | void;
+    ctx: { emit: (event: string, ...args: any[]) => void },
+  ) => Function | Record<string, unknown> | void
   // Allow returning Record<string, unknown>
   // .
   // .
   // .
-};
+}
 ```
 
 ```ts
@@ -69,26 +69,26 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  setupState: Data; // Store the result of setup as an object here
+  setupState: Data // Store the result of setup as an object here
 }
 ```
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode;
-  initProps(instance, props);
+  const { props } = instance.vnode
+  initProps(instance, props)
 
-  const component = instance.type as Component;
+  const component = instance.type as Component
   if (component.setup) {
     const setupResult = component.setup(instance.props, {
       emit: instance.emit,
-    }) as InternalRenderFunction;
+    }) as InternalRenderFunction
 
     // Branch based on the type of setupResult
-    if (typeof setupResult === "function") {
-      instance.render = setupResult;
-    } else if (typeof setupResult === "object" && setupResult !== null) {
-      instance.setupState = setupResult;
+    if (typeof setupResult === 'function') {
+      instance.render = setupResult
+    } else if (typeof setupResult === 'object' && setupResult !== null) {
+      instance.setupState = setupResult
     } else {
       // do nothing
     }
@@ -96,7 +96,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // .
   // .
   // .
-};
+}
 ```
 
 From now on, I will refer to the data defined in `setup` as `setupState`.
@@ -106,10 +106,10 @@ Now, before implementing the compiler, let's think about how to bind `setupState
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return () => h("div", {}, [state.message]);
+    const state = reactive({ message: 'hello' })
+    return () => h('div', {}, [state.message])
   },
-});
+})
 ```
 
 Well, it's not really binding, but rather the render function simply forms a closure and references the variable. However, this time, since the setup option and the render function are conceptually different, we need to find a way to pass the setup data to the render function.
@@ -117,13 +117,13 @@ Well, it's not really binding, but rather the render function simply forms a clo
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return { state };
+    const state = reactive({ message: 'hello' })
+    return { state }
   },
 
   // This will be converted to a render function
-  template: "<div>{{ state.message }}</div>",
-});
+  template: '<div>{{ state.message }}</div>',
+})
 ```
 
 The `template` is compiled as a render function using the `h` function and assigned to `instance.render`. So, it is equivalent to the following code:
@@ -131,14 +131,14 @@ The `template` is compiled as a render function using the `h` function and assig
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return { state };
+    const state = reactive({ message: 'hello' })
+    return { state }
   },
 
   render() {
-    return h("div", {}, [state.message]);
+    return h('div', {}, [state.message])
   },
-});
+})
 ```
 
 Naturally, the variable `state` is not defined within the render function.
@@ -151,16 +151,16 @@ In conclusion, we can use the `with` statement to achieve the desired result:
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
-    return { state };
+    const state = reactive({ message: 'hello' })
+    return { state }
   },
 
   render(ctx) {
     with (ctx) {
-      return h("div", {}, [state.message]);
+      return h('div', {}, [state.message])
     }
   },
-});
+})
 ```
 
 I believe that there are many people who are not familiar with the `with` statement.
@@ -185,10 +185,10 @@ The `with` statement extends the scope chain for a statement.
 It behaves as follows:
 
 ```ts
-const obj = { a: 1, b: 2 };
+const obj = { a: 1, b: 2 }
 
 with (obj) {
-  console.log(a, b); // 1, 2
+  console.log(a, b) // 1, 2
 }
 ```
 
@@ -210,21 +210,21 @@ To summarize what we want to achieve this time, we want to compile the following
 into the following function:
 
 ```ts
-(_ctx) => {
+_ctx => {
   with (_ctx) {
-    return h("div", {}, [
-      h("p", {}, [state.message]),
-      h("button", { onClick: changeMessage }, ["click me"]),
-    ]);
+    return h('div', {}, [
+      h('p', {}, [state.message]),
+      h('button', { onClick: changeMessage }, ['click me']),
+    ])
   }
-};
+}
 ```
 
 And pass `setupState` to this function:
 
 ```ts
-const setupState = setup();
-render(setupState);
+const setupState = setup()
+render(setupState)
 ```
 
 ## Implementing the Mustache Syntax
@@ -243,11 +243,11 @@ export const enum NodeTypes {
   INTERPOLATION, // Added
 }
 
-export type TemplateChildNode = ElementNode | TextNode | InterpolationNode; // Added InterpolationNode
+export type TemplateChildNode = ElementNode | TextNode | InterpolationNode // Added InterpolationNode
 
 export interface InterpolationNode extends Node {
-  type: NodeTypes.INTERPOLATION;
-  content: string; // The content written inside the Mustache (in this case, the single variable name defined in setup will be placed here)
+  type: NodeTypes.INTERPOLATION
+  content: string // The content written inside the Mustache (in this case, the single variable name defined in setup will be placed here)
 }
 ```
 
@@ -280,38 +280,38 @@ function parseChildren(
 
 ```ts
 function parseInterpolation(
-  context: ParserContext
+  context: ParserContext,
 ): InterpolationNode | undefined {
-  const [open, close] = ["{{", "}}"];
-  const closeIndex = context.source.indexOf(close, open.length);
-  if (closeIndex === -1) return undefined;
+  const [open, close] = ['{{', '}}']
+  const closeIndex = context.source.indexOf(close, open.length)
+  if (closeIndex === -1) return undefined
 
-  const start = getCursor(context);
-  advanceBy(context, open.length);
+  const start = getCursor(context)
+  advanceBy(context, open.length)
 
-  const innerStart = getCursor(context);
-  const innerEnd = getCursor(context);
-  const rawContentLength = closeIndex - open.length;
-  const rawContent = context.source.slice(0, rawContentLength);
-  const preTrimContent = parseTextData(context, rawContentLength);
+  const innerStart = getCursor(context)
+  const innerEnd = getCursor(context)
+  const rawContentLength = closeIndex - open.length
+  const rawContent = context.source.slice(0, rawContentLength)
+  const preTrimContent = parseTextData(context, rawContentLength)
 
-  const content = preTrimContent.trim();
+  const content = preTrimContent.trim()
 
-  const startOffset = preTrimContent.indexOf(content);
+  const startOffset = preTrimContent.indexOf(content)
 
   if (startOffset > 0) {
-    advancePositionWithMutation(innerStart, rawContent, startOffset);
+    advancePositionWithMutation(innerStart, rawContent, startOffset)
   }
   const endOffset =
-    rawContentLength - (preTrimContent.length - content.length - startOffset);
-  advancePositionWithMutation(innerEnd, rawContent, endOffset);
-  advanceBy(context, close.length);
+    rawContentLength - (preTrimContent.length - content.length - startOffset)
+  advancePositionWithMutation(innerEnd, rawContent, endOffset)
+  advanceBy(context, close.length)
 
   return {
     type: NodeTypes.INTERPOLATION,
     content,
     loc: getSelection(context, start),
-  };
+  }
 }
 ```
 
@@ -319,25 +319,25 @@ There are cases where <span v-pre>`{{`</span> appears in the text, so we will ma
 
 ```ts
 function parseText(context: ParserContext): TextNode {
-  const endTokens = ["<", "{{"]; // If <span v-pre>`{{`</span> appears, parseText ends
+  const endTokens = ['<', '{{'] // If <span v-pre>`{{`</span> appears, parseText ends
 
-  let endIndex = context.source.length;
+  let endIndex = context.source.length
 
   for (let i = 0; i < endTokens.length; i++) {
-    const index = context.source.indexOf(endTokens[i], 1);
+    const index = context.source.indexOf(endTokens[i], 1)
     if (index !== -1 && endIndex > index) {
-      endIndex = index;
+      endIndex = index
     }
   }
 
-  const start = getCursor(context);
-  const content = parseTextData(context, endIndex);
+  const start = getCursor(context)
+  const content = parseTextData(context, endIndex)
 
   return {
     type: NodeTypes.TEXT,
     content,
     loc: getSelection(context, start),
-  };
+  }
 }
 ```
 
@@ -349,12 +349,12 @@ Let's output to the console or something to make sure that the parsing is workin
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
   template: `
     <div class="container" style="text-align: center">
@@ -378,7 +378,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 ![parse_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/parse_interpolation.png)
@@ -392,30 +392,30 @@ Wrap the contents of the render function with a with statement.
 export const generate = ({
   children,
 }: {
-  children: TemplateChildNode[];
+  children: TemplateChildNode[]
 }): string => {
   return `return function render(_ctx) {
   with (_ctx) {
     const { h } = ChibiVue;
     return ${genNode(children[0])};
   }
-}`;
-};
+}`
+}
 
 const genNode = (node: TemplateChildNode): string => {
   switch (node.type) {
     // .
     // .
     case NodeTypes.INTERPOLATION:
-      return genInterpolation(node);
+      return genInterpolation(node)
     // .
     // .
   }
-};
+}
 
 const genInterpolation = (node: InterpolationNode): string => {
-  return `${node.content}`;
-};
+  return `${node.content}`
+}
 ```
 
 Finally, when executing the render function, pass `setupState` as an argument.
@@ -424,8 +424,8 @@ Finally, when executing the render function, pass `setupState` as an argument.
 
 ```ts
 export type InternalRenderFunction = {
-  (ctx: Data): VNodeChild; // Accept ctx as an argument
-};
+  (ctx: Data): VNodeChild // Accept ctx as an argument
+}
 ```
 
 `~/packages/runtime-core/renderer.ts`
@@ -434,15 +434,15 @@ export type InternalRenderFunction = {
 const setupRenderEffect = (
   instance: ComponentInternalInstance,
   initialVNode: VNode,
-  container: RendererElement
+  container: RendererElement,
 ) => {
   const componentUpdateFn = () => {
-    const { render, setupState } = instance;
+    const { render, setupState } = instance
     if (!instance.isMounted) {
       // .
       // .
       // .
-      const subTree = (instance.subTree = normalizeVNode(render(setupState))); // Pass setupState
+      const subTree = (instance.subTree = normalizeVNode(render(setupState))) // Pass setupState
       // .
       // .
       // .
@@ -450,13 +450,13 @@ const setupRenderEffect = (
       // .
       // .
       // .
-      const nextTree = normalizeVNode(render(setupState)); // Pass setupState
+      const nextTree = normalizeVNode(render(setupState)) // Pass setupState
       // .
       // .
       // .
     }
-  };
-};
+  }
+}
 ```
 
 If you have come this far, you should be able to render. Let's check it!
@@ -474,12 +474,12 @@ const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
     .map(({ name, value }) =>
       // Convert props name to onClick if it is @click
-      name === "@click"
+      name === '@click'
         ? `onClick: ${value?.content}`
-        : `${name}: "${value?.content}"`
+        : `${name}: "${value?.content}"`,
     )
-    .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
-};
+    .join(', ')}}, [${el.children.map(it => genNode(it)).join(', ')}])`
+}
 ```
 
 Let's check the operation.
@@ -487,12 +487,12 @@ Let's check the operation.
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!" });
+    const state = reactive({ message: 'Hello, chibivue!' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    return { state, changeMessage };
+    return { state, changeMessage }
   },
   template: `
     <div class="container" style="text-align: center">
@@ -516,7 +516,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 You did it! Well done! It's complete!
@@ -537,20 +537,20 @@ export const enum NodeTypes {
 }
 
 export interface ElementNode extends Node {
-  type: NodeTypes.ELEMENT;
-  tag: string;
-  props: Array<AttributeNode | DirectiveNode>; // props is an array of AttributeNode and DirectiveNode union
+  type: NodeTypes.ELEMENT
+  tag: string
+  props: Array<AttributeNode | DirectiveNode> // props is an array of AttributeNode and DirectiveNode union
   // .
   // .
 }
 
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE;
+  type: NodeTypes.DIRECTIVE
   // Represents the format of `v-name:arg="exp"`.
   // eg. For `v-on:click="increment"`, it would be { name: "on", arg: "click", exp="increment" }
-  name: string;
-  arg: string;
-  exp: string;
+  name: string
+  arg: string
+  exp: string
 }
 ```
 
@@ -610,27 +610,27 @@ function parseAttribute(
 ```ts
 const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
-    .map((prop) => genProp(prop))
-    .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
-};
+    .map(prop => genProp(prop))
+    .join(', ')}}, [${el.children.map(it => genNode(it)).join(', ')}])`
+}
 
 const genProp = (prop: AttributeNode | DirectiveNode): string => {
   switch (prop.type) {
     case NodeTypes.ATTRIBUTE:
-      return `${prop.name}: "${prop.value?.content}"`;
+      return `${prop.name}: "${prop.value?.content}"`
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
-        case "on":
-          return `${toHandlerKey(prop.arg)}: ${prop.exp}`;
+        case 'on':
+          return `${toHandlerKey(prop.arg)}: ${prop.exp}`
         default:
           // TODO: other directives
-          throw new Error(`unexpected directive name. got "${prop.name}"`);
+          throw new Error(`unexpected directive name. got "${prop.name}"`)
       }
     }
     default:
-      throw new Error(`unexpected prop type.`);
+      throw new Error(`unexpected prop type.`)
   }
-};
+}
 ```
 
 Now, let's check the operation in the playground.
@@ -639,17 +639,17 @@ You should be able to handle not only `@click`, but also `v-on:click` and other 
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     const handleInput = (e: InputEvent) => {
-      state.input = (e.target as HTMLInputElement)?.value ?? "";
-    };
+      state.input = (e.target as HTMLInputElement)?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
 
   template: `
@@ -683,7 +683,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 ![compile_directives](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_directives.png)

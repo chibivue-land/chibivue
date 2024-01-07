@@ -34,18 +34,18 @@ Through the implementation of the h function, we understood how declarative UI i
 
 ```ts
 // Internally, it generates an object like {tag, props, children} and performs DOM operations based on it
-h("div", { id: "my-app" }, [
-  h("p", {}, ["Hello!"]),
+h('div', { id: 'my-app' }, [
+  h('p', {}, ['Hello!']),
   h(
-    "button",
+    'button',
     {
       onClick: () => {
-        alert("hello");
+        alert('hello')
       },
     },
-    ["Click me!"]
+    ['Click me!'],
   ),
-]);
+])
 ```
 
 This is where something like Virtual DOM first appears.
@@ -55,43 +55,43 @@ This is where something like Virtual DOM first appears.
 We understood the implementation of Vue's unique feature, the Reactivity System, how it works, and what it actually is.
 
 ```ts
-const targetMap = new WeakMap<any, KeyToDepMap>();
+const targetMap = new WeakMap<any, KeyToDepMap>()
 
 function reactive<T extends object>(target: T): T {
   const proxy = new Proxy(target, {
     get(target: object, key: string | symbol, receiver: object) {
-      track(target, key);
-      return Reflect.get(target, key, receiver);
+      track(target, key)
+      return Reflect.get(target, key, receiver)
     },
 
     set(
       target: object,
       key: string | symbol,
       value: unknown,
-      receiver: object
+      receiver: object,
     ) {
-      Reflect.set(target, key, value, receiver);
-      trigger(target, key);
-      return true;
+      Reflect.set(target, key, value, receiver)
+      trigger(target, key)
+      return true
     },
-  });
+  })
 }
 ```
 
 ```ts
 const component = {
   setup() {
-    const state = reactive({ count: 0 }); // create proxy
+    const state = reactive({ count: 0 }) // create proxy
 
     const increment = () => {
-      state.count++; // trigger
-    };
+      state.count++ // trigger
+    }
 
-    () => {
-      return h("p", {}, `${state.count}`); // track
-    };
+    ;() => {
+      return h('p', {}, `${state.count}`) // track
+    }
   },
-};
+}
 ```
 
 ## We now know what Virtual DOM is, why it is beneficial, and how to implement it
@@ -101,55 +101,55 @@ As an improvement to rendering using the h function, we understood the efficient
 ```ts
 // Interface for Virtual DOM
 export interface VNode<HostNode = any> {
-  type: string | typeof Text | object;
-  props: VNodeProps | null;
-  children: VNodeNormalizedChildren;
-  el: HostNode | undefined;
+  type: string | typeof Text | object
+  props: VNodeProps | null
+  children: VNodeNormalizedChildren
+  el: HostNode | undefined
 }
 
 // First, the render function is called
 const render: RootRenderFunction = (rootComponent, container) => {
-  const vnode = createVNode(rootComponent, {}, []);
+  const vnode = createVNode(rootComponent, {}, [])
   // The first time, n1 is null. In this case, each process runs mount
-  patch(null, vnode, container);
-};
+  patch(null, vnode, container)
+}
 
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-  const { type } = n2;
+  const { type } = n2
   if (type === Text) {
-    processText(n1, n2, container);
-  } else if (typeof type === "string") {
-    processElement(n1, n2, container);
-  } else if (typeof type === "object") {
-    processComponent(n1, n2, container);
+    processText(n1, n2, container)
+  } else if (typeof type === 'string') {
+    processElement(n1, n2, container)
+  } else if (typeof type === 'object') {
+    processComponent(n1, n2, container)
   } else {
     // do nothing
   }
-};
+}
 
 // From the second time onwards, the previous VNode and the current VNode are passed to the patch function to update the differences
-const nextVNode = component.render();
-patch(prevVNode, nextVNode);
+const nextVNode = component.render()
+patch(prevVNode, nextVNode)
 ```
 
 I understood how the structure of components and the interaction between components are achieved.
 
 ```ts
 export interface ComponentInternalInstance {
-  type: Component;
+  type: Component
 
-  vnode: VNode;
-  subTree: VNode;
-  next: VNode | null;
-  effect: ReactiveEffect;
-  render: InternalRenderFunction;
-  update: () => void;
+  vnode: VNode
+  subTree: VNode
+  next: VNode | null
+  effect: ReactiveEffect
+  render: InternalRenderFunction
+  update: () => void
 
-  propsOptions: Props;
-  props: Data;
-  emit: (event: string, ...args: any[]) => void;
+  propsOptions: Props
+  props: Data
+  emit: (event: string, ...args: any[]) => void
 
-  isMounted: boolean;
+  isMounted: boolean
 }
 ```
 
@@ -159,35 +159,35 @@ const MyComponent = {
 
   setup(props: any, { emit }: any) {
     return () =>
-      h("div", {}, [
-        h("p", {}, [`someMessage: ${props.someMessage}`]),
-        h("button", { onClick: () => emit("click:change-message") }, [
-          "change message",
+      h('div', {}, [
+        h('p', {}, [`someMessage: ${props.someMessage}`]),
+        h('button', { onClick: () => emit('click:change-message') }, [
+          'change message',
         ]),
-      ]);
+      ])
   },
-};
+}
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: "hello" });
+    const state = reactive({ message: 'hello' })
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     return () =>
-      h("div", { id: "my-app" }, [
+      h('div', { id: 'my-app' }, [
         h(
           MyComponent,
           {
-            "some-message": state.message,
-            "onClick:change-message": changeMessage,
+            'some-message': state.message,
+            'onClick:change-message': changeMessage,
           },
-          []
+          [],
         ),
-      ]);
+      ])
   },
-});
+})
 ```
 
 I understood what the compiler is and how the template functionality is implemented.
@@ -197,17 +197,17 @@ By understanding what the compiler is and implementing the template compiler, I 
 ```ts
 const app = createApp({
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
     const handleInput = (e: InputEvent) => {
-      state.input = (e.target as HTMLInputElement)?.value ?? "";
-    };
+      state.input = (e.target as HTMLInputElement)?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
 
   template: `
@@ -241,7 +241,7 @@ const app = createApp({
       </style>
     </div>
   `,
-});
+})
 ```
 
 I understood how to achieve the SFC compiler through the Vite plugin.
@@ -250,23 +250,23 @@ By implementing the template compiler and utilizing it through the Vite plugin, 
 
 ```vue
 <script>
-import { reactive } from "chibivue";
+import { reactive } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: "Hello, chibivue!", input: "" });
+    const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
     const changeMessage = () => {
-      state.message += "!";
-    };
+      state.message += '!'
+    }
 
-    const handleInput = (e) => {
-      state.input = e.target?.value ?? "";
-    };
+    const handleInput = e => {
+      state.input = e.target?.value ?? ''
+    }
 
-    return { state, changeMessage, handleInput };
+    return { state, changeMessage, handleInput }
   },
-};
+}
 </script>
 
 <template>

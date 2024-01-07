@@ -10,23 +10,23 @@ DirectiveTransform は DirectiveNode,ElementNode を受け取り、Transform 後
 export type DirectiveTransform = (
   dir: DirectiveNode,
   node: ElementNode,
-  context: TransformContext
-) => DirectiveTransformResult;
+  context: TransformContext,
+) => DirectiveTransformResult
 
 export interface DirectiveTransformResult {
-  props: Property[];
+  props: Property[]
 }
 ```
 
 まずは今回目指す開発者インタフェースから確認してみましょう。
 
 ```ts
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent } from 'chibivue'
 
 const App = defineComponent({
   setup() {
-    const bind = { id: "some-id", class: "some-class", style: "color: red" };
-    return { count: 1, bind };
+    const bind = { id: 'some-id', class: 'some-class', style: 'color: red' }
+    return { count: 1, bind }
   },
 
   template: `<div>
@@ -46,11 +46,11 @@ const App = defineComponent({
   <p :class="{ 'my-class': true }"> :class="{ 'my-class': true }" </p>
   <p :class="{ 'my-class': false }"> :class="{ 'my-class': false }" </p>
 </div>`,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 v-bind には 概ね上記のような記法があります。詳しくは下記の公式ドキュメントを参照してください。  
@@ -64,10 +64,10 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 
 ```ts
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE;
-  name: string;
-  exp: ExpressionNode | undefined; // ここ
-  arg: ExpressionNode | undefined; // ここ
+  type: NodeTypes.DIRECTIVE
+  name: string
+  exp: ExpressionNode | undefined // ここ
+  arg: ExpressionNode | undefined // ここ
 }
 ```
 
@@ -97,48 +97,48 @@ parser の実装をこの AST の変更に追従します。exp, arg を `Simple
 ```ts
 function parseAttribute(
   context: ParserContext,
-  nameSet: Set<string>
+  nameSet: Set<string>,
 ): AttributeNode | DirectiveNode {
   // .
   // .
   // .
   // .
   // directive
-  const loc = getSelection(context, start);
+  const loc = getSelection(context, start)
   // ここの正規表現は本家から拝借
   if (/^(v-[A-Za-z0-9-]|:|\.|@|#)/.test(name)) {
     const match =
       // ここの正規表現は本家から拝借
       /(?:^v-([a-z0-9-]+))?(?:(?::|^\.|^@|^#)(\[[^\]]+\]|[^\.]+))?(.+)?$/i.exec(
-        name
-      )!;
+        name,
+      )!
 
     // name 部分のマッチを見て、`:` で始まっていた場合には bind として扱う
     let dirName =
       match[1] ||
-      (startsWith(name, ":") ? "bind" : startsWith(name, "@") ? "on" : "");
+      (startsWith(name, ':') ? 'bind' : startsWith(name, '@') ? 'on' : '')
 
-    let arg: ExpressionNode | undefined;
+    let arg: ExpressionNode | undefined
 
     if (match[2]) {
-      const startOffset = name.lastIndexOf(match[2]);
+      const startOffset = name.lastIndexOf(match[2])
       const loc = getSelection(
         context,
         getNewPosition(context, start, startOffset),
-        getNewPosition(context, start, startOffset + match[2].length)
-      );
+        getNewPosition(context, start, startOffset + match[2].length),
+      )
 
-      let content = match[2];
-      let isStatic = true;
+      let content = match[2]
+      let isStatic = true
 
       // `[arg]` のような動的な引数の場合、`isStatic` を false として、中身を content として取り出す
-      if (content.startsWith("[")) {
-        isStatic = false;
-        if (!content.endsWith("]")) {
-          console.error(`Invalid dynamic argument expression: ${content}`);
-          content = content.slice(1);
+      if (content.startsWith('[')) {
+        isStatic = false
+        if (!content.endsWith(']')) {
+          console.error(`Invalid dynamic argument expression: ${content}`)
+          content = content.slice(1)
         } else {
-          content = content.slice(1, content.length - 1);
+          content = content.slice(1, content.length - 1)
         }
       }
 
@@ -147,7 +147,7 @@ function parseAttribute(
         content,
         isStatic,
         loc,
-      };
+      }
     }
 
     return {
@@ -161,7 +161,7 @@ function parseAttribute(
       },
       loc,
       arg,
-    };
+    }
   }
 }
 ```
@@ -194,7 +194,7 @@ v-bind:id="count"
 
 ```ts
 {
-  id: count;
+  id: count
 }
 ```
 
@@ -217,7 +217,7 @@ v-bind:id="count"
 ↓
 
 ```ts
-h("p", mergeProps(bindingObject, { class: "my-class" }), "hello");
+h('p', mergeProps(bindingObject, { class: 'my-class' }), 'hello')
 ```
 
 また、class と style に関してはさまざまな開発者インタフェースを持っているため、normalize する必要があります。  

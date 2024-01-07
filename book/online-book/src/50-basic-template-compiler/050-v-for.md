@@ -15,27 +15,27 @@ https://ja.vuejs.org/guide/essentials/list.html
 
 ```vue
 <script>
-import { createApp, defineComponent, ref } from "chibivue";
+import { createApp, defineComponent, ref } from 'chibivue'
 
-const genId = () => Math.random().toString(36).slice(2);
+const genId = () => Math.random().toString(36).slice(2)
 
 const FRUITS_FACTORIES = [
-  () => ({ id: genId(), name: "apple", color: "red" }),
-  () => ({ id: genId(), name: "banana", color: "yellow" }),
-  () => ({ id: genId(), name: "grape", color: "purple" }),
-];
+  () => ({ id: genId(), name: 'apple', color: 'red' }),
+  () => ({ id: genId(), name: 'banana', color: 'yellow' }),
+  () => ({ id: genId(), name: 'grape', color: 'purple' }),
+]
 
 export default {
   setup() {
-    const fruits = ref([...FRUITS_FACTORIES].map((f) => f()));
+    const fruits = ref([...FRUITS_FACTORIES].map(f => f()))
     const addFruit = () => {
       fruits.value.push(
-        FRUITS_FACTORIES[Math.floor(Math.random() * FRUITS_FACTORIES.length)]()
-      );
-    };
-    return { fruits, addFruit };
+        FRUITS_FACTORIES[Math.floor(Math.random() * FRUITS_FACTORIES.length)](),
+      )
+    }
+    return { fruits, addFruit }
   },
-};
+}
 </script>
 
 <template>
@@ -113,8 +113,8 @@ export default {
 h(
   _Fragment,
   null,
-  _renderList(fruits, (fruit) => h("li", { key: fruit.id }, fruit.name))
-);
+  _renderList(fruits, fruit => h('li', { key: fruit.id }, fruit.name)),
+)
 ```
 
 例 2:
@@ -131,8 +131,8 @@ h(
 h(
   _Fragment,
   null,
-  _renderList(fruits, (fruit) => h("li", { key: fruit.id }, fruit.name))
-);
+  _renderList(fruits, fruit => h('li', { key: fruit.id }, fruit.name)),
+)
 ```
 
 例 3:
@@ -147,8 +147,8 @@ h(
 h(
   _Fragment,
   null,
-  _renderList(fruits, ({ name, id }) => h("li", { key: id }, name))
-);
+  _renderList(fruits, ({ name, id }) => h('li', { key: id }, name)),
+)
 ```
 
 後々、renderList の第 1 引数として渡す値は配列以外にも数値やオブジェクトも想定していきますが、  
@@ -174,12 +174,12 @@ h(
     _ctx.fruits, // fruits は _ctx からバインドされるものだので prefix がついていて OK
     ({ name, id }) =>
       h(
-        "li",
+        'li',
         { key: _ctx.id }, // ここに _ctx がついてはダメ
-        _ctx.name // ここに _ctx がついてはダメ
-      )
-  )
-);
+        _ctx.name, // ここに _ctx がついてはダメ
+      ),
+  ),
+)
 ```
 
 ```ts
@@ -191,12 +191,12 @@ h(
     _ctx.fruits, // fruits は _ctx からバインドされるものだので prefix がついていて OK
     ({ name, id }) =>
       h(
-        "li",
+        'li',
         { key: id }, // ここに _ctx がついてはダメ
-        name // ここに _ctx がついてはダメ
-      )
-  )
-);
+        name, // ここに _ctx がついてはダメ
+      ),
+  ),
+)
 ```
 
 ローカル変数の定義は様々で、例 1~3 までそれぞれあります。
@@ -225,41 +225,41 @@ export type ParentNode =
   | RootNode
   | ElementNode
   | ForNode // [!code ++]
-  | IfBranchNode;
+  | IfBranchNode
 
 export interface ForNode extends Node {
-  type: NodeTypes.FOR;
-  source: ExpressionNode;
-  valueAlias: ExpressionNode | undefined;
-  keyAlias: ExpressionNode | undefined;
-  children: TemplateChildNode[];
-  parseResult: ForParseResult; // 後述
-  codegenNode?: ForCodegenNode;
+  type: NodeTypes.FOR
+  source: ExpressionNode
+  valueAlias: ExpressionNode | undefined
+  keyAlias: ExpressionNode | undefined
+  children: TemplateChildNode[]
+  parseResult: ForParseResult // 後述
+  codegenNode?: ForCodegenNode
 }
 
 export interface ForCodegenNode extends VNodeCall {
-  isBlock: true;
-  tag: typeof FRAGMENT;
-  props: undefined;
-  children: ForRenderListExpression;
+  isBlock: true
+  tag: typeof FRAGMENT
+  props: undefined
+  children: ForRenderListExpression
 }
 
 export interface ForRenderListExpression extends CallExpression {
-  callee: typeof RENDER_LIST; // 後述
-  arguments: [ExpressionNode, ForIteratorExpression];
+  callee: typeof RENDER_LIST // 後述
+  arguments: [ExpressionNode, ForIteratorExpression]
 }
 
 // renderList の第二引数でコールバック関数を使用するので、関数式にも対応します。
 export interface FunctionExpression extends Node {
-  type: NodeTypes.JS_FUNCTION_EXPRESSION;
-  params: ExpressionNode | string | (ExpressionNode | string)[] | undefined;
-  returns?: TemplateChildNode | TemplateChildNode[] | JSChildNode;
-  newline: boolean;
+  type: NodeTypes.JS_FUNCTION_EXPRESSION
+  params: ExpressionNode | string | (ExpressionNode | string)[] | undefined
+  returns?: TemplateChildNode | TemplateChildNode[] | JSChildNode
+  newline: boolean
 }
 
 // v-for の場合、 return は決まっているので、それ用のASTとして表現します。
 export interface ForIteratorExpression extends FunctionExpression {
-  returns: VNodeCall;
+  returns: VNodeCall
 }
 
 export type JSChildNode =
@@ -269,7 +269,7 @@ export type JSChildNode =
   | ArrayExpression
   | ConditionalExpression
   | ExpressionNode
-  | FunctionExpression; // [!code ++]
+  | FunctionExpression // [!code ++]
 ```
 
 `RENDER_LIST` に関しては、例の如く runtimeHelpers に追加しておきます。
@@ -279,7 +279,7 @@ export type JSChildNode =
 // .
 // .
 // .
-export const RENDER_LIST = Symbol(); // [!code ++]
+export const RENDER_LIST = Symbol() // [!code ++]
 
 export const helperNameMap: Record<symbol, string> = {
   // .
@@ -287,17 +287,17 @@ export const helperNameMap: Record<symbol, string> = {
   [RENDER_LIST]: `renderList`, // [!code ++]
   // .
   // .
-};
+}
 ```
 
 `ForParseResult` についてですが、こちらの定義は transform/vFor にあります。
 
 ```ts
 export interface ForParseResult {
-  source: ExpressionNode;
-  value: ExpressionNode | undefined;
-  key: ExpressionNode | undefined;
-  index: ExpressionNode | undefined;
+  source: ExpressionNode
+  value: ExpressionNode | undefined
+  key: ExpressionNode | undefined
+  index: ExpressionNode | undefined
 }
 ```
 
@@ -334,8 +334,8 @@ switch (node.type) {
   // .
   // .
   case NodeTypes.JS_FUNCTION_EXPRESSION: // [!code ++]
-    genFunctionExpression(node, context, option); // [!code ++]
-    break; // [!code ++]
+    genFunctionExpression(node, context, option) // [!code ++]
+    break // [!code ++]
   // .
   // .
   // .
@@ -344,35 +344,35 @@ switch (node.type) {
 function genFunctionExpression(
   node: FunctionExpression,
   context: CodegenContext,
-  option: CompilerOptions
+  option: CompilerOptions,
 ) {
-  const { push, indent, deindent } = context;
-  const { params, returns, newline } = node;
+  const { push, indent, deindent } = context
+  const { params, returns, newline } = node
 
-  push(`(`, node);
+  push(`(`, node)
   if (isArray(params)) {
-    genNodeList(params, context, option);
+    genNodeList(params, context, option)
   } else if (params) {
-    genNode(params, context, option);
+    genNode(params, context, option)
   }
-  push(`) => `);
+  push(`) => `)
   if (newline) {
-    push(`{`);
-    indent();
+    push(`{`)
+    indent()
   }
   if (returns) {
     if (newline) {
-      push(`return `);
+      push(`return `)
     }
     if (isArray(returns)) {
-      genNodeListAsArray(returns, context, option);
+      genNodeListAsArray(returns, context, option)
     } else {
-      genNode(returns, context, option);
+      genNode(returns, context, option)
     }
   }
   if (newline) {
-    deindent();
-    push(`}`);
+    deindent()
+    push(`}`)
   }
 }
 ```
@@ -390,13 +390,13 @@ v-on の時にもやりましたが、v-for の場合には processExpression �
 ```ts
 export const transformExpression: NodeTransform = (node, ctx) => {
   if (node.type === NodeTypes.INTERPOLATION) {
-    node.content = processExpression(node.content as SimpleExpressionNode, ctx);
+    node.content = processExpression(node.content as SimpleExpressionNode, ctx)
   } else if (node.type === NodeTypes.ELEMENT) {
     for (let i = 0; i < node.props.length; i++) {
-      const dir = node.props[i];
+      const dir = node.props[i]
       if (
         dir.type === NodeTypes.DIRECTIVE &&
-        dir.name !== "for" // [!code ++]
+        dir.name !== 'for' // [!code ++]
       ) {
         // .
         // .
@@ -404,7 +404,7 @@ export const transformExpression: NodeTransform = (node, ctx) => {
       }
     }
   }
-};
+}
 ```
 
 ### Identifier の収集
@@ -425,22 +425,22 @@ export const transformExpression: NodeTransform = (node, ctx) => {
 
 ```ts
 export interface SimpleExpressionNode extends Node {
-  type: NodeTypes.SIMPLE_EXPRESSION;
-  content: string;
-  isStatic: boolean;
-  identifiers?: string[]; // [!code ++]
+  type: NodeTypes.SIMPLE_EXPRESSION
+  content: string
+  isStatic: boolean
+  identifiers?: string[] // [!code ++]
 }
 
 export interface CompoundExpressionNode extends Node {
-  type: NodeTypes.COMPOUND_EXPRESSION;
+  type: NodeTypes.COMPOUND_EXPRESSION
   children: (
     | SimpleExpressionNode
     | CompoundExpressionNode
     | InterpolationNode
     | TextNode
     | string
-  )[];
-  identifiers?: string[]; // [!code ++]
+  )[]
+  identifiers?: string[] // [!code ++]
 }
 ```
 
@@ -453,8 +453,8 @@ export interface TransformContext extends Required<TransformOptions> {
   // .
   // .
   // .
-  addIdentifiers(exp: ExpressionNode | string): void;
-  removeIdentifiers(exp: ExpressionNode | string): void;
+  addIdentifiers(exp: ExpressionNode | string): void
+  removeIdentifiers(exp: ExpressionNode | string): void
   // .
   // .
   // .
@@ -467,29 +467,29 @@ const context: TransformContext = {
   addIdentifiers(exp) {
     if (!isBrowser) {
       if (isString(exp)) {
-        addId(exp);
+        addId(exp)
       } else if (exp.identifiers) {
-        exp.identifiers.forEach(addId);
+        exp.identifiers.forEach(addId)
       } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-        addId(exp.content);
+        addId(exp.content)
       }
     }
   },
   removeIdentifiers(exp) {
     if (!isBrowser) {
       if (isString(exp)) {
-        removeId(exp);
+        removeId(exp)
       } else if (exp.identifiers) {
-        exp.identifiers.forEach(removeId);
+        exp.identifiers.forEach(removeId)
       } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-        removeId(exp.content);
+        removeId(exp.content)
       }
     }
   },
   // .
   // .
   // .
-};
+}
 ```
 
 それでは、processExpression の方で identifier を収集する実装をやっていきます。
@@ -502,18 +502,18 @@ asParams と言うのは、renderList の第二引数のコールバック関数
 export function processExpression(
   node: SimpleExpressionNode,
   ctx: TransformContext,
-  asParams = false // [!code ++]
+  asParams = false, // [!code ++]
 ) {
   // .
   if (isSimpleIdentifier(rawExp)) {
-    const isScopeVarReference = ctx.identifiers[rawExp];
+    const isScopeVarReference = ctx.identifiers[rawExp]
     if (
       !asParams && // [!code ++]
       !isScopeVarReference
     ) {
-      node.content = rewriteIdentifier(rawExp);
+      node.content = rewriteIdentifier(rawExp)
     } // [!code ++]
-    return node;
+    return node
 
     // .
   }
@@ -528,7 +528,7 @@ simpleIdentifier の場合はこれでおしまいです。問題はそれ以外
 
 ```ts
 // asParams の場合は、関数の引数のように変換する
-const source = `(${rawExp})${asParams ? `=>{}` : ``}`;
+const source = `(${rawExp})${asParams ? `=>{}` : ``}`
 ```
 
 walkIdentifiers の方が多少複雑です。
@@ -538,11 +538,11 @@ export function walkIdentifiers(
   root: Node,
   onIdentifier: (node: Identifier) => void,
   knownIds: Record<string, number> = Object.create(null),
-  parentStack: Node[] = []
+  parentStack: Node[] = [],
 ) {
   // .
 
-  (walk as any)(root, {
+  ;(walk as any)(root, {
     // prettier-ignore
     enter(node: Node, parent: Node | undefined) {
       parent && parentStack.push(parent);
@@ -560,12 +560,12 @@ export function walkIdentifiers(
         ); // [!code ++]
       } // [!code ++]
     },
-  });
+  })
 }
 
 export const isFunctionType = (node: Node): node is Function => {
-  return /Function(?:Expression|Declaration)$|Method$/.test(node.type);
-};
+  return /Function(?:Expression|Declaration)$|Method$/.test(node.type)
+}
 ```
 
 やっていることとしては、 node が関数だった場合には、その引数を walk し、identifiers に identifier を収集しているだけです。
@@ -575,24 +575,24 @@ export const isFunctionType = (node: Node): node is Function => {
 `walkIdentifiers` で収集した後で、最後、CompoundExpression を生成するタイミングで `knownIds` を元に identifiers を生成します。
 
 ```ts
-const knownIds: Record<string, number> = Object.create(ctx.identifiers);
+const knownIds: Record<string, number> = Object.create(ctx.identifiers)
 
 walkIdentifiers(
   ast,
-  (node) => {
-    node.name = rewriteIdentifier(node.name);
-    ids.push(node as QualifiedId);
+  node => {
+    node.name = rewriteIdentifier(node.name)
+    ids.push(node as QualifiedId)
   },
   knownIds, // 渡す
-  parentStack
-);
+  parentStack,
+)
 
 // .
 // .
 // .
 
-ret.identifiers = Object.keys(knownIds); //　knownIds を元に identifiers を生成
-return ret;
+ret.identifiers = Object.keys(knownIds) //　knownIds を元に identifiers を生成
+return ret
 ```
 
 少しファイルが前後しますが、walkFunctionParams, markScopeIdentifier は何をやっているかというと、これは単純で、 param の walk と Node.name を knownIds に追加しているだけです。
@@ -600,11 +600,11 @@ return ret;
 ```ts
 export function walkFunctionParams(
   node: Function,
-  onIdent: (id: Identifier) => void
+  onIdent: (id: Identifier) => void,
 ) {
   for (const p of node.params) {
     for (const id of extractIdentifiers(p)) {
-      onIdent(id);
+      onIdent(id)
     }
   }
 }
@@ -612,18 +612,18 @@ export function walkFunctionParams(
 function markScopeIdentifier(
   node: Node & { scopeIds?: Set<string> },
   child: Identifier,
-  knownIds: Record<string, number>
+  knownIds: Record<string, number>,
 ) {
-  const { name } = child;
+  const { name } = child
   if (node.scopeIds && node.scopeIds.has(name)) {
-    return;
+    return
   }
   if (name in knownIds) {
-    knownIds[name]++;
+    knownIds[name]++
   } else {
-    knownIds[name] = 1;
+    knownIds[name] = 1
   }
-  (node.scopeIds || (node.scopeIds = new Set())).add(name);
+  ;(node.scopeIds || (node.scopeIds = new Set())).add(name)
 }
 ```
 
@@ -643,56 +643,55 @@ function markScopeIdentifier(
 // しかるべきところで processFor を実行し、しかるべきところで codegenNode を生成します。
 // processFor が一番複雑な実装になります。
 export const transformFor = createStructuralDirectiveTransform(
-  "for",
+  'for',
   (node, dir, context) => {
-    return processFor(node, dir, context, (forNode) => {
+    return processFor(node, dir, context, forNode => {
       // 想定通り、renderList を呼び出すコードを生成します。
       const renderExp = createCallExpression(context.helper(RENDER_LIST), [
         forNode.source,
-      ]) as ForRenderListExpression;
+      ]) as ForRenderListExpression
 
       // v-for のコンテナとなる Fragment の codegenNode を生成
       forNode.codegenNode = createVNodeCall(
         context,
         context.helper(FRAGMENT),
         undefined,
-        renderExp
-      ) as ForCodegenNode;
+        renderExp,
+      ) as ForCodegenNode
 
       // codegen の process (processFor 内で、parse, identifiers の収集後に実行されます)
       return () => {
-        const { children } = forNode;
-        const childBlock = (children[0] as ElementNode)
-          .codegenNode as VNodeCall;
+        const { children } = forNode
+        const childBlock = (children[0] as ElementNode).codegenNode as VNodeCall
 
         renderExp.arguments.push(
           createFunctionExpression(
             createForLoopParams(forNode.parseResult),
             childBlock,
-            true /* force newline */
-          ) as ForIteratorExpression
-        );
-      };
-    });
-  }
-);
+            true /* force newline */,
+          ) as ForIteratorExpression,
+        )
+      }
+    })
+  },
+)
 
 export function processFor(
   node: ElementNode,
   dir: DirectiveNode,
   context: TransformContext,
-  processCodegen?: (forNode: ForNode) => (() => void) | undefined
+  processCodegen?: (forNode: ForNode) => (() => void) | undefined,
 ) {
   // v-for の式を解析します。
   // parseResult の段階ですでに各 Node の identifiers は収集されています。
   const parseResult = parseForExpression(
     dir.exp as SimpleExpressionNode,
-    context
-  );
+    context,
+  )
 
-  const { addIdentifiers, removeIdentifiers } = context;
+  const { addIdentifiers, removeIdentifiers } = context
 
-  const { source, value, key, index } = parseResult!;
+  const { source, value, key, index } = parseResult!
 
   const forNode: ForNode = {
     type: NodeTypes.FOR,
@@ -702,90 +701,90 @@ export function processFor(
     keyAlias: key,
     parseResult: parseResult!,
     children: [node],
-  };
+  }
 
   // Node を forNode に置き換える
-  context.replaceNode(forNode);
+  context.replaceNode(forNode)
 
   if (!context.isBrowser) {
     // 収集された identifiers を context に追加して、
-    value && addIdentifiers(value);
-    key && addIdentifiers(key);
-    index && addIdentifiers(index);
+    value && addIdentifiers(value)
+    key && addIdentifiers(key)
+    index && addIdentifiers(index)
   }
 
   // code を生成します。 (これにより、 ローカル変数の prefix の付与をスキップできる)
-  const onExit = processCodegen && processCodegen(forNode);
+  const onExit = processCodegen && processCodegen(forNode)
 
   return () => {
-    value && removeIdentifiers(value);
-    key && removeIdentifiers(key);
-    index && removeIdentifiers(index);
+    value && removeIdentifiers(value)
+    key && removeIdentifiers(key)
+    index && removeIdentifiers(index)
 
-    if (onExit) onExit();
-  };
+    if (onExit) onExit()
+  }
 }
 
 // 正規表現を活用して v-for に与えられた式を解析します。
-const forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/;
-const forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/;
-const stripParensRE = /^\(|\)$/g;
+const forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/
+const forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/
+const stripParensRE = /^\(|\)$/g
 
 export interface ForParseResult {
-  source: ExpressionNode;
-  value: ExpressionNode | undefined;
-  key: ExpressionNode | undefined;
-  index: ExpressionNode | undefined;
+  source: ExpressionNode
+  value: ExpressionNode | undefined
+  key: ExpressionNode | undefined
+  index: ExpressionNode | undefined
 }
 
 export function parseForExpression(
   input: SimpleExpressionNode,
-  context: TransformContext
+  context: TransformContext,
 ): ForParseResult | undefined {
-  const loc = input.loc;
-  const exp = input.content;
-  const inMatch = exp.match(forAliasRE);
+  const loc = input.loc
+  const exp = input.content
+  const inMatch = exp.match(forAliasRE)
 
-  if (!inMatch) return;
+  if (!inMatch) return
 
-  const [, LHS, RHS] = inMatch;
+  const [, LHS, RHS] = inMatch
   const result: ForParseResult = {
     source: createAliasExpression(
       loc,
       RHS.trim(),
-      exp.indexOf(RHS, LHS.length)
+      exp.indexOf(RHS, LHS.length),
     ),
     value: undefined,
     key: undefined,
     index: undefined,
-  };
+  }
 
   if (!context.isBrowser) {
     result.source = processExpression(
       result.source as SimpleExpressionNode,
-      context
-    );
+      context,
+    )
   }
 
-  let valueContent = LHS.trim().replace(stripParensRE, "").trim();
-  const iteratorMatch = valueContent.match(forIteratorRE);
-  const trimmedOffset = LHS.indexOf(valueContent);
+  let valueContent = LHS.trim().replace(stripParensRE, '').trim()
+  const iteratorMatch = valueContent.match(forIteratorRE)
+  const trimmedOffset = LHS.indexOf(valueContent)
 
   if (iteratorMatch) {
-    valueContent = valueContent.replace(forIteratorRE, "").trim();
-    const keyContent = iteratorMatch[1].trim();
-    let keyOffset: number | undefined;
+    valueContent = valueContent.replace(forIteratorRE, '').trim()
+    const keyContent = iteratorMatch[1].trim()
+    let keyOffset: number | undefined
     if (keyContent) {
-      keyOffset = exp.indexOf(keyContent, trimmedOffset + valueContent.length);
-      result.key = createAliasExpression(loc, keyContent, keyOffset);
+      keyOffset = exp.indexOf(keyContent, trimmedOffset + valueContent.length)
+      result.key = createAliasExpression(loc, keyContent, keyOffset)
       if (!context.isBrowser) {
         // ブラウザモードでない場合、asParams を true にし、key の identifiers を収集します。
-        result.key = processExpression(result.key, context, true);
+        result.key = processExpression(result.key, context, true)
       }
     }
 
     if (iteratorMatch[2]) {
-      const indexContent = iteratorMatch[2].trim();
+      const indexContent = iteratorMatch[2].trim()
       if (indexContent) {
         result.index = createAliasExpression(
           loc,
@@ -794,57 +793,57 @@ export function parseForExpression(
             indexContent,
             result.key
               ? keyOffset! + keyContent.length
-              : trimmedOffset + valueContent.length
-          )
-        );
+              : trimmedOffset + valueContent.length,
+          ),
+        )
         if (!context.isBrowser) {
           // ブラウザモードでない場合、asParams を true にし、index の identifiers を収集します。
-          result.index = processExpression(result.index, context, true);
+          result.index = processExpression(result.index, context, true)
         }
       }
     }
   }
 
   if (valueContent) {
-    result.value = createAliasExpression(loc, valueContent, trimmedOffset);
+    result.value = createAliasExpression(loc, valueContent, trimmedOffset)
     if (!context.isBrowser) {
       // ブラウザモードでない場合、asParams を true にし、value の identifiers を収集します。
-      result.value = processExpression(result.value, context, true);
+      result.value = processExpression(result.value, context, true)
     }
   }
 
-  return result;
+  return result
 }
 
 function createAliasExpression(
   range: SourceLocation,
   content: string,
-  offset: number
+  offset: number,
 ): SimpleExpressionNode {
   return createSimpleExpression(
     content,
     false,
-    getInnerRange(range, offset, content.length)
-  );
+    getInnerRange(range, offset, content.length),
+  )
 }
 
 export function createForLoopParams(
   { value, key, index }: ForParseResult,
-  memoArgs: ExpressionNode[] = []
+  memoArgs: ExpressionNode[] = [],
 ): ExpressionNode[] {
-  return createParamsList([value, key, index, ...memoArgs]);
+  return createParamsList([value, key, index, ...memoArgs])
 }
 
 function createParamsList(
-  args: (ExpressionNode | undefined)[]
+  args: (ExpressionNode | undefined)[],
 ): ExpressionNode[] {
-  let i = args.length;
+  let i = args.length
   while (i--) {
-    if (args[i]) break;
+    if (args[i]) break
   }
   return args
     .slice(0, i + 1)
-    .map((arg, i) => arg || createSimpleExpression(`_`.repeat(i + 1), false));
+    .map((arg, i) => arg || createSimpleExpression(`_`.repeat(i + 1), false))
 }
 ```
 
@@ -855,6 +854,5 @@ function createParamsList(
 ![v_for](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/v_for.png)
 
 順調そうです。
-
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/050_v_for)
