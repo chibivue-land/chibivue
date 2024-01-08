@@ -287,8 +287,8 @@ function startsWithEndTagOpen(source: string, tag: string): boolean {
 function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
   const s = context.source
 
-  // sが</で始まり、かつその後にancestorsのタグ名が続くことを判定し、閉じタグがあるか(parseChildrenが終了するべきか)を判定します。
-  if (startsWith(s, "</")) {
+  // s が '</' で始まり、かつその後にancestorsのタグ名が続くことを判定し、閉じタグがあるか(parseChildrenが終了するべきか)を判定します。
+  if (startsWith(s, '</')) {
     for (let i = ancestors.length - 1; i >= 0; --i) {
       if (startsWithEndTagOpen(s, ancestors[i].tag)) {
         return true
