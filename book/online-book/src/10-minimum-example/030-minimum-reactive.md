@@ -145,7 +145,7 @@ Proxy はとても面白いオブジェクトです。
 以下のように、引数にオブジェクトを渡し、new することで使います。
 
 ```ts
-const o = new Proxy({ value: 1 })
+const o = new Proxy({ value: 1 }, {})
 console.log(o.value) // 1
 ```
 
