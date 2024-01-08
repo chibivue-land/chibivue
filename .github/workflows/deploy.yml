@@ -23,6 +23,14 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Check if it's the original repo and the main branch
+        run: |
+          if [[ "${{ github.repository }}" == "Ubugeeei/chibivue" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "This is the original repo's main branch, running the workflow."
+          else
+            echo "This is a fork or a different branch, skipping the workflow."
+            exit 0
+          fi
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
