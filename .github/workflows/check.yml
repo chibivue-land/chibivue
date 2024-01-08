@@ -35,9 +35,9 @@ jobs:
       - name: check fmt
         run: pnpm fmt:check
       - name: check lint
-        run: 
-          - pnpm lint
-          - pnpm lint:text
+        run: pnpm lint
+      - name: check lint text
+        run: pnpm lint:text
       - name: check types
         run: pnpm tsc --noEmit
       - name: check building
