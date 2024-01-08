@@ -285,18 +285,18 @@ function startsWithEndTagOpen(source: string, tag: string): boolean {
  isEnd では ancestors の配列のそれぞれの要素に対して startsWithEndTagOpen で s がその要素の閉じタグで始まっている文字列かどうかをループでチェックするような処理になっています。
 ```typescript
 function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
-  const s = context.source;
+  const s = context.source
 
-  // sが"</"で始まり、かつその後にancestorsのタグ名が続くことを判定し、閉じタグがあるか(parseChildrenが終了するべきか)を判定します。
+  // sが</で始まり、かつその後にancestorsのタグ名が続くことを判定し、閉じタグがあるか(parseChildrenが終了するべきか)を判定します。
   if (startsWith(s, "</")) {
     for (let i = ancestors.length - 1; i >= 0; --i) {
       if (startsWithEndTagOpen(s, ancestors[i].tag)) {
-        return true;
+        return true
       }
     }
   }
 
-  return !s;
+  return !s
 }
 ```
 しかし、s が閉じタグで始まっている文字列かどうかをチェックするのであれば、ancestors の最後の要素に対してのみチェックすれば良いはずです。parser のリライトによってこのコードは無くなってしまいましたが、リライト前の Vue 3.3 のコードで ancestors の最後の要素に対してのみチェックするようにコードを書き換えても正常系のテストは全て PASS します。
