@@ -289,7 +289,7 @@ function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
   const s = context.source
 
   // If s starts with </ and the tag name of ancestors follows, it determines whether there is a closing tag (whether parseChildren should end).
-  if (startsWith(s, "</")) {
+  if (startsWith(s, '</')) {
     for (let i = ancestors.length - 1; i >= 0; --i) {
       if (startsWithEndTagOpen(s, ancestors[i].tag)) {
         return true
