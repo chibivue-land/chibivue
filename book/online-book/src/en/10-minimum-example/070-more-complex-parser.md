@@ -282,6 +282,27 @@ function startsWithEndTagOpen(source: string, tag: string): boolean {
 
 Next, let's implement parseElement and parseText.
 
+::: tip About the isEnd Loop
+In isEnd, there is a loop process that checks whether 's' starts with the closing tag of each element in the ancestors array using startsWithEndTagOpen.
+```typescript
+function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
+  const s = context.source;
+
+  // If s starts with "</" and the tag name of ancestors follows, it determines whether there is a closing tag (whether parseChildren should end).
+  if (startsWith(s, "</")) {
+    for (let i = ancestors.length - 1; i >= 0; --i) {
+      if (startsWithEndTagOpen(s, ancestors[i].tag)) {
+        return true;
+      }
+    }
+  }
+
+  return !s;
+}
+```
+However, if you need to check whether 's' starts with a closing tag, it should be sufficient to check only the last element in ancestors. Although this section of code was eliminated in a recent rewrite of the parser, modifying the Vue 3.3 code to only check the last element in ancestors still results in all the positive tests passing successfully.
+:::
+
 ## parseText
 
 First, let's start with the simple parseText. It is a bit long because it also implements some utilities that are used not only in parseText but also in other functions.
