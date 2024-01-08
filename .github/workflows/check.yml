@@ -32,6 +32,12 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
+      - name: check fmt
+        run: pnpm fmt:check
+      - name: check lint
+        run: 
+          - pnpm lint
+          - pnpm lint:text
       - name: check types
         run: pnpm tsc --noEmit
       - name: check building
