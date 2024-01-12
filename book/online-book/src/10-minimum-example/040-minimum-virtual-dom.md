@@ -369,7 +369,7 @@ const patchElement = (n1: VNode, n2: VNode) => {
   patchChildren(n1, n2, el)
 
   for (const key in props) {
-    if (props[key] !== n1.props[key]) {
+    if (props[key] !== n1.props?.[key] ?? {}) {
       hostPatchProp(el, key, props[key])
     }
   }
