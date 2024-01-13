@@ -255,10 +255,10 @@ export default function vitePluginChibivue(): Plugin {
 
 ```sh
 pwd # ~
-touch playground/src/App.vue
+touch examples/playground/src/App.vue
 ```
 
-`playground/src/App.vue`
+`examples/playground/src/App.vue`
 
 ```vue
 <script>
