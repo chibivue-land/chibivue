@@ -212,7 +212,7 @@ nr dev
 You can see that the source code has been modified properly.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/070_sfc_compiler)
 
 ## Implementing the SFC Compiler
 
@@ -612,7 +612,7 @@ This code runs in the process where Vite is running, which means it is executed 
 It seems that parsing was successful. Great job!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler2)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/070_sfc_compiler2)
 
 ## Compiling the template section
 
@@ -811,7 +811,7 @@ const genInterpolation = (
 It seems that it was compiled successfully. All that's left is to extract the script in the same way and put it into the default exports.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler3)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/070_sfc_compiler3)
 
 ## Compiling the script section
 
@@ -1301,4 +1301,4 @@ In the browser, you can see that the CSS is imported and a `.vue.css` file is ge
 Now you can use SFC!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler4)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/070_sfc_compiler4)
