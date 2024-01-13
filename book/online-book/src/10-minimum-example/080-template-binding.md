@@ -24,7 +24,7 @@ const app = createApp({
       <h2>message: {{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
         alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
@@ -368,7 +368,7 @@ const app = createApp({
       <h2>{{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
         alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
@@ -506,7 +506,7 @@ const app = createApp({
       <h2>{{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
         alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
@@ -664,7 +664,7 @@ const app = createApp({
       <h2>{{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
         alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
