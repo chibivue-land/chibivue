@@ -18,7 +18,7 @@ nr setup ../my-chibivue-project
 
 ## createApp (1 min)
 
-create app には setup 関数と render 関数を指定できるような シグネチャを考えます。
+create app には setup 関数と render 関数を指定できるようなシグネチャを考えます。
 ユーザーからすると、
 
 ```ts
@@ -45,7 +45,7 @@ type CreateAppOption = {
 }
 ```
 
-これを受け取って、とりあえず mount 関数を実装したオブジェクトを return すうるようなものにすれば OK です。
+これを受け取って、とりあえず mount 関数を実装したオブジェクトを return するようなものにすれば OK です。
 
 ```ts
 export const createApp = (option: CreateAppOption) => ({
@@ -63,7 +63,7 @@ export const createApp = (option: CreateAppOption) => ({
 patch レンダリングを行いたいですが、そのためには仮想 DOM とそれを生成するための関数が必要です。
 
 仮想 DOM というのは タグ名や属性、子要素などの情報を JS のオブジェクトで表現したもので、  
-Vue の renderer は基本的にはこの仮想 DOM を扱いながら 実 DOM への反映を行っていきます。
+Vue の renderer は基本的にはこの仮想 DOM を扱いながら実 DOM への反映を行っていきます。
 今回は名前と click イベントのハンドラと 子要素( text )を扱うような VNode を考えてみます。
 
 ```ts
@@ -83,7 +83,7 @@ export const h = (
 
 このレンダリング処理はたちまち patch 処理と呼ばれたりしますが、 patch という名の通り、
 
-新旧の仮想 DOM を比較して 差分を実 DOM に反映します。
+新旧の仮想 DOM を比較して差分を実 DOM に反映します。
 
 つまり、関数のシグネチャ的には
 
@@ -126,11 +126,11 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
 
 ## Reactivity System (2 min)
 
-これからは実際に setup オプションで でセットアップされたステートの変更を追跡して、
+これからは実際に setup オプションでセットアップされたステートの変更を追跡して、
 
 render 関数を発火させる処理を実装していきます。ステートの更新を追跡して特定の作用を実行することから「Reactivity System」というふうな名前がついています。
 
-今回は `reactive` という関数でユーザーにステートを定義さることを考えてみます。
+今回は `reactive` という関数でユーザーにステートを定義することを考えてみます。
 
 ```ts
 const app = createApp({
@@ -238,7 +238,7 @@ type AST = {
 type Interpolation = { content: string }
 ```
 
-今回扱う ast は上記の通りです。 VNode と似ていますが全くの別物で、これはコードを生成するためのものです。
+今回扱う AST は上記の通りです。 VNode と似ていますが全くの別物で、これはコードを生成するためのものです。
 Interpolation というのがマスタッシュ構文です。 <span v-pre>`{{ state.count }}`</span> のような文字列は、 <span v-pre>`{ content: "state.count" }`</span> というオブジェクト(AST)に解析されます。
 
 あとは与えられた文字列から AST を生成する parse 関数を実装してしまえば OK です。
@@ -308,12 +308,12 @@ export const VitePluginChibivue = () => ({
 ```
 
 のようにすれば、全てのファイルの内容が空文字列になります。
-元々のコードは第一引数で受け取れるようになっているので、この値をうまく変換して最後に return すれば 変換することができます。
+元々のコードは第一引数で受け取れるようになっているので、この値をうまく変換して最後に return すれば変換することができます。
 
 やることは、 5 つです。
 
-- script から default export されてるものを抜き出す。
-- それを変数に入れるようなコードに変換する。(便宜上その変数名を A おきます。)
+- script から default export されているものを抜き出す。
+- それを変数に入れるようなコードに変換する。(便宜上その変数名を A とします。)
 - template から HTML 文字列を抜き出して、さっき作った compile 関数で h 関数の呼び出しに変換する。 (便宜上その結果を B とします。)
 - `Object.assign(A, { render: B })` というようなコードを生成する。
 - A を default export するようなコードを生成する。
