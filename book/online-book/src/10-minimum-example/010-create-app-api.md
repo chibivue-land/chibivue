@@ -197,7 +197,7 @@ touch packages/runtime-dom/nodeOps.ts
 #### renderer の設計
 
 先ほども話したとおり、Vue.js では DOM に依存する部分と純粋な Vue.js のコア機能部分を分離しています。
-まず、注目して欲しいのは`runtime-core`の方の renderer factory と `runtime-dom`の node-ops です。
+まず、注目して欲しいのは`runtime-core`の方の renderer factory と `runtime-dom`の nodeOps です。
 先ほど実装した例だと、createApp が返す app の mount メソッドで直接レンダリングをしていました。
 
 ```ts

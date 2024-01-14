@@ -176,7 +176,7 @@ As for the roles of these files, it may be difficult to understand just by expla
 
 #### Design of the Renderer
 
-As mentioned earlier, Vue.js separates the parts that depend on the DOM from the pure core functionality of Vue.js. First, I want you to pay attention to the renderer factory in "runtime-core" and the node-ops in "runtime-dom". In the example we implemented earlier, we directly rendered in the mount method of the app returned by createApp.
+As mentioned earlier, Vue.js separates the parts that depend on the DOM from the pure core functionality of Vue.js. First, I want you to pay attention to the renderer factory in "runtime-core" and the nodeOps in "runtime-dom". In the example we implemented earlier, we directly rendered in the mount method of the app returned by createApp.
 
 ```ts
 // This is the code from earlier
