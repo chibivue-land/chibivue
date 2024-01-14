@@ -789,3 +789,6 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 
 Let's test the functionality with an example of the developer interface we assumed earlier!  
 If it works properly, you can now communicate between components using props/emit!
+
+Source code up to this point:  
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)

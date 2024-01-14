@@ -794,4 +794,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 先ほど想定していた開発者インタフェースの例で動作を確認してみましょう！  
 ちゃんと動いていればこれで props/emit によるコンポーネント間のやりとりが行えるようになりました！
 
+ここまでのソースコード：  
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)
+
 <!-- TODO: veiについての説明を書く -->
