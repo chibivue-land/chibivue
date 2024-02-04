@@ -16,7 +16,7 @@
         "./packages/@extensions/vite-plugin-chibivue/src"
       ]
     },
-    "types": ["vitest/importMeta"],
+    "types": ["vitest/globals"],
     "moduleResolution": "Bundler",
     "allowJs": true,
     "esModuleInterop": true
