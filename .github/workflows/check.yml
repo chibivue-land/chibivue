@@ -4,15 +4,12 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
-    branches:
-      - main
 
 permissions:
   contents: read # to fetch code (actions/checkout)
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,15 +38,15 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
-      - name: check fmt
+      - name: Check fmt
         run: pnpm fmt:check
-      - name: check lint
+      - name: Check lint
         run: pnpm lint
-      - name: check lint text
+      - name: Check lint text
         run: pnpm lint:text
-      - name: check types
+      - name: Check types
         run: pnpm tsc --noEmit
-      - name: check building
+      - name: Check building
         run: pnpm build
-      - name: check test (e2e)
+      - name: Check test (e2e)
         run: pnpm test
