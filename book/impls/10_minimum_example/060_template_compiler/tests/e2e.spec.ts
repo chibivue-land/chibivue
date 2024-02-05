@@ -19,7 +19,6 @@ describe('10_minimum_example/060_template_compiler', () => {
     app.mount('#host')
 
     expect(host.innerHTML).toBe(
-      // prettier-ignore
       '<b class="hello" style="color: red;">Hello World!!</b>',
     )
   })
