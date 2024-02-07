@@ -299,7 +299,7 @@ export const generate = ({
 
 Now, let's implement a function that generates a function string from a template by combining these. Create a new file called `packages/compiler-core/compile.ts`.
 
-`packages/compiler-core/codegen.ts`
+`packages/compiler-core/compile.ts`
 
 ```ts
 import { generate } from './codegen'

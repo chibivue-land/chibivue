@@ -223,7 +223,7 @@ function parseChildren(
     }
 
     if (!node) {
-      //　上記の条件に当てはまらなかった場合位はTextNodeとしてパースします。
+      // 上記の条件に当てはまらなかった場合はTextNodeとしてパースします。
       node = parseText(context) // TODO: これから実装します。
     }
 

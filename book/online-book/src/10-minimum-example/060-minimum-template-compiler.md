@@ -306,7 +306,7 @@ export const generate = ({
 ```
 
 それでは、これらを組み合わせて template から関数の文字列を生成する関数を実装します。`packages/compiler-core/compile.ts`というファイルを新たに作成します。
-`packages/compiler-core/codegen.ts`
+`packages/compiler-core/compile.ts`
 
 ```ts
 import { generate } from './codegen'
