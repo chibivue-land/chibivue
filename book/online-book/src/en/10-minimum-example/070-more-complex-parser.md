@@ -631,6 +631,9 @@ The screen will not display anything, but let's check the console.
 It seems that the parsing is going well.
 Now, let's proceed with the implementation of the codegen based on the generated AST.
 
+Source code up to this point:  
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
+
 ## Generating the render function based on the AST
 
 Now that we have implemented a full-fledged parser, let's create a code generator that can be applied to it.
