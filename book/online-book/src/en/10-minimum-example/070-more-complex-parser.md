@@ -743,7 +743,7 @@ import { createApp } from 'chibivue'
 const app = createApp({
   setup() {
     // Delay the processing with Promise.resolve so that DOM operations can be performed after mounting
-    Promise.resolve(() => {
+    Promise.resolve().then(() => {
       const btn = document.getElementById('btn')
       btn &&
         btn.addEventListener('click', () => {
