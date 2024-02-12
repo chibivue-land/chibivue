@@ -473,7 +473,6 @@ function parseAttributes(
 ): AttributeNode[] {
   const props = []
   const attributeNames = new Set<string>()
-  s
 
   // タグが終わるまで読み続ける
   while (
