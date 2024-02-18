@@ -1264,7 +1264,7 @@ export default function vitePluginChibivue(): Plugin {
       // Handling when .vue.css is loaded (when import is declared and loaded)
       if (id.match(/\.vue\.css$/)) {
         const filename = id.replace(/\.css$/, '')
-        const content = fs.readFileSync('.' + filename, 'utf-8') // Retrieve the SFC file normally
+        const content = fs.readFileSync(filename, 'utf-8') // Retrieve the SFC file normally
         const { descriptor } = parse(content, { filename }) // Parse the SFC
 
         // Join the content and return it as the result

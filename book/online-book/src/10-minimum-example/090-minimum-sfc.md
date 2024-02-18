@@ -1306,7 +1306,7 @@ export default function vitePluginChibivue(): Plugin {
       // .vue.cssがloadされた (importが宣言され、読み込まれた) ときのハンドリング
       if (id.match(/\.vue\.css$/)) {
         const filename = id.replace(/\.css$/, '')
-        const content = fs.readFileSync('.' + filename, 'utf-8') // 普通にSFCファイルを取得
+        const content = fs.readFileSync(filename, 'utf-8') // 普通にSFCファイルを取得
         const { descriptor } = parse(content, { filename }) //  SFCをパース
 
         // contentをjoinsして結果とする。
