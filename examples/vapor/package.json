@@ -7,7 +7,7 @@
   },
   "author": "Ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
-    "vite": "^3.0.9"
+    "vite": "^5.1.0"
   },
   "volta": {
     "node": "18.14.0"

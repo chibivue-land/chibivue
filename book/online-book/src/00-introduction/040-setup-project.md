@@ -198,18 +198,21 @@ pwd # ~/examples/playground
 touch vite.config.js
 ```
 
-vite.config.js の内容
+vite.config.ts の内容
 
 ```ts
-import { defineConfig } from "vite";
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vite'
 
+const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))
 export default defineConfig({
   resolve: {
     alias: {
-      chibivue: `${process.cwd()}/../../packages`,
+      chibivue: path.resolve(dirname, '../../packages'),
     },
   },
-});
+})
 ```
 
 tsconfig.json の中身を以下のように書き換えます。

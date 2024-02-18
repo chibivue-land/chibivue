@@ -6,7 +6,7 @@
     "dev": "vite"
   },
   "devDependencies": {
-    "vite": "^5"
+    "vite": "^5.1.0"
   },
   "volta": {
     "node": "20.10.0"
