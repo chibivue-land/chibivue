@@ -94,7 +94,7 @@ app.mount('#app')
 
 ## shallowRef
 
-さて、続けてどんどん ref 周りの api を実装していきます。
+さて、続けてどんどん ref 周りの api を実装していきます。  
 先ほど、ref の性質として「value プロパティにオブジェクトが割り当てられた際は value プロパティの値は reactive オブジェクトになる」というものを紹介しましたが、この性質を持たないのが shallowRef です。
 
 > Unlike ref(), the inner value of a shallow ref is stored and exposed as-is, and will not be made deeply reactive. Only the .value access is reactive.
