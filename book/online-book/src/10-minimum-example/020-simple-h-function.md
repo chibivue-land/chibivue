@@ -378,8 +378,8 @@ export function patchEvent(
   }
 }
 
-function parseName(rowName: string): string {
-  return rowName.slice(2).toLocaleLowerCase()
+function parseName(rawName: string): string {
+  return rawName.slice(2).toLocaleLowerCase()
 }
 
 function createInvoker(initialValue: EventValue) {
