@@ -1031,7 +1031,7 @@ import { parse } from '@babel/parser'
 import MagicString from 'magic-string'
 // .
 // .
-export function hasDefaultExport(input: string): boolean {
+export function rewriteDefault(input: string, as: string): string {
   // .
   // .
   const s = new MagicString(input)
