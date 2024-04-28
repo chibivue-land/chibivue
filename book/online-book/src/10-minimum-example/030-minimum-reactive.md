@@ -385,8 +385,8 @@ function render() {
 effect.run()
 ```
 
-そうすると、まず `activeEffect` に `updateComponent` が設定されます。  
-この状態で `track` が走るので、`targetMap` に `state.count` と `updateComponent` のマップが登録されます。  
+そうすると、まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます。  
+この状態で `track` が走るので、`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます。  
 これがリアクティブの形成です。
 
 ここで、increment が実行された時のことを考えてみましょう。  
