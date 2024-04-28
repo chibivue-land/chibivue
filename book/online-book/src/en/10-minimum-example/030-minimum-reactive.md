@@ -347,8 +347,57 @@ const app: App = {
 }
 ```
 
-To explain step by step, first, the `setup` function is executed.
-At this point,
+To explain step by step, first, the `setup` function is executed.\
+A reactive proxy is generated at this point. In other words, any operation performed on the proxy created here will behave as configured in the proxy.
+
+```ts
+const state = reactive({ count: 0 }) // Generating a proxy
+```
+
+Next, we pass `updateComponent` to create a `ReactiveEffect` (Observer side).
+
+```ts
+const effect = new ReactiveEffect(updateComponent)
+```
+
+The `componentRender` used in `updateComponent` is a function that is the `return value` of `setup`, and this function references the object created by the proxy.
+
+```ts
+function render() {
+  return h('div', { id: 'my-app' }, [
+    h('p', {}, [`count: ${state.count}`]), // Referencing the object created by the proxy
+    h(
+      'button',
+      {
+        onClick: increment,
+      },
+      ['increment'],
+    ),
+  ])
+}
+```
+
+When this function is actually executed, the `getter` function of `state.count` is executed, and `track` is triggered. 
+In this situation, let's execute the effect.
+
+```ts
+effect.run()
+```
+
+Then, `updateComponent` (a ReactiveEffect with `updateComponent`) is set to `activeEffect`. 
+When `track` is triggered in this state, a map of `state.count` and `updateComponent` (a ReactiveEffect with `updateComponent`) is registered in `targetMap`. 
+This is how reactivity is formed.
+
+Now, let's consider what happens when `increment` is executed. 
+Since `increment` is rewriting `state.count`, the `setter` is executed, and `trigger` is triggered. 
+`trigger` finds and executes the `effect` (in this case, updateComponent) from `targetMap` based on `state` and `count`. 
+This is how the screen update is triggered!
+
+This allows us to achieve reactivity.
+
+It's a bit complicated, so let's summarize it in a diagram.
+
+![reactivity_create](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactivity_create.drawio.png)
 
 ## Based on these, let's implement it.
 
@@ -558,6 +607,8 @@ The rendering is working fine now, but something seems off.
 Well, it's not surprising because in `updateComponent`, we create elements every time.
 So, let's remove all the elements before each rendering.
 
+![reactive_example_mistake](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example_mistake.png)
+
 Modify the `render` function in `~/packages/runtime-core/renderer.ts` like this:
 
 ```ts
@@ -569,6 +620,8 @@ const render: RootRenderFunction = (vnode, container) => {
 ```
 
 Now, how about this?
+
+![reactive_example](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example.png)
 
 Now it seems to be working fine!
 
