@@ -1104,7 +1104,7 @@ export function rewriteDefault(input: string, as: string): string {
 基本的には AST を手繰っていって、type によって分岐処理を書いて magic-string のメソッドで s を操作していくだけです。
 
 ```ts
-export function hasDefaultExport(input: string): boolean {
+export function rewriteDefault(input: string, as: string): string {
   // .
   // .
   ast.forEach(node => {

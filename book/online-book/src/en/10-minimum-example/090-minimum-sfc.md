@@ -1078,7 +1078,7 @@ export function rewriteDefault(input: string, as: string): string {
 From here, we will manipulate the string `s` based on the JavaScript AST (Abstract Syntax Tree) obtained by the Babel parser. Although it is a bit long, I will provide additional explanations in the comments in the source code. Basically, we traverse the AST and write conditional statements based on the `type` property, and manipulate the string `s` using the methods of `magic-string`.
 
 ```ts
-export function hasDefaultExport(input: string): boolean {
+export function rewriteDefault(input: string, as: string): string {
   // .
   // .
   ast.forEach(node => {
