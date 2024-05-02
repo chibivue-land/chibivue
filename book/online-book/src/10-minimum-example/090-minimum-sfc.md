@@ -349,7 +349,7 @@ export default defineConfig({
 
 ![vite_error](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/vite_error.png)
 
-もちろんエラーになります。やったね( ？　)
+もちろんエラーになります。やったね( ？ )
 
 ## エラーの解消
 
@@ -999,7 +999,7 @@ export default { ..._sfc_main, render }
 
 というふうに書き換えたいわけです。
 
-つまりは、元々のコードの export 文から良い感じに export 対象をを抜き出し、\_sfc_main という変数に代入できるようになればゴールということです。
+つまりは、元々のコードの export 文から良い感じに export 対象を抜き出し、\_sfc_main という変数に代入できるようになればゴールということです。
 
 まずは必要なライブラリをインストールします。
 
@@ -1283,7 +1283,7 @@ import { msg } from 'virtual:my-module'
 
 [参考](https://ja.vitejs.dev/guide/api-plugin.html#%E4%BB%AE%E6%83%B3%E3%83%A2%E3%82%B7%E3%82%99%E3%83%A5%E3%83%BC%E3%83%AB%E3%81%AE%E8%A6%8F%E7%B4%84)
 
-子の仕組みを使って SFC の style ブロックを仮想の css ファイルとして読み込むようにしてみます。  
+この仕組みを使って SFC の style ブロックを仮想の css ファイルとして読み込むようにしてみます。  
 最初に言った通り、vite では css という拡張子のファイルを import すれば良いので、${SFC のファイル名}.css という仮想モジュールを作ることを考えてみます。
 
 ### SFC のスタイルブロックの内容で仮想モジュールを実装する
