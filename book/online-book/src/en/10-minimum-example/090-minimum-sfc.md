@@ -1253,7 +1253,7 @@ Let's also support styles. In Vite, you can import CSS files by using the `.css`
 import 'app.css'
 ```
 
-We will implement this by using Vite's virtual modules. Virtual modules allow you to keep non-existent files in memory as if they exist. You can use the `load` and `resolve` options to implement virtual modules.
+We will implement this by using Vite's virtual modules. Virtual modules allow you to keep non-existent files in memory as if they exist. You can use the `load` and `resolveId` options to implement virtual modules.
 
 ```ts
 export default function myPlugin() {
@@ -1275,7 +1275,7 @@ export default function myPlugin() {
 }
 ```
 
-By setting the desired module ID in `resolve` and handling the ID in `load`, you can load the module. In the example above, if you write `import { msg } from "virtual:my-module";`, `export const msg = "from virtual module"` will be loaded.
+By setting the desired module ID in `resolveId` and handling the ID in `load`, you can load the module. In the example above, if you write `import { msg } from "virtual:my-module";`, `export const msg = "from virtual module"` will be loaded.
 
 [Reference](https://vitejs.dev/guide/api-plugin.html#virtual-modules)
 
