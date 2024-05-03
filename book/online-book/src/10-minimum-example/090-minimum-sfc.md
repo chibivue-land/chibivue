@@ -1178,8 +1178,7 @@ export function rewriteDefault(input: string, as: string): string {
       }
     }
   })
-  // .
-  // .
+  return s.toString()
 }
 
 // 宣言文の終端を算出する

@@ -1152,8 +1152,7 @@ export function rewriteDefault(input: string, as: string): string {
       }
     }
   })
-  // .
-  // .
+  return s.toString()
 }
 
 // Calculate the end of the declaration statement
