@@ -2,12 +2,9 @@
 
 ## Minimal Example section is over!
 
-At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example," is now complete. Well done!  
-The reason why I specifically use the term "section" is because there are two reasons.  
-First, from here on, I aim to create a configuration where each section has as little dependency as possible, so that each section can deepen their understanding in their respective areas of interest (sections).  
-If you are interested in Virtual DOM and patch rendering, you can proceed to the Basic Virtual DOM section. If you want to extend components further, you can go to the Basic Component section. If you are interested in richer expressions (directives, etc.) with templates, you can go to the Basic Template Compiler section. If you are interested in script setup and compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do all of them if you want!)  
-And above all, since this "Minimal Example" is also a respectable section, if you just want to have a general understanding without going too deep, it is sufficient to stop here.  
-(Regarding the Web Application Essentials section, there are some dependencies on the basic implementation of Vue, so the implementations of each section are mixed to some extent.)
+At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done 😁\
+If you are interested in Virtual DOM or patch rendering, you can move on to the Basic Virtual DOM section. If you want to extend components further, there is the Basic Component section. If you are interested in richer expressions in templates (such as directives), you can explore the Basic Template Compiler section. If you are interested in script setup or compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do them all if you want!!)\
+Above all, the "Minimal Example Section" is also a respectable section, so if you feel like, "I don't need to know too deeply, but I want to get a general idea," then you are good to go up to this point.
 
 ## What have we achieved so far?
 
@@ -305,7 +302,7 @@ export default {
 ## About the Future
 
 From now on, in order to make it more practical, we will go into more detail in each part.  
-With that, the initial source code for each part after this will start from the state of the "Minimal Example" part. I will explain a little about what to do and how to proceed (policy) for each part.
+I will explain a little about what to do and how to proceed (policy) for each part.
 
 ### What to do
 
@@ -333,7 +330,7 @@ From here, it will be divided into 5 parts + 1 appendix.
   - compiler macro
 - Web Application Essentials Part (Appendix)
 
-This part is an appendix. In this part, we will implement libraries that are frequently used together with Vue in web development. This part has some dependencies on other parts. Of course, it is also possible to start from this part and implement the necessary parts in other parts as you go along, but it may be a little confusing.
+This part is an appendix. In this part, we will implement libraries that are frequently used together with Vue in web development. 
 
 - store
 - route
@@ -342,4 +339,8 @@ We will cover the above two, but feel free to implement other things that come t
 
 ### Policy
 
-In the Minimal Example part, we explained the implementation steps in quite detail. By now, if you have implemented it, you should be able to read the source code of the original Vue. Therefore, from now on, the explanations will be kept to a rough policy, and you will implement the actual code while reading the original code or thinking on your own. (N-no, it's not that I'm getting lazy to write in detail or anything like that!) Well, it's fun to implement it as the book says, but once it starts to take shape, it's more fun to do it yourself and it leads to a deeper understanding. From here on, please consider this book as a kind of guideline, and the main content is in the original Vue source code!
+In the Minimal Example part, we explained the implementation steps in quite detail. By now, if you have implemented it, you should be able to read the source code of the original Vue. 
+Therefore, from now on, the explanations will be kept to a rough policy, and you will implement the actual code while reading the original code or thinking on your own. 
+(N-no, it's not that I'm getting lazy to write in detail or anything like that!) 
+Well, it's fun to implement it as the book says, but once it starts to take shape, it's more fun to do it yourself and it leads to a deeper understanding. 
+From here on, please consider this book as a kind of guideline, and the main content is in the original Vue source code!
