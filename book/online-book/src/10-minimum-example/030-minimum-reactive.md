@@ -67,7 +67,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 ## setup 関数の実装
 
 やることはとっても簡単です。
-setup オプションをを受け取り実行し、あとはそれをこれまでの render オプションと同じように使えば OK です。
+setup オプションを受け取り実行し、あとはそれをこれまでの render オプションと同じように使えば OK です。
 
 ~/packages/runtime-core/componentOptions.ts を編集します。
 
