@@ -90,7 +90,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 | |- playground
 |
 |- packages
-|- tsconfig.js
+|- tsconfig.json
 
 ```
 
