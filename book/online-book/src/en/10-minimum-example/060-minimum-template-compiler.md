@@ -239,7 +239,7 @@ const code = `
 
 ## Implementation
 
-Once you understand the approach, let's implement it. Create a directory called `compiler-core` in `~/packages/src` and create `index.ts`, `parse.ts`, and `codegen.ts` in it.
+Once you understand the approach, let's implement it. Create a directory called `compiler-core` in `~/packages` and create `index.ts`, `parse.ts`, and `codegen.ts` in it.
 
 ```sh
 pwd # ~/

@@ -247,7 +247,7 @@ const code = `
 
 ## 実装
 
-アプローチが理解できたら早速実装してみましょう．`~/packages/src`に`compiler-core`というディレクトリを作ってそこに`index.ts`, `parse.ts`, `codegen.ts`を作成します．
+アプローチが理解できたら早速実装してみましょう．`~/packages`に`compiler-core`というディレクトリを作ってそこに`index.ts`, `parse.ts`, `codegen.ts`を作成します．
 
 ```sh
 pwd # ~/
