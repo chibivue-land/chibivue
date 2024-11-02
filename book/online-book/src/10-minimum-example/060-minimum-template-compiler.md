@@ -570,7 +570,7 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` })
 app.mount('#app')
 ```
 
-![simple_template_compiler](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler.png)
+![simple_template_compiler](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler.png)
 
 無事に動いているようです．同じ構造であればコンパイルできるはずなので，少しいじってみて反映されるか確認してみましょう．
 
@@ -581,7 +581,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_template_compiler2](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler2.png)
+![simple_template_compiler2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler2.png)
 
 ちゃんと実装できているようです！
 

@@ -82,7 +82,7 @@ exp is the right side. In the case of v-bind:id="count", count is included.
 Both exp and arg can embed variables dynamically, so their types are ExpressionNode.  
 (Since arg can also be dynamic like v-bind:[key]="count")
 
-![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/dir_ast.drawio.png)
+![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/dir_ast.drawio.png)
 
 ## Parser Modification
 
@@ -175,7 +175,7 @@ Since it is a bit complicated, I summarized the flow in the following diagram. P
 In general, the necessary items are whether there are arguments for v-bind, whether it is class or style.  
 ※ Parts other than the processing involved this time are omitted. (Please note that this diagram is not very strict.)
 
-![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/transform_vbind.drawio.png)
+![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/transform_vbind.drawio.png)
 
 First of all, as a premise, since a directive is basically declared for an element,  
 the transformer related to the directive is called from transformElement.
@@ -224,7 +224,7 @@ If the arg is dynamic, it is impossible to determine the specific one, so implem
 
 Now that we have implemented this far, let's see how it works!
 
-![vbind_test](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/vbind_test.png)
+![vbind_test](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vbind_test.png)
 
 Looks great!
 

@@ -384,7 +384,7 @@ const processText = (
 
 Now that we can perform diff rendering, let's take a look at the playground.
 
-![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_rendering.png)
+![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
 
 We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
 

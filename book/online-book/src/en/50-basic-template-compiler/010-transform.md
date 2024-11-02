@@ -4,7 +4,7 @@
 
 Now, let's implement the template compiler more seriously from where we left off in the Minimum Example department. It has been a while since we worked on it, so let's review the current implementation. The main keywords are Parse, AST, and Codegen.
 
-![me_template_compiler_design](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/me_template_compiler_design.drawio.png)
+![me_template_compiler_design](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/me_template_compiler_design.drawio.png)
 
 ```ts
 export function baseCompile(
@@ -39,7 +39,7 @@ It is like this.
 
 This time, we will implement the `transform` function.
 
-![design_with_transformer](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/design_with_transformer.drawio.png)
+![design_with_transformer](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/design_with_transformer.drawio.png)
 
 ## What is Transform?
 

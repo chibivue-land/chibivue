@@ -27,12 +27,12 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 これは，c2(つまり次の vnode)の長さを基準にループを回しています．
 つまり，c1 と c2 が同じ要素の場合にしか基本的には成り立っていないのです．
 
-![c1c2map](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map.png)
+![c1c2map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map.png)
 
 例えば，要素が減っていた場合を考えてみましょう．
 patch のループは c2 を基本としているわけなので，4 つめの要素の patch が行われません．
 
-![c1c2map_deleted](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_deleted.png)
+![c1c2map_deleted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_deleted.png)
 
 このようになった時，どうなるかというと，単純に 1~3 つ目の要素は更新され，4 つ目は消えず， c1 のものが残ってしまいます．
 
@@ -65,18 +65,18 @@ app.mount('#app')
 
 update ボタンを押すと以下のようになるかと思います．
 
-![patch_bug](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_bug.png)
+![patch_bug](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_bug.png)
 
 list は`["e", "f", "g"]`に更新したはずなのに，`d`が残ってしまっています．
 
 そして，実は問題はこれだけではありません．要素が差し込まれた時のことを考えてみましょう．
 現状では，c2 を基準にループを回しているだけなので，以下のようになってしまいます．
 
-![c1c2map_inserted](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_inserted.png)
+![c1c2map_inserted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted.png)
 
 しかし，実際に差し込まれたのは`new element`で，比較は c1,c2 のそれぞれの li 1, li 2, li 3, li 4 同士で行いたいはずです．
 
-![c1c2map_inserted_correct](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_inserted_correct.png)
+![c1c2map_inserted_correct](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted_correct.png)
 
 これらの二つの問題に共通して言えることは，「c1 と c2 で同一視したい node が判断できない」ということです．  
 これを解決するには，要素に key を付与し，その key を元にパッチを行う必要があります．  

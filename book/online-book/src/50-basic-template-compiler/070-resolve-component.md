@@ -688,7 +688,7 @@ export default defineComponent({
 </template>
 ```
 
-![resolve_components](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/resolve_components.png)
+![resolve_components](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_components.png)
 
 正常に動作しているようです！やったね！
 

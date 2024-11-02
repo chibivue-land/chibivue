@@ -411,7 +411,7 @@ const processText = (
 
 さて，これで差分レンダリングができるようになったので，playground を見てみましょう．
 
-![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_rendering.png)
+![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
 
 これで Virtual DOM を利用したパッチが実装できました!!!!! 祝
 

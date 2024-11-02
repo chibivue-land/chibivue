@@ -37,7 +37,7 @@ app.mount('#app')
 
 If you check the console, you should see the following result:
 
-![reactive_html_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_html_element.png)
+![reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_html_element.png)
 
 Now, let's add a focus function.
 
@@ -71,7 +71,7 @@ app.mount('#app')
 
 Surprisingly, it throws an error.
 
-![focus_in_reactive_html_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/focus_in_reactive_html_element.png)
+![focus_in_reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_reactive_html_element.png)
 
 The reason for this is that the element obtained by `document.getElementById` is used to generate a Proxy itself.
 
@@ -110,7 +110,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![element_to_string](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/element_to_string.png)
+![element_to_string](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/element_to_string.png)
 
 This allows us to determine the type of the object. Although it is somewhat hard-coded, let's generalize this determination function.
 
@@ -170,7 +170,7 @@ export function reactive<T extends object>(target: T): T {
 
 Now, the focus code should work!
 
-![focus_in_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/focus_in_element.png)
+![focus_in_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_element.png)
 
 ## Implementing TemplateRefs
 

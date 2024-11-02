@@ -18,7 +18,7 @@ Virtual DOM やパッチレンダリング周りに興味がある人は Basic V
 ここらで今現状でのディレクトリと，vuejs/core のディレクトリを見比べてみましょう．
 
 chibivue
-![minimum_example_artifacts](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/minimum_example_artifacts.png)
+![minimum_example_artifacts](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/minimum_example_artifacts.png)
 
 ※ 本家のコードはデカくてスクショに収まりきらないので割愛
 

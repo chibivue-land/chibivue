@@ -268,7 +268,7 @@ nr dev
 
 このコマンドで立ち上がった開発者サーバーにアクセスし，メッセージが表示されていれば完了です！
 
-![hello chibivue](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_chibivue.png)
+![hello chibivue](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_chibivue.png)
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/00_introduction/010_project_setup)

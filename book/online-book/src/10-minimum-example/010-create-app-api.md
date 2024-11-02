@@ -140,7 +140,7 @@ app.mount('#app')
 
 画面にメッセージを表示することができました! やったね!
 
-![hello_createApp](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_createApp.png)
+![hello_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_createApp.png)
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)
@@ -192,7 +192,7 @@ touch packages/runtime-dom/nodeOps.ts
 
 これらの役割についてですが，最初から文章で説明してもわかりづらいかと思いますので以下の図を見てください．
 
-![refactor_createApp!](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/refactor_createApp.png)
+![refactor_createApp!](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp.png)
 
 #### renderer の設計
 
@@ -228,7 +228,7 @@ Vue.js ではこのレンダリングを担う部分を`renderer`として切り
 - `runtime-dom/index.ts`で nodeOps と renderer のファクトリをもとに renderer を完成させる
 
 ここまでの話が図の赤く囲まれた部分です．
-![refactor_createApp_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/refactor_createApp_render.png)
+![refactor_createApp_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_render.png)
 
 ソースコードベースで説明してみます．今の時点ではまだ Virtual DOM のレンダリング機能は実装していないので，先ほどと同じ機能で作ります．
 
@@ -317,7 +317,7 @@ DI と DIP は慣れていないと難しい概念かもしれませんが，よ
 
 実装に話を戻して，renderer が生成できたのであとは以下の図の赤い領域について考えれば良いです．
 
-![refactor_createApp_createApp](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/refactor_createApp_createApp.png)
+![refactor_createApp_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_createApp.png)
 
 と，いってもやることは単純で，createApp のファクトリ関数に先ほど作った renderer を渡せるように実装すれば良いだけです．
 

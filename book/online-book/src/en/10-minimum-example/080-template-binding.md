@@ -381,7 +381,7 @@ const app = createApp({
 })
 ```
 
-![parse_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/parse_interpolation.png)
+![parse_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_interpolation.png)
 
 It looks fine!
 
@@ -461,7 +461,7 @@ const setupRenderEffect = (
 
 If you have come this far, you should be able to render. Let's check it!
 
-![render_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_interpolation.png)
+![render_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_interpolation.png)
 
 This completes the first binding!
 
@@ -686,7 +686,7 @@ const app = createApp({
 })
 ```
 
-![compile_directives](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_directives.png)
+![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
 
 You did it. We're getting closer to Vue!  
 With this, the implementation of the small template is complete. Good job.

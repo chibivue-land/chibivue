@@ -108,7 +108,7 @@ export default { ..._sfc_main, render }
 
 以下をみてもらえれば分かる通り，本家では setup 関数からバインディングされるものは `$setup` を介して解決されます．
 
-![resolve_bindings_original](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/resolve_bindings_original.png)
+![resolve_bindings_original](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_bindings_original.png)
 
 しかしこの実装をするのは少々大変なので，簡略化として `_ctx.` を付与するように実装します．(props も setup も全て \_ctx から解決する)
 

@@ -110,7 +110,7 @@ function parseAttribute(
 
 現状は以下のような構成になっています．
 
-![50-027-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
+![50-027-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
 
 compiler-core と compiler-dom のそれぞれの役割を改めて理解してみると，  
 compiler-core は DOM に依存しないコンパイラの機能を提供するもので，AST の生成や，その変換を行います．
@@ -164,7 +164,7 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 以下のような関係図です．  
 全ての transformer を compiler-dom から渡すのではなく，デフォルトの実装は compiler-core に実装しておき，オプションとしてあと乗せ出来るような構成にするイメージです．
 
-![50-027-new-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
+![50-027-new-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
 
 これで compiler-core が DOM に依存せず，compiler-dom 側で DOM に依存した処理を実装しつつ compiler-core の transformer を実行できるようになります．
 

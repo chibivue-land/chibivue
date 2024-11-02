@@ -105,7 +105,7 @@ Source code so far:
 
 ※ By the way, I have also implemented the implementation of defineComponent and related type checking (this allows us to infer the type of proxy data).
 
-![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/infer_component_types.png)
+![infer_component_types](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/infer_component_types.png)
 
 ## setupContext
 
@@ -301,7 +301,7 @@ const Child2 = {
 It's just a simple code, but it doesn't work.  
 It complains that state is not defined.
 
-![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
+![state_is_not_defined](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/state_is_not_defined.png)
 
 The reason for this is that when passing a Proxy as an argument to the with statement, has must be defined.
 

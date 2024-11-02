@@ -110,7 +110,7 @@ Let's review the current compiler architecture a little.
 
 The current configuration is as follows.
 
-![50-027-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
+![50-027-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
 
 When you understand the roles of compiler-core and compiler-dom again,  
 compiler-core provides compiler functionality that does not depend on the DOM, such as generating and transforming AST.
@@ -164,7 +164,7 @@ And if you pass this `transformOn` implemented on the compiler-dom side as an op
 Here is a diagram of the relationship.  
 Instead of passing all transformers from compiler-dom, the default implementation is implemented in compiler-core, and the configuration allows additional transformers to be added.
 
-![50-027-new-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
+![50-027-new-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
 
 With this, compiler-core can execute transformers without depending on the DOM, and compiler-dom can implement processing that depends on the DOM while executing the transformers in compiler-core.
 

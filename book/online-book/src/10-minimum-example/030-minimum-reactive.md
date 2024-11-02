@@ -171,7 +171,7 @@ const o = new Proxy(
 具体的には，このオブジェクトのプロパティにアクセス(get)した際に元のオブジェクト(target)とアクセスされた key 名がコンソールに出力されるようになっています．
 実際にブラウザ等で動作を確認してみましょう．
 
-![proxy_get](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_get.png)
+![proxy_get](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_get.png)
 
 この Proxy で生成したオブジェクトのプロパティから値を読み取った時に設定された処理が実行されているのがわかるかと思います．
 
@@ -190,7 +190,7 @@ const o = new Proxy(
 )
 ```
 
-![proxy_set](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_set.png)
+![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
 
 Proxy の理解はこの程度で OK です．
 
@@ -283,7 +283,7 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive.drawio.png)
+![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
 
 ここで，一つ足りない要素について気づくかもしれません．それは「track ではどの関数を登録するの?」という点です．
 答えを言ってしまうと，これが `activeEffect` という概念です．
@@ -398,7 +398,7 @@ increment では `state.count` を書き換えているので `setter` が実行
 
 ちょっとややこしいので図でまとめます．
 
-![reactivity_create](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactivity_create.drawio.png)
+![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
 
 ## これらを踏まえて実装しよう
 
@@ -602,7 +602,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![reactive_example_mistake](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example_mistake.png)
+![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
 
 あっ………
 
@@ -623,7 +623,7 @@ const render: RootRenderFunction = (vnode, container) => {
 
 さてこれでどうでしょう．
 
-![reactive_example](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example.png)
+![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
 
 今度は大丈夫そうです!
 

@@ -105,7 +105,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 
 ※ ついでに defineComponent の実装とそれに関連する型付も実装しています． (そうすると proxy のデータの型を推論できるようになります．)
 
-![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/infer_component_types.png)
+![infer_component_types](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/infer_component_types.png)
 
 ## setupContext
 
@@ -301,7 +301,7 @@ const Child2 = {
 なんの変哲もないコードですが，実はこれは動きません．  
 state が定義されていないと怒られてしまいます．
 
-![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
+![state_is_not_defined](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/state_is_not_defined.png)
 
 これがなぜかというと，with 文の引数として Proxy を渡す場合，has を定義しないといけないためです．
 

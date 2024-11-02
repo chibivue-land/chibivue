@@ -20,7 +20,7 @@ app.mount('#app')
 
 You may encounter an error like this:
 
-![fragment_error.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/fragment_error.png)
+![fragment_error.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/fragment_error.png)
 
 Looking at the error message, it seems to be related to the Function constructor.
 

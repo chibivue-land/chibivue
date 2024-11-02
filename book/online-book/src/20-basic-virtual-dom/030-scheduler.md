@@ -34,7 +34,7 @@ app.mount('#app')
 ボタンをクリックすると，state.message に対して 2 回 set が起こるので，当然 2 回 trigger が実行されることになります．
 つまりは，2 回 Virtual DOM が算出され，2 回 patch が行われます．
 
-![non_scheduled_effect](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/non_scheduled_effect.png)
+![non_scheduled_effect](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/non_scheduled_effect.png)
 
 しかし，実際に patch 処理を行うのは 2 回目のタイミングだけで十分なはずです．  
 そこで，スケジューラを実装します．スケジューラというのはあるタスクに対する実行順番であったり，実行を管理するものです．
@@ -177,7 +177,7 @@ app.mount('#app')
 
 こちらのボタンをクリックしてみてコンソールを覗いてみましょう．
 
-![old_state_dom](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/old_state_dom.png)
+![old_state_dom](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/old_state_dom.png)
 
 `state.count`を更新した後にコンソールに出力しているのに，情報が古くなってしまっています．  
 それもそのはず，ステートを更新しても瞬時に DOM が更新されるわけではなく，コンソールに出力した段階ではまだ DOM は古い状態のままです．
@@ -232,7 +232,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![next_tick](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/next_tick.png)
+![next_tick](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/next_tick.png)
 
 さて，実際に今のスケジューラの実装を`currentFlushPromise`を保持しておくような実装に書き換えて，nextTick を実装してみましょう!
 

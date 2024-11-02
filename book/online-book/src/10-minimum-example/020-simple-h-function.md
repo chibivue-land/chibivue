@@ -237,7 +237,7 @@ app.mount('#app')
 
 やった！ h 関数でいろんなタグを描画できるようになった！
 
-![](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function.png)
+![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
 
 ## 表示するだけでは寂しいので
 
@@ -467,7 +467,7 @@ app.mount('#app')
 
 h 関数でイベントハンドラを登録できるようになりました!
 
-![simple_h_function_event](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function_event.png)
+![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
 
 ## 他の Props にも対応してみる．
 
@@ -499,7 +499,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_h_function_attr](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function_attr.png)
+![simple_h_function_attr](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_attr.png)
 
 これでかなりの HTML に対応することができました!
 

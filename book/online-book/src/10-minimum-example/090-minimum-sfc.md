@@ -206,9 +206,9 @@ pwd # ~/plugin-sample
 nr dev
 ```
 
-![sample_vite_plugin_console](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/sample_vite_plugin_console.png)
+![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)
 
-![sample_vite_plugin_source](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/sample_vite_plugin_source.png)
+![sample_vite_plugin_source](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_source.png)
 
 ちゃんとソースコードが改変されていることがわかります．
 
@@ -354,7 +354,7 @@ export default defineConfig({
 
 この状態で起動してみましょう．
 
-![vite_error](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/vite_error.png)
+![vite_error](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vite_error.png)
 
 もちろんエラーになります．やったね( ？ )
 
@@ -623,11 +623,11 @@ export default function vitePluginChibivue(): Plugin {
 
 このコードは vite が動いているプロセス，つまり node で実行されるので console はターミナルに出力されているかと思います．
 
-![parse_sfc1](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/parse_sfc1.png)
+![parse_sfc1](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc1.png)
 
 /_ 途中省略 _/
 
-![parse_sfc2](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/parse_sfc2.png)
+![parse_sfc2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc2.png)
 
 無事にパースできているようです．やったね！
 
@@ -853,7 +853,7 @@ const genInterpolation = (
 }
 ```
 
-![compile_sfc_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_sfc_render.png)
+![compile_sfc_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_sfc_render.png)
 
 上手くコンパイルできているようです．あとは同じ要領で，どうにかして script を引っこ抜いて default exports に突っ込めば OK です．
 
@@ -1265,7 +1265,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 これでレンダリングができるようになっているはずです!!！
 
-![render_sfc](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_sfc.png)
+![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
 
 スタイルの対応をしていないのでスタイルが当たっていないですがこれでレンダリングはできるようになりました．
 
@@ -1367,13 +1367,13 @@ export default function vitePluginChibivue(): Plugin {
 
 さて，ブラウザで確認してみましょう．
 
-![load_virtual_css_module](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/load_virtual_css_module.png)
+![load_virtual_css_module](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module.png)
 
 ちゃんとスタイルが当たるようになっているようです．
 
 ブラウザの方でも，css が import され，.vue.css というファイルが仮想的に生成されているのが分かるかと思います．  
-![load_virtual_css_module2](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/load_virtual_css_module2.png)  
-![load_virtual_css_module3](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/load_virtual_css_module3.png)
+![load_virtual_css_module2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module2.png)  
+![load_virtual_css_module3](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module3.png)
 
 これで SFC が使えるようになりました！
 

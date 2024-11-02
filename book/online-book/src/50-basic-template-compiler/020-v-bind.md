@@ -82,7 +82,7 @@ exp は右辺です．`v-bind:id="count"` でいうと count が入ります．
 exp も arg も，動的に変数を埋め込むことができるので，型は `ExpressionNode` になります．  
 ( `v-bind:[key]="count"` のように arg も動的にできるので)
 
-![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/dir_ast.drawio.png)
+![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/dir_ast.drawio.png)
 
 ## Parser の変更
 
@@ -175,7 +175,7 @@ function parseAttribute(
 大まかに，必要な項目を挙げると，v-bind に引数が存在するかどうか，class かどうか，style かどうかです．  
 ※ 今回関係してくる処理以外の部分は省略しています．(あまり厳格な図ではありませんがご了承ください．)
 
-![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/transform_vbind.drawio.png)
+![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/transform_vbind.drawio.png)
 
 まず，前提として，ディレクティブというものは基本的に要素 (element) に対して宣言されているものなので，
 
@@ -229,7 +229,7 @@ arg が動的な場合は，特定が不可能なため，normalizeProps とい�
 
 さてここまで実装できたら動作を見てみましょう！
 
-![vbind_test](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/vbind_test.png)
+![vbind_test](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vbind_test.png)
 
 とっても良さそうです！
 

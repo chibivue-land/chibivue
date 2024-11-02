@@ -27,12 +27,12 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 This loops based on the length of c2 (i.e., the next vnode).
 In other words, it basically only works when c1 and c2 are the same.
 
-![c1c2map](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map.png)
+![c1c2map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map.png)
 
 For example, let's consider the case where elements are removed.
 Since the patch loop is based on c2, the patch for the fourth element will not be performed.
 
-![c1c2map_deleted](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_deleted.png)
+![c1c2map_deleted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_deleted.png)
 
 When it becomes like this, the first to third elements are simply updated, and the fourth element remains as the one from c1 that is not removed.
 
@@ -65,18 +65,18 @@ app.mount('#app')
 
 When you click the update button, it should look like this:
 
-![patch_bug](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_bug.png)
+![patch_bug](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_bug.png)
 
 Although the list should have been updated to `["e", "f", "g"]`, "d" remains.
 
 And actually, the problem is not just this. Let's consider the case where elements are inserted.
 Currently, since the loop is based on c2, it becomes like this:
 
-![c1c2map_inserted](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_inserted.png)
+![c1c2map_inserted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted.png)
 
 However, in reality, "new element" was inserted, and the comparison should be made between each li 1, li 2, li 3, and li 4 of c1 and c2.
 
-![c1c2map_inserted_correct](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_inserted_correct.png)
+![c1c2map_inserted_correct](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted_correct.png)
 
 What these two problems have in common is that "the node that needs to be treated as the same in c1 and c2 cannot be determined".  
 To solve this, it is necessary to assign a key to the elements and patch based on that key.  
