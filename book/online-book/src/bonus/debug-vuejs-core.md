@@ -16,7 +16,7 @@ https://play.vuejs.org
 このプレイグラウンドでは Vue のコンポーネントを記述しながら動作を確認することはもちろん，SFC のコンパイル結果を確認できます．  
 サクッとブラウザ上で確認できるので便利です．(もちろん共有もできます．)
 
-<video src="https://github.com/Ubugeeei/Ubugeeei/assets/71201308/8281e589-fdaf-4206-854e-25a66dfaac05" controls />
+<video src="https://github.com/ubugeeei/ubugeeei/assets/71201308/8281e589-fdaf-4206-854e-25a66dfaac05" controls />
 
 ## vuejs/core のテストを活用する
 
@@ -42,7 +42,7 @@ nr test
 
 テストコードを読んで把握するもよし，実際にコードをいじってテストを走らせるもよし，テストケースを追加してみるもよし，色々な使い方ができます．
 
-<img width="590" alt="スクリーンショット 2024-01-07 0 31 29" src="https://github.com/Ubugeeei/Ubugeeei/assets/71201308/3c862bd5-1d94-4d2a-a9fa-8755872098ed">
+<img width="590" alt="スクリーンショット 2024-01-07 0 31 29" src="https://github.com/ubugeeei/ubugeeei/assets/71201308/3c862bd5-1d94-4d2a-a9fa-8755872098ed">
 
 ## vuejs/core のソースコードを実際に動かしてみる
 
@@ -71,7 +71,7 @@ nr setup:vue
 
 これで chibivue のリポジトリ内に ローカルの vuejs/core を指すような vue のプロジェクトが作成されます．
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
 
 あとは起動したい時に以下のコマンドで起動して，vuejs/core のソースコードをいじりながら動作を確認する事ができます．
 
@@ -81,14 +81,14 @@ nr dev:vue
 
 playground 側の HMR はもちろん，
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/a2ad46d8-4b07-4ac5-a887-f71507c619a6" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/a2ad46d8-4b07-4ac5-a887-f71507c619a6" controls/>
 
 vuejs/core のコードをいじっても HMR が効きます．
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
 
 ---
 
 また，standalone で確認したい際は index.html で standalone-vue.js の方を読み込むように変更するとこちらも HMR で確認できます．
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/c57ab5c2-0e62-4971-b1b4-75670d3efeec" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/c57ab5c2-0e62-4971-b1b4-75670d3efeec" controls/>

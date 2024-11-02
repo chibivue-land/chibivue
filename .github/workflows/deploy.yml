@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
       - name: Check if it's the original repo and the main branch
         run: |
-          if [[ "${{ github.repository }}" == "Ubugeeei/chibivue" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+          if [[ "${{ github.repository }}" == "ubugeeei/chibivue" && "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "This is the original repo's main branch, running the workflow."
           else
             echo "This is a fork or a different branch, skipping the workflow."

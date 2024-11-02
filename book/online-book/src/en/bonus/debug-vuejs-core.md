@@ -16,7 +16,7 @@ https://play.vuejs.org
 In this playground, you can not only write Vue components and check their behavior, but also check the compilation results of SFC.  
 It is convenient because you can quickly check it in the browser. (Of course, you can also share it.)
 
-<video src="https://github.com/Ubugeeei/Ubugeeei/assets/71201308/8281e589-fdaf-4206-854e-25a66dfaac05" controls />
+<video src="https://github.com/ubugeeei/ubugeeei/assets/71201308/8281e589-fdaf-4206-854e-25a66dfaac05" controls />
 
 ## Utilizing vuejs/core tests
 
@@ -42,7 +42,7 @@ There are several test commands other than `test`, so if you are interested, ple
 
 You can read and understand the test code, modify the code and run the tests, or add test cases. There are various ways to use it.
 
-<img width="590" alt="Screenshot 2024-01-07 0 31 29" src="https://github.com/Ubugeeei/Ubugeeei/assets/71201308/3c862bd5-1d94-4d2a-a9fa-8755872098ed">
+<img width="590" alt="Screenshot 2024-01-07 0 31 29" src="https://github.com/ubugeeei/ubugeeei/assets/71201308/3c862bd5-1d94-4d2a-a9fa-8755872098ed">
 
 ## Running the vuejs/core source code
 
@@ -71,7 +71,7 @@ nr setup:vue
 
 This will create a Vue project in the chibivue repository that points to the local vuejs/core source code.
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
 
 Then, when you want to start, you can start it with the following command and check the operation while modifying the vuejs/core source code.
 
@@ -81,14 +81,14 @@ nr dev:vue
 
 Of course, HMR on the playground side,
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/a2ad46d8-4b07-4ac5-a887-f71507c619a6" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/a2ad46d8-4b07-4ac5-a887-f71507c619a6" controls/>
 
 Even if you modify the vuejs/core code, HMR will work.
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
 
 ---
 
 Also, if you want to check it in standalone, you can also use HMR by changing the index.html to load standalone-vue.js.
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/c57ab5c2-0e62-4971-b1b4-75670d3efeec" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/c57ab5c2-0e62-4971-b1b4-75670d3efeec" controls/>

@@ -87,7 +87,7 @@ There are no strict rules at the moment, but please avoid very short names or na
 If it is not related to a specific issue, the issue number is not necessary.
 
 It would be helpful if you could create an issue whenever possible. It is not necessary for simple typo fixes.  
-Also, if the changes are expected to be significant or critical in content, it would be appreciated if you could consult with @Ubugeeei in advance.  
+Also, if the changes are expected to be significant or critical in content, it would be appreciated if you could consult with @ubugeeei in advance.  
 (If such changes are made without consultation, there is a possibility that the PR will be rejected depending on the case.)
 
 ### Creating commits
@@ -116,11 +116,11 @@ This is achieved by husky, and you can check the details in `/.husky/commit-msg`
 
 Once you have finished making changes locally and pushed the changes, please create a Pull Request to the main branch of https://github.com/chibivue-land/chibivue.  
 Please make the title and description of the Pull Request as clear as possible.  
-Please always notify @Ubugeeei when the work is completed to keep track of whether the work is in progress or completed.  
-You can mention @Ubugeeei in the PR comment. The same applies when the changes are completed after the review.
+Please always notify @ubugeeei when the work is completed to keep track of whether the work is in progress or completed.  
+You can mention @ubugeeei in the PR comment. The same applies when the changes are completed after the review.
 Also, please make sure to check that the CI has succeeded before reporting completion.
 
-Basically, all PRs are managed by @Ubugeeei, so please contact @Ubugeeei for any inquiries.
+Basically, all PRs are managed by @ubugeeei, so please contact @ubugeeei for any inquiries.
 
 ## Guide about the contents of contribution
 
