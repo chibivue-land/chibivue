@@ -231,4 +231,4 @@ Looks great!
 Next time, we will implement v-on.
 
 Source code up to this point:  
-[GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/020_v_bind)
+[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/020_v_bind)

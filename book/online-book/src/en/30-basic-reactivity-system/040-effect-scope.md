@@ -105,7 +105,7 @@ app.mount('#app')
 ```
 
 Source code so far:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/130_cleanup_effects)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/130_cleanup_effects)
 
 ## What is Effect Scope
 
@@ -200,4 +200,4 @@ Then, when the `stop` method of this effect is triggered, we can clean up all th
 You should have understood the basic principles, so let's try implementing it while reading the source code!
 
 Source code so far:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/140_effect_scope)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/140_effect_scope)

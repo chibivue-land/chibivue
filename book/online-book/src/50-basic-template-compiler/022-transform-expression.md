@@ -525,4 +525,4 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/022_transform_expression)
+ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/022_transform_expression)

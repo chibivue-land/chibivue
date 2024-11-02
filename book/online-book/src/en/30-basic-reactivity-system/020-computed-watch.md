@@ -139,9 +139,9 @@ app.mount('#app')
 ```
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/050_computed)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/050_computed)
 (with setter):
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/060_computed_setter)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/060_computed_setter)
 
 ## Implementation of Watch
 
@@ -193,7 +193,7 @@ export function watch<T>(
 ```
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/070_watch)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/070_watch)
 
 ## Other APIs of watch
 
@@ -253,7 +253,7 @@ Once you have the base, it's just a matter of extending it. There is no need for
   ```
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/080_watch_api_extends)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/080_watch_api_extends)
 
 ## watchEffect
 
@@ -274,7 +274,7 @@ count.value++
 You can implement it like immediate for the image.
 
 Source code so far:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/090_watch_effect)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/090_watch_effect)
 
 ---
 

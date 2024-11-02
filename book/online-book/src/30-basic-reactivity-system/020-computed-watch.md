@@ -140,9 +140,9 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/050_computed)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/050_computed)
 (setter 込みはこちら):  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/060_computed_setter)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/060_computed_setter)
 
 ## Watch の実装
 
@@ -195,7 +195,7 @@ export function watch<T>(
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/070_watch)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/070_watch)
 
 ## watch の その他の api
 
@@ -256,7 +256,7 @@ export function watch<T>(
   ```
 
 ここまでのソースコード:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/080_watch_api_extends)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/080_watch_api_extends)
 
 ## watchEffect
 
@@ -277,7 +277,7 @@ count.value++
 イメージてには immediate のような実装をすれば OK です．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/090_watch_effect)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/090_watch_effect)
 
 ---
 

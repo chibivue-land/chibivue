@@ -13,7 +13,7 @@ export const sharedConfig = defineConfig({
       'link',
       {
         rel: 'icon',
-        href: 'https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true',
+        href: 'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true',
       },
     ],
 
@@ -34,7 +34,7 @@ export const sharedConfig = defineConfig({
       {
         property: 'og:image',
         content:
-          'https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true',
+          'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true',
       },
     ],
     ['meta', { property: 'og:image:alt', content: 'chibivue' }],
@@ -54,23 +54,23 @@ export const sharedConfig = defineConfig({
       {
         name: 'twitter:image',
         content:
-          'https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true',
+          'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true',
       },
     ],
     ['meta', { name: 'twitter:image:alt', content: 'chibivue' }],
   ],
   themeConfig: {
-    logo: 'https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true',
+    logo: 'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true',
     search: { provider: 'local' },
     outline: 'deep',
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Ubugeeei/chibivue' },
+      { icon: 'github', link: 'https://github.com/chibivue-land/chibivue' },
       { icon: 'twitter', link: 'https://twitter.com/ubugeeei' },
       { icon: 'discord', link: 'https://discord.gg/aVHvmbmSRy' },
     ],
     editLink: {
       pattern:
-        'https://github.com/Ubugeeei/chibivue/blob/main/book/online-book/src/:path',
+        'https://github.com/chibivue-land/chibivue/blob/main/book/online-book/src/:path',
       text: 'Suggest changes to this page',
     },
     footer: {

@@ -251,4 +251,4 @@ app.mount('#app')
 
 It seems to be working correctly!
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)

@@ -261,7 +261,7 @@ That's the end of the implementation.
 
 Let's check the operation! If the input content is reflected on the screen without the page being reloaded when the button is pressed, it's OK!
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
 
 ## Other Modifiers
 
@@ -287,4 +287,4 @@ The two points to be careful about are:
 Please try implementing while reading the actual code!
 If you've come this far, you should be able to do it.
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)

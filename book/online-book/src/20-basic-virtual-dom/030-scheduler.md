@@ -139,7 +139,7 @@ function triggerEffect(effect: ReactiveEffect) {
 さて，キュー管理によるスケジューリングと作用の分類わけを実際にソースコードを読みながら実装してみましょう !
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
 
 ## nextTick が欲しい
 
@@ -237,4 +237,4 @@ app.mount('#app')
 さて，実際に今のスケジューラの実装を`currentFlushPromise`を保持しておくような実装に書き換えて，nextTick を実装してみましょう!
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)

@@ -40,7 +40,7 @@ book
 
 ### Forking the repository
 
-Access https://github.com/Ubugeeei/chibivue and click on the `Fork` button on this page to fork it to your own account.
+Access https://github.com/chibivue-land/chibivue and click on the `Fork` button on this page to fork it to your own account.
 
 You can choose any name for the repository. Feel free to set other information as well.
 
@@ -114,7 +114,7 @@ This is achieved by husky, and you can check the details in `/.husky/commit-msg`
 
 ### Creating a Pull Request
 
-Once you have finished making changes locally and pushed the changes, please create a Pull Request to the main branch of https://github.com/Ubugeeei/chibivue.  
+Once you have finished making changes locally and pushed the changes, please create a Pull Request to the main branch of https://github.com/chibivue-land/chibivue.  
 Please make the title and description of the Pull Request as clear as possible.  
 Please always notify @Ubugeeei when the work is completed to keep track of whether the work is in progress or completed.  
 You can mention @Ubugeeei in the PR comment. The same applies when the changes are completed after the review.

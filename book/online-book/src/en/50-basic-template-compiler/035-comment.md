@@ -226,4 +226,4 @@ const processCommentNode = (
 
 Well, you should have implemented comment out by now. Let's check the actual operation!
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)

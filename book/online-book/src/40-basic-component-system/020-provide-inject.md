@@ -77,4 +77,4 @@ app.provide(LoggerKey, window.console.log)
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/020_provide_inject)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/020_provide_inject)

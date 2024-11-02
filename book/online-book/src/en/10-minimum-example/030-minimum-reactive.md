@@ -627,4 +627,4 @@ Now it seems to be working fine!
 
 Now we can update the screen with `reactive`!
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)

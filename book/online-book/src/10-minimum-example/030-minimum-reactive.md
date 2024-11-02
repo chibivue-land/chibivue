@@ -629,4 +629,4 @@ const render: RootRenderFunction = (vnode, container) => {
 
 これで reactive に画面を更新できるようになりました!!
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)
+ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)

@@ -188,4 +188,4 @@ At first glance, you may be overwhelmed by the many generics and type conversion
 In the code of this book, inspired by the original Vue, we have abstracted it one step further with "CreateComponentPublicInstance" and implemented a type called "ComponentPublicInstanceConstructor", but don't worry too much about it. (If you're interested, you can read it too!)
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/070_options_api)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/070_options_api)

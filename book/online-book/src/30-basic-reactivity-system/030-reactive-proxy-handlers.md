@@ -256,7 +256,7 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
 
 ## key が増減するオブジェクトに対応する
 
@@ -535,4 +535,4 @@ export function toRaw<T>(observed: T): T {
 https://ja.vuejs.org/api/reactivity-advanced.html#toraw
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/120_proxy_handler_improvement)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/120_proxy_handler_improvement)

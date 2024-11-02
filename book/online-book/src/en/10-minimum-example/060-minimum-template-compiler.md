@@ -549,4 +549,4 @@ app.mount('#app')
 It appears to be implemented correctly!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)

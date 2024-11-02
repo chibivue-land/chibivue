@@ -101,7 +101,7 @@ Let's implement this Proxy!
 Once implemented, let's modify the code to pass this proxy to the render function and ref.
 
 Source code so far:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
 
 ※ By the way, I have also implemented the implementation of defineComponent and related type checking (this allows us to infer the type of proxy data).
 
@@ -332,4 +332,4 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 If it works correctly, it should work fine!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)

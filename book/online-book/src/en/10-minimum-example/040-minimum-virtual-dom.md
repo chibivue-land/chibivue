@@ -388,4 +388,4 @@ Now that we can perform diff rendering, let's take a look at the playground.
 
 We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

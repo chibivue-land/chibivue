@@ -49,10 +49,10 @@ You can read and understand the test code, modify the code and run the tests, or
 Next, this is the most convenient but still the method of actually modifying and running the vuejs/core source code.
 
 Regarding this, we have prepared projects that can be HMR with vite for both SFC and standalone, so please try using them.
-This project is in the repository of [chibivue](https://github.com/Ubugeeei/chibivue), so please clone it.
+This project is in the repository of [chibivue](https://github.com/chibivue-land/chibivue), so please clone it.
 
 ```bash
-git clone https://github.com/Ubugeeei/chibivue.git
+git clone https://github.com/chibivue-land/chibivue.git
 ```
 
 Once cloned, run the script to create the project.

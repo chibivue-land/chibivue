@@ -319,7 +319,7 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
 
 ## コンポーネント間のやりとり
 
@@ -572,7 +572,7 @@ const setupRenderEffect = (
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/props.png)
 
 ここまでのソースコード：  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
 ついでと言ってはなんなのですが，本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう．  
 ここで，新たに `~/packages/shared` というディレクトリを作成し， `general.ts` を作成します．  
@@ -795,6 +795,6 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 ちゃんと動いていればこれで props/emit によるコンポーネント間のやりとりが行えるようになりました！
 
 ここまでのソースコード：  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)
 
 <!-- TODO: veiについての説明を書く -->

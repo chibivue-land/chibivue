@@ -19,4 +19,4 @@
 ここまでやってきた方なら説明がなくてもソースコードを読みながら実装できるはずです！
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/150_other_apis)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/150_other_apis)

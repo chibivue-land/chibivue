@@ -90,7 +90,7 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/010_ref)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/010_ref)
 
 ## shallowRef
 
@@ -198,7 +198,7 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/020_shallow_ref)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/020_shallow_ref)
 
 ## toRef
 
@@ -243,7 +243,7 @@ app.mount('#app')
 詳しくは公式ドキュメントのシグネチャをチェックしてみてください! (https://vuejs.org/api/reactivity-utilities.html#toref)
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/030_to_ref)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/030_to_ref)
 
 ## toRefs
 
@@ -279,4 +279,4 @@ app.mount('#app')
 こちらは toRef の実装を使って簡単に実装できるかと思います．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/040_to_refs)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/040_to_refs)

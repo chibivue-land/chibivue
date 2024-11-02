@@ -415,4 +415,4 @@ const processText = (
 
 これで Virtual DOM を利用したパッチが実装できました!!!!! 祝
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)
+ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

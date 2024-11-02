@@ -8,7 +8,7 @@
 - プロジェクト名は chibivue とします．  
   本書で実装する Vue.js の基本実装をまとめて chibivue と呼ぶことにします．
 - 基本方針は最初に話した通り，「小さい開発を繰り返す」です．
-- この本の付録として各フェーズのソースコードを https://github.com/Ubugeeei/chibivue/tree/main/book/impls に載せてあります．  
+- この本の付録として各フェーズのソースコードを https://github.com/chibivue-land/chibivue/tree/main/book/impls に載せてあります．  
   この本では具体的な説明を全てのソースコードに対して行うわけではないので，その辺りは随時こちらを参照していただければと思います．
 - 完成系のコードはいくつかのパッケージに依存しています．  
   これは自作系のコンテンツにありがちな問題なのですが，「どこからどこまで自分の手で実装すれば自作と言えるのだろう」という議論がしばしば挙げられます．  
@@ -63,7 +63,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 1. chibivue をクローンする
 
    ```sh
-   $ git clone https://github.com/Ubugeeei/chibivue
+   $ git clone https://github.com/chibivue-land/chibivue
    ```
 
 2. script を実行.  
@@ -271,4 +271,4 @@ nr dev
 ![hello chibivue](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_chibivue.png)
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/00_introduction/010_project_setup)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/00_introduction/010_project_setup)

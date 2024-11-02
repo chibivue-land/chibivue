@@ -692,6 +692,6 @@ You did it. We're getting closer to Vue!
 With this, the implementation of the small template is complete. Good job.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
 
 <!-- It seems to be working properly, so we have finished implementing the three tasks that were split when starting the compiler implementation. Well done! -->

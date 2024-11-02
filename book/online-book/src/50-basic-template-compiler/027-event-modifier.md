@@ -265,7 +265,7 @@ export const withModifiers = (fn: Function, modifiers: string[]) => {
 動作を確認してみましょう！  
 ボタンを押した際に，ページがリロードされずに input の内容が画面に反映されていれば OK です！
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
+ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
 
 ## その他の修飾子
 
@@ -293,4 +293,4 @@ const eventOptionModifiers = []
 この辺りは実際にコードを読みながら実装してみてください！  
 ここまできた皆さんなら出来るはずです．
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)
+ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)

@@ -4,7 +4,7 @@
 
 ```sh
 # Clone this repository and navigate to it.
-git clone https://github.com/Ubugeeei/chibivue
+git clone https://github.com/chibivue-land/chibivue
 cd chibivue
 
 # Create a project using the setup command.

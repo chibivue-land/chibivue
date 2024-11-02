@@ -4,7 +4,7 @@
 
 ```sh
 # 本リポジトリをクローンして移動しましょう。
-git clone https://github.com/Ubugeeei/chibivue
+git clone https://github.com/chibivue-land/chibivue
 cd chibivue
 
 # setup コマンドでプロジェクトを作成します。

@@ -317,7 +317,7 @@ app.mount('#app')
 ```
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
 
 ## Communication between components
 
@@ -571,7 +571,7 @@ Now, you can pass data to the component using props! Great job!
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/props.png)
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
 As a side note, although it's not necessary, let's implement the ability to receive props in kebab-case, just like in the original Vue.
 At this point, create a directory called `~/packages/shared` and create a file called `general.ts` in it.
@@ -791,4 +791,4 @@ Let's test the functionality with an example of the developer interface we assum
 If it works properly, you can now communicate between components using props/emit!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)

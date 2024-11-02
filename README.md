@@ -23,7 +23,7 @@ Currently, I am still in the process of implementation, but after implementation
 
 (For now, I plan to post Japanese first.)
 
-[example](https://github.com/Ubugeeei/chibivue/tree/main/example/app)
+[example](https://github.com/chibivue-land/chibivue/tree/main/example/app)
 
 # 👜 Package Manager
 
@@ -38,7 +38,7 @@ npm i -g @antfu/ni
 
 # 📔 Online Book
 
-[![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
+[![Pages Deploy](https://github.com/chibivue-land/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/chibivue-land/chibivue/actions/workflows/deploy.yml)
 
 > total: 370,000 chars ↑ (japanese)
 
@@ -51,7 +51,7 @@ Japaneses: https://book.chibivue.land
 ### open book on localhost
 
 ```sh
-$ git clone https://github.com/Ubugeeei/chibivue
+$ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
 $ ni
 $ nr book:dev
@@ -59,14 +59,14 @@ $ nr book:dev
 
 ### view on github
 
-[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src)
+[English](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src)
 <br/>
 <br/>
 
 # 🎥 playground
 
 ```sh
-$ git clone https://github.com/Ubugeeei/chibivue
+$ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
 $ ni
 
@@ -204,13 +204,13 @@ This chapter implements createApp / virtual dom / patch / reactivity / template 
 
 The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 minutes**"
 
-[Online Book](https://book.chibivue.land/en/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/Ubugeeei/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
+[Online Book](https://book.chibivue.land/en/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
 <img src="./book/images/hyper-ultimate-super-extreme-minimal-vue.png">
 
 # Contributing
 
-Please see [contributing.md](https://github.com/Ubugeeei/chibivue/blob/main/.github/contributing.md).
+Please see [contributing.md](https://github.com/chibivue-land/chibivue/blob/main/.github/contributing.md).
 
 
 <div align="center">

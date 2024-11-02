@@ -6,7 +6,7 @@ hero:
   name: "chibivue"
   text: "Step by Step, from just one line of \"Hello, World\"."
   tagline: powered by VitePress
-  image: https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true
+  image: https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true
   actions:
     - theme: brand
       text: Dive into book ->

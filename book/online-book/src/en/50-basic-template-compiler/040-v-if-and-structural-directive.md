@@ -734,4 +734,4 @@ It's working properly!
 
 ![vif_fizzbuzz](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/vif_fizzbuzz.png)
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)

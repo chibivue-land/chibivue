@@ -102,4 +102,4 @@ app.mount('#app')
 ```
 
 Source code so far:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/010_lifecycle_hooks)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/010_lifecycle_hooks)

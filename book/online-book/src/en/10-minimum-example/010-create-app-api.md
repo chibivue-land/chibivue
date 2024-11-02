@@ -129,7 +129,7 @@ We were able to display the message on the screen! Well done!
 ![hello_createApp](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_createApp.png)
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)
 
 ## Refactoring
 
@@ -345,4 +345,4 @@ I moved the types to `~/packages/runtime-core/component.ts`, but that's not impo
 Now that we are closer to the source code of the original Vue.js, let's test it. If the message is still displayed, it's OK.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/010_create_app2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app2)

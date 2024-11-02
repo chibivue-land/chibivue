@@ -790,4 +790,4 @@ app.mount('#app')
 どうでしょう．機能は少ないにしろ，だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)

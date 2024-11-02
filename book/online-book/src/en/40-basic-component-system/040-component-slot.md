@@ -34,7 +34,7 @@ Let's implement it up to this point for now!
 (ShapeFlags has been slightly changed due to the implementation of normalize in children.)
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/050_component_slot)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/050_component_slot)
 
 ## Implementation of Named Slots/Scoped Slots
 
@@ -80,4 +80,4 @@ const app = createApp({
 ```
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/060_slot_extend)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/060_slot_extend)

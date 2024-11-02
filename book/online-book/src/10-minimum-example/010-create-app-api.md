@@ -143,7 +143,7 @@ app.mount('#app')
 ![hello_createApp](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_createApp.png)
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)
 
 ## リファクタリング
 
@@ -382,4 +382,4 @@ export const createApp = ((...args) => {
 だいぶ本家 Vue.js のソースコードに近づいたところで動作確認をしてみましょう．変わらずメッセージが表示されていれば OK です．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/010_create_app2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app2)

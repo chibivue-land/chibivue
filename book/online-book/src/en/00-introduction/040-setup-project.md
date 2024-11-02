@@ -6,7 +6,7 @@ We will promptly start with a simple implementation of Vue.js. Here are some poi
 
 - The project name will be "chibivue." We will refer to the basic Vue.js implementations covered in this book as "chibivue."
 - As initially mentioned, our primary approach will be "repeating small developments."
-- Source codes for each phase are included in the appendix of this book and can be found at https://github.com/Ubugeeei/chibivue/tree/main/book/impls. We will not provide detailed explanations for all the source code in the book, so please refer to the appendix as needed.
+- Source codes for each phase are included in the appendix of this book and can be found at https://github.com/chibivue-land/chibivue/tree/main/book/impls. We will not provide detailed explanations for all the source code in the book, so please refer to the appendix as needed.
 - The final code depends on several packages. A common issue with DIY content is the debate over "how much one should implement by hand to call it homemade." While we won't write all source code by hand in this book, we will actively use packages similar to those used in Vue.js's official code. For example, we'll use Babel. Rest assured, we aim to make this book as beginner-friendly as possible, providing minimal explanations for necessary packages.
 
 ## Environment Setup
@@ -53,7 +53,7 @@ If you find the manual process tedious, please feel free to use this tool!
 1. Clone chibivue.
 
    ```sh
-   $ git clone https://github.com/Ubugeeei/chibivue
+   $ git clone https://github.com/chibivue-land/chibivue
    ```
 
 2. Execute the script.  
@@ -250,4 +250,4 @@ Access the developer server that started with this command. If a message display
 ![hello chibivue](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_chibivue.png)
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls//00_introduction/010_project_setup)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls//00_introduction/010_project_setup)

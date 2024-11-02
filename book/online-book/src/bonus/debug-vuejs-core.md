@@ -49,10 +49,10 @@ nr test
 続いては，一番手軽ではないのですがやはり vuejs/core のソースコードを実際にいじりながら動作させる方法です．
 
 こちらに関しては, SFC, standalone ともに vite で HMR できるプロジェクトを用意しているので，ぜひそちらを使ってみてください．
-このプロジェクトは [chibivue](https://github.com/Ubugeeei/chibivue) のリポジトリにあるので clone してください．
+このプロジェクトは [chibivue](https://github.com/chibivue-land/chibivue) のリポジトリにあるので clone してください．
 
 ```bash
-git clone https://github.com/Ubugeeei/chibivue.git
+git clone https://github.com/chibivue-land/chibivue.git
 ```
 
 clone できたら，プロジェクトを作成するスクリプトを実行します．

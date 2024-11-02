@@ -137,7 +137,7 @@ function triggerEffect(effect: ReactiveEffect) {
 Now, let's implement scheduling with queue management and the classification of effects while reading the source code!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
 
 ## We want nextTick
 
@@ -229,4 +229,4 @@ app.mount('#app')
 Now, let's actually rewrite the implementation of the current scheduler to keep "currentFlushPromise" and implement "nextTick"!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)

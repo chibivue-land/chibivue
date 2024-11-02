@@ -791,4 +791,4 @@ Let's make sure it is working correctly.
 How about that? Although the functionality is limited, it is getting closer to the usual Vue developer interface.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
