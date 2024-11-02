@@ -19,10 +19,7 @@ export const sharedConfig = defineConfig({
 
     // og
     ['meta', { property: 'og:site_name', content: 'chibivue' }],
-    [
-      'meta',
-      { property: 'og:url', content: 'https://ubugeeei.github.io/chibivue' },
-    ],
+    ['meta', { property: 'og:url', content: 'https://book.chibivue.land' }],
     ['meta', { property: 'og:title', content: 'chibivue' }],
     [
       'meta',

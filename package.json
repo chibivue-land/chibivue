@@ -19,7 +19,7 @@
     "fmt:check": "prettier --check --cache .",
     "test": "vitest",
     "book:dev": "vitepress dev book/online-book",
-    "book:build": "vitepress build book/online-book --base /chibivue/",
+    "book:build": "vitepress build book/online-book",
     "book:preview": "vitepress preview book/online-book",
     "book:count-chars": "tsx tools/book-size/book/count-chars.ts",
     "book:translate": "tsx tools/translator/ja2en/main.ts",
