@@ -1,15 +1,15 @@
-# 様々な Reactive Proxy Handler
+# Various Reactive Proxy Handlers
 
 ::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが，これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています．  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい．  
-然るべきタイミングでこのオンラインブックも追従する予定です．  
+[Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) was released at the end of December 2023, which includes [performance improvements for reactivity](https://github.com/vuejs/core/pull/5912).  
+You should note that this online book is referencing the previous implementation.  
+We plan to update this online book at the appropriate time.
 :::
 
-## reactive にしたくないオブジェクト
+## Objects that should not be reactive
 
-さて，ここでは現状の Reactivity System のある問題について解決していきます．  
-まずは以下のコードを動かしてみてください．
+Now, let's solve a problem with the current Reactivity System.  
+First, try running the following code.
 
 ```ts
 import { createApp, h, ref } from 'chibivue'
@@ -35,11 +35,11 @@ const app = createApp({
 app.mount('#app')
 ```
 
-コンソールを見てみると，以下のようになっていることが観測できるかと思います．
+If you check the console, you should see the following result:
 
 ![reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_html_element.png)
 
-ここで，focus をする処理を加えてみましょう．
+Now, let's add a focus function.
 
 ```ts
 import { createApp, h, ref } from 'chibivue'
@@ -69,18 +69,18 @@ const app = createApp({
 app.mount('#app')
 ```
 
-なんと，エラーになってしまいます．
+Surprisingly, it throws an error.
 
 ![focus_in_reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_reactive_html_element.png)
 
-これの原因としては，document.getElementById によって取得した要素自体を元に Proxy を生成してしまっているためです．
+The reason for this is that the element obtained by `document.getElementById` is used to generate a Proxy itself.
 
-Proxy を生成してしまうと値は当然元のオブジェクトではなく Proxy になってしまいますから，HTML 要素としての機能が失われてしまっているのです．
+When a Proxy is generated, the value becomes the Proxy instead of the original object, causing the loss of HTML element functionality.
 
-## reactive Proxy を生成する前にオブジェクトを判定する．
+## Determine the object before generating a reactive Proxy
 
-判定方法はとてもシンプルです．`Object.prototype.toString`を利用します．
-先ほどのコードで，Object.prototype.toString を使うと HTMLInputElement はどのように判定されるかみてみましょう．
+The determination method is very simple. Use `Object.prototype.toString`.
+Let's see how `Object.prototype.toString` determines an HTMLInputElement in the code above.
 
 ```ts
 import { createApp, h, ref } from 'chibivue'
@@ -112,26 +112,26 @@ app.mount('#app')
 
 ![element_to_string](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/element_to_string.png)
 
-このようにしてどのようなオブジェクトなのかというのを知ることができます．ややハードコードですが，この判定関数を一般化します．
+This allows us to determine the type of the object. Although it is somewhat hard-coded, let's generalize this determination function.
 
 ```ts
 // shared/general.ts
-export const objectToString = Object.prototype.toString // isMapやisSetなどで既出
+export const objectToString = Object.prototype.toString // already used in isMap and isSet
 export const toTypeString = (value: unknown): string =>
   objectToString.call(value)
 
-// 今回追加する関数
+// Function to be added this time
 export const toRawType = (value: unknown): string => {
   return toTypeString(value).slice(8, -1)
 }
 ```
 
-slice しているのは，`[Object hoge]`の hoge に当たる文字列を取得するためです．
+The reason for using `slice` is to obtain the string corresponding to `hoge` in `[Object hoge]`.
 
-そして，reactive toRawType によってオブジェクトの種類を判別し，分岐していきましょう．  
-HTMLInput の場合は Proxy の生成をスキップするようにします．
+Then, let's determine the type of the object by using `reactive toRawType` and branch it.
+Skip generating a Proxy for HTMLInput.
 
-reactive.ts の方で，rawType を取得し，reactive のターゲットとなるオブジェクトのタイプを判定します．
+In reactive.ts, get the rawType and determine the type of the object that will be the target of reactive.
 
 ```ts
 const enum TargetType {
@@ -168,19 +168,19 @@ export function reactive<T extends object>(target: T): T {
 }
 ```
 
-これで先ほどのフォーカスのコードが動くようになったはずです！
+Now, the focus code should work!
 
 ![focus_in_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_element.png)
 
-## TemplateRefs を実装してみる
+## Implementing TemplateRefs
 
-せっかく Ref に HTML 要素を入れられるようになったので，TemplateRef を実装してみましょう．
+Now that we can put HTML elements into Ref, let's implement TemplateRef.
 
-ref は ref 属性を利用することで template への参照を取ることができます．
+Ref can be used to reference a template by using the ref attribute.
 
 https://vuejs.org/guide/essentials/template-refs.html
 
-目標は以下のようなコードが動くようになることです．
+The goal is to make the following code work:
 
 ```ts
 import { createApp, h, ref } from 'chibivue'
@@ -203,25 +203,25 @@ const app = createApp({
 app.mount('#app')
 ```
 
-ここまでやってきたみなさんならば，実装方法はもう見えてるかと思います．
-そう，VNode に ref を持たせて render 時に値をぶち込んでやればいいわけです．
+If you've come this far, you probably already see how to implement it.
+Yes, just add ref to VNode and inject the value during rendering.
 
 ```ts
 export interface VNode<HostNode = any> {
   // .
   // .
   key: string | number | symbol | null
-  ref: Ref | null // これ
+  ref: Ref | null // This
   // .
   // .
 }
 ```
 
-本家の実装でいうと，setRef という関数です．探して，読んで，実装をしてみましょう！  
-本家の方では配列で ref を持ったり，$ref でアクセスできるようにしたりと色々複雑になっていますが，とりあえず上記のコードが動く程度のものを目指してみましょう．
+In the original implementation, it is called `setRef`. Find it, read it, and implement it!
+In the original implementation, it is more complicated, with ref being an array and accessible with `$ref`, but for now, let's aim for a code that works with the above code.
 
-ついでに，component だった場合は component の setupContext を ref に代入してあげましょう．  
-(※ ここは本当はコンポーネントの proxy を渡すべきなんですが，まだ未実装のため setupContext ということにしています．)
+By the way, if it is a component, assign the component's `setupContext` to the ref.  
+(Note: In reality, you should pass the component's proxy, but it is not yet implemented, so we are using `setupContext` for now.)
 
 ```ts
 import { createApp, h, ref } from 'chibivue'
@@ -255,26 +255,26 @@ const app = createApp({
 app.mount('#app')
 ```
 
-ここまでのソースコード:  
+Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
 
-## key が増減するオブジェクトに対応する
+## Handling Objects with Changing Keys
 
-実は，今の実装では key が増減するオブジェクトに対応できていません．
-この，「key が増減するオブジェクト」と言うのは配列も含みます．  
-要するに，以下のようなコンポーネントが正常に動作しません．
+Actually, the current implementation cannot handle objects with changing keys.
+This includes arrays as well.
+In other words, the following components do not work correctly:
 
 ```ts
 const App = {
   setup() {
     const array = ref<number[]>([])
     const mutateArray = () => {
-      array.value.push(Date.now()) // trigger しても何も effect がない (この時、set の key は "0")
+      array.value.push(Date.now()) // No effect is triggered even when this is called (the key for set is "0")
     }
 
     const record = reactive<Record<string, number>>({})
     const mutateRecord = () => {
-      record[Date.now().toString()] = Date.now() // trigger しても何も effect がない (key 新しく設定された key)
+      record[Date.now().toString()] = Date.now() // No effect is triggered even when the key is changed
     }
 
     return () =>
@@ -289,11 +289,11 @@ const App = {
 }
 ```
 
-これを解決するにはどうしたら良いでしょうか?
+How can we solve this?
 
-### 配列の場合
+### For Arrays
 
-配列もいってしまえばオブジェクトなので，新しい要素を追加するとその index が key として Proxy の set の handler に入ってきます．
+Arrays are essentially objects, so when a new element is added, its index is passed as the key to the `set` handler of the Proxy.
 
 ```ts
 const p = new Proxy([], {
@@ -307,12 +307,12 @@ const p = new Proxy([], {
 p.push(42) // 0
 ```
 
-しかしこれらの key をそれぞれ track するわけにはいきません．
-そこで，length を track することで配列の変更をトリガーするようにします．
+However, we cannot track each of these keys individually.
+Therefore, we can track the `length` of the array to trigger changes in the array.
 
-length を track すると言いましたが，実はすでに track されるようになっています．
+It is worth noting that the `length` is already being tracked.
 
-以下のようなコードをブラウザなどで実行してみると JSON.stringify で配列を文字列化した際に length が呼ばれていることがわかります．
+If you execute the following code in a browser or similar environment, you will see that `length` is called when the array is stringified using `JSON.stringify`.
 
 ```ts
 const data = new Proxy([], {
@@ -327,10 +327,10 @@ JSON.stringify(data)
 // get! toJSON
 ```
 
-つまりすでに length には effect が登録されているので，あとは index が set された時に，この effect を取り出して trigger してあげれば良いわけです．
+In other words, the `length` already has an effect registered. So, all we need to do is extract this effect and trigger it when an index is set.
 
-入ってきた key が index かどうかを判定して，index だった場合は length の effect を trigger するようにします．
-他にも dep がある可能性はもちろんあるので， deps という配列に切り出して，effect を詰めてまとめて trigger してあげます．
+If the key is determined to be an index, we trigger the effect of `length`.
+Of course, there may be other dependencies, so we extract them into an array called `deps` and trigger the effects together.
 
 ```ts
 export function trigger(target: object, key?: unknown) {
@@ -342,7 +342,7 @@ export function trigger(target: object, key?: unknown) {
     deps.push(depsMap.get(key))
   }
 
-  // これ
+  // This
   if (isIntegerKey(key)) {
     deps.push(depsMap.get('length'))
   }
@@ -364,18 +364,18 @@ export const isIntegerKey = (key: unknown) =>
   '' + parseInt(key, 10) === key
 ```
 
-これで配列の場合は動くようになりました．
+Now, arrays should work correctly.
 
-### オブジェクト(レコード)の場合
+### For Objects (Records)
 
-続いてはオブジェクトですが，配列とは違い length という情報は持っていません．
+Next, let's consider objects. Unlike arrays, objects do not have the `length` property.
 
-これは一工夫します．  
-`ITERATE_KEY` というシンボルを用意してこれを配列の時の length のように使います．  
-何を言っているのかよく分からないかもしれませんが，depsMap はただの Map なので，別に勝手に用意したものを key として使っても問題ありません．
+We can make a small modification here.
+We can prepare a symbol called `ITERATE_KEY` and use it in a similar way to the `length` property for arrays.
+You may not understand what I mean, but since `depsMap` is just a Map, there is no problem using a symbol that we define as a key.
 
-配列の時と少し順番は変わりますが，まず trigger から考えてみます．
-あたかも `ITERATE_KEY` というものが存在し，そこに effect が登録されているかのような実装をしておけば OK です．
+The order of operations is slightly different from arrays, but let's start by considering the `trigger` function.
+We can implement it as if there is a `ITERATE_KEY` with registered effects.
 
 ```ts
 export const ITERATE_KEY = Symbol()
@@ -390,10 +390,10 @@ export function trigger(target: object, key?: unknown) {
   }
 
   if (!isArray(target)) {
-    // 配列でない場合は、ITERATE_KEY に登録された effect を trigger する
+    // If it is not an array, trigger the effect registered with ITERATE_KEY
     deps.push(depsMap.get(ITERATE_KEY))
   } else if (isIntegerKey(key)) {
-    // new index added to array -> length changes
+    // New index added to array -> length changes
     deps.push(depsMap.get('length'))
   }
 
@@ -405,15 +405,15 @@ export function trigger(target: object, key?: unknown) {
 }
 ```
 
-問題は，この `ITERATE_KEY` に対してどう effect をトラックするかです．
+The problem is how to track effects for `ITERATE_KEY`.
 
-ここで， `ownKeys` と言う Proxy ハンドラを利用します．
+Here, we can use the `ownKeys` Proxy handler.
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/ownKeys
 
-ownKeys は `Object.keys()` や `Reflect.ownKeys()` などで呼ばれますが，実は `JSON.stringify` でも呼ばれます．
+`ownKeys` is called by functions like `Object.keys()` or `Reflect.ownKeys()`, but it is also called by `JSON.stringify`.
 
-試しに以下のコードをブラウザなどで動かしてみるとそれを確認できます．
+You can confirm this by running the following code in a browser or similar environment:
 
 ```ts
 const data = new Proxy(
@@ -432,8 +432,8 @@ const data = new Proxy(
 JSON.stringify(data)
 ```
 
-あとはこれを利用して `ITERATE_KEY` を track すれば良いわけです．
-配列だった場合は，必要ないのでテキトーに length を track してあげます．
+We can use this to track `ITERATE_KEY`.
+For arrays, we don't need it, so we can simply track the `length`.
 
 ```ts
 export const mutableHandlers: ProxyHandler<object> = {
@@ -446,11 +446,11 @@ export const mutableHandlers: ProxyHandler<object> = {
 }
 ```
 
-これでキーが増減するオブジェクトに対応でき多はずです！
+Now, we should be able to handle objects with changing keys!
 
-## Collection 系の組み込みオブジェクトに対応する
+## Support for Collection-based built-in objects
 
-今，reactive.ts の実装を見てみると，Object と Array のみを対象としています．
+Currently, when looking at the implementation of reactive.ts, it only targets Object and Array.
 
 ```ts
 function targetTypeMap(rawType: string) {
@@ -464,13 +464,13 @@ function targetTypeMap(rawType: string) {
 }
 ```
 
-Vue.js では，これらに加え，Map, Set, WeakMap, WeakSet に対応しています．
+In Vue.js, in addition to these, it also supports Map, Set, WeakMap, and WeakSet.
 
 https://github.com/vuejs/core/blob/9f8e98af891f456cc8cc9019a31704e5534d1f08/packages/reactivity/src/reactive.ts#L43C1-L56C2
 
-そして，これらのオブジェクトは別の Proxy ハンドラとして実装されています．それが，`collectionHandlers`と呼ばれるものです．
+And these objects are implemented as separate Proxy handlers. It is called `collectionHandlers`.
 
-ここでは，この collectionHandlers を実装し，以下のようなコードが動くことを目指します．
+Here, we will implement this `collectionHandlers` and aim for the following code to work.
 
 ```ts
 const app = createApp({
@@ -499,14 +499,14 @@ const app = createApp({
 app.mount('#app')
 ```
 
-collectionHandlers では，add や set, delete といったメソッドの getter にハンドラを実装します．  
-それらを実装しているのが collectionHandlers.ts です．  
+In `collectionHandlers`, we implement handlers for methods such as add, set, and delete.  
+The implementation of these can be found in `collectionHandlers.ts`.  
 https://github.com/vuejs/core/blob/9f8e98af891f456cc8cc9019a31704e5534d1f08/packages/reactivity/src/collectionHandlers.ts#L0-L1  
-TargetType を判別し，collection 型の場合 h にはこのハンドラを元に Proxy を生成します．  
-実際に実装してみましょう!
+By determining the `TargetType`, if it is a collection type, we generate a Proxy based on this handler for `h`.  
+Let's actually implement it!
 
-注意点としては，Reflect の receiver に target 自身を渡す点で，target 自体に Proxy が設定されていた場合に無限ループになることがある点です．  
-これを回避するために target に対して生のデータも持たせておくような構造に変更し，Proxy のハンドラを実装するにあたってはこの生データを操作するように変更します．
+One thing to note is that when passing the target itself to the receiver of Reflect, it may cause an infinite loop if the target itself has a Proxy set.  
+To avoid this, we change the structure to have the raw data attached to the target, and when implementing the Proxy handler, we modify it to operate on this raw data.
 
 ```ts
 export const enum ReactiveFlags {
@@ -518,10 +518,10 @@ export interface Target {
 }
 ```
 
-厳密には今までの通常の reactive ハンドラでもこの実装をしておくべきだったのですが，今までは特に問題なかったという点と余計な説明をなるべく省くために省略していました．  
-getter に入ってきたの key が ReactiveFlags.RAW の場合には Proxy ではなく生のデータを返すような実装にしてみましょう．
+Strictly speaking, this implementation should have been done for the normal reactive handler as well, but it was omitted to minimize unnecessary explanations and because there were no problems so far.  
+Let's try implementing it so that if the key that enters the getter is `ReactiveFlags.RAW`, it returns the raw data instead of a Proxy.
 
-それに伴って，target から再帰的に生データをとり，最終的に全てが生の状態のデータを取得する toRaw という関数も実装しています．
+Along with this, we also implement a function called `toRaw` that recursively retrieves raw data from the target and ultimately obtains data that is in a raw state.
 
 ```ts
 export function toRaw<T>(observed: T): T {
@@ -530,9 +530,9 @@ export function toRaw<T>(observed: T): T {
 }
 ```
 
-ちなみに，この toRaw 関数は API としても提供されている関数です．
+By the way, this `toRaw` function is also provided as an API function.
 
-https://ja.vuejs.org/api/reactivity-advanced.html#toraw
+https://vuejs.org/api/reactivity-advanced.html#toraw
 
-ここまでのソースコード:  
+Source code so far:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/120_proxy_handler_improvement)

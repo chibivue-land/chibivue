@@ -1,13 +1,13 @@
-# データバインディング
+# Data Binding
 
-## テンプレートにバインドしたい
+## Want to bind to the template
 
-今の状態だと，直接 DOM 操作をしているので， Reactivity System や Virtual DOM の恩恵を得ることができていません．  
-実際にはイベントハンドラであったり，テキストの内容はテンプレート部分に書きたいわけです．それでこそ宣言的 UI の嬉しさと言った感じですよね．  
-以下のような開発者インタフェースを目指します．
+Currently, we are directly manipulating the DOM, so we are not able to take advantage of the Reactivity System or Virtual DOM.  
+In reality, we want to write event handlers and text content in the template section. That's where the joy of declarative UI comes in.  
+We aim for a developer interface like the following.
 
 ```ts
-import { createApp, reactive } from 'chibivue'
+import { createApp, reactive, h } from 'chibivue'
 
 const app = createApp({
   setup() {
@@ -19,44 +19,45 @@ const app = createApp({
     return { state, changeMessage }
   },
 
-  template: `
-    <div class="container" style="text-align: center">
-      <h2>message: {{ state.message }}</h2>
-      <img
-        width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-        alt="Vue.js Logo"
-      />
-      <p><b>chibivue</b> is the minimal Vue.js</p>
-
-      <button @click="changeMessage"> click me! </button>
-
-      <style>
+  render() {
+    return h('div', { class: 'container', style: 'text-align: center' }, [
+      h('h2', {}, `message: ${this.state.message}`),
+      h('img', {
+        width: '150px',
+        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png',
+      }),
+      h('p', {}, [h('b', {}, 'chibivue'), ' is the minimal Vue.js']),
+      h('button', { onclick: this.changeMessage }, 'click me!'),
+      h(
+        'style',
+        {},
+        `
         .container {
           height: 100vh;
           padding: 16px;
           background-color: #becdbe;
           color: #2c3e50;
         }
-      </style>
-    </div>
-  `,
+      `,
+      ),
+    ])
+  },
 })
 
 app.mount('#app')
 ```
 
-setup から return した値をテンプレートに記述して扱えるようにしたいのですが，このことをこれからは「テンプレートバインディング」であったり，単に「バインディング」という言葉で表現することにします．  
-バインディングをこれから実装していくわけですがイベントハンドラやマスタッシュ構文を実装する前にやっておきたいことがあります．  
-`setup から return した値`と言ったのですが，今 setup の戻り値は`undefined`または，`関数`(レンダー関数)です．  
-バインディングの実装の準備として，setup からステート等を return できるようにして，それらをコンポーネントのデータとして保持できるようにしておく必要があるようです．
+Now, I want to be able to handle the values returned from the `setup` function in the template. From now on, I will refer to this as "template binding" or simply "binding". I am going to implement the binding, but before implementing event handlers and mustache syntax, there are a few things I want to do.
+
+I mentioned the value returned from `setup`, but currently the return value of `setup` is either `undefined` or a function (render function). As a preparation for implementing binding, I need to modify it so that `setup` can return state and other values, and these values can be stored as component data.
 
 ```ts
 export type ComponentOptions = {
   setup?: (
     props: Record<string, any>,
     ctx: { emit: (event: string, ...args: any[]) => void },
-  ) => Function | Record<string, unknown> | void // Record<string, unknown>も返しうるように
+  ) => Function | Record<string, unknown> | void
+  // Allow returning Record<string, unknown>
   // .
   // .
   // .
@@ -68,7 +69,7 @@ export interface ComponentInternalInstance {
   // .
   // .
   // .
-  setupState: Data // setup の結果はオブジェクトの場合はここに格納することにする
+  setupState: Data // Store the result of setup as an object here
 }
 ```
 
@@ -83,7 +84,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
       emit: instance.emit,
     }) as InternalRenderFunction
 
-    // setupResultの型によって分岐をする
+    // Branch based on the type of setupResult
     if (typeof setupResult === 'function') {
       instance.render = setupResult
     } else if (typeof setupResult === 'object' && setupResult !== null) {
@@ -98,10 +99,9 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-伴って，これ以降，setup で定義されるデータのことを`setupState`と呼ぶことにします．
+From now on, I will refer to the data defined in `setup` as `setupState`.
 
-さて，コンパイラを実装する前に，setupState をどのようにしてテンプレートにバインディングするか方針について考えてみます．  
-テンプレートを実装する前までは以下のように setupState をバインディングしていました．
+Now, before implementing the compiler, let's think about how to bind `setupState` to the template. Previously, we bound `setupState` like this:
 
 ```ts
 const app = createApp({
@@ -112,8 +112,7 @@ const app = createApp({
 })
 ```
 
-まぁ，バインドというより普通に render 関数がクロージャを形成し変数を参照しているだけです．  
-しかし今回は，イメージ的には setup オプションと render 関数は別のものなので，どうにかして render 関数に setup のデータを渡す必要があります．
+Well, it's not really binding, but rather the render function simply forms a closure and references the variable. However, this time, since the setup option and the render function are conceptually different, we need to find a way to pass the setup data to the render function.
 
 ```ts
 const app = createApp({
@@ -122,12 +121,12 @@ const app = createApp({
     return { state }
   },
 
-  // これはrender関数に変換される
+  // This will be converted to a render function
   template: '<div>{{ state.message }}</div>',
 })
 ```
 
-template は h 関数を使った render 関数として compile され，instance.render に突っ込まれるわけなので，イメージ的には以下のようなコードと同等になります．
+The `template` is compiled as a render function using the `h` function and assigned to `instance.render`. So, it is equivalent to the following code:
 
 ```ts
 const app = createApp({
@@ -142,12 +141,12 @@ const app = createApp({
 })
 ```
 
-当然，render 関数内では `state` という変数は定義されていません．  
-さて，どのようにして state を参照できるようにすれば良いでしょうか．
+Naturally, the variable `state` is not defined within the render function.
+Now, how can we reference the `state` variable?
 
-## with 文
+## Using the `with` statement
 
-結論から言うと，with 文を使って以下のようにすれば良いです．
+In conclusion, we can use the `with` statement to achieve the desired result:
 
 ```ts
 const app = createApp({
@@ -164,30 +163,26 @@ const app = createApp({
 })
 ```
 
-with 文についてあまりよく知らない方も少なくないんじゃないかと思います．
+I believe that there are many people who are not familiar with the `with` statement.
 
-それもそのはず，この機能は非推奨の機能です．
+And for good reason, this feature is deprecated.
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
+According to MDN:
 
-MDN によると，
+> Although still supported by some browsers, it has been deprecated from the Web standards. However, it may still be in use for various purposes, such as compatibility with legacy code. Avoid using it, and update existing code if possible.
 
-> まだ対応しているブラウザーがあるかもしれませんが、すでに関連するウェブ標準から削除されているか、削除の手続き中であるか、互換性のためだけに残されている可能性があります。使用を避け、できれば既存のコードは更新してください。
+Therefore, it is recommended to avoid using it.
 
-とのことで，使用を避けるようにとのことです．
+We do not know how the implementation of Vue.js will change in the future, but since Vue.js 3 uses the `with` statement, we will use it for this implementation.
 
-今後の Vue.js の実装がどうなるかはわかりませんが，Vue.js 3 では with 文を使っているので，今回は with 文を使って実装していきます．
-
-ここで少し補足なのですが，Vue.js でも，全てが全て with 文で実装されているわけではありません．  
-SFC で template を扱う際は with 文を使わずに実装されています．  
-これについては後のチャプターで触れる予定ですが，とりあえずここでは with を使って実装することを考えてみます．
+A little side note, not everything in Vue.js is implemented using the `with` statement. When dealing with templates in Single File Components (SFC), it is implemented without using the `with` statement. We will cover this in a later chapter, but for now, let's consider implementing it using `with`.
 
 ---
 
-さて，ここで少し with 文の挙動についておさらいです．
-with 文は，文に対するスコープチェーンを拡張します．
+Now, let's review the behavior of the `with` statement.
+The `with` statement extends the scope chain for a statement.
 
-以下のような挙動をとります．
+It behaves as follows:
 
 ```ts
 const obj = { a: 1, b: 2 }
@@ -197,13 +192,13 @@ with (obj) {
 }
 ```
 
-with の引数として，state を持つ親オブジェクトを渡してあげれば，state を参照できるようになります．
+By passing the parent object that contains the `state` as an argument to `with`, we can reference the `state` variable.
 
-今回は，この親オブジェクトとして setupState を扱います．  
-実際には，setupState だけではなく，props のデータや OptionsApi で定義されたデータにもアクセスできるようになる必要があるのですが，今回は一旦 setupState のデータのみ使える形で良しとします．  
-(この辺りの実装は最小構成部門では取り上げず，後の部門で取り上げます．)
+In this case, we will treat `setupState` as the parent object.
+In reality, not only `setupState`, but also data from `props` and data defined in Options API should be accessible. However, for now, we will only consider using the data from `setupState`.
+(We will cover the implementation of this part in a later section, as it is not part of the minimal implementation.)
 
-今回やりたいことをまとめると，以下のようなテンプレートを
+To summarize what we want to achieve this time, we want to compile the following template:
 
 ```html
 <div>
@@ -212,7 +207,7 @@ with の引数として，state を持つ親オブジェクトを渡してあげ
 </div>
 ```
 
-以下のような関数にコンパイルして，
+into the following function:
 
 ```ts
 _ctx => {
@@ -225,41 +220,39 @@ _ctx => {
 }
 ```
 
-この関数に setupState を渡してあげることです．
+And pass `setupState` to this function:
 
 ```ts
 const setupState = setup()
 render(setupState)
 ```
 
-## マスタッシュ構文の実装
+## Implementing the Mustache Syntax
 
-まずはマスタッシュ構文の実装をしていきます．例によって，AST を考え，パーサの実装してコードジェネレータの実装をしていきます．
-今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です．
-新たにマスタッシュ構文を定義したいので，直感的には `Mustache`のような AST にすることが考えられます．
-それにあたるのが`Interpolation`という Node です．
-Interpolation には「内挿」であったり，「挿入」と言った意味合いがあります．
-よって，今回扱う AST は次のようなものになります．
+First, let's implement the Mustache syntax. As usual, we will consider the AST, implement the parser, and then implement the code generator.
+Currently, the only nodes defined as part of the AST are `Element`, `Text`, and `Attribute`.
+Since we want to define the Mustache syntax, it intuitively makes sense to have an AST called `Mustache`.
+For that purpose, we will use the `Interpolation` node.
+Interpolation has meanings such as "interpolation" or "insertion".
+Therefore, the AST we will handle this time will look like this:
 
 ```ts
 export const enum NodeTypes {
   ELEMENT,
   TEXT,
-  INTERPOLATION, // 追加
-
-  ATTRIBUTE,
+  INTERPOLATION, // Added
 }
 
-export type TemplateChildNode = ElementNode | TextNode | InterpolationNode // InterpolationNodeを追加
+export type TemplateChildNode = ElementNode | TextNode | InterpolationNode // Added InterpolationNode
 
 export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION
-  content: string // マスタッシュの中に記述された内容 (今回は setup で定義された単一の変数名がここに入る)
+  content: string // The content written inside the Mustache (in this case, the single variable name defined in setup will be placed here)
 }
 ```
 
-AST が実装できたので，パースの実装をやっていきます．
-<span v-pre>`{{`</span> という文字列を見つけたら Interpolation としてパースします．
+Now that the AST has been implemented, let's move on to implementing the parser.
+When we find the string <span v-pre>`{{`</span>, we will parse it as an `Interpolation`.
 
 ```ts
 function parseChildren(
@@ -272,7 +265,7 @@ function parseChildren(
     const s = context.source;
     let node: TemplateChildNode | undefined = undefined;
 
-    if (startsWith(s, "{{")) { // ここ
+    if (startsWith(s, "{{")) { // Here
       node = parseInterpolation(context);
     } else if (s[0] === "<") {
       if (/[a-z]/i.test(s[1])) {
@@ -322,11 +315,11 @@ function parseInterpolation(
 }
 ```
 
-Text 中に <span v-pre>`{{`</span> が出現することもあるので parseText も少しだけいじります．
+There are cases where <span v-pre>`{{`</span> appears in the text, so we will make some modifications to `parseText`.
 
 ```ts
 function parseText(context: ParserContext): TextNode {
-  const endTokens = ['<', '{{'] // {{ が出現したらparseTextは終わり
+  const endTokens = ['<', '{{'] // If <span v-pre>`{{`</span> appears, parseText ends
 
   let endIndex = context.source.length
 
@@ -348,10 +341,10 @@ function parseText(context: ParserContext): TextNode {
 }
 ```
 
-これまでパーサを実装してきた方にとっては特に難しいことはないはずです． <span v-pre>`{{`</span> を探し， <span v-pre>`}}`</span> が来るまで読み進めて AST を生成しているだけです．  
-<span v-pre>`}}`</span> が見つからなかった場合は undefined を返し，parseText への分岐でテキストとしてパースさせています．
+For those who have implemented the parser so far, there should be no particularly difficult parts. It simply searches for <span v-pre>`{{`</span> and reads until <span v-pre>`}}`</span> comes, generating an AST.  
+If <span v-pre>`}}`</span> is not found, it returns undefined and parses it as text in the branching of parseText.
 
-ここらでちゃんとパースができているか，コンソール等に出力して確認してみましょう．
+Let's output to the console or something to make sure that the parsing is working properly.
 
 ```ts
 const app = createApp({
@@ -390,10 +383,10 @@ const app = createApp({
 
 ![parse_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_interpolation.png)
 
-問題なさそうです！
+It looks fine!
 
-さてそれではこの AST を元にバインディングを実装していきましょう．  
-render 関数の中身を with 文で囲ってあげます．
+Now let's implement the binding based on this AST.  
+Wrap the contents of the render function with a with statement.
 
 ```ts
 export const generate = ({
@@ -425,13 +418,13 @@ const genInterpolation = (node: InterpolationNode): string => {
 }
 ```
 
-あとは，実際に render 関数を実行する際に引数として setupState を渡してあげましょう．
+Finally, when executing the render function, pass `setupState` as an argument.
 
 `~/packages/runtime-core/component.ts`
 
 ```ts
 export type InternalRenderFunction = {
-  (ctx: Data): VNodeChild // 引数でctxを受け取れるように
+  (ctx: Data): VNodeChild // Accept ctx as an argument
 }
 ```
 
@@ -449,7 +442,7 @@ const setupRenderEffect = (
       // .
       // .
       // .
-      const subTree = (instance.subTree = normalizeVNode(render(setupState))) // setupStateを渡す
+      const subTree = (instance.subTree = normalizeVNode(render(setupState))) // Pass setupState
       // .
       // .
       // .
@@ -457,7 +450,7 @@ const setupRenderEffect = (
       // .
       // .
       // .
-      const nextTree = normalizeVNode(render(setupState)) // setupStateを渡す
+      const nextTree = normalizeVNode(render(setupState)) // Pass setupState
       // .
       // .
       // .
@@ -466,21 +459,21 @@ const setupRenderEffect = (
 }
 ```
 
-ここまで来ればレンダリングできるようになっているはずです．確認してみましょう！
+If you have come this far, you should be able to render. Let's check it!
 
 ![render_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_interpolation.png)
 
-これにて初めてのバインディング，完です！
+This completes the first binding!
 
-## 初めてのディレクティブ
+## First Directive
 
-さて，マスタッシュの次はインベントハンドラです．
+Next is the event handler.
 
 ```ts
 const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
     .map(({ name, value }) =>
-      // props 名が @click だった場合にonClickに変換する
+      // Convert props name to onClick if it is @click
       name === '@click'
         ? `onClick: ${value?.content}`
         : `${name}: "${value?.content}"`,
@@ -489,7 +482,7 @@ const genElement = (el: ElementNode): string => {
 }
 ```
 
-動作を確認してみましょう．
+Let's check the operation.
 
 ```ts
 const app = createApp({
@@ -526,12 +519,12 @@ const app = createApp({
 })
 ```
 
-動きましたね！　やったね！　完成！
+You did it! Well done! It's complete!
 
-と言いたいところですが，流石に実装が綺麗じゃないのでリファクタしていこうかと思います．
-`@click`というものはせっかく，「ディレクティブ」という名前で分類されていて，今後は v-bind や v-model を実装していくことは容易に想像できるかと思いますので，AST 上で`DIRECTIVE`と表現することにして，単純な ATTRIBUTE と区別するようにしておきましょう．
+I want to say that, but the implementation is not clean enough, so I think I'll refactor it a bit.
+Since `@click` is classified under the name "directive", it would be easy to imagine implementing `v-bind` and `v-model` in the future. So let's represent it as `DIRECTIVE` in the AST and distinguish it from simple `ATTRIBUTE`.
 
-いつも通り AST -> parse -> codegen の順で実装してみます．
+As usual, let's implement it in the order of AST -> parse -> codegen.
 
 ```ts
 export const enum NodeTypes {
@@ -540,21 +533,21 @@ export const enum NodeTypes {
   INTERPOLATION,
 
   ATTRIBUTE,
-  DIRECTIVE, // 追加
+  DIRECTIVE, // added
 }
 
 export interface ElementNode extends Node {
   type: NodeTypes.ELEMENT
   tag: string
-  props: Array<AttributeNode | DirectiveNode> // props は Attribute と DirectiveNode のユニオンの配列にする
+  props: Array<AttributeNode | DirectiveNode> // props is an array of AttributeNode and DirectiveNode union
   // .
   // .
 }
 
 export interface DirectiveNode extends Node {
   type: NodeTypes.DIRECTIVE
-  // v-name:arg="exp" というような形式で表すことにする。
-  // eg. v-on:click="increment"の場合は { name: "on", arg: "click", exp="increment" }
+  // Represents the format of `v-name:arg="exp"`.
+  // eg. For `v-on:click="increment"`, it would be { name: "on", arg: "click", exp="increment" }
   name: string
   arg: string
   exp: string
@@ -585,7 +578,7 @@ function parseAttribute(
     value = parseAttributeValue(context);
   }
 
-  // --------------------------------------------------- ここから
+  // --------------------------------------------------- From here
   // directive
   const loc = getSelection(context, start);
   if (/^(v-[A-Za-z0-9-]|@)/.test(name)) {
@@ -608,7 +601,7 @@ function parseAttribute(
       arg,
     };
   }
-  // --------------------------------------------------- ここまで
+  // --------------------------------------------------- To here
   // .
   // .
   // .
@@ -640,8 +633,8 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
 }
 ```
 
-さて，playground で動作を確認してみましょう．
-`@click`のみならず，`v-on:click`や他のイベントもハンドリングできるようになっているはずです．
+Now, let's check the operation in the playground.
+You should be able to handle not only `@click`, but also `v-on:click` and other events.
 
 ```ts
 const app = createApp({
@@ -695,10 +688,10 @@ const app = createApp({
 
 ![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
 
-やりました．かなり Vue に近づいてきました！  
-ここまでで小さなテンプレートの実装は完了です．お疲れ様でした．
+You did it. We're getting closer to Vue!  
+With this, the implementation of the small template is complete. Good job.
 
-ここまでのソースコード:  
+Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
 
-<!-- ちゃんと動いているようなのでコンパイラ実装を始める際に分割した 3 つのタスクを実装し終えました。やったね！ -->
+<!-- It seems to be working properly, so we have finished implementing the three tasks that were split when starting the compiler implementation. Well done! -->

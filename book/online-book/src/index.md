@@ -17,15 +17,15 @@ hero:
 
 features:
   - title: Reactivity System
-    details: 基本的な Reactivity System の原理から、effectScope や customRef などの応用的な API の実装まで幅広く行います。
+    details: From the basic principles of the Reactivity System, we will cover a wide range of implementations, from EffectScope to advanced APIs like CustomRef.
     icon: 🔆
   - title: Virtual DOM
-    details:  Virtual DOM の基本的な実装から、パッチレンダリング、スケジューラの実装まで幅広く行います。
+    details: We will cover a broad range of implementations, from the basic setup of the Virtual DOM to patch rendering and scheduler implementations.
     icon: ⛅
   - title: Template Compiler
-    details: テンプレートコンパイラの基本的な実装から、データバインディングやディレクティブの実装まで幅広く行います。
+    details: From the fundamental implementation of the template compiler, we will extend our coverage to data binding and directive implementations.
     icon: 🔁
   - title: Single File Component
-    details: SFC の基本的な実装から、script setup やコンパイラマクロ、scoped css の実装まで幅広く行います。
+    details: Starting from the basic implementation of SFCs, we will delve into a wide range of areas, from script setup to compiler macros and scoped CSS implementations.
     icon: 🎁
 ---

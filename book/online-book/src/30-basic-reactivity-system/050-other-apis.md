@@ -1,12 +1,12 @@
-# その他の reactivity api
+# Other Reactivity APIs
 
 ::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが，これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています．  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい．  
-然るべきタイミングでこのオンラインブックも追従する予定です．  
+[Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) was released at the end of December 2023, which includes [performance improvements for reactivity](https://github.com/vuejs/core/pull/5912).  
+You should note that this online book is referencing the previous implementation.  
+We plan to update this online book at the appropriate time.
 :::
 
-## その他の reactivity api を実装してみましょう !
+## Let's implement other reactivity APIs!
 
 - customRef
 - readonly
@@ -16,7 +16,7 @@
 - isReactive
 - isReadonly
 
-ここまでやってきた方なら説明がなくてもソースコードを読みながら実装できるはずです！
+If you have come this far, you should be able to implement them by reading the source code without any explanations!
 
-ここまでのソースコード:  
+Source code so far:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/150_other_apis)

@@ -1,34 +1,34 @@
-# Vue.jsとは
+# What is Vue.js?
 
-## Vue.js についてのおさらい
+## A quick recap about Vue.js
 
-早速本題に入っていきましょう．  
-っとその前に改めて Vue.js についておさらいしておきます．
+Let's get straight to the point.  
+But before that, let's quickly recap what Vue.js is all about.
 
-## Vue.js ってなんだっけ？
+## What's Vue.js again?
 
-Vue.js とは「Web ユーザーインタフェース構築のための，親しみやすく，パフォーマンスと汎用性の高いフレームワーク」です．  
-これは[公式ドキュメントのトップページ](https://ja.vuejs.org/)に掲げられているものです．  
-ここに関しては僕の解釈を入れるよりも公式の言葉をそのまま持ってくるのがわかりやすいと思うので以下に引用します．
+Vue.js is a "friendly, high-performance, and versatile framework for building web user interfaces."  
+This is stated on the official documentation's homepage.  
+For this, I believe it's clearer to directly quote the official words without adding my own interpretation, so I've cited them below:
 
-> Vue (発音は /vjuː/、view と同様) は、ユーザーインタフェースの構築のための JavaScript フレームワークです。標準的な HTML、CSS、JavaScript を土台とする、コンポーネントベースの宣言的なプログラミングモデルを提供します。シンプルなものから複雑なものまで、ユーザーインタフェースの開発を効率的に支えるフレームワークです。
+> Vue (pronounced /vjuː/, like view) is a JavaScript framework for building user interfaces. It builds on top of standard HTML, CSS, and JavaScript and provides a declarative and component-based programming model that helps you efficiently develop user interfaces, be they simple or complex.
 
-> 宣言的レンダリング: Vue では、標準的な HTML を拡張したテンプレート構文を使って、HTML の出力を宣言的に記述することができます。この出力は、JavaScript の状態に基づきます。
+> Declarative Rendering: Vue extends standard HTML with a template syntax that allows us to declaratively describe HTML output based on JavaScript state.
 
-> リアクティビティ: Vue は JavaScript の状態の変化を自動的に追跡し、変化が起きると効率的に DOM を更新します。
+> Reactivity: Vue automatically tracks JavaScript state changes and efficiently updates the DOM when changes happen.
 
-> 最小限のサンプルは、次のようになります:
+> Here's a minimal example:
 >
 > ```ts
-> import { createApp } from "vue";
+> import { createApp } from 'vue'
 >
 > createApp({
 >   data() {
 >     return {
 >       count: 0,
->     };
+>     }
 >   },
-> }).mount("#app");
+> }).mount('#app')
 > ```
 >
 > ```html
@@ -37,19 +37,18 @@ Vue.js とは「Web ユーザーインタフェース構築のための，親し
 > </div>
 > ```
 
-[引用元](https://ja.vuejs.org/guide/introduction.html#what-is-vue)
+[reference source](https://vuejs.org/guide/introduction.html#what-is-vue)
 
-宣言的レンダリングやリアクティビティに関してはそれを説明するチャプターで詳しくやるので，ここではほんとに概要レベルの理解で問題ないです．
+For declarative rendering and reactivity, we will delve into them in detail in their respective chapters, so a high-level understanding is fine for now.
 
-また，ここで「フレームワーク」という言葉が出てきていますが，Vue.js は「プログレッシブフレームワーク」を謳っています．
-それについてもドキュメントの以下の部分を参照するのが最も端的で正確でわかりやすいと思います．
+Also, the term "framework" has come up here, and Vue.js promotes itself as a "progressive framework." For more on that, I believe it's best to refer directly to the following section of the documentation:
 
-https://ja.vuejs.org/guide/introduction.html#the-progressive-framework
+https://vuejs.org/guide/introduction.html#the-progressive-framework
 
-## 公式ドキュメントとこの本の違い
+## The difference between the official documentation and this book
 
-公式ドキュメントの方では，この次は「どうやって Vue.js を使うか」という点についてフォーカスし，チュートリアルやガイドが豊富に展開されています．
+The official documentation focuses on "how to use Vue.js," with an abundance of tutorials and guides provided.
 
-しかし，この本では少し切り口を変えて「Vue.js はどうやって実装されているか」という点についてフォーカスし，実際にコードを書きながら小さな Vue.js を作っていきます．
+However, this book takes a slightly different approach, focusing on "how Vue.js is implemented." We'll write actual code to create a mini version of Vue.js.
 
-また，この本は公式のものではなく完全なものではありません．もしかするとおかしな点がいくつか残っていることもあるとおもうので，随時ご指摘いただければと思います．
+Also, this book isn't an official publication and may not be exhaustive. There might be some errors or omissions, so I'd appreciate any feedback or corrections.

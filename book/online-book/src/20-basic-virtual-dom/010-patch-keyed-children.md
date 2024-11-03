@@ -1,16 +1,16 @@
-# key属性とパッチレンダリング(Basic Virtual DOM部門スタート)
+# key attribute and patch rendering (Basic Virtual DOM section start)
 
-## 重大なバグ
+## Critical bug
 
-実は今の chibivue のパッチレンダリングには重大なバグが存在しています．  
-パッチレンダリングの実装をした際に，
+Actually, there is a critical bug in the current patch rendering of chibivue.  
+When implementing patch rendering,
 
-> patchChildren に関して、本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけない
+> Regarding patchChildren, it is necessary to handle dynamically sized child elements by adding attributes such as key.
 
-と言ったのを覚えているでしょうか．
+Do you remember saying that?
 
-実際にどのような問題が起こるのか確かめてみましょう．
-現時点での実装だと，patchChildren は以下のような実装になっています．
+Let's see what kind of problem actually occurs.
+In the current implementation, patchChildren is implemented as follows:
 
 ```ts
 const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
@@ -24,19 +24,19 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 }
 ```
 
-これは，c2(つまり次の vnode)の長さを基準にループを回しています．
-つまり，c1 と c2 が同じ要素の場合にしか基本的には成り立っていないのです．
+This loops based on the length of c2 (i.e., the next vnode).
+In other words, it basically only works when c1 and c2 are the same.
 
 ![c1c2map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map.png)
 
-例えば，要素が減っていた場合を考えてみましょう．
-patch のループは c2 を基本としているわけなので，4 つめの要素の patch が行われません．
+For example, let's consider the case where elements are removed.
+Since the patch loop is based on c2, the patch for the fourth element will not be performed.
 
 ![c1c2map_deleted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_deleted.png)
 
-このようになった時，どうなるかというと，単純に 1~3 つ目の要素は更新され，4 つ目は消えず， c1 のものが残ってしまいます．
+When it becomes like this, the first to third elements are simply updated, and the fourth element remains as the one from c1 that is not removed.
 
-実際に動作を見てみましょう．
+Let's see it in action.
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -63,36 +63,36 @@ const app = createApp({
 app.mount('#app')
 ```
 
-update ボタンを押すと以下のようになるかと思います．
+When you click the update button, it should look like this:
 
 ![patch_bug](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_bug.png)
 
-list は`["e", "f", "g"]`に更新したはずなのに，`d`が残ってしまっています．
+Although the list should have been updated to `["e", "f", "g"]`, "d" remains.
 
-そして，実は問題はこれだけではありません．要素が差し込まれた時のことを考えてみましょう．
-現状では，c2 を基準にループを回しているだけなので，以下のようになってしまいます．
+And actually, the problem is not just this. Let's consider the case where elements are inserted.
+Currently, since the loop is based on c2, it becomes like this:
 
 ![c1c2map_inserted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted.png)
 
-しかし，実際に差し込まれたのは`new element`で，比較は c1,c2 のそれぞれの li 1, li 2, li 3, li 4 同士で行いたいはずです．
+However, in reality, "new element" was inserted, and the comparison should be made between each li 1, li 2, li 3, and li 4 of c1 and c2.
 
 ![c1c2map_inserted_correct](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted_correct.png)
 
-これらの二つの問題に共通して言えることは，「c1 と c2 で同一視したい node が判断できない」ということです．  
-これを解決するには，要素に key を付与し，その key を元にパッチを行う必要があります．  
-ここで，Vue のドキュメントで key 属性についての説明を見てみましょう．
+What these two problems have in common is that "the node that needs to be treated as the same in c1 and c2 cannot be determined".  
+To solve this, it is necessary to assign a key to the elements and patch based on that key.  
+Now, let's take a look at the explanation of the key attribute in the Vue documentation.
 
-> 特別な属性 key は、主に Vue の Virtual DOM アルゴリズムが新しいノードリストを古いリストに対して差分する際に、vnode を識別するためのヒントとして使用されます。
+> The special attribute key is primarily used as a hint for Vue's Virtual DOM algorithm to identify VNodes when diffing the new list of nodes against the old list.
 
-https://ja.vuejs.org/api/built-in-special-attributes.html#key
+https://v3.vuejs.org/guide/migration/key-attribute.html
 
-いかにも，と言ったところです．よく，「v-for の key に index を指定するな」という話があると思いますが，まさに今現時点では暗黙的に key が index になっているがために上記のような問題が発生していました．(c2 の長さを基準に for を回し，その index を元に c1 と patch を行っている)
+As expected, right? You may have heard the advice "do not use index as the key for v-for", but at this point, the key is implicitly set to the index, which is why the above problems occur. (The loop is based on the length of c2, and patching is done based on that index)
 
-## key 属性を元に patch しよう
+## Patch based on the key attribute
 
-そしてこれらを実装しているのが，``という関数です．(本家 Vue で探してみましょう．)
+And the function that implements these is `patchKeyedChildren`. (Let's search for it in the original Vue.)
 
-方針としては，まず新しい node の key と index のマップを生成します．
+The approach is to first generate a map of keys and indexes for the new nodes.
 
 ```ts
 let i = 0
@@ -112,7 +112,7 @@ for (i = s2; i <= e2; i++) {
 }
 ```
 
-本家の Vue ではこの patchKeyedChildren は５のパートに分かれます．
+In the original Vue, this `patchKeyedChildren` is divided into five parts:
 
 1. sync from start
 2. sync from end
@@ -120,30 +120,29 @@ for (i = s2; i <= e2; i++) {
 4. common sequence + unmount
 5. unknown sequence
 
-ですが，上の 4 つは最適化のようなものなので，機能的には最後の `unknown sequence` だけで動作可能します．
-なので，まずは`unknown sequence`の部分を読み進めて実装することにしましょう．
+However, the last part, `unknown sequence`, is the only one that is functionally necessary, so we will start by reading and implementing that part.
 
-まずは，要素の移動のことは忘れて，key を元に VNode を patch していきましょう．
-先ほど作った`keyToNewIndexMap`を利用して，n1 と n2 の組を算出して patch します．
-この時点で，新しくマウントするものや，アンマウントする必要があればその処理も行ってしまいます．
+First, forget about moving elements and patch VNodes based on the key.
+Using the `keyToNewIndexMap` we created earlier, calculate the pairs of n1 and n2 and patch them.
+At this point, if there are new elements to be mounted or if there is a need to unmount, perform those operations as well.
 
-ざっくりいうとこういうこと ↓ (かなり省略しています．詳しくは vuejs/core の renderer.ts を読んでみてください．)
+Roughly speaking, it looks like this ↓ (I'm skipping a lot of details. Please read vuejs/core's renderer.ts for more details.)
 
 ```ts
 const toBePatched = e2 + 1
-const newIndexToOldIndexMap = new Array(toBePatched) // 新indexと旧indexとのマップ
+const newIndexToOldIndexMap = new Array(toBePatched) // map of new index to old index
 for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
 
-// e1 (旧 len)を元にループ
+// Loop based on e1 (old len)
 for (i = 0; i <= e1; i++) {
   const prevChild = c1[i]
   newIndex = keyToNewIndexMap.get(prevChild.key)
   if (newIndex === undefined) {
-    // 移動先が見つからなければアンマウント
+    // If it does not exist in the new one, unmount it
     unmount(prevChild)
   } else {
-    newIndexToOldIndexMap[newIndex] = i + 1 // マップ形成
-    patch(prevChild, c2[newIndex] as VNode, container) // パッチ処理
+    newIndexToOldIndexMap[newIndex] = i + 1 // Form the map
+    patch(prevChild, c2[newIndex] as VNode, container) // Patch
   }
 }
 
@@ -151,22 +150,21 @@ for (i = toBePatched - 1; i >= 0; i--) {
   const nextIndex = i
   const nextChild = c2[nextIndex] as VNode
   if (newIndexToOldIndexMap[i] === 0) {
-    // マップが存在しない(初期値のまま)のであれば新しくマウントするということになる。　(真にはあって、旧にはないということなので)
+    // If the map does not exist (remains the initial value), it means it needs to be newly mounted. (In fact, it exists and is not in the old one)
     patch(null, nextChild, container, anchor)
   }
 }
 ```
 
-## 要素の移動
+## Moving Elements
 
-## 手法
+### Method
 
-### Node.insertBefore
+#### Node.insertBefore
 
-現時点では，key の一致のよってそれぞれの要素を更新しているだけなので，移動していた場合は所定の位置に移動させる処理を書かなくてはなりません．
+Currently, we only update each element based on key matching, so if an element is moved, we need to write code to move it to the desired position.
 
-まず，どうやって要素を移動するかについてですが，nodeOps の insert に anchor の指定をします．
-anchor というのは名前の通りアンカーで，runtime-dom に実装した nodeOps を見てもらえればわかるのですが，この insert メソッドは`insertBefore`というメソッドで実装されています．
+First, let's talk about how to move elements. We specify the anchor in the `insert` function of `nodeOps`. The anchor, as the name suggests, is an anchor point, and if you look at the `insert` method implemented in runtime-dom, you can see that it is implemented with the `insertBefore` method.
 
 ```ts
 export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
@@ -179,24 +177,25 @@ export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
 }
 ```
 
-このメソッドは第二引数に node を渡すことで，その node の直前に insert されるようになります．  
+By passing the node as the second argument to this method, the node will be inserted right before that node.  
 https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
 
-これを利用して実際の DOM を移動させます．
+We use this method to actually move the DOM.
 
-### LIS (Longest Increasing Subsequence)
+#### LIS (Longest Increasing Subsequence)
 
-そして，どのように移動のアルゴリズムを書いていくかですが，こちらはちょっとだけ複雑です．  
-DOM 操作というのは JS を動かすのに比べてかなりコストが高いので，なるべく余計な移動がないように移動回数は最小限にしたいのです．  
-そこで，「最長増加部分列 (Longest Increasing Subsequence)」というものを利用します．  
-これがどのようなものかというと，名前の通りなんですが，最長の増加部分列です．  
-増加部分列というのは，例えば以下のような配列があったとき，
+Now, let's talk about how to write the algorithm for moving. This part is a bit more complicated.  
+DOM operations are much more costly compared to running JavaScript, so we want to minimize the number of unnecessary moves as much as possible.  
+That's where we use the "Longest Increasing Subsequence" (LIS) algorithm.  
+This algorithm finds the longest increasing subsequence in an array.  
+An increasing subsequence is a subsequence in which the elements are in increasing order.  
+For example, given the following array:
 
 ```
 [2, 4, 1, 7, 5, 6]
 ```
 
-増加部分列は以下のようにいくつか存在します．
+There are several increasing subsequences:
 
 ```
 [2, 4]
@@ -216,11 +215,10 @@ DOM 操作というのは JS を動かすのに比べてかなりコストが高
 [1, 5, 6]
 ```
 
-増加している部分列です．このうち，最長のものが「最長増加部分列」です．  
-つまり，今回で言うと，`[2, 4, 5, 6]`が最長増加部分列となります．
-そして，Vue ではこの 2, 4, 5, 6 に該当する index を結果の配列として扱っています．　(つまり `[0, 1, 4, 5]`)．
+These are the subsequences where the elements are increasing. The longest one is the "Longest Increasing Subsequence".  
+In this case, `[2, 4, 5, 6]` is the longest increasing subsequence. And in Vue, the indices corresponding to 2, 4, 5, and 6 are treated as the result array (i.e., `[0, 1, 4, 5]`).
 
-ちなみにこんな感じの関数です．
+By the way, here's an example function:
 
 ```ts
 function getSequence(arr: number[]): number[] {
@@ -265,21 +263,21 @@ function getSequence(arr: number[]): number[] {
 }
 ```
 
-これをどう利用するかというと，newIndexToOldIndexMap から最長増加部分列を算出し，それを基準にして，それ以外の node を insertBefore で差し込んでいきます．
+We will use this function to calculate the longest increasing subsequence from `newIndexToOldIndexMap`, and based on that, we will use `insertBefore` to insert the other nodes.
 
-## 具体例
+### Concrete Example
 
-ちょっとわかりづらいので具体例です．
+Here's a concrete example to make it easier to understand.
 
-c1 と c2 という二つの vnode の配列を考えます．c1 が更新前で c2 が更新後で，それぞれが持つ子供はそれぞれ key 属性を持っています．(実際には key 以外の情報を持っています．)
+Let's consider two arrays of VNodes, `c1` and `c2`. `c1` represents the state before the update, and `c2` represents the state after the update. Each VNode has a `key` attribute (in reality, it holds more information).
 
 ```js
 c1 = [{ key: 'a' }, { key: 'b' }, { key: 'c' }, { key: 'd' }]
 c2 = [{ key: 'a' }, { key: 'b' }, { key: 'd' }, { key: 'c' }]
 ```
 
-これらを元にまずは keyToNewIndexMap を生成します．(key と，それに対する c2 の index の map)
-※ 以下は先ほど紹介したコードです．
+First, let's generate `keyToNewIndexMap` based on `c2` (a map of keys to indices in `c2`).
+※ This is the code introduced earlier.
 
 ```ts
 const keyToNewIndexMap: Map<string | number | symbol, number> = new Map()
@@ -293,39 +291,39 @@ for (i = 0; i <= e2; i++) {
 // keyToNewIndexMap = { a: 0, b: 1, d: 2, c: 3 }
 ```
 
-続いて newIndexToOldIndexMap を生成します．
-※ 以下は先ほど紹介したコードです．
+Next, let's generate `newIndexToOldIndexMap`.
+※ This is the code introduced earlier.
 
 ```ts
-// 初期化
+// Initialization
 
 const toBePatched = c2.length
-const newIndexToOldIndexMap = new Array(toBePatched) // 新indexと旧indexとのマップ
+const newIndexToOldIndexMap = new Array(toBePatched) // Map of new indices to old indices
 for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
 
 // newIndexToOldIndexMap = [0, 0, 0, 0]
 ```
 
 ```ts
-// patchをしつつmove用にnewIndexToOldIndexMapを生成する
+// Perform patch and generate newIndexToOldIndexMap for move
 
-// e1 (旧 len)を元にループ
+// Loop based on e1 (old len)
 for (i = 0; i <= e1; i++) {
   const prevChild = c1[i]
   newIndex = keyToNewIndexMap.get(prevChild.key)
   if (newIndex === undefined) {
-    // 移動先が見つからなければアンマウント
+    // If it doesn't exist in the new array, unmount it
     unmount(prevChild)
   } else {
-    newIndexToOldIndexMap[newIndex] = i + 1 // マップ形成
-    patch(prevChild, c2[newIndex] as VNode, container) // パッチ処理
+    newIndexToOldIndexMap[newIndex] = i + 1 // Form the map
+    patch(prevChild, c2[newIndex] as VNode, container) // Perform patch
   }
 }
 
 // newIndexToOldIndexMap = [1, 2, 4, 3]
 ```
 
-そして，得られた newIndexToOldIndexMap から最長増加部分列を取得します．(ここから新実装)
+Then, obtain the longest increasing subsequence from the obtained `newIndexToOldIndexMap` (new implementation starts here).
 
 ```ts
 const increasingNewIndexSequence = getSequence(newIndexToOldIndexMap)
@@ -354,17 +352,15 @@ for (i = toBePatched - 1; i >= 0; i--) {
 }
 ```
 
-## 実際に実装してみよう．
+### Let's implement it.
 
-さて，方針についてはざっと説明したので実際に `patchKeyedChildren` を実装してみましょう．
-Todo だけまとめておきます．
+Now that we have explained the approach in detail, let's actually implement `patchKeyedChildren`. Here is a summary of the steps:
 
-1. anchor をバケツリレーできるように (move のための insert で使うので)
-2. c2 を元に key と index の map を用意する
-3. key の map を元に c2 の index と c1 の index の map を用意する  
-   この段階で，c1 ベースのループと c2 ベースのループで patch 処理をしておく (move はまだ)
-4. 3 で得た map を元に最長増加部分列を求める
-5. 4 で得た部分列と c2 を元に move する
+1. Prepare the `anchor` for bucket relay (used for inserting in `move`).
+2. Create a map of keys and indices based on `c2`.
+3. Create a map of indices in `c2` and `c1` based on the key map.  
+   At this stage, perform the patching process in both `c1`-based and `c2`-based loops (excluding `move`).
+4. Find the longest increasing subsequence based on the map obtained in step 3.
+5. Perform `move` based on the subsequence obtained in step 4 and `c2`.
 
-ここからは本家 Vue の実装を見てもらってもいいですし，もちろん chibivue を参考にしてもらっても良いです．
-(おすすめなのは本家 Vue を実際に読みながらです．)
+You can refer to the original Vue implementation or the chibivue implementation for guidance. (I recommend reading the original Vue implementation while following along.)

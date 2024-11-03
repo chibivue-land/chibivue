@@ -1,49 +1,50 @@
-# chibivue？ どこが chibi なんだ！？デカすぎてやってらんないよ！？
+# chibivue? Where is it chibi!? It's too big, I can't handle it!
 
-## 大きいじゃん......
+## It's big...
 
-そう思った方，誠に申し訳ございません．
+To those who thought so, I sincerely apologize.
 
-この本を手に取る前はもっと小さいものを想像していたかもしれません．
+Before picking up this book, you may have imagined something smaller.
 
-少し言い訳させていただきますと，僕自身もこんなに大きくやるつもりはなかったんです．
+Allow me to make a little excuse, even I didn't intend to make it this big.
 
-やってくうちについ楽しくて，「お，次はこの辺機能追加してみるか」とやっていったところ今のようになってしまいました．
+As I continued working on it, I found it enjoyable and thought, "Oh, should I add this functionality next?" And that's how it ended up like this.
 
-## わかりました．制限時間を設けましょう．
+## Understood. Let's set a time limit.
 
-大きくなりすぎてしまった要因の一つとして，「時間に制限がなかった」という点が挙げられます．
+One of the factors that caused it to become too big was that "there was no time limit".
 
-そこで，この付録では 「**15 分**」で実装してみます．
+So, in this appendix, I will try to implement it in "**15 minutes**".
 
-説明ももちろん 1 ページだけに収めます．
+Of course, I will also limit the explanation to just one page.
 
-さらに，ページのみならず，「実装自体も 1 ファイルに収める」ことを目標にやってみます．
+Furthermore, not only the page, but also the "implementation itself will be contained in one file" is the goal I will try to achieve.
 
-ただ 1 ファイルといっても 1 ファイルに 10 万行書いてしまっては意味がないですから，150 行ないくらいを目標に実装していきます．
+However, even if it's one file, it's meaningless to write 100,000 lines in one file, so I will aim to implement it in less than 150 lines.
 
-題して，「**Hyper Ultimate Super Extreme Minimal Vue**」
+The title is "**Hyper Ultimate Super Extreme Minimal Vue**".
 
-::: info 名前の由来について
+::: info About the name
 
-なんとも幼稚な名前だなと思った方が多いと思います．
+I think many people thought that the name is quite childish.
 
-僕もそう思います．
+I think so too.
 
-ただ，この名前にはちゃんとした由来があります．
+However, there is a proper reason for this name.
 
-とにかく小さいということを強調しつつ，略称は欲しかったので，この語順になってます．
+While emphasizing that it is extremely small, I wanted an abbreviation, so it became this word order.
 
-その略称というのが「HUSEM Vue (風船 Vue)」 です．
+The abbreviation is "HUSEM Vue (Balloon Vue)".
 
-これからとっても雑な実装をしていきますが，その雑さを「風船」に例えています．
-少しでも針が触れると破裂してしまうようなイメージです．
+"HU-SEN" [fuːsen] means "balloon" in Japanese.
+
+Although I will be implementing it in a very sloppy way from now on, I am comparing that sloppiness to a "balloon" that will burst if even a needle touches it.
 
 :::
 
-## どうせ リアクティブシステムをちょろっと実装するだけなんでしょ？
+## You're just going to implement a Reactivity System, right?
 
-いいえ，そうではありません．今回 15 分で対応するものを以下に列挙してみます．
+No, that's not the case. This time, I will try to list what will be implemented in 15 minutes.
 
 - create app api
 - Virtual DOM
@@ -52,11 +53,11 @@
 - template compiler
 - sfc compiler (vite-plugin)
 
-これくらいものを実装していきます．
+I will be implementing these things.
 
-つまり，SFC が動きます．
+In other words, SFC will work.
 
-ソースコードとしては，以下のようなものが動作する想定をしています．
+As for the source code, I assume that the following will work:
 
 ```vue
 <script>

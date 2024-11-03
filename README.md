@@ -44,9 +44,9 @@ npm i -g @antfu/ni
 
 ### book url (GitHub Pages)
 
-English: https://book.chibivue.land/en
+English: https://book.chibivue.land/
 
-Japaneses: https://book.chibivue.land
+Japaneses: https://book.chibivue.land/ja
 
 ### open book on localhost
 
@@ -59,7 +59,7 @@ $ nr book:dev
 
 ### view on github
 
-[English](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src)
+[English](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src) | [Japanese](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src/ja)
 <br/>
 <br/>
 
@@ -204,7 +204,7 @@ This chapter implements createApp / virtual dom / patch / reactivity / template 
 
 The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 minutes**"
 
-[Online Book](https://book.chibivue.land/en/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
+[Online Book](https://book.chibivue.land/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
 <img src="./book/images/hyper-ultimate-super-extreme-minimal-vue.png">
 

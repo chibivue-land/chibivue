@@ -1,34 +1,34 @@
-# v-if と構造的ディレクティブ
+# v-if and structural directives
 
-さてここからはまたディレクティブの実装をやっていきましょう！
+Now let's continue implementing directives!
 
-ついに v-if を実装していきます．
+Finally, we will implement v-if.
 
-## v-if ディレクティブとこれまでのディレクティブの違い
+## Difference between v-if directive and previous directives
 
-これまでの v-bind や v-on などを実装してきました．
+So far, we have implemented directives such as v-bind and v-on.
 
-これから v-if を実装して行くのですが，v-if はこれらのディレクティブとは少し作りが違います．
+Now let's implement v-if, but v-if is slightly different from these directives.
 
-以下は Vue.js の公式ドキュメントのコンパイル時最適化に関する項目の一説ですが，
+According to the excerpt from the official Vue.js documentation on compile-time optimization,
 
 > In this case, the entire template has a single block because it does not contain any structural directives like v-if and v-for.
 
 https://vuejs.org/guide/extras/rendering-mechanism.html#tree-flattening
 
-という言葉が見受けられます．(Tree Flattening が何かについては別で解説するので気にしなくていいです．)
+As you can see, the words "structural directives" can be found. (You don't have to worry about what Tree Flattening is, as it will be explained separately.)
 
-この通り，v-if や v-if は `structural directives` と呼ばれるもので，構造を伴うディレクティブです．
+As mentioned, v-if and v-for are called "structural directives" and are directives that involve the structure.
 
-angular のドキュメントだと項目として明記されていたりもします．
+In Angular's documentation, they are explicitly mentioned as well.
 
 https://angular.jp/guide/structural-directives
 
-v-if や v-for は単にその要素の属性(+イベントに対する振舞い)を変更するだけでなく，要素の存在を切り替えたり，リストの数に応じて 要素を生成・削除したりと，要素の構造を変更するディレクティブです．
+v-if and v-for are directives that not only change the attributes (and behavior for events) of elements, but also change the structure of elements by toggling their existence or generating/removing elements based on the number of items in a list.
 
-## 目指す開発者インターフェース
+## Desired developer interface
 
-v-if / v-else-if / v-else を組み合わせて FizzBuzz が実装できるようなものを考えてみましょう．
+Let's think about how to combine v-if / v-else-if / v-else to implement FizzBuzz.
 
 ```ts
 import { createApp, defineComponent, ref } from 'chibivue'
@@ -57,9 +57,9 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-今回はまず初めに，どういうコードを生成したいかについても考えてみようかと思います．
+First, let's think about the code we want to generate.
 
-結論から言ってしまうと，v-if や v-else は以下のように条件式に変換されます．
+To put it simply, v-if and v-else are converted into conditional expressions as follows:
 
 ```ts
 function render(_ctx) {
@@ -90,50 +90,50 @@ function render(_ctx) {
 }
 ```
 
-これをみても分かる通り，これまで実装してきたものに条件を表す構造を持たせています．
+As you can see, we are adding a structure to the code we have implemented so far.
 
-このようなコードを生成するための AST に変形させる transformer を実装するには一工夫必要そうです．
+To implement a transformer that transforms the AST into such code, we need to make some modifications.
 
 ::: warning
 
-現時点での実装では空白などの読み飛ばしの実装を行っていないので実際には間に余計な文字 Node が入ってしまうかと思います．
+The current implementation does not handle whitespace and other skipping, so there may be unnecessary text nodes in between.
 
-が， v-if の実装上は特に問題ありませんので(後でわかります)，今回は無視してください．
+However, there is no problem with the implementation of v-if (you will see later), so please ignore it for now.
 
 :::
 
-## 構造的ディレクティブの実装
+## Implementation of structural directives
 
-### 構造にまつわるメソッドを実装する
+### Implement methods related to structure
 
-v-if の実装を行っていく前に，少し準備です．
+Before implementing v-if, let's do some preparation.
 
-最初にも v-if や v-for という構造的ディレクティブは AST Node の構造を変更するディレクティブであるということを説明しました．
+As mentioned earlier, v-if and v-for are structural directives that modify the structure of AST nodes.
 
-これらを実現するために，ベースとなる transformer にいくつかの実装を行います．
+To achieve this, we need to implement several methods in the base transformer.
 
-具体的には，TransformContext に以下の３つを実装します．
+Specifically, we will implement the following three methods in TransformContext:
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
   // .
   // .
   // .
-  replaceNode(node: TemplateChildNode): void // 追加
-  removeNode(node?: TemplateChildNode): void // 追加
-  onNodeRemoved(): void // 追加
+  replaceNode(node: TemplateChildNode): void // Added
+  removeNode(node?: TemplateChildNode): void // Added
+  onNodeRemoved(): void // Added
 }
 ```
 
-traverseChildren の方で現在の parent と children の index は保持するようになっていると思うので，それらを使って 上記のメソッドを実装していきます．
+Since you are already implementing traverseChildren, I think you are already keeping track of the current parent and the index of the children. You can use them to implement the above methods.
 
-<!-- NOTE: このチャプターまで実装しなくてもいいかもしれない -->
+<!-- NOTE: You may not need to implement this chapter yet. -->
 
-::: details 念の為
+::: details Just in case
 
-この部分です．
+This part:
 
-実装していると思いますが，これを実装したチャプターではあまり詳しく説明していなかったので念の為補足です．
+I think you have already implemented it, but I will explain it just in case because I didn't explain it in detail in the chapter where it was implemented.
 
 ```ts
 export function traverseChildren(
@@ -143,8 +143,8 @@ export function traverseChildren(
   for (let i = 0; i < parent.children.length; i++) {
     const child = parent.children[i]
     if (isString(child)) continue
-    context.parent = parent // これ
-    context.childIndex = i // これ
+    context.parent = parent // This
+    context.childIndex = i // This
     traverseNode(child, context)
   }
 }
@@ -162,12 +162,12 @@ export function createTransformContext(
     // .
     // .
 
-    // Node を受け取って currentNode と 該当の parent の children をその Node に置き換えます
+    // Replaces the current node and the corresponding parent's children with the given node
     replaceNode(node) {
       context.parent!.children[context.childIndex] = context.currentNode = node
     },
 
-    // Node を受け取って currentNode と 該当の parent の children からその Node を削除します
+    // Removes the given node from the current node's parent's children
     removeNode(node) {
       const list = context.parent!.children
       const removalIndex = node
@@ -189,7 +189,7 @@ export function createTransformContext(
       context.parent!.children.splice(removalIndex, 1)
     },
 
-    // こちらは replaceNode 等を実際に使用する際に登録するようにします
+    // This is registered when using replaceNode, etc.
     onNodeRemoved: () => {},
   }
 
@@ -197,40 +197,40 @@ export function createTransformContext(
 }
 ```
 
-既存の実装も少し修正が必要です．transform 中に removeNode が呼ばれることを想定して，traverseChildren の方を調整してあげます．
+Some modifications are also needed in the existing implementation. Adjust traverseChildren to handle the case where removeNode is called.
 
-Node が削除されると index が変わってしまうので，Node が 削除された際に for の index を減らしてあげます．
+Since the index changes when a node is removed, decrease the index when a node is removed.
 
 ```ts
 export function traverseChildren(
   parent: ParentNode,
   context: TransformContext,
 ) {
-  let i = 0 // これ
+  let i = 0 // This
   const nodeRemoved = () => {
-    i-- // これ
+    i-- // This
   }
   for (; i < parent.children.length; i++) {
     const child = parent.children[i]
     if (isString(child)) continue
     context.parent = parent
     context.childIndex = i
-    context.onNodeRemoved = nodeRemoved // これ
+    context.onNodeRemoved = nodeRemoved // This
     traverseNode(child, context)
   }
 }
 ```
 
-### createStructuralDirectiveTransform の実装
+### Implementation of createStructuralDirectiveTransform
 
-v-if や v-for といったディレクティブを実装するにあたって，createStructuralDirectiveTransform というヘルパー関数を実装します．
+To implement directives such as v-if and v-for, we will implement a helper function called createStructuralDirectiveTransform.
 
-これらの transformer は NodeTypes.ELEMENT のみに作用し，その Node が持つ DirectiveNode に対して 各 transformer の実装を適用します．
+These transformers only act on NodeTypes.ELEMENT and apply the implementation of each transformer to the DirectiveNode that the Node has.
 
-まぁ，実装自体は大きなものではないので，実際に見てもらった方がわかりやすいと思います．以下のような感じです．
+Well, the implementation itself is not big, so I think it would be easier to understand if you actually see it. It looks like this:
 
 ```ts
-// 各 transformer (v-if/v-for など) はこの interface にそって実装されます。
+// Each transformer (v-if/v-for, etc.) is implemented according to this interface.
 export type StructuralDirectiveTransform = (
   node: ElementNode,
   dir: DirectiveNode,
@@ -238,8 +238,8 @@ export type StructuralDirectiveTransform = (
 ) => void | (() => void)
 
 export function createStructuralDirectiveTransform(
-  // name は正規表現にも対応しています。
-  // v-if の transformer でいうと、 `/^(if|else|else-if)$/` のようなものを受け取れる想定です。
+  // The name also supports regular expressions.
+  // For example, in the transformer for v-if, it is assumed to receive something like /^(if|else|else-if)$/.
   name: string | RegExp,
   fn: StructuralDirectiveTransform,
 ): NodeTransform {
@@ -249,13 +249,13 @@ export function createStructuralDirectiveTransform(
 
   return (node, context) => {
     if (node.type === NodeTypes.ELEMENT) {
-      // NodeTypes.ELEMENT のみに作用
+      // Only act on NodeTypes.ELEMENT
       const { props } = node
       const exitFns = []
       for (let i = 0; i < props.length; i++) {
         const prop = props[i]
         if (prop.type === NodeTypes.DIRECTIVE && matches(prop.name)) {
-          // NodeTypes.DIRECTIVE かつ name が一致するものに対して transformer を実行
+          // Execute the transformer for NodeTypes.DIRECTIVE that matches the name
           props.splice(i, 1)
           i--
           const onExit = fn(node, prop, context)
@@ -268,19 +268,19 @@ export function createStructuralDirectiveTransform(
 }
 ```
 
-## v-if を実装していく
+## Implementing v-if
 
-### AST の実装
+### AST Implementation
 
-上記までで準備は終わりです．ここからは v-if の実装を行っていきます．
+Preparations are complete up to this point. From here, let's implement v-if.
 
-いつものように，AST の定義から行なって，パーサーを実装していきましょう．
+As usual, let's start with the definition of the AST and implement the parser.
 
-と言いたいところでしたが，今回はパーサーは必要なさそうです．
+I would like to say that, but it seems that we don't need a parser this time.
 
-どちらかというと，今回は transform 後の AST をどういう形にしたいかを考えて，それに変形させるための transformer を実装していく感じになります．
+Rather, this time we will think about how we want the transformed AST to look like and implement transformers to transform it accordingly.
 
-改めて，冒頭で想定していたコンパイル後のコードを見てみましょう．
+Let's take a look at the compiled code that was assumed at the beginning.
 
 ```ts
 function render(_ctx) {
@@ -311,20 +311,20 @@ function render(_ctx) {
 }
 ```
 
-最終的には条件式(三項演算子)に変換されていることが分かります．
+It can be seen that it is ultimately converted to a conditional expression (ternary operator).
 
-これまで条件式を扱ったことはないので，Codegen のために AST 側でこれを取り扱う必要があるようです．  
-基本的に考えたいものは 3 つの情報です．("三項"演算子なのでね)
+Since we have never dealt with conditional expressions before, it seems that we need to handle this in the AST side for Codegen.
+Basically, we want to consider three pieces of information (because it's a "ternary" operator).
 
-- **条件**  
-  A ? B : C の A にあたる部分です．  
-  condition という名前で表現されます．
-- **条件にマッチした時の Node**  
-  A ? B : C の B にあたる部分です．  
-  consequent という名前で表現されます．
-- **条件にマッチしなかった時の Node**  
-  A ? B : C の C にあたる部分です．  
-  alternate という名前で表現されます．
+- **Condition**  
+  This is the part that corresponds to A in A ? B : C.  
+  It is represented by the name "condition".
+- **Node when the condition matches**  
+  This is the part that corresponds to B in A ? B : C.  
+  It is represented by the name "consequent".
+- **Node when the condition does not match**  
+  This is the part that corresponds to C in A ? B : C.  
+  It is represented by the name "alternate".
 
 ```ts
 export const enum NodeTypes {
@@ -339,7 +339,7 @@ export interface ConditionalExpression extends Node {
   test: JSChildNode
   consequent: JSChildNode
   alternate: JSChildNode
-  newline: boolean // これは codegen のフォーマット用なのであまり気にしなくていいです
+  newline: boolean
 }
 
 export type JSChildNode =
@@ -347,7 +347,7 @@ export type JSChildNode =
   | CallExpression
   | ObjectExpression
   | ArrayExpression
-  | ConditionalExpression // 追加
+  | ConditionalExpression
   | ExpressionNode
 
 export function createConditionalExpression(
@@ -367,7 +367,7 @@ export function createConditionalExpression(
 }
 ```
 
-これらを使って VIf の Node を表現する AST を実装していきます．
+We will implement an AST to represent the VIf node using these.
 
 ```ts
 export const enum NodeTypes {
@@ -391,42 +391,27 @@ export interface IfConditionalExpression extends ConditionalExpression {
 
 export interface IfBranchNode extends Node {
   type: NodeTypes.IF_BRANCH
-  condition: ExpressionNode | undefined // else
+  condition: ExpressionNode | undefined
   children: TemplateChildNode[]
   userKey?: AttributeNode | DirectiveNode
 }
 
-export type ParentNode =
-  | RootNode
-  | ElementNode
-  // 追加
-  | IfBranchNode
+export type ParentNode = RootNode | ElementNode | IfBranchNode
 ```
 
-### transformer の実装
+### Implementation of the transformer
 
-AST ができたので，実際にこの AST を生成する transformer を実装していきます．
+Now that we have the AST, let's implement the transformer that generates this AST.
 
-イメージ的にはいくつかの `ElementNode` をもとに `IfNode` を生成するという感じです．
+The idea is to generate an `IfNode` based on several `ElementNode`s.
 
-「いくつかの」といったのは，今回の場合，ある一つの Node を違う一つの Node に変形するようなものではなく，
+By "several", in this case, it means that if there are multiple `ElementNode`s, we need to generate a single `IfNode` that includes `v-if` to `v-else` statements.
 
-```html
-<p v-if="n % 5 === 0 && n % 3 === 0">FizzBuzz</p>
-<p v-else-if="n % 5 === 0">Buzz</p>
-<p v-else-if="n % 3 === 0">Fizz</p>
-<p v-else>{{ n }}</p>
-```
+If the first `v-if` matches, we need to generate the `IfNode` while checking if the subsequent nodes are `v-else-if` or `v-else`.
 
-のような複数の ElementNode があった場合には v-if ~ v-else までを一つの IfNode として生成する必要があります．
+Let's start by implementing the overall structure, using the `createStructuralDirectiveTransform` we implemented earlier.
 
-最初の v-if にマッチした場合，後続の Node が v-else-if や v-else に当たるものでないかどうかを判定しながら IfNode を生成していきます．
-
-具体的な それぞれの処理は processIf という関数に逃しておくとして，とりあえず大枠を実装してみましょう．
-先ほどの `createStructuralDirectiveTransform` を活用します．
-
-具体的には，最終的に codegenNode に先ほど実装した AST を詰めていきたいわけなので，
-この transformer の `onExit` で Node を生成します．
+Specifically, since we want to eventually fill the `codegenNode` with the AST we implemented earlier, we will generate the Node in the `onExit` of this transformer.
 
 ```ts
 export const transformIf = createStructuralDirectiveTransform(
@@ -466,9 +451,9 @@ export function processIf(
 ```
 
 ```ts
-/// codegenNode を生成するのに使用した関数たち
+/// Functions used to generate codegenNode
 
-// branch の codegenNode 生成
+// Generate codegenNode for branch
 function createCodegenNodeForBranch(
   branch: IfBranchNode,
   context: TransformContext,
@@ -477,10 +462,10 @@ function createCodegenNodeForBranch(
     return createConditionalExpression(
       branch.condition,
       createChildrenCodegenNode(branch, context),
-      // alternate はとりあえずコメントアウトで生成するようになっています。
-      // v-else-if や v-if が来た時に alternate を対象の Node に書き換えます。
-      // `parentCondition.alternate = createCodegenNodeForBranch(branch, context);` の部分です
-      // もし、v-else-if や v-else がこなかった場合には、このまま CREATE_COMMENT の Node になります。
+      // The alternate is temporarily set to be generated as a comment.
+      // It will be replaced with the target Node when v-else-if or v-else is encountered.
+      // This is the part where `parentCondition.alternate = createCodegenNodeForBranch(branch, context);` is written.
+      // If v-else-if or v-else is not encountered, it will remain as a CREATE_COMMENT Node.
       createCallExpression(context.helper(CREATE_COMMENT), ['""', 'true']),
     ) as IfConditionalExpression
   } else {
@@ -492,7 +477,7 @@ function createChildrenCodegenNode(
   branch: IfBranchNode,
   context: TransformContext,
 ): VNodeCall {
-  // branch から vnode call を取り出すだけ
+  // Just extract vnode call from the branch
   const { children } = branch
   const firstChild = children[0]
   const vnodeCall = (firstChild as ElementNode).codegenNode as VNodeCall
@@ -502,7 +487,7 @@ function createChildrenCodegenNode(
 function getParentCondition(
   node: IfConditionalExpression,
 ): IfConditionalExpression {
-  // node から辿って 末端の Node を取得する
+  // Get the end Node by tracing from the node
   while (true) {
     if (node.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
       if (node.alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
@@ -515,12 +500,12 @@ function getParentCondition(
 }
 ```
 
-`processIf` ではより具体的な AST Node の変形処理を行なっていきます．
+In `processIf`, more specific AST node transformations are performed.
 
-if / else-if / else の場合がありますが，まずは `if` だった場合を考えてみます．
+There are cases for if / else-if / else, but let's first consider the case for `if`.
 
-こちらはかなり単純です． IfNode を生成し，codegenNode の生成を実行してあげるだけです．
-この際，今の Node を IfBranch としてを生成し，それを IfNode に持たせた上で IfNode に replace しておきます．
+This is quite simple. We create an IfNode and execute the codegenNode generation.
+At this time, we generate the current Node as an IfBranch and assign it to IfNode, then replace it with IfNode.
 
 ```
 - parent
@@ -533,7 +518,7 @@ if / else-if / else の場合がありますが，まずは `if` だった場合
     - IfBranch (currentNode)
 ```
 
-のように構造を変更するイメージです．
+This is the image of changing the structure.
 
 ```ts
 export function processIf(
@@ -546,7 +531,7 @@ export function processIf(
     isRoot: boolean,
   ) => (() => void) | undefined,
 ) {
-  // あらかじめ、exp には processExpression を実行しておきます。
+  // We will run processExpression on exp in advance.
   if (!context.isBrowser && dir.exp) {
     dir.exp = processExpression(dir.exp as SimpleExpressionNode, context)
   }
@@ -577,15 +562,15 @@ function createIfBranch(node: ElementNode, dir: DirectiveNode): IfBranchNode {
 }
 ```
 
-次は v-if 以外の場合を考えてみましょう．
+Let's consider the case other than v-if.
 
-context から parent の children を辿って siblings を取得し，  
-現在の node (自身) から順にループを回し，自身をもとに IfBranch を生成して branches に push していきます．  
-この際，コメントや空のテキストは削除してしまいます．
+We will traverse from the parent's children through the context to obtain the siblings.  
+We will loop through the nodes (starting from the current node itself) and generate IfBranch based on itself, pushing them into branches.  
+During this process, comments and empty texts will be removed.
 
 ```ts
 if (dir.name === 'if') {
-  /** 省略 */
+  /** omitted */
 } else {
   const siblings = context.parent!.children
   let i = siblings.indexOf(node)
@@ -619,18 +604,18 @@ if (dir.name === 'if') {
 }
 ```
 
-これをみても分かる通り，実は else-if と else は区別していません．
+As you can see, actually else-if and else are not distinguished.
 
-AST 上でも condition がない場合は else というふうな定義にしているので，特に考えることはないのです．  
-(`createIfBranch` の `dir.name === "else" ? undefined : dir.exp` の部分で吸収)
+Even in the AST, if there is no condition, it is defined as else, so there is nothing special to consider.  
+(Absorbed in the part of `createIfBranch` with `dir.name === "else" ? undefined : dir.exp`)
 
-重要なのは，`if` であった場合に `IfNode` を生成しておくということで，それ以外はその Node の branches に突っ込んでいけばいいわけです．
+What is important is to generate `IfNode` when it is an `if`, and for other cases, just push them into the branches of that Node.
 
-ここまで来れば transformIf の実装は終わりです．あとは周辺に少しだけ手を加えます．
+With this, the implementation of transformIf is complete. We just need to make a few adjustments around it.
 
-traverseNode で，IfNode が持つ branches に対して traverseNode を実行してあげるようにします．
+In traverseNode, we will execute traverseNode for the branches that IfNode has.
 
-IfBranch も traverseChildren の対象にしてあげます．
+We will also include IfBranch as a target for traverseChildren.
 
 ```ts
 export function traverseNode(
@@ -643,14 +628,14 @@ export function traverseNode(
   switch (node.type) {
     // .
     // .
-    // 追加
+    // Added
     case NodeTypes.IF:
       for (let i = 0; i < node.branches.length; i++) {
         traverseNode(node.branches[i], context)
       }
       break
 
-    case NodeTypes.IF_BRANCH: // 追加
+    case NodeTypes.IF_BRANCH: // Added
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
       traverseChildren(node, context)
@@ -659,7 +644,7 @@ export function traverseNode(
 }
 ```
 
-あとは，compiler のオプションとして transformIf を登録してあげるだけです．
+Finally, we just need to register transformIf as an option in the compiler.
 
 ```ts
 export function getBaseTransformPreset(): TransformPreset {
@@ -670,13 +655,13 @@ export function getBaseTransformPreset(): TransformPreset {
 }
 ```
 
-これで transformer が実装できました！
+With this, the transformer is implemented!
 
-あとは codegen を実装すれば，v-if の完成です．もう少しです，頑張りましょう！
+All that's left is to implement codegen, and v-if will be complete. We're almost there, let's do our best!
 
-### codegen の実装
+### Implementation of codegen
 
-あとは楽ちんです．ConditionalExpression の Node をもとにコードを生成すれば OK です．
+The rest is easy. Just generate code based on the Node of ConditionalExpression.
 
 ```ts
 const genNode = (
@@ -686,7 +671,7 @@ const genNode = (
 ) => {
   switch (node.type) {
     case NodeTypes.ELEMENT:
-    case NodeTypes.IF: // ここを追加するのを忘れずに！
+    case NodeTypes.IF: // Don't forget to add this!
       genNode(node.codegenNode!, context, option)
       break
     // .
@@ -737,16 +722,16 @@ function genConditionalExpression(
 }
 ```
 
-いつも通り，AST をもとに条件式を生成しているだけなので特に難しいことはないと思います．
+As usual, we are simply generating the conditional expression based on the AST, so there is nothing particularly difficult.
 
-## 完成！！
+## Done!!
 
-さてさて，久しぶりに少しファットなチャプターになってしまいましたがこれで v-if の実装は完了です！ (お疲れ様でした．)
+Well, it's been a while since we had a slightly fat chapter, but with this, the implementation of v-if is complete! (Good job!)
 
-実際に動かしてみましょう！！！！
+Let's try running it for real!!
 
-ちゃんと動いています！
+It's working properly!
 
 ![vif_fizzbuzz](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vif_fizzbuzz.png)
 
-ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)

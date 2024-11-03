@@ -1,8 +1,8 @@
-# スケジューラ
+# Scheduler
 
-## effect のスケジューリング
+## Scheduling Effects
 
-まずはこのコードをご覧ください．
+First, take a look at this code:
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -31,18 +31,16 @@ const app = createApp({
 app.mount('#app')
 ```
 
-ボタンをクリックすると，state.message に対して 2 回 set が起こるので，当然 2 回 trigger が実行されることになります．
-つまりは，2 回 Virtual DOM が算出され，2 回 patch が行われます．
+When the button is clicked, the `set` function is called twice on `state.message`, so naturally, the `trigger` function will be executed twice as well. This means that the Virtual DOM will be computed twice and the patching will be performed twice.
 
 ![non_scheduled_effect](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/non_scheduled_effect.png)
 
-しかし，実際に patch 処理を行うのは 2 回目のタイミングだけで十分なはずです．  
-そこで，スケジューラを実装します．スケジューラというのはあるタスクに対する実行順番であったり，実行を管理するものです．
-Vue のスケジューラの役割の一つとして，リアクティブな作用をキューで管理し，まとめられるものはまとめる，というのがあります．
+However, in reality, patching only needs to be done once, during the second trigger.  
+Therefore, we will implement a scheduler. A scheduler is responsible for managing the execution order and control of tasks. One of the roles of the Vue scheduler is to manage reactive effects in a queue and consolidate them if possible.
 
-## キュー管理によるスケジューリング
+## Scheduling with Queue Management
 
-具体的にはキュー をもち，ジョブを管理します．ジョブは id を持っており，キューに新しくジョブがエンキューされる際に，既に同一の id を持ったジョブが存在していた場合に上書きしてしまいます．
+Specifically, we will have a queue to manage jobs. Each job has an ID, and when a new job is enqueued, if there is already a job with the same ID in the queue, it will be overwritten.
 
 ```ts
 export interface SchedulerJob extends Function {
@@ -66,27 +64,27 @@ export function queueJob(job: SchedulerJob) {
 }
 ```
 
-肝心のジョブの id ですが，今回の場合はコンポーネント単位でまとめたいので，コンポーネントに uid を持たせるようにして，それらを job の id となるように実装します．
+As for the job ID, in this case, we want to group them by component, so we will assign a unique identifier (UID) to each component and use them as the job IDs.  
+The UID is simply an identifier obtained by incrementing a counter.
 
-uid といっても単にインクリメントによって得られる識別子です．
+## ReactiveEffect and Scheduler
 
-## ReactiveEffect とスケジューラ
-
-現在，ReactiveEffect は以下のようなインタフェースになっています．(一部省略)
+Currently, the ReactiveEffect has the following interface (partially omitted):
 
 ```ts
 class ReactiveEffect {
   public fn: () => T,
+
   run() {}
 }
 ```
 
-スケジューラの実装に伴って少し変えてみます．  
-現在，作用として fn に関数を登録しているのですが，今回は「能動的に実行する作用」と「受動的に実行される作用」に分けてみます．  
-Reactive な作用として扱うものは，作用を設定した側で能動的に実行される場合と，dep に追加された後で，何らかの外部のアクションによって trigger され受動的に実行される場合があります．  
-後者の作用は不特定多数の depsMap に追加され，不特定多数に trigger されるので，スケジューリングの対応が必要です．(逆にいえば能動的(明示的)に呼ぶならばそのような対応は必要ない)
+With the implementation of the scheduler, let's make a slight change.  
+Currently, we register a function to `fn` as an effect, but this time, let's divide it into "actively executed effects" and "passively executed effects".  
+Reactive effects can be actively executed by the side that sets the effect, or they can be passively executed by being triggered by some external action after being added to a dependency (`dep`).  
+For the latter type of effect, which is added to multiple `depsMap` and triggered by multiple sources, scheduling is necessary (on the other hand, if it is explicitly called actively, such scheduling is not necessary).
 
-具体例を考えてみましょう．今実際に renderer の setupRenderEffect では以下のような実装があるかと思います．
+Let's consider a specific example. In the `setupRenderEffect` function of the renderer, you may have the following implementation:
 
 ```ts
 const effect = (instance.effect = new ReactiveEffect(() => componentUpdateFn))
@@ -94,15 +92,15 @@ const update = (instance.update = () => effect.run())
 update()
 ```
 
-ここで生成した effect という reactiveEffect はのちに setup の実行によって getter が走った reactive なオブジェクトに track されるわけですが，これは明らかにスケジューリングの実装が必要です．(バラバラにいろんなところから trigger されるため)  
-しかし，ここで`update()`を呼び出していることに関してはそのまま作用を実行するだけでいいはずなので，スケジューリングの実装は必要ありません．  
-「え？　じゃあ componentUpdateFn を直接呼び出せばいいんじゃないの？」と思うかも知れませんが，run の実装をよく思い出してください．componentUpdateFn を呼び出すだけでは activeEffect が設定されません．  
-そこで，「能動的に実行する作用」と「受動的に実行される作用(スケジューラが必要な作用)」を分けてもつように変えてみましょう．
+The `effect` created here, which is a `reactiveEffect`, will later be tracked by a reactive object when the `setup` function is executed. This clearly requires implementation of scheduling (because it will be triggered from various places).  
+However, regarding the `update()` function being called here, it should simply execute the effect, so scheduling is not necessary.  
+You might think, "Can't we just call `componentUpdateFn` directly then?" But please remember the implementation of the `run` function. Simply calling `componentUpdateFn` does not set the `activeEffect`.  
+So, let's separate the "actively executed effects" and the "passively executed effects (effects that require scheduling)".
 
-このチャプターでの最終的なインタフェースとしては，以下のようになります．
+As the final interface in this chapter, it will look like this:
 
 ```ts
-// ReactiveEffectの第 1 引数が能動的な作用, 第 2 引数が受動的な作用
+// The first argument of ReactiveEffect is the actively executed effect, and the second argument is the passively executed effect
 const effect = (instance.effect = new ReactiveEffect(componentUpdateFn, () =>
   queueJob(update),
 ))
@@ -111,7 +109,7 @@ update.id = instance.uid
 update()
 ```
 
-実装的には，ReactiveEffect に fn とは別に scheduler という関数をもち，trigger では scheduler を優先して実行するようにします．
+In terms of implementation, in addition to `fn`, the `ReactiveEffect` will have a `scheduler` function, and in the `triggerEffect` function, the scheduler will be executed first if it exists.
 
 ```ts
 export type EffectScheduler = (...args: any[]) => any;
@@ -129,22 +127,21 @@ function triggerEffect(effect: ReactiveEffect) {
   if (effect.scheduler) {
     effect.scheduler()
   } else {
-    effect.run() // なければ通常の作用を実行する
+    effect.run() // If there is no scheduler, execute the effect normally
   }
 }
 ```
 
 ---
 
-さて，キュー管理によるスケジューリングと作用の分類わけを実際にソースコードを読みながら実装してみましょう !
+Now, let's implement scheduling with queue management and the classification of effects while reading the source code!
 
-ここまでのソースコード:  
+Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
 
-## nextTick が欲しい
+## We want nextTick
 
-スケジューラの実装をする際にソースコードを読んだかたは「nextTick ってここで出てくるのか」というのに気づいた方もいるかもしれません．
-まずは今回実現したい課題についてです．こちらのコードをご覧ください．
+If you have read the source code when implementing the scheduler, you may have noticed the appearance of "nextTick" and wondered if it is used here. First, let's talk about the task we want to achieve this time. Please take a look at this code:
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -175,19 +172,17 @@ const app = createApp({
 app.mount('#app')
 ```
 
-こちらのボタンをクリックしてみてコンソールを覗いてみましょう．
+Try clicking this button and take a look at the console.
 
 ![old_state_dom](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/old_state_dom.png)
 
-`state.count`を更新した後にコンソールに出力しているのに，情報が古くなってしまっています．  
-それもそのはず，ステートを更新しても瞬時に DOM が更新されるわけではなく，コンソールに出力した段階ではまだ DOM は古い状態のままです．
+Even though we output to the console after updating `state.count`, the information is outdated. This is because the DOM is not instantly updated when the state is updated, and at the time of console output, the DOM is still in the old state.
 
-ここで登場するのが nextTick です．
+This is where "nextTick" comes in.
 
 https://vuejs.org/api/general.html#nexttick
 
-この nextTick というのはスケジューラの API で，スケジューラによって DOM に変更が適応されるまで待つことができます．  
-nextTick の実装方法ですが，非常に単純で，スケジューラ内で今 flush しているジョブ(promise)を保持しておいて，それの then に繋ぐだけです．
+"nextTick" is an API of the scheduler that allows you to wait until the DOM changes are applied by the scheduler. The implementation of "nextTick" is very simple. It just keeps the job (promise) being flushed in the scheduler and connects it to "then".
 
 ```ts
 export function nextTick<T = void>(
@@ -199,8 +194,7 @@ export function nextTick<T = void>(
 }
 ```
 
-そのジョブが完了した(promise が resolve された)際に nextTick に渡されたコールバックを実行するということです．(キューにジョブがなければ resolvedPromise の then に繋ぎます)  
-当然，この nextTick 自体も Promise を返すため，開発者インタフェースとしては，コールバックに渡すのもよし，nextTick を await するのもよし，といった感じになっているわけです．
+When the job is completed (the promise is resolved), the callback passed to "nextTick" is executed. (If there is no job in the queue, it is connected to "then" of "resolvedPromise") Naturally, "nextTick" itself also returns a Promise, so as a developer interface, you can pass a callback or await "nextTick".
 
 ```ts
 import { createApp, h, reactive, nextTick } from 'chibivue'
@@ -213,7 +207,7 @@ const app = createApp({
     const updateState = async () => {
       state.count++
 
-      await nextTick() // 待つ
+      await nextTick() // Wait
       const p = document.getElementById('count-p')
       if (p) {
         console.log('😎 p.textContent', p.textContent)
@@ -232,9 +226,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![next_tick](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/next_tick.png)
+Now, let's actually rewrite the implementation of the current scheduler to keep "currentFlushPromise" and implement "nextTick"!
 
-さて，実際に今のスケジューラの実装を`currentFlushPromise`を保持しておくような実装に書き換えて，nextTick を実装してみましょう!
-
-ここまでのソースコード:  
+Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)

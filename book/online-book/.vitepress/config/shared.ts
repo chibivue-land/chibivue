@@ -63,6 +63,7 @@ export const sharedConfig = defineConfig({
     logo: 'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true',
     search: { provider: 'local' },
     outline: 'deep',
+    i18nRouting: true,
     socialLinks: [
       { icon: 'github', link: 'https://github.com/chibivue-land/chibivue' },
       { icon: 'twitter', link: 'https://twitter.com/ubugeeei' },
