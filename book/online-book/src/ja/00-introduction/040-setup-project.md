@@ -198,7 +198,7 @@ pwd # ~/examples/playground
 touch vite.config.js
 ```
 
-vite.config.ts の内容
+vite.config.js の内容
 
 ```ts
 import path from 'node:path'
