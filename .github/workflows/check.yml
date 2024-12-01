@@ -44,9 +44,8 @@ jobs:
         run: pnpm lint
       - name: Check lint text
         run: pnpm lint:text
-      # FIXME:
-      # - name: Check types
-      #   run: pnpm tsc --noEmit
+      - name: Check types
+        run: pnpm tsc --noEmit
       - name: Check building
         run: pnpm build
       - name: Check test (e2e)

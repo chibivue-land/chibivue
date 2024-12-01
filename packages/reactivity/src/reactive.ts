@@ -142,8 +142,8 @@ export function isProxy(value: unknown): boolean {
 export const toReactive = <T extends unknown>(value: T): T =>
   isObject(value) ? reactive(value) : value
 
-export const toReadonly = <T extends unknown>(value: T): T =>
-  isObject(value) ? readonly(value) : value
+export const toReadonly = <T extends unknown>(value: T): DeepReadonly<T> =>
+  isObject(value) ? readonly(value) : (value as DeepReadonly<T>)
 
 export function toRaw<T>(observed: T): T {
   const raw = observed && (observed as Target)[ReactiveFlags.RAW]
