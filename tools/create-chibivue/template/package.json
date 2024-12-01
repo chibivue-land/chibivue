@@ -6,6 +6,6 @@
     "dev": "cd examples/playground && pnpm i && pnpm run dev"
   },
   "devDependencies": {
-    "@types/node": "^18.15.11"
+    "@types/node": "^22.10.1"
   }
 }

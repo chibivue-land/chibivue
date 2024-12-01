@@ -48,7 +48,7 @@ You can choose any name for the repository. Feel free to set other information a
 
 #### Installing the necessary tools
 
-- [Node.js](https://nodejs.org/en) (v18.x)
+- [Node.js](https://nodejs.org/en) (v22.x)
   We use [Volta](https://volta.sh/) for version management, so please install it if you haven't already.
 - [pnpm](https://pnpm.io/) (v8.x)
 - [@antfu/ni](https://github.com/antfu/ni)

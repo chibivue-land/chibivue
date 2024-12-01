@@ -19,7 +19,7 @@ importers:
         version: 0.30.0
       vite:
         specifier: ^6.0.0
-        version: 6.0.1(@types/node@20.10.5)(tsx@4.7.0)
+        version: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)
     devDependencies:
       '@babel/types':
         specifier: ^7.21.2
@@ -31,8 +31,8 @@ importers:
         specifier: ^11.0.1
         version: 11.0.1
       '@types/node':
-        specifier: ^20.10.5
-        version: 20.10.5
+        specifier: ^22.10.1
+        version: 22.10.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.17.0
         version: 6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.56.0)(typescript@5.3.3))(eslint@8.56.0)(typescript@5.3.3)
@@ -41,7 +41,7 @@ importers:
         version: 6.17.0(eslint@8.56.0)(typescript@5.3.3)
       '@vitejs/plugin-vue':
         specifier: ^5.0.2
-        version: 5.0.2(vite@6.0.1(@types/node@20.10.5)(tsx@4.7.0))(vue@3.4.21(typescript@5.3.3))
+        version: 5.0.2(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0))(vue@3.4.21(typescript@5.3.3))
       chainsi:
         specifier: ^0.0.1
         version: 0.0.1
@@ -101,16 +101,16 @@ importers:
         version: 5.3.3
       vite-hyper-config:
         specifier: ^0.2.1
-        version: 0.2.1(@types/node@20.10.5)(vite@6.0.1(@types/node@20.10.5)(tsx@4.7.0))
+        version: 0.2.1(@types/node@22.10.1)(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0))
       vite-node:
         specifier: ^1.1.3
-        version: 1.1.3(@types/node@20.10.5)
+        version: 1.1.3(@types/node@22.10.1)
       vitepress:
         specifier: ^1.0.1
-        version: 1.0.1(@algolia/client-search@4.19.1)(@types/node@20.10.5)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3)
+        version: 1.0.1(@algolia/client-search@4.19.1)(@types/node@22.10.1)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3)
       vitepress-plugin-mermaid:
         specifier: ^2.0.16
-        version: 2.0.16(mermaid@10.6.1)(vitepress@1.0.1(@algolia/client-search@4.19.1)(@types/node@20.10.5)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3))
+        version: 2.0.16(mermaid@10.6.1)(vitepress@1.0.1(@algolia/client-search@4.19.1)(@types/node@22.10.1)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3))
       vitest:
         specifier: ^0.29.2
         version: 0.29.2(jsdom@24.0.0)
@@ -119,13 +119,13 @@ importers:
     devDependencies:
       vite:
         specifier: ^6.0.0
-        version: 6.0.1(@types/node@20.10.5)(tsx@4.7.0)
+        version: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)
 
   examples/vapor:
     devDependencies:
       vite:
         specifier: ^6.0.0
-        version: 6.0.1(@types/node@20.10.5)(tsx@4.7.0)
+        version: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)
 
   packages/@extensions/chibivue-router: {}
 
@@ -1172,8 +1172,8 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@20.10.5':
-    resolution: {integrity: sha512-nNPsNE65wjMxEKI93yOP+NPGGBJz/PoN3kZsVLee0XMiJolxSekEVD8wRwBUBqkwc7UWop0edW50yrCQW4CyRw==}
+  '@types/node@22.10.1':
+    resolution: {integrity: sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==}
 
   '@types/node@8.0.0':
     resolution: {integrity: sha512-j2tekvJCO7j22cs+LO6i0kRPhmQ9MXaPZ55TzOc1lzkN5b6BWqq4AFjl04s1oRRQ1v5rSe+KEvnLUSTonuls/A==}
@@ -3526,8 +3526,8 @@ packages:
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
-  undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
   unified@9.2.2:
     resolution: {integrity: sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==}
@@ -4648,12 +4648,12 @@ snapshots:
   '@types/fs-extra@11.0.1':
     dependencies:
       '@types/jsonfile': 6.1.1
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
 
   '@types/glob@5.0.30':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
 
   '@types/json-schema@7.0.15': {}
 
@@ -4661,7 +4661,7 @@ snapshots:
 
   '@types/jsonfile@6.1.1':
     dependencies:
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
 
   '@types/linkify-it@3.0.5': {}
 
@@ -4682,9 +4682,9 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
-  '@types/node@20.10.5':
+  '@types/node@22.10.1':
     dependencies:
-      undici-types: 5.26.5
+      undici-types: 6.20.0
 
   '@types/node@8.0.0': {}
 
@@ -4782,14 +4782,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-vue@5.0.2(vite@6.0.1(@types/node@20.10.5)(tsx@4.7.0))(vue@3.4.21(typescript@5.3.3))':
+  '@vitejs/plugin-vue@5.0.2(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0))(vue@3.4.21(typescript@5.3.3))':
     dependencies:
-      vite: 6.0.1(@types/node@20.10.5)(tsx@4.7.0)
+      vite: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)
       vue: 3.4.21(typescript@5.3.3)
 
-  '@vitejs/plugin-vue@5.0.4(vite@5.2.6(@types/node@20.10.5))(vue@3.4.21(typescript@5.3.3))':
+  '@vitejs/plugin-vue@5.0.4(vite@5.2.6(@types/node@22.10.1))(vue@3.4.21(typescript@5.3.3))':
     dependencies:
-      vite: 5.2.6(@types/node@20.10.5)
+      vite: 5.2.6(@types/node@22.10.1)
       vue: 3.4.21(typescript@5.3.3)
 
   '@vitest/expect@0.29.2':
@@ -7543,7 +7543,7 @@ snapshots:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
 
-  undici-types@5.26.5: {}
+  undici-types@6.20.0: {}
 
   unified@9.2.2:
     dependencies:
@@ -7617,12 +7617,12 @@ snapshots:
       unist-util-stringify-position: 2.0.3
       vfile-message: 2.0.4
 
-  vite-hyper-config@0.2.1(@types/node@20.10.5)(vite@6.0.1(@types/node@20.10.5)(tsx@4.7.0)):
+  vite-hyper-config@0.2.1(@types/node@22.10.1)(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0)):
     dependencies:
       cac: 6.7.14
       picocolors: 1.0.0
-      vite: 6.0.1(@types/node@20.10.5)(tsx@4.7.0)
-      vite-node: 1.1.3(@types/node@20.10.5)
+      vite: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)
+      vite-node: 1.1.3(@types/node@22.10.1)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7633,14 +7633,14 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@0.29.2(@types/node@20.10.5):
+  vite-node@0.29.2(@types/node@22.10.1):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4
       mlly: 1.2.0
       pathe: 1.1.0
       picocolors: 1.0.0
-      vite: 4.4.9(@types/node@20.10.5)
+      vite: 4.4.9(@types/node@22.10.1)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7651,13 +7651,13 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@1.1.3(@types/node@20.10.5):
+  vite-node@1.1.3(@types/node@22.10.1):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 5.2.6(@types/node@20.10.5)
+      vite: 5.2.6(@types/node@22.10.1)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7668,49 +7668,49 @@ snapshots:
       - supports-color
       - terser
 
-  vite@4.4.9(@types/node@20.10.5):
+  vite@4.4.9(@types/node@22.10.1):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.32
       rollup: 3.28.0
     optionalDependencies:
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
       fsevents: 2.3.3
 
-  vite@5.2.6(@types/node@20.10.5):
+  vite@5.2.6(@types/node@22.10.1):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.13.0
     optionalDependencies:
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
       fsevents: 2.3.3
 
-  vite@6.0.1(@types/node@20.10.5)(tsx@4.7.0):
+  vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0):
     dependencies:
       esbuild: 0.24.0
       postcss: 8.4.49
       rollup: 4.28.0
     optionalDependencies:
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
       fsevents: 2.3.3
       tsx: 4.7.0
 
-  vitepress-plugin-mermaid@2.0.16(mermaid@10.6.1)(vitepress@1.0.1(@algolia/client-search@4.19.1)(@types/node@20.10.5)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3)):
+  vitepress-plugin-mermaid@2.0.16(mermaid@10.6.1)(vitepress@1.0.1(@algolia/client-search@4.19.1)(@types/node@22.10.1)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3)):
     dependencies:
       mermaid: 10.6.1
-      vitepress: 1.0.1(@algolia/client-search@4.19.1)(@types/node@20.10.5)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3)
+      vitepress: 1.0.1(@algolia/client-search@4.19.1)(@types/node@22.10.1)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3)
     optionalDependencies:
       '@mermaid-js/mermaid-mindmap': 9.3.0
 
-  vitepress@1.0.1(@algolia/client-search@4.19.1)(@types/node@20.10.5)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3):
+  vitepress@1.0.1(@algolia/client-search@4.19.1)(@types/node@22.10.1)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.3.3):
     dependencies:
       '@docsearch/css': 3.6.0
       '@docsearch/js': 3.6.0(@algolia/client-search@4.19.1)(search-insights@2.7.0)
       '@shikijs/core': 1.2.0
       '@shikijs/transformers': 1.2.0
       '@types/markdown-it': 13.0.7
-      '@vitejs/plugin-vue': 5.0.4(vite@5.2.6(@types/node@20.10.5))(vue@3.4.21(typescript@5.3.3))
+      '@vitejs/plugin-vue': 5.0.4(vite@5.2.6(@types/node@22.10.1))(vue@3.4.21(typescript@5.3.3))
       '@vue/devtools-api': 7.0.21(vue@3.4.21(typescript@5.3.3))
       '@vueuse/core': 10.9.0(vue@3.4.21(typescript@5.3.3))
       '@vueuse/integrations': 10.9.0(focus-trap@7.5.4)(vue@3.4.21(typescript@5.3.3))
@@ -7718,7 +7718,7 @@ snapshots:
       mark.js: 8.11.1
       minisearch: 6.3.0
       shiki: 1.2.0
-      vite: 5.2.6(@types/node@20.10.5)
+      vite: 5.2.6(@types/node@22.10.1)
       vue: 3.4.21(typescript@5.3.3)
     optionalDependencies:
       postcss: 8.4.49
@@ -7753,7 +7753,7 @@ snapshots:
     dependencies:
       '@types/chai': 4.3.4
       '@types/chai-subset': 1.3.3
-      '@types/node': 20.10.5
+      '@types/node': 22.10.1
       '@vitest/expect': 0.29.2
       '@vitest/runner': 0.29.2
       '@vitest/spy': 0.29.2
@@ -7772,8 +7772,8 @@ snapshots:
       tinybench: 2.4.0
       tinypool: 0.3.1
       tinyspy: 1.1.1
-      vite: 4.4.9(@types/node@20.10.5)
-      vite-node: 0.29.2(@types/node@20.10.5)
+      vite: 4.4.9(@types/node@22.10.1)
+      vite-node: 0.29.2(@types/node@22.10.1)
       why-is-node-running: 2.2.2
     optionalDependencies:
       jsdom: 24.0.0
