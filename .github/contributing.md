@@ -50,7 +50,7 @@ You can choose any name for the repository. Feel free to set other information a
 
 - [Node.js](https://nodejs.org/en) (v22.x)
   We use [Volta](https://volta.sh/) for version management, so please install it if you haven't already.
-- [pnpm](https://pnpm.io/) (v8.x)
+- [pnpm](https://pnpm.io/) (v9.x)
 - [@antfu/ni](https://github.com/antfu/ni)
   ni is a great package manager wrapper created by [Anthony Fu](https://github.com/antfu). We assume the use of ni in the chibivue documentation.
 

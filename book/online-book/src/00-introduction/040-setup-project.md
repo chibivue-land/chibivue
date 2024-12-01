@@ -15,7 +15,7 @@ Now, let's quickly move on to setting up the environment! I'll list the tools an
 
 - Runtime: Node.js v22
 - Language: TypeScript
-- Package Manager: pnpm v8.x
+- Package Manager: pnpm v9
 - Build Tool: Vite v6
 
 ## Installing Node.js
