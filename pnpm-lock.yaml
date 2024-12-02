@@ -92,7 +92,7 @@ importers:
         version: 13.4.1
       textlint-rule-ja-space-between-half-and-full-width:
         specifier: ^2.3.0
-        version: 2.3.0
+        version: 2.4.2
       textlint-rule-prh:
         specifier: ^6.0.0
         version: 6.0.0
@@ -966,6 +966,9 @@ packages:
   '@textlint/module-interop@13.4.1':
     resolution: {integrity: sha512-keM5zHwyifijEDqEvAFhhXHC5UbmZjfGytRJzPPJaW3C3UsGbIzDCnfOSE9jUVTWZcngHuSJ7aKGv42Rhy9nEg==}
 
+  '@textlint/regexp-string-matcher@2.0.2':
+    resolution: {integrity: sha512-OXLD9XRxMhd3S0LWuPHpiARQOI7z9tCOs0FsynccW2lmyZzHHFJ9/eR6kuK9xF459Qf+740qI5h+/0cx+NljzA==}
+
   '@textlint/source-code-fixer@13.4.1':
     resolution: {integrity: sha512-Sl29f3Tpimp0uVE3ysyJBjxaFTVYLOXiJX14eWCQ/kC5ZhIXGosEbStzkP1n8Urso1rs1W4p/2UemVAm3NH2ng==}
 
@@ -1058,9 +1061,6 @@ packages:
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
-
-  '@types/unist@2.0.10':
-    resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -1480,10 +1480,6 @@ packages:
   cose-base@2.2.0:
     resolution: {integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==}
 
-  cross-spawn@7.0.3:
-    resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
-    engines: {node: '>= 8'}
-
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -1711,10 +1707,6 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
-
-  define-data-property@1.1.1:
-    resolution: {integrity: sha512-E7uGkTzkk1d0ByLeSc6ZsFS79Axg+m1P/VsgYsxHgiuc3tFSj+MjMIwe90FC4lOAZzNBdY7kkO2P2wKdsQ1vgQ==}
-    engines: {node: '>= 0.4'}
 
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
@@ -2142,9 +2134,6 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  has-property-descriptors@1.0.1:
-    resolution: {integrity: sha512-VsX8eaIewvas0xnvinAe9bw4WfIeODpGYikiWYLH+dma0Jw6KHYqWiWfhQlgOVK8D6PvjubK5Uc4P0iIhIcNVg==}
-
   has-property-descriptors@1.0.2:
     resolution: {integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg==}
 
@@ -2512,8 +2501,17 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
+  lodash.sortby@4.7.0:
+    resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
+
   lodash.truncate@4.4.2:
     resolution: {integrity: sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==}
+
+  lodash.uniq@4.5.0:
+    resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
+
+  lodash.uniqwith@4.5.0:
+    resolution: {integrity: sha512-7lYL8bLopMoy4CTICbxygAUq6CdRJ36vFc80DucPueUee+d5NBRxz3FdT9Pes/HEx5mPoT9jwnsEJWz1N7uq7Q==}
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -3022,10 +3020,6 @@ packages:
     resolution: {integrity: sha512-bMvFGIUKlc/eSfXNX+aZ+EL95/EgZzuwA0OBPTbZZDEJw/0AkentjMuM1oiRfwHrshqk4RzdgiTg5CcDalXN5g==}
     engines: {node: '>= 0.4'}
 
-  regexp.prototype.flags@1.5.1:
-    resolution: {integrity: sha512-sy6TXMN+hnP/wMy+ISxg3krXx7BAtWVO4UouuCN/ziM9UEne0euamVNafDfvC83bRNr95y0V5iijeDQFUNpvrg==}
-    engines: {node: '>= 0.4'}
-
   regexp.prototype.flags@1.5.3:
     resolution: {integrity: sha512-vqlC04+RQoFalODCbCumG2xIOvapzVMHwsyIGM/SIE8fRhFFsXeH8/QQ+s0T0kDAhKc4k30s73/0ydkHQz6HlQ==}
     engines: {node: '>= 0.4'}
@@ -3149,10 +3143,6 @@ packages:
 
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
-    engines: {node: '>= 0.4'}
-
-  set-function-name@2.0.1:
-    resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
     engines: {node: '>= 0.4'}
 
   set-function-name@2.0.2:
@@ -3323,8 +3313,8 @@ packages:
   textlint-rule-helper@2.3.1:
     resolution: {integrity: sha512-b1bijvyiUmKinfFE5hkQMSXs3Ky8jyZ3Y6SOoTRJKV9HLL2LWUVFAUezO7z4FpAkVvYruDYWCwA5qWV8GmvyUw==}
 
-  textlint-rule-ja-space-between-half-and-full-width@2.3.0:
-    resolution: {integrity: sha512-XJmw9fiKCK32P1fVGnYsqr1RdrWxTSqVqBPPHFVaIZhS1pBR7FsxdcR1SD6vEKe+EBJDEEZhJxrw8Pi1E5E22g==}
+  textlint-rule-ja-space-between-half-and-full-width@2.4.2:
+    resolution: {integrity: sha512-GqwSy0ivm4Q5Bok9LaOwfg+H1auLRMoMi2aY/7aSIrgvX/RD5aZ2Rk2lm3TTX42mR1UrQu8GDqktUEZfvQ913w==}
 
   textlint-rule-prh@6.0.0:
     resolution: {integrity: sha512-byU7eUyhabX2FKx3ShOktKkmKLG5dhR0ru+PGllKgafKKWXtzOIAhAaDlqMC5qU6b3Jaz5rKQcnroGVCEjcP1Q==}
@@ -4454,6 +4444,13 @@ snapshots:
 
   '@textlint/module-interop@13.4.1': {}
 
+  '@textlint/regexp-string-matcher@2.0.2':
+    dependencies:
+      escape-string-regexp: 4.0.0
+      lodash.sortby: 4.7.0
+      lodash.uniq: 4.5.0
+      lodash.uniqwith: 4.5.0
+
   '@textlint/source-code-fixer@13.4.1':
     dependencies:
       '@textlint/types': 13.4.1
@@ -4530,7 +4527,7 @@ snapshots:
 
   '@types/mdast@3.0.15':
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
 
   '@types/mdurl@1.0.5': {}
 
@@ -4550,8 +4547,6 @@ snapshots:
 
   '@types/trusted-types@2.0.7':
     optional: true
-
-  '@types/unist@2.0.10': {}
 
   '@types/unist@2.0.11': {}
 
@@ -5040,12 +5035,6 @@ snapshots:
     dependencies:
       layout-base: 2.0.1
 
-  cross-spawn@7.0.3:
-    dependencies:
-      path-key: 3.1.1
-      shebang-command: 2.0.0
-      which: 2.0.2
-
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -5293,12 +5282,6 @@ snapshots:
   deep-eql@5.0.2: {}
 
   deep-is@0.1.4: {}
-
-  define-data-property@1.1.1:
-    dependencies:
-      get-intrinsic: 1.2.4
-      gopd: 1.1.0
-      has-property-descriptors: 1.0.1
 
   define-data-property@1.1.4:
     dependencies:
@@ -5898,10 +5881,6 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  has-property-descriptors@1.0.1:
-    dependencies:
-      get-intrinsic: 1.2.4
-
   has-property-descriptors@1.0.2:
     dependencies:
       es-define-property: 1.0.0
@@ -6263,7 +6242,13 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
+  lodash.sortby@4.7.0: {}
+
   lodash.truncate@4.4.2: {}
+
+  lodash.uniq@4.5.0: {}
+
+  lodash.uniqwith@4.5.0: {}
 
   lodash@4.17.21: {}
 
@@ -6299,7 +6284,7 @@ snapshots:
 
   match-index@1.0.3:
     dependencies:
-      regexp.prototype.flags: 1.5.1
+      regexp.prototype.flags: 1.5.3
 
   md5@2.3.0:
     dependencies:
@@ -6384,7 +6369,7 @@ snapshots:
 
   mdast-util-to-markdown@0.6.5:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
       longest-streak: 2.0.4
       mdast-util-to-string: 2.0.0
       parse-entities: 2.0.0
@@ -6933,12 +6918,6 @@ snapshots:
       gopd: 1.1.0
       which-builtin-type: 1.2.0
 
-  regexp.prototype.flags@1.5.1:
-    dependencies:
-      call-bind: 1.0.7
-      define-properties: 1.2.1
-      set-function-name: 2.0.1
-
   regexp.prototype.flags@1.5.3:
     dependencies:
       call-bind: 1.0.7
@@ -7102,12 +7081,6 @@ snapshots:
       get-intrinsic: 1.2.4
       gopd: 1.1.0
       has-property-descriptors: 1.0.2
-
-  set-function-name@2.0.1:
-    dependencies:
-      define-data-property: 1.1.1
-      functions-have-names: 1.2.3
-      has-property-descriptors: 1.0.1
 
   set-function-name@2.0.2:
     dependencies:
@@ -7283,8 +7256,9 @@ snapshots:
       structured-source: 4.0.0
       unist-util-visit: 2.0.3
 
-  textlint-rule-ja-space-between-half-and-full-width@2.3.0:
+  textlint-rule-ja-space-between-half-and-full-width@2.4.2:
     dependencies:
+      '@textlint/regexp-string-matcher': 2.0.2
       match-index: 1.0.3
       textlint-rule-helper: 2.3.1
 
@@ -7486,7 +7460,7 @@ snapshots:
 
   unified@9.2.2:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
       bail: 1.0.5
       extend: 3.0.2
       is-buffer: 2.0.5
@@ -7500,7 +7474,7 @@ snapshots:
 
   unist-util-stringify-position@2.0.3:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
 
   unist-util-stringify-position@3.0.3:
     dependencies:
@@ -7508,12 +7482,12 @@ snapshots:
 
   unist-util-visit-parents@3.1.1:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
       unist-util-is: 4.1.0
 
   unist-util-visit@2.0.3:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
       unist-util-is: 4.1.0
       unist-util-visit-parents: 3.1.1
 
@@ -7546,12 +7520,12 @@ snapshots:
 
   vfile-message@2.0.4:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
       unist-util-stringify-position: 2.0.3
 
   vfile@4.2.1:
     dependencies:
-      '@types/unist': 2.0.10
+      '@types/unist': 2.0.11
       is-buffer: 2.0.5
       unist-util-stringify-position: 2.0.3
       vfile-message: 2.0.4
