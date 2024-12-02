@@ -44,7 +44,7 @@ importers:
         version: 6.17.0(eslint@8.56.0)(typescript@5.7.2)
       '@vitejs/plugin-vue':
         specifier: ^5.0.2
-        version: 5.0.2(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))(vue@3.4.21(typescript@5.7.2))
+        version: 5.2.1(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))(vue@3.4.21(typescript@5.7.2))
       chainsi:
         specifier: ^0.0.1
         version: 0.0.1
@@ -1125,18 +1125,11 @@ packages:
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  '@vitejs/plugin-vue@5.0.2':
-    resolution: {integrity: sha512-kEjJHrLb5ePBvjD0SPZwJlw1QTRcjjCA9sB5VyfonoXVBxTS7TMnqL6EkLt1Eu61RDeiuZ/WN9Hf6PxXhPI2uA==}
+  '@vitejs/plugin-vue@5.2.1':
+    resolution: {integrity: sha512-cxh314tzaWwOLqVes2gnnCtvBDcM1UMdn+iFR+UjAn411dPT3tOmqrJjbMd7koZpMAmBM/GqeV4n9ge7JSiJJQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.0.0
-      vue: ^3.2.25
-
-  '@vitejs/plugin-vue@5.0.4':
-    resolution: {integrity: sha512-WS3hevEszI6CEVEx28F8RjTX97k3KsrcY6kvTg7+Whm5y3oYvcqzVeGCU3hxSAn4uY2CLCkeokkGKpoctccilQ==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    peerDependencies:
-      vite: ^5.0.0
+      vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
   '@vitest/expect@2.1.6':
@@ -1291,10 +1284,6 @@ packages:
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
-
-  ansi-regex@6.0.1:
-    resolution: {integrity: sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==}
-    engines: {node: '>=12'}
 
   ansi-regex@6.1.0:
     resolution: {integrity: sha512-7HSX4QQb4CspciLpVFwyRe79O3xsIZDDLER21kERQ71oaPodF8jL725AgJMFAYbooIqolJoRLuM81SpeUkpkvA==}
@@ -4654,14 +4643,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-vue@5.0.2(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))(vue@3.4.21(typescript@5.7.2))':
-    dependencies:
-      vite: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1)
-      vue: 3.4.21(typescript@5.7.2)
-
-  '@vitejs/plugin-vue@5.0.4(vite@5.2.6(@types/node@22.10.1))(vue@3.4.21(typescript@5.7.2))':
+  '@vitejs/plugin-vue@5.2.1(vite@5.2.6(@types/node@22.10.1))(vue@3.4.21(typescript@5.7.2))':
     dependencies:
       vite: 5.2.6(@types/node@22.10.1)
+      vue: 3.4.21(typescript@5.7.2)
+
+  '@vitejs/plugin-vue@5.2.1(vite@6.0.1(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))(vue@3.4.21(typescript@5.7.2))':
+    dependencies:
+      vite: 6.0.1(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1)
       vue: 3.4.21(typescript@5.7.2)
 
   '@vitest/expect@2.1.6':
@@ -4856,8 +4845,6 @@ snapshots:
   ansi-purge@1.0.0: {}
 
   ansi-regex@5.0.1: {}
-
-  ansi-regex@6.0.1: {}
 
   ansi-regex@6.1.0: {}
 
@@ -7693,7 +7680,7 @@ snapshots:
       '@shikijs/core': 1.2.0
       '@shikijs/transformers': 1.2.0
       '@types/markdown-it': 13.0.7
-      '@vitejs/plugin-vue': 5.0.4(vite@5.2.6(@types/node@22.10.1))(vue@3.4.21(typescript@5.7.2))
+      '@vitejs/plugin-vue': 5.2.1(vite@5.2.6(@types/node@22.10.1))(vue@3.4.21(typescript@5.7.2))
       '@vue/devtools-api': 7.0.21(vue@3.4.21(typescript@5.7.2))
       '@vueuse/core': 10.9.0(vue@3.4.21(typescript@5.7.2))
       '@vueuse/integrations': 10.9.0(focus-trap@7.5.4)(vue@3.4.21(typescript@5.7.2))
