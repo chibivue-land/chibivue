@@ -204,10 +204,8 @@ chibivue (もしくは ubugeeei, もしくはこのコミュニティ) に興味
 
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
-Vue.js メンバー, Vue.js Japan User Group コアスタッフ．\
-Vapor Mode の開発に立ち上げ (2023/11) から携わる. \
-2023/12 に vuejs/core-vapor の external collaborator になる.\
-2024/4 に vuejs organization のメンバーになり，Vapor Team のメンバーになる.
+[Vue.js](https://github.com/vuejs) メンバー, [Vue.js Japan User Group](https://github.com/vuejs-jp) コアスタッフ．\
+[chibivue land](https://github.com/chibivue-land) オーナー.
 
 https://ublog.dev/
 

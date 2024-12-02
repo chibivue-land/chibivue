@@ -193,10 +193,8 @@ Other than that, there are no specific requirements.
 
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
-Vue.js member and core staff of the Vue.js Japan User Group.\
-Involved in the development of Vapor Mode from its inception (November 2023).\
-Became an external collaborator for vuejs/core-vapor in December 2023.\
-In April 2024, joined the Vue.js organization and became a member of the Vapor Team.
+Member of [Vue.js](https://github.com/vuejs), core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp).\
+Owner of [chibivue land](https://github.com/chibivue-land).
 
 https://ublog.dev/
 
