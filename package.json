@@ -76,5 +76,8 @@
     "estree-walker": "^3.0.3",
     "magic-string": "^0.30.0",
     "vite": "^6.0.0"
+  },
+  "resolutions": {
+    "cytoscape": "3.28.1"
   }
 }
