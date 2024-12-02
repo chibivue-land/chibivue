@@ -157,9 +157,11 @@ https://twitter.com/ubugeeei
 ## 🦀 About the Discord Server
 
 We have created a Discord Server for this book! (2024/01/01)  
-Here, we share announcements, provide support for questions and tips related to this online book.  
+~~Here, we share announcements, provide support for questions and tips related to this online book.~~ \
 We also welcome casual conversations, so let's have fun communicating with other chibivue users.  
 Currently, most of the conversations are in Japanese as there are many Japanese speakers, but non-Japanese speakers are also welcome to join without hesitation! (It's completely fine to use your native language)
+
+Recently, We’ve been actively contributing not only to chibivue but also as part of the Japanese community server for Vue.js!
 
 ### What we do roughly
 
@@ -169,23 +171,12 @@ Currently, most of the conversations are in Japanese as there are many Japanese 
 - Answering questions
 - Responding to requests
 - Casual conversations
-- ubugeeei mutters to himself when working on chibivue (heckling is welcome)
 
 ### How to join
 
 Here is the invitation link 👉 https://discord.gg/aVHvmbmSRy
 
 You can also join from the Discord button on the top right of this book's header.
-
-### Eligibility to join
-
-Anyone interested in chibivue (or ubugeeei, or this community)!  
-(Please refrain from joining solely for promotional purposes)
-
-### What we would like you to do when joining
-
-Please make sure to read general/rules thoroughly.
-Other than that, there are no specific requirements.
 
 ## About the Author
 
