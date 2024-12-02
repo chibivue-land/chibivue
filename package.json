@@ -78,6 +78,6 @@
     "vite": "^6.0.0"
   },
   "resolutions": {
-    "cytoscape": "3.28.1"
+    "cytoscape": "3.30.4"
   }
 }
