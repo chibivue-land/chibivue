@@ -3,7 +3,7 @@
   "version": "0.0.9",
   "type": "module",
   "author": "ubugeeei",
-  "packageManager": "pnpm@9.10.0",
+  "packageManager": "pnpm@9.14.4",
   "scripts": {
     "prepare": "husky install",
     "setup": "pnpm i && tsx tools/create-chibivue/main.ts",
