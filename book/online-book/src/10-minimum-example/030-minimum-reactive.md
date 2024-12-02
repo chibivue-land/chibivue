@@ -196,16 +196,19 @@ This is the extent of understanding Proxy.
 
 ## Trying to achieve Reactivity System with Proxy
 
-::: warning
-[Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) was released at the end of December 2023, which includes [improvements to reactivity performance](https://github.com/vuejs/core/pull/5912).  
-You should note that this online book is referencing the previous implementation.  
-There are no major changes in this chapter, but the file structure may be slightly different and some code may have been modified.  
-This online book will be updated accordingly at the appropriate time.
+::: info Differences in Design Compared to the Current `vuejs/core`
+As of December 2024, Vue.js's Reactivity system employs a doubly linked list-based Observer Pattern.\
+This implementation, introduced in [Refactor reactivity system to use version counting and doubly-linked list tracking](https://github.com/vuejs/core/pull/10397), has contributed significantly to performance improvements.  
+
+However, for those implementing a reactivity system for the first time, this can be somewhat challenging to grasp. In this chapter, we will create a simplified implementation of the traditional (pre-optimization) system.\
+For a more detailed explanation of a system closer to the current implementation, please refer to [Reactivity Optimization](/30-basic-reactivity-system/005-reactivity-optimization).  
+
+Another significant improvement, [feat(reactivity): more efficient reactivity system](https://github.com/vuejs/core/pull/5912), will be covered in a separate chapter.  
 :::
 
 To clarify the purpose again, the purpose this time is to "execute `updateComponent` when the state is changed". Let me explain the implementation process using Proxy.
 
-First, Vue.js's Reactivity System involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect`.
+First, Vue.js's Reactivity System involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect` (currently `activeSub`).
 
 First, let's talk about the structure of targetMap.
 targetMap is a mapping of keys and deps for a certain target.

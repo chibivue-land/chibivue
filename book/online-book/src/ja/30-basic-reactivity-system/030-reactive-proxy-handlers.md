@@ -1,9 +1,8 @@
 # 様々な Reactive Proxy Handler
 
 ::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが，これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています．  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい．  
-然るべきタイミングでこのオンラインブックも追従する予定です．  
+ここで説明される実装は現在執筆中の [Reactivity の最適化](/ja/30-basic-reactivity-system/005-reactivity-optimization) 以前のものになります．\
+[Reactivity の最適化](/ja/30-basic-reactivity-system/005-reactivity-optimization)　が完成次第，このチャプターの内容もそれに沿うように変更されます．
 :::
 
 ## reactive にしたくないオブジェクト

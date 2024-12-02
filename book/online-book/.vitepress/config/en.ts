@@ -99,6 +99,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
+            text: '🚧 Reactivity Optimization',
+            link: '/30-basic-reactivity-system/005-reactivity-optimization.md',
+          },
+          {
             text: 'ref API',
             link: '/30-basic-reactivity-system/010-ref-api',
           },

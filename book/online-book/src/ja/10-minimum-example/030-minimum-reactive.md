@@ -196,17 +196,20 @@ Proxy の理解はこの程度で OK です．
 
 ## Proxy で Reactivity System を実現してみる
 
-::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが，これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています．  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい．  
-このチャプターに関しては大きな変更はありませんが，ファイル構成が少し違っていたり，コードの一部が変更されていたりします．  
-然るべきタイミングでこのオンラインブックも追従する予定です．  
+::: info 現在の vuejs/core との設計の違いについて
+現在 (2024/12)の Vue.js の Reactivity System では，doubly linked list ベースの Observer Pattern が採用されています．\
+この実装は [Refactor reactivity system to use version counting and doubly-linked list tracking](https://github.com/vuejs/core/pull/10397) で行われ，パフォーマンスの向上に寄与しました．
+
+しかし，初めてリアクティビティシステムを実装する人にとっては少し難しいものになっており，今回のこのチャプターでは従来 (改善以前) のものをより簡略化したものの実装を行います．\
+より現在の実装に近いものは [リアクティビティの最適化](/ja/30-basic-reactivity-system/005-reactivity-optimization) にて解説します．
+
+また，もう一つ大きな改善として，[feat(reactivity): more efficient reactivity system](https://github.com/vuejs/core/pull/5912) がありますが，こちらも別のチャプターで解説します．
 :::
 
 改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．  
 Proxy を用いた実装の流れについて説明してみます．
 
-まず，Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します．
+まず，Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
 
 まず，targetMap の構造についてです．  
 targetMap はある target の key と dep のマッピングです．  
