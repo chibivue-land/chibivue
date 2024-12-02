@@ -103,8 +103,8 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
       vite-hyper-config:
-        specifier: ^0.2.1
-        version: 0.2.1(@types/node@22.10.1)(vite@6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))
+        specifier: ^0.4.0
+        version: 0.4.1(@types/node@22.10.1)(tsx@4.7.0)(vite@6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))(yaml@2.5.1)
       vite-node:
         specifier: ^1.1.3
         version: 1.1.3(@types/node@22.10.1)
@@ -3588,11 +3588,11 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite-hyper-config@0.2.1:
-    resolution: {integrity: sha512-ItRIpzWp0XMh/Sn1H0GCWnQIUcBjnSaZy/EbOpJcRr9H/KTBHUSTCEOigE9K0KTN01Z0GDi/8WgVT9+RPL932A==}
+  vite-hyper-config@0.4.1:
+    resolution: {integrity: sha512-w9D4g0+5Km8XCgkBY/BZrXZAl8FF2q1UpDXT/Fsm6VLEU5tkkzDCko8fjLPOaSbvirUJgbY5OsD5wuuZ6581Fg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
+      vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
   vite-node@1.1.3:
     resolution: {integrity: sha512-BLSO72YAkIUuNrOx+8uznYICJfTEbvBAmWClY3hpath5+h1mbPS5OMn42lrTxXuyCazVyZoDkSRnju78GiVCqA==}
@@ -7753,14 +7753,15 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-hyper-config@0.2.1(@types/node@22.10.1)(vite@6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1)):
+  vite-hyper-config@0.4.1(@types/node@22.10.1)(tsx@4.7.0)(vite@6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))(yaml@2.5.1):
     dependencies:
       cac: 6.7.14
-      picocolors: 1.0.0
+      picocolors: 1.1.1
       vite: 6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1)
-      vite-node: 1.1.3(@types/node@22.10.1)
+      vite-node: 2.1.6(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1)
     transitivePeerDependencies:
       - '@types/node'
+      - jiti
       - less
       - lightningcss
       - sass
@@ -7769,6 +7770,8 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+      - tsx
+      - yaml
 
   vite-node@1.1.3(@types/node@22.10.1):
     dependencies:
