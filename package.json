@@ -5,7 +5,6 @@
   "author": "ubugeeei",
   "packageManager": "pnpm@9.14.4",
   "scripts": {
-    "prepare": "husky install",
     "setup": "pnpm i && tsx tools/create-chibivue/main.ts",
     "setup:vue": "tsx tools/vue-playground/main.ts",
     "setup:dev": "tsx tools/chibivue-playground/main.ts",
@@ -27,18 +26,6 @@
     "book:translate": "tsx tools/translator/ja2en/main.ts",
     "book:size": "tokei -f packages > tools/book-size/pkg/files.txt"
   },
-  "lint-staged": {
-    "*.{js,json}": [
-      "prettier --write"
-    ],
-    "*.ts": [
-      "eslint --fix",
-      "prettier --parser=typescript --write"
-    ],
-    "*.md": [
-      "textlint"
-    ]
-  },
   "devDependencies": {
     "@babel/types": "^7.21.2",
     "@types/dts-bundle": "^0.0.35",
@@ -58,9 +45,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-import-x": "^4.5.0",
     "fs-extra": "^11.1.1",
-    "husky": "^9.0.0",
     "jsdom": "^25.0.0",
-    "lint-staged": "^15.2.0",
     "prettier": "4.0.0-alpha.10",
     "rimraf": "^6.0.0",
     "textlint": "^14.0.0",
