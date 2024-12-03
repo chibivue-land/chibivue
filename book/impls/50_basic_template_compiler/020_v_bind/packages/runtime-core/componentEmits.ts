@@ -1,5 +1,5 @@
-import { UnionToIntersection, camelize, toHandlerKey } from '../shared'
-import { ComponentInternalInstance } from './component'
+import { type UnionToIntersection, camelize, toHandlerKey } from '../shared'
+import type { ComponentInternalInstance } from './component'
 
 export type ObjectEmitsOptions = Record<
   string,

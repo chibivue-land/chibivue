@@ -1,12 +1,12 @@
 import { toHandlerKey } from '../shared'
 import {
-  AttributeNode,
-  DirectiveNode,
-  ElementNode,
-  InterpolationNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type InterpolationNode,
   NodeTypes,
-  TemplateChildNode,
-  TextNode,
+  type TemplateChildNode,
+  type TextNode,
 } from './ast'
 
 export const generate = ({

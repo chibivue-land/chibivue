@@ -1,4 +1,4 @@
-import { DirectiveTransform, NodeTransform } from './transform'
+import type { DirectiveTransform, NodeTransform } from './transform'
 
 export type CompilerOptions = TransformOptions
 

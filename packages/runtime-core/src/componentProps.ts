@@ -1,6 +1,6 @@
 import { reactive } from '@chibivue/reactivity'
 import { camelize, hasOwn, isReservedProp } from '@chibivue/shared'
-import { ComponentInternalInstance, Data } from './component'
+import type { ComponentInternalInstance, Data } from './component'
 
 export type NormalizedProps = Record<string, PropOptions | null>
 export interface PropOptions<T = any> {

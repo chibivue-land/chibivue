@@ -1,18 +1,18 @@
 import { isSymbol } from '@chibivue/shared'
 
 import {
-  ArrayExpression,
-  CallExpression,
-  ComponentNode,
-  DirectiveArguments,
-  DirectiveNode,
-  ElementNode,
+  type ArrayExpression,
+  type CallExpression,
+  type ComponentNode,
+  type DirectiveArguments,
+  type DirectiveNode,
+  type ElementNode,
   ElementTypes,
-  ExpressionNode,
+  type ExpressionNode,
   NodeTypes,
-  ObjectExpression,
-  TemplateTextChildNode,
-  VNodeCall,
+  type ObjectExpression,
+  type TemplateTextChildNode,
+  type VNodeCall,
   createArrayExpression,
   createCallExpression,
   createObjectExpression,
@@ -28,7 +28,7 @@ import {
   RESOLVE_COMPONENT,
   TO_HANDLERS,
 } from '../runtimeHelpers'
-import { NodeTransform, TransformContext } from '../transform'
+import type { NodeTransform, TransformContext } from '../transform'
 import { isStaticExp } from '../utils'
 
 const directiveImportMap = new WeakMap<DirectiveNode, symbol>()

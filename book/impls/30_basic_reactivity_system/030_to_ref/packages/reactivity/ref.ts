@@ -1,5 +1,5 @@
-import { IfAny } from '../shared'
-import { Dep, createDep } from './dep'
+import type { IfAny } from '../shared'
+import { type Dep, createDep } from './dep'
 import { getDepFromReactive, trackEffects, triggerEffects } from './effect'
 import { toReactive } from './reactive'
 

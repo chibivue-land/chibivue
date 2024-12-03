@@ -1,4 +1,4 @@
-import { DefaultTheme, LocaleSpecificConfig } from 'vitepress'
+import type { DefaultTheme, LocaleSpecificConfig } from 'vitepress'
 
 export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   themeConfig: {

@@ -1,19 +1,19 @@
 import {
-  CallExpression,
-  DirectiveNode,
-  ElementNode,
-  ExpressionNode,
+  type CallExpression,
+  type DirectiveNode,
+  type ElementNode,
+  type ExpressionNode,
   NodeTypes,
-  ObjectExpression,
-  TemplateTextChildNode,
-  VNodeCall,
+  type ObjectExpression,
+  type TemplateTextChildNode,
+  type VNodeCall,
   createCallExpression,
   createObjectExpression,
   createObjectProperty,
   createSimpleExpression,
   createVNodeCall,
 } from '../ast'
-import { NodeTransform, TransformContext } from '../transform'
+import type { NodeTransform, TransformContext } from '../transform'
 import { isStaticExp } from '../utils'
 
 export type PropsExpression = ObjectExpression | CallExpression | ExpressionNode

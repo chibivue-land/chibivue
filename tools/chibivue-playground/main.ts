@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import fse from 'fs-extra'
 
 const red = (s: string) => `\x1b[31m${s}\x1b[0m`

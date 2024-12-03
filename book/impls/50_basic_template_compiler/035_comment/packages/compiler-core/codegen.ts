@@ -1,21 +1,21 @@
 import { isArray, isString, isSymbol } from '../shared'
 import {
-  ArrayExpression,
-  CallExpression,
-  CommentNode,
-  CompoundExpressionNode,
-  ExpressionNode,
-  InterpolationNode,
-  JSChildNode,
+  type ArrayExpression,
+  type CallExpression,
+  type CommentNode,
+  type CompoundExpressionNode,
+  type ExpressionNode,
+  type InterpolationNode,
+  type JSChildNode,
   NodeTypes,
-  ObjectExpression,
-  RootNode,
-  SimpleExpressionNode,
-  TemplateChildNode,
-  TextNode,
-  VNodeCall,
+  type ObjectExpression,
+  type RootNode,
+  type SimpleExpressionNode,
+  type TemplateChildNode,
+  type TextNode,
+  type VNodeCall,
 } from './ast'
-import { CompilerOptions } from './options'
+import type { CompilerOptions } from './options'
 import { CREATE_COMMENT, CREATE_VNODE, helperNameMap } from './runtimeHelpers'
 
 const CONSTANT = { ctxIdent: '_ctx' }

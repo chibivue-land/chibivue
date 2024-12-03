@@ -1,14 +1,14 @@
-import { EffectScope, ReactiveEffect } from '../reactivity'
-import { AppContext, createAppContext } from './apiCreateApp'
+import { EffectScope, type ReactiveEffect } from '../reactivity'
+import { type AppContext, createAppContext } from './apiCreateApp'
 import { emit } from './componentEmits'
-import { ComponentOptions } from './componentOptions'
-import { Props, initProps } from './componentProps'
+import type { ComponentOptions } from './componentOptions'
+import { type Props, initProps } from './componentProps'
 import {
-  ComponentPublicInstance,
+  type ComponentPublicInstance,
   PublicInstanceProxyHandlers,
 } from './componentPublicInstance'
 import { LifecycleHooks } from './enums'
-import { VNode, VNodeChild } from './vnode'
+import type { VNode, VNodeChild } from './vnode'
 
 export type Component = ComponentOptions
 

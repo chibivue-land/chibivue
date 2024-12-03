@@ -1,8 +1,8 @@
-import { IfAny, isArray } from '../shared'
-import { CollectionTypes } from './collectionHandlers'
-import { Dep, createDep } from './dep'
+import { type IfAny, isArray } from '../shared'
+import type { CollectionTypes } from './collectionHandlers'
+import { type Dep, createDep } from './dep'
 import { getDepFromReactive, trackEffects, triggerEffects } from './effect'
-import { ShallowReactiveMarker, toReactive } from './reactive'
+import { type ShallowReactiveMarker, toReactive } from './reactive'
 
 declare const RefSymbol: unique symbol
 export declare const RawSymbol: unique symbol

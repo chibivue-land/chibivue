@@ -1,5 +1,5 @@
 import type { SFCDescriptor, SFCScriptBlock } from '@chibivue/compiler-sfc'
-import { ResolvedOptions } from '.'
+import type { ResolvedOptions } from '.'
 
 export function resolveScript(
   descriptor: SFCDescriptor,

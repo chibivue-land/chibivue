@@ -1,10 +1,10 @@
 import { transformOn as baseTransform } from '../../compiler-core/transforms/vOn'
-import { DirectiveTransform } from '../../compiler-core/transform'
+import type { DirectiveTransform } from '../../compiler-core/transform'
 import { makeMap } from '../../shared/makeMap'
 import {
-  ExpressionNode,
+  type ExpressionNode,
   NodeTypes,
-  SimpleExpressionNode,
+  type SimpleExpressionNode,
   createCallExpression,
   createCompoundExpression,
   createObjectProperty,

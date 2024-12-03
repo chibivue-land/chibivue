@@ -1,6 +1,6 @@
 import { camelize, capitalize } from '../../shared'
-import { ConcreteComponent, currentInstance } from '../component'
-import { ComponentOptions } from '../componentOptions'
+import { type ConcreteComponent, currentInstance } from '../component'
+import type { ComponentOptions } from '../componentOptions'
 import { currentRenderingInstance } from '../componentRenderContext'
 
 export function resolveComponent(name: string): ConcreteComponent | string {

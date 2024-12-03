@@ -1,8 +1,8 @@
 import { createApp } from 'chibivue'
 
-// @ts-ignore
+// @ts-expect-error
 import App from './App.vue'
-// @ts-ignore
+// @ts-expect-error
 import Counter from './components/Counter.vue'
 
 const app = createApp(App)

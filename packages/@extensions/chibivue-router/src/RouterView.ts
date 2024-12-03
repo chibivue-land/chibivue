@@ -1,4 +1,4 @@
-import { ComponentOptions, Fragment, h, inject } from 'chibivue'
+import { type ComponentOptions, Fragment, h, inject } from 'chibivue'
 import { routerViewLocationKey } from './injectionSymbols'
 
 export const RouterViewImpl: ComponentOptions = {

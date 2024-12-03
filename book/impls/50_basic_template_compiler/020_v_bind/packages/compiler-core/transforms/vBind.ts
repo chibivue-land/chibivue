@@ -1,5 +1,5 @@
 import { createObjectProperty } from '../ast'
-import { DirectiveTransform } from '../transform'
+import type { DirectiveTransform } from '../transform'
 
 // *with* args.
 export const transformBind: DirectiveTransform = (dir, _node, _context) => {

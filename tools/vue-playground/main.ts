@@ -3,7 +3,6 @@ import path from 'node:path'
 
 import { fileURLToPath } from 'node:url'
 
-import { t } from 'chainsi'
 import { locale } from './locale'
 import { getVuejsCorePathInteract } from './prompt'
 import { generate } from './generate'

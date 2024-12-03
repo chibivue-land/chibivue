@@ -1,6 +1,6 @@
-import { ReactiveEffect } from '../reactivity'
-import { ComponentOptions } from './componentOptions'
-import { VNode, VNodeChild } from './vnode'
+import type { ReactiveEffect } from '../reactivity'
+import type { ComponentOptions } from './componentOptions'
+import type { VNode, VNodeChild } from './vnode'
 
 export type Component = ComponentOptions
 

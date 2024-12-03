@@ -1,4 +1,9 @@
-import { ElementNode, NodeTypes, TemplateChildNode, TextNode } from './ast'
+import {
+  type ElementNode,
+  NodeTypes,
+  type TemplateChildNode,
+  type TextNode,
+} from './ast'
 
 export const generate = ({
   children,

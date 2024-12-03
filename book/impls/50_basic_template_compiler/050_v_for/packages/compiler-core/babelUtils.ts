@@ -1,4 +1,4 @@
-import { Function, Identifier, Node } from '@babel/types'
+import type { Function, Identifier, Node } from '@babel/types'
 
 import { walk } from 'estree-walker'
 

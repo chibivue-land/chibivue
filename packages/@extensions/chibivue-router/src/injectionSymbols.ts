@@ -1,6 +1,6 @@
 import type { ComputedRef, InjectionKey, Ref } from '@chibivue/runtime-core'
-import { Router } from './router'
-import { RouteLocationNormalizedLoaded } from './types'
+import type { Router } from './router'
+import type { RouteLocationNormalizedLoaded } from './types'
 
 export const routerKey = Symbol() as InjectionKey<Router>
 

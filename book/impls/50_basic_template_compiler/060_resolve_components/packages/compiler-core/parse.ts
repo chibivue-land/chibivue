@@ -1,20 +1,20 @@
 import {
-  AttributeNode,
-  CommentNode,
-  DirectiveNode,
-  ElementNode,
+  type AttributeNode,
+  type CommentNode,
+  type DirectiveNode,
+  type ElementNode,
   ElementTypes,
-  ExpressionNode,
-  InterpolationNode,
+  type ExpressionNode,
+  type InterpolationNode,
   NodeTypes,
-  Position,
-  RootNode,
-  SourceLocation,
-  TemplateChildNode,
-  TextNode,
+  type Position,
+  type RootNode,
+  type SourceLocation,
+  type TemplateChildNode,
+  type TextNode,
   createRoot,
 } from './ast'
-import { ParserOptions } from './options'
+import type { ParserOptions } from './options'
 import { advancePositionWithClone } from './utils'
 
 type OptionalOptions = 'isNativeTag' // | TODO:

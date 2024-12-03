@@ -1,4 +1,4 @@
-import { useData, inBrowser } from 'vitepress'
+import { inBrowser, useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme-without-fonts'
 import './main.css'
 

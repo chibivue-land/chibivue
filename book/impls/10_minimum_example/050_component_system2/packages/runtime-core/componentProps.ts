@@ -1,5 +1,5 @@
 import { reactive } from '../reactivity'
-import { ComponentInternalInstance, Data } from './component'
+import type { ComponentInternalInstance, Data } from './component'
 
 export type Props = Record<string, PropOptions | null>
 

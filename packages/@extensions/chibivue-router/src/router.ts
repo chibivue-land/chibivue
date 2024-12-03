@@ -1,11 +1,11 @@
-import { App, computed, reactive, ref } from 'chibivue'
+import { type App, computed, reactive, ref } from 'chibivue'
 import {
   routeLocationKey,
   routerKey,
   routerViewLocationKey,
 } from './injectionSymbols'
-import { RouterHistory } from './history'
-import { RouteLocationNormalizedLoaded } from './types'
+import type { RouterHistory } from './history'
+import type { RouteLocationNormalizedLoaded } from './types'
 import { RouterViewImpl } from './RouterView'
 
 export interface RouteRecord {

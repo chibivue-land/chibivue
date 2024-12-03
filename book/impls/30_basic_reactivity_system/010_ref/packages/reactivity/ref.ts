@@ -1,4 +1,4 @@
-import { Dep, createDep } from './dep'
+import { type Dep, createDep } from './dep'
 import { trackEffects, triggerEffects } from './effect'
 import { toReactive } from './reactive'
 

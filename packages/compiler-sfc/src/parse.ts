@@ -6,8 +6,8 @@ import type {
 import { NodeTypes } from '@chibivue/compiler-core'
 import * as CompilerDOM from '@chibivue/compiler-dom'
 
-import { ImportBinding } from './compileScript'
-import { TemplateCompiler } from './compileTemplate'
+import type { ImportBinding } from './compileScript'
+import type { TemplateCompiler } from './compileTemplate'
 
 export const DEFAULT_FILENAME = 'anonymous.vue'
 

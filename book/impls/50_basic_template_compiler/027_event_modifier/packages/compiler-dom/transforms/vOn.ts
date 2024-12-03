@@ -1,5 +1,5 @@
 import { transformOn as baseTransform } from '../../compiler-core/transforms/vOn'
-import { DirectiveTransform } from '../../compiler-core/transform'
+import type { DirectiveTransform } from '../../compiler-core/transform'
 import { makeMap } from '../../shared/makeMap'
 import { createCallExpression, createObjectProperty } from '../../compiler-core'
 import { V_ON_WITH_MODIFIERS } from '../../runtime-dom/runtimeHelpers'

@@ -1,17 +1,17 @@
 import { parse } from '@babel/parser'
-import { Identifier, Node } from '@babel/types'
+import type { Identifier, Node } from '@babel/types'
 import { genPropsAccessExp, hasOwn, makeMap } from '@chibivue/shared'
 
 import {
-  CompoundExpressionNode,
-  ExpressionNode,
+  type CompoundExpressionNode,
+  type ExpressionNode,
   NodeTypes,
-  SimpleExpressionNode,
+  type SimpleExpressionNode,
   createCompoundExpression,
   createSimpleExpression,
 } from '../ast'
 import { walkIdentifiers } from '../babelUtils'
-import { NodeTransform, TransformContext } from '../transform'
+import type { NodeTransform, TransformContext } from '../transform'
 import { advancePositionWithClone, isSimpleIdentifier } from '../utils'
 import { BindingTypes } from '../options'
 import { UNREF } from '../runtimeHelpers'

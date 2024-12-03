@@ -1,4 +1,9 @@
-import { ComputedRef, ReactiveEffect, Ref, isRef } from '@chibivue/reactivity'
+import {
+  type ComputedRef,
+  ReactiveEffect,
+  type Ref,
+  isRef,
+} from '@chibivue/reactivity'
 import {
   hasChanged,
   isArray,

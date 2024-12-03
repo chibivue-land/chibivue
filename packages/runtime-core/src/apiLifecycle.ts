@@ -1,6 +1,6 @@
-import { VaporComponentInternalInstance } from '@chibivue/runtime-vapor'
+import type { VaporComponentInternalInstance } from '@chibivue/runtime-vapor'
 import {
-  ComponentInternalInstance,
+  type ComponentInternalInstance,
   currentInstance,
   setCurrentInstance,
 } from './component'

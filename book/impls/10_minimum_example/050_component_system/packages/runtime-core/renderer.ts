@@ -1,11 +1,11 @@
 import { ReactiveEffect } from '../reactivity'
 import {
-  Component,
-  ComponentInternalInstance,
-  InternalRenderFunction,
+  type Component,
+  type ComponentInternalInstance,
+  type InternalRenderFunction,
   createComponentInstance,
 } from './component'
-import { Text, VNode, createVNode, normalizeVNode } from './vnode'
+import { Text, type VNode, createVNode, normalizeVNode } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: Component,

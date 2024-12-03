@@ -1,13 +1,13 @@
 import {
-  AttributeNode,
-  DirectiveNode,
-  ElementNode,
-  InterpolationNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type InterpolationNode,
   NodeTypes,
-  Position,
-  SourceLocation,
-  TemplateChildNode,
-  TextNode,
+  type Position,
+  type SourceLocation,
+  type TemplateChildNode,
+  type TextNode,
 } from './ast'
 
 export interface ParserContext {

@@ -1,4 +1,4 @@
-import { RendererOptions } from '../runtime-core'
+import type { RendererOptions } from '../runtime-core'
 import { patchAttr } from './modules/attrs'
 import { patchEvent } from './modules/events'
 import { patchDOMProp } from './modules/props'

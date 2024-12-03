@@ -1,11 +1,11 @@
-import { Ref } from '../reactivity'
+import type { Ref } from '../reactivity'
 import { isArray, isFunction, isObject, isString } from '../shared'
 import { normalizeClass, normalizeStyle } from '../shared/normalizeProp'
 import { ShapeFlags } from '../shared/shapeFlags'
-import { AppContext } from './apiCreateApp'
-import { Component, ComponentInternalInstance, Data } from './component'
+import type { AppContext } from './apiCreateApp'
+import type { Component, ComponentInternalInstance, Data } from './component'
 
-import { RawSlots } from './componentSlots'
+import type { RawSlots } from './componentSlots'
 
 export const Fragment = Symbol()
 export const Text = Symbol()

@@ -1,7 +1,7 @@
-import { EffectScope, getCurrentInstance, inject } from 'chibivue'
+import { type EffectScope, getCurrentInstance, inject } from 'chibivue'
 import {
-  StateTree,
-  Store,
+  type StateTree,
+  type Store,
   activeStore,
   setActiveStore,
   storeSymbol,

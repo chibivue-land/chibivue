@@ -1,5 +1,5 @@
 import {
-  CreateAppFunction,
+  type CreateAppFunction,
   createAppAPI,
   createRenderer,
 } from '../runtime-core'
