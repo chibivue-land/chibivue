@@ -32,6 +32,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/010-create-app-api',
           },
           {
+            text: 'パッケージの設計',
+            link: '/ja/10-minimum-example/015-package-architecture',
+          },
+          {
             text: 'HTML要素をレンダリングできるようにしよう',
             link: '/ja/10-minimum-example/020-simple-h-function',
           },

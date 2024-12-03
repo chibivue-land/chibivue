@@ -35,6 +35,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/010-create-app-api',
           },
           {
+            text: 'Package Architecture',
+            link: '/10-minimum-example/015-package-architecture',
+          },
+          {
             text: "Let's Enable Rendering HTML Elements",
             link: '/10-minimum-example/020-simple-h-function',
           },
