@@ -115,8 +115,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.1(@types/node@22.10.1)(vite@6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1))
       vite-node:
-        specifier: ^1.1.3
-        version: 1.6.0(@types/node@22.10.1)
+        specifier: ^2.0.0
+        version: 2.1.8(@types/node@22.10.1)
       vitepress:
         specifier: ^1.0.1
         version: 1.5.0(@algolia/client-search@5.15.0)(@types/node@22.10.1)(postcss@8.4.49)(search-insights@2.7.0)(typescript@5.7.2)
@@ -3688,11 +3688,6 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
-
-  vite-node@1.6.0:
-    resolution: {integrity: sha512-de6HJgzC+TFzOu0NTC4RAIsyf/DY/ibWDYQUcuEA84EMHhcefTUGkjFHKKEJhQN4A+6I0u++kr3l36ZF2d7XRw==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
 
   vite-node@2.1.8:
     resolution: {integrity: sha512-uPAwSr57kYjAUux+8E2j0q0Fxpn8M9VoyfGiRI8Kfktz9NcYMCenwY5RnZxnF1WTu3TGiYipirIzacLL3VVGFg==}
@@ -7958,24 +7953,6 @@ snapshots:
       picocolors: 1.1.1
       vite: 6.0.2(@types/node@22.10.1)(tsx@4.7.0)(yaml@2.5.1)
       vite-node: 2.1.8(@types/node@22.10.1)
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
-  vite-node@1.6.0(@types/node@22.10.1):
-    dependencies:
-      cac: 6.7.14
-      debug: 4.3.7
-      pathe: 1.1.2
-      picocolors: 1.1.1
-      vite: 5.4.11(@types/node@22.10.1)
     transitivePeerDependencies:
       - '@types/node'
       - less
