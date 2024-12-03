@@ -60,6 +60,14 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/050-minimum-component',
           },
           {
+            text: 'Props の実装',
+            link: '/ja/10-minimum-example/051-component-props',
+          },
+          {
+            text: 'Emit の実装',
+            link: '/ja/10-minimum-example/052-component-emits',
+          },
+          {
             text: '小さいテンプレートコンパイラ',
             link: '/ja/10-minimum-example/060-minimum-template-compiler',
           },

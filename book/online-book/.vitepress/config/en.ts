@@ -63,6 +63,14 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/050-minimum-component',
           },
           {
+            text: 'Component Props',
+            link: '/10-minimum-example/051-component-props',
+          },
+          {
+            text: 'Component Emit',
+            link: '/10-minimum-example/052-component-emits',
+          },
+          {
             text: 'A Simple Template Compiler',
             link: '/10-minimum-example/060-minimum-template-compiler',
           },
