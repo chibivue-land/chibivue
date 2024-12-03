@@ -59,7 +59,7 @@ importers:
         version: 3.2.3
       dotenv:
         specifier: ^16.3.1
-        version: 16.4.6
+        version: 16.4.7
       dts-bundle:
         specifier: ^0.7.3
         version: 0.7.3
@@ -1804,8 +1804,8 @@ packages:
   dompurify@3.2.2:
     resolution: {integrity: sha512-YMM+erhdZ2nkZ4fTNRTSI94mb7VG7uVF5vj5Zde7tImgnhZE3R6YW/IACGIHb2ux+QkEXMhe591N+5jWOmL4Zw==}
 
-  dotenv@16.4.6:
-    resolution: {integrity: sha512-JhcR/+KIjkkjiU8yEpaB/USlzVi3i5whwOjpIRNGi9svKEXZSe+Qp6IWAjFjv+2GViAoDRCUv/QLNziQxsLqDg==}
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
   dts-bundle@0.7.3:
@@ -5430,7 +5430,7 @@ snapshots:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
-  dotenv@16.4.6: {}
+  dotenv@16.4.7: {}
 
   dts-bundle@0.7.3:
     dependencies:
