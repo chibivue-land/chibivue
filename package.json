@@ -63,7 +63,7 @@
     "lint-staged": "^15.2.0",
     "prettier": "4.0.0-alpha.10",
     "rimraf": "^6.0.0",
-    "textlint": "^13.4.1",
+    "textlint": "^14.0.0",
     "textlint-rule-ja-space-between-half-and-full-width": "^2.3.0",
     "textlint-rule-prh": "^6.0.0",
     "tsx": "^4.7.0",
