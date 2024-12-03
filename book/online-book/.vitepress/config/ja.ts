@@ -44,8 +44,12 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/025-event-handler-and-attrs',
           },
           {
-            text: '小さい Reactivity System ',
-            link: '/ja/10-minimum-example/030-minimum-reactive',
+            text: 'Reactivity System の前程知識',
+            link: '/ja/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system',
+          },
+          {
+            text: '小さいリアクティビティシステムを実装してみる',
+            link: '/ja/10-minimum-example/035-try-implementing- a-minimum-reactivity-system',
           },
           {
             text: '小さい Virtual DOM',

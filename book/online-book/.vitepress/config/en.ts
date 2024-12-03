@@ -47,8 +47,12 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/025-event-handler-and-attrs',
           },
           {
-            text: 'A Lightweight Reactivity System',
-            link: '/10-minimum-example/030-minimum-reactive',
+            text: 'Prerequisite Knowledge for the Reactivity System',
+            link: '/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system',
+          },
+          {
+            text: 'Try Implementing a Small Reactivity System',
+            link: '/10-minimum-example/035-try-implementing- a-minimum-reactivity-system',
           },
           {
             text: 'A Minimal Virtual DOM',
