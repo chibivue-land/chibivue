@@ -43,6 +43,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/020-simple-h-function',
           },
           {
+            text: "Let's work on supporting event handlers and attributes.",
+            link: '/10-minimum-example/025-event-handler-and-attrs',
+          },
+          {
             text: 'A Lightweight Reactivity System',
             link: '/10-minimum-example/030-minimum-reactive',
           },

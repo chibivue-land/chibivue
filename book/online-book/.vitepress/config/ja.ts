@@ -40,6 +40,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/020-simple-h-function',
           },
           {
+            text: 'イベントハンドラや属性に対応してみる',
+            link: '/ja/10-minimum-example/025-event-handler-and-attrs',
+          },
+          {
             text: '小さい Reactivity System ',
             link: '/ja/10-minimum-example/030-minimum-reactive',
           },
