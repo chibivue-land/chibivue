@@ -52,7 +52,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
           {
             text: 'Try Implementing a Small Reactivity System',
-            link: '/10-minimum-example/035-try-implementing- a-minimum-reactivity-system',
+            link: '/10-minimum-example/035-try-implementing-a-minimum-reactivity-system',
           },
           {
             text: 'A Minimal Virtual DOM',
@@ -71,8 +71,12 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/052-component-emits',
           },
           {
-            text: 'A Simple Template Compiler',
-            link: '/10-minimum-example/060-minimum-template-compiler',
+            text: 'Understanding the Template Compiler',
+            link: '/10-minimum-example/060-template-compiler',
+          },
+          {
+            text: 'Implementing the Template Compiler',
+            link: '/10-minimum-example/061-template-compiler-impl',
           },
           {
             text: 'Desire to Write More Complex HTML',

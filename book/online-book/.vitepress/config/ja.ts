@@ -68,8 +68,12 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/052-component-emits',
           },
           {
-            text: '小さいテンプレートコンパイラ',
-            link: '/ja/10-minimum-example/060-minimum-template-compiler',
+            text: 'テンプレートコンパイラを理解する',
+            link: '/ja/10-minimum-example/060-template-compiler',
+          },
+          {
+            text: 'テンプレートコンパイラを実装する',
+            link: '/ja/10-minimum-example/061-template-compiler-impl',
           },
           {
             text: 'もっと複雑な HTML を書きたい',
