@@ -35,12 +35,24 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/010-create-app-api',
           },
           {
+            text: 'Package Architecture',
+            link: '/10-minimum-example/015-package-architecture',
+          },
+          {
             text: "Let's Enable Rendering HTML Elements",
             link: '/10-minimum-example/020-simple-h-function',
           },
           {
-            text: 'A Lightweight Reactivity System',
-            link: '/10-minimum-example/030-minimum-reactive',
+            text: "Let's work on supporting event handlers and attributes.",
+            link: '/10-minimum-example/025-event-handler-and-attrs',
+          },
+          {
+            text: 'Prerequisite Knowledge for the Reactivity System',
+            link: '/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system',
+          },
+          {
+            text: 'Try Implementing a Small Reactivity System',
+            link: '/10-minimum-example/035-try-implementing- a-minimum-reactivity-system',
           },
           {
             text: 'A Minimal Virtual DOM',
@@ -49,6 +61,14 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           {
             text: 'Aspiring for Component-Oriented Development',
             link: '/10-minimum-example/050-minimum-component',
+          },
+          {
+            text: 'Component Props',
+            link: '/10-minimum-example/051-component-props',
+          },
+          {
+            text: 'Component Emit',
+            link: '/10-minimum-example/052-component-emits',
           },
           {
             text: 'A Simple Template Compiler',

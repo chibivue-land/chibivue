@@ -32,12 +32,24 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/010-create-app-api',
           },
           {
+            text: 'パッケージの設計',
+            link: '/ja/10-minimum-example/015-package-architecture',
+          },
+          {
             text: 'HTML要素をレンダリングできるようにしよう',
             link: '/ja/10-minimum-example/020-simple-h-function',
           },
           {
-            text: '小さい Reactivity System ',
-            link: '/ja/10-minimum-example/030-minimum-reactive',
+            text: 'イベントハンドラや属性に対応してみる',
+            link: '/ja/10-minimum-example/025-event-handler-and-attrs',
+          },
+          {
+            text: 'Reactivity System の前程知識',
+            link: '/ja/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system',
+          },
+          {
+            text: '小さいリアクティビティシステムを実装してみる',
+            link: '/ja/10-minimum-example/035-try-implementing- a-minimum-reactivity-system',
           },
           {
             text: '小さい Virtual DOM',
@@ -46,6 +58,14 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           {
             text: 'コンポーネント指向で開発したい',
             link: '/ja/10-minimum-example/050-minimum-component',
+          },
+          {
+            text: 'Props の実装',
+            link: '/ja/10-minimum-example/051-component-props',
+          },
+          {
+            text: 'Emit の実装',
+            link: '/ja/10-minimum-example/052-component-emits',
           },
           {
             text: '小さいテンプレートコンパイラ',

@@ -1,6 +1,6 @@
 {
   "name": "@chibivue/compiler-core",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "main": "dist/index.js",
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "license": "MIT"
