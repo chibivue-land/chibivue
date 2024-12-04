@@ -17,6 +17,7 @@
     "klass",
     "lightningcss",
     "nocheck",
+    "onwarn",
     "paren",
     "Parens",
     "RAWTEXT",

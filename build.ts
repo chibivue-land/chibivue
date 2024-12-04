@@ -3,7 +3,6 @@ import { execSync } from 'node:child_process'
 
 import { build } from 'esbuild'
 import { rimraf } from 'rimraf'
-import { bundle } from 'dts-bundle'
 import { t } from 'chainsi'
 
 const finishedBuild = (dir: string) =>
@@ -68,8 +67,6 @@ const PACKAGES: Record<string, { external?: string[] }> = {
 }
 
 export const buildMain = () => {
-  execSync('tsc -p tsconfig.build.json')
-
   const promises = Object.entries(PACKAGES).map(async ([pkg, { external }]) => {
     const res = await build({
       entryPoints: [path.resolve(`packages/${pkg}/src/index`)],
@@ -78,20 +75,6 @@ export const buildMain = () => {
       outdir: `packages/${pkg}/dist`,
       external: [...NODE_EXTERNALS, ...(external ?? [])],
       format: 'esm',
-      plugins: [
-        {
-          name: 'TypeScriptDeclarationsPlugin',
-          setup(build: any) {
-            build.onEnd(() => {
-              bundle({
-                name: pkg,
-                main: `temp/${pkg}/src/index.d.ts`,
-                out: path.resolve(`packages/${pkg}/dist/index.d.ts`),
-              })
-            })
-          },
-        },
-      ],
     })
     finishedBuild(`packages/${pkg}/dist`)
     return res
@@ -110,5 +93,4 @@ export const clearMain = () =>
   console.log('building...')
   const buildingMain = buildMain()
   await Promise.all([...buildingMain])
-  execSync('rm -rf temp')
 })()
