@@ -1,7 +1,7 @@
 import { isFunction } from '@chibivue/shared'
-import { Dep } from './dep'
+import type { Dep } from './dep'
 import { ReactiveEffect } from './effect'
-import { Ref, trackRefValue, triggerRefValue } from './ref'
+import { type Ref, trackRefValue, triggerRefValue } from './ref'
 
 export interface ComputedRef<T = any> extends WritableComputedRef<T> {
   readonly value: T

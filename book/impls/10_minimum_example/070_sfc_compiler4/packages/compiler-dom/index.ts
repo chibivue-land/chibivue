@@ -1,4 +1,4 @@
-import { CompilerOptions, baseCompile, baseParse } from '../compiler-core'
+import { type CompilerOptions, baseCompile, baseParse } from '../compiler-core'
 
 export function compile(template: string, option?: CompilerOptions) {
   const defaultOption: Required<CompilerOptions> = { isBrowser: true }

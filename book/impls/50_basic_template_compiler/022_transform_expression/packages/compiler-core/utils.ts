@@ -1,4 +1,9 @@
-import { JSChildNode, NodeTypes, Position, SimpleExpressionNode } from './ast'
+import {
+  type JSChildNode,
+  NodeTypes,
+  type Position,
+  type SimpleExpressionNode,
+} from './ast'
 
 const nonIdentifierRE = /^\d|[^\$\w]/
 export const isSimpleIdentifier = (name: string): boolean =>

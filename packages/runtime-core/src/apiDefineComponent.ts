@@ -1,18 +1,18 @@
 import { isFunction } from '@chibivue/shared'
-import { EmitsOptions } from './componentEmits'
+import type { EmitsOptions } from './componentEmits'
 
-import {
+import type {
   ComponentInjectOptions,
   ComponentOptions,
   ComputedOptions,
   MethodOptions,
   ResolveProps,
 } from './componentOptions'
-import {
+import type {
   ComponentPublicInstanceConstructor,
   CreateComponentPublicInstance,
 } from './componentPublicInstance'
-import { SlotsType } from './componentSlots'
+import type { SlotsType } from './componentSlots'
 
 type DefineComponent<
   PropOptions = {},

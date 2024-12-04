@@ -1,4 +1,4 @@
-import { ComponentInternalInstance } from './component'
+import type { ComponentInternalInstance } from './component'
 
 export type VNodeTypes = string | typeof Text | object
 

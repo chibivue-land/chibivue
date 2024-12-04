@@ -168,9 +168,11 @@ Twitter(X): https://twitter.com/ubugeeei
 ## 🦀 Discord Server について
 
 この本の Discord Server を作りました！ (2024/01/01)  
-ここではこのオンラインブックに関するアナウンスや質問対応・Tips の共有などを行っています．  
+~~ここではこのオンラインブックに関するアナウンスや質問対応・Tips の共有などを行っています．~~\
 その他雑談なども大歓迎なので，ぜひ chibivue ユーザー同士で楽しくコミュニケーションしましょう．  
 日本語話者が多く会話も今の所は日本語が多いですが，日本語話者以外の方も大歓迎なのであまり気にせず参加してください！ (母語を使ってもらって全く問題ないです)
+
+最近は，chibivue にとどまらず，Vue.js の日本のコミュニティサーバーとして活発に活動しています！
 
 ### ざっくりやっていること
 
@@ -180,7 +182,6 @@ Twitter(X): https://twitter.com/ubugeeei
 - 質問対応
 - 要望対応
 - 雑談
-- ubugeeei が chibivue に関する作業をしているときに独り言を呟いている (野次歓迎)
 
 ### どこから参加できるか
 
@@ -188,26 +189,14 @@ Twitter(X): https://twitter.com/ubugeeei
 
 この本のヘッダー右上の Discord ボタンからも参加できます．
 
-### 参加資格
-
-chibivue (もしくは ubugeeei, もしくはこのコミュニティ) に興味がある方！  
-(宣伝目的のみでのご参加はご遠慮ください)
-
-### 参加時にやって欲しいこと
-
-必ず general/rules を一読していただきたいです．
-あとは特にありません．
-
 ## 著者について
 
 **ubugeeei (うぶげ)** 
 
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
-Vue.js メンバー, Vue.js Japan User Group コアスタッフ．\
-Vapor Mode の開発に立ち上げ (2023/11) から携わる. \
-2023/12 に vuejs/core-vapor の external collaborator になる.\
-2024/4 に vuejs organization のメンバーになり，Vapor Team のメンバーになる.
+[Vue.js](https://github.com/vuejs) メンバー, [Vue.js Japan User Group](https://github.com/vuejs-jp) コアスタッフ．\
+[chibivue land](https://github.com/chibivue-land) オーナー.
 
 https://ublog.dev/
 

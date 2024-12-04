@@ -1,5 +1,5 @@
 import { hasOwn } from '../shared'
-import { ComponentInternalInstance, Data } from './component'
+import type { ComponentInternalInstance, Data } from './component'
 
 export type ComponentPublicInstanceConstructor<
   T extends ComponentPublicInstance<

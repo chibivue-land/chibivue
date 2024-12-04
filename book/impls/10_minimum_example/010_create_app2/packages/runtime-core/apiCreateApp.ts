@@ -1,5 +1,5 @@
-import { Component } from './component'
-import { RootRenderFunction } from './renderer'
+import type { Component } from './component'
+import type { RootRenderFunction } from './renderer'
 
 export interface App<HostElement = any> {
   mount(rootContainer: HostElement | string): void

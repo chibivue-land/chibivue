@@ -1,5 +1,5 @@
 import { generate } from './codegen'
-import { CompilerOptions } from './options'
+import type { CompilerOptions } from './options'
 import { baseParse } from './parse'
 
 export function baseCompile(

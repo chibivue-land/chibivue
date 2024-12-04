@@ -1,7 +1,11 @@
 import { hasOwn } from '../shared'
-import { ComponentInternalInstance, Data, getExposeProxy } from './component'
-import { EmitFn, EmitsOptions } from './componentEmits'
 import {
+  type ComponentInternalInstance,
+  type Data,
+  getExposeProxy,
+} from './component'
+import type { EmitFn, EmitsOptions } from './componentEmits'
+import type {
   ComponentInjectOptions,
   ComputedOptions,
   ExtractComputedReturns,
@@ -9,7 +13,7 @@ import {
   MethodOptions,
   ResolveProps,
 } from './componentOptions'
-import { SlotsType, UnwrapSlotsType } from './componentSlots'
+import type { SlotsType, UnwrapSlotsType } from './componentSlots'
 import { nextTick, queueJob } from './scheduler'
 
 export type ComponentPublicInstanceConstructor<

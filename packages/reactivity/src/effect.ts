@@ -1,5 +1,5 @@
 import { isArray, isIntegerKey } from '@chibivue/shared'
-import { ComputedRefImpl } from './computed'
+import type { ComputedRefImpl } from './computed'
 import { type Dep, createDep } from './dep'
 import { type EffectScope, recordEffectScope } from './effectScope'
 

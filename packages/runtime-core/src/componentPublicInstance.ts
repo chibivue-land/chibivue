@@ -1,7 +1,7 @@
 import { hasOwn } from '@chibivue/shared'
-import { type ComponentInternalInstance, Data } from './component'
-import { EmitFn, EmitsOptions } from './componentEmits'
-import {
+import type { ComponentInternalInstance, Data } from './component'
+import type { EmitFn, EmitsOptions } from './componentEmits'
+import type {
   ComponentInjectOptions,
   ComputedOptions,
   ExtractComputedReturns,
@@ -9,8 +9,8 @@ import {
   MethodOptions,
   ResolveProps,
 } from './componentOptions'
-import { SlotsType, UnwrapSlotsType } from './componentSlots'
-import { nextTick } from './scheduler'
+import type { SlotsType, UnwrapSlotsType } from './componentSlots'
+import type { nextTick } from './scheduler'
 
 export type ComponentPublicInstanceConstructor<
   T extends ComponentPublicInstance<

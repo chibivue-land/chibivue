@@ -1,8 +1,8 @@
-import { EffectScope, ReactiveEffect } from '../reactivity'
+import { EffectScope, type ReactiveEffect } from '../reactivity'
 import { emit } from './componentEmits'
-import { ComponentOptions } from './componentOptions'
-import { Props, initProps } from './componentProps'
-import { VNode, VNodeChild } from './vnode'
+import type { ComponentOptions } from './componentOptions'
+import { type Props, initProps } from './componentProps'
+import type { VNode, VNodeChild } from './vnode'
 
 export type Component = ComponentOptions
 

@@ -1,5 +1,5 @@
 import {
-  PropType,
+  type PropType,
   createApp,
   defineComponent,
   h,

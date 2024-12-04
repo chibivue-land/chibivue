@@ -23,6 +23,7 @@
     "RCDATA",
     "textlint",
     "tokei",
+    "tseslint",
     "unref",
     "vdom",
     "vitepress",

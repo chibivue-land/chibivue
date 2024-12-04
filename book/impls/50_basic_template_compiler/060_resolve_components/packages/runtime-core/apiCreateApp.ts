@@ -1,6 +1,6 @@
-import { InjectionKey } from './apiInject'
-import { Component } from './component'
-import { RootRenderFunction } from './renderer'
+import type { InjectionKey } from './apiInject'
+import type { Component } from './component'
+import type { RootRenderFunction } from './renderer'
 import { createVNode } from './vnode'
 
 export interface App<HostElement = any> {

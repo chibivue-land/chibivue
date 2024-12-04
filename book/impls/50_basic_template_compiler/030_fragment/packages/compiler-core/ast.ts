@@ -1,7 +1,7 @@
 import { isString } from '../shared'
 import { CREATE_VNODE } from './runtimeHelpers'
-import { TransformContext } from './transform'
-import { PropsExpression } from './transforms/transformElement'
+import type { TransformContext } from './transform'
+import type { PropsExpression } from './transforms/transformElement'
 
 export const enum NodeTypes {
   ROOT,

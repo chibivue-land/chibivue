@@ -1,22 +1,22 @@
-import { EffectScope, ReactiveEffect } from '../reactivity'
+import { EffectScope, type ReactiveEffect } from '../reactivity'
 import { proxyRefs } from '../reactivity/ref'
-import { AppContext, createAppContext } from './apiCreateApp'
-import { EmitFn, EmitsOptions, emit } from './componentEmits'
-import { ComponentOptions, applyOptions } from './componentOptions'
-import { Props, initProps } from './componentProps'
+import { type AppContext, createAppContext } from './apiCreateApp'
+import { type EmitFn, type EmitsOptions, emit } from './componentEmits'
+import { type ComponentOptions, applyOptions } from './componentOptions'
+import { type Props, initProps } from './componentProps'
 import {
-  ComponentPublicInstance,
-  ComponentPublicInstanceConstructor,
+  type ComponentPublicInstance,
+  type ComponentPublicInstanceConstructor,
   PublicInstanceProxyHandlers,
 } from './componentPublicInstance'
 import {
-  InternalSlots,
-  SlotsType,
-  UnwrapSlotsType,
+  type InternalSlots,
+  type SlotsType,
+  type UnwrapSlotsType,
   initSlots,
 } from './componentSlots'
 import { LifecycleHooks } from './enums'
-import { VNode, VNodeChild } from './vnode'
+import type { VNode, VNodeChild } from './vnode'
 
 export type ConcreteComponent<
   Props = {},

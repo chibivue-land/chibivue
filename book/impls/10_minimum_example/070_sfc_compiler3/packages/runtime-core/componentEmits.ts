@@ -1,5 +1,5 @@
 import { camelize, toHandlerKey } from '../shared'
-import { ComponentInternalInstance } from './component'
+import type { ComponentInternalInstance } from './component'
 
 export function emit(
   instance: ComponentInternalInstance,

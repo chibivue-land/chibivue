@@ -2,30 +2,34 @@ import {
   type VaporComponentInternalInstance,
   isVapor,
 } from '@chibivue/runtime-vapor'
-import { EffectScope, ReactiveEffect, proxyRefs } from '@chibivue/reactivity'
+import {
+  EffectScope,
+  type ReactiveEffect,
+  proxyRefs,
+} from '@chibivue/reactivity'
 import { isFunction, isObject } from '@chibivue/shared'
 
-import { AppContext, createAppContext } from './apiCreateApp'
+import { type AppContext, createAppContext } from './apiCreateApp'
 import {
-  EmitFn,
-  EmitsOptions,
-  ObjectEmitsOptions,
+  type EmitFn,
+  type EmitsOptions,
+  type ObjectEmitsOptions,
   emit,
 } from './componentEmits'
-import { ComponentOptions, applyOptions } from './componentOptions'
-import { NormalizedProps, initProps } from './componentProps'
+import { type ComponentOptions, applyOptions } from './componentOptions'
+import { type NormalizedProps, initProps } from './componentProps'
 import {
-  ComponentPublicInstance,
+  type ComponentPublicInstance,
   PublicInstanceProxyHandlers,
 } from './componentPublicInstance'
 import {
-  InternalSlots,
-  SlotsType,
-  UnwrapSlotsType,
+  type InternalSlots,
+  type SlotsType,
+  type UnwrapSlotsType,
   initSlots,
 } from './componentSlots'
 import { LifecycleHooks } from './enums'
-import { VNode, VNodeChild } from './vnode'
+import type { VNode, VNodeChild } from './vnode'
 
 export type Data = Record<string, unknown>
 

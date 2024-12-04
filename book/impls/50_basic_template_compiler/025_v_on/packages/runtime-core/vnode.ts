@@ -1,10 +1,14 @@
-import { Ref } from '../reactivity'
+import type { Ref } from '../reactivity'
 import { isArray, isFunction, isObject, isString } from '../shared'
 import { normalizeClass, normalizeStyle } from '../shared/normalizeProp'
 import { ShapeFlags } from '../shared/shapeFlags'
-import { AppContext } from './apiCreateApp'
-import { ComponentInternalInstance, Data, currentInstance } from './component'
-import { RawSlots } from './componentSlots'
+import type { AppContext } from './apiCreateApp'
+import {
+  type ComponentInternalInstance,
+  type Data,
+  currentInstance,
+} from './component'
+import type { RawSlots } from './componentSlots'
 
 export type VNodeTypes = string | typeof Text | object
 

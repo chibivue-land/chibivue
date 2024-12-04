@@ -1,4 +1,4 @@
-import { ParserOptions } from '../compiler-core'
+import type { ParserOptions } from '../compiler-core'
 import { isHTMLTag, isSVGTag } from '../shared/domTagConfig'
 
 export const parserOptions: ParserOptions = {

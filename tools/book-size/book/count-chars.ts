@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 const listFiles = (dir: string): string[] =>
   fs

@@ -12,7 +12,7 @@ import {
   unsetCurrentInstance,
 } from '@chibivue/runtime-core'
 
-import { type VaporNode } from '.'
+import type { VaporNode } from '.'
 
 export type VaporComponent = (self: VaporComponentInternalInstance) => VaporNode
 

@@ -1,4 +1,4 @@
-import { VNode } from './vnode'
+import type { VNode } from './vnode'
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: VNode,

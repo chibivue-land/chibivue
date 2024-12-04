@@ -2,22 +2,22 @@ import { ReactiveEffect } from '../reactivity'
 import { invokeArrayFns } from '../shared'
 import { ShapeFlags } from '../shared/shapeFlags'
 import {
-  Component,
-  ComponentInternalInstance,
+  type Component,
+  type ComponentInternalInstance,
   createComponentInstance,
   setupComponent,
 } from './component'
 import { updateProps } from './componentProps'
 import { setRef } from './rendererTemplateRef'
 import {
-  SchedulerJob,
+  type SchedulerJob,
   flushPostFlushCbs,
   queueJob,
   queuePostFlushCb,
 } from './scheduler'
 import {
   Text,
-  VNode,
+  type VNode,
   createVNode,
   isSameVNodeType,
   normalizeVNode,

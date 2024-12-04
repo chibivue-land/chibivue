@@ -1,8 +1,8 @@
-import { Ref } from '../reactivity'
+import type { Ref } from '../reactivity'
 import { isArray, isObject, isString } from '../shared'
 import { ShapeFlags } from '../shared/shapeFlags'
-import { AppContext } from './apiCreateApp'
-import { ComponentInternalInstance } from './component'
+import type { AppContext } from './apiCreateApp'
+import type { ComponentInternalInstance } from './component'
 
 export type VNodeTypes = string | typeof Text | object
 

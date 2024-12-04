@@ -1,14 +1,14 @@
 import {
-  AttributeNode,
-  DirectiveNode,
-  ElementNode,
-  InterpolationNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type InterpolationNode,
   NodeTypes,
-  Position,
-  RootNode,
-  SourceLocation,
-  TemplateChildNode,
-  TextNode,
+  type Position,
+  type RootNode,
+  type SourceLocation,
+  type TemplateChildNode,
+  type TextNode,
   createRoot,
 } from './ast'
 

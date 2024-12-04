@@ -1,7 +1,7 @@
 import { isFunction } from '../shared'
-import { Dep } from './dep'
+import type { Dep } from './dep'
 import { ReactiveEffect } from './effect'
-import { Ref, trackRefValue, triggerRefValue } from './ref'
+import { type Ref, trackRefValue, triggerRefValue } from './ref'
 
 declare const ComputedRefSymbol: unique symbol
 

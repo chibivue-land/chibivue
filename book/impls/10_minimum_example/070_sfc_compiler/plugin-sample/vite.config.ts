@@ -1,4 +1,4 @@
-import { Plugin, defineConfig } from 'vite'
+import { type Plugin, defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/

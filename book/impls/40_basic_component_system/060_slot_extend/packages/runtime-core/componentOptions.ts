@@ -1,7 +1,7 @@
-import { SetupContext } from './component'
-import { PropType } from './componentProps'
-import { ComponentPublicInstance } from './componentPublicInstance'
-import { VNode } from './vnode'
+import type { SetupContext } from './component'
+import type { PropType } from './componentProps'
+import type { ComponentPublicInstance } from './componentPublicInstance'
+import type { VNode } from './vnode'
 
 export type ComponentOptions<P = {}, B = {}> = {
   props?: P

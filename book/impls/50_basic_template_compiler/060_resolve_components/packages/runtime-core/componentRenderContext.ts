@@ -1,4 +1,4 @@
-import { ComponentInternalInstance } from './component'
+import type { ComponentInternalInstance } from './component'
 
 export let currentRenderingInstance: ComponentInternalInstance | null = null
 

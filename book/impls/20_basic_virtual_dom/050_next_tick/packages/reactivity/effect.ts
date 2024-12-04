@@ -1,4 +1,4 @@
-import { Dep, createDep } from './dep'
+import { type Dep, createDep } from './dep'
 
 type KeyToDepMap = Map<any, Dep>
 const targetMap = new WeakMap<any, KeyToDepMap>()

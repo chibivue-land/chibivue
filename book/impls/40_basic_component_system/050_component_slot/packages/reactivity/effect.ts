@@ -1,6 +1,6 @@
 import { isArray, isIntegerKey } from '../shared'
-import { Dep, createDep } from './dep'
-import { EffectScope, recordEffectScope } from './effectScope'
+import { type Dep, createDep } from './dep'
+import { type EffectScope, recordEffectScope } from './effectScope'
 
 type KeyToDepMap = Map<any, Dep>
 const targetMap = new WeakMap<any, KeyToDepMap>()

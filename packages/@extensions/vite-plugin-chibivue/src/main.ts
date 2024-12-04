@@ -1,5 +1,5 @@
 import type { SFCDescriptor } from '@chibivue/compiler-sfc'
-import { ResolvedOptions } from '.'
+import type { ResolvedOptions } from '.'
 import { createDescriptor } from './utils/descriptorCache'
 import { isUseInlineTemplate, resolveScript } from './script'
 import { transformTemplateInMain } from './template'

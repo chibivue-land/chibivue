@@ -1,9 +1,13 @@
 import { isString } from '@chibivue/shared'
 
-import { RootNode } from './ast'
+import type { RootNode } from './ast'
 import { generate } from './codegen'
 import { baseParse } from './parse'
-import { DirectiveTransform, NodeTransform, transform } from './transform'
+import {
+  type DirectiveTransform,
+  type NodeTransform,
+  transform,
+} from './transform'
 
 import { transformElement } from './transforms/transformElement'
 import { transformExpression } from './transforms/transformExpression'
@@ -12,7 +16,7 @@ import { transformFor } from './transforms/vFor'
 import { transformBind } from './transforms/vBind'
 import { transformOn } from './transforms/vOn'
 import { transformModel } from './transforms/vModel'
-import { CompilerOptions } from './options'
+import type { CompilerOptions } from './options'
 import { transformIf } from './transforms/vIf'
 
 export type TransformPreset = [

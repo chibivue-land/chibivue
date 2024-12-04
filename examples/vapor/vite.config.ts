@@ -2,7 +2,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 
-// @ts-ignore
+// @ts-expect-error
 import Chibivue from '../../packages/@extensions/vite-plugin-chibivue/dist'
 
 const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))

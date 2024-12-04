@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 
-// @ts-ignore
+// @ts-expect-error
 const modules = import.meta.glob('./*.(vue|js)')
 const mod = (modules['.' + location.pathname] || modules['./App.vue'])()
 

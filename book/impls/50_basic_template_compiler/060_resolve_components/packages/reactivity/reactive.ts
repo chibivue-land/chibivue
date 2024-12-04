@@ -8,7 +8,7 @@ import {
   mutableCollectionHandlers,
   readonlyCollectionHandlers,
 } from './collectionHandlers'
-import { Ref, UnwrapRefSimple } from './ref'
+import type { Ref, UnwrapRefSimple } from './ref'
 
 export const enum ReactiveFlags {
   IS_REACTIVE = '__v_isReactive',

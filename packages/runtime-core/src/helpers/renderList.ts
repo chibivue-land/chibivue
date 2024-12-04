@@ -1,4 +1,4 @@
-import { VNodeChild } from '../vnode'
+import type { VNodeChild } from '../vnode'
 
 export function renderList<T>(
   source: T[],

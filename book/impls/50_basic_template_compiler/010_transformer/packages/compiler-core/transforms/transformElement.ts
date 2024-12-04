@@ -1,16 +1,16 @@
 import {
-  DirectiveNode,
-  ElementNode,
+  type DirectiveNode,
+  type ElementNode,
   NodeTypes,
-  ObjectExpression,
-  TemplateTextChildNode,
-  VNodeCall,
+  type ObjectExpression,
+  type TemplateTextChildNode,
+  type VNodeCall,
   createObjectExpression,
   createObjectProperty,
   createSimpleExpression,
   createVNodeCall,
 } from '../ast'
-import { NodeTransform } from '../transform'
+import type { NodeTransform } from '../transform'
 
 export type PropsExpression = ObjectExpression
 
