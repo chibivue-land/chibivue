@@ -7,3 +7,6 @@ tools/translator/ja2en/input.md
 tools/translator/ja2en/output.md
 book/online-book/.vitepress/cache
 book/online-book/.vitepress/dist
+
+# for dts-bundle
+temp
