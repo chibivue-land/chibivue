@@ -49,7 +49,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
           {
             text: '小さいリアクティビティシステムを実装してみる',
-            link: '/ja/10-minimum-example/035-try-implementing- a-minimum-reactivity-system',
+            link: '/ja/10-minimum-example/035-try-implementing-a-minimum-reactivity-system',
           },
           {
             text: '小さい Virtual DOM',
@@ -84,8 +84,24 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/080-template-binding',
           },
           {
-            text: 'SFC で開発したい',
-            link: '/ja/10-minimum-example/090-minimum-sfc',
+            text: 'SFC で開発したい (周辺知識編)',
+            link: '/ja/10-minimum-example/090-prerequisite-knowledge-for-the-sfc',
+          },
+          {
+            text: 'SFC のパース',
+            link: '/ja/10-minimum-example/091-parse-sfc',
+          },
+          {
+            text: 'SFC の template block',
+            link: '/ja/10-minimum-example/092-compile-sfc-template',
+          },
+          {
+            text: 'SFC の script block',
+            link: '/ja/10-minimum-example/093-compile-sfc-script',
+          },
+          {
+            text: 'SFC の style block',
+            link: '/ja/10-minimum-example/094-compile-sfc-style',
           },
           {
             text: 'ちょっと一息',

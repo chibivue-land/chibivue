@@ -87,8 +87,24 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/080-template-binding',
           },
           {
-            text: 'Desire to Develop with Single File Components',
-            link: '/10-minimum-example/090-minimum-sfc',
+            text: 'Developing with SFC (Peripheral Knowledge)',
+            link: '/10-minimum-example/090-prerequisite-knowledge-for-the-sfc',
+          },
+          {
+            text: 'Parse SFC',
+            link: '/10-minimum-example/091-parse-sfc',
+          },
+          {
+            text: 'template block of SFC',
+            link: '/10-minimum-example/092-compile-sfc-template',
+          },
+          {
+            text: 'script block of SFC ',
+            link: '/10-minimum-example/093-compile-sfc-script',
+          },
+          {
+            text: 'style block of SFC ',
+            link: '/10-minimum-example/094-compile-sfc-style',
           },
           {
             text: 'Taking a Short Break',
