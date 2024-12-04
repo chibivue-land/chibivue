@@ -7,8 +7,5 @@
   },
   "devDependencies": {
     "vite": "^6.0.0"
-  },
-  "volta": {
-    "node": "22.12.0"
   }
 }

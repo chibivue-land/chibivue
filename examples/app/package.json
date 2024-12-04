@@ -8,8 +8,5 @@
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
     "vite": "^6.0.0"
-  },
-  "volta": {
-    "node": "18.14.0"
   }
 }
