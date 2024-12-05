@@ -22,7 +22,7 @@ importers:
         version: 0.30.14
       vite:
         specifier: ^6.0.0
-        version: 6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
+        version: 6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
     devDependencies:
       '@babel/types':
         specifier: ^7.21.2
@@ -44,7 +44,7 @@ importers:
         version: 8.17.0(eslint@9.16.0)(typescript@5.7.2)
       '@vitejs/plugin-vue':
         specifier: ^5.0.2
-        version: 5.2.1(vite@6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1))(vue@3.5.13(typescript@5.7.2))
+        version: 5.2.1(vite@6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1))(vue@3.5.13(typescript@5.7.2))
       '@vitest/eslint-plugin':
         specifier: ^1.1.14
         version: 1.1.14(@typescript-eslint/utils@8.17.0(eslint@9.16.0)(typescript@5.7.2))(eslint@9.16.0)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.1)(jsdom@25.0.1))
@@ -110,7 +110,7 @@ importers:
         version: 8.17.0(eslint@9.16.0)(typescript@5.7.2)
       vite-hyper-config:
         specifier: ^0.4.0
-        version: 0.4.1(@types/node@22.10.1)(vite@6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1))
+        version: 0.4.1(@types/node@22.10.1)(vite@6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1))
       vite-node:
         specifier: ^2.0.0
         version: 2.1.8(@types/node@22.10.1)
@@ -128,13 +128,13 @@ importers:
     devDependencies:
       vite:
         specifier: ^6.0.0
-        version: 6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
+        version: 6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
 
   examples/vapor:
     devDependencies:
       vite:
         specifier: ^6.0.0
-        version: 6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
+        version: 6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/@extensions/chibivue-router: {}
 
@@ -3450,8 +3450,8 @@ packages:
       terser:
         optional: true
 
-  vite@6.0.2:
-    resolution: {integrity: sha512-XdQ+VsY2tJpBsKGs0wf3U/+azx8BBpYRHFAyKm5VeEZNOJZRB63q7Sc8Iup3k0TrN3KO6QgyzFf+opSbfY1y0g==}
+  vite@6.0.3:
+    resolution: {integrity: sha512-Cmuo5P0ENTN6HxLSo6IHsjCLn/81Vgrp81oaiFFMRa8gGDj5xEjIcEpf2ZymZtZR8oU0P2JX5WuUp/rlXcHkAw==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -4548,9 +4548,9 @@ snapshots:
       vite: 5.4.11(@types/node@22.10.1)
       vue: 3.5.13(typescript@5.7.2)
 
-  '@vitejs/plugin-vue@5.2.1(vite@6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1))(vue@3.5.13(typescript@5.7.2))':
+  '@vitejs/plugin-vue@5.2.1(vite@6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1))(vue@3.5.13(typescript@5.7.2))':
     dependencies:
-      vite: 6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
+      vite: 6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
       vue: 3.5.13(typescript@5.7.2)
 
   '@vitest/eslint-plugin@1.1.14(@typescript-eslint/utils@8.17.0(eslint@9.16.0)(typescript@5.7.2))(eslint@9.16.0)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.1)(jsdom@25.0.1))':
@@ -7378,11 +7378,11 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-hyper-config@0.4.1(@types/node@22.10.1)(vite@6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)):
+  vite-hyper-config@0.4.1(@types/node@22.10.1)(vite@6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)):
     dependencies:
       cac: 6.7.14
       picocolors: 1.1.1
-      vite: 6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
+      vite: 6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1)
       vite-node: 2.1.8(@types/node@22.10.1)
     transitivePeerDependencies:
       - '@types/node'
@@ -7422,7 +7422,7 @@ snapshots:
       '@types/node': 22.10.1
       fsevents: 2.3.3
 
-  vite@6.0.2(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1):
+  vite@6.0.3(@types/node@22.10.1)(tsx@4.19.2)(yaml@2.5.1):
     dependencies:
       esbuild: 0.24.0
       postcss: 8.4.49
