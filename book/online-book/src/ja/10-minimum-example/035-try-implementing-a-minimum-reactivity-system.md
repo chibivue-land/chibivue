@@ -4,7 +4,7 @@
 ## Proxy を使ったリアクティビティの仕組み
 
 ::: info 現在の vuejs/core との設計の違いについて
-現在 (2024/12)の Vue.js の Reactivity System では，doubly linked list ベースの Observer Pattern が採用されています．\
+現在 (2024/12)の Vue.js のリアクティビティシステムでは，doubly linked list ベースの Observer Pattern が採用されています．\
 この実装は [Refactor reactivity system to use version counting and doubly-linked list tracking](https://github.com/vuejs/core/pull/10397) で行われ，パフォーマンスの向上に寄与しました．
 
 しかし，初めてリアクティビティシステムを実装する人にとっては少し難しいものになっており，今回のこのチャプターでは従来 (改善以前) のものをより簡略化したものの実装を行います．\
@@ -16,7 +16,7 @@
 改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．  
 Proxy を用いた実装の流れについて説明してみます．
 
-まず，Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
+まず，Vue.js のリアクティビティシステムには `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
 
 まず，targetMap の構造についてです．  
 targetMap はある target の key と dep のマッピングです．  

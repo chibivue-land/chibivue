@@ -138,7 +138,7 @@
 
 - **Basic Component System 部門**  
   ここでは Component System 関する基本実装を行います．実は，Basic Virtual DOM 部門で Component System のベースは実装してしまうので，
-  それ以外の部分の Component System を実装します．例えば props/emit や provide/inject， Reactivity System の拡張，ライフサイクルフックなどです．
+  それ以外の部分の Component System を実装します．例えば props/emit や provide/inject， リアクティビティシステムの拡張，ライフサイクルフックなどです．
 
 - **Basic Template Compiler 部門**  
   Basic Virtual DOM で実装した Virtual DOM システムに対応する機能のコンパイラに加え，v-on, v-bind, v-for 等のディレクティブなどの実装を行います．  
