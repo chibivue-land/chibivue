@@ -123,7 +123,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
           {
             text: 'スケジューラ',
-            link: '/ja/20-basic-virtual-dom/030-scheduler',
+            link: '/kja/20-basic-virtual-dom/030-scheduler',
           },
           {
             text: '🚧 対応できていない Props のパッチ',

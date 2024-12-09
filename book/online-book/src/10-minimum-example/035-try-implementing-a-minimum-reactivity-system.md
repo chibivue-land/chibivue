@@ -39,6 +39,39 @@ class ReactiveEffect {
 }
 ```
 
+It means registering "a certain effect" for "a certain key" of "a certain target (object)".
+
+It might be hard to understand just by looking at the code, so here is a concrete example and a supplementary diagram.\
+Consider a component like the following:
+
+```ts
+export default defineComponent({
+  setup() {
+    const state1 = reactive({ name: "John", age: 20 })
+    const state2 = reactive({ count: 0 })
+
+    function onCountUpdated() {
+      console.log("count updated")
+    }
+
+    watch(() => state2.count, onCountUpdated)
+
+    return () => h("p", {}, `name: ${state1.name}`)
+  }
+})
+```
+
+Although we haven't implemented `watch` in this chapter yet, it is written here for the sake of illustration.\
+In this component, the targetMap will eventually be formed as follows.
+
+![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+
+The key of targetMap is "a certain target". In this example, state1 and state2 correspond to that.\
+The keys that these targets have become the keys of targetMap.\
+The effects associated with them become the values.
+
+In the part `() => h("p", {}, name: ${state1.name})`, the mapping `state1->name->updateComponentFn` is registered, and in the part `watch(() => state2.count, onCountUpdated)`, the mapping `state2->count->onCountUpdated` is registered.
+
 This basic structure is responsible for the rest, and then we think about how to create (register) targetMap and how to execute the effect.
 
 That's where the concepts of `track` and `trigger` come in.

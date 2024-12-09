@@ -41,6 +41,39 @@ class ReactiveEffect {
 }
 ```
 
+「ある target (オブジェクト)」 の「ある key」 に対して「ある作用」 を登録するということになります．
+
+パッと見のコードだけだと分かりづらいと思うので具体例と図による補足です．\
+以下のようなコンポーネントがあったと考えてみます．
+
+```ts
+export default defineComponent({
+  setup() {
+    const state1 = reactive({ name: "John", age: 20 })
+    const state2 = reactive({ count: 0 })
+
+    function onCountUpdated() {
+      console.log("count updated")
+    }
+
+    watch(() => state2.count, onCountUpdated)
+
+    return () => h("p", {}, `name: ${state1.name}`)
+  }
+})
+```
+
+このチャプターではまだ watch は実装していないのでですが，イメージのために書いてあります．\
+このコンポーネントでは最終的にかのような targetMap が形成されます．
+
+![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+
+targetMap の key は「ある target」 です．この例では state1 と state2 がそれにあたります．\
+そして，これらの target が持つ key が targetMap の key になります．\
+そこに紐づく作用がその value になります．
+
+`() => h("p", {}, name: ${state1.name})` の部分で `state->name->updateComponentFn` というマッピングが登録され，`watch(() => state2.count, onCountUpdated)` の部分で `state2->count->onCountUpdated` というマッピングが登録されるという感じです．
+
 基本的な構造はこれが担っていて，あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます．
 
 そこで登場する概念が `track` と `trigger` です．
