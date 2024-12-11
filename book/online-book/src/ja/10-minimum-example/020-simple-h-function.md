@@ -56,7 +56,8 @@ h function の基本的な使い方として，第 1 引数にタグ名，第 2 
 const result = h('div', { class: 'container' }, ['hello'])
 ```
 
-result にはどのような結果を格納するのが良いでしょうか?(結果をどのような形にして，どうレンダリングしましょうか?)
+result にはどのような結果を格納するのが良いでしょうか？\
+(結果をどのような形にして，どうレンダリングしましょうか？)
 
 result には以下のようなオブジェクトが格納されることにしてみましょう．
 
@@ -68,8 +69,8 @@ const result = {
 }
 ```
 
-つまり，render 関数から上記のようなオブジェクトをもらい，それを元に DOM 操作をしてレンダリングをすればいいのです．
-イメージ的にはこうです．(createApp の mount の中です．)
+つまり，render 関数から上記のようなオブジェクトをもらい，それを元に DOM 操作をしてレンダリングをすればいいのです．\
+イメージ的には以下です．(createApp の mount の中です．)
 
 ```ts
 const app: App = {
@@ -80,11 +81,11 @@ const app: App = {
 }
 ```
 
-まあ，変わったところというと，message という文字列ではなく node というオブジェクトに変えただけです．  
+変わったところというと，message という文字列ではなく node というオブジェクトに変えただけです．  
 あとは render 関数でオブジェクトを元に DOM 操作をすれば OK です．
 
-実は，このオブジェクトには名前がついていて，「Virtual DOM」と言います．  
-Virtual DOM については Virtual DOM のチャプターで詳しく解説するので，とりあえず名前だけ覚えてもらえれば大丈夫です．
+実は，このオブジェクトには名前がついていて，「仮想 DOM」と言います．  
+仮想 DOM については仮想 DOM のチャプターで詳しく解説するので，とりあえず名前だけ覚えてもらえれば大丈夫です．
 
 ## h function を実装する
 
@@ -161,7 +162,8 @@ export interface RendererOptions<HostNode = RendererNode> {
 }
 ```
 
-render 関数に`renderVNode`という関数を実装してみます．(とりあえず一旦 props は無視して実装しています．)
+render 関数に `renderVNode` という関数を実装してみます．\
+(とりあえず一旦 props は無視して実装しています．)
 
 ```ts
 export function createRenderer(options: RendererOptions) {
@@ -217,7 +219,7 @@ export const nodeOps: RendererOptions<Node> = {
 }
 ```
 
-さて，ここまでで画面に要素を描画できるようになっているはずです．
+さて，ここまでで画面に要素を描画できるようになっているはずです．\
 playground で色々書いてみて試してみましょう!
 
 ```ts

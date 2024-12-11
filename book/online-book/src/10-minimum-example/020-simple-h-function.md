@@ -49,7 +49,7 @@ However, here we will implement it in the most basic syntax.
 
 Now that we understand the developer interface, let's decide how to implement it.  
 The important point to note is how it is used as the return value of the render function.  
-This means that the `h` function returns some kind of object and uses that result internally.
+This means that the `h` function returns some kind of object and uses that result internally.\
 Since it is difficult to understand with complex child elements, let's consider the result of implementing a simple h function.
 
 ```ts
@@ -68,7 +68,7 @@ const result = {
 }
 ```
 
-In other words, we will receive an object similar to the one above from the render function and use it to perform DOM operations and render it.
+In other words, we will receive an object similar to the one above from the render function and use it to perform DOM operations and render it.\
 The image is like this (inside the `mount` of `createApp`):
 
 ```ts
@@ -84,7 +84,7 @@ Well, the only thing that has changed is that we changed the `message` string to
 All we have to do now is perform DOM operations based on the object in the render function.
 
 Actually, this object has a name, "Virtual DOM".  
-We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.
+We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.\
 
 ## Implementing the h function
 
@@ -146,7 +146,7 @@ mount(rootContainer: HostElement) {
 },
 ```
 
-Now, let's implement the render function.
+Now, let's implement the render function.\
 Implement `createElement`, `createText`, and `insert` in RendererOptions.
 
 ```ts
@@ -217,7 +217,7 @@ export const nodeOps: RendererOptions<Node> = {
 }
 ```
 
-Well, at this point, you should be able to render elements on the screen.
+Well, at this point, you should be able to render elements on the screen.\
 Try writing and testing various things in the playground!
 
 ```ts
