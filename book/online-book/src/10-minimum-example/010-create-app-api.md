@@ -4,13 +4,17 @@
 
 Now, let's start implementing chibivue step by step. How should we proceed with the implementation?
 
-This is something the author always keeps in mind when creating something new: first, think about how the software will be used. For convenience, let's call this "Developer Interface".
+This is something the author always keeps in mind when creating something new: first, think about how the software will be used. \
+For convenience, let's call this "Developer Interface".
 
-Here, "developer" refers to the person who develops web applications using chibivue, not the developer of chibivue itself. In other words, let's refer to the developer interface of the original Vue.js as a reference when developing chibivue. Specifically, let's take a look at what to write when developing web applications with Vue.js.
+Here, "developer" refers to the person who develops web applications using chibivue, not the developer of chibivue itself.\
+In other words, let's refer to the developer interface of the original Vue.js as a reference when developing chibivue. \
+Specifically, let's take a look at what to write when developing web applications with Vue.js.
 
 ## Developer Interface Levels? 🤔
 
-What we need to be careful about here is that Vue.js has multiple developer interfaces, each with a different level. Here, the level refers to how close it is to raw JavaScript. For example, the following are examples of developer interfaces for displaying HTML with Vue:
+What we need to be careful about here is that Vue.js has multiple developer interfaces, each with a different level. Here, the level refers to how close it is to raw JavaScript. \
+For example, the following are examples of developer interfaces for displaying HTML with Vue:
 
 1. Write the template in Single File Component
 
@@ -55,17 +59,22 @@ const app = createApp({
 app.mount('#app')
 ```
 
-There are other options as well, but let's consider these three developer interfaces. Which one is closest to raw JavaScript? The answer is "using the render option and h function" (option 3). Option 1 requires the implementation of the SFC compiler and bundler, and option 2 requires compiling the HTML passed to the template (converting it to JavaScript code) in order to work.
+There are other options as well, but let's consider these three developer interfaces. \
+Which one is closest to raw JavaScript? The answer is "using the render option and h function" (option 3). \
+Option 1 requires the implementation of the SFC compiler and bundler (or loader), and option 2 requires compiling the HTML passed to the template (converting it to JavaScript code) in order to work.
 
-For convenience, let's call the developer interface that is closer to raw JS "low-level developer interface". And the important thing here is to "start implementing from the low-level part". The reason for this is that in many cases, high-level descriptions are converted to low-level descriptions and executed. In other words, both option 1 and 2 are ultimately converted internally to the form of option 3. The implementation of this conversion is called a "compiler".
+For convenience, let's call the developer interface that is closer to raw JS "low-level developer interface".\
+And the important thing here is to "start implementing from the low-level part". \
+The reason for this is that in many cases, high-level descriptions are converted to low-level descriptions and executed. \
+In other words, both option 1 and 2 are ultimately converted internally to the form of option 3. \
+The implementation of this conversion is called a "compiler".
 
 So, let's start by implementing a developer interface like option 3!
 
 ## createApp API and Rendering
 
-## Approach
-
-Although we aim for the form of option 3, we still don't understand the h function well, and since this book aims for incremental development, let's not aim for the form of option 3 right away. Instead, let's start by implementing a simple rendering function that returns a message to be displayed.
+Although we aim for the form of option 3, we still don't understand the h function well, and since this book aims for incremental development, let's not aim for the form of option 3 right away. \
+Instead, let's start by implementing a simple rendering function that returns a message to be displayed.
 
 Image ↓
 
