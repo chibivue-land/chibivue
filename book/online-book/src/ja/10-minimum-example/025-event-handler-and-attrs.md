@@ -2,7 +2,7 @@
 
 ## 表示するだけでは寂しいので
 
-せっかくなので props の実装をしてクリックイベントや style を使えるようにしてみます．
+せっかくなので簡単な props の実装をしてクリックイベントやスタイルを使えるようにしてみます．
 
 この部分について，直接 renderVNode に実装してしまってもいいのですが，本家に倣った設計も考慮しつつ進めてみようかと思います．
 
@@ -12,7 +12,7 @@ https://github.com/vuejs/core/tree/main/packages/runtime-dom/src
 
 特に注目して欲しいのは `modules` というディレクトリと `patchProp.ts` というファイルです．
 
-modules の中には class や style, その他 props の操作をするためのファイルが実装されています．
+modules の中には class や style, その他 props の操作をするためのファイルが実装されています．\
 https://github.com/vuejs/core/tree/main/packages/runtime-dom/src/modules
 
 それらを patchProp という関数にまとめているのが patchProp.ts で，これを nodeOps に混ぜ込んでいます．
@@ -72,7 +72,7 @@ export const nodeOps: Omit<RendererOptions, "patchProp"> = {
   .
 ```
 
-そして，`runtime-dom/index`の renderer を生成する際に patchProp も一緒に渡すように変更します．
+そして，`runtime-dom/index` の renderer を生成する際に patchProp も一緒に渡すように変更します．
 
 ```ts
 const { render } = createRenderer({ ...nodeOps, patchProp })
@@ -159,8 +159,9 @@ addEventListener は名前の通り，ただイベントのリスナーを登録
 
 patchEvent では invoker という関数でラップしてリスナーを登録しています．  
 parseName に関しては，単純に props のキー名は `onClick` や `onInput` のようになっているので，それらを on を除いた小文字に変換しているだけです．(eg. click, input)  
-一点注意点としては，同じ要素に対して重複して addEventListener しないように，要素に `_vei` (vue event invokers)という名前で invoker を生やしてあげます．  
-これによって patch 時に existingInvoker.value を更新することで重複して addEventListener せずにハンドラを更新することができます．
+一点注意点としては，同じ要素に対して重複して addEventListener しないように，要素に `_vei` (vue event invokers) という名前で invoker を生やしてあげます．  
+これによって patch 時に existingInvoker.value を更新することで重複して addEventListener せずにハンドラを更新することができます．\
+invoker と言うのは単に「実行する者」と言う者です．特に深い意味はありません，実際に実行されるハンドラを格納するためのオブジェクトです．
 
 あとは patchProps に組み込んで renderVNode で使ってみましょう．
 
@@ -226,7 +227,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-h 関数でイベントハンドラを登録できるようになりました!
+h 関数でイベントハンドラを登録できるようになりました！
 
 ![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
 

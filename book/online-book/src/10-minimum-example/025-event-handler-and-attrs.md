@@ -154,13 +154,14 @@ function createInvoker(initialValue: EventValue) {
 
 It's a bit long, but if you split it, it's a very simple code.
 
-addEventListener is simply a function for registering event listeners as the name suggests.
+addEventListener is simply a function for registering event listeners as the name suggests.\
 Although you actually need to remove it at the appropriate timing, we will ignore it for now.
 
-In patchEvent, we wrap the listener with a function called invoker and register the listener.
+In patchEvent, we wrap the listener with a function called invoker and register the listener.\
 Regarding parseName, it simply converts prop key names such as `onClick` and `onInput` to lowercase by removing "on" (e.g. click, input).
-One thing to note is that in order not to add duplicate addEventListeners to the same element, we add an invoker to the element with the name `_vei` (vue event invokers).
-By updating existingInvoker.value at the time of patch, we can update the handler without adding duplicate addEventListeners.
+One thing to note is that in order not to add duplicate addEventListeners to the same element, we add an invoker to the element with the name `_vei` (vue event invokers).\
+By updating existingInvoker.value at the time of patch, we can update the handler without adding duplicate addEventListeners.\
+The term "invoker" simply means "one who executes." There is no deeper meaning; it is just an object that stores the handler that will actually be executed.
 
 Now let's incorporate it into patchProps and try using it in renderVNode.
 
@@ -232,9 +233,9 @@ We can now register event handlers with the h function!
 
 ## Trying to support other props
 
-After this, it's just a matter of doing the same thing with setAttribute.
-We will implement this in `modules/attrs.ts`.
-I would like you to try it yourself. The answer will be attached at the end of this chapter in the source code, so please check it there.
+After this, it's just a matter of doing the same thing with setAttribute.\
+We will implement this in `modules/attrs.ts`.\
+I would like you to try it yourself. The answer will be attached at the end of this chapter in the source code, so please check it there.\
 Once you can make this code work, you have reached the goal.
 
 ```ts
