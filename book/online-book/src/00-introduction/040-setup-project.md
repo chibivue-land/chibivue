@@ -7,16 +7,17 @@ We will promptly start with a simple implementation of Vue.js. Here are some poi
 - The project name will be "chibivue." We will refer to the basic Vue.js implementations covered in this book as "chibivue."
 - As initially mentioned, our primary approach will be "repeating small developments."
 - Source codes for each phase are included in the appendix of this book and can be found at https://github.com/chibivue-land/chibivue/tree/main/book/impls. We will not provide detailed explanations for all the source code in the book, so please refer to the appendix as needed.
-- The final code depends on several packages. A common issue with DIY content is the debate over "how much one should implement by hand to call it homemade." While we won't write all source code by hand in this book, we will actively use packages similar to those used in Vue.js's official code. For example, we'll use Babel. Rest assured, we aim to make this book as beginner-friendly as possible, providing minimal explanations for necessary packages.
+- The final code depends on several packages. A common issue with DIY content is the debate over "how much one should implement by hand to call it homemade." While we won't write all source code by hand in this book, we will actively use packages similar to those used in Vue.js's official code. For example, we'll use [Babel](https://babeljs.io/). Rest assured, we aim to make this book as beginner-friendly as possible, providing minimal explanations for necessary packages.
 
 ## Environment Setup
 
-Now, let's quickly move on to setting up the environment! I'll list the tools and versions we'll be using:
+Now, let's quickly move on to setting up the environment! \
+I'll list the tools and versions we'll be using:
 
-- Runtime: Node.js v22
-- Language: TypeScript
-- Package Manager: pnpm v9
-- Build Tool: Vite v6
+- Runtime: [Node.js](https://nodejs.org/en) v22
+- Language: [TypeScript](https://www.typescriptlang.org/)
+- Package Manager: [pnpm](https://pnpm.io/) v9
+- Build Tool: [Vite](https://vite.dev/) v6
 
 ## Installing Node.js
 
@@ -120,9 +121,7 @@ Contents of tsconfig.json
 Contents of packages/index.ts
 
 ```ts
-export const helloChibivue = () => {
-  console.log('Hello chibivue!')
-}
+console.log("Hello, World")
 ```
 
 ### ### Building the Playground Side
@@ -154,9 +153,7 @@ Contents of src/main.ts
 ※ For now, there will be an error after "from," but we will address this in the upcoming steps, so it's not a problem.
 
 ```ts
-import { helloChibivue } from 'chibivue'
-
-helloChibivue()
+import "chibivue"
 ```
 
 Modify index.html as follows.

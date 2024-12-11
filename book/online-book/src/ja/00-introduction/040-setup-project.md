@@ -13,18 +13,18 @@
 - 完成系のコードはいくつかのパッケージに依存しています．  
   これは自作系のコンテンツにありがちな問題なのですが，「どこからどこまで自分の手で実装すれば自作と言えるのだろう」という議論がしばしば挙げられます．  
   例によってこの本も全てのソースコードを手で書くわけではありません．  
-  今回は Vue.js 本家のコードが使っているようなパッケージは積極的に使っていきます．例えば，Babel がその一つです．  
+  今回は Vue.js 本家のコードが使っているようなパッケージは積極的に使っていきます．例えば，[Babel](https://babeljs.io/) がその一つです．  
   しかし安心してもらいたいのは，今回の本では前程知識を必要としないことを目指しているので必要になったパッケージについて必要最低限説明を加えます．
 
 ## 環境構築
 
-さて，早速ですが環境構築からやっていきましょう！
+さて，早速ですが環境構築からやっていきましょう！\
 一応先に今回構築する環境の内容を列挙しておきます
 
-- ランタイム: Node.js 22
-- 言語: TypeScript
-- パッケージマネージャ: pnpm 9
-- ビルドツール: Vite 6
+- ランタイム: [Node.js](https://nodejs.org/en) v22
+- 言語: [TypeScript](https://www.typescriptlang.org/)
+- パッケージマネージャ: [pnpm](https://pnpm.io/) v9
+- ビルドツール: [Vite](https://vite.dev/) v6
 
 ## Node.js インストール
 
@@ -135,9 +135,7 @@ tsconfig.json の内容
 packages/index.ts の内容
 
 ```ts
-export const helloChibivue = () => {
-  console.log("Hello chibivue!");
-};
+console.log("Hello, World");
 ```
 
 ### プレイグラウンド側の構築
@@ -168,9 +166,7 @@ src/main.ts の中身
 ※ 一旦 from の後ろのエラーが出ますがこれから設定するので問題ありません．
 
 ```ts
-import { helloChibivue } from "chibivue";
-
-helloChibivue();
+import "chibivue"
 ```
 
 index.html を以下のように書き換えます．

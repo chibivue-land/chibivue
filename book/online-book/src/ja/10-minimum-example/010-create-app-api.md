@@ -96,8 +96,8 @@ app.mount('#app')
 
 ## 早速実装
 
-`~/packages/index.ts`に createApp 関数を作ってみましょう．
-※ helloChibivue は不要なので消してしまいます．
+`~/packages/index.ts`に createApp 関数を作ってみましょう．\
+※ `"Hello, World"` の出力は不要なので消してしまいます．
 
 ```ts
 export type Options = {

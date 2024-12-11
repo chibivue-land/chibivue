@@ -83,7 +83,8 @@ app.mount('#app')
 
 ## Implementing it right away
 
-Let's create the createApp function in `~/packages/index.ts`. (We will remove helloChibivue as it is unnecessary.)
+Let's create the createApp function in `~/packages/index.ts`. \
+Note: Since the output of "Hello, World" is not necessary, we will remove it.
 
 ```ts
 export type Options = {

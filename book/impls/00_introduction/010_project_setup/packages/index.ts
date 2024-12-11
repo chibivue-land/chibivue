@@ -1,3 +1,1 @@
-export const helloChibivue = () => {
-  console.log('Hello chibivue!')
-}
+console.log('Hello chibivue!')
