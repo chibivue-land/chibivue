@@ -131,7 +131,7 @@ Since this book has turned out quite voluminous, I've set achievement milestones
   ```
 
 - **Basic Virtual DOM Section**  
-  In this section, we will implement a fairly practical patch rendering functionality for the Virtual DOM. While we won't be implementing features like "suspense" or other optimizations, it will be proficient enough to handle basic rendering tasks. We will also implement the scheduler here.
+  In this section, we will implement a fairly practical patch rendering functionality for the Virtual DOM. While we won't be implementing features like [Suspense](https://vuejs.org/guide/built-ins/suspense) or other optimizations, it will be proficient enough to handle basic rendering tasks. We will also implement the scheduler here.
 
 - **Basic Reactivity System Section**  
   Although we implemented the reactive API in the Minimal Example section, in this section we will implement other APIs. Starting from basic APIs like ref, watch, and computed, we'll also delve into more advanced APIs like effectScope and the shallow series.
@@ -143,7 +143,9 @@ Since this book has turned out quite voluminous, I've set achievement milestones
   In addition to a compiler for the Virtual DOM system implemented in the Basic Virtual DOM section, we will implement directives like v-on, v-bind, and v-for. Generally, this will involve the component's template option, and we won't cover SFC (Single File Components) here.
 
 - **Basic SFC Compiler Section**  
-  In this section, we will craft a fairly practical SFC compiler. Leveraging the template compiler from the Basic Template Compiler section, the primary focus here will be on implementing the script compiler. Specifically, we'll implement the script's default exports and the script setup of SFCs. By the end of this section, the feel should be quite close to the usual Vue experience.
+  Here, we will implement a somewhat practical SFC compiler while utilizing the template compiler implemented in the Basic Template Compiler section.  
+  Specifically, we will implement script setup and compiler macros.  
+  At this point, the experience will be quite close to using regular Vue.
 
 - **Web Application Essentials Section**  
   By the time we finish the Basic SFC Compiler section, we'll have a somewhat practical set of Vue.js features. However, to develop a web application, there's still a lot missing. For instance, we'll need tools to manage global state and routers. In this section, we'll develop such external plugins, aiming to make our toolkit even more practical from a "web application development" perspective.
