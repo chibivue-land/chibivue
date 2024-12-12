@@ -2,7 +2,7 @@
 
 ## 開発者インターフェース
 
-props に引き続き emit の実装をしていきます．
+props に引き続き emit の実装をしていきます．\
 emit の実装は比較的ライトなのですぐに終わります．
 
 開発者インタフェース的には emit は setup 関数の第 2 引数から受け取れるような形にします．
@@ -46,8 +46,7 @@ const app = createApp({
 
 ## 実装
 
-props の時と同じように，`~/packages/runtime-core/componentEmits.ts`というファイルを作成してそこに実装していきます．
-
+props の時と同じように，`~/packages/runtime-core/componentEmits.ts` というファイルを作成してそこに実装していきます．\
 emit は単純に，instance に emit 用の関数を実装し，実行時は vnode が持つ props からハンドラを探し実行します．
 
 `~/packages/runtime-core/componentEmits.ts`
@@ -136,7 +135,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
     }
 ```
 
-先ほど想定していた開発者インタフェースの例で動作を確認してみましょう！  
+先ほど想定していた開発者インタフェースの例で動作を確認してみましょう！\
 ちゃんと動いていればこれで props/emit によるコンポーネント間のやりとりが行えるようになりました！
 
 ここまでのソースコード：  

@@ -2,7 +2,7 @@
 
 ## Developer Interface
 
-Continuing from props, let's implement emits.
+Continuing from props, let's implement emits.\
 The implementation of emits is relatively simple, so it will be finished quickly.
 
 In terms of the developer interface, emits will be received from the second argument of the setup function.
@@ -46,8 +46,7 @@ const app = createApp({
 
 ## Implementation
 
-Similar to props, let's create a file called `~/packages/runtime-core/componentEmits.ts` and implement it there.
-
+Similar to props, let's create a file called `~/packages/runtime-core/componentEmits.ts` and implement it there.\
 `~/packages/runtime-core/componentEmits.ts`
 
 ```ts
