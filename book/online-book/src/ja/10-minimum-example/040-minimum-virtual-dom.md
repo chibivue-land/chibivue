@@ -1,6 +1,6 @@
-# 小さい Virtual DOM
+# 小さい仮想 DOM
 
-## Virtual DOM，何に使われる?
+## 仮想 DOM，何に使われる?
 
 前のチャプターでリアクティビティシステムを導入したことで画面を動的に更新できるようになりました．
 改めて現在の render 関数の内容を見てみましょう．
@@ -36,11 +36,11 @@ const app = createApp({
 
 何がまずいかというと，increment を実行した時に変化する部分は，`count: ${state.count}` の部分だけなのに，renderVNode では一度全ての DOM を削除し，1 から再生成しているのです．  
 これはなんとも無駄だらけな感じがしてなりません．今はまだ小さいので，これくらいでも特に問題なく動いているように見えますが，普段 Web アプリケーションを開発しているときような複雑な DOM を毎度毎度丸ごと作り替えるととんでもなくパフォーマンスが落ちてしまうのが容易に想像できると思います．  
-そこで，せっかく Virtual DOM を持っているわけですから，画面を描画する際に，前の Virtual DOM と比較して差分があったところだけを DOM 操作で書き換えるような実装をしたくなります．  
+そこで，せっかく仮想 DOM を持っているわけですから，画面を描画する際に，前の仮想 DOM と比較して差分があったところだけを DOM 操作で書き換えるような実装をしたくなります．  
 さて，今回のメインテーマはこれです．
 
 やりたいことをソースコードベースで見てみましょう．
-上記のようなコンポーネントがあったとき，render 関数の戻り値は以下のような Virtual DOM になっています．
+上記のようなコンポーネントがあったとき，render 関数の戻り値は以下のような仮想 DOM になっています．
 初回のレンダリング時には count は 0 なので以下のようになります．
 
 ```ts
@@ -186,7 +186,10 @@ export function normalizeVNode(child: VNodeChild): VNode {
 patch 関数でやりたいことは 2 つの vnode の比較なので，便宜上それぞれ vnode1, vnode2 とするのですが，初回は vnode1 がありません．  
 つまり，patch 関数での処理は「初回(vnode2 から dom を生成)」と，「vnode1 と vnode2 の差分を更新」の処理に分かれます．  
 これらの処理をそれぞれ「mount」と「patch」と名付けることにします．  
-そしてそれらは ElementNode と TextNode それぞれで行うようにします．(それぞれの mount と patch を process と言う名前でまとめてます．)
+そしてそれらは ElementNode と TextNode それぞれで行うようにします．\
+それぞれの mount と patch を process と言う名前でまとめてます．
+
+![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
 
 ```ts
 const patch = (
@@ -225,7 +228,7 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 
 ## 実際に実装してみる
 
-ここから実際に Virtual DOM の patch を実装していきます．  
+ここから実際に仮想 DOM の patch を実装していきます．  
 まず，Element にしろ，Text にしろ，マウントした段階で vnode に実際の DOM への参照を持たせておきたいので，vnode の el というプロパティを持たせておきます．
 
 `~/packages/runtime-core/vnode.ts`
@@ -239,7 +242,7 @@ export interface VNode<HostNode = RendererNode> {
 }
 ```
 
-それではここからは`~/packages/runtime-core/renderer.ts`です．  
+それではここからは `~/packages/runtime-core/renderer.ts` です．  
 createRenderer 関数の中に実装していきましょう．
 renderVNode 関数は消してしまいます．
 
@@ -406,13 +409,13 @@ const processText = (
 }
 ```
 
-※ patchChildren に関して，本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけないのですが，今回は小さく Virtual DOM を実装するのでその辺の実用性については触れません．  
-そのあたりをやりたい方は Basic Virtual DOM 部門で説明するのでぜひそちらをご覧ください．ここでは Virtual DOM の実装雰囲気であったり，役割が理解できるところまでの理解を目指します．
+※ patchChildren に関して，本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけないのですが，今回は小さく仮想 DOM を実装するのでその辺の実用性については触れません．  
+そのあたりをやりたい方は Basic Virtual DOM 部門で説明するのでぜひそちらをご覧ください．ここでは仮想 DOM の実装雰囲気であったり，役割が理解できるところまでの理解を目指します．
 
 さて，これで差分レンダリングができるようになったので，playground を見てみましょう．
 
 ![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
 
-これで Virtual DOM を利用したパッチが実装できました!!!!! 祝
+これで仮想 DOM を利用したパッチが実装できました!!!!! 祝
 
 ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

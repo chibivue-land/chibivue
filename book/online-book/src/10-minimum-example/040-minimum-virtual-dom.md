@@ -32,7 +32,10 @@ const app = createApp({
 })
 ```
 
-The problem is that only the part that changes when increment is executed is the `count: ${state.count}` part, but in renderVNode, all the DOM elements are removed and recreated from scratch. This feels very wasteful. Although it seems to be working fine for now because it is still small, you can easily imagine that performance will be greatly reduced if you have to recreate a complex DOM from scratch every time you develop a web application. Therefore, since we already have a Virtual DOM, we want to implement an implementation that compares the current Virtual DOM with the previous one and only updates the parts where there are differences using DOM operations. Now, this is the main theme of this chapter.
+The problem is that only the part that changes when increment is executed is the `count: ${state.count}` part, but in renderVNode, all the DOM elements are removed and recreated from scratch. This feels very wasteful. \
+Although it seems to be working fine for now because it is still small, you can easily imagine that performance will be greatly reduced if you have to recreate a complex DOM from scratch every time you develop a web application. \
+Therefore, since we already have a Virtual DOM, we want to implement an implementation that compares the current Virtual DOM with the previous one and only updates the parts where there are differences using DOM operations. \
+Now, this is the main theme of this chapter.
 
 Let's see what we want to do in the source code. When we have a component like the one above, the return value of the render function becomes a Virtual DOM like the following. At the time of the initial rendering, the count is 0, so it looks like this:
 
@@ -76,7 +79,8 @@ const nextVnode = {
 }
 ```
 
-Now, with these two vnodes, the screen is in the state of vnode (before it becomes nextVnode). We want to pass these two to a function called patch and render only the differences.
+Now, with these two vnodes, the screen is in the state of vnode (before it becomes nextVnode). \
+We want to pass these two to a function called patch and render only the differences.
 
 ```ts
 const vnode = {...}
@@ -84,11 +88,13 @@ const nextVnode = {...}
 patch(vnode, nextVnode, container)
 ```
 
-I introduced the function name earlier, but this differential rendering is called "patch". It is also sometimes called "reconciliation". By using these two Virtual DOMs, you can efficiently update the screen.
+I introduced the function name earlier, but this differential rendering is called "patch". \
+It is also sometimes called "reconciliation". By using these two Virtual DOMs, you can efficiently update the screen.
 
 ## Before implementing the patch function
 
-This is not directly related to the main topic, but let's do a slight refactoring here (because it is convenient for what we are going to talk about next). Let's create a function called createVNode in vnode.ts and make h function call it.
+This is not directly related to the main topic, but let's do a slight refactoring here (because it is convenient for what we are going to talk about next). \
+Let's create a function called createVNode in vnode.ts and make h function call it.
 
 ```ts
 export function createVNode(
@@ -113,7 +119,11 @@ export function h(
 }
 ```
 
-Now, let's get to the main point. Until now, the type of the small element that VNode has has been `(Vnode | string)[]`, but it is not enough to treat Text as a string, so let's try to unify it as VNode. Text is not just a string, but it exists as an HTML TextElement, so it contains more information than just a string. We want to treat it as a VNode in order to handle the surrounding information. Specifically, let's use the symbol Text to have it as the type of VNode. For example, when there is a text like `"hello"`,
+Now, let's get to the main point. Until now, the type of the small element that VNode has has been `(Vnode | string)[]`, but it is not enough to treat Text as a string, so let's try to unify it as VNode. \
+Text is not just a string, but it exists as an HTML TextElement, so it contains more information than just a string. \
+We want to treat it as a VNode in order to handle the surrounding information. \
+Specifically, let's use the symbol Text to have it as the type of VNode. \
+For example, when there is a text like `"hello"`,
 
 ```ts
 {
@@ -168,7 +178,14 @@ Now Text can be treated as a VNode.
 
 ## Design of the patch function
 
-First, let's take a look at the design of the patch function in the codebase. (We don't need to implement it here, just understand it.) The patch function compares two vnodes, vnode1 and vnode2. However, vnode1 does not exist initially. Therefore, the patch function is divided into two processes: "initial (generating dom from vnode2)" and "updating the difference between vnode1 and vnode2". These processes are named "mount" and "patch" respectively. And they are performed separately for ElementNode and TextNode (combined as "process" with the name "mount" and "patch" for each).
+First, let's take a look at the design of the patch function in the codebase. \
+(We don't need to implement it here, just understand it.) \
+The patch function compares two vnodes, vnode1 and vnode2. However, vnode1 does not exist initially. \
+Therefore, the patch function is divided into two processes: "initial (generating dom from vnode2)" and "updating the difference between vnode1 and vnode2". \
+These processes are named "mount" and "patch" respectively. \
+And they are performed separately for ElementNode and TextNode (combined as "process" with the name "mount" and "patch" for each).
+
+![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
 
 ```ts
 const patch = (
@@ -207,7 +224,9 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 
 ## Actual implementation
 
-Now let's actually implement the patch function for the Virtual DOM. First, we want to have a reference to the actual DOM in the vnode when it is mounted, whether it is an Element or a Text. So we add the "el" property to the vnode.
+Now let's actually implement the patch function for the Virtual DOM. \
+First, we want to have a reference to the actual DOM in the vnode when it is mounted, whether it is an Element or a Text.\
+So we add the "el" property to the vnode.
 
 `~/packages/runtime-core/vnode.ts`
 
@@ -220,7 +239,8 @@ export interface VNode<HostNode = RendererNode> {
 }
 ```
 
-Now let's move on to `~/packages/runtime-core/renderer.ts`. We will implement it inside the `createRenderer` function and remove the `renderVNode` function.
+Now let's move on to `~/packages/runtime-core/renderer.ts`. \
+We will implement it inside the `createRenderer` function and remove the `renderVNode` function.
 
 ```ts
 export function createRenderer(options: RendererOptions) {
@@ -271,7 +291,8 @@ const mountElement = (vnode: VNode, container: RendererElement) => {
 }
 ```
 
-Since it is an element, we also need to mount its children. Let's use the `normalize` function we created earlier.
+Since it is an element, we also need to mount its children. \
+Let's use the `normalize` function we created earlier.
 
 ```ts
 const mountChildren = (children: VNode[], container: RendererElement) => {
@@ -282,7 +303,10 @@ const mountChildren = (children: VNode[], container: RendererElement) => {
 }
 ```
 
-With this, we have implemented the mounting of elements. Next, let's move on to mounting Text. However, this is just a simple DOM operation. In the design explanation, we divided it into `mountText` and `patchText` functions, but since there is not much processing and it is not expected to become more complex in the future, let's write it directly.
+With this, we have implemented the mounting of elements. \
+Next, let's move on to mounting Text. \
+However, this is just a simple DOM operation. \
+In the design explanation, we divided it into `mountText` and `patchText` functions, but since there is not much processing and it is not expected to become more complex in the future, let's write it directly.
 
 ```ts
 const processText = (
@@ -298,7 +322,8 @@ const processText = (
 }
 ```
 
-Now, with the mounting of the initial render completed, let's move some of the processing from the `mount` function in `createAppAPI` to the `render` function so that we can hold two vnodes. Specifically, we pass `rootComponent` to the `render` function and perform ReactiveEffect registration inside it.
+Now, with the mounting of the initial render completed, let's move some of the processing from the `mount` function in `createAppAPI` to the `render` function so that we can hold two vnodes. \
+Specifically, we pass `rootComponent` to the `render` function and perform ReactiveEffect registration inside it.
 
 ```ts
 return function createApp(rootComponent) {
@@ -380,7 +405,9 @@ const processText = (
 }
 ```
 
-※ Regarding patchChildren, normally we need to handle dynamic-length child elements by adding key attributes, but since we are implementing a small Virtual DOM, we won't cover the practicality of that here. If you are interested, please refer to the Basic Virtual DOM section. Here, we aim to understand the implementation and role of Virtual DOM up to a certain extent.
+※ Regarding patchChildren, normally we need to handle dynamic-length child elements by adding key attributes, but since we are implementing a small Virtual DOM, we won't cover the practicality of that here. \
+If you are interested, please refer to the Basic Virtual DOM section. \
+Here, we aim to understand the implementation and role of Virtual DOM up to a certain extent.
 
 Now that we can perform diff rendering, let's take a look at the playground.
 
