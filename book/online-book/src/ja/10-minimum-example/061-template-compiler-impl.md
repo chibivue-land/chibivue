@@ -78,7 +78,7 @@ ChibiVue => {
 }
 ```
 
-のように変換し，runtimeDom を渡して render 関数を生成します．
+のように変換し，runtimeDom を渡して render 関数を生成します．\
 そして，codegen の責務は
 
 ```ts
@@ -94,7 +94,7 @@ const code = `
 
 ## 実装
 
-アプローチが理解できたら早速実装してみましょう．`~/packages`に`compiler-core`というディレクトリを作ってそこに`index.ts`, `parse.ts`, `codegen.ts`を作成します．
+アプローチが理解できたら早速実装してみましょう．`~/packages` に `compiler-core` というディレクトリを作ってそこに `index.ts`, `parse.ts`, `codegen.ts` を作成します．
 
 ```sh
 pwd # ~/
@@ -106,7 +106,7 @@ touch packages/compiler-core/codegen.ts
 
 index.ts は例の如く export するためだけに利用します．
 
-それでは parse から実装していきましょう．
+それでは parse から実装していきましょう．\
 `packages/compiler-core/parse.ts`
 
 ```ts
@@ -130,7 +130,7 @@ export const baseParse = (
 
 正規表現を使った非常に簡素なパーサではありますが，初めての実装としては十分です．
 
-続いて，コードの生成です．codegen.ts に実装していきます．
+続いて，コードの生成です．codegen.ts に実装していきます．\
 `packages/compiler-core/codegen.ts`
 
 ```ts
@@ -152,7 +152,7 @@ export const generate = ({
 }
 ```
 
-それでは，これらを組み合わせて template から関数の文字列を生成する関数を実装します．`packages/compiler-core/compile.ts`というファイルを新たに作成します．
+それでは，これらを組み合わせて template から関数の文字列を生成する関数を実装します．`packages/compiler-core/compile.ts` というファイルを新たに作成します．\
 `packages/compiler-core/compile.ts`
 
 ```ts
@@ -259,7 +259,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependen
 
 ## 実装の続き
 
-少し話が飛んでしまいましたが，実装の続きをやっていきましょう．
+少し話が飛んでしまいましたが，実装の続きをやっていきましょう．\
 先ほどの話を考慮すると，今作っているのはランタイム上で動作するコンパイラなので，`compiler-dom`を作っていくのが良さそうです．
 
 ```sh
@@ -281,7 +281,7 @@ export function compile(template: string) {
 「えっっっっ，これじゃあただ codegen しただけじゃん．関数の生成はどうするの？」と思ったかも知れません．  
 実はここでも関数の生成は行なっておらず，どこで行うかというと`package/index.ts`です．(本家のコードで言うと [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts) です)
 
-`package/index.ts`を実装したいところですが，ちょいと下準備があるので先にそちらからやります．
+`package/index.ts`を実装したいところですが，ちょいと下準備があるので先にそちらからやります．\
 その下準備というのは，`package/runtime-core/component.ts`にコンパイラ本体を保持する変数と，登録用の関数の実装です．
 
 `package/runtime-core/component.ts`
@@ -314,13 +314,13 @@ export * from './runtime-dom'
 export * from './reactivity'
 ```
 
-※ runtimeDom には h 関数を含める必要があるので `runtime-dom`で export するのを忘れないようにしてください．
+※ runtimeDom には h 関数を含める必要があるので `runtime-dom` で export するのを忘れないようにしてください．
 
 ```ts
 export { h } from '../runtime-core'
 ```
 
-さて，コンパイラの登録ができたので実際にコンパイルを実行したいです．
+さて，コンパイラの登録ができたので実際にコンパイルを実行したいです．\
 コンポーネントのオプションの型に template がなくては始まらないのでとりあえず template は生やしておきます．
 
 ```ts
@@ -357,7 +357,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-`mountComponent`の上記に示した部分を`package/runtime-core/component.ts`に切り出します．
+`mountComponent` の上記に示した部分を `package/runtime-core/component.ts` に切り出します．
 
 `package/runtime-core/component.ts`
 
