@@ -2,8 +2,8 @@
 
 ## Developer Interface
 
-Let's start with props.
-Let's think about the final developer interface.
+Let's start with props.\
+Let's think about the final developer interface.\
 Let's consider that props are passed as the first argument to the `setup` function.
 
 ```ts
@@ -33,7 +33,7 @@ const app = createApp({
 
 ## Implementation
 
-Based on this, let's think about the information we want to have in `ComponentInternalInstance`.
+Based on this, let's think about the information we want to have in `ComponentInternalInstance`.\
 We need the definition of props specified as `props: { message: { type: String } }`, and a property to actually hold the props value, so we add the following:
 
 ```ts
@@ -89,8 +89,8 @@ export function createComponentInstance(
     props: {},
 ```
 
-Let's think about how to form the `instance.props`.
-At the time of component mounting, filter the props held by the vnode based on the propsOptions.
+Let's think about how to form the `instance.props`.\
+At the time of component mounting, filter the props held by the vnode based on the propsOptions.\
 Convert the filtered object into a reactive object using the `reactive` function, and assign it to `instance.props`.
 
 Implement a function called `initProps` in `componentProps.ts` that performs this series of steps.
@@ -143,6 +143,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
     // .
     // .
     // .
+}
 ```
 
 ```ts
@@ -243,7 +244,7 @@ const setupRenderEffect = (
           updateProps(instance, next.props); // here
 ```
 
-If the screen is updated, it's OK.
+If the screen is updated, it's OK.\
 Now, you can pass data to the component using props! Great job!
 
 ![props](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/props.png)
@@ -251,9 +252,9 @@ Now, you can pass data to the component using props! Great job!
 Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
-As a side note, although it's not necessary, let's implement the ability to receive props in kebab-case, just like in the original Vue.
-At this point, create a directory called `~/packages/shared` and create a file called `general.ts` in it.
-This is the place to define general functions, not only for `runtime-core` and `runtime-dom`.
+As a side note, although it's not necessary, let's implement the ability to receive props in kebab-case, just like in the original Vue.\
+At this point, create a directory called `~/packages/shared` and create a file called `general.ts` in it.\
+This is the place to define general functions, not only for `runtime-core` and `runtime-dom`.\
 Following the original Vue, let's implement `hasOwn` and `camelize`.
 
 `~/packages/shared/general.ts`

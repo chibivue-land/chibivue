@@ -33,8 +33,8 @@ const app = createApp({
 
 ## 実装
 
-これを元に ComponentInternalInstance に持たせたい情報を考えてみます．
-`props: { message: { type: String } }`のように指定された props の定義と，props の値を実際に保持するプロパティが必要なので以下のように追加します．
+これを元に ComponentInternalInstance に持たせたい情報を考えてみます．\
+`props: { message: { type: String } }` のように指定された props の定義と，props の値を実際に保持するプロパティが必要なので以下のように追加します．
 
 ```ts
 export type Data = Record<string, unknown>
@@ -49,7 +49,7 @@ export interface ComponentInternalInstance {
 }
 ```
 
-`~/packages/runtime-core/componentProps.ts`というファイルを以下の内容で新たに作成します．
+`~/packages/runtime-core/componentProps.ts` というファイルを以下の内容で新たに作成します．
 
 ```ts
 export type Props = Record<string, PropOptions | null>
@@ -89,7 +89,7 @@ export function createComponentInstance(
     props: {},
 ```
 
-肝心の instance.props をどう形成するかというと，コンポーネントのマウント時に vnode が保持している props を propsOptions を元にフィルターします．
+肝心の instance.props をどう形成するかというと，コンポーネントのマウント時に vnode が保持している props を propsOptions を元にフィルターします．\
 フィルターしてできたオブジェクトを reactive 関数によってリアクティブなオブジェクトにし，instance.prop にセットします．
 
 この一連の流れを実装する`initProps`という関数を componentProps.ts に実装します．
@@ -142,6 +142,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
     // .
     // .
     // .
+}
 ```
 
 ```ts
@@ -242,7 +243,7 @@ const setupRenderEffect = (
           updateProps(instance, next.props); // ここ
 ```
 
-これで画面が更新されるようになれば OK です．
+これで画面が更新されるようになれば OK です．\
 これで props を利用することによってコンポーネントにデータを受け渡せるようになりました！　やったね！
 
 ![props](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/props.png)
@@ -250,10 +251,10 @@ const setupRenderEffect = (
 ここまでのソースコード：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
-ついでと言ってはなんなのですが，本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう．  
-ここで，新たに `~/packages/shared` というディレクトリを作成し， `general.ts` を作成します．  
-ここは，runtime-core や runtime-dom に限らず，汎用的な関数を定義する場所です．
-このタイミングで作る意味というのは特別ないのですが，本家に倣ってついでに作っておきます．
+ついでと言ってはなんなのですが，本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう．\
+ここで，新たに `~/packages/shared` というディレクトリを作成し， `general.ts` を作成します．\
+ここは，runtime-core や runtime-dom に限らず，汎用的な関数を定義する場所です．\
+このタイミングで作る意味というのは特別ないのですが，本家に倣ってついでに作っておきます．\
 そして，今回は `hasOwn` と `camelize` を実装してみます．
 
 `~/packages/shared/general.ts`
