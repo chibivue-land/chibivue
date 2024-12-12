@@ -2,9 +2,10 @@
 
 ## Thinking based on organizing existing implementations
 
-So far, we have implemented createApp API, Reactivity System, and Virtual DOM system in a small scale.
-With the current implementation, we can dynamically change the UI using the Reactivity System and perform efficient rendering using the Virtual DOM system. However, as a developer interface, everything is written in createAppAPI.
-In reality, I want to divide the files more and implement generic components for reusability.
+So far, we have implemented createApp API, Reactivity System, and Virtual DOM system in a small scale.\
+With the current implementation, we can dynamically change the UI using the Reactivity System and perform efficient rendering using the Virtual DOM system. \
+However, as a developer interface, everything is written in createAppAPI.\
+In reality, I want to divide the files more and implement generic components for reusability.\
 First, let's review the parts that are currently messy in the existing implementation. Please take a look at the render function in renderer.ts.
 
 ```ts
@@ -25,13 +26,14 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-In the render function, information about the root component is directly defined.
-In reality, n1, n2, updateComponent, and effect exist for each component.
-In fact, from now on, I want to define the component (in a sense, the constructor) on the user side and instantiate it.
-And I want the instance to have properties such as n1, n2, and updateComponent.
+In the render function, information about the root component is directly defined.\
+In reality, n1, n2, updateComponent, and effect exist for each component.\
+In fact, from now on, I want to define the component (in a sense, the constructor) on the user side and instantiate it.\
+And I want the instance to have properties such as n1, n2, and updateComponent.\
 So, let's think about encapsulating these as a component instance.
 
-Let's define something called `ComponentInternalInstance` in `~/packages/runtime-core/component.ts`. This will be the type of the instance.
+Let's define something called `ComponentInternalInstance` in `~/packages/runtime-core/component.ts`. \
+This will be the type of the instance.
 
 ```ts
 export interface ComponentInternalInstance {
@@ -50,9 +52,8 @@ export type InternalRenderFunction = {
 }
 ```
 
-The vnode, subTree, and next properties that this instance has are a bit complicated,
-but from now on, we will implement it so that ConcreteComponent can be specified as the type of VNode.
-In instance.vnode, we will keep the VNode itself.
+The vnode, subTree, and next properties that this instance has are a bit complicated, but from now on, we will implement it so that ConcreteComponent can be specified as the type of VNode.\
+In instance.vnode, we will keep the VNode itself.\
 And subTree and next will hold the rendering result VNode of that component. (This is the same as before with n1 and n2)
 
 In terms of image,
@@ -71,11 +72,10 @@ const App = {
 }
 ```
 
-You can use it like this,
-and if you let the instance be instance of MyComponent, instance.vnode will hold the result of `h(MyComponent, {}, [])`, and instance.subTree will hold the result of `h("p", {}, ["hello"])`.
+You can use it like this, and if you let the instance be instance of MyComponent, instance.vnode will hold the result of `h(MyComponent, {}, [])`, and instance.subTree will hold the result of `h("p", {}, ["hello"])`.
 
-For now, let's implement it so that you can specify a component as the first argument of the h function.
-However, it's just a matter of receiving an object that defines the component as the type.
+For now, let's implement it so that you can specify a component as the first argument of the h function.\
+However, it's just a matter of receiving an object that defines the component as the type.\
 In `~/packages/runtime-core/vnode.ts`
 
 ```ts
@@ -102,7 +102,8 @@ export interface VNode<HostNode = any> {
 }
 ```
 
-As a result, the renderer also needs to handle components. Implement `processComponent` similar to `processElement` and `processText` for handling components, and also implement `mountComponent` and `patchComponent` (or `updateComponent`).
+As a result, the renderer also needs to handle components. \
+Implement `processComponent` similar to `processElement` and `processText` for handling components, and also implement `mountComponent` and `patchComponent` (or `updateComponent`).
 
 First, let's start with an overview and detailed explanation.
 
@@ -182,7 +183,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-Next is the `setup` function. We need to move the code that was previously written directly in the `render` function to here and store the result in the instance instead of using variables.
+Next is the `setup` function. \
+We need to move the code that was previously written directly in the `render` function to here and store the result in the instance instead of using variables.
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -198,7 +200,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-Finally, let's combine the code for creating the effect into a function called `setupRenderEffect`. Again, the main task is to move the code that was previously implemented directly in the `render` function to here, while utilizing the state of the instance.
+Finally, let's combine the code for creating the effect into a function called `setupRenderEffect`. \
+Again, the main task is to move the code that was previously implemented directly in the `render` function to here, while utilizing the state of the instance.
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -263,7 +266,7 @@ parentNode: (node) => {
 },
 ```
 
-I think it's not particularly difficult, although it's a bit long.
+I think it's not particularly difficult, although it's a bit long.\
 In the `setupRenderEffect` function, a function for updating is registered as the `update` method of the instance, so in `updateComponent`, we just need to call that function.
 
 ```ts
@@ -283,7 +286,7 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-Now we can render components. Let's try creating a `playground` component as an example.
+Now we can render components. Let's try creating a `playground` component as an example.\
 In this way, we can divide the rendering into components.
 
 ```ts
