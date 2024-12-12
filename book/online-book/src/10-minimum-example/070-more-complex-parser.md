@@ -2,8 +2,8 @@
 
 ## I want to write more complex HTML
 
-In the current state, I can only express the names and attributes of tags, and the content of text.
-Therefore, I want to be able to write more complex HTML in the template.
+In the current state, I can only express the names and attributes of tags, and the content of text.\
+Therefore, I want to be able to write more complex HTML in the template.\
 Specifically, I want to be able to compile a template like this:
 
 ```ts
@@ -33,18 +33,19 @@ const app = createApp({
 app.mount('#app')
 ```
 
-However, it is difficult to parse such complex HTML with regular expressions. So, from here, I will implement a parser in earnest.
+However, it is difficult to parse such complex HTML with regular expressions. \
+So, from here, I will implement a parser in earnest.
 
 ## Introduction of AST
 
-In order to implement a full-fledged compiler, I will introduce something called AST (Abstract Syntax Tree).
-AST stands for Abstract Syntax Tree, and as the name suggests, it is a data representation of a tree structure that represents syntax.
-This is a concept that appears when implementing various compilers, not just Vue.js.
-In many cases (in language processing systems), "parsing" refers to converting it into this representation called AST.
-The definition of AST is defined by each language.
+In order to implement a full-fledged compiler, I will introduce something called AST (Abstract Syntax Tree).\
+AST stands for Abstract Syntax Tree, and as the name suggests, it is a data representation of a tree structure that represents syntax.\
+This is a concept that appears when implementing various compilers, not just Vue.js.\
+In many cases (in language processing systems), "parsing" refers to converting it into this representation called AST.\
+The definition of AST is defined by each language.\
 For example, JavaScript, which you are familiar with, is represented by AST called [estree](https://github.com/estree/estree), and the source code string is parsed according to this definition.
 
-I tried to explain it in a cool way, but in terms of image, it is just a formal definition of the return type of the parse function that we have implemented so far.
+I tried to explain it in a cool way, but in terms of image, it is just a formal definition of the return type of the parse function that we have implemented so far.\
 Currently, the return value of the parse function is as follows:
 
 ```ts
@@ -57,7 +58,7 @@ type ParseResult = {
 
 Let's extend this and define it so that more complex expressions can be performed.
 
-Create a new file `~/packages/compiler-core/ast.ts`.
+Create a new file `~/packages/compiler-core/ast.ts`.\
 I will explain while writing the code because it is a bit long.
 
 ```ts
@@ -121,7 +122,7 @@ export interface Position {
 }
 ```
 
-This is the AST we will be dealing with this time.
+This is the AST we will be dealing with this time.\
 In the parse function, we will implement the conversion of the template string into this AST.
 
 ## Implementation of a full-fledged parser
@@ -134,8 +135,9 @@ We plan to update this online book accordingly at the appropriate timing.
 :::
 
 Implement it in `~/packages/compiler-core/parse.ts`.
-Even if I say it's full-fledged, you don't have to be too nervous. Basically, all you're doing is generating an AST while reading the string and using branching and looping.
-The source code will be a bit longer, but I think the explanation will be easier to understand in the code base. So let's proceed that way.
+Even if I say it's full-fledged, you don't have to be too nervous.\
+Basically, all you're doing is generating an AST while reading the string and using branching and looping.\
+The source code will be a bit longer, but I think the explanation will be easier to understand in the code base. So let's proceed that way.\
 Please try to understand the details by reading the source code.
 
 Delete the contents of baseParse that you have implemented so far, and change the return type as follows:
@@ -153,7 +155,9 @@ export const baseParse = (
 
 ## Context
 
-First, let's implement the state used during parsing. We will name it `ParserContext` and gather the necessary information during parsing here. Eventually, I think it will also hold parser configuration options, etc.
+First, let's implement the state used during parsing.
+\We will name it `ParserContext` and gather the necessary information during parsing here.\
+Eventually, I think it will also hold parser configuration options, etc.
 
 ```ts
 export interface ParserContext {
@@ -192,7 +196,8 @@ export const baseParse = (
 
 In terms of order, the parsing progresses as follows: (parseChildren) -> (parseElement or parseText).
 
-Although it is a bit long, let's start with the implementation of parseChildren. The explanation will be done in the comments in the source code.
+Although it is a bit long, let's start with the implementation of parseChildren.\
+The explanation will be done in the comments in the source code.
 
 ```ts
 export const baseParse = (
@@ -302,12 +307,14 @@ function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
 }
 ```
 
-However, if you need to check whether 's' starts with a closing tag, it should be sufficient to check only the last element in ancestors. Although this section of code was eliminated in a recent rewrite of the parser, modifying the Vue 3.3 code to only check the last element in ancestors still results in all the positive tests passing successfully.
+However, if you need to check whether 's' starts with a closing tag, it should be sufficient to check only the last element in ancestors. \
+Although this section of code was eliminated in a recent rewrite of the parser, modifying the Vue 3.3 code to only check the last element in ancestors still results in all the positive tests passing successfully.
 :::
 
 ## parseText
 
-First, let's start with the simple parseText. It is a bit long because it also implements some utilities that are used not only in parseText but also in other functions.
+First, let's start with the simple parseText.\
+It is a bit long because it also implements some utilities that are used not only in parseText but also in other functions.
 
 ```ts
 function parseText(context: ParserContext): TextNode {
@@ -401,7 +408,8 @@ function getSelection(
 ## parseElement
 
 Next is the parsing of elements.  
-The parsing of elements mainly consists of parsing the start tag, parsing child nodes, and parsing the end tag. The parsing of the start tag is further divided into tag name and attributes.  
+The parsing of elements mainly consists of parsing the start tag, parsing child nodes, and parsing the end tag.\
+The parsing of the start tag is further divided into tag name and attributes.\
 Let's start by creating a framework for parsing the first half of the start tag, child nodes, and the end tag.
 
 ```ts
@@ -438,7 +446,8 @@ function parseElement(
 }
 ```
 
-There is nothing particularly difficult here. The `parseChildren` function is recursive (since `parseElement` is called by `parseChildren`).  
+There is nothing particularly difficult here.\
+The `parseChildren` function is recursive (since `parseElement` is called by `parseChildren`).\
 We are manipulating the `ancestors` data structure as a stack before and after.
 
 Let's implement `parseTag`.
@@ -581,11 +590,11 @@ function parseAttributeValue(context: ParserContext): AttributeValue {
 
 ## After finishing the implementation of the parser
 
-I have written a lot of code, more than usual. (It's only about 300 lines at most)
-I think it would be better to read the implementation here rather than explaining it in special words, so please read it repeatedly.
-Although I have written a lot, basically it is a straightforward task of advancing the analysis by reading the string, and there are no particularly difficult techniques.
+I have written a lot of code, more than usual. (It's only about 300 lines at most)\
+I think it would be better to read the implementation here rather than explaining it in special words, so please read it repeatedly.\
+Although I have written a lot, basically it is a straightforward task of advancing the analysis by reading the string, and there are no particularly difficult techniques.\
 
-By now, you should be able to generate an AST. Let's check if the parsing is working.
+By now, you should be able to generate an AST. Let's check if the parsing is working.\
 However, since the codegen part has not been implemented yet, we will output it to the console for confirmation this time.
 
 ```ts
@@ -635,13 +644,13 @@ The screen will not display anything, but let's check the console.
 
 ![simple_template_compiler_complex_html](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler_complex_html.png)
 
-It seems that the parsing is going well.
+It seems that the parsing is going well.\
 Now, let's proceed with the implementation of the codegen based on the generated AST.
 
 ## Generating the render function based on the AST
 
-Now that we have implemented a full-fledged parser, let's create a code generator that can be applied to it.
-However, at this point, there is no need for a complex implementation.
+Now that we have implemented a full-fledged parser, let's create a code generator that can be applied to it.\
+However, at this point, there is no need for a complex implementation.\
 I will show you the code first.
 
 ```ts
@@ -680,8 +689,8 @@ const genText = (text: TextNode): string => {
 }
 ```
 
-With the above code, you can create something that works.
-Uncomment the part that was commented out in the parser chapter and check the actual operation.
+With the above code, you can create something that works.\
+Uncomment the part that was commented out in the parser chapter and check the actual operation.\
 `~/packages/compiler-core/compile.ts`
 
 ```ts
@@ -727,7 +736,8 @@ app.mount('#app')
 
 How about that? It seems that we can render the screen very nicely.
 
-Let's add some movement to the screen. Since we haven't implemented template binding, we will directly manipulate the DOM.
+Let's add some movement to the screen. \
+Since we haven't implemented template binding, we will directly manipulate the DOM.
 
 ```ts
 export type ComponentOptions = {
@@ -787,7 +797,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-Let's make sure it is working correctly.
+Let's make sure it is working correctly.\
 How about that? Although the functionality is limited, it is getting closer to the usual Vue developer interface.
 
 Source code up to this point:  
