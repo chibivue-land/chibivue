@@ -152,16 +152,18 @@ function myPlugin(): Plugin {
 }
 ```
 
-I created it with the name `myPlugin`.
+I created it with the name `myPlugin`.\
 Since it's simple, I think many of you can understand it without explanation, but I'll explain it just in case.
 
-The plugin conforms to the format required by Vite. There are various options, but since this is a simple sample, I only used the `transform` option.
+The plugin conforms to the format required by Vite. \
+There are various options, but since this is a simple sample, I only used the `transform` option.\
 I recommend checking the official documentation and other resources for more information: https://vitejs.dev/guide/api-plugin.html
 
-In the `transform` function, you can receive `code` and `id`. You can think of `code` as the content of the file and `id` as the file name.
+In the `transform` function, you can receive `code` and `id`. \
+You can think of `code` as the content of the file and `id` as the file name.\
 As a return value, you put the result in the `code` property.
-You can write different processing for each file type based on the `id`, or modify the `code` to rewrite the content of the file.
-In this case, I added 100 console logs to the beginning of the file's content for files ending with `*.sample.js`.
+You can write different processing for each file type based on the `id`, or modify the `code` to rewrite the content of the file.\
+In this case, I added 100 console logs to the beginning of the file's content for files ending with `*.sample.js`.\
 Now, let's implement a sample `plugin.sample.js` and check it.
 
 ```sh
