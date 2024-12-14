@@ -2,13 +2,16 @@
 
 ## Virtual Modules
 
-Let's also support styles. In Vite, you can import CSS files by using the `.css` extension.
+Let's also support styles. \
+In Vite, you can import CSS files by using the `.css` extension.
 
 ```js
 import 'app.css'
 ```
 
-We will implement this by using Vite's virtual modules. Virtual modules allow you to keep non-existent files in memory as if they exist. You can use the `load` and `resolveId` options to implement virtual modules.
+We will implement this by using Vite's virtual modules. \
+Virtual modules allow you to keep non-existent files in memory as if they exist. \
+You can use the `load` and `resolveId` options to implement virtual modules.
 
 ```ts
 export default function myPlugin() {
@@ -36,9 +39,8 @@ As mentioned earlier, in Vite, importing a file with the `.css` extension is suf
 ## Implementing a Virtual Module with the Content of the SFC Style Block
 
 For this example, let's consider a file named "App.vue" and implement a virtual module named "App.vue.css" for its style section.  
-The process is straightforward: when a file named `**.vue.css` is loaded, we will retrieve the SFC using `fs.readFileSync` from the file path without the `.css` (i.e., the original Vue file),  
-parse it to extract the content of the style tag, and return that content as the code.
-Ï
+The process is straightforward: when a file named `**.vue.css` is loaded, we will retrieve the SFC using `fs.readFileSync` from the file path without the `.css` (i.e., the original Vue file), parse it to extract the content of the style tag, and return that content as the code.
+
 
 ```ts
 export default function vitePluginChibivue(): Plugin {
