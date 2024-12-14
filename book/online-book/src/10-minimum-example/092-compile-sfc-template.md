@@ -122,8 +122,10 @@ Now you should be able to compile the render function. Let's check it in the bro
 
 However, there is a small problem.
 
-When binding data to the template, I think you are using the `with` statement. However, due to the nature of Vite handling ESM, it cannot process code that only works in non-strict mode (sloppy mode) and cannot handle `with` statements.  
-So far, it hasn't been a problem because I was simply passing code (strings) containing `with` statements to the Function constructor and making it a function in the browser, but now it throws an error. You should see an error like this:
+When binding data to the template, I think you are using the `with` statement. \
+However, due to the nature of Vite handling ESM, it cannot process code that only works in non-strict mode (sloppy mode) and cannot handle `with` statements.  
+So far, it hasn't been a problem because I was simply passing code (strings) containing `with` statements to the Function constructor and making it a function in the browser, but now it throws an error. \
+You should see an error like this:
 
 > Strict mode code may not include a with statement
 
@@ -133,8 +135,8 @@ This is also described in the Vite official documentation as a troubleshooting t
 
 As a temporary solution, let's try to generate code that does not include the `with` statement when it is not in browser mode.
 
-Specifically, for the data to be bound, let's try to control it by adding the prefix `_ctx.` instead of using the `with` statement.  
-Since this is a temporary solution, it is not very strict, but I think it will work generally.  
+Specifically, for the data to be bound, let's try to control it by adding the prefix `_ctx.` instead of using the `with` statement.\
+Since this is a temporary solution, it is not very strict, but I think it will work generally.\
 (The proper solution will be implemented in a later chapter.)
 
 ```ts
