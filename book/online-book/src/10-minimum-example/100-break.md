@@ -3,7 +3,9 @@
 ## Minimal Example section is over!
 
 At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done 😁\
-If you are interested in Virtual DOM or patch rendering, you can move on to the Basic Virtual DOM section. If you want to extend components further, there is the Basic Component section. If you are interested in richer expressions in templates (such as directives), you can explore the Basic Template Compiler section. If you are interested in script setup or compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do them all if you want!!)\
+If you are interested in Virtual DOM or patch rendering, you can move on to the Basic Virtual DOM section. \
+If you want to extend components further, there is the Basic Component section. If you are interested in richer expressions in templates (such as directives), you can explore the Basic Template Compiler section. \
+If you are interested in script setup or compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do them all if you want!!)\
 Above all, the "Minimal Example Section" is also a respectable section, so if you feel like, "I don't need to know too deeply, but I want to get a general idea," then you are good to go up to this point.
 
 ## What have we achieved so far?
@@ -23,7 +25,8 @@ chibivue
 
 https://github.com/vuejs/core
 
-Even though it's small, you should now be able to read and understand the roles and contents of each file to some extent. I hope you will also challenge yourself to read the source code of the parts we haven't covered this time. (You should be able to read it little by little!)
+Even though it's small, you should now be able to read and understand the roles and contents of each file to some extent. \
+I hope you will also challenge yourself to read the source code of the parts we haven't covered this time. (You should be able to read it little by little!)
 
 ## We now know how declarative UI is achieved
 
@@ -243,7 +246,8 @@ const app = createApp({
 
 I understood how to achieve the SFC compiler through the Vite plugin.
 
-By implementing the template compiler and utilizing it through the Vite plugin, I gained an understanding of how to implement an original file format that combines script, template, and style into one file. I also learned about what can be done with Vite plugins, as well as transform and virtual modules.
+By implementing the template compiler and utilizing it through the Vite plugin, I gained an understanding of how to implement an original file format that combines script, template, and style into one file.\
+I also learned about what can be done with Vite plugins, as well as transform and virtual modules.
 
 ```vue
 <script>
@@ -330,7 +334,8 @@ From here, it will be divided into 5 parts + 1 appendix.
   - compiler macro
 - Web Application Essentials Part (Appendix)
 
-This part is an appendix. In this part, we will implement libraries that are frequently used together with Vue in web development. 
+This part is an appendix. \
+In this part, we will implement libraries that are frequently used together with Vue in web development. 
 
 - store
 - route
@@ -339,8 +344,9 @@ We will cover the above two, but feel free to implement other things that come t
 
 ### Policy
 
-In the Minimal Example part, we explained the implementation steps in quite detail. By now, if you have implemented it, you should be able to read the source code of the original Vue. 
-Therefore, from now on, the explanations will be kept to a rough policy, and you will implement the actual code while reading the original code or thinking on your own. 
-(N-no, it's not that I'm getting lazy to write in detail or anything like that!) 
-Well, it's fun to implement it as the book says, but once it starts to take shape, it's more fun to do it yourself and it leads to a deeper understanding. 
+In the Minimal Example part, we explained the implementation steps in quite detail. \
+By now, if you have implemented it, you should be able to read the source code of the original Vue. 
+Therefore, from now on, the explanations will be kept to a rough policy, and you will implement the actual code while reading the original code or thinking on your own. \
+(N-no, it's not that I'm getting lazy to write in detail or anything like that!) \
+Well, it's fun to implement it as the book says, but once it starts to take shape, it's more fun to do it yourself and it leads to a deeper understanding. \
 From here on, please consider this book as a kind of guideline, and the main content is in the original Vue source code!
