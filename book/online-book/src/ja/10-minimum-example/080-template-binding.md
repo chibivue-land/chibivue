@@ -48,7 +48,7 @@ app.mount('#app')
 
 setup から return した値をテンプレートに記述して扱えるようにしたいのですが，このことをこれからは「テンプレートバインディング」であったり，単に「バインディング」という言葉で表現することにします．  
 バインディングをこれから実装していくわけですがイベントハンドラやマスタッシュ構文を実装する前にやっておきたいことがあります．  
-`setup から return した値`と言ったのですが，今 setup の戻り値は`undefined`または，`関数`(レンダー関数)です．  
+`setup から return した値` と言ったのですが，今 setup の戻り値は `undefined` または，`関数` (レンダー関数)です．  
 バインディングの実装の準備として，setup からステート等を return できるようにして，それらをコンポーネントのデータとして保持できるようにしておく必要があるようです．
 
 ```ts
@@ -56,7 +56,7 @@ export type ComponentOptions = {
   setup?: (
     props: Record<string, any>,
     ctx: { emit: (event: string, ...args: any[]) => void },
-  ) => Function | Record<string, unknown> | void // Record<string, unknown>も返しうるように
+  ) => Function | Record<string, unknown> | void // Record<string, unknown> も返しうるように
   // .
   // .
   // .
@@ -98,7 +98,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-伴って，これ以降，setup で定義されるデータのことを`setupState`と呼ぶことにします．
+伴って，これ以降，setup で定義されるデータのことを `setupState` と呼ぶことにします．
 
 さて，コンパイラを実装する前に，setupState をどのようにしてテンプレートにバインディングするか方針について考えてみます．  
 テンプレートを実装する前までは以下のように setupState をバインディングしていました．
@@ -234,11 +234,11 @@ render(setupState)
 
 ## マスタッシュ構文の実装
 
-まずはマスタッシュ構文の実装をしていきます．例によって，AST を考え，パーサの実装してコードジェネレータの実装をしていきます．
-今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です．
-新たにマスタッシュ構文を定義したいので，直感的には `Mustache`のような AST にすることが考えられます．
-それにあたるのが`Interpolation`という Node です．
-Interpolation には「内挿」であったり，「挿入」と言った意味合いがあります．
+まずはマスタッシュ構文の実装をしていきます．例によって，AST を考え，パーサの実装してコードジェネレータの実装をしていきます．\
+今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です．\
+新たにマスタッシュ構文を定義したいので，直感的には `Mustache` のような AST にすることが考えられます．\
+それにあたるのが `Interpolation` という Node です．\
+Interpolation には「内挿」であったり，「挿入」と言った意味合いがあります．\
 よって，今回扱う AST は次のようなものになります．
 
 ```ts
@@ -348,7 +348,7 @@ function parseText(context: ParserContext): TextNode {
 }
 ```
 
-これまでパーサを実装してきた方にとっては特に難しいことはないはずです． <span v-pre>`{{`</span> を探し， <span v-pre>`}}`</span> が来るまで読み進めて AST を生成しているだけです．  
+これまでパーサを実装してきた方にとっては特に難しいことはないはずです． <span v-pre>`{{`</span> を探し， <span v-pre>`}}`</span> が来るまで読み進めて AST を生成しています．  
 <span v-pre>`}}`</span> が見つからなかった場合は undefined を返し，parseText への分岐でテキストとしてパースさせています．
 
 ここらでちゃんとパースができているか，コンソール等に出力して確認してみましょう．
@@ -529,7 +529,7 @@ const app = createApp({
 動きましたね！　やったね！　完成！
 
 と言いたいところですが，流石に実装が綺麗じゃないのでリファクタしていこうかと思います．
-`@click`というものはせっかく，「ディレクティブ」という名前で分類されていて，今後は v-bind や v-model を実装していくことは容易に想像できるかと思いますので，AST 上で`DIRECTIVE`と表現することにして，単純な ATTRIBUTE と区別するようにしておきましょう．
+`@click` というものはせっかく，「ディレクティブ」という名前で分類されていて，今後は v-bind や v-model を実装していくことは容易に想像できるかと思いますので，AST 上で `DIRECTIVE` と表現することにして，単純な `ATTRIBUTE` と区別するようにしておきましょう．
 
 いつも通り AST -> parse -> codegen の順で実装してみます．
 
@@ -641,7 +641,7 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
 ```
 
 さて，playground で動作を確認してみましょう．
-`@click`のみならず，`v-on:click`や他のイベントもハンドリングできるようになっているはずです．
+`@click` のみならず，`v-on:click` や他のイベントもハンドリングできるようになっているはずです．
 
 ```ts
 const app = createApp({

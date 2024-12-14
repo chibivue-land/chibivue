@@ -47,9 +47,12 @@ const app = createApp({
 app.mount('#app')
 ```
 
-Now, I want to be able to handle the values returned from the `setup` function in the template. From now on, I will refer to this as "template binding" or simply "binding". I am going to implement the binding, but before implementing event handlers and mustache syntax, there are a few things I want to do.
+Now, I want to be able to handle the values returned from the `setup` function in the template. \
+From now on, I will refer to this as "template binding" or simply "binding". \
+I am going to implement the binding, but before implementing event handlers and mustache syntax, there are a few things I want to do.
 
-I mentioned the value returned from `setup`, but currently the return value of `setup` is either `undefined` or a function (render function). As a preparation for implementing binding, I need to modify it so that `setup` can return state and other values, and these values can be stored as component data.
+I mentioned the value returned from `setup`, but currently the return value of `setup` is either `undefined` or a function (render function).\
+As a preparation for implementing binding, I need to modify it so that `setup` can return state and other values, and these values can be stored as component data.
 
 ```ts
 export type ComponentOptions = {
@@ -101,7 +104,8 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 From now on, I will refer to the data defined in `setup` as `setupState`.
 
-Now, before implementing the compiler, let's think about how to bind `setupState` to the template. Previously, we bound `setupState` like this:
+Now, before implementing the compiler, let's think about how to bind `setupState` to the template. \
+Previously, we bound `setupState` like this:
 
 ```ts
 const app = createApp({
@@ -112,7 +116,8 @@ const app = createApp({
 })
 ```
 
-Well, it's not really binding, but rather the render function simply forms a closure and references the variable. However, this time, since the setup option and the render function are conceptually different, we need to find a way to pass the setup data to the render function.
+Well, it's not really binding, but rather the render function simply forms a closure and references the variable. \
+However, this time, since the setup option and the render function are conceptually different, we need to find a way to pass the setup data to the render function.
 
 ```ts
 const app = createApp({
@@ -126,7 +131,8 @@ const app = createApp({
 })
 ```
 
-The `template` is compiled as a render function using the `h` function and assigned to `instance.render`. So, it is equivalent to the following code:
+The `template` is compiled as a render function using the `h` function and assigned to `instance.render`. \
+So, it is equivalent to the following code:
 
 ```ts
 const app = createApp({
@@ -141,7 +147,7 @@ const app = createApp({
 })
 ```
 
-Naturally, the variable `state` is not defined within the render function.
+Naturally, the variable `state` is not defined within the render function.\
 Now, how can we reference the `state` variable?
 
 ## Using the `with` statement
@@ -175,7 +181,9 @@ Therefore, it is recommended to avoid using it.
 
 We do not know how the implementation of Vue.js will change in the future, but since Vue.js 3 uses the `with` statement, we will use it for this implementation.
 
-A little side note, not everything in Vue.js is implemented using the `with` statement. When dealing with templates in Single File Components (SFC), it is implemented without using the `with` statement. We will cover this in a later chapter, but for now, let's consider implementing it using `with`.
+A little side note, not everything in Vue.js is implemented using the `with` statement.\
+When dealing with templates in Single File Components (SFC), it is implemented without using the `with` statement. \
+We will cover this in a later chapter, but for now, let's consider implementing it using `with`.
 
 ---
 
@@ -194,8 +202,9 @@ with (obj) {
 
 By passing the parent object that contains the `state` as an argument to `with`, we can reference the `state` variable.
 
-In this case, we will treat `setupState` as the parent object.
-In reality, not only `setupState`, but also data from `props` and data defined in Options API should be accessible. However, for now, we will only consider using the data from `setupState`.
+In this case, we will treat `setupState` as the parent object.\
+In reality, not only `setupState`, but also data from `props` and data defined in Options API should be accessible.\
+ However, for now, we will only consider using the data from `setupState`.
 (We will cover the implementation of this part in a later section, as it is not part of the minimal implementation.)
 
 To summarize what we want to achieve this time, we want to compile the following template:
@@ -229,11 +238,12 @@ render(setupState)
 
 ## Implementing the Mustache Syntax
 
-First, let's implement the Mustache syntax. As usual, we will consider the AST, implement the parser, and then implement the code generator.
-Currently, the only nodes defined as part of the AST are `Element`, `Text`, and `Attribute`.
-Since we want to define the Mustache syntax, it intuitively makes sense to have an AST called `Mustache`.
-For that purpose, we will use the `Interpolation` node.
-Interpolation has meanings such as "interpolation" or "insertion".
+First, let's implement the Mustache syntax.\
+As usual, we will consider the AST, implement the parser, and then implement the code generator.\
+Currently, the only nodes defined as part of the AST are `Element`, `Text`, and `Attribute`.\
+Since we want to define the Mustache syntax, it intuitively makes sense to have an AST called `Mustache`.\
+For that purpose, we will use the `Interpolation` node.\
+Interpolation has meanings such as "interpolation" or "insertion".\
 Therefore, the AST we will handle this time will look like this:
 
 ```ts
@@ -251,7 +261,7 @@ export interface InterpolationNode extends Node {
 }
 ```
 
-Now that the AST has been implemented, let's move on to implementing the parser.
+Now that the AST has been implemented, let's move on to implementing the parser.\
 When we find the string <span v-pre>`{{`</span>, we will parse it as an `Interpolation`.
 
 ```ts
@@ -341,7 +351,8 @@ function parseText(context: ParserContext): TextNode {
 }
 ```
 
-For those who have implemented the parser so far, there should be no particularly difficult parts. It simply searches for <span v-pre>`{{`</span> and reads until <span v-pre>`}}`</span> comes, generating an AST.  
+For those who have implemented the parser so far, there should be no particularly difficult parts. \
+It simply searches for <span v-pre>`{{`</span> and reads until <span v-pre>`}}`</span> comes, generating an AST.  \
 If <span v-pre>`}}`</span> is not found, it returns undefined and parses it as text in the branching of parseText.
 
 Let's output to the console or something to make sure that the parsing is working properly.
@@ -385,7 +396,7 @@ const app = createApp({
 
 It looks fine!
 
-Now let's implement the binding based on this AST.  
+Now let's implement the binding based on this AST.  \
 Wrap the contents of the render function with a with statement.
 
 ```ts
@@ -418,7 +429,7 @@ const genInterpolation = (node: InterpolationNode): string => {
 }
 ```
 
-Finally, when executing the render function, pass `setupState` as an argument.
+Finally, when executing the render function, pass `setupState` as an argument.\
 
 `~/packages/runtime-core/component.ts`
 
@@ -521,8 +532,9 @@ const app = createApp({
 
 You did it! Well done! It's complete!
 
-I want to say that, but the implementation is not clean enough, so I think I'll refactor it a bit.
-Since `@click` is classified under the name "directive", it would be easy to imagine implementing `v-bind` and `v-model` in the future. So let's represent it as `DIRECTIVE` in the AST and distinguish it from simple `ATTRIBUTE`.
+I want to say that, but the implementation is not clean enough, so I think I'll refactor it a bit.\
+Since `@click` is classified under the name "directive", it would be easy to imagine implementing `v-bind` and `v-model` in the future.\
+So let's represent it as `DIRECTIVE` in the AST and distinguish it from simple `ATTRIBUTE`.
 
 As usual, let's implement it in the order of AST -> parse -> codegen.
 
@@ -633,7 +645,7 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
 }
 ```
 
-Now, let's check the operation in the playground.
+Now, let's check the operation in the playground.\
 You should be able to handle not only `@click`, but also `v-on:click` and other events.
 
 ```ts
@@ -688,7 +700,8 @@ const app = createApp({
 
 ![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
 
-You did it. We're getting closer to Vue!  
+You did it.\
+We're getting closer to Vue!  
 With this, the implementation of the small template is complete. Good job.
 
 Source code up to this point:  
