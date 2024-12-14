@@ -40,7 +40,8 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-Now, let's implement the SFC compiler. However, it may be difficult to imagine without any substance, so let's implement a playground and do it while running it.  
+Now, let's implement the SFC compiler. \
+However, it may be difficult to imagine without any substance, so let's implement a playground and do it while running it.  
 We will create a simple SFC and load it.
 
 ```sh
@@ -143,9 +144,10 @@ Of course, it will result in an error. Well done (?).
 
 ## Resolving the Error
 
-Let's resolve the error for now. We don't aim for perfection right away.
-First, let's limit the target of `transform` to "\*.vue".
-We can write a branching statement with `id` as we did in the sample, but since Vite provides a function called `createFilter`, let's create a filter using that. (There is no particular reason for this.)
+Let's resolve the error for now. We don't aim for perfection right away.\
+First, let's limit the target of `transform` to "\*.vue".\
+We can write a branching statement with `id` as we did in the sample, but since Vite provides a function called `createFilter`, let's create a filter using that.\
+(There is no particular reason for this.)
 
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
 
@@ -167,13 +169,13 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-We created a filter and transformed the file content to `export default {}` if it was a Vue file.
+We created a filter and transformed the file content to `export default {}` if it was a Vue file.\
 The error should disappear and the screen should not display anything.
 
 ## Implementation of the Parser on compiler-sfc
 
-Now, this is just a temporary solution, so let's implement a proper solution.
-The role of vite-plugin is to enable transformation with Vite, so the parsing and compilation are in the main Vue package.
+Now, this is just a temporary solution, so let's implement a proper solution.\
+The role of vite-plugin is to enable transformation with Vite, so the parsing and compilation are in the main Vue package.\
 That is the `compiler-sfc` directory.
 
 ```mermaid
@@ -203,7 +205,8 @@ That is the `compiler-sfc` directory.
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
-The SFC compiler is the same for both Vite and Webpack. The core implementation is in `compiler-sfc`.
+The SFC compiler is the same for both Vite and Webpack. \
+The core implementation is in `compiler-sfc`.
 
 Let's create `compiler-sfc`.
 
@@ -252,10 +255,11 @@ export declare interface SFCStyleBlock extends SFCBlock {
 }
 ```
 
-Well, there's nothing particularly difficult. It's just an object that represents the SFC information.
+Well, there's nothing particularly difficult. \
+It's just an object that represents the SFC information.
 
-In `packages/compiler-sfc/parse.ts`, we will parse the SFC file (string) into `SFCDescriptor`.
-Some of you may be thinking, "What? You worked so hard on the template parser, and now you're creating another parser...? It's a hassle." But don't worry.
+In `packages/compiler-sfc/parse.ts`, we will parse the SFC file (string) into `SFCDescriptor`.\
+Some of you may be thinking, "What? You worked so hard on the template parser, and now you're creating another parser...? It's a hassle." But don't worry.\
 The parser we're going to implement here is not a big deal. That's because we're just separating the template, script, and style by combining what we've created so far.
 
 First, as a preparation, export the template parser we created earlier.

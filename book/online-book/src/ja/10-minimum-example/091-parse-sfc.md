@@ -2,7 +2,7 @@
 
 ## 準備
 
-先ほど作ったサンプルのプラグインなのですが，もう不要なので消してしまいましょう
+先ほど作ったサンプルのプラグインなのですが，もう不要なので消してしまいましょう．
 
 ```sh
 pwd # ~
@@ -16,7 +16,7 @@ pwd # ~
 ni vite
 ```
 
-plugin の本体なのですが，本来これは vuejs/core の範囲外なので packages に`@extensions`というディレクトリを切ってそこに実装していきます．
+plugin の本体なのですが，本来これは vuejs/core の範囲外なので packages に　`@extensions`　というディレクトリを切ってそこに実装していきます．
 
 ```sh
 pwd # ~
@@ -144,7 +144,7 @@ export default defineConfig({
 ## エラーの解消
 
 とりあえずエラーを解消していきましょう．いきなり完璧なものは目指しません．  
-まず，transform の対象を「\*.vue」に限定してあげましょう．
+まず，transform の対象を「\*.vue」に限定してあげましょう．\
 sample でやったように id で分岐を書いてもいいのですが，せっかく vite から createFilter という関数が提供されているのでそれでフィルターを作ります．(特に理由はないです．)
 
 `~/packages/@extensions/vite-plugin-chibivue/index.ts`
@@ -203,9 +203,9 @@ vite-plugin での役割はあくまで vite を利用する際に vite で tran
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
-SFC のコンパイラは vite だろうが webpack だろうがコアな部分は同じです．それらの実装をになっているのが`compiler-sfc`です．
+SFC のコンパイラは vite だろうが webpack だろうがコアな部分は同じです．それらの実装をになっているのが `compiler-sfc` です．
 
-`compiler-sfc`を作っていきましょう．
+`compiler-sfc` を作っていきましょう．
 
 ```sh
 pwd # ~
@@ -254,7 +254,7 @@ export declare interface SFCStyleBlock extends SFCBlock {
 
 まあ，特に難しいことはないです．SFC の情報をオブジェクトで表現しただけです．
 
-`packages/compiler-sfc/parse.ts`では SFC ファイル(文字列)を `SFCDescriptor` にパースします．  
+`packages/compiler-sfc/parse.ts` では SFC ファイル(文字列)を `SFCDescriptor` にパースします．  
 「ええ．あんだけテンプレートのパースを頑張ったのにまたパーサつくるのかよ．．面倒臭い」と思った方もいるかも知れませんが，安心してください．  
 ここで実装するパーサは大したものではないです．というのも，これまで作ってきたものを組み合わせて template，script，style を分離するだけなので楽ちんです．
 
@@ -404,7 +404,7 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-このコードは vite が動いているプロセス，つまり node で実行されるので console はターミナルに出力されているかと思います．
+このコードは vite が動いているプロセス，つまり node で実行されるので console はターミナルに出力されているかと思います．\
 
 ![parse_sfc1](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc1.png)
 
