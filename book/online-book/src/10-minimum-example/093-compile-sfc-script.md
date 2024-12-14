@@ -13,7 +13,7 @@ export default {
 I want to extract only the following part:
 
 ```ts
-{
+  {
   setup() {},
 }
 ```
@@ -61,7 +61,8 @@ interface Program {
 }
 ```
 
-Statement represents a "statement" in JavaScript, which is a collection of statements. Examples include "variable declaration statement," "if statement," "for statement," and "block statement."
+Statement represents a "statement" in JavaScript, which is a collection of statements. \
+Examples include "variable declaration statement," "if statement," "for statement," and "block statement."
 
 ```ts
 interface Statement {}
@@ -84,7 +85,9 @@ interface BlockStatement extends Statement {
 // There are many more
 ```
 
-Statements usually have an "expression" in most cases. An expression is something that can be assigned to a variable. Examples include "object," "binary operation," and "function call."
+Statements usually have an "expression" in most cases. \
+An expression is something that can be assigned to a variable. \
+Examples include "object," "binary operation," and "function call."
 
 ```ts
 interface Expression {}
@@ -117,22 +120,30 @@ interface IfStatement extends Statement {
 }
 ```
 
-In this way, JavaScript syntax is parsed into the AST mentioned above. I think this explanation is easy to understand for those who have already implemented the template compiler for chibivue. (It's the same thing)
+In this way, JavaScript syntax is parsed into the AST mentioned above. \
+I think this explanation is easy to understand for those who have already implemented the template compiler for chibivue. (It's the same thing)
 
-The reason why I use Babel is twofold. First, it's simply because it's cumbersome. If you have implemented a parser before, it may be technically possible to implement a JS parser while referring to estree. However, it is very cumbersome, and it is not very important for the purpose of "deepening understanding of Vue" in this case. The other reason is that the official Vue also uses Babel for this part.
+The reason why I use Babel is twofold.\
+First, it's simply because it's cumbersome. \
+If you have implemented a parser before, it may be technically possible to implement a JS parser while referring to estree. \
+However, it is very cumbersome, and it is not very important for the purpose of "deepening understanding of Vue" in this case. \
+The other reason is that the official Vue also uses Babel for this part.
 
 ### magic-string
 
 https://github.com/rich-harris/magic-string
 
-There is another library I want to use. This library is also used by the official Vue. It is a library that makes string manipulation easier.
+There is another library I want to use. \
+This library is also used by the official Vue. \
+It is a library that makes string manipulation easier.
 
 ```ts
 const input = 'Hello'
 const s = new MagicString(input)
 ```
 
-You can generate an instance like this and use the convenient methods provided by the instance to manipulate strings. Here are some examples:
+You can generate an instance like this and use the convenient methods provided by the instance to manipulate strings. \
+Here are some examples:
 
 ```ts
 s.append('!!!') // Append to the end
@@ -142,7 +153,8 @@ s.overwrite(9, 13, 'こんにちは') // Overwrite within a range
 
 There is no need to use it forcefully, but I will use it to align with the official Vue.
 
-Whether it's Babel or magic-string, you don't need to understand the actual usage at this point. I will explain and align the implementation later, so it's okay to have a rough understanding for now.
+Whether it's Babel or magic-string, you don't need to understand the actual usage at this point. \
+I will explain and align the implementation later, so it's okay to have a rough understanding for now.
 
 ## Rewriting the default export of the script
 
@@ -336,7 +348,8 @@ function specifierEnd(input: string, end: number, nodeEnd: number | null) {
 }
 ```
 
-Now you can rewrite the default export. Let's try using it in a plugin.
+Now you can rewrite the default export. \
+Let's try using it in a plugin.
 
 ```ts
 import type { Plugin } from 'vite'

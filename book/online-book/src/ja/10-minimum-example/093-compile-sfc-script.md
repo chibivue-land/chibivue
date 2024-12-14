@@ -63,7 +63,8 @@ interface Program {
 }
 ```
 
-Statement というのは日本で言うと「文」です．JavaScript は文の集まりです．具体的には「変数宣言文」や「if 文」「for 文」「ブロック」などが挙げられます．
+Statement というのは日本で言うと「文」です．JavaScript は文の集まりです．\
+具体的には「変数宣言文」や「if 文」「for 文」「ブロック」などが挙げられます．
 
 ```ts
 interface Statement {}
@@ -86,7 +87,9 @@ interface BlockStatement extends Statement {
 // 他にもたくさんある
 ```
 
-そして，文というのは多くの場合「Expression(式)」を持ちます．式というのは変数に代入できる物だと考えてもらえれば良いです．具体的には「オブジェクト」や「2 項演算」「関数呼び出し」などが挙げられます．
+そして，文というのは多くの場合「Expression(式)」を持ちます．\
+式というのは変数に代入できる物だと考えてもらえれば良いです．\
+具体的には「オブジェクト」や「2 項演算」「関数呼び出し」などが挙げられます．
 
 ```ts
 interface Expression {}
@@ -119,10 +122,13 @@ interface IfStatement extends Statement {
 }
 ```
 
-このように，JavaScript の構文は上記のような AST にパースされるのです．既に chibivue のテンプレートのコンパイラを実装したみなさんにとっては分かりやすい話だと思います．(同じこと)
+このように，JavaScript の構文は上記のような AST にパースされるのです．\
+既に chibivue のテンプレートのコンパイラを実装したみなさんにとっては分かりやすい話だと思います．(同じこと)
 
-なぜ Babel を使うのかというと，理由は２つあって，1 つは単純にめんどくさいからです．パーサを実装したことあるみなさんなら estree を見ながら JS のパーサを実装することも技術的には可能かも知れません．
-けど，とてもめんどくさいし，今回の「Vue の理解を深める」という点においてはあまり重要ではありません．もう一つの理由は本家 Vue もこの部分は Babel を使っているという点です．
+なぜ Babel を使うのかというと，理由は２つあって，1 つは単純にめんどくさいからです．\
+パーサを実装したことあるみなさんなら estree を見ながら JS のパーサを実装することも技術的には可能かも知れません．\
+けれども，とてもめんどくさいし，今回の「Vue の理解を深める」という点においてはあまり重要ではありません．\
+もう一つの理由は本家 Vue もこの部分は Babel を使っているという点です．
 
 ### magic-string
 
@@ -136,7 +142,7 @@ const input = 'Hello'
 const s = new MagicString(input)
 ```
 
-のようにインスタンスを生成し，そのインスタンスに生えている便利なメソッドを利用して文字列操作をしていきます．
+のようにインスタンスを生成し，そのインスタンスに生えている便利なメソッドを利用して文字列操作をしていきます．\
 いくつか例をあげます．
 
 ```ts
@@ -241,8 +247,8 @@ export function rewriteDefault(input: string, as: string): string {
 }
 ```
 
-ここからは Babel パーサによって得られた JavaScript の AST(ast) を元に s を文字列操作していきます．
-少し長いですが，ソースコード内のコメントで補足の説明も入れていきます．
+ここからは Babel パーサによって得られた JavaScript の AST(ast) を元に s を文字列操作していきます．\
+少し長いですが，ソースコード内のコメントで補足の説明も入れていきます．\
 基本的には AST を手繰っていって，type によって分岐処理を書いて magic-string のメソッドで s を操作していくだけです．
 
 ```ts
@@ -343,7 +349,8 @@ function specifierEnd(input: string, end: number, nodeEnd: number | null) {
 }
 ```
 
-これで default export の書き換えができるようになりました．実際に plugin で使ってみましょう．
+これで default export の書き換えができるようになりました．\
+実際に plugin で使ってみましょう．
 
 ```ts
 import type { Plugin } from 'vite'
@@ -405,7 +412,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-これでレンダリングができるようになっているはずです!!！
+これでレンダリングができるようになっているはずです！！！
 
 ![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
 
