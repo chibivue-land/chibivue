@@ -1,5 +1,10 @@
 import { isString } from '../shared'
-import { CREATE_VNODE, type FRAGMENT, type RENDER_LIST } from './runtimeHelpers'
+import {
+  CREATE_VNODE,
+  type FRAGMENT,
+  type RENDER_LIST,
+  type RENDER_SLOT,
+} from './runtimeHelpers'
 import type { TransformContext } from './transform'
 import type { PropsExpression } from './transforms/transformElement'
 import type { ForParseResult } from './transforms/vFor'
@@ -33,6 +38,7 @@ export const enum NodeTypes {
 export const enum ElementTypes {
   ELEMENT,
   COMPONENT,
+  SLOT,
 }
 
 export interface Node {
@@ -158,7 +164,7 @@ export interface RootNode extends Node {
   components: string[]
 }
 
-export type ElementNode = PlainElementNode | ComponentNode
+export type ElementNode = PlainElementNode | ComponentNode | SlotOutletNode
 
 export interface BaseElementNode extends Node {
   type: NodeTypes.ELEMENT
@@ -177,6 +183,11 @@ export interface PlainElementNode extends BaseElementNode {
 export interface ComponentNode extends BaseElementNode {
   tagType: ElementTypes.COMPONENT
   codegenNode: VNodeCall | undefined
+}
+
+export interface SlotOutletNode extends BaseElementNode {
+  tagType: ElementTypes.SLOT
+  codegenNode: RenderSlotCall | undefined
 }
 
 export interface TextNode extends Node {
@@ -210,6 +221,12 @@ export interface DirectiveNode extends Node {
   exp: ExpressionNode | undefined
   arg: ExpressionNode | undefined
   modifiers: string[]
+}
+
+export interface RenderSlotCall extends CallExpression {
+  callee: typeof RENDER_SLOT
+  // $slots, name
+  arguments: [string, string | ExpressionNode]
 }
 
 export interface ForCodegenNode extends VNodeCall {
@@ -343,17 +360,21 @@ export function createCompoundExpression(
   }
 }
 
+type InferCodegenNodeType<T> = T extends typeof RENDER_SLOT
+  ? RenderSlotCall
+  : CallExpression
+
 export function createCallExpression<T extends CallExpression['callee']>(
   callee: T,
   args: CallExpression['arguments'] = [],
   loc: SourceLocation = locStub,
-): CallExpression {
+): InferCodegenNodeType<T> {
   return {
     type: NodeTypes.JS_CALL_EXPRESSION,
     loc,
     callee,
     arguments: args,
-  } as CallExpression
+  } as InferCodegenNodeType<T>
 }
 
 export function createConditionalExpression(

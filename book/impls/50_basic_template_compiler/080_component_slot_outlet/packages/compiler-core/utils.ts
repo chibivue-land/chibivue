@@ -1,9 +1,14 @@
 import {
+  type DirectiveNode,
+  ElementTypes,
   type JSChildNode,
   NodeTypes,
   type Position,
+  type RootNode,
   type SimpleExpressionNode,
+  type SlotOutletNode,
   type SourceLocation,
+  type TemplateChildNode,
 } from './ast'
 
 const nonIdentifierRE = /^\d|[^\$\w]/
@@ -153,4 +158,17 @@ export function advancePositionWithMutation(
       : numberOfCharacters - lastNewLinePos
 
   return pos
+}
+
+export function isStaticArgOf(
+  arg: DirectiveNode['arg'],
+  name: string,
+): boolean {
+  return !!(arg && isStaticExp(arg) && arg.content === name)
+}
+
+export function isSlotOutlet(
+  node: RootNode | TemplateChildNode,
+): node is SlotOutletNode {
+  return node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.SLOT
 }

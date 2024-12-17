@@ -8,6 +8,7 @@ import {
 } from './transform'
 import { transformElement } from './transforms/transformElement'
 import { transformExpression } from './transforms/transformExpression'
+import { transformSlotOutlet } from './transforms/transformSlotOutlet'
 import { transformBind } from './transforms/vBind'
 import { transformFor } from './transforms/vFor'
 import { transformIf } from './transforms/vIf'
@@ -20,7 +21,13 @@ export type TransformPreset = [
 
 export function getBaseTransformPreset(): TransformPreset {
   return [
-    [transformIf, transformFor, transformExpression, transformElement],
+    [
+      transformIf,
+      transformFor,
+      transformExpression,
+      transformSlotOutlet,
+      transformElement,
+    ],
     { bind: transformBind, on: transformOn },
   ]
 }

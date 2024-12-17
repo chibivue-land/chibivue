@@ -235,8 +235,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/50-basic-template-compiler/070-resolve-component',
           },
           {
-            text: '🚧 Support for Slot',
-            link: '/50-basic-template-compiler/080-slot',
+            text: 'Support for Slots (Definition)',
+            link: '/50-basic-template-compiler/080-component-slot-outlet',
           },
           {
             text: '🚧 Other Directives',

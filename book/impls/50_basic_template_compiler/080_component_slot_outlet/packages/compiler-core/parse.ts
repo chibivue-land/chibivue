@@ -316,7 +316,9 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
   advanceBy(context, isSelfClosing ? 2 : 1)
 
   let tagType = ElementTypes.ELEMENT
-  if (isComponent(tag, context)) {
+  if (tag === 'slot') {
+    tagType = ElementTypes.SLOT
+  } else if (isComponent(tag, context)) {
     tagType = ElementTypes.COMPONENT
   }
 

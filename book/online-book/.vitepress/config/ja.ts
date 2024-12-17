@@ -232,8 +232,8 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/50-basic-template-compiler/070-resolve-component',
           },
           {
-            text: '🚧 スロットに対応する',
-            link: '/ja/50-basic-template-compiler/080-slot',
+            text: 'スロットに対応する (定義編)',
+            link: '/ja/50-basic-template-compiler/080-component-slot-outlet',
           },
           {
             text: '🚧 その他のディレクティブ',

@@ -32,7 +32,15 @@ export const transformElement: NodeTransform = (node, context) => {
   return function postTransformElement() {
     node = context.currentNode!
 
-    if (node.type !== NodeTypes.ELEMENT) return
+    if (
+      !(
+        node.type === NodeTypes.ELEMENT &&
+        (node.tagType === ElementTypes.ELEMENT ||
+          node.tagType === ElementTypes.COMPONENT)
+      )
+    ) {
+      return
+    }
 
     const { tag, props } = node
     const isComponent = node.tagType === ElementTypes.COMPONENT

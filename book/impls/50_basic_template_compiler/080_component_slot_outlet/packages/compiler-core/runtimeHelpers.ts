@@ -3,6 +3,7 @@ export const CREATE_VNODE = Symbol()
 export const CREATE_COMMENT = Symbol()
 export const RESOLVE_COMPONENT = Symbol()
 export const RENDER_LIST = Symbol()
+export const RENDER_SLOT = Symbol()
 export const MERGE_PROPS = Symbol()
 export const NORMALIZE_CLASS = Symbol()
 export const NORMALIZE_STYLE = Symbol()
@@ -16,6 +17,7 @@ export const helperNameMap: Record<symbol, string> = {
   [CREATE_COMMENT]: 'createCommentVNode',
   [RESOLVE_COMPONENT]: 'resolveComponent',
   [RENDER_LIST]: `renderList`,
+  [RENDER_SLOT]: 'renderSlot',
   [MERGE_PROPS]: 'mergeProps',
   [NORMALIZE_CLASS]: 'normalizeClass',
   [NORMALIZE_STYLE]: 'normalizeStyle',
