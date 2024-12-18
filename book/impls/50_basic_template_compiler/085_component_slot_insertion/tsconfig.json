@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "lib": ["DOM", "ES2020"],
+    "strict": true,
+    "paths": {
+      "chibivue": ["./packages"]
+    },
+    "moduleResolution": "Bundler",
+    "allowJs": true,
+    "esModuleInterop": true
+  },
+  "include": ["packages/**/*.ts", "examples/**/**.ts"],
+  "exclude": ["node_modules", "dist"]
+}
