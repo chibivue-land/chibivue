@@ -18,7 +18,9 @@ We want to handle SFCs like the following:\
 ```vue
 <!-- App.vue -->
 <script>
+import { ref } from 'chibivue'
 import Comp from './Comp.vue'
+
 export default {
   components: {
     Comp,
