@@ -21,7 +21,7 @@ const app = createApp({
 
     const increment = () => {
       state.count++
-    }g
+    }
 
     return () =>
       h('div', { id: 'my-app' }, [
