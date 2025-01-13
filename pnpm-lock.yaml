@@ -109,8 +109,8 @@ importers:
         specifier: ^8.17.0
         version: 8.19.1(eslint@9.18.0)(typescript@5.7.3)
       vite-hyper-config:
-        specifier: ^0.4.0
-        version: 0.4.1(@types/node@22.10.5)(vite@6.0.7(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1))
+        specifier: ^0.5.0
+        version: 0.5.0(@types/node@22.10.5)(tsx@4.19.2)(vite@6.0.7(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1))(yaml@2.5.1)
       vite-node:
         specifier: ^2.0.0
         version: 2.1.8(@types/node@22.10.5)
@@ -2951,6 +2951,9 @@ packages:
   pathe@1.1.2:
     resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
 
+  pathe@2.0.1:
+    resolution: {integrity: sha512-6jpjMpOth5S9ITVu5clZ7NOgHNsv5vRQdheL9ztp2vZmM6fRbLvyua1tiBIL4lk8SAe3ARzeXEly6siXCjDHDw==}
+
   pathval@2.0.0:
     resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
     engines: {node: '>= 14.16'}
@@ -3551,8 +3554,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite-hyper-config@0.4.1:
-    resolution: {integrity: sha512-w9D4g0+5Km8XCgkBY/BZrXZAl8FF2q1UpDXT/Fsm6VLEU5tkkzDCko8fjLPOaSbvirUJgbY5OsD5wuuZ6581Fg==}
+  vite-hyper-config@0.5.0:
+    resolution: {integrity: sha512-9AakekSPCoBVdy5Iovl3VQquSbm0mKV2tukNMFZE7jzvqbbajAu9R/u8V/2YzCH+NCCAwcrVGy77cZmF2/Zq3A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
@@ -3560,6 +3563,11 @@ packages:
   vite-node@2.1.8:
     resolution: {integrity: sha512-uPAwSr57kYjAUux+8E2j0q0Fxpn8M9VoyfGiRI8Kfktz9NcYMCenwY5RnZxnF1WTu3TGiYipirIzacLL3VVGFg==}
     engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+
+  vite-node@3.0.0-beta.4:
+    resolution: {integrity: sha512-dzWen17ftEjmJWCsY7iMZ3lz4npzDsMYKEqkCnIiyABHiQCp9usrFnyzqNJJDIVZYZsG+UXgizOwjrV2cl2QYw==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
 
   vite@5.4.11:
@@ -6894,6 +6902,8 @@ snapshots:
 
   pathe@1.1.2: {}
 
+  pathe@2.0.1: {}
+
   pathval@2.0.0: {}
 
   perfect-debounce@1.0.0: {}
@@ -7645,14 +7655,15 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-hyper-config@0.4.1(@types/node@22.10.5)(vite@6.0.7(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1)):
+  vite-hyper-config@0.5.0(@types/node@22.10.5)(tsx@4.19.2)(vite@6.0.7(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1))(yaml@2.5.1):
     dependencies:
       cac: 6.7.14
       picocolors: 1.1.1
       vite: 6.0.7(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1)
-      vite-node: 2.1.8(@types/node@22.10.5)
+      vite-node: 3.0.0-beta.4(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1)
     transitivePeerDependencies:
       - '@types/node'
+      - jiti
       - less
       - lightningcss
       - sass
@@ -7661,6 +7672,8 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+      - tsx
+      - yaml
 
   vite-node@2.1.8(@types/node@22.10.5):
     dependencies:
@@ -7679,6 +7692,27 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-node@3.0.0-beta.4(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1):
+    dependencies:
+      cac: 6.7.14
+      debug: 4.4.0
+      es-module-lexer: 1.5.4
+      pathe: 2.0.1
+      vite: 6.0.7(@types/node@22.10.5)(tsx@4.19.2)(yaml@2.5.1)
+    transitivePeerDependencies:
+      - '@types/node'
+      - jiti
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
 
   vite@5.4.11(@types/node@22.10.5):
     dependencies:
