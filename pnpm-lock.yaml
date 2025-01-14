@@ -56,7 +56,7 @@ importers:
         version: 0.1.6
       consola:
         specifier: ^3.2.3
-        version: 3.3.3
+        version: 3.4.0
       dotenv:
         specifier: ^16.3.1
         version: 16.4.7
@@ -1589,8 +1589,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  consola@3.3.3:
-    resolution: {integrity: sha512-Qil5KwghMzlqd51UXM0b6fyaGHtOC22scxrwrz4A2882LyUMwQjnvaedN1HAeXzphspQ6CpHkzMAWxBTUruDLg==}
+  consola@3.4.0:
+    resolution: {integrity: sha512-EiPU8G6dQG0GFHNR8ljnZFki/8a+cQwEQ+7wpxdChl02Q8HXlwEZWD5lqAF8vC2sEC3Tehr8hy7vErz88LHyUA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
   copy-anything@3.0.5:
@@ -3303,8 +3303,8 @@ packages:
   stubborn-fs@1.2.5:
     resolution: {integrity: sha512-H2N9c26eXjzL/S/K+i/RHHcFanE74dptvvjM8iwzwbVcWY/zjBbgRqF3K0DY4+OD+uTTASTBvDoxPDaPN02D7g==}
 
-  stylis@4.3.4:
-    resolution: {integrity: sha512-osIBl6BGUmSfDkyH2mB7EFvCJntXDrLhKjHTRj/rK6xLH0yuPrHULDRQzKokSOD4VoorhtKpfcfW1GAntu8now==}
+  stylis@4.3.5:
+    resolution: {integrity: sha512-K7npNOKGRYuhAFFzkzMGfxFDpN6gDwf8hcMiE+uveTVbBgm93HrNP3ZDUpKqzZ4pG7TP6fmb+EMAQPjq9FqqvA==}
 
   superjson@2.2.1:
     resolution: {integrity: sha512-8iGv75BYOa0xRJHK5vRLEjE2H/i4lulTjzpUXic3Eg8akftYjkmQDa8JARQ42rlczXyFR3IeRoeFCc7RxHsYZA==}
@@ -5155,7 +5155,7 @@ snapshots:
 
   citty@0.1.6:
     dependencies:
-      consola: 3.3.3
+      consola: 3.4.0
 
   color-convert@2.0.1:
     dependencies:
@@ -5175,7 +5175,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  consola@3.3.3: {}
+  consola@3.4.0: {}
 
   copy-anything@3.0.5:
     dependencies:
@@ -6512,7 +6512,7 @@ snapshots:
       lodash-es: 4.17.21
       mdast-util-from-markdown: 1.3.1
       non-layered-tidy-tree-layout: 2.0.2
-      stylis: 4.3.4
+      stylis: 4.3.5
       ts-dedent: 2.2.0
       uuid: 9.0.1
       web-worker: 1.3.0
@@ -7312,7 +7312,7 @@ snapshots:
 
   stubborn-fs@1.2.5: {}
 
-  stylis@4.3.4: {}
+  stylis@4.3.5: {}
 
   superjson@2.2.1:
     dependencies:
