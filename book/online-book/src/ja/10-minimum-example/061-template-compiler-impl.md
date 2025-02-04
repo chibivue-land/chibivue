@@ -279,12 +279,12 @@ export function compile(template: string) {
 ```
 
 「えっっっっ，これじゃあただ codegen しただけじゃん．関数の生成はどうするの？」と思ったかも知れません．  
-実はここでも関数の生成は行なっておらず，どこで行うかというと`package/index.ts`です．(本家のコードで言うと [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts) です)
+実はここでも関数の生成は行なっておらず，どこで行うかというと`packages/index.ts`です．(本家のコードで言うと [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts) です)
 
-`package/index.ts`を実装したいところですが，ちょいと下準備があるので先にそちらからやります．\
-その下準備というのは，`package/runtime-core/component.ts`にコンパイラ本体を保持する変数と，登録用の関数の実装です．
+`packages/index.ts`を実装したいところですが，ちょいと下準備があるので先にそちらからやります．\
+その下準備というのは，`packages/runtime-core/component.ts`にコンパイラ本体を保持する変数と，登録用の関数の実装です．
 
-`package/runtime-core/component.ts`
+`packages/runtime-core/component.ts`
 
 ```ts
 type CompileFunction = (template: string) => InternalRenderFunction
@@ -295,7 +295,7 @@ export function registerRuntimeCompiler(_compile: any) {
 }
 ```
 
-それでは，`package/index.ts`で関数の生成をして，登録してあげましょう．
+それでは，`packages/index.ts`で関数の生成をして，登録してあげましょう．
 
 ```ts
 import { compile } from './compiler-dom'
@@ -357,9 +357,9 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-`mountComponent` の上記に示した部分を `package/runtime-core/component.ts` に切り出します．
+`mountComponent` の上記に示した部分を `packages/runtime-core/component.ts` に切り出します．
 
-`package/runtime-core/component.ts`
+`packages/runtime-core/component.ts`
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
@@ -375,7 +375,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-`package/runtime-core/renderer.ts`
+`packages/runtime-core/renderer.ts`
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {

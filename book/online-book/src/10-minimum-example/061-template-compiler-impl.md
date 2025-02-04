@@ -262,10 +262,10 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependen
 ## Continued Implementation
 
 We've jumped ahead a bit, but let's continue with the implementation. \
-Although I would like to implement `package/index.ts`, there is some preparation work to be done, so let's do that first. \
-The preparation work is to implement a variable in `package/runtime-core/component.ts` to hold the compiler itself, and a registration function.
+Although I would like to implement `packages/index.ts`, there is some preparation work to be done, so let's do that first. \
+The preparation work is to implement a variable in `packages/runtime-core/component.ts` to hold the compiler itself, and a registration function.
 
-`package/runtime-core/component.ts`
+`packages/runtime-core/component.ts`
 
 ```ts
 type CompileFunction = (template: string) => InternalRenderFunction
@@ -276,7 +276,7 @@ export function registerRuntimeCompiler(_compile: any) {
 }
 ```
 
-Now, let's generate the function in `package/index.ts` and register it.
+Now, let's generate the function in `packages/index.ts` and register it.
 
 ```ts
 import { compile } from './compiler-dom'
@@ -338,9 +338,9 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-We will extract the above part in `package/runtime-core/component.ts`.
+We will extract the above part in `packages/runtime-core/component.ts`.
 
-`package/runtime-core/component.ts`
+`packages/runtime-core/component.ts`
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
@@ -356,7 +356,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-`package/runtime-core/renderer.ts`
+`packages/runtime-core/renderer.ts`
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
