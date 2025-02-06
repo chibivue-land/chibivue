@@ -109,8 +109,8 @@ importers:
         specifier: ^8.17.0
         version: 8.22.0(eslint@9.19.0)(typescript@5.7.3)
       vite-hyper-config:
-        specifier: ^0.5.0
-        version: 0.5.0(@types/node@22.13.0)(tsx@4.19.2)(vite@6.1.0(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1))(yaml@2.5.1)
+        specifier: ^0.6.0
+        version: 0.6.0(@types/node@22.13.0)(tsx@4.19.2)(vite@6.1.0(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1))(yaml@2.5.1)
       vite-node:
         specifier: ^3.0.0
         version: 3.0.4(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1)
@@ -3581,14 +3581,19 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite-hyper-config@0.5.0:
-    resolution: {integrity: sha512-9AakekSPCoBVdy5Iovl3VQquSbm0mKV2tukNMFZE7jzvqbbajAu9R/u8V/2YzCH+NCCAwcrVGy77cZmF2/Zq3A==}
+  vite-hyper-config@0.6.0:
+    resolution: {integrity: sha512-Jkb1+Fqo3rrztBUlj/4qU5uCwH3NkJy4t5fww+4KhuG/vIv8TxuQlWUU29CAWuJw7/7hu8CS6fGQtO/SPPe8Eg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
   vite-node@3.0.4:
     resolution: {integrity: sha512-7JZKEzcYV2Nx3u6rlvN8qdo3QV7Fxyt6hx+CCKz9fbWxdX5IvUOmTWEAxMrWxaiSf7CKGLJQ5rFu8prb/jBjOA==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
+    hasBin: true
+
+  vite-node@3.0.5:
+    resolution: {integrity: sha512-02JEJl7SbtwSDJdYS537nU6l+ktdvcREfLksk/NDAqtdKWGqHl+joXzEubHROmS3E6pip+Xgu2tFezMu75jH7A==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
 
@@ -7715,12 +7720,12 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-hyper-config@0.5.0(@types/node@22.13.0)(tsx@4.19.2)(vite@6.1.0(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1))(yaml@2.5.1):
+  vite-hyper-config@0.6.0(@types/node@22.13.0)(tsx@4.19.2)(vite@6.1.0(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1))(yaml@2.5.1):
     dependencies:
       cac: 6.7.14
       picocolors: 1.1.1
       vite: 6.1.0(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1)
-      vite-node: 3.0.4(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1)
+      vite-node: 3.0.5(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -7736,6 +7741,27 @@ snapshots:
       - yaml
 
   vite-node@3.0.4(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1):
+    dependencies:
+      cac: 6.7.14
+      debug: 4.4.0
+      es-module-lexer: 1.6.0
+      pathe: 2.0.2
+      vite: 6.1.0(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1)
+    transitivePeerDependencies:
+      - '@types/node'
+      - jiti
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
+
+  vite-node@3.0.5(@types/node@22.13.0)(tsx@4.19.2)(yaml@2.5.1):
     dependencies:
       cac: 6.7.14
       debug: 4.4.0
