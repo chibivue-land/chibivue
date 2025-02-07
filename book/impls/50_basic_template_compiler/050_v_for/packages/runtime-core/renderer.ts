@@ -2,14 +2,14 @@ import { ReactiveEffect } from '../reactivity'
 import { invokeArrayFns } from '../shared'
 import { ShapeFlags } from '../shared/shapeFlags'
 import {
-  ComponentInternalInstance,
+  type ComponentInternalInstance,
   createComponentInstance,
   setupComponent,
 } from './component'
 import { updateProps } from './componentProps'
 import { setRef } from './rendererTemplateRef'
 import {
-  SchedulerJob,
+  type SchedulerJob,
   flushPostFlushCbs,
   queueJob,
   queuePostFlushCb,
@@ -18,7 +18,7 @@ import {
   Comment,
   Fragment,
   Text,
-  VNode,
+  type VNode,
   isSameVNodeType,
   normalizeVNode,
 } from './vnode'

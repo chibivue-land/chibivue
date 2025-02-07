@@ -1,16 +1,16 @@
 import { parse } from '@babel/parser'
-import { Identifier } from '@babel/types'
+import type { Identifier } from '@babel/types'
 
 import {
-  CompoundExpressionNode,
-  ExpressionNode,
+  type CompoundExpressionNode,
+  type ExpressionNode,
   NodeTypes,
-  SimpleExpressionNode,
+  type SimpleExpressionNode,
   createCompoundExpression,
   createSimpleExpression,
 } from '../ast'
 import { walkIdentifiers } from '../babelUtils'
-import { NodeTransform, TransformContext } from '../transform'
+import type { NodeTransform, TransformContext } from '../transform'
 import { advancePositionWithClone, isSimpleIdentifier } from '../utils'
 import { makeMap } from '../../shared/makeMap'
 

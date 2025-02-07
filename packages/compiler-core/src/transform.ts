@@ -1,16 +1,16 @@
 import { isArray, isString } from '@chibivue/shared'
 import {
-  DirectiveNode,
-  ElementNode,
-  ExpressionNode,
+  type DirectiveNode,
+  type ElementNode,
+  type ExpressionNode,
   NodeTypes,
-  ParentNode,
-  Property,
-  RootNode,
-  TemplateChildNode,
+  type ParentNode,
+  type Property,
+  type RootNode,
+  type TemplateChildNode,
   createVNodeCall,
 } from './ast'
-import { TransformOptions } from './options'
+import type { TransformOptions } from './options'
 import {
   CREATE_COMMENT,
   FRAGMENT,

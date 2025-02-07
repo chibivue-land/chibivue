@@ -1,34 +1,34 @@
-# 本家のソースコードをデバッグする
+# Debugging the original source code
 
-実際に本家の Vue.js のコードを動かして動作を確かめたい場合があるかと思います。  
-この本の方針としても是非とも本家のソースコード読みながら理解できるようになってほしいところもあり、ソースコードリーディングやテストプレイを強く推奨しています。
+There may be times when you want to run and test the actual source code of Vue.js.  
+As part of the approach in this book, we strongly recommend reading and understanding the original source code, as well as conducting source code reading and test plays.
 
-そこで、本編では触れていない本家のソースコードのデバッグ方法をいくつか紹介します。
+Therefore, we will introduce several methods for debugging the original source code that are not covered in the main text.
 
-(手軽な順番で紹介していきます。)
+(We will introduce them in an easy-to-understand order.)
 
-## SFC Playground を活用する
+## Utilizing SFC Playground
 
-これは最も手軽な方法です。公式ドキュメントからもリンクされているほど、広く知られている方法です。
+This is the easiest method. It is widely known and even linked from the official documentation.
 
 https://play.vuejs.org
 
-このプレイグラウンドでは Vue のコンポーネントを記述しながら動作を確認することはもちろん、SFC のコンパイル結果を確認できます。  
-サクッとブラウザ上で確認できるので便利です。(もちろん共有もできます。)
+In this playground, you can not only write Vue components and check their behavior, but also check the compilation results of SFC.  
+It is convenient because you can quickly check it in the browser. (Of course, you can also share it.)
 
-<video src="https://github.com/Ubugeeei/Ubugeeei/assets/71201308/8281e589-fdaf-4206-854e-25a66dfaac05" controls />
+<video src="https://github.com/ubugeeei/ubugeeei/assets/71201308/8281e589-fdaf-4206-854e-25a66dfaac05" controls />
 
-## vuejs/core のテストを活用する
+## Utilizing vuejs/core tests
 
-続いては [vuejs/core](https://github.com/vuejs/core) のテストを実行してみる方法です。
-当然ですが、これはもちろん [vuejs/core](https://github.com/vuejs/core) のソースコードを clone してくる必要があります。
+Next, let's try running the tests of [vuejs/core](https://github.com/vuejs/core).
+Naturally, you need to clone the source code of [vuejs/core](https://github.com/vuejs/core).
 
 ```bash
 git clone https://github.com/vuejs/core.git vuejs-core
-# NOTE: `core` というリポジトリ名になっているので、わかりやすくしておくのがおすすめです
+# NOTE: It is recommended to make it easy to understand since the repository name is `core`
 ```
 
-あとは、
+Then,
 
 ```bash
 cd vuejs-core
@@ -36,28 +36,28 @@ ni
 nr test
 ```
 
-でテストを実行する事ができるので、適宜気になるソースコードをいじってみてテストを実行してみましょう。
+You can run the tests, so feel free to modify the source code you are interested in and run the tests.
 
-`test` 以外にもいくつかテストコマンドがあるので、気になる方は `package.json` を見てみてください。
+There are several test commands other than `test`, so if you are interested, please check `package.json`.
 
-テストコードを読んで把握するもよし、実際にコードをいじってテストを走らせるもよし、テストケースを追加してみるもよし、色々な使い方ができます。
+You can read and understand the test code, modify the code and run the tests, or add test cases. There are various ways to use it.
 
-<img width="590" alt="スクリーンショット 2024-01-07 0 31 29" src="https://github.com/Ubugeeei/Ubugeeei/assets/71201308/3c862bd5-1d94-4d2a-a9fa-8755872098ed">
+<img width="590" alt="Screenshot 2024-01-07 0 31 29" src="https://github.com/ubugeeei/ubugeeei/assets/71201308/3c862bd5-1d94-4d2a-a9fa-8755872098ed">
 
-## vuejs/core のソースコードを実際に動かしてみる
+## Running the vuejs/core source code
 
-続いては、一番手軽ではないのですがやはり vuejs/core のソースコードを実際にいじりながら動作させる方法です。
+Next, this is the most convenient but still the method of actually modifying and running the vuejs/core source code.
 
-こちらに関しては, SFC, standalone ともに vite で HMR できるプロジェクトを用意しているので、ぜひそちらを使ってみてください。
-このプロジェクトは [chibivue](https://github.com/Ubugeeei/chibivue) のリポジトリにあるので clone してください。
+Regarding this, we have prepared projects that can be HMR with vite for both SFC and standalone, so please try using them.
+This project is in the repository of [chibivue](https://github.com/chibivue-land/chibivue), so please clone it.
 
 ```bash
-git clone https://github.com/Ubugeeei/chibivue.git
+git clone https://github.com/chibivue-land/chibivue.git
 ```
 
-clone できたら、プロジェクトを作成するスクリプトを実行します。
+Once cloned, run the script to create the project.
 
-この際、ローカルにある vuejs/core のソースコードの**絶対パス**を求められるはずなので、入力してください。
+At this time, you should be asked for the **absolute path** of the local vuejs/core source code, so please enter it.
 
 ```bash
 cd chibi-vue
@@ -69,26 +69,26 @@ nr setup:vue
 #   >
 ```
 
-これで chibivue のリポジトリ内に ローカルの vuejs/core を指すような vue のプロジェクトが作成されます。
+This will create a Vue project in the chibivue repository that points to the local vuejs/core source code.
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/5d57c022-c411-4452-9e7e-c27623ec28b4" controls/>
 
-あとは起動したい時に以下のコマンドで起動して、vuejs/core のソースコードをいじりながら動作を確認する事ができます。
+Then, when you want to start, you can start it with the following command and check the operation while modifying the vuejs/core source code.
 
 ```bash
 nr dev:vue
 ```
 
-playground 側の HMR はもちろん、
+Of course, HMR on the playground side,
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/a2ad46d8-4b07-4ac5-a887-f71507c619a6" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/a2ad46d8-4b07-4ac5-a887-f71507c619a6" controls/>
 
-vuejs/core のコードをいじっても HMR が効きます。
+Even if you modify the vuejs/core code, HMR will work.
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/72f38910-19b8-4171-9ed7-74d1ba223bc8" controls/>
 
 ---
 
-また、standalone で確認したい際は index.html で standalone-vue.js の方を読み込むように変更するとこちらも HMR で確認できます。
+Also, if you want to check it in standalone, you can also use HMR by changing the index.html to load standalone-vue.js.
 
-<video src="https://github.com/Ubugeeei/work-log/assets/71201308/c57ab5c2-0e62-4971-b1b4-75670d3efeec" controls/>
+<video src="https://github.com/ubugeeei/work-log/assets/71201308/c57ab5c2-0e62-4971-b1b4-75670d3efeec" controls/>

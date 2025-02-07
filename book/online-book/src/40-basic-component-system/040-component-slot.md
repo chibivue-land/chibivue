@@ -1,12 +1,12 @@
-# スロット
+# Slots
 
-## デフォルトスロットの実装
+## Implementation of Default Slot
 
-Vue にはスロットと呼ばれる機能があります。そしてこのスロットには、default slot, named slot, scoped slot の 3 種類があります。  
+Vue has a feature called slots, which includes three types: default slot, named slot, and scoped slot.
 https://vuejs.org/guide/components/slots.html#slots
 
-今回はこれらのうち、デフォルトスロットを実装していきます。
-目指す開発者インタフェースは以下のようなものです。
+This time, we will implement the default slot among them.
+The desired developer interface is as follows:
 
 https://vuejs.org/guide/extras/render-function.html#passing-slots
 
@@ -24,27 +24,27 @@ const app = createApp({
 })
 ```
 
-仕組みは単純で、スロットの定義側では、setupContext として slots を受け取れるようにしておき、使用する側で h 関数でコンポーネントをレンダリングする際に、children としてレンダー関数を渡すだけです。
-おそらく、皆さんが最も馴染み深い使い方は、SFC で template に slot 要素を置いたりする使い方だとは思うのですが、そちらは別途 template のコンパイラを実装する必要があるので、今回は省略します。(Basic Template Compiler 部門で扱います。)
+The mechanism is simple. On the slot definition side, we make sure to receive slots as setupContext, and when rendering the component with the h function on the usage side, we simply pass the render function as children.
+Perhaps the most familiar usage for everyone is to place a slot element in the template of SFC, but that requires implementing a separate template compiler, so we will omit it this time. (We will cover it in the Basic Template Compiler section.)
 
-例の如く、インスタンスに slots を保持しておけるプロパティを追加し、createSetupContext で SetupContext として混ぜます。  
-h 関数も第 3 引数として配列だけではなく、レンダー関数を受け取れるような形にして、レンダー関数が来た場合にはコンポーネントのインスタンスを生成するタイミングでインスタンスの default slot として設定してあげます。  
-とりあえずここまで実装してみましょう！
+As usual, add a property that can hold slots to the instance and mix it as SetupContext with createSetupContext.
+Modify the h function so that it can receive a render function as the third argument, not just an array, and if a render function is passed, set it as the default slot of the component instance when generating the instance.
+Let's implement it up to this point for now!
 
-(children の normalize 実装に伴って ShapeFlags を少々変更しています。)
+(ShapeFlags has been slightly changed due to the implementation of normalize in children.)
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/050_component_slot)
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/050_component_slot)
 
-## 名前付きスロット/スコープ付きスロットの実装
+## Implementation of Named Slots/Scoped Slots
 
-デフォルトスロットの拡張です。  
-今度は関数ではなく、オブジェクトで渡せるようにしてみましょう。
+This is an extension of the default slot.
+This time, let's try passing an object instead of a function.
 
-スコープ付きスロットに関しては、レンダー関数の引数を定義してあげるだけです。  
-これをみても分かる通り、レンダー関数を使用する際はスコープ付きスロットという区別をわざわざする必要もないように感じます。  
-それはその通りで、スロットの正体はただのコールバック関数で、それに引数を持たせるためにスコープ付きスロットという名前で API を提供しています。  
-もちろん、これから Basic Template Compiler の部門でスコープ付きスロットを扱えるようなコンパイラを実装しますが、それはこれらの形に変換されているのです。
+For scoped slots, you just need to define the arguments of the render function.
+As you can see, when using a render function, it doesn't seem necessary to distinguish scoped slots.
+That's right, the essence of slots is just a callback function, and the API is provided as scoped slots to allow passing arguments to it.
+Of course, we will implement a compiler in the Basic Template Compiler section that can handle scoped slots, but they will be converted to these forms.
 
 https://vuejs.org/guide/components/slots.html#scoped-slots
 
@@ -79,5 +79,5 @@ const app = createApp({
 })
 ```
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/060_slot_extend)
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/060_slot_extend)

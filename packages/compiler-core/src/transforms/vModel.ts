@@ -1,12 +1,12 @@
 import { camelize } from '@chibivue/shared'
 
 import {
-  SimpleExpressionNode,
+  type SimpleExpressionNode,
   createCompoundExpression,
   createObjectProperty,
   createSimpleExpression,
 } from '../ast'
-import { DirectiveTransform } from '../transform'
+import type { DirectiveTransform } from '../transform'
 
 export const transformModel: DirectiveTransform = (dir, node, context) => {
   const { exp, arg } = dir

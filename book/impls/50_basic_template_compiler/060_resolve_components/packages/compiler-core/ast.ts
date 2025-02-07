@@ -1,8 +1,8 @@
 import { isString } from '../shared'
-import { CREATE_VNODE, FRAGMENT, RENDER_LIST } from './runtimeHelpers'
-import { TransformContext } from './transform'
-import { PropsExpression } from './transforms/transformElement'
-import { ForParseResult } from './transforms/vFor'
+import { CREATE_VNODE, type FRAGMENT, type RENDER_LIST } from './runtimeHelpers'
+import type { TransformContext } from './transform'
+import type { PropsExpression } from './transforms/transformElement'
+import type { ForParseResult } from './transforms/vFor'
 
 export const enum NodeTypes {
   ROOT,

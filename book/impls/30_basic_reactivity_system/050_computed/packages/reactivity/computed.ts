@@ -1,6 +1,6 @@
-import { Dep } from './dep'
+import type { Dep } from './dep'
 import { ReactiveEffect } from './effect'
-import { Ref, trackRefValue, triggerRefValue } from './ref'
+import { type Ref, trackRefValue, triggerRefValue } from './ref'
 
 declare const ComputedRefSymbol: unique symbol
 
@@ -38,7 +38,7 @@ export class ComputedRefImpl<T> {
     return this._value
   }
 
-  set value(newValue: T) {}
+  set value(_newValue: T) {}
 }
 
 export function computed<T>(getter: ComputedGetter<T>): ComputedRef<T> {

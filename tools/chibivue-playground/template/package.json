@@ -1,15 +1,11 @@
 {
-  "name": "chibi-vue",
-  "version": "1.0.0",
+  "name": "@examples/playground",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite"
   },
-  "author": "Ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
-    "vite": "^3.0.9"
-  },
-  "volta": {
-    "node": "18.14.0"
+    "vite": "^6.0.0"
   }
 }

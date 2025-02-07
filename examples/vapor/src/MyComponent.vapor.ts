@@ -16,7 +16,7 @@ import {
   template,
 } from '@chibivue/runtime-vapor'
 
-// @ts-ignore
+// @ts-expect-error
 import Counter from './Counter.vue'
 
 const t0 = () => template('<div><button id="btn-on-vapor">')

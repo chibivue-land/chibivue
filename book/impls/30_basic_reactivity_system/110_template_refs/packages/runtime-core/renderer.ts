@@ -1,17 +1,17 @@
 import { ReactiveEffect } from '../reactivity'
 import { ShapeFlags } from '../shared/shapeFlags'
 import {
-  Component,
-  ComponentInternalInstance,
+  type Component,
+  type ComponentInternalInstance,
   createComponentInstance,
   setupComponent,
 } from './component'
 import { updateProps } from './componentProps'
 import { setRef } from './rendererTemplateRef'
-import { SchedulerJob, queueJob } from './scheduler'
+import { type SchedulerJob, queueJob } from './scheduler'
 import {
   Text,
-  VNode,
+  type VNode,
   createVNode,
   isSameVNodeType,
   normalizeVNode,

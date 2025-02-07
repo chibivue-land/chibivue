@@ -1,4 +1,4 @@
-import { type App, InjectionKey } from 'chibivue'
+import type { App, InjectionKey } from 'chibivue'
 
 export let activeStore: Store | undefined
 export const setActiveStore = (store: Store | undefined) =>

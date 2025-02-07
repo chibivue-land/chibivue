@@ -1,18 +1,18 @@
 import {
-  DirectiveNode,
-  ElementNode,
-  IfBranchNode,
-  IfConditionalExpression,
-  IfNode,
+  type DirectiveNode,
+  type ElementNode,
+  type IfBranchNode,
+  type IfConditionalExpression,
+  type IfNode,
   NodeTypes,
-  SimpleExpressionNode,
-  VNodeCall,
+  type SimpleExpressionNode,
+  type VNodeCall,
   createCallExpression,
   createConditionalExpression,
 } from '../ast'
 import { CREATE_COMMENT } from '../runtimeHelpers'
 import {
-  TransformContext,
+  type TransformContext,
   createStructuralDirectiveTransform,
   traverseNode,
 } from '../transform'

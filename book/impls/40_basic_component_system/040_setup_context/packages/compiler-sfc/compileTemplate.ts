@@ -1,4 +1,4 @@
-import { TemplateChildNode } from '../compiler-core'
+import type { TemplateChildNode } from '../compiler-core'
 
 export interface TemplateCompiler {
   compile(template: string): string

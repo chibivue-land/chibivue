@@ -1,5 +1,5 @@
 import { parse as _parse } from '@babel/parser'
-import {
+import type {
   ArrayPattern,
   CallExpression,
   Declaration,
@@ -16,7 +16,7 @@ import MagicString from 'magic-string'
 import type { BindingMetadata } from '@chibivue/compiler-core'
 import { BindingTypes, getImportedName } from '@chibivue/compiler-core'
 
-import { SFCDescriptor, SFCScriptBlock } from './parse'
+import type { SFCDescriptor, SFCScriptBlock } from './parse'
 import { compileTemplate } from './compileTemplate'
 
 const DEFINE_PROPS = 'defineProps'

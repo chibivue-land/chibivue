@@ -1,5 +1,5 @@
-import fs from 'fs'
-import readline from 'readline'
+import fs from 'node:fs'
+import readline from 'node:readline'
 import consola from 'consola'
 import dotenv from 'dotenv'
 import { INPUT } from './constant'

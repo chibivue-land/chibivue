@@ -1,7 +1,7 @@
-import { Ref } from '../reactivity'
+import type { Ref } from '../reactivity'
 import { isArray, isObject, isString } from '../shared'
 import { ShapeFlags } from '../shared/shapeFlags'
-import { ComponentInternalInstance } from './component'
+import type { ComponentInternalInstance } from './component'
 
 export type VNodeTypes = string | typeof Text | object
 

@@ -1,5 +1,5 @@
-import { ComponentPublicInstance } from './componentPublicInstance'
-import { Fragment, VNodeProps, createVNode } from './vnode'
+import type { ComponentPublicInstance } from './componentPublicInstance'
+import { type Fragment, type VNodeProps, createVNode } from './vnode'
 
 export function h(
   type: string | ComponentPublicInstance | typeof Fragment,

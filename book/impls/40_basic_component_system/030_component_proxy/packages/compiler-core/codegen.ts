@@ -1,14 +1,14 @@
 import { toHandlerKey } from '../shared'
 import {
-  AttributeNode,
-  DirectiveNode,
-  ElementNode,
-  InterpolationNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type InterpolationNode,
   NodeTypes,
-  TemplateChildNode,
-  TextNode,
+  type TemplateChildNode,
+  type TextNode,
 } from './ast'
-import { CompilerOptions } from './options'
+import type { CompilerOptions } from './options'
 
 export const generate = (
   {

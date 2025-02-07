@@ -1,15 +1,15 @@
-# コンポーネントを解決する
+# Resolving Components
 
-実は、まだ私たちの chibivue の template はコンポーネントを解決することができません。  
-ここでそれを実装していくのですが、Vue.js ではコンポーネントの解決方法がいくつかあります。
+Actually, our chibivue template cannot resolve components yet.
+Let's implement it here, as Vue.js provides several ways to resolve components.
 
-まずはいくつかの解決方法についておさらいしてみましょう。
+First, let's review some of the resolution methods.
 
-## コンポーネントの解決方法
+## Resolution Methods for Components
 
-### 1. Components Option (ローカル登録)
+### 1. Components Option (Local Registration)
 
-おそらく、これが最も単純なコンポーネントの解決方法です。
+This is probably the simplest way to resolve components.
 
 https://vuejs.org/api/options-misc.html#components
 
@@ -31,11 +31,11 @@ export default {
 </template>
 ```
 
-components オプションに指定したオブジェクトの key 名が、テンプレート内で使用できるコンポーネント名になります。
+The key names specified in the components option object become the component names that can be used in the template.
 
-### 2. app に登録 (グローバル登録)
+### 2. Registering on the app (Global Registration)
 
-作成した Vue アプリケーションの `.component()` メソッドを使うことでアプリケーション全体で使用できるコンポーネントを登録することができます。
+You can register components that can be used throughout the application by using the `.component()` method of the created Vue application.
 
 https://vuejs.org/guide/components/registration.html#global-registration
 
@@ -50,9 +50,9 @@ app
   .component('ComponentC', ComponentC)
 ```
 
-### 3. 動的コンポーネント + is 属性
+### 3. Dynamic Components + is Attribute
 
-is 属性を使うことで、動的にコンポーネントを切り替えることができます。
+By using the is attribute, you can dynamically switch components.
 
 https://vuejs.org/api/built-in-special-elements.html#component
 
@@ -76,9 +76,9 @@ export default {
 </template>
 ```
 
-### 4. script setup 時の import
+### 4. Importing during script setup
 
-script setup では、import したコンポーネントをそのまま使用することができます。
+In script setup, you can directly use the imported components.
 
 ```vue
 <script setup>
@@ -90,23 +90,21 @@ import MyComponent from './MyComponent.vue'
 </template>
 ```
 
----
+In addition, there are also asynchronous components, embedded components, and the `component` tag, but this time I will try to handle the above two (1, 2).
 
-他にも、非同期コンポーネントや組み込みコンポーネント, `component` タグなどもありますが、今回は上記 ２ つ (1, 2) に対応してみようと思います。
+Regarding 3, if 1 and 2 can handle it, it is just an extension. As for 4, since script setup has not been implemented yet, we will put it off for a while.
 
-3 に関しては、1, 2 が対応できれば拡張するだけです。 4 に関してはまだ script setup を実装していないので、少し後回しにします。
+## Basic Approach
 
-## 基本アプローチ
+The basic approach to resolving components is as follows:
 
-どのようにコンポーネントを解決していくかですが、基本的には以下のような流れになります。
+- Somewhere, store the names and component records used in the template.
+- Use helper functions to resolve components based on their names.
 
-- どこかしらに、テンプレート内で使う名前とコンポーネントのレコードを保持する
-- ヘルパー関数を用いて、名前を元にコンポーネントを解決する
+Both the form of 1 and the form of 2 simply store the names and component records, with the only difference being where they are registered.  
+If you have the records, you can resolve the components from the names when necessary, so both implementations will be similar.
 
-1 の形も 2 の形も、登録する場所が少々異なるだけで、単に名前とコンポーネントのレコードを保持しているだけです。  
-レコードを保持していれば、必要になったところで名前からコンポーネントを解決することができるので、どちらも同じような実装になります。
-
-先に、想定されるコードと、コンパイル結果を見てみましょう。
+First, let's take a look at the expected code and the compilation result.
 
 ```vue
 <script>
@@ -123,7 +121,7 @@ export default defineComponent({
 ```
 
 ```js
-// コンパイル結果
+// Compilation result
 
 function render(_ctx) {
   const {
@@ -138,19 +136,19 @@ function render(_ctx) {
 }
 ```
 
-このような感じです。
+It looks like this.
 
-## 実装
+## Implementation
 
 ### AST
 
-コンポーネントとして解決するコードを生成するためには、"MyComponent" がコンポーネントであることを知っている必要があります。  
-parse の段階で、タグ名をハンドリングして、AST 上は通常の Element と Component で分けるようにします。
+In order to generate code that resolves components, we need to know that "MyComponent" is a component.  
+At the parse stage, we handle the tag name and separate it into a regular Element and a Component on the AST.
 
-まずは AST の定義を考えてみましょう。  
-ComponentNode は通常の Element と同じように、 props や children を持ちます。  
-これらの共通部分を `BaseElementNode` としてまとめつつ、これまでの `ElementNode` は `PlainElementNode` とし、  
-`ElementNode` は `PlainElementNode` と `ComponentNode` のユニオンにしてしまいます。
+First, let's consider the definition of the AST.  
+The ComponentNode, like a regular Element, has props and children.  
+While consolidating these common parts as `BaseElementNode`, we will rename the existing `ElementNode` to `PlainElementNode`,  
+and make `ElementNode` a union of `PlainElementNode` and `ComponentNode`.
 
 ```ts
 // compiler-core/ast.ts
@@ -182,37 +180,35 @@ export interface ComponentNode extends BaseElementNode {
 }
 ```
 
-内容としては今のところ変わりありませんが、tagType だけ区別して、 ast は別物として扱います。  
-今後、これを使って transform の方で helper 関数の追加であったりを行っていきます。
+The content is the same as before, but we distinguish them by `tagType` and treat them as separate ASTs.  
+We will use this in the transform phase to add helper functions, etc.
 
 ### Parser
 
-さて続いては、上記の AST を生成するためのパーサの実装です。  
-基本的には tag 名を判断して tagType を決めるだけです。
+Next, let's implement the parser to generate the above AST.  
+Basically, we just need to determine the `tagType` based on the tag name.
 
-問題は、どうやって Element なのか Component なのかを判断するかです。
+The problem is how to determine whether it is an Element or a Component.
 
-基本的な考え方は単純で、"ネイティブなタグかどうか" を判断するだけです。
+The basic idea is simple: just determine whether it is a "native tag" or not.
 
 ・  
 ・  
 ・
 
-「え、いやいや、だからそれをどうやって実装するかという話じゃないの ?」
+"Wait, wait, that's not what I'm asking. How do we actually implement it?"
 
-はい。ここは力技です。ネイティブなタグ名をあらかじめ列挙し、それにマッチするかどうかで判断します。  
-列挙するべき項目なんてものは、仕様をみに行けば全て書いてあるはずなので、それを信頼して使います。
+Yes, this is a brute force approach. We predefine a list of native tag names and determine whether it matches or not.  
+As for what items should be enumerated, all of them should be written in the specification, so we will trust it and use it.
 
-ここで一つ、問題があるとすれば、「何がネイティブなタグかどうかは環境によって変わる」という点です。  
-今回でいえば、ブラウザです。何が言いたいのかというと、「compiler-core は環境依存であってはならない」ということです。  
-私たちはこれまで DOM に依存するような実装は compiler-dom に実装してきました。今回のこの列挙もその例外ではありません。
+One problem, if any, is that "what is a native tag" can vary depending on the environment.  
+In this case, it's the browser. What I mean is that "compiler-core should not depend on the environment".  
+We have implemented such DOM-dependent implementations in compiler-dom so far, and this enumeration is no exception.
 
-それに伴って、「ネイティブなタグ名であるかどうか」という関数をパーサのオプションとして外から注入できるような実装にします。
-
-これからのことも考えて、オプションは色々後から追加しやすいようにしておきます。
+With that in mind, we will implement it so that the function "whether it is a native tag or not" can be injected as an option from outside the parser, considering future possibilities and making it easy to add various options later.
 
 ```ts
-type OptionalOptions = 'isNativeTag' // | TODO: 今後増やしていく (かも)
+type OptionalOptions = 'isNativeTag' // | TODO: Add more in the future (maybe)
 
 type MergedParserOptions = Omit<Required<ParserOptions>, OptionalOptions> &
   Pick<ParserOptions, OptionalOptions>
@@ -258,9 +254,9 @@ export const baseParse = (
 }
 ```
 
-さてさて、そうしましたら、 compiler-dom の方でネイティブなタグ名を列挙して、それをオプションとして渡してあげます。
+Now, in the compiler-dom, we will enumerate the native tag names and pass them as options.
 
-compiler-dom と言いましたが、実は列挙自体は shared/domTagConfig.ts で行われています。
+Although I mentioned compiler-dom, the enumeration itself is done in shared/domTagConfig.ts.
 
 ```ts
 import { makeMap } from './makeMap'
@@ -280,13 +276,13 @@ const HTML_TAGS =
 export const isHTMLTag = makeMap(HTML_TAGS)
 ```
 
-なんとも禍々しいですね！！
+It looks quite ominous, doesn't it?
 
-でもこれが正しい実装なのです。
+But this is the correct implementation.
 
 https://github.com/vuejs/core/blob/32bdc5d1900ceb8df1e8ee33ea65af7b4da61051/packages/shared/src/domTagConfig.ts#L6
 
-compiler-dom/parserOptions.ts を作成し、コンパイラに渡します。
+Create compiler-dom/parserOptions.ts and pass it to the compiler.
 
 ```ts
 // compiler-dom/parserOptions.ts
@@ -317,9 +313,9 @@ export function compile(template: string, option?: CompilerOptions) {
 }
 ```
 
-少し話が飛びましたが、パーサの実装に必要なものは揃ったので、残りの部分を実装していきます。
+The implementation of the parser is complete, so we will now proceed to implement the remaining parts.
 
-残りはとっても簡単です。コンポーネント化どうかを判断して tagType を生やしてあげるだけです。
+The remaining part is very simple. We just need to determine whether it is a component or not and assign a tagType.
 
 ```ts
 function parseElement(
@@ -344,7 +340,7 @@ function parseElement(
 function isComponent(tag: string, context: ParserContext) {
   const options = context.options
   if (
-    // NOTE: Vue.js では、先頭が大文字のタグはコンポーネントとして扱われるようです。
+    // NOTE: In Vue.js, tags starting with uppercase letters are treated as components.
     // ref: https://github.com/vuejs/core/blob/32bdc5d1900ceb8df1e8ee33ea65af7b4da61051/packages/compiler-core/src/parse.ts#L662
     /^[A-Z]/.test(tag) ||
     (options.isNativeTag && !options.isNativeTag(tag))
@@ -354,17 +350,17 @@ function isComponent(tag: string, context: ParserContext) {
 }
 ```
 
-これで parser と AST は OK です。これからはこれらを使って transform と codegen を実装していきます。
+With this, the parser and AST are complete. We will now proceed to implement the transform and codegen using these.
 
 ### Transform
 
-transform の方でやることはとても簡単です。
+What needs to be done in the transform is very simple.
 
-transformElement で、Node が ComponentNode だった場合に少々変換してあげるだけです。
+In transformElement, we just need to make a slight conversion if the Node is a ComponentNode.
 
-この際、context にも component を登録しておいてあげます。  
-これは、codegen の際にまとめて resolve してあげるためです。
-後述しますが、codegen の方ではコンポーネントは assets としてまとめて resolve されます。
+At this time, we also register the component in the context.  
+This is done so that we can resolve it collectively during codegen.
+As mentioned later, components will be resolved collectively as assets in codegen.
 
 ```ts
 // compiler-core/transforms/transformElement.ts
@@ -387,7 +383,7 @@ export const transformElement: NodeTransform = (node, context) => {
 function resolveComponentType(node: ComponentNode, context: TransformContext) {
   let { tag } = node
   context.helper(RESOLVE_COMPONENT)
-  context.components.add(tag) // 後述
+  context.components.add(tag) // explained later
   return toValidAssetId(tag, `component`)
 }
 ```
@@ -404,7 +400,7 @@ export function toValidAssetId(
 }
 ```
 
-context の方にも登録できるようにしておきます。
+We also make sure to register it in the context.
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
@@ -429,7 +425,7 @@ export function createTransformContext(
 }
 ```
 
-そして、context にまとめられて components は登録対象のコンポーネントの RootNode に全て登録してあげます。
+And then, all the components in the context are registered in the RootNode of the target components.
 
 ```ts
 export interface RootNode extends Node {
@@ -451,18 +447,17 @@ export function transform(root: RootNode, options: TransformOptions) {
 }
 ```
 
-これで、あとは RootNode.components を codegen で使うだけです。
+With this, all that's left is to use RootNode.components in codegen.
 
 ### Codegen
 
-最初に見たコンパイル結果のように、ヘルパー関数に名前を渡して解決するコードを生成するだけです。  
-今後のためを考えて assets というふうな抽象化をしています。
+The code simply generates code by passing the name to helper functions to resolve, just like the compilation result we saw at the beginning. We are abstracting it as "assets" for future considerations.
 
 ```ts
 export const generate = (ast: RootNode, option: CompilerOptions): string => {
   // .
   // .
-  genFunctionPreamble(ast, context) // NOTE: 将来的には関数の外に出す
+  genFunctionPreamble(ast, context) // NOTE: Move this outside the function in the future
 
   // prettier-ignore
   if (ast.components.length) { // [!code ++]
@@ -499,13 +494,13 @@ function genAssets(
 }
 ```
 
-### runtime-core 側の実装
+### Implementation on the runtime-core side
 
-ここまでくれば目的のコードは生成できているので、あとは runtime-core の実装です。
+Now that we have generated the desired code, let's move on to the implementation in runtime-core.
 
-#### コンポーネントのオプションとして component を追加できるように
+#### Adding "component" as an option for components
 
-これは単純で、option に追加するだけです。
+This is simple, just add it to the options.
 
 ```ts
 export type ComponentOptions<
@@ -518,9 +513,9 @@ export type ComponentOptions<
 }
 ```
 
-#### app のオプションとして components を追加できるように
+#### Adding "components" as an option for the app
 
-こちらも単純です。
+This is also simple.
 
 ```ts
 export interface AppContext {
@@ -554,17 +549,17 @@ export function createAppAPI<HostElement>(
 }
 ```
 
-#### 上記二つからコンポーネントを解決する関数の実装
+#### Implementing a function to resolve components from the above two
 
-こちらも特に説明することはないでしょう。  
-ローカル/グローバルに登録されたコンポーネントをそれぞれに探索し、コンポーネントを返します。  
-見つからなかった場合は fallback としてそのまま名前を返します。
+There is nothing special to explain here.  
+It searches for components registered locally and globally, and returns the component.  
+If it is not found, it returns the name as is as a fallback.
 
 ```ts
 // runtime-core/helpers/componentAssets.ts
 
 export function resolveComponent(name: string): ConcreteComponent | string {
-  const instance = currentInstance || currentRenderingInstance // 後述
+  const instance = currentInstance || currentRenderingInstance // explained later
   if (instance) {
     const Component = instance.type
     const res =
@@ -588,12 +583,12 @@ function resolve(registry: Record<string, any> | undefined, name: string) {
 }
 ```
 
-一点、注意点があるのは `currentRenderingInstance` についてです。
+One thing to note is `currentRenderingInstance`.
 
-resolveComponent ではローカル登録されたコンポーネントを辿るために、現在レンダリングされているコンポーネントにアクセスする必要があります。  
-(レンダリング中のコンポーネントの components オプションを探索したいため)
+In order to traverse locally registered components in `resolveComponent`, we need to access the currently rendering component.  
+(We want to search the `components` option of the component being rendered)
 
-それに伴って、`currentRenderingInstance` というものを用意し、レンダリングする際にこれを更新していく実装にしてみます。
+With that in mind, let's prepare `currentRenderingInstance` and update it when rendering.
 
 ```ts
 // runtime-core/componentRenderContexts.ts
@@ -632,11 +627,11 @@ const setupRenderEffect = (
 }
 ```
 
-## いざ動かしてみる
+## Let's try it out
 
-お疲れ様でした。ここまででようやくコンポーネントを解決することができるようになりました。
+Great job! We can finally resolve components.
 
-実際にプレイグラウンドの方で動かしてみましょう！
+Let's try running it in the playground!
 
 ```ts
 import { createApp } from 'chibivue'
@@ -688,8 +683,8 @@ export default defineComponent({
 </template>
 ```
 
-![resolve_components](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/resolve_components.png)
+![resolve_components](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_components.png)
 
-正常に動作しているようです！やったね！
+It seems to be working fine! Great job!
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/060_resolve_components)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/060_resolve_components)

@@ -1,7 +1,7 @@
 import {
-  ComputedGetter,
-  Ref,
-  WritableComputedOptions,
+  type ComputedGetter,
+  type Ref,
+  type WritableComputedOptions,
   computed,
   isRef,
   reactive,
@@ -16,16 +16,16 @@ import {
   onUnmounted,
   onUpdated,
 } from './apiLifecycle'
-import { WatchCallback, WatchOptions, watch } from './apiWatch'
-import { ComponentInternalInstance, Data, SetupContext } from './component'
-import { EmitsOptions } from './componentEmits'
-import { PropType } from './componentProps'
-import {
+import { type WatchCallback, type WatchOptions, watch } from './apiWatch'
+import type { ComponentInternalInstance, Data, SetupContext } from './component'
+import type { EmitsOptions } from './componentEmits'
+import type { PropType } from './componentProps'
+import type {
   ComponentPublicInstance,
   CreateComponentPublicInstance,
 } from './componentPublicInstance'
-import { SlotsType } from './componentSlots'
-import { VNode } from './vnode'
+import type { SlotsType } from './componentSlots'
+import type { VNode } from './vnode'
 
 export type ComponentOptions<
   P = {},

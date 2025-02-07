@@ -1,4 +1,9 @@
-import { JSChildNode, NodeTypes, Position, SimpleExpressionNode } from './ast'
+import {
+  type JSChildNode,
+  NodeTypes,
+  type Position,
+  type SimpleExpressionNode,
+} from './ast'
 
 export const isStaticExp = (p: JSChildNode): p is SimpleExpressionNode =>
   p.type === NodeTypes.SIMPLE_EXPRESSION && p.isStatic

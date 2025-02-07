@@ -1,21 +1,20 @@
-# Effect のクリーンアップと Effect Scope
+# Effect Cleanup and Effect Scope
 
 ::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが、これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています。  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい。  
-然るべきタイミングでこのオンラインブックも追従する予定です。  
+The implementation explained here is based on the version prior to the currently drafted [Reactivity Optimization](/30-basic-reactivity-system/005-reactivity-optimization).  \
+Once [Reactivity Optimization](/30-basic-reactivity-system/005-reactivity-optimization) is completed, the content of this chapter will be updated to align with it.
 :::
 
-## ReactiveEffect のクリーンアップ
+## Cleanup of ReactiveEffect
 
-私たちは今まで登録した effect のクリーンアップを行っていません。ReactiveEffect にクリーンアップの処理を追加してみましょう。
+We haven't been cleaning up the effects we registered so far. Let's add cleanup processing to ReactiveEffect.
 
-ReactiveEffect に stop というメソッドを実装します。  
-ReactiveEffect に自身がアクティブかどうかというフラグを持たせ、stop メソッドではそれを false に切り替えつつ、deps の削除を行います。
+Implement a method called `stop` in ReactiveEffect.  
+Add a flag to ReactiveEffect to indicate whether it is active or not, and in the `stop` method, switch it to `false` while removing the dependencies.
 
 ```ts
 export class ReactiveEffect<T = any> {
-  active = true // 追加
+  active = true // Added
   //.
   //.
   //.
@@ -27,17 +26,18 @@ export class ReactiveEffect<T = any> {
 }
 ```
 
-ついでに、cleanUp 時に行いたい処理を登録できるような hooks の実装と、activeEffect が自身だった場合のハンドリングを追加しておきます。
+With this basic implementation, all we need to do is remove all the dependencies when the `stop` method is executed.  
+Additionally, let's add an implementation of hooks that allows us to register the processing we want to perform during cleanup, and handling when `activeEffect` is itself.
 
 ```ts
 export class ReactiveEffect<T = any> {
-  private deferStop?: boolean // 追加
-  onStop?: () => void // 追加
-  parent: ReactiveEffect | undefined = undefined // 追加 (finallyで参照したいので)
+  private deferStop?: boolean // Added
+  onStop?: () => void // Added
+  parent: ReactiveEffect | undefined = undefined // Added (to be referenced in finally)
 
   run() {
     if (!this.active) {
-      return this.fn() // active が false な場合は単に関数を実行するだけに
+      return this.fn() // If active is false, simply execute the function
     }
 
     try {
@@ -56,12 +56,12 @@ export class ReactiveEffect<T = any> {
 
   stop() {
     if (activeEffect === this) {
-      // activeEffectが自身だった場合はrunが終わった最後にstopするようにフラグを立てる
+      // If activeEffect is itself, set a flag to stop after run is finished
       this.deferStop = true
     } else if (this.active) {
       // ...
       if (this.onStop) {
-        this.onStop() // 登録されたフックを実行
+        this.onStop() // Execute registered hooks
       }
       // ...
     }
@@ -69,9 +69,9 @@ export class ReactiveEffect<T = any> {
 }
 ```
 
-ReactiveEffect にクリーンアップ処理が登録できたので、ついでに watch のクリーンアップ関数を実装してみましょう。
+Now that we have added cleanup processing to ReactiveEffect, let's also implement the cleanup function for watch.
 
-以下のようなコードが動くようになれば OK です。
+If the following code works, it's OK.
 
 ```ts
 import { createApp, h, reactive, watch } from 'chibivue'
@@ -103,14 +103,12 @@ const app = createApp({
 app.mount('#app')
 ```
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/130_cleanup_effects)
+Source code so far:  
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/130_cleanup_effects)
 
-## Effect Scope とは
+## What is Effect Scope
 
-さて、effect をクリーンアップできるようになったわけなので、コンポーネントがアンマウントされた際にも不要な effect はクリーンアップしたいものです。
-しかし、watch にしろ computed にしろ、たくさんの effect を収集するのは少々めんどくさいです。
-愚直に実装しようと思うと、以下のようになってしまいます。
+Now that we can clean up effects, we want to clean up unnecessary effects when a component is unmounted. However, it is a bit cumbersome to collect a large number of effects, whether it's watch or computed. If we try to implement it straightforwardly, it will look like this:
 
 ```ts
 let disposables = []
@@ -130,12 +128,12 @@ disposables.forEach(f => f())
 disposables = []
 ```
 
-このような管理はめんどくさいですし、必ずどこかでミスります。
+This kind of management is cumbersome and prone to mistakes.
 
-そこで、Vue には EffectScope という機構があります。
+Therefore, Vue has a mechanism called EffectScope.  
 https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md
 
-イメージ的には 1 インスタンス 1 EffectScope を持つ感じで、具体的には以下のようなインタフェースになっています。
+The idea is to have one EffectScope per instance, and specifically, it has the following interface:
 
 ```ts
 const scope = effectScope()
@@ -152,14 +150,14 @@ scope.run(() => {
 scope.stop()
 ```
 
-引用元: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
+Quoted from: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
 
-そして、この EffectScope というのはユーザー向けの API としても公開されています。  
-https://ja.vuejs.org/api/reactivity-advanced.html#effectscope
+And this EffectScope is also exposed as a user-facing API.  
+https://v3.vuejs.org/api/reactivity-advanced.html#effectscope
 
-## EffectScope の実装
+## Implementation of EffectScope
 
-先ほども言ったように、1 インスタンスに 1 EffectScope を持つような形をとります。
+As mentioned earlier, we will have one EffectScope per instance.
 
 ```ts
 export interface ComponentInternalInstance {
@@ -167,7 +165,7 @@ export interface ComponentInternalInstance {
 }
 ```
 
-そして、アンマウント時に収集しておいた effect を stop します
+And when the component is unmounted, we stop the collected effects.
 
 ```ts
 const unmountComponent = (...) => {
@@ -180,25 +178,25 @@ const unmountComponent = (...) => {
 }
 ```
 
-EffectScope の構造ですが、activeEffectScope という現在 active な EffectScope を指す変数を一つ持ち、EffectScope に実装された on/off/run/stop というメソッドでその状態を管理します。  
-on/off メソッドは、自身を activeEffectScope として持ち上げたり、持ち上げた状態を元に戻す(元々の EffectScope に戻す)といったことを行います。  
-そして、ReactiveEffect が生成される際は、effect を activeEffectScope に登録するようにします。
+The structure of EffectScope is as follows: it has a variable called `activeEffectScope` that points to the currently active EffectScope, and it manages its state with the `on/off/run/stop` methods implemented in EffectScope.  
+The `on/off` methods lift themselves as `activeEffectScope` or restore the lifted state (return to the original EffectScope).  
+And when a ReactiveEffect is created, it is registered in `activeEffectScope`.
 
-少しわかりづらいので、イメージをソースコードで書くと、
+Since it may be a little difficult to understand, if we write the image in source code,
 
 ```ts
 instance.scope.on()
 
-/** computed や watch などの何らかの ReactiveEffect が生成される */
+/** Some ReactiveEffect such as computed or watch is created */
 setup()
 
 instance.scope.off()
 ```
 
-このようにすることで、生成された effect を instance の EffectScope に収集しておくことができるというわけです。  
-あとは、この effect の stop メソッドを発火すると全ての effect のクリーンアップを行うことができます。
+With this, we can collect the generated effects in the EffectScope of the instance.  
+Then, when the `stop` method of this effect is triggered, we can clean up all the effects.
 
-基本的な原理については理解できたはずなので、実際にソースコードを読みながら実装してみましょう！
+You should have understood the basic principles, so let's try implementing it while reading the source code!
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/140_effect_scope)
+Source code so far:  
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/140_effect_scope)

@@ -1,5 +1,3 @@
-import { Data } from './component'
-
 export type ComponentOptions = {
   props?: Record<string, any>
   setup?: (

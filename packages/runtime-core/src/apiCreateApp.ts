@@ -1,8 +1,8 @@
 import { createVNode } from './vnode'
-import { type ComponentPublicInstance } from './componentPublicInstance'
-import { type RootRenderFunction } from './renderer'
-import { Component } from './component'
-import { InjectionKey } from './apiInject'
+import type { ComponentPublicInstance } from './componentPublicInstance'
+import type { RootRenderFunction } from './renderer'
+import type { Component } from './component'
+import type { InjectionKey } from './apiInject'
 
 export interface App<HostElement = any> {
   use(plugin: Plugin, ...options: any[]): App

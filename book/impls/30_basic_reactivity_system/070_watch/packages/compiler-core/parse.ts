@@ -1,13 +1,13 @@
 import {
-  AttributeNode,
-  DirectiveNode,
-  ElementNode,
-  InterpolationNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type InterpolationNode,
   NodeTypes,
-  Position,
-  SourceLocation,
-  TemplateChildNode,
-  TextNode,
+  type Position,
+  type SourceLocation,
+  type TemplateChildNode,
+  type TextNode,
 } from './ast'
 
 export interface ParserContext {
@@ -198,7 +198,6 @@ function parseElement(
   ancestors: ElementNode[],
 ): ElementNode | undefined {
   // Start tag.
-  const parent = last(ancestors)
   const element = parseTag(context, TagType.Start) // TODO:
 
   if (element.isSelfClosing) {

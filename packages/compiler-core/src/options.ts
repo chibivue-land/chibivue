@@ -1,6 +1,6 @@
-import { ElementNode } from './ast'
-import { TextModes } from './parse'
-import { DirectiveTransform, NodeTransform } from './transform'
+import type { ElementNode } from './ast'
+import type { TextModes } from './parse'
+import type { DirectiveTransform, NodeTransform } from './transform'
 
 export interface ParserOptions {
   isNativeTag?: (tag: string) => boolean

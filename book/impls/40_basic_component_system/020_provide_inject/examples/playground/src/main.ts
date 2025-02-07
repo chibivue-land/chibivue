@@ -1,4 +1,11 @@
-import { InjectionKey, createApp, h, inject, provide, reactive } from 'chibivue'
+import {
+  type InjectionKey,
+  createApp,
+  h,
+  inject,
+  provide,
+  reactive,
+} from 'chibivue'
 
 const Child = {
   setup() {

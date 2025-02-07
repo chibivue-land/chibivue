@@ -2,7 +2,7 @@ import { hasChanged, isObject } from '@chibivue/shared'
 import { ITERATE_KEY, track, trigger } from './effect'
 import {
   ReactiveFlags,
-  Target,
+  type Target,
   isReadonly,
   reactive,
   readonly,

@@ -1,8 +1,24 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "types": ["node"],
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "stripInternal": true,
+    "composite": false
   },
-  "exclude": ["examples"]
+  "include": [
+    "packages/@extensions/chibivue-router/src",
+    "packages/@extensions/chibivue-store/src",
+    "packages/@extensions/vite-plugin-chibivue/src",
+    "packages/chibivue/src",
+    "packages/compiler-core/src",
+    "packages/compiler-dom/src",
+    "packages/runtime-core/src",
+    "packages/runtime-dom/src",
+    "packages/reactivity/src",
+    "packages/shared/src",
+    "packages/compiler-sfc/src",
+    "packages/runtime-vapor/src"
+  ]
 }

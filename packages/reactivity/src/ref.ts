@@ -1,8 +1,8 @@
-import { IfAny, isArray } from '@chibivue/shared'
-import { CollectionTypes } from './collectionHandlers'
-import { Dep, createDep } from './dep'
+import { type IfAny, isArray } from '@chibivue/shared'
+import type { CollectionTypes } from './collectionHandlers'
+import { type Dep, createDep } from './dep'
 import { getDepFromReactive, trackEffects, triggerEffects } from './effect'
-import { ShallowReactiveMarker, isReactive, toReactive } from './reactive'
+import { type ShallowReactiveMarker, isReactive, toReactive } from './reactive'
 
 declare const RefSymbol: unique symbol
 export declare const RawSymbol: unique symbol
@@ -252,11 +252,12 @@ class ObjectRefImpl<T extends object, K extends keyof T> {
 type BaseTypes = string | number | boolean
 export interface RefUnwrapBailTypes {}
 
-export type UnwrapRef<T> = T extends ShallowRef<infer V>
-  ? V
-  : T extends Ref<infer V>
-    ? UnwrapRefSimple<V>
-    : UnwrapRefSimple<T>
+export type UnwrapRef<T> =
+  T extends ShallowRef<infer V>
+    ? V
+    : T extends Ref<infer V>
+      ? UnwrapRefSimple<V>
+      : UnwrapRefSimple<T>
 
 export type UnwrapRefSimple<T> = T extends
   | Function

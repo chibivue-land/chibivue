@@ -1,5 +1,5 @@
-import { ComponentOptions } from './componentOptions'
-import { ComponentPublicInstanceConstructor } from './componentPublicInstance'
+import type { ComponentOptions } from './componentOptions'
+import type { ComponentPublicInstanceConstructor } from './componentPublicInstance'
 
 type DefineComponent<
   PropsOrPropOptions = {},

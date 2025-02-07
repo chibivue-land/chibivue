@@ -1,14 +1,14 @@
 import {
-  CallExpression,
-  ComponentNode,
-  DirectiveNode,
-  ElementNode,
+  type CallExpression,
+  type ComponentNode,
+  type DirectiveNode,
+  type ElementNode,
   ElementTypes,
-  ExpressionNode,
+  type ExpressionNode,
   NodeTypes,
-  ObjectExpression,
-  TemplateTextChildNode,
-  VNodeCall,
+  type ObjectExpression,
+  type TemplateTextChildNode,
+  type VNodeCall,
   createCallExpression,
   createObjectExpression,
   createObjectProperty,
@@ -23,7 +23,7 @@ import {
   RESOLVE_COMPONENT,
   TO_HANDLERS,
 } from '../runtimeHelpers'
-import { NodeTransform, TransformContext } from '../transform'
+import type { NodeTransform, TransformContext } from '../transform'
 import { isStaticExp, toValidAssetId } from '../utils'
 
 export type PropsExpression = ObjectExpression | CallExpression | ExpressionNode

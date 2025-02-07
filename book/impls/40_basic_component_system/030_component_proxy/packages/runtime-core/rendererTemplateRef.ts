@@ -1,6 +1,6 @@
-import { Ref } from '../reactivity'
+import type { Ref } from '../reactivity'
 import { ShapeFlags } from '../shared/shapeFlags'
-import { VNode } from './vnode'
+import type { VNode } from './vnode'
 
 export function setRef(rawRef: Ref, vnode: VNode) {
   const { shapeFlag } = vnode

@@ -1,8 +1,8 @@
-# Fragment を実装する
+# Implementing Fragment
 
-## 今の実装の問題点
+## Issues with the current implementation
 
-以下のようなコードを playground で実行してみましょう。
+Let's try running the following code in a playground:
 
 ```ts
 import { createApp, defineComponent } from 'chibivue'
@@ -18,13 +18,13 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-以下のようなエラーが出てしまうかと思います。
+You may encounter an error like this:
 
-![fragment_error.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/fragment_error.png)
+![fragment_error.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/fragment_error.png)
 
-エラー文をみてみると、 Function コンストラクタで起きているようです。
+Looking at the error message, it seems to be related to the Function constructor.
 
-つまり、codegen までは一応成功しているようなので、実際にどのようなコードが生成されたのかみてみましょう。
+In other words, the code generation seems to be successful up to a certain point, so let's see what code is actually generated.
 
 ```ts
 return function render(_ctx) {
@@ -36,14 +36,15 @@ return function render(_ctx) {
 }
 ```
 
-return の先がおかしなことになってしまっていますね。今の codegen の実装だと、ルートが配列だった場合(単一のノードではない場合)を考慮できていません。  
-今回はこれを修正していきます。
+The code after the `return` statement is incorrect. The current code generation implementation does not handle cases where the root is an array (i.e., not a single node).
 
-## どういうコードを生成すればいいのか
+We will fix this issue.
 
-修正していくとはいえ、どういうコードを生成できるようになれば良いでしょうか。
+## What code should be generated?
 
-結論から言うと以下のようなコードになります。
+Even though we are making modifications, what kind of code should be generated?
+
+In conclusion, the code should look like this:
 
 ```ts
 return function render(_ctx) {
@@ -63,31 +64,27 @@ return function render(_ctx) {
 }
 ```
 
-この `Fragment` というものは Vue で定義されている symbol です。  
-つまり、Fragment は FragmentNode のような AST として表現されるものではなく、単に ElementNode の tag として表現されます。
+This `Fragment` is a symbol defined in Vue.
 
-そして、tag が Fragment あった場合の処理を renderer に実装します。  
-Text と似たよう感じです。
+In other words, Fragment is not represented as an AST like FragmentNode, but simply as a tag of ElementNode.
 
-## 実装していく
+We will implement the processing for Fragment in the renderer, similar to Text.
 
-fragment の symbol は runtime-core/vnode.ts の方に実装されます。
+## Implementation
 
-VNodeTypes の新たな種類として追加しましょう。
+The Fragment symbol will be implemented in runtime-core/vnode.ts.
+
+Let's add it as a new type in VNodeTypes.
 
 ```ts
-export type VNodeTypes =
-  | Component; // `object` になってると思うので、ついでに直しておきました
-  | typeof Text
-  | typeof Fragment  // これを追加
-  | string
+export type VNodeTypes = Component | typeof Text | typeof Fragment | string
 
-export const Fragment = Symbol(); // これを追加
+export const Fragment = Symbol()
 ```
 
-renderer を実装します。
+Implement the renderer.
 
-patch 関数に fragment の時の分岐を追加します。
+Add a branch for fragment in the patch function.
 
 ```ts
 if (type === Text) {
@@ -95,7 +92,7 @@ if (type === Text) {
 } else if (shapeFlag & ShapeFlags.ELEMENT) {
   processElement(n1, n2, container, anchor, parentComponent)
 } else if (type === Fragment) {
-  // ここ
+  // Here
   processFragment(n1, n2, container, anchor, parentComponent)
 } else if (shapeFlag & ShapeFlags.COMPONENT) {
   processComponent(n1, n2, container, anchor, parentComponent)
@@ -104,26 +101,26 @@ if (type === Text) {
 }
 ```
 
-注意点としては、要素の insert や remove は基本的に anchor を目印に実装して行く必要があることです。
+Note that inserting or removing elements should generally be implemented with anchor as a marker.
 
-anchor というのは名の通り、フラグメントの開始と終了の位置を示すものです。
+As the name suggests, an anchor indicates the start and end positions of a fragment.
 
-始端の要素 は 従来から VNode に存在する `el` というプロパティが担いますが、現時点だと終端を表すプロパティが存在しないので追加します。
+The starting element is represented by the existing `el` property in VNode, but currently there is no property to represent the end. Let's add it.
 
 ```ts
 export interface VNode<HostNode = any> {
   // .
   // .
   // .
-  anchor: HostNode | null // fragment anchor // 追加
+  anchor: HostNode | null // fragment anchor // Added
   // .
   // .
 }
 ```
 
-mount 時に anchor を設定します
+Set the anchor during mount.
 
-そして、mount / patch に anchor として フラグメントの終端を渡してあげます。
+Pass the fragment's end as the anchor in mount/patch.
 
 ```ts
 const processFragment = (
@@ -151,7 +148,7 @@ const processFragment = (
 }
 ```
 
-更新時、fragment の要素が変動する際も注意します。
+Be careful when the elements of the fragment change during updates.
 
 ```ts
 const move = (
@@ -162,14 +159,13 @@ const move = (
   const { type, children, el, shapeFlag } = vnode
 
   // .
-  // .
 
   if (type === Fragment) {
     hostInsert(el!, container, anchor)
     for (let i = 0; i < (children as VNode[]).length; i++) {
       move((children as VNode[])[i], container, anchor)
     }
-    hostInsert(vnode.anchor!, container, anchor) // アンカーを挿入
+    hostInsert(vnode.anchor!, container, anchor) // Insert the anchor
     return
   }
   // .
@@ -178,7 +174,7 @@ const move = (
 }
 ```
 
-unmount 時も anchor を頼りに要素を削除していきます。
+During unmount, also rely on the anchor to remove elements.
 
 ```ts
 const remove = (vnode: VNode) => {
@@ -195,7 +191,7 @@ const remove = (vnode: VNode) => {
 const removeFragment = (cur: RendererNode, end: RendererNode) => {
   let next
   while (cur !== end) {
-    next = hostNextSibling(cur)! // ※ nodeOps に追加しましょう！
+    next = hostNextSibling(cur)! // ※ Add this to nodeOps!
     hostRemove(cur)
     cur = next
   }
@@ -203,9 +199,9 @@ const removeFragment = (cur: RendererNode, end: RendererNode) => {
 }
 ```
 
-## 動作を見てみる
+## Testing
 
-先ほどのコードはきちんと動くようになっているはずです。
+The code we wrote earlier should work correctly.
 
 ```ts
 import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'
@@ -221,9 +217,9 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-現状だと、v-for ディレクティブなどが使えないことから、template で fragment を使いつつ要素の個数を変化させるような記述ができないので、
+Currently, we cannot use directives like v-for, so we cannot write a description that uses a fragment in the template and changes the number of elements.
 
-擬似的に コンパイル後のコードを書いて動作を見てみましょう。
+Let's simulate the behavior by writing the compiled code and see how it works.
 
 ```ts
 import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'
@@ -253,6 +249,6 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-ちゃんと動作しているようです！
+It seems to be working correctly!
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)

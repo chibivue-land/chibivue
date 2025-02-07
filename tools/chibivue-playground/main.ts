@@ -1,11 +1,11 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import fse from 'fs-extra'
 
 const red = (s: string) => `\x1b[31m${s}\x1b[0m`
 const green = (s: string) => `\x1b[32m${s}\x1b[0m`
 const blue = (s: string) => `\x1b[34m${s}\x1b[0m`
 
-const targetDirPath = 'example/playground'
+const targetDirPath = 'examples/playground'
 
 // check if target path is empty
 if (!targetDirPath) {

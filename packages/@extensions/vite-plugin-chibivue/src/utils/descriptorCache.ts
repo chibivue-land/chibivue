@@ -1,9 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
-import { SFCDescriptor } from '@chibivue/compiler-sfc'
+import type { SFCDescriptor } from '@chibivue/compiler-sfc'
 
-import { ResolvedOptions } from '..'
+import type { ResolvedOptions } from '..'
 
 // compiler-sfc should be exported so it can be re-used
 export interface SFCParseResult {

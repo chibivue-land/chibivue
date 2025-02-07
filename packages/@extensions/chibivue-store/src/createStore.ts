@@ -1,4 +1,4 @@
-import { Store, setActiveStore, storeSymbol } from './rootStore'
+import { type Store, setActiveStore, storeSymbol } from './rootStore'
 
 export function createStore(): Store {
   const store: Store = {

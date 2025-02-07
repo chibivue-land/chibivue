@@ -1,8 +1,8 @@
 import { isFunction } from '@chibivue/shared'
 import { ComponentInternalInstance } from './component'
-import { ComponentPublicInstance } from './componentPublicInstance'
+import type { ComponentPublicInstance } from './componentPublicInstance'
 import { currentRenderingInstance } from './componentRenderContext'
-import { VNode } from './vnode'
+import type { VNode } from './vnode'
 
 export interface DirectiveBinding<V = any> {
   instance: ComponentPublicInstance | null

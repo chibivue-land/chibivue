@@ -1,7 +1,7 @@
 import { toRaw } from '@chibivue/reactivity'
-import { IfAny, Prettify } from '@chibivue/shared'
-import { ComponentInternalInstance } from './component'
-import { VNode, VNodeNormalizedChildren } from './vnode'
+import type { IfAny, Prettify } from '@chibivue/shared'
+import type { ComponentInternalInstance } from './component'
+import type { VNode, VNodeNormalizedChildren } from './vnode'
 
 export type Slot<T extends any = any> = (
   ...args: IfAny<T, any[], [T] | (T extends undefined ? [] : never)>

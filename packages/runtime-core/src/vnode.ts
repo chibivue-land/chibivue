@@ -11,11 +11,11 @@ import {
   normalizeStyle,
 } from '@chibivue/shared'
 import { currentRenderingInstance } from './componentRenderContext'
-import { Component, type ComponentInternalInstance, Data } from './component'
-import { type ComponentPublicInstance } from './componentPublicInstance'
-import { AppContext } from './apiCreateApp'
-import { DirectiveBinding } from './directives'
-import { RawSlots } from './componentSlots'
+import type { Component, ComponentInternalInstance, Data } from './component'
+import type { ComponentPublicInstance } from './componentPublicInstance'
+import type { AppContext } from './apiCreateApp'
+import type { DirectiveBinding } from './directives'
+import type { RawSlots } from './componentSlots'
 
 export type VNodeTypes =
   | string

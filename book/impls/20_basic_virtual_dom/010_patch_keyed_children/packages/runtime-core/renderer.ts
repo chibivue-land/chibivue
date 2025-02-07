@@ -1,14 +1,14 @@
 import { ReactiveEffect } from '../reactivity'
 import {
-  Component,
-  ComponentInternalInstance,
+  type Component,
+  type ComponentInternalInstance,
   createComponentInstance,
   setupComponent,
 } from './component'
 import { updateProps } from './componentProps'
 import {
   Text,
-  VNode,
+  type VNode,
   createVNode,
   isSameVNodeType,
   normalizeVNode,
@@ -131,7 +131,7 @@ export function createRenderer(options: RendererOptions) {
     patchChildren(n1, n2, el, anchor)
 
     for (const key in props) {
-      if (props[key] !== n1.props?.[key] ?? {}) {
+      if (props[key] !== n1.props?.[key]) {
         hostPatchProp(el, key, props[key])
       }
     }

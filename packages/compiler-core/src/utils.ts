@@ -1,10 +1,10 @@
 import {
-  ElementNode,
-  JSChildNode,
+  type ElementNode,
+  type JSChildNode,
   NodeTypes,
-  Position,
-  SimpleExpressionNode,
-  SourceLocation,
+  type Position,
+  type SimpleExpressionNode,
+  type SourceLocation,
 } from './ast'
 import { CREATE_ELEMENT_VNODE, CREATE_VNODE } from './runtimeHelpers'
 

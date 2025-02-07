@@ -4,9 +4,9 @@
 
 <div align="center">
 
-### [**Writing Vue.js: Step by Step, from just one line of "Hello, World".**](https://ubugeeei.github.io/chibivue)
+### [**Writing Vue.js: Step by Step, from just one line of "Hello, World".**](https://book.chibivue.land)
 
-https://ubugeeei.github.io/chibivue
+https://book.chibivue.land
 
 </div>
 
@@ -38,20 +38,20 @@ npm i -g @antfu/ni
 
 # 📔 Online Book
 
-[![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
+[![Pages Deploy](https://github.com/chibivue-land/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/chibivue-land/chibivue/actions/workflows/deploy.yml)
 
 > total: 370,000 chars ↑ (japanese)
 
 ### book url (GitHub Pages)
 
-English: https://ubugeeei.github.io/chibivue/en
+English: https://book.chibivue.land/
 
-Japaneses: https://ubugeeei.github.io/chibivue
+Japaneses: https://book.chibivue.land/ja
 
 ### open book on localhost
 
 ```sh
-$ git clone https://github.com/Ubugeeei/chibivue
+$ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
 $ ni
 $ nr book:dev
@@ -59,14 +59,14 @@ $ nr book:dev
 
 ### view on github
 
-[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src)
+[English](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src) | [Japanese](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src/ja)
 <br/>
 <br/>
 
 # 🎥 playground
 
 ```sh
-$ git clone https://github.com/Ubugeeei/chibivue
+$ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
 $ ni
 
@@ -174,7 +174,7 @@ Please refer to the information below for the progress status.
 | keep-alive |      |      |
 | suspense   |      |      |
 
-## 🗓️ Big Plans
+# 🗓️ Big Plans
 
 - Complete Basic Template Compiler
   - Slots
@@ -196,7 +196,7 @@ Please refer to the information below for the progress status.
   Since the official version has not been released, we will implement it based on our predictions.  
   https://github.com/vuejs/core-vapor/tree/main
 
-## 🎉 Bonus Track
+# 🎉 Bonus Track
 
 This is bonus track on writing Vue.js in 15 minutes because chibivue has gotten so big.
 
@@ -204,10 +204,27 @@ This chapter implements createApp / virtual dom / patch / reactivity / template 
 
 The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 minutes**"
 
-[Online Book](https://ubugeeei.github.io/chibivue/en/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/Ubugeeei/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
+[Online Book](https://book.chibivue.land/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
 <img src="./book/images/hyper-ultimate-super-extreme-minimal-vue.png">
 
 # Contributing
 
-Please see [contributing.md](https://github.com/Ubugeeei/chibivue/blob/main/.github/contributing.md).
+Please see [contributing.md](https://github.com/chibivue-land/chibivue/blob/main/.github/contributing.md).
+
+
+<div align="center">
+
+# Sponsors
+
+<a href="https://github.com/sponsors/ubugeeei">
+  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+</a>
+
+If you'd like to support my work, I would greatly appreciate it!
+
+https://github.com/sponsors/ubugeeei
+
+</div>
+
+</div>

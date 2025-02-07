@@ -1,8 +1,8 @@
 import { isVapor } from '@chibivue/runtime-vapor'
 import { camelize, capitalize } from '@chibivue/shared'
 
-import { ConcreteComponent, currentInstance } from '../component'
-import { ComponentOptions } from '../componentOptions'
+import { type ConcreteComponent, currentInstance } from '../component'
+import type { ComponentOptions } from '../componentOptions'
 import { currentRenderingInstance } from '../componentRenderContext'
 
 export const COMPONENTS = 'components'

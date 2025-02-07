@@ -1,5 +1,5 @@
 import { isArray, isObject, isString } from '../../shared'
-import { VNode, VNodeChild } from '../vnode'
+import type { VNode, VNodeChild } from '../vnode'
 
 /**
  * v-for string

@@ -1,89 +1,91 @@
-# はじめに
+# Introduction
 
-## 🎯 本書の目的
+## 🎯 Purpose of this book
 
-この本を手に取って頂きありがとうございます！  
-少しでも興味を持って頂いたということで大変嬉しく思います。  
-この本の目的について最初にまとめておきます。
+Thank you for picking up this book!  
+I am truly delighted if you have even a slight interest in this book.  
+Let me first summarize the purpose of this book.
 
-**☆ 目的**
+**☆ Purpose**
 
-- **Vue.js についての理解を深める**  
-  Vue.js とは何なのか? どのような構成で成り立っているのか?
-- **Vue.js の基本的な機能を実装できるようになる**  
-  実際に基本的な機能を実装してみる
-- **vuejs/core のソースコードを読めるようになる**  
-  実装と本家のコードとの関連を把握して、実際にどんな実装になっているのかを把握する
+- **Deepen understanding of Vue.js**  
+  What is Vue.js? How is it structured?
+- **Be able to implement basic functions of Vue.js**  
+  Actually try implementing basic functionalities.
+- **Read the source code of vuejs/core**  
+  Understand the relation between implementations and the official code, and grasp how they are really built.
 
-いくつかざっくりした目的を挙げましたが、この全てを満たす必要はないですし、完璧を目指す必要はありません。  
-通しで全て読んでもらっても、部分的に読みたいところを読んでもらってもご自由に。。  
-少しでも参考になる部分があれば嬉しいです！
+I've provided a rough outline of goals, but it's not necessary to fulfill all of them, nor is it a call to pursue perfection.  
+Whether you read it cover-to-cover, or just pick out the parts that interest you, it's up to you.  
+I'd be happy if you find even a small part of this book useful!
 
-## 🤷‍♂️ 想定する対象者
+## 🤷‍♂️ Intended Audience
 
-- **Vue.js を触ったことがある**
-- **TypeScript が書ける**
+- **Those who have experience with Vue.js**
+- **Can write in TypeScript**
 
-以上があれば他の知識は何も必要ありません。  
-この本の中では普段聞きなれない言葉がたくさん出てくるかもしれませんが、可能な限り前程知識は排除し、随時説明しながらこの本内で完結できることを目指します。  
-ですが、Vue.js や TypeScript についてまだ十分に扱うことができないと言う方であれば、まずはそちらの方から学ばれることを推奨します。
-(基本的な機能について知っていればそれで十分です! (詳しくある必要はない))
+With just these two prerequisites, no other knowledge is needed.  
+While you might encounter unfamiliar terms throughout the book, I've tried my best to exclude any prior knowledge and explain things along the way, aiming to make this book self-contained.  
+However, if you come across terms that shouldn't be used for Vue.js or TypeScript, I recommend learning from the respective resources first.  
+(Basic functionalities are enough! (There's no need to delve deep))
 
-## 🙋‍♀️ この本(著者)が意識していること (したいこと)
+## 🙋‍♀️ What this book (and the author) is conscious of (and wants to achieve)
 
-この本を書く上で意識しておきたいことをいくつかまとめておくので、その心構えで読んでいただけると幸いです。
-もしも、この点で欠けている点があればご指摘ください。
+Before diving in, I'd like to share a few things that I've been especially conscious of while writing this book.  
+I hope you keep these in mind as you read, and if there are any areas where I've missed the mark, please let me know.
 
-- **前程知識の排除**  
-  前述の「想定する対象者」に関する説明と重複してしまいますが、この本では可能な限り前程知識は排除し、随時説明してこの本で完結できることを目指します。
-  これはより多くの方々にとってわかりやすい説明を広めたいからです。
-  ある程度、知識のある方にとっては冗長な説明に感じる部分が多くあるかもしれませんが、その辺はご了承ください
+- **Eliminating the need for prior knowledge**  
+  While this might overlap with the "Intended Audience" section mentioned earlier, I strive to make this book as self-contained as possible,  
+  minimizing the need for prior knowledge and providing explanations as needed.  
+  This is because I want to make the explanations as clear as possible to as many readers as I can.  
+  Those with a good deal of experience may find some of the explanations a bit verbose, but I ask for your understanding.
 
-- **インクリメンタルな実装**  
-  この本の目的の一つとして、Vue.js を自分の手で小さく実装するというのがあります。  
-  つまりはこの本は実装ベースで説明をしていくのですが、その際はなるべく小さくインクリメンタルな実装を心がけます。  
-  もう少し具体的にいうと、「動かない状態をなるべく減らす」ということです。  
-  最後まで完成しないと動かないなどといった実装は避け、なるべく常に成果物が動いている状態を目指します。  
-  これは筆者が個人的に何かを実装する上でかなり大切にしていることで、動かないコードを書き続けるのはやはり辛いです。  
-  不完全ではあるものの、常に動いているような状況を作ることで楽しくやっていきましょう。  
-  「やった! 次はここまで動くようになった！」というのを小さく繰り返していくようなイメージです！
+- **Incremental implementation**  
+  One of the book's goals is to incrementally implement Vue.js by hand. This means that the book focuses on a hands-on approach,  
+  and when it comes to implementation, I emphasize building in small, incremental steps.  
+  To be more specific, it's about "minimizing non-working states."  
+  Instead of having something that won't work until it's complete, the aim is to keep it functioning at every stage.  
+  This reflects my personal approach to coding – writing non-functional code continuously can be disheartening.  
+  Even if it's imperfect, always having something in motion makes the process more enjoyable.  
+  It's about experiencing little victories like, "Yes! It works up to this point now!"
 
-- **特定のフレームワーク・ライブラリ・言語などの優劣をつけるような内容にはしない**  
-  今回は Vue.js を主題として取り上げますが、昨今は他にも素晴らしいフレームワークやライブラリ・言語が多数あります。
-  実際、著者も Vue.js 以外でも好きなライブラリ等はたくさんありますし、自分では書かないけれどそれらで作られたサービス・知見にとても助けられることも日常茶飯事です。
-  本書の目的はあくまで、「Vue.js について理解する」であり、他の議論はその範囲を超えます。ついてはそれぞれの優劣をつけるような目的は含みません。
+- **Avoiding biases towards specific frameworks, libraries, or languages**  
+  While this book focuses on Vue.js, there are countless excellent frameworks, libraries, and languages out there today.  
+  In fact, I have my favorites beyond Vue.js, and I frequently benefit from insights and services built with them.  
+  The purpose of this book is purely to "understand Vue.js" and doesn't venture into ranking or judging other tools.
 
-## 💡 このオンラインブックで取り上げることと流れ
+## 💡 Topics and structure of this online book
 
-本書はかなりボリューミーな感じになってしまっているので、各部門ごとに達成マイルストーンを立てて分割します。
+Since this book has turned out quite voluminous, I've set achievement milestones and divided it into different sections.
 
-- **Minimal Example 部門**  
-  最小の構成で Vue.js を実装します。機能としても一番小さい部門ですが、 Virtual DOM, Reactivity System , コンパイラ, SFC の実装を行います。  
-  とはいえ実用的なものからは程遠く、かなり簡略化した実装になっています。  
-  しかし、Vue.js の全体像がどうなっているかのざっくりした理解をしたい方にとっては十分な達成率です。  
-  入門の部門でもあるということで、説明も他の部門と比べて最も丁寧に行なっています。  
-  この部門を終えてからは、ある程度 Vue.js 本家のソースコードが読めるようになっているかと思います。  
-  機能的には概ね以下のようなコードが動くようになります。
+- **Minimal Example Section**  
+   Here, Vue.js is implemented in its most basic form.  
+   Although this section covers the smallest set of features, it will deal with  
+   the Virtual DOM, the Reactivity System, the Compiler, and SFC (Single File Components) support.  
+   However, these implementations are far from practical and are highly simplified.  
+   But, for those wanting a broad overview of Vue.js, this section offers sufficient insight.  
+   Being an introductory section, the explanations here are more detailed than in other parts.  
+   By the end of this section, readers should be somewhat comfortable reading the official Vue.js source code. Functionally, you can expect the code to do roughly the following...
 
   ```vue
   <script>
-  import { reactive } from "chibivue";
+  import { reactive } from 'chibivue'
 
   export default {
     setup() {
-      const state = reactive({ message: "Hello, chibivue!", input: "" });
+      const state = reactive({ message: 'Hello, chibivue!', input: '' })
 
       const changeMessage = () => {
-        state.message += "!";
-      };
+        state.message += '!'
+      }
 
-      const handleInput = (e) => {
-        state.input = e.target?.value ?? "";
-      };
+      const handleInput = e => {
+        state.input = e.target?.value ?? ''
+      }
 
-      return { state, changeMessage, handleInput };
+      return { state, changeMessage, handleInput }
     },
-  };
+  }
   </script>
 
   <template>
@@ -92,6 +94,7 @@
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
+        alt="Vue.js Logo"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -119,81 +122,85 @@
   ```
 
   ```ts
-  import { createApp } from "chibivue";
-  import App from "./App.vue";
+  import { createApp } from 'chibivue'
+  import App from './App.vue'
 
-  const app = createApp(App);
+  const app = createApp(App)
 
-  app.mount("#app");
+  app.mount('#app')
   ```
 
-- **Basic Virtual DOM 部門**  
-  ここではある程度実用的な Virtual DOM のパッチレンダリング機能の実装を行います。
-  suspense などの機能や最適化の実装は行いませんが、基本的なレンダリングであれば問題なくできる程度の完成度です。
-  スケジューラの実装などもここで行います。
+- **Basic Virtual DOM Section**  
+  In this section, we will implement a fairly practical patch rendering functionality for the Virtual DOM. While we won't be implementing features like [Suspense](https://vuejs.org/guide/built-ins/suspense) or other optimizations, it will be proficient enough to handle basic rendering tasks. We will also implement the scheduler here.
 
-- **Basic Reactivity System 部門**  
-  Minimal Example 部門では reactive という API を実装しましたが、この部門ではその他の API を実装します。
-  ref/watch/computed というベーシックな API をはじめ、effectScope や shallow 系などの応用的な API まで幅広く実装します。
+- **Basic Reactivity System Section**  
+  Although we implemented the reactive API in the Minimal Example section, in this section we will implement other APIs. Starting from basic APIs like ref, watch, and computed, we'll also delve into more advanced APIs like effectScope and the shallow series.
 
-- **Basic Component System 部門**  
-  ここでは Component System 関する基本実装を行います。実は、Basic Virtual DOM 部門で Component System のベースは実装してしまうので、
-  それ以外の部分の Component System を実装します。例えば props/emit や provide/inject、 Reactivity System の拡張、ライフサイクルフックなどです。
+- **Basic Component System Section**  
+  Here, we will undertake the basic implementations related to the Component System. In fact, since we'll have already set the base for the Component System in the Basic Virtual DOM section, here we'll focus on other aspects of the Component System. This includes features like props/emit, provide/inject, extensions to the Reactivity System, and lifecycle hooks.
 
-- **Basic Template Compiler 部門**  
-  Basic Virtual DOM で実装した Virtual DOM システムに対応する機能のコンパイラに加え、v-on, v-bind, v-for 等のディレクティブなどの実装を行います。  
-  基本的にはコンポーネントの template オプションを利用した実装で、SFC の対応はここではやりません。
+- **Basic Template Compiler Section**  
+  In addition to a compiler for the Virtual DOM system implemented in the Basic Virtual DOM section, we will implement directives like v-on, v-bind, and v-for. Generally, this will involve the component's template option, and we won't cover SFC (Single File Components) here.
 
-- **Basic SFC Compiler 部門**  
-  ここではある程度実用的な SFC コンパイラを実装します。  
-  Basic Template Compiler 部門で実装した template のコンパイラを活用しつつ、ここでは主に script のコンパイラを実装します。  
-  具体的には SFC の script(の default exports)や script setup の実装を行います。  
-  ここまでくると触り心地としてはかなり普段の Vue に近づきます。
+- **Basic SFC Compiler Section**  
+  Here, we will implement a somewhat practical SFC compiler while utilizing the template compiler implemented in the Basic Template Compiler section.  
+  Specifically, we will implement script setup and compiler macros.  
+  At this point, the experience will be quite close to using regular Vue.
 
-- **Web Application Essentials 部門**  
-  Basic SFC Compiler 部門までで、ある程度実用的な Vue.js の機能が実装されます。  
-  しかし、Web アプリケーションを開発するにはまだまだ不十分です。例えばグローバルなステートの管理であったり、router の管理であったりが必要です。  
-  この部門ではそういった外部プラグインの実装を行って、「Web アプリケーションを開発する」という視点においてさらに実用的なものを目指します。  
-  一部、Vue.js が行っている最適化の実装なども行います。
+- **Web Application Essentials Section**  
+  By the time we finish the Basic SFC Compiler section, we'll have a somewhat practical set of Vue.js features. However, to develop a web application, there's still a lot missing. For instance, we'll need tools to manage global state and routers. In this section, we'll develop such external plugins, aiming to make our toolkit even more practical from a "web application development" perspective.
 
-## 🧑‍🏫 この本に対する意見や質問について
+## 🧑‍🏫 About opinions and questions on this book
 
-この本に関する質問や意見については可能な限り対応しようと思っています。  
-Twitter で声をかけてもらってもいいですし(DM でも TL でも)、リポジトリを公開しているのでそちらの issue 等で投げてもらっても、PR を出していただいても問題ないです。  
-この本も自分自身の理解も完璧ではないと思っているので、随時ご指摘いただけると嬉しいのと、「この説明がわかりづらい！」などもあれば是非問い合わせて欲しいです。  
-少しでも多くの方にわかりやすく、正しい説明を広めたいので、ぜひみなさんと一緒に作り上げていけたらなと思います 👍
+I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together 👍.
 
-Twitter(X): https://twitter.com/ubugeeei
+https://twitter.com/ubugeeei
 
-## 🦀 Discord Server について
+## 🦀 About the Discord Server
 
-この本の Discord Server を作りました！ (2024/01/01)  
-ここではこのオンラインブックに関するアナウンスや質問対応・Tips の共有などを行っています。  
-その他雑談なども大歓迎なので、ぜひ chibivue ユーザー同士で楽しくコミュニケーションしましょう。  
-日本語話者が多く会話も今の所は日本語が多いですが、日本語話者以外の方も大歓迎なのであまり気にせず参加してください！ (母語を使ってもらって全く問題ないです)
+We have created a Discord Server for this book! (2024/01/01)  
+~~Here, we share announcements, provide support for questions and tips related to this online book.~~ \
+We also welcome casual conversations, so let's have fun communicating with other chibivue users.  
+Currently, most of the conversations are in Japanese as there are many Japanese speakers, but non-Japanese speakers are also welcome to join without hesitation! (It's completely fine to use your native language)
 
-### ざっくりやっていること
+Recently, We’ve been actively contributing not only to chibivue but also as part of the Japanese community server for Vue.js!
 
-- 自己紹介 (任意)
-- chibivue に関するアナウンス (更新情報など)
-- Tips の共有
-- 質問対応
-- 要望対応
-- 雑談
-- ubugeeei が chibivue に関する作業をしているときに独り言を呟いている (野次歓迎)
+### What we do roughly
 
-### どこから参加できるか
+- Self-introduction (optional)
+- Announcements related to chibivue (such as updates)
+- Sharing tips
+- Answering questions
+- Responding to requests
+- Casual conversations
 
-招待リンクはこちらです 👉 https://discord.gg/aVHvmbmSRy
+### How to join
 
-この本のヘッダー右上の Discord ボタンからも参加できます。
+Here is the invitation link 👉 https://discord.gg/aVHvmbmSRy
 
-### 参加資格
+You can also join from the Discord button on the top right of this book's header.
 
-chibivue (もしくは ubugeeei, もしくはこのコミュニティ) に興味がある方！  
-(宣伝目的のみでのご参加はご遠慮ください)
+## About the Author
 
-### 参加時にやって欲しいこと
+**ubugeeei**
 
-必ず general/rules を一読していただきたいです。
-あとは特にありません。
+<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+
+Member of [Vue.js](https://github.com/vuejs), core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp).\
+Owner of [chibivue land](https://github.com/chibivue-land).
+
+https://ublog.dev/
+
+<div align="center">
+
+## Sponsors
+
+<a href="https://github.com/sponsors/ubugeeei">
+  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+</a>
+
+If you'd like to support my work, I would greatly appreciate it!
+
+https://github.com/sponsors/ubugeeei
+
+</div>

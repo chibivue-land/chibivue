@@ -1,4 +1,4 @@
-import { VNode, VNodeProps, createVNode } from './vnode'
+import { type VNode, type VNodeProps, createVNode } from './vnode'
 
 export function h(
   type: string | object,

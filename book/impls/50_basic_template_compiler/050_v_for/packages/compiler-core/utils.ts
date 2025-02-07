@@ -1,9 +1,9 @@
 import {
-  JSChildNode,
+  type JSChildNode,
   NodeTypes,
-  Position,
-  SimpleExpressionNode,
-  SourceLocation,
+  type Position,
+  type SimpleExpressionNode,
+  type SourceLocation,
 } from './ast'
 
 const nonIdentifierRE = /^\d|[^\$\w]/

@@ -11,7 +11,7 @@ export default (process.env.NODE_ENV === 'production'
   : defineConfig)({
   ...sharedConfig,
   locales: {
-    root: { label: 'Japanese', lang: 'ja', link: '/', ...jaConfig },
-    en: { label: 'English', lang: 'en', link: '/en/', ...enConfig },
+    root: { label: 'English', lang: 'en', link: '/', ...enConfig },
+    ja: { label: '日本語', lang: 'ja', link: '/ja', ...jaConfig },
   },
 })

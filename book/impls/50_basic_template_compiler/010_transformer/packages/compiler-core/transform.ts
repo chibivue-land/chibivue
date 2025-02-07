@@ -1,6 +1,11 @@
 import { isArray, isString } from '../shared'
-import { NodeTypes, ParentNode, RootNode, TemplateChildNode } from './ast'
-import { TransformOptions } from './options'
+import {
+  NodeTypes,
+  type ParentNode,
+  type RootNode,
+  type TemplateChildNode,
+} from './ast'
+import type { TransformOptions } from './options'
 
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,

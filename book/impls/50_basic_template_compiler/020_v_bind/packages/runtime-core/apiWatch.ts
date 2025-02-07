@@ -1,4 +1,9 @@
-import { ComputedRef, ReactiveEffect, Ref, isRef } from '../reactivity'
+import {
+  type ComputedRef,
+  ReactiveEffect,
+  type Ref,
+  isRef,
+} from '../reactivity'
 import {
   hasChanged,
   isArray,

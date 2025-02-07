@@ -1,16 +1,16 @@
 import { ReactiveEffect } from '../reactivity'
 import { ShapeFlags } from '../shared/shapeFlags'
 import {
-  Component,
-  ComponentInternalInstance,
+  type Component,
+  type ComponentInternalInstance,
   createComponentInstance,
   setupComponent,
 } from './component'
 import { updateProps } from './componentProps'
-import { SchedulerJob, queueJob } from './scheduler'
+import { type SchedulerJob, queueJob } from './scheduler'
 import {
   Text,
-  VNode,
+  type VNode,
   createVNode,
   isSameVNodeType,
   normalizeVNode,
@@ -134,7 +134,7 @@ export function createRenderer(options: RendererOptions) {
     patchChildren(n1, n2, el, anchor)
 
     for (const key in props) {
-      if (props[key] !== n1.props?.[key] ?? {}) {
+      if (props[key] !== n1.props?.[key]) {
         hostPatchProp(el, key, props[key])
       }
     }

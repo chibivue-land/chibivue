@@ -1,4 +1,4 @@
-import { type ComponentInternalInstance } from './component'
+import type { ComponentInternalInstance } from './component'
 import { setCurrentRenderingInstance } from './componentRenderContext'
 import { type VNode, normalizeVNode } from './vnode'
 

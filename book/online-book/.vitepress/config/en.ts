@@ -1,28 +1,28 @@
-import { DefaultTheme, LocaleSpecificConfig } from 'vitepress'
+import type { DefaultTheme, LocaleSpecificConfig } from 'vitepress'
 
 export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   themeConfig: {
     nav: [
-      { text: 'Home', link: '/en/' },
-      { text: 'Start Learning', link: '/en/00-introduction/010-about' },
+      { text: 'Home', link: '/' },
+      { text: 'Start Learning', link: '/00-introduction/010-about' },
     ],
     sidebar: [
       {
         text: 'Getting Started',
         collapsed: false,
         items: [
-          { text: 'Getting Started', link: '/en/00-introduction/010-about' },
+          { text: 'Getting Started', link: '/00-introduction/010-about' },
           {
             text: 'What is Vue.js?',
-            link: '/en/00-introduction/020-what-is-vue',
+            link: '/00-introduction/020-what-is-vue',
           },
           {
             text: 'Key Elements of Vue.js',
-            link: '/en/00-introduction/030-vue-core-components',
+            link: '/00-introduction/030-vue-core-components',
           },
           {
             text: 'Approach in This Book and Setting Up the Environment',
-            link: '/en/00-introduction/040-setup-project',
+            link: '/00-introduction/040-setup-project',
           },
         ],
       },
@@ -32,43 +32,83 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: 'First Rendering and the createApp API',
-            link: '/en/10-minimum-example/010-create-app-api',
+            link: '/10-minimum-example/010-create-app-api',
+          },
+          {
+            text: 'Package Architecture',
+            link: '/10-minimum-example/015-package-architecture',
           },
           {
             text: "Let's Enable Rendering HTML Elements",
-            link: '/en/10-minimum-example/020-simple-h-function',
+            link: '/10-minimum-example/020-simple-h-function',
           },
           {
-            text: 'A Lightweight Reactivity System',
-            link: '/en/10-minimum-example/030-minimum-reactive',
+            text: "Let's work on supporting event handlers and attributes.",
+            link: '/10-minimum-example/025-event-handler-and-attrs',
+          },
+          {
+            text: 'Prerequisite Knowledge for the Reactivity System',
+            link: '/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system',
+          },
+          {
+            text: 'Try Implementing a Small Reactivity System',
+            link: '/10-minimum-example/035-try-implementing-a-minimum-reactivity-system',
           },
           {
             text: 'A Minimal Virtual DOM',
-            link: '/en/10-minimum-example/040-minimum-virtual-dom',
+            link: '/10-minimum-example/040-minimum-virtual-dom',
           },
           {
             text: 'Aspiring for Component-Oriented Development',
-            link: '/en/10-minimum-example/050-minimum-component',
+            link: '/10-minimum-example/050-minimum-component',
           },
           {
-            text: 'A Simple Template Compiler',
-            link: '/en/10-minimum-example/060-minimum-template-compiler',
+            text: 'Component Props',
+            link: '/10-minimum-example/051-component-props',
+          },
+          {
+            text: 'Component Emit',
+            link: '/10-minimum-example/052-component-emits',
+          },
+          {
+            text: 'Understanding the Template Compiler',
+            link: '/10-minimum-example/060-template-compiler',
+          },
+          {
+            text: 'Implementing the Template Compiler',
+            link: '/10-minimum-example/061-template-compiler-impl',
           },
           {
             text: 'Desire to Write More Complex HTML',
-            link: '/en/10-minimum-example/070-more-complex-parser',
+            link: '/10-minimum-example/070-more-complex-parser',
           },
           {
             text: 'Data Binding',
-            link: '/en/10-minimum-example/080-template-binding',
+            link: '/10-minimum-example/080-template-binding',
           },
           {
-            text: 'Desire to Develop with Single File Components',
-            link: '/en/10-minimum-example/090-minimum-sfc',
+            text: 'Developing with SFC (Peripheral Knowledge)',
+            link: '/10-minimum-example/090-prerequisite-knowledge-for-the-sfc',
+          },
+          {
+            text: 'Parse SFC',
+            link: '/10-minimum-example/091-parse-sfc',
+          },
+          {
+            text: 'SFC template block',
+            link: '/10-minimum-example/092-compile-sfc-template',
+          },
+          {
+            text: 'SFC script block ',
+            link: '/10-minimum-example/093-compile-sfc-script',
+          },
+          {
+            text: 'SFC style block',
+            link: '/10-minimum-example/094-compile-sfc-style',
           },
           {
             text: 'Taking a Short Break',
-            link: '/en/10-minimum-example/100-break',
+            link: '/10-minimum-example/100-break',
           },
         ],
       },
@@ -78,19 +118,19 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: 'key Attribute and Patch Rendering',
-            link: '/en/20-basic-virtual-dom/010-patch-keyed-children',
+            link: '/20-basic-virtual-dom/010-patch-keyed-children',
           },
           {
             text: 'Bit-Level Representation of VNodes',
-            link: '/en/20-basic-virtual-dom/020-bit-flags',
+            link: '/20-basic-virtual-dom/020-bit-flags',
           },
           {
             text: 'Scheduler',
-            link: '/en/20-basic-virtual-dom/030-scheduler',
+            link: '/20-basic-virtual-dom/030-scheduler',
           },
           {
             text: '🚧 Patch for Unhandled Props',
-            link: '/en/20-basic-virtual-dom/040-patch-other-attrs',
+            link: '/20-basic-virtual-dom/040-patch-other-attrs',
           },
         ],
       },
@@ -99,24 +139,28 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
+            text: '🚧 Reactivity Optimization',
+            link: '/30-basic-reactivity-system/005-reactivity-optimization.md',
+          },
+          {
             text: 'ref API',
-            link: '/en/30-basic-reactivity-system/010-ref-api',
+            link: '/30-basic-reactivity-system/010-ref-api',
           },
           {
             text: 'computed / watch API',
-            link: '/en/30-basic-reactivity-system/020-computed-watch',
+            link: '/30-basic-reactivity-system/020-computed-watch',
           },
           {
             text: 'Various Reactive Proxy Handlers',
-            link: '/en/30-basic-reactivity-system/030-reactive-proxy-handlers',
+            link: '/30-basic-reactivity-system/030-reactive-proxy-handlers',
           },
           {
             text: 'Effect Cleanup and Effect Scope',
-            link: '/en/30-basic-reactivity-system/040-effect-scope',
+            link: '/30-basic-reactivity-system/040-effect-scope',
           },
           {
             text: 'Other Reactivity APIs',
-            link: '/en/30-basic-reactivity-system/050-other-apis',
+            link: '/30-basic-reactivity-system/050-other-apis',
           },
         ],
       },
@@ -126,23 +170,23 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: 'Lifecycle Hooks',
-            link: '/en/40-basic-component-system/010-lifecycle-hooks',
+            link: '/40-basic-component-system/010-lifecycle-hooks',
           },
           {
             text: 'Provide/Inject',
-            link: '/en/40-basic-component-system/020-provide-inject',
+            link: '/40-basic-component-system/020-provide-inject',
           },
           {
             text: 'Component Proxies and setupContext',
-            link: '/en/40-basic-component-system/030-component-proxy-setup-context',
+            link: '/40-basic-component-system/030-component-proxy-setup-context',
           },
           {
             text: 'Slots',
-            link: '/en/40-basic-component-system/040-component-slot',
+            link: '/40-basic-component-system/040-component-slot',
           },
           {
             text: 'Supporting Options API',
-            link: '/en/40-basic-component-system/050-options-api',
+            link: '/40-basic-component-system/050-options-api',
           },
         ],
       },
@@ -152,59 +196,59 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: 'Refactoring Implementation of Transformer for Codegen',
-            link: '/en/50-basic-template-compiler/010-transform',
+            link: '/50-basic-template-compiler/010-transform',
           },
           {
             text: 'Implementing Directives (v-bind)',
-            link: '/en/50-basic-template-compiler/020-v-bind',
+            link: '/50-basic-template-compiler/020-v-bind',
           },
           {
             text: 'Eval expression in template',
-            link: '/en/50-basic-template-compiler/022-transform-expression',
+            link: '/50-basic-template-compiler/022-transform-expression',
           },
           {
             text: 'Supporting v-on',
-            link: '/en/50-basic-template-compiler/025-v-on',
+            link: '/50-basic-template-compiler/025-v-on',
           },
           {
             text: 'compiler-dom and Event Modifiers',
-            link: '/en/50-basic-template-compiler/027-event-modifier',
+            link: '/50-basic-template-compiler/027-event-modifier',
           },
           {
             text: 'Support for Fragment',
-            link: '/en/50-basic-template-compiler/030-fragment',
+            link: '/50-basic-template-compiler/030-fragment',
           },
           {
             text: 'Support for Comment Node',
-            link: '/en/50-basic-template-compiler/035-comment',
+            link: '/50-basic-template-compiler/035-comment',
           },
           {
             text: 'v-if and Structural Directives',
-            link: '/en/50-basic-template-compiler/040-v-if-and-structural-directive',
+            link: '/50-basic-template-compiler/040-v-if-and-structural-directive',
           },
           {
             text: 'Support for v-for',
-            link: '/en/50-basic-template-compiler/050-v-for',
+            link: '/50-basic-template-compiler/050-v-for',
           },
           {
             text: 'Resolving Components',
-            link: '/en/50-basic-template-compiler/070-resolve-component',
+            link: '/50-basic-template-compiler/070-resolve-component',
           },
           {
-            text: '🚧 Support for Slot',
-            link: '/en/50-basic-template-compiler/080-slot',
+            text: 'Support for Slots (Definition)',
+            link: '/50-basic-template-compiler/080-component-slot-outlet',
           },
           {
             text: '🚧 Other Directives',
-            link: '/en/50-basic-template-compiler/090-other-directives',
+            link: '/50-basic-template-compiler/090-other-directives',
           },
           {
             text: '🚧 Chore Compiler',
-            link: '/en/50-basic-template-compiler/100-chore-compiler',
+            link: '/50-basic-template-compiler/100-chore-compiler',
           },
           {
             text: '🚧 Custom Directives',
-            link: '/en/50-basic-template-compiler/500-custom-directive',
+            link: '/50-basic-template-compiler/500-custom-directive',
           },
         ],
       },
@@ -214,19 +258,19 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: 'Supporting script setup',
-            link: '/en/60-basic-sfc-compiler/010-script-setup',
+            link: '/60-basic-sfc-compiler/010-script-setup',
           },
           {
             text: 'Supporting defineProps',
-            link: '/en/60-basic-sfc-compiler/020-define-props',
+            link: '/60-basic-sfc-compiler/020-define-props',
           },
           {
             text: 'Supporting defineEmits',
-            link: '/en/60-basic-sfc-compiler/030-define-emits',
+            link: '/60-basic-sfc-compiler/030-define-emits',
           },
           {
             text: 'Supporting Scoped CSS',
-            link: '/en/60-basic-sfc-compiler/040-scoped-css',
+            link: '/60-basic-sfc-compiler/040-scoped-css',
           },
         ],
       },
@@ -311,17 +355,17 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             items: [
               {
                 text: "chibivue, isn't it small...?",
-                link: '/en/bonus/hyper-ultimate-super-extreme-minimal-vue/',
+                link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/',
               },
               {
                 text: 'Implement',
-                link: '/en/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl.md',
+                link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl.md',
               },
             ],
           },
           {
             text: 'debug original Vue.js source',
-            link: '/en/bonus/debug-vuejs-core',
+            link: '/bonus/debug-vuejs-core',
           },
         ],
       },

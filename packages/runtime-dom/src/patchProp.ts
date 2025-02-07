@@ -1,6 +1,6 @@
 import { isOn } from '@chibivue/shared'
 import { patchEvent } from './modules/events'
-import { type RendererOptions } from '@chibivue/runtime-core'
+import type { RendererOptions } from '@chibivue/runtime-core'
 import { patchAttr } from './modules/attrs'
 import { patchStyle } from './modules/style'
 

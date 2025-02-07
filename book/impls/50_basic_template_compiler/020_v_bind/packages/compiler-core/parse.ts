@@ -1,15 +1,15 @@
 import {
-  AttributeNode,
-  DirectiveNode,
-  ElementNode,
-  ExpressionNode,
-  InterpolationNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type ExpressionNode,
+  type InterpolationNode,
   NodeTypes,
-  Position,
-  RootNode,
-  SourceLocation,
-  TemplateChildNode,
-  TextNode,
+  type Position,
+  type RootNode,
+  type SourceLocation,
+  type TemplateChildNode,
+  type TextNode,
   createRoot,
 } from './ast'
 import { advancePositionWithClone } from './utils'
@@ -200,7 +200,6 @@ function parseElement(
   ancestors: ElementNode[],
 ): ElementNode | undefined {
   // Start tag.
-  const parent = last(ancestors)
   const element = parseTag(context, TagType.Start) // TODO:
 
   if (element.isSelfClosing) {

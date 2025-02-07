@@ -1,3 +1,1 @@
-import { helloChibivue } from 'chibivue'
-
-helloChibivue()
+import 'chibivue'

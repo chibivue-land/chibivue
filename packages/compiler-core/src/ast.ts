@@ -3,13 +3,13 @@ import { isString } from '@chibivue/shared'
 import {
   CREATE_ELEMENT_VNODE,
   CREATE_VNODE,
-  FRAGMENT,
-  RENDER_LIST,
+  type FRAGMENT,
+  type RENDER_LIST,
   WITH_DIRECTIVES,
 } from './runtimeHelpers'
-import { TransformContext } from './transform'
-import { PropsExpression } from './transforms/transformElement'
-import { ForParseResult } from './transforms/vFor'
+import type { TransformContext } from './transform'
+import type { PropsExpression } from './transforms/transformElement'
+import type { ForParseResult } from './transforms/vFor'
 
 export const enum NodeTypes {
   ROOT,

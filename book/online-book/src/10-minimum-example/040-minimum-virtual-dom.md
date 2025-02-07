@@ -1,9 +1,8 @@
-# 小さい Virtual DOM
+# Minimum Virtual DOM
 
-## Virtual DOM、何に使われる?
+## What is Virtual DOM used for?
 
-前のチャプターで Reactivity System を導入したことで画面を動的に更新できるようになりました。
-改めて現在の render 関数の内容を見てみましょう。
+By introducing the Reactivity System in the previous chapter, we were able to dynamically update the screen. Let's take a look at the content of the current render function again.
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
@@ -13,10 +12,9 @@ const render: RootRenderFunction = (vnode, container) => {
 }
 ```
 
-前のチャプターの時点で「これはヤバそうだ」と気づいた人ももしかしたらいるかもしれません。
-この関数にはとんでもない無駄が存在します。
+Some people may have noticed in the previous chapter that there is a lot of waste in this function.
 
-playground を見てみてください。
+Take a look at the playground.
 
 ```ts
 const app = createApp({
@@ -34,14 +32,12 @@ const app = createApp({
 })
 ```
 
-何がまずいかというと、increment を実行した時に変化する部分は、`count: ${state.count}` の部分だけなのに、renderVNode では一度全ての DOM を削除し、1 から再生成しているのです。  
-これはなんとも無駄だらけな感じがしてなりません。今はまだ小さいので、これくらいでも特に問題なく動いているように見えますが、普段 Web アプリケーションを開発しているときような複雑な DOM を毎度毎度丸ごと作り替えるととんでもなくパフォーマンスが落ちてしまうのが容易に想像できると思います。  
-そこで、せっかく Virtual DOM を持っているわけですから、画面を描画する際に、前の Virtual DOM と比較して差分があったところだけを DOM 操作で書き換えるような実装をしたくなります。  
-さて、今回のメインテーマはこれです。
+The problem is that only the part that changes when increment is executed is the `count: ${state.count}` part, but in renderVNode, all the DOM elements are removed and recreated from scratch. This feels very wasteful. \
+Although it seems to be working fine for now because it is still small, you can easily imagine that performance will be greatly reduced if you have to recreate a complex DOM from scratch every time you develop a web application. \
+Therefore, since we already have a Virtual DOM, we want to implement an implementation that compares the current Virtual DOM with the previous one and only updates the parts where there are differences using DOM operations. \
+Now, this is the main theme of this chapter.
 
-やりたいことをソースコードベースで見てみましょう。
-上記のようなコンポーネントがあったとき、render 関数の戻り値は以下のような Virtual DOM になっています。
-初回のレンダリング時には count は 0 なので以下のようになります。
+Let's see what we want to do in the source code. When we have a component like the one above, the return value of the render function becomes a Virtual DOM like the following. At the time of the initial rendering, the count is 0, so it looks like this:
 
 ```ts
 const vnode = {
@@ -56,13 +52,13 @@ const vnode = {
     {
       type: "button",
       { onClick: increment },
-      children: ["increment"]
+      ["increment"]
     }
   ]
 }
 ```
 
-この vnode を持っておいて、次のレンダリングの時の vnode はまた別で持つことにしましょう。以下は 1 回目のボタンがクリックされた時の vnode です。
+Let's keep this vnode and have another vnode for the next rendering. The following is the vnode when the first button is clicked:
 
 ```ts
 const nextVnode = {
@@ -72,19 +68,19 @@ const nextVnode = {
     {
       type: "p",
       props: {},
-      children: [`count: 1`] // ここだけ更新したいなぁ〜
+      children: [`count: 1`] // Only want to update this part
     },
     {
       type: "button",
       { onClick: increment },
-      children: ["increment"]
+      ["increment"]
     }
   ]
 }
 ```
 
-今、vnode と、nextVnode の 2 つを持っている状態で、画面は vnode の状態です(nextVnode になる前)
-これら二つを patch という関数に渡してあげて、差分だけレンダリングするようにしたいです。
+Now, with these two vnodes, the screen is in the state of vnode (before it becomes nextVnode). \
+We want to pass these two to a function called patch and render only the differences.
 
 ```ts
 const vnode = {...}
@@ -92,13 +88,13 @@ const nextVnode = {...}
 patch(vnode, nextVnode, container)
 ```
 
-先に関数名を紹介してしまいましたが、この差分レンダリングは「パッチ」と呼ばれます。差分検出処理 (reconciliation)と呼ばれることもあるようです。
-このように 2 つの Virtual DOM を利用することで効率的に画面の更新を行うことができます。
+I introduced the function name earlier, but this differential rendering is called "patch". \
+It is also sometimes called "reconciliation". By using these two Virtual DOMs, you can efficiently update the screen.
 
-## patch 関数の実装を行う前に
+## Before implementing the patch function
 
-本筋とは関係ないのですが、ちょっとここらで軽いリファクタを行なっておきます。(今から話すことにとって都合がいいので)
-vnode.ts に createVNode と言う関数を作っておいて、h 関数からはそれを呼ぶようにしておきましょう。
+This is not directly related to the main topic, but let's do a slight refactoring here (because it is convenient for what we are going to talk about next). \
+Let's create a function called createVNode in vnode.ts and make h function call it.
 
 ```ts
 export function createVNode(
@@ -106,12 +102,12 @@ export function createVNode(
   props: VNodeProps | null,
   children: unknown,
 ): VNode {
-  const vnode: VNode = { type, props, children }
+  const vnode: VNode = { type, props, children: [] }
   return vnode
 }
 ```
 
-h 関数も変更
+Change h function as well.
 
 ```ts
 export function h(
@@ -123,10 +119,11 @@ export function h(
 }
 ```
 
-ここからが本筋なのですが、これまで VNode が持つ子要素の型は`(Vnode | string)[]`としてきたのですが、Text を文字列として扱い続けるのもなんなので、VNode に統一してみようと思います。
-Text も実際にはただの文字列ではなく、HTML の TextElement として存在するので、文字列以上の情報を含みます。それらの周辺情報を扱うためにも VNode として扱いたいわけです。
-具体的には、Text と言う Symbol を用いて、VNode の type として持たせましょう。
-例えば、`"hello"`のようなテキストがあった時、
+Now, let's get to the main point. Until now, the type of the small element that VNode has has been `(Vnode | string)[]`, but it is not enough to treat Text as a string, so let's try to unify it as VNode. \
+Text is not just a string, but it exists as an HTML TextElement, so it contains more information than just a string. \
+We want to treat it as a VNode in order to handle the surrounding information. \
+Specifically, let's use the symbol Text to have it as the type of VNode. \
+For example, when there is a text like `"hello"`,
 
 ```ts
 {
@@ -136,10 +133,9 @@ Text も実際にはただの文字列ではなく、HTML の TextElement とし
 }
 ```
 
-としてあげる感じです。
+is the representation.
 
-また、ここで一つ注意点なのは、h 関数を実行した時は従来通りの表現をして、上記のように Text を表現するのは、render 関数内で normalize と言う関数を噛ませて変換することにします。  
-これは本家の Vue.js に合わせてそうすることにします。
+Also, one thing to note here is that when h function is executed, we will continue to use the conventional expression, and we will convert it by applying a function called normalize in the render function to represent Text as mentioned above. This is done to match the original Vue.js.
 
 `~/packages/runtime-core/vnode.ts`;
 
@@ -158,35 +154,38 @@ export interface VNodeProps {
   [key: string]: any;
 }
 
-// normalize後の型
+// Type after normalization
 export type VNodeNormalizedChildren = string | VNodeArrayChildren;
 export type VNodeArrayChildren = Array<VNodeArrayChildren | VNodeChildAtom>;
 
 export type VNodeChild = VNodeChildAtom | VNodeArrayChildren;
 type VNodeChildAtom = VNode | string;
 
-export function createVNode(..){..} // 省略
+export function createVNode(..){..} // omitted
 
-// normalize 関数を実装。(renderer.tsで使う)
+// Implement the normalize function (used in renderer.ts)
 export function normalizeVNode(child: VNodeChild): VNode {
   if (typeof child === "object") {
     return { ...child } as VNode;
   } else {
-    // stringだった場合に先ほど紹介した扱いたい形に変換する
+    // Convert string to the desired form introduced earlier
     return createVNode(Text, null, String(child));
   }
 }
 ```
 
-これで Text も VNode として扱えるようになりました。
+Now Text can be treated as a VNode.
 
-## patch 関数の設計
+## Design of the patch function
 
-まず、patch 関数の設計をコードベースで見てみましょう。(実装フェーズはまた別であるのでここではまだ実装しなくていいです。理解だけ。)  
-patch 関数でやりたいことは 2 つの vnode の比較なので、便宜上それぞれ vnode1, vnode2 とするのですが、初回は vnode1 がありません。  
-つまり、patch 関数での処理は「初回(vnode2 から dom を生成)」と、「vnode1 と vnode2 の差分を更新」の処理に分かれます。  
-これらの処理をそれぞれ「mount」と「patch」と名付けることにします。  
-そしてそれらは ElementNode と TextNode それぞれで行うようにします。(それぞれの mount と patch を process と言う名前でまとめてます。)
+First, let's take a look at the design of the patch function in the codebase. \
+(We don't need to implement it here, just understand it.) \
+The patch function compares two vnodes, vnode1 and vnode2. However, vnode1 does not exist initially. \
+Therefore, the patch function is divided into two processes: "initial (generating dom from vnode2)" and "updating the difference between vnode1 and vnode2". \
+These processes are named "mount" and "patch" respectively. \
+And they are performed separately for ElementNode and TextNode (combined as "process" with the name "mount" and "patch" for each).
+
+![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
 
 ```ts
 const patch = (
@@ -223,10 +222,11 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 }
 ```
 
-## 実際に実装してみる
+## Actual implementation
 
-ここから実際に Virtual DOM の patch を実装していきます。  
-まず、Element にしろ、Text にしろ、マウントした段階で vnode に実際の DOM への参照を持たせておきたいので、vnode の el というプロパティを持たせておきます。
+Now let's actually implement the patch function for the Virtual DOM. \
+First, we want to have a reference to the actual DOM in the vnode when it is mounted, whether it is an Element or a Text.\
+So we add the "el" property to the vnode.
 
 `~/packages/runtime-core/vnode.ts`
 
@@ -239,9 +239,8 @@ export interface VNode<HostNode = RendererNode> {
 }
 ```
 
-それではここからは`~/packages/runtime-core/renderer.ts`です。  
-createRenderer 関数の中に実装していきましょう。
-renderVNode 関数は消してしまいます。
+Now let's move on to `~/packages/runtime-core/renderer.ts`. \
+We will implement it inside the `createRenderer` function and remove the `renderVNode` function.
 
 ```ts
 export function createRenderer(options: RendererOptions) {
@@ -260,7 +259,7 @@ export function createRenderer(options: RendererOptions) {
 }
 ```
 
-processElement の mountElement から実装していきます。
+Let's start implementing from `processElement` and `mountElement`.
 
 ```ts
 const processElement = (
@@ -292,8 +291,8 @@ const mountElement = (vnode: VNode, container: RendererElement) => {
 }
 ```
 
-要素なので、当然子要素のマウントも必要です。
-ここで、先ほど作った normalize 関数を噛ませておきましょう。
+Since it is an element, we also need to mount its children. \
+Let's use the `normalize` function we created earlier.
 
 ```ts
 const mountChildren = (children: VNode[], container: RendererElement) => {
@@ -304,9 +303,10 @@ const mountChildren = (children: VNode[], container: RendererElement) => {
 }
 ```
 
-ここまでで要素のマウントは実装できました。  
-次は Text のマウントからやりましょう。と、言ってもこちらはただ DOM 操作をするだけです。  
-設計の説明では mountText と patchText のように関数に分けてましたが、たいした処理もなく、今後もそれほど複雑にならないはずなので直接書いてしまいます。
+With this, we have implemented the mounting of elements. \
+Next, let's move on to mounting Text. \
+However, this is just a simple DOM operation. \
+In the design explanation, we divided it into `mountText` and `patchText` functions, but since there is not much processing and it is not expected to become more complex in the future, let's write it directly.
 
 ```ts
 const processText = (
@@ -322,15 +322,14 @@ const processText = (
 }
 ```
 
-一旦ここまでで、初回のマウントはできるようになったはずなので、render 関数で patch 関数を使用して playground で試してみましょう!  
-今まで、createAppAPI の mount に書いていた処理を一部 render 関数に移植して、２つの vnode を保持できるようにします。  
-具体的には。render 関数に rootComponent を渡して、その中で ReactiveEffect の登録等を行うように変更します。
+Now, with the mounting of the initial render completed, let's move some of the processing from the `mount` function in `createAppAPI` to the `render` function so that we can hold two vnodes. \
+Specifically, we pass `rootComponent` to the `render` function and perform ReactiveEffect registration inside it.
 
 ```ts
 return function createApp(rootComponent) {
   const app: App = {
     mount(rootContainer: HostElement) {
-      // rootComponentを渡すだけに
+      // Just pass rootComponent
       render(rootComponent, rootContainer)
     },
   }
@@ -354,11 +353,11 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-ここまでできたら playground で描画できるかどうか試してみましょう！
+Now, let's try to render in the playground to see if it works!
 
-まだ、patch の処理は行なっていないので画面の更新は行われません。
+Since we haven't implemented the patch function yet, the screen won't be updated.
 
-と、言うことで引き続き patch の処理を書いていきましょう。
+So, let's continue writing the patch function.
 
 ```ts
 const patchElement = (n1: VNode, n2: VNode) => {
@@ -369,7 +368,7 @@ const patchElement = (n1: VNode, n2: VNode) => {
   patchChildren(n1, n2, el)
 
   for (const key in props) {
-    if (props[key] !== n1.props[key]) {
+    if (props[key] !== n1.props?.[key]) {
       hostPatchProp(el, key, props[key])
     }
   }
@@ -386,7 +385,7 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 }
 ```
 
-Text も同様に。
+The same goes for Text nodes.
 
 ```ts
 const processText = (
@@ -397,7 +396,7 @@ const processText = (
   if (n1 == null) {
     hostInsert((n2.el = hostCreateText(n2.children as string)), container)
   } else {
-    // patchの処理を追加
+    // Add patch logic
     const el = (n2.el = n1.el!)
     if (n2.children !== n1.children) {
       hostSetText(el, n2.children as string)
@@ -406,13 +405,14 @@ const processText = (
 }
 ```
 
-※ patchChildren に関して、本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけないのですが、今回は小さく Virtual DOM を実装するのでその辺の実用性については触れません。  
-そのあたりをやりたい方は Basic Virtual DOM 部門で説明するのでぜひそちらをご覧ください。ここでは Virtual DOM の実装雰囲気であったり、役割が理解できるところまでの理解を目指します。
+※ Regarding patchChildren, normally we need to handle dynamic-length child elements by adding key attributes, but since we are implementing a small Virtual DOM, we won't cover the practicality of that here. \
+If you are interested, please refer to the Basic Virtual DOM section. \
+Here, we aim to understand the implementation and role of Virtual DOM up to a certain extent.
 
-さて、これで差分レンダリングができるようになったので、playground を見てみましょう。
+Now that we can perform diff rendering, let's take a look at the playground.
 
-![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_rendering.png)
+![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
 
-これで Virtual DOM を利用したパッチが実装できました!!!!! 祝
+We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

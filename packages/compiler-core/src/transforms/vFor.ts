@@ -1,15 +1,15 @@
 import {
-  DirectiveNode,
-  ElementNode,
-  ExpressionNode,
-  ForCodegenNode,
-  ForIteratorExpression,
-  ForNode,
-  ForRenderListExpression,
+  type DirectiveNode,
+  type ElementNode,
+  type ExpressionNode,
+  type ForCodegenNode,
+  type ForIteratorExpression,
+  type ForNode,
+  type ForRenderListExpression,
   NodeTypes,
-  SimpleExpressionNode,
-  SourceLocation,
-  VNodeCall,
+  type SimpleExpressionNode,
+  type SourceLocation,
+  type VNodeCall,
   createCallExpression,
   createFunctionExpression,
   createSimpleExpression,
@@ -17,7 +17,7 @@ import {
 } from '../ast'
 import { FRAGMENT, RENDER_LIST } from '../runtimeHelpers'
 import {
-  TransformContext,
+  type TransformContext,
   createStructuralDirectiveTransform,
 } from '../transform'
 import { getInnerRange } from '../utils'

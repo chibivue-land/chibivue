@@ -1,14 +1,14 @@
-# イベント修飾子
+# Event Modifiers
 
-## 今回やること
+## What to do this time
 
-前回、v-on ディレクティブを実装したので続いてはイベント修飾子を実装します。
+Since we implemented the v-on directive last time, let's now implement event modifiers.
 
-Vue.js には preventDefault や stopPropagation に対応する修飾子があります。
+Vue.js has modifiers that correspond to preventDefault and stopPropagation.
 
-https://ja.vuejs.org/guide/essentials/event-handling.html#event-modifiers
+https://vuejs.org/guide/essentials/event-handling.html
 
-今回は以下のような開発者インターフェースを目指してみましょう。
+This time, let's aim for the following developer interface.
 
 ```ts
 import { createApp, defineComponent, ref } from 'chibivue'
@@ -17,7 +17,7 @@ const App = defineComponent({
   setup() {
     const inputText = ref('')
 
-    const buffer = ref('');
+    const buffer = ref('')
     const handleInput = (e: Event) => {
       const target = e.target as HTMLInputElement
       buffer.value = target.value
@@ -25,9 +25,9 @@ const App = defineComponent({
     const submit = () => {
       inputText.value = buffer.value
       buffer.value = ''
-    };
+    }
 
-    return { inputText, buffer, handleInput,fun submit }
+    return { inputText, buffer, handleInput, submit }
   },
 
   template: `<div>
@@ -40,28 +40,28 @@ const App = defineComponent({
     </form>
     <p>inputText: {{ inputText }}</p>
 </div>`,
-});
+})
 
 const app = createApp(App)
 
 app.mount('#app')
 ```
 
-特に、以下の部分に注目してください。
+In particular, please pay attention to the following part.
 
 ```html
 <form @submit.prevent="submit"></form>
 ```
 
-`@submit.prevent` という記述があります。これは submit イベントのハンドラを呼び出す際に、`preventDefault` を実行するという意味です。
+There is a description of `@submit.prevent`. This means that when calling the submit event handler, `preventDefault` is executed.
 
-この `.prevent` を記述しない場合、submit 時にページがリロードされてしまいます。
+If you don't include `.prevent`, the page will be reloaded when submitting.
 
-## AST と Parser の実装
+## Implementation of AST and Parser
 
-テンプレートの新しいシンタックスを追加するわけなので、Parser と AST の変更が必要になります。
+Since we are adding a new syntax to the template, changes to the Parser and AST are necessary.
 
-まずは AST を見てみましょう。これはとっても簡単で、`DirectiveNode` に `modifiers` というプロパティ(string の配列)を追加するだけです。
+First, let's take a look at the AST. It's very simple, just add a property called `modifiers` (an array of strings) to `DirectiveNode`.
 
 ```ts
 export interface DirectiveNode extends Node {
@@ -69,13 +69,13 @@ export interface DirectiveNode extends Node {
   name: string
   exp: ExpressionNode | undefined
   arg: ExpressionNode | undefined
-  modifiers: string[] // ここを追加
+  modifiers: string[] // Add this
 }
 ```
 
-これに合わせて Parser も実装します。
+Let's implement the Parser accordingly.
 
-実は本家から拝借した正規表現にもう含まれているので、こちらの実装もとても簡単です。
+Actually, it's very easy because it's already included in the regular expression borrowed from the original source.
 
 ```ts
 function parseAttribute(
@@ -85,7 +85,7 @@ function parseAttribute(
   // .
   // .
   // .
-  const modifiers = match[3] ? match[3].slice(1).split('.') : [] // match 結果から修飾子を取り出す
+  const modifiers = match[3] ? match[3].slice(1).split('.') : [] // Extract modifiers from the match result
   return {
     type: NodeTypes.DIRECTIVE,
     name: dirName,
@@ -97,62 +97,62 @@ function parseAttribute(
     },
     loc,
     arg,
-    modifiers, // return に含める
+    modifiers, // Include in the return
   }
 }
 ```
 
-はい。これで AST と Parser の実装は完了です。
+Yes. With this, the implementation of AST and Parser is complete.
 
 ## compiler-dom/transform
 
-ここで少し今のコンパイラの構成をおさらいしてみます。
+Let's review the current compiler architecture a little.
 
-現状は以下のような構成になっています。
+The current configuration is as follows.
 
-![50-027-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
+![50-027-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
 
-compiler-core と compiler-dom のそれぞれの役割を改めて理解してみると、  
-compiler-core は DOM に依存しないコンパイラの機能を提供するもので、AST の生成や、その変換を行います。
+When you understand the roles of compiler-core and compiler-dom again,  
+compiler-core provides compiler functionality that does not depend on the DOM, such as generating and transforming AST.
 
-これまでに、v-on ディレクティブなどを compiler-core に実装しましたが、これは`@click="handle"` という記述を `{ onClick: handle }` というオブジェクトに変換しているだけで、  
-DOM に依存するような処理は行っていません。
+So far, we have implemented v-on directive in compiler-core, but this is just converting the notation `@click="handle"` to an object `{ onClick: handle }`,  
+It does not perform any processing that depends on the DOM.
 
-ここで、今回実装したいものを見てみましょう。  
-今回は実際に `e.preventDefault()` や `e.stopPropagation()` を実行するコードを生成したいです。  
-これらは大きく DOM に依存してしまいます。
+Now, let's take a look at what we want to implement this time.  
+This time, we want to generate code that actually executes `e.preventDefault()` or `e.stopPropagation()`.  
+These depend heavily on the DOM.
 
-そこで、compiler-dom 側にも transformer を実装していきます。 DOM に関連する transform はここに実装して行くことにしましょう。
+Therefore, we will also implement transformers on the compiler-dom side. We will implement transformers related to the DOM here.
 
-compiler-dom の方に `transformOn` を実装していきたいのですが、runtime-core の `transformOn` との兼ね合いを考える必要があります。  
-兼ね合いというのは、「compiler-core の transform も実行しつつ、compiler-dom で実装した transform を実装するにはどうすればいいのか?」 ということです。
+In compiler-core, we need to consider the interaction between the transform in compiler-core and the transform implemented in compiler-dom.  
+The interaction is how to implement the transform implemented in compiler-dom while executing the transform in compiler-core.
 
-そこでまず、 compiler-core の方に実装してある `DirectiveTransform` という interface に手を加えていきます。
+So first, let's modify the `DirectiveTransform` interface implemented in compiler-core.
 
 ```ts
 export type DirectiveTransform = (
   dir: DirectiveNode,
   node: ElementNode,
   context: TransformContext,
-  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult, // 追加
+  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult, // Added
 ) => DirectiveTransformResult
 ```
 
-augmentor というものを追加してみました。  
-まぁ、これはただのコールバック関数です。 `DirectiveTransform` の interface としてコールバックを受け取れるようにして、transform 関数を拡張可能にしています。
+I added `augmentor`.  
+Well, this is just a callback function. By allowing callbacks to be received as part of the `DirectiveTransform` interface, we make the transform function extensible.
 
-compiler-dom の方では、compiler-core で実装した transformer をラップした transformer の実装をしていくようにします。
+In compiler-dom, we will implement a transformer that wraps the transformers implemented in compiler-core.
 
 ```ts
-// 実装イメージ
+// Implementation example
 
-// compiler-dom側の実装
+// Implementation on the compiler-dom side
 
 import { transformOn as baseTransformOn } from 'compiler-core'
 
 export const transformOn: DirectiveTransform = (dir, node, context) => {
   return baseTransformOn(dir, node, context, () => {
-    /** ここに compiler-dom の独自の実装 */
+    /** Implement compiler-dom's own implementation here */
     return {
       /** */
     }
@@ -160,23 +160,21 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 }
 ```
 
-そして、この compiler-dom 側で実装した `transformOn` を compiler のオプションとして渡してあげれば OK です。  
-以下のような関係図です。  
-全ての transformer を compiler-dom から渡すのではなく、デフォルトの実装は compiler-core に実装しておき、オプションとしてあと乗せ出来るような構成にするイメージです。
+And if you pass this `transformOn` implemented on the compiler-dom side as an option to the compiler, it will be OK.  
+Here is a diagram of the relationship.  
+Instead of passing all transformers from compiler-dom, the default implementation is implemented in compiler-core, and the configuration allows additional transformers to be added.
 
-![50-027-new-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
+![50-027-new-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
 
-これで compiler-core が DOM に依存せず、compiler-dom 側で DOM に依存した処理を実装しつつ compiler-core の transformer を実行できるようになります。
+With this, compiler-core can execute transformers without depending on the DOM, and compiler-dom can implement processing that depends on the DOM while executing the transformers in compiler-core.
 
-## transformer の実装
+## Implementation of the transformer
 
-それでは、compiler-dom 側の transformer を実装していきます。
+Now, let's implement the transformer on the compiler-dom side.
 
-どういう風に transform していきましょうか。とりあえず、一概に '修飾子' といってもいろんな種類のものがあるので、  
-今後のことも考えて分類わけできるようにしておきましょう。
+How should we transform it? For now, since there are various types of modifiers even if we simply say "modifier," let's classify them so that we can consider future possibilities.
 
-今回実装するのは 'イベント修飾子' です。
-とりあえず、この eventModifiers として取り出してみましょう。
+This time, we will implement the "event modifier". Let's start by extracting it as `eventModifiers`.
 
 ```ts
 const isEventModifier = makeMap(
@@ -198,8 +196,7 @@ const resolveModifiers = (modifiers: string[]) => {
 }
 ```
 
-eventModifiers を抽出できたところでこれをどう使いましょうか。
-結論から言うと、これは runtime-dom 側に withModifiers というヘルパー関数を実装し、その関数を呼び出す式に transform していきます。
+Now that we have extracted `eventModifiers`, how should we use it? In conclusion, we will implement a helper function called `withModifiers` on the runtime-dom side and transform it into an expression that calls that function.
 
 ```ts
 // runtime-dom/runtimeHelpers.ts
@@ -230,17 +227,17 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 }
 ```
 
-これで transform 側の実装は概ね終わりです。
+With this, the implementation of the transformer is almost complete.
 
-あとはこの withModifiers を compiler-dom 側で実装していきます。
+Now let's implement `withModifiers` on the compiler-dom side.
 
-## withModifiers の実装
+## Implementation of `withModifiers`
 
-runtime-dom/directives/vOn.ts に実装を進めていきます。
+Let's proceed with the implementation in runtime-dom/directives/vOn.ts.
 
-実装はとてもシンプルです。
+The implementation is very simple.
 
-イベント修飾子のガード関数を実装して、配列で受け取った修飾子の分だけ実行するような実装をするだけです。
+Implement a guard function for event modifiers and implement it so that it runs as many times as the number of modifiers received in an array.
 
 ```ts
 const modifierGuards: Record<string, (e: Event) => void | boolean> = {
@@ -260,20 +257,19 @@ export const withModifiers = (fn: Function, modifiers: string[]) => {
 }
 ```
 
-これで実装はおしまいです。
+That's the end of the implementation.
 
-動作を確認してみましょう！  
-ボタンを押した際に、ページがリロードされずに input の内容が画面に反映されていれば OK です！
+Let's check the operation! If the input content is reflected on the screen without the page being reloaded when the button is pressed, it's OK!
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
 
-## その他の修飾子
+## Other Modifiers
 
-さて、ここまできたら他の修飾子も実装してみましょう。
+Now that we've come this far, let's implement other modifiers.
 
-基本的な実装方針は同じです。
+The basic implementation approach is the same.
 
-修飾子を以下のように分類してみましょう。
+Let's classify the modifiers as follows:
 
 ```ts
 const keyModifiers = []
@@ -281,16 +277,14 @@ const nonKeyModifiers = []
 const eventOptionModifiers = []
 ```
 
-あとはこれに必要な map を生成して、resolveModifiers でこれらに分類できれば OK です。
+Then, generate the necessary maps and classify them with `resolveModifiers`.
 
-残り気をつけるべき点は 2 点で、
+The two points to be careful about are:
 
-- 修飾子名と実際の DOM API の名前の差異
-- 特定のキーイベントで実行する helper 関数を新たに実装 (withKeys)
+- The difference between the modifier name and the actual DOM API name
+- Implementing a new helper function to execute with specific key events (withKeys)
 
-です。
+Please try implementing while reading the actual code!
+If you've come this far, you should be able to do it.
 
-この辺りは実際にコードを読みながら実装してみてください！  
-ここまできた皆さんなら出来るはずです。
-
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)

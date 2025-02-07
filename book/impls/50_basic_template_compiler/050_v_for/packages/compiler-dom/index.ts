@@ -1,5 +1,5 @@
-import { CompilerOptions, baseCompile, baseParse } from '../compiler-core'
-import { DirectiveTransform } from '../compiler-core/transform'
+import { type CompilerOptions, baseCompile, baseParse } from '../compiler-core'
+import type { DirectiveTransform } from '../compiler-core/transform'
 import { transformOn } from './transforms/vOn'
 
 const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {

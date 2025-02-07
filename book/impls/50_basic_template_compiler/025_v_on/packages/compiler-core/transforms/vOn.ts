@@ -1,14 +1,14 @@
 import {
-  DirectiveNode,
-  ExpressionNode,
+  type DirectiveNode,
+  type ExpressionNode,
   NodeTypes,
-  SimpleExpressionNode,
+  type SimpleExpressionNode,
   createCompoundExpression,
   createObjectProperty,
   createSimpleExpression,
 } from '../ast'
 import { TO_HANDLER_KEY } from '../runtimeHelpers'
-import { DirectiveTransform, DirectiveTransformResult } from '../transform'
+import type { DirectiveTransform, DirectiveTransformResult } from '../transform'
 import { isMemberExpression } from '../utils'
 import { processExpression } from './transformExpression'
 

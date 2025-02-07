@@ -161,7 +161,7 @@ function createIterableMethod(method: string | symbol) {
 }
 
 function createReadonlyMethod(): Function {
-  return function (this: CollectionTypes, ...args: unknown[]) {
+  return function (this: CollectionTypes, ..._args: unknown[]) {
     return this
   }
 }

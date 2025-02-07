@@ -4,7 +4,7 @@
     "outDir": "temp",
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["DOM"],
+    "lib": ["DOM", "ES2020"],
     "strict": true,
     "paths": {
       "@chibivue/*": ["./packages/*/src"],
@@ -16,7 +16,7 @@
         "./packages/@extensions/vite-plugin-chibivue/src"
       ]
     },
-    "types": ["vitest/importMeta"],
+    "types": ["vitest/globals"],
     "moduleResolution": "Bundler",
     "allowJs": true,
     "esModuleInterop": true

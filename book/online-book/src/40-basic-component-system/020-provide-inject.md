@@ -1,12 +1,12 @@
-# Provide/Inject の実装
+# Implementation of Provide/Inject
 
-## Provide/Inject を実装しよう
+## Let's implement Provide/Inject
 
-Provide と Inject の実装です。こちらも実装は至ってシンプルです。  
-基本的なコンセプトとしては、 ComponentInternalInstance に provides (provide されたデータを格納する場所)と、親コンポーネントのインスタンスを保持しておいて、データを受け継ぐだけです。
+This is the implementation of Provide and Inject. The implementation is quite simple as well.  
+The basic concept is to have a place in ComponentInternalInstance to store the provided data (provides) and to keep the instance of the parent component to inherit the data.
 
-一点、注意する点としては、provide のエントリポイントは 2 種類あるということで、一つはコンポーネントの setup 時という想像のつきやすいものですが、  
-もう一つは App の provide を呼ぶケースです。
+One thing to note is that there are two entry points for provide. One is during the setup of the component, which is easy to imagine,  
+and the other is when calling provide on the App.
 
 ```ts
 const app = createApp({
@@ -14,24 +14,24 @@ const app = createApp({
     //.
     //.
     //.
-    provide('key', someValue) // これはコンポーネントから provide するケース
+    provide('key', someValue) // This is a case where provide is called from the component
     //.
     //.
   },
 })
 
-app.provide('key2', someValue2) // App に provide
+app.provide('key2', someValue2) // Provide on the App
 ```
 
-さて、app で provide したものはどこに保持しておきましょう ? app はコンポーネントではないですからね。困りました。
+Now, where should we store what was provided by app? Since app is not a component, it's a problem.
 
-答えを言ってしまうと、app のインスタンスに AppContext というオブジェクトを持つことにして、provides というオブジェクトをこの中で保持するようにします。
+To give you the answer, let's say that the app instance has an object called AppContext and we will store the provides object in it.
 
-この、AppContext には将来的にグローバルコンポーネントやカスタムディレクティブの設定を持たせます。
+In the future, we will add global component and custom directive settings to this AppContext.
 
-さて、ここまでで説明するべきことは揃ったので、概ね以下のようなコードが動くように実装してみましょう！
+Now that we have explained everything so far, let's implement the code so that it works as follows!
 
-※ 想定しているシグネチャ
+※ Assumed signatures
 
 ```ts
 export interface InjectionKey<_T> extends Symbol {}
@@ -76,5 +76,5 @@ const LoggerKey = Symbol() as InjectionKey<Logger>
 app.provide(LoggerKey, window.console.log)
 ```
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/020_provide_inject)
+Source code so far:  
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/020_provide_inject)

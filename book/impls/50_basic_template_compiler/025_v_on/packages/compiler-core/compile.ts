@@ -1,7 +1,11 @@
 import { generate } from './codegen'
-import { CompilerOptions } from './options'
+import type { CompilerOptions } from './options'
 import { baseParse } from './parse'
-import { DirectiveTransform, NodeTransform, transform } from './transform'
+import {
+  type DirectiveTransform,
+  type NodeTransform,
+  transform,
+} from './transform'
 import { transformElement } from './transforms/transformElement'
 import { transformExpression } from './transforms/transformExpression'
 import { transformBind } from './transforms/vBind'

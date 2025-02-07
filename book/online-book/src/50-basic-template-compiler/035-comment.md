@@ -1,6 +1,6 @@
-# コメントアウトを実装する
+# Implementing Comment Out
 
-## 目指す開発者インタフェース
+## Target Developer Interface
 
 ```ts
 import { createApp, defineComponent } from 'chibivue'
@@ -25,18 +25,18 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-特に説明は必要ないでしょう。
+There is no need for further explanation.
 
-## AST とパーサの実装
+## Implementation of AST and Parser
 
-コメントアウトをどう実装するかですが、一見 パースするときに無視してしまえばいい感じもします。
+As for how to implement comment out, at first glance, it seems that we can simply ignore it when parsing.
 
-しかし、Vue のコメントアウトは、template に記述したものがそのまま HTML として出力されるようになっています。
+However, in Vue, comment outs written in the template are output as HTML as they are.
 
-つまりはコメントアウトもレンダリングする必要があるので、VNode 上での表現が必要かつコンパイラもそのコードを出力する必要があり、  
-その上コメントノードを生成する操作も必要になります。
+In other words, comment outs also need to be rendered, so it is necessary to have a representation on the VNode and the compiler also needs to output that code.
+In addition, an operation to generate a comment node is also necessary.
 
-まずは AST とパーサを実装していきましょう。
+First, let's implement the AST and parser.
 
 ### AST
 
@@ -64,7 +64,7 @@ export type TemplateChildNode =
 
 ### Parser
 
-エラーはとりあえず throw するようにします。
+For now, let's throw an error.
 
 ```ts
 function parseChildren(
@@ -131,9 +131,9 @@ function parseComment(context: ParserContext): CommentNode {
 }
 ```
 
-## コードを生成する
+## Generating Code
 
-runtime-core 側に Comment を表現する VNode を追加します。
+Add a VNode that represents Comment to the runtime-core.
 
 ```ts
 export const Comment = Symbol()
@@ -145,9 +145,9 @@ export type VNodeTypes =
   | typeof Fragment
 ```
 
-createCommentVNode という関数を実装し、helper として公開します。
+Implement a function called createCommentVNode and expose it as a helper.
 
-codegen ではこの createCommentVNode を呼び出すコードを生成します。
+In codegen, generate the code that calls createCommentVNode.
 
 ```ts
 export function createCommentVNode(text: string = ''): VNode {
@@ -180,13 +180,13 @@ function genComment(node: CommentNode, context: CodegenContext) {
 }
 ```
 
-## レンダリングする
+## Rendering
 
-renderer の実装をやっていきます。
+Let's implement the renderer.
 
-いつものように patch で Comment の場合を分岐し、mount 時にコメントを生成します。
+As usual, branch the case of Comment in patch and generate a comment when mounting.
 
-patch に関しては、今回は静的なものなので、特に何も行いません。(コード上はそのまま代入するようにしています。)
+Regarding the patch, since it's static this time, I won't be doing anything special. (In the code, it's just set to assign as is.)
 
 ```ts
 const patch = (
@@ -214,7 +214,7 @@ const processCommentNode = (
 ) => {
   if (n1 == null) {
     hostInsert(
-      (n2.el = hostCreateComment((n2.children as string) || '')), // hostCreateComment を nodeOps 側に実装しましょう！
+      (n2.el = hostCreateComment((n2.children as string) || '')), // Implement hostCreateComment on the nodeOps side!
       container,
       anchor,
     )
@@ -224,6 +224,6 @@ const processCommentNode = (
 }
 ```
 
-さて、ここまででコメントアウトが実装できたはずです。実際に動作を確認してみましょう！
+Well, you should have implemented comment out by now. Let's check the actual operation!
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)
