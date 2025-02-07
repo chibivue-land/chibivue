@@ -23,7 +23,7 @@ Currently, I am still in the process of implementation, but after implementation
 
 (For now, I plan to post Japanese first.)
 
-[example](https://github.com/Ubugeeei/chibivue/tree/main/example/app)
+[example](https://github.com/Ubugeeei/chibivue/tree/main/examples/app)
 
 # 👜 Package Manager
 
