@@ -18,7 +18,9 @@ Basic Component System のスロットの実装で，すでにランタイムの
 ```vue
 <!-- App.vue -->
 <script>
+import { ref } from 'chibivue'
 import Comp from './Comp.vue'
+
 export default {
   components: {
     Comp,
