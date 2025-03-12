@@ -110,7 +110,7 @@ importers:
         version: 8.26.0(eslint@9.22.0)(typescript@5.7.3)
       vite-hyper-config:
         specifier: ^0.6.0
-        version: 0.6.0(@types/node@22.13.10)(tsx@4.19.3)(vite@6.2.1(@types/node@22.13.10)(tsx@4.19.3))
+        version: 0.6.1(@types/node@22.13.10)(tsx@4.19.3)(vite@6.2.1(@types/node@22.13.10)(tsx@4.19.3))
       vite-node:
         specifier: ^3.0.0
         version: 3.0.8(@types/node@22.13.10)(tsx@4.19.3)
@@ -3712,8 +3712,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite-hyper-config@0.6.0:
-    resolution: {integrity: sha512-Jkb1+Fqo3rrztBUlj/4qU5uCwH3NkJy4t5fww+4KhuG/vIv8TxuQlWUU29CAWuJw7/7hu8CS6fGQtO/SPPe8Eg==}
+  vite-hyper-config@0.6.1:
+    resolution: {integrity: sha512-LlGzJDSRoi79wm5OHsWjBbdaP1xISIAw68X7pn44o2x6hqSiL7SeKygDqLjGbn7vVw16Z+J41B0C+y7aDvBRhg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
@@ -7998,7 +7998,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-hyper-config@0.6.0(@types/node@22.13.10)(tsx@4.19.3)(vite@6.2.1(@types/node@22.13.10)(tsx@4.19.3)):
+  vite-hyper-config@0.6.1(@types/node@22.13.10)(tsx@4.19.3)(vite@6.2.1(@types/node@22.13.10)(tsx@4.19.3)):
     dependencies:
       cac: 6.7.14
       picocolors: 1.1.1
