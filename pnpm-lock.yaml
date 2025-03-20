@@ -89,7 +89,7 @@ importers:
         version: 4.36.0
       rollup-plugin-dts:
         specifier: ^6.1.1
-        version: 6.1.1(rollup@4.36.0)(typescript@5.7.3)
+        version: 6.2.0(rollup@4.36.0)(typescript@5.7.3)
       textlint:
         specifier: ^14.0.0
         version: 14.5.0
@@ -3176,8 +3176,8 @@ packages:
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
 
-  rollup-plugin-dts@6.1.1:
-    resolution: {integrity: sha512-aSHRcJ6KG2IHIioYlvAOcEq6U99sVtqDDKVhnwt70rW6tsz3tv5OSjEiWcgzfsHdLyGXZ/3b/7b/+Za3Y6r1XA==}
+  rollup-plugin-dts@6.2.0:
+    resolution: {integrity: sha512-iciY+z46mUbN5nCxtJqVynwgrZZljM8of6k8Rg5rVAmu4VHDxexFPgoCa2wrJG5mMsHSGrJmjQPCM4vD0Oe3Lg==}
     engines: {node: '>=16'}
     peerDependencies:
       rollup: ^3.29.4 || ^4
@@ -7259,7 +7259,7 @@ snapshots:
 
   robust-predicates@3.0.2: {}
 
-  rollup-plugin-dts@6.1.1(rollup@4.36.0)(typescript@5.7.3):
+  rollup-plugin-dts@6.2.0(rollup@4.36.0)(typescript@5.7.3):
     dependencies:
       magic-string: 0.30.17
       rollup: 4.36.0
