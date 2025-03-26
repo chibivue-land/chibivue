@@ -3,7 +3,7 @@
   "version": "0.0.18",
   "type": "module",
   "author": "ubugeeei",
-  "packageManager": "pnpm@10.6.5",
+  "packageManager": "pnpm@10.7.0",
   "scripts": {
     "setup": "pnpm i && tsx tools/create-chibivue/main.ts",
     "setup:vue": "tsx tools/vue-playground/main.ts",
