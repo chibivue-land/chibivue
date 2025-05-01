@@ -59,6 +59,7 @@
     "vite-hyper-config": "^0.6.0",
     "vite-node": "^3.0.0",
     "vitepress": "^1.0.1",
+    "vitepress-plugin-llms": "^1.1.1",
     "vitepress-plugin-mermaid": "^2.0.16",
     "vitest": "^3.0.0"
   },
