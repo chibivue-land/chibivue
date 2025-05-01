@@ -87,6 +87,10 @@ export const sharedConfig = defineConfig({
     },
   },
   vite: {
-    plugins: [llmstxt()],
+    plugins: [
+      llmstxt({
+        ignoreFiles: ['index.md', 'ja/index.md'],
+      }),
+    ],
   },
 })
