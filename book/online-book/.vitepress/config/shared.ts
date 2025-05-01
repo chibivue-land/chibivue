@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 
 export const sharedConfig = defineConfig({
   title: 'The chibivue Book',
@@ -84,5 +85,8 @@ export const sharedConfig = defineConfig({
       copyright: `Copyright © 2023-${new Date().getFullYear()} ubugeeei`,
       message: 'Released under the MIT License.',
     },
+  },
+  vite: {
+    plugins: [llmstxt()],
   },
 })
