@@ -7,7 +7,7 @@
 這個實現在 [Refactor reactivity system to use version counting and doubly-linked list tracking](https://github.com/vuejs/core/pull/10397) 中引入，對性能改進做出了重大貢獻。  
 
 然而，對於第一次實現響應式系統的人來說，這可能有些難以理解。在本章中，我們將創建傳統（優化前）系統的簡化實現。\
-有關更接近當前實現的系統的更詳細解釋，請參考 [響應式優化](/30-basic-reactivity-system/005-reactivity-optimization)。  
+有關更接近當前實現的系統的更詳細解釋，請參考 [響應式優化](/zh-tw/30-basic-reactivity-system/005-reactivity-optimization)。
 
 另一個重大改進 [feat(reactivity): more efficient reactivity system](https://github.com/vuejs/core/pull/5912) 將在單獨的章節中介紹。  
 :::

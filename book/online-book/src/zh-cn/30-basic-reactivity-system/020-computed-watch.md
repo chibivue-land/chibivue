@@ -1,8 +1,8 @@
 # computed / watch api
 
 ::: warning
-这里解释的实现基于当前草拟的[响应式优化](/30-basic-reactivity-system/005-reactivity-optimization)之前的版本。  
-一旦[响应式优化](/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致。
+这里解释的实现基于当前草拟的[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)之前的版本。  
+一旦[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致。
 :::
 
 ## computed 的回顾（和实现）
