@@ -140,7 +140,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: '🚧 Reactivity Optimization',
-            link: '/30-basic-reactivity-system/005-reactivity-optimization.md',
+            link: '/30-basic-reactivity-system/005-reactivity-optimization',
           },
           {
             text: 'ref API',
@@ -237,6 +237,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           {
             text: 'Support for Slots (Definition)',
             link: '/50-basic-template-compiler/080-component-slot-outlet',
+          },
+          {
+            text: '🚧 Slots',
+            link: '/50-basic-template-compiler/080-slot',
           },
           {
             text: '🚧 Other Directives',
@@ -359,7 +363,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
               },
               {
                 text: 'Implement',
-                link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl.md',
+                link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl',
               },
             ],
           },

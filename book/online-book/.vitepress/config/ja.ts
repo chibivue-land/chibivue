@@ -137,7 +137,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: '🚧 Reactivity の最適化',
-            link: '/ja/30-basic-reactivity-system/005-reactivity-optimization.md',
+            link: '/ja/30-basic-reactivity-system/005-reactivity-optimization',
           },
           {
             text: 'ref api',
