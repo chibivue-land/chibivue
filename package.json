@@ -1,6 +1,6 @@
 {
   "name": "chibivue",
-  "version": "0.0.18",
+  "version": "0.1.0",
   "type": "module",
   "author": "ubugeeei",
   "packageManager": "pnpm@10.8.0",
