@@ -22,6 +22,7 @@
     "Parens",
     "RAWTEXT",
     "RCDATA",
+    "resetsix",
     "textlint",
     "tokei",
     "tseslint",
