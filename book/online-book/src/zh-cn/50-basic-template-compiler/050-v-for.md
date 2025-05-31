@@ -2,12 +2,12 @@
 
 ## 目标开发者接口
 
-现在，让我们继续指令的实现。这次，让我们尝试支持 v-for。
+现在，让我们继续指令的实现．这次，让我们尝试支持 v-for．
 
-嗯，我想对于那些之前使用过 Vue.js 的人来说，这是一个熟悉的指令。
+嗯，我想对于那些之前使用过 Vue.js 的人来说，这是一个熟悉的指令．
 
-v-for 有各种语法。
-最基本的是循环遍历数组，但你也可以循环遍历其他东西，如字符串、对象键、范围等等。
+v-for 有各种语法．
+最基本的是循环遍历数组，但你也可以循环遍历其他东西，如字符串，对象键，范围等等．
 
 https://vuejs.org/v2/guide/list.html
 
@@ -91,15 +91,15 @@ export default {
 </template>
 ```
 
-你可能会想，"我们突然要实现这么多东西？这不可能！"但不要担心，我会一步一步地解释。
+你可能会想，"我们突然要实现这么多东西？这不可能！"但不要担心，我会一步一步地解释．
 
 ## 实现方法
 
-首先，让我们大致思考一下我们想要如何编译它，并考虑在实现时可能遇到的困难点。
+首先，让我们大致思考一下我们想要如何编译它，并考虑在实现时可能遇到的困难点．
 
-首先，让我们看看期望的编译结果。
+首先，让我们看看期望的编译结果．
 
-基本结构并不那么困难。我们将在 runtime-core 中实现一个名为 renderList 的辅助函数来渲染列表，并将其编译为表达式。
+基本结构并不那么困难．我们将在 runtime-core 中实现一个名为 renderList 的辅助函数来渲染列表，并将其编译为表达式．
 
 示例 1：
 
@@ -151,15 +151,15 @@ h(
 )
 ```
 
-将来，作为 renderList 第一个参数传递的值预期不仅是数组，还可能是数字和对象。但是，现在让我们假设只期望数组。\_renderList 函数本身的实现可以理解为类似于 Array.prototype.map 的东西。至于除数组之外的值，你只需要在 \_renderList 中对它们进行规范化，所以现在让我们忘记它们（只关注数组）。
+将来，作为 renderList 第一个参数传递的值预期不仅是数组，还可能是数字和对象．但是，现在让我们假设只期望数组．\_renderList 函数本身的实现可以理解为类似于 Array.prototype.map 的东西．至于除数组之外的值，你只需要在 \_renderList 中对它们进行规范化，所以现在让我们忘记它们（只关注数组）．
 
-现在，对于那些到目前为止已经实现了各种指令的人来说，实现这种编译器（转换器）应该不会太困难。
+现在，对于那些到目前为止已经实现了各种指令的人来说，实现这种编译器（转换器）应该不会太困难．
 
 ## 关键实现点（困难点）
 
-困难点在于在 SFC（单文件组件）中使用它时。你还记得在 SFC 中使用的编译器和在浏览器中使用的编译器之间的区别吗？是的，就是使用 `_ctx` 解析表达式。
+困难点在于在 SFC（单文件组件）中使用它时．你还记得在 SFC 中使用的编译器和在浏览器中使用的编译器之间的区别吗？是的，就是使用 `_ctx` 解析表达式．
 
-在 v-for 中，用户定义的局部变量以各种形式出现，所以你需要正确地收集它们并跳过 rewriteIdentifiers。
+在 v-for 中，用户定义的局部变量以各种形式出现，所以你需要正确地收集它们并跳过 rewriteIdentifiers．
 
 ```ts
 // 错误示例
@@ -195,17 +195,17 @@ h(
 )
 ```
 
-从示例 1 到 3，有各种局部变量的定义。
+从示例 1 到 3，有各种局部变量的定义．
 
-你需要分析每个定义并收集要跳过的标识符。
+你需要分析每个定义并收集要跳过的标识符．
 
-现在，让我们暂时搁置如何实现这一点，从大局开始实现。
+现在，让我们暂时搁置如何实现这一点，从大局开始实现．
 
 ## AST 的实现
 
-现在，让我们像往常一样定义 AST。
+现在，让我们像往常一样定义 AST．
 
-与 v-if 一样，我们将考虑转换后的 AST（无需实现解析器）。
+与 v-if 一样，我们将考虑转换后的 AST（无需实现解析器）．
 
 ```ts
 export const enum NodeTypes {
@@ -268,7 +268,7 @@ export type JSChildNode =
   | FunctionExpression // [!code ++]
 ```
 
-关于 `RENDER_LIST`，像往常一样，将其添加到 `runtimeHelpers`。
+关于 `RENDER_LIST`，像往常一样，将其添加到 `runtimeHelpers`．
 
 ```ts
 // runtimeHelpers.ts
@@ -286,7 +286,7 @@ export const helperNameMap: Record<symbol, string> = {
 }
 ```
 
-至于 `ForParseResult`，其定义在 `transform/vFor` 中。
+至于 `ForParseResult`，其定义在 `transform/vFor` 中．
 
 ```ts
 export interface ForParseResult {
@@ -306,20 +306,20 @@ export interface ForParseResult {
 - key: `i`
 - index: `undefined`
 
-`index` 是将对象应用于 `v-for` 时的第三个参数。
+`index` 是将对象应用于 `v-for` 时的第三个参数．
 
 https://vuejs.org/v2/guide/list.html#v-for-with-an-object
 
 ![v_for_ast.drawio.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for_ast.drawio.png)
 
-关于 `value`，如果你使用像 `{ id, name, color, }` 这样的解构赋值，它将有多个标识符。
+关于 `value`，如果你使用像 `{ id, name, color, }` 这样的解构赋值，它将有多个标识符．
 
-我们收集由 `value`、`key` 和 `index` 定义的标识符，并跳过添加前缀。
+我们收集由 `value`，`key` 和 `index` 定义的标识符，并跳过添加前缀．
 
 ## codegen 的实现
 
-虽然顺序有点颠倒，但让我们先实现 codegen，因为没有太多要讨论的。
-只需要做两件事：处理 `NodeTypes.FOR` 和函数表达式的 codegen（这是第一次出现）。
+虽然顺序有点颠倒，但让我们先实现 codegen，因为没有太多要讨论的．
+只需要做两件事：处理 `NodeTypes.FOR` 和函数表达式的 codegen（这是第一次出现）．
 
 ```ts
 switch (node.type) {
@@ -373,15 +373,15 @@ function genFunctionExpression(
 }
 ```
 
-没有什么特别困难的。就这样结束了。
+没有什么特别困难的．就这样结束了．
 
 ## 转换器的实现
 
 ### 准备工作
 
-在实现转换器之前，还有一些准备工作。
+在实现转换器之前，还有一些准备工作．
 
-正如我们在 `v-on` 中所做的，在 `v-for` 的情况下，执行 `processExpression` 的时机有点特殊（我们需要收集局部变量），所以我们在 `transformExpression` 中跳过它。
+正如我们在 `v-on` 中所做的，在 `v-for` 的情况下，执行 `processExpression` 的时机有点特殊（我们需要收集局部变量），所以我们在 `transformExpression` 中跳过它．
 
 ```ts
 export const transformExpression: NodeTransform = (node, ctx) => {
@@ -405,19 +405,19 @@ export const transformExpression: NodeTransform = (node, ctx) => {
 
 ### 收集标识符
 
-现在，在我们继续主要实现之前，让我们思考如何收集标识符。
+现在，在我们继续主要实现之前，让我们思考如何收集标识符．
 
-这次，我们需要考虑不仅是像 `fruit` 这样的简单标识符，还有像 `{ id, name, color }` 这样的解构赋值。
-为此，似乎我们需要像往常一样使用 TreeWalker。
+这次，我们需要考虑不仅是像 `fruit` 这样的简单标识符，还有像 `{ id, name, color }` 这样的解构赋值．
+为此，似乎我们需要像往常一样使用 TreeWalker．
 
-目前，在 `processExpression` 函数中，实现是搜索标识符并向它们添加 `_ctx`。但是，这次我们只需要收集标识符而不添加任何东西。让我们实现这一点。
+目前，在 `processExpression` 函数中，实现是搜索标识符并向它们添加 `_ctx`．但是，这次我们只需要收集标识符而不添加任何东西．让我们实现这一点．
 
-首先，让我们准备一个地方来存储收集的标识符。由于如果每个 Node 都有它们对于 codegen 和其他目的会很方便，让我们向 AST 添加一个可以在每个 Node 上保存多个标识符的属性。
+首先，让我们准备一个地方来存储收集的标识符．由于如果每个 Node 都有它们对于 codegen 和其他目的会很方便，让我们向 AST 添加一个可以在每个 Node 上保存多个标识符的属性．
 
-目标是 `CompoundExpressionNode` 和 `SimpleExpressionNode`。
+目标是 `CompoundExpressionNode` 和 `SimpleExpressionNode`．
 
 像 `fruit` 这样的简单标识符将被添加到 `SimpleExpressionNode`，
-像 `{ id, name, color }` 这样的解构赋值将被添加到 `CompoundExpressionNode`。（在可视化方面，它将是一个复合表达式，如 `["{", simpleExpr("id"), ",", simpleExpr("name"), ",", simpleExpr("color"), "}"]`）
+像 `{ id, name, color }` 这样的解构赋值将被添加到 `CompoundExpressionNode`．（在可视化方面，它将是一个复合表达式，如 `["{", simpleExpr("id"), ",", simpleExpr("name"), ",", simpleExpr("color"), "}"]`）
 
 ```ts
 export interface SimpleExpressionNode extends Node {
@@ -440,9 +440,9 @@ export interface CompoundExpressionNode extends Node {
 }
 ```
 
-在 `processExpression` 函数中，让我们在这里实现收集标识符的逻辑，并通过将收集的标识符添加到转换器的上下文中来跳过添加前缀。
+在 `processExpression` 函数中，让我们在这里实现收集标识符的逻辑，并通过将收集的标识符添加到转换器的上下文中来跳过添加前缀．
 
-目前，用于添加/删除标识符的函数被配置为接收单个标识符作为字符串，所以让我们将其更改为假设 `{ identifier: string[] }` 的形式。
+目前，用于添加/删除标识符的函数被配置为接收单个标识符作为字符串，所以让我们将其更改为假设 `{ identifier: string[] }` 的形式．
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
@@ -488,11 +488,11 @@ const context: TransformContext = {
 }
 ```
 
-现在，让我们在 `processExpression` 函数中实现收集标识符的逻辑。
+现在，让我们在 `processExpression` 函数中实现收集标识符的逻辑．
 
-在 `processExpression` 函数中，定义一个名为 `asParams` 的选项，如果设置为 true，实现跳过添加前缀并在 `node.identifiers` 中收集标识符的逻辑。
+在 `processExpression` 函数中，定义一个名为 `asParams` 的选项，如果设置为 true，实现跳过添加前缀并在 `node.identifiers` 中收集标识符的逻辑．
 
-`asParams` 旨在引用在 `renderList` 的回调函数中定义的参数（局部变量）。
+`asParams` 旨在引用在 `renderList` 的回调函数中定义的参数（局部变量）．
 
 ```ts
 export function processExpression(
@@ -516,11 +516,11 @@ export function processExpression(
 }
 ```
 
-这就是简单标识符的结束。问题在于其他情况。
+这就是简单标识符的结束．问题在于其他情况．
 
-为此，我们将使用在 `babelUtils` 中实现的 `walkIdentifiers`。
+为此，我们将使用在 `babelUtils` 中实现的 `walkIdentifiers`．
 
-由于我们假设定义为函数参数的局部变量，我们将在此函数中将它们转换为"函数参数"，并在 `walkIdentifier` 中将它们作为 Function params 搜索。
+由于我们假设定义为函数参数的局部变量，我们将在此函数中将它们转换为"函数参数"，并在 `walkIdentifier` 中将它们作为 Function params 搜索．
 
 ```ts
 // 将 asParams 转换为类似函数参数的形式
@@ -561,11 +561,11 @@ export const isFunctionType = (node: Node): node is Function => {
 }
 ```
 
-我们在这里做的只是如果 node 是函数则遍历参数，并将标识符收集到 `identifiers` 中。
+我们在这里做的只是如果 node 是函数则遍历参数，并将标识符收集到 `identifiers` 中．
 
-在 `walkIdentifiers` 的调用者中，我们定义 `knownIds` 并将其与 `knownIds` 一起传递给 `walkIdentifiers` 以收集标识符。
+在 `walkIdentifiers` 的调用者中，我们定义 `knownIds` 并将其与 `knownIds` 一起传递给 `walkIdentifiers` 以收集标识符．
 
-在 `walkIdentifiers` 中收集后，最后，在生成 CompoundExpression 时基于 `knownIds` 生成标识符。
+在 `walkIdentifiers` 中收集后，最后，在生成 CompoundExpression 时基于 `knownIds` 生成标识符．
 
 ```ts
 const knownIds: Record<string, number> = Object.create(ctx.identifiers)
@@ -588,7 +588,7 @@ ret.identifiers = Object.keys(knownIds) // 基于 knownIds 生成标识符
 return ret
 ```
 
-虽然文件有点乱序，但 `walkFunctionParams` 和 `markScopeIdentifier` 只是遍历参数并将 `Node.name` 添加到 `knownIds`。
+虽然文件有点乱序，但 `walkFunctionParams` 和 `markScopeIdentifier` 只是遍历参数并将 `Node.name` 添加到 `knownIds`．
 
 ```ts
 export function walkFunctionParams(
@@ -620,16 +620,16 @@ function markScopeIdentifier(
 }
 ```
 
-有了这个，我们应该能够收集标识符。让我们使用这个实现 `transformFor` 并完成 v-for 指令！
+有了这个，我们应该能够收集标识符．让我们使用这个实现 `transformFor` 并完成 v-for 指令！
 
 ### transformFor
 
-现在我们已经克服了障碍，让我们像往常一样使用我们拥有的东西实现转换器。
+现在我们已经克服了障碍，让我们像往常一样使用我们拥有的东西实现转换器．
 还有一点点，让我们加油！
 
-像 v-if 一样，这也涉及结构，所以让我们使用 `createStructuralDirectiveTransform` 来实现它。
+像 v-if 一样，这也涉及结构，所以让我们使用 `createStructuralDirectiveTransform` 来实现它．
 
-我认为如果我用代码写解释会更容易理解，所以我将在下面提供带有解释的代码。但是，请在查看这个之前尝试通过阅读源代码自己实现它！
+我认为如果我用代码写解释会更容易理解，所以我将在下面提供带有解释的代码．但是，请在查看这个之前尝试通过阅读源代码自己实现它！
 
 ```ts
 // 这是主要结构的实现，类似于 v-if。
@@ -840,12 +840,12 @@ function createParamsList(
 }
 ```
 
-现在，剩下的部分是实际包含在编译代码中的 renderList 的实现，以及注册转换器的实现。如果我们能实现这些，v-for 应该就能工作了！
+现在，剩下的部分是实际包含在编译代码中的 renderList 的实现，以及注册转换器的实现．如果我们能实现这些，v-for 应该就能工作了！
 
 让我们尝试运行它！
 
 ![v_for](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for.png)
 
-看起来进展顺利。
+看起来进展顺利．
 
 到此为止的源代码：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/050_v_for)

@@ -2,8 +2,8 @@
 
 ## 我想编写更复杂的 HTML
 
-在当前状态下，我只能表达标签的名称和属性，以及文本的内容。\
-因此，我想能够在模板中编写更复杂的 HTML。\
+在当前状态下，我只能表达标签的名称和属性，以及文本的内容．\
+因此，我想能够在模板中编写更复杂的 HTML．\
 具体来说，我想能够编译这样的模板：
 
 ```ts
@@ -33,19 +33,19 @@ const app = createApp({
 app.mount('#app')
 ```
 
-但是，用正则表达式解析如此复杂的 HTML 是困难的。\
-所以，从这里开始，我将认真实现一个解析器。
+但是，用正则表达式解析如此复杂的 HTML 是困难的．\
+所以，从这里开始，我将认真实现一个解析器．
 
 ## AST 的介绍
 
-为了实现一个成熟的编译器，我将引入一个叫做 AST（抽象语法树）的东西。\
-AST 代表抽象语法树，顾名思义，它是表示语法的树结构的数据表示。\
-这是在实现各种编译器时出现的概念，不仅仅是 Vue.js。\
-在许多情况下（在语言处理系统中），"解析"指的是将其转换为这种称为 AST 的表示。\
-AST 的定义由每种语言定义。\
-例如，您熟悉的 JavaScript 由称为 [estree](https://github.com/estree/estree) 的 AST 表示，源代码字符串根据此定义进行解析。
+为了实现一个成熟的编译器，我将引入一个叫做 AST（抽象语法树）的东西．\
+AST 代表抽象语法树，顾名思义，它是表示语法的树结构的数据表示．\
+这是在实现各种编译器时出现的概念，不仅仅是 Vue.js．\
+在许多情况下（在语言处理系统中），"解析"指的是将其转换为这种称为 AST 的表示．\
+AST 的定义由每种语言定义．\
+例如，您熟悉的 JavaScript 由称为 [estree](https://github.com/estree/estree) 的 AST 表示，源代码字符串根据此定义进行解析．
 
-我试图以一种酷的方式解释它，但在图像方面，它只是我们迄今为止实现的 parse 函数返回类型的正式定义。\
+我试图以一种酷的方式解释它，但在图像方面，它只是我们迄今为止实现的 parse 函数返回类型的正式定义．\
 目前，parse 函数的返回值如下：
 
 ```ts
@@ -56,10 +56,10 @@ type ParseResult = {
 }
 ```
 
-让我们扩展这个并定义它，以便可以执行更复杂的表达式。
+让我们扩展这个并定义它，以便可以执行更复杂的表达式．
 
-创建一个新文件 `~/packages/compiler-core/ast.ts`。\
-我将在编写代码时解释，因为它有点长。
+创建一个新文件 `~/packages/compiler-core/ast.ts`．\
+我将在编写代码时解释，因为它有点长．
 
 ```ts
 // 这表示节点的类型。
@@ -122,23 +122,23 @@ export interface Position {
 }
 ```
 
-这是我们这次将要处理的 AST。\
-在 parse 函数中，我们将实现将模板字符串转换为这个 AST。
+这是我们这次将要处理的 AST．\
+在 parse 函数中，我们将实现将模板字符串转换为这个 AST．
 
 ## 成熟解析器的实现
 
 ::: warning
-在 2023 年 11 月下旬，在 [vuejs/core#9674](https://github.com/vuejs/core/pull/9674) 中进行了性能改进的重大重写。  
-这些更改在 2023 年 12 月下旬作为 [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) 发布。  
-请注意，这本在线书籍参考的是此重写之前的实现。  
-我们计划在适当的时机相应地更新这本在线书籍。
+在 2023 年 11 月下旬，在 [vuejs/core#9674](https://github.com/vuejs/core/pull/9674) 中进行了性能改进的重大重写．  
+这些更改在 2023 年 12 月下旬作为 [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) 发布．  
+请注意，这本在线书籍参考的是此重写之前的实现．  
+我们计划在适当的时机相应地更新这本在线书籍．
 :::
 
-在 `~/packages/compiler-core/parse.ts` 中实现它。
-即使我说它是成熟的，你也不必太紧张。\
-基本上，你所做的就是在读取字符串时生成 AST，并使用分支和循环。\
-源代码会有点长，但我认为在代码库中解释会更容易理解。所以让我们这样进行。\
-请通过阅读源代码来尝试理解细节。
+在 `~/packages/compiler-core/parse.ts` 中实现它．
+即使我说它是成熟的，你也不必太紧张．\
+基本上，你所做的就是在读取字符串时生成 AST，并使用分支和循环．\
+源代码会有点长，但我认为在代码库中解释会更容易理解．所以让我们这样进行．\
+请通过阅读源代码来尝试理解细节．
 
 删除您迄今为止实现的 baseParse 的内容，并按如下方式更改返回类型：
 
@@ -155,9 +155,9 @@ export const baseParse = (
 
 ## Context
 
-首先，让我们实现解析期间使用的状态。
-\我们将其命名为 `ParserContext`，并在解析期间在这里收集必要的信息。\
-最终，我认为它也会保存解析器配置选项等。
+首先，让我们实现解析期间使用的状态．
+\我们将其命名为 `ParserContext`，并在解析期间在这里收集必要的信息．\
+最终，我认为它也会保存解析器配置选项等．
 
 ```ts
 export interface ParserContext {
@@ -194,10 +194,10 @@ export const baseParse = (
 
 ## parseChildren
 
-在顺序方面，解析按如下方式进行：(parseChildren) -> (parseElement 或 parseText)。
+在顺序方面，解析按如下方式进行：(parseChildren) -> (parseElement 或 parseText)．
 
-虽然有点长，但让我们从 parseChildren 的实现开始。\
-解释将在源代码的注释中完成。
+虽然有点长，但让我们从 parseChildren 的实现开始．\
+解释将在源代码的注释中完成．
 
 ```ts
 export const baseParse = (
@@ -285,10 +285,10 @@ function startsWithEndTagOpen(source: string, tag: string): boolean {
 }
 ```
 
-接下来，让我们实现 parseElement 和 parseText。
+接下来，让我们实现 parseElement 和 parseText．
 
 ::: tip 关于 isEnd 循环
-在 isEnd 中，有一个循环过程，使用 startsWithEndTagOpen 检查 's' 是否以 ancestors 数组中每个元素的闭合标签开头。
+在 isEnd 中，有一个循环过程，使用 startsWithEndTagOpen 检查 's' 是否以 ancestors 数组中每个元素的闭合标签开头．
 
 ```ts
 function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
@@ -307,14 +307,14 @@ function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
 }
 ```
 
-但是，如果您需要检查 's' 是否以闭合标签开头，只检查 ancestors 中的最后一个元素应该就足够了。\
-虽然这部分代码在解析器的最近重写中被消除了，但将 Vue 3.3 代码修改为只检查 ancestors 中的最后一个元素仍然会导致所有正面测试成功通过。
+但是，如果您需要检查 's' 是否以闭合标签开头，只检查 ancestors 中的最后一个元素应该就足够了．\
+虽然这部分代码在解析器的最近重写中被消除了，但将 Vue 3.3 代码修改为只检查 ancestors 中的最后一个元素仍然会导致所有正面测试成功通过．
 :::
 
 ## parseText
 
-首先，让我们从简单的 parseText 开始。\
-它有点长，因为它还实现了一些不仅在 parseText 中使用，而且在其他函数中也使用的实用程序。
+首先，让我们从简单的 parseText 开始．\
+它有点长，因为它还实现了一些不仅在 parseText 中使用，而且在其他函数中也使用的实用程序．
 
 ```ts
 function parseText(context: ParserContext): TextNode {
@@ -407,10 +407,10 @@ function getSelection(
 
 ## parseElement
 
-接下来是元素的解析。
-元素的解析主要包括解析开始标签、解析子节点和解析结束标签。\
-开始标签的解析进一步分为标签名和属性。\
-让我们首先创建一个框架来解析开始标签的前半部分、子节点和结束标签。
+接下来是元素的解析．
+元素的解析主要包括解析开始标签，解析子节点和解析结束标签．\
+开始标签的解析进一步分为标签名和属性．\
+让我们首先创建一个框架来解析开始标签的前半部分，子节点和结束标签．
 
 ```ts
 const enum TagType {
@@ -446,11 +446,11 @@ function parseElement(
 }
 ```
 
-这里没有什么特别困难的。\
-`parseChildren` 函数是递归的（因为 `parseElement` 被 `parseChildren` 调用）。\
-我们在前后操作 `ancestors` 数据结构作为堆栈。
+这里没有什么特别困难的．\
+`parseChildren` 函数是递归的（因为 `parseElement` 被 `parseChildren` 调用）．\
+我们在前后操作 `ancestors` 数据结构作为堆栈．
 
-让我们实现 `parseTag`。
+让我们实现 `parseTag`．
 
 ```ts
 function parseTag(context: ParserContext, type: TagType): ElementNode {
@@ -590,12 +590,12 @@ function parseAttributeValue(context: ParserContext): AttributeValue {
 
 ## 完成解析器实现后
 
-我写了很多代码，比平时多。（最多只有大约 300 行）\
-我认为在这里阅读实现比用特殊词汇解释更好，所以请反复阅读。\
-虽然我写了很多，但基本上它是通过读取字符串推进分析的直接任务，没有特别困难的技术。
+我写了很多代码，比平时多．（最多只有大约 300 行）\
+我认为在这里阅读实现比用特殊词汇解释更好，所以请反复阅读．\
+虽然我写了很多，但基本上它是通过读取字符串推进分析的直接任务，没有特别困难的技术．
 
-到现在，您应该能够生成 AST。让我们检查解析是否正常工作。\
-但是，由于 codegen 部分尚未实现，我们这次将输出到控制台进行确认。
+到现在，您应该能够生成 AST．让我们检查解析是否正常工作．\
+但是，由于 codegen 部分尚未实现，我们这次将输出到控制台进行确认．
 
 ```ts
 const app = createApp({
@@ -640,18 +640,18 @@ export function baseCompile(template: string) {
 }
 ```
 
-屏幕不会显示任何内容，但让我们检查控制台。
+屏幕不会显示任何内容，但让我们检查控制台．
 
 ![simple_template_compiler_complex_html](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler_complex_html.png)
 
-看起来解析进展顺利。\
-现在，让我们基于生成的 AST 继续实现 codegen。
+看起来解析进展顺利．\
+现在，让我们基于生成的 AST 继续实现 codegen．
 
 ## 基于 AST 生成渲染函数
 
-现在我们已经实现了一个成熟的解析器，让我们创建一个可以应用于它的代码生成器。\
-但是，在这一点上，不需要复杂的实现。\
-我将首先向您展示代码。
+现在我们已经实现了一个成熟的解析器，让我们创建一个可以应用于它的代码生成器．\
+但是，在这一点上，不需要复杂的实现．\
+我将首先向您展示代码．
 
 ```ts
 import { ElementNode, NodeTypes, TemplateChildNode, TextNode } from './ast'
@@ -689,8 +689,8 @@ const genText = (text: TextNode): string => {
 }
 ```
 
-使用上述代码，您可以创建有效的东西。\
-取消注释解析器章节中被注释掉的部分并检查实际操作。\
+使用上述代码，您可以创建有效的东西．\
+取消注释解析器章节中被注释掉的部分并检查实际操作．\
 `~/packages/compiler-core/compile.ts`
 
 ```ts
@@ -734,10 +734,10 @@ app.mount('#app')
 
 ![render_template](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_template.png)
 
-怎么样？看起来我们可以很好地渲染屏幕。
+怎么样？看起来我们可以很好地渲染屏幕．
 
-让我们为屏幕添加一些动作。\
-由于我们还没有实现模板绑定，我们将直接操作 DOM。
+让我们为屏幕添加一些动作．\
+由于我们还没有实现模板绑定，我们将直接操作 DOM．
 
 ```ts
 export type ComponentOptions = {
@@ -797,8 +797,8 @@ const app = createApp({
 app.mount('#app')
 ```
 
-让我们确保它正常工作。\
-怎么样？虽然功能有限，但它越来越接近通常的 Vue 开发者接口。
+让我们确保它正常工作．\
+怎么样？虽然功能有限，但它越来越接近通常的 Vue 开发者接口．
 
 到此为止的源代码：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)

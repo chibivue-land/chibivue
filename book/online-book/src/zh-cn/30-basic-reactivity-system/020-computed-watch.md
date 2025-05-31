@@ -1,16 +1,16 @@
 # computed / watch api
 
 ::: warning
-这里解释的实现基于当前草拟的[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)之前的版本。  
-一旦[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致。
+这里解释的实现基于当前草拟的[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)之前的版本．  
+一旦[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致．
 :::
 
 ## computed 的回顾（和实现）
 
-在上一章中，我们实现了与 ref 相关的 API。接下来，让我们谈谈 computed。
+在上一章中，我们实现了与 ref 相关的 API．接下来，让我们谈谈 computed．
 https://vuejs.org/api/reactivity-core.html#computed
 
-Computed 有两个签名：只读和可写。
+Computed 有两个签名：只读和可写．
 
 ```ts
 // 只读
@@ -30,9 +30,9 @@ function computed<T>(
 ): Ref<T>
 ```
 
-官方实现有点复杂，但让我们从一个简单的结构开始。
+官方实现有点复杂，但让我们从一个简单的结构开始．
 
-实现它的最简单方法是每次检索值时触发回调。
+实现它的最简单方法是每次检索值时触发回调．
 
 ```ts
 export class ComputedRefImpl<T> {
@@ -46,12 +46,12 @@ export class ComputedRefImpl<T> {
 }
 ```
 
-然而，这并不是真正的 computed。它只是调用一个函数（这并不是很令人兴奋）。
+然而，这并不是真正的 computed．它只是调用一个函数（这并不是很令人兴奋）．
 
-实际上，我们希望跟踪依赖项并在值更改时重新计算。
+实际上，我们希望跟踪依赖项并在值更改时重新计算．
 
-为了实现这一点，我们使用一种机制，将 `_dirty` 标志作为调度器作业更新。
-`_dirty` 标志是一个表示值是否需要重新计算的标志。它在被依赖项触发时更新。
+为了实现这一点，我们使用一种机制，将 `_dirty` 标志作为调度器作业更新．
+`_dirty` 标志是一个表示值是否需要重新计算的标志．它在被依赖项触发时更新．
 
 以下是它的工作原理示例：
 
@@ -81,20 +81,20 @@ export class ComputedRefImpl<T> {
 }
 ```
 
-Computed 实际上具有惰性求值的性质，所以值只在第一次读取时重新计算。
-我们将此标志更新为 true，函数被多个依赖项触发，所以我们将其注册为 ReactiveEffect 的调度器。
+Computed 实际上具有惰性求值的性质，所以值只在第一次读取时重新计算．
+我们将此标志更新为 true，函数被多个依赖项触发，所以我们将其注册为 ReactiveEffect 的调度器．
 
-这是基本流程。在实现时，有几个要注意的点，让我们在下面总结它们。
+这是基本流程．在实现时，有几个要注意的点，让我们在下面总结它们．
 
-- 当将 `_dirty` 标志更新为 true 时，触发它拥有的依赖项。
+- 当将 `_dirty` 标志更新为 true 时，触发它拥有的依赖项．
   ```ts
   if (!this._dirty) {
     this._dirty = true
     triggerRefValue(this)
   }
   ```
-- 由于 computed 被归类为 `ref`，将 `__v_isRef` 标记为 true。
-- 如果你想实现 setter，最后实现它。首先，目标是使其可计算。
+- 由于 computed 被归类为 `ref`，将 `__v_isRef` 标记为 true．
+- 如果你想实现 setter，最后实现它．首先，目标是使其可计算．
 
 现在我们准备好了，让我们实现它！如果下面的代码按预期工作，就可以了！（请确保只触发 computed 依赖项！）
 
@@ -146,8 +146,8 @@ app.mount('#app')
 
 https://vuejs.org/api/reactivity-core.html#watch
 
-watch API 有各种形式。让我们从实现最简单的形式开始，即使用 getter 函数进行监视。
-首先，让我们目标使下面的代码工作。
+watch API 有各种形式．让我们从实现最简单的形式开始，即使用 getter 函数进行监视．
+首先，让我们目标使下面的代码工作．
 
 ```ts
 import { createApp, h, reactive, watch } from 'chibivue'
@@ -171,10 +171,10 @@ const app = createApp({
 app.mount('#app')
 ```
 
-watch 的实现不在 reactivity 中，而在 runtime-core（apiWatch.ts）中。
+watch 的实现不在 reactivity 中，而在 runtime-core（apiWatch.ts）中．
 
-它可能看起来有点复杂，因为有各种 API 混合在一起，但如果你缩小范围，实际上非常简单。
-我已经在下面实现了目标 API（watch 函数）的签名，所以请尝试实现它。我相信如果你到目前为止已经掌握了响应式的知识，你可以做到！
+它可能看起来有点复杂，因为有各种 API 混合在一起，但如果你缩小范围，实际上非常简单．
+我已经在下面实现了目标 API（watch 函数）的签名，所以请尝试实现它．我相信如果你到目前为止已经掌握了响应式的知识，你可以做到！
 
 ```ts
 export type WatchEffect = (onCleanup: OnCleanup) => void
@@ -196,7 +196,7 @@ export function watch<T>(
 
 ## watch 的其他 API
 
-一旦你有了基础，就只是扩展的问题。不需要进一步解释。
+一旦你有了基础，就只是扩展的问题．不需要进一步解释．
 
 - 监视 ref
   ```ts
@@ -258,7 +258,7 @@ export function watch<T>(
 
 https://vuejs.org/api/reactivity-core.html#watcheffect
 
-使用 watch 实现来实现 watchEffect 很容易。
+使用 watch 实现来实现 watchEffect 很容易．
 
 ```ts
 const count = ref(0)
@@ -270,11 +270,11 @@ count.value++
 // -> 记录 1
 ```
 
-你可以像 immediate 的图像一样实现它。
+你可以像 immediate 的图像一样实现它．
 
 到此为止的源代码：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/090_watch_effect)
 
 ---
 
-※ 清理将在单独的章节中完成。
+※ 清理将在单独的章节中完成．

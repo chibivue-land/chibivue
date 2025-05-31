@@ -2,14 +2,14 @@
 
 ## 让我们实现生命周期钩子
 
-实现生命周期钩子非常简单。
-你只需要在 ComponentInternalInstance 中注册函数，并在渲染期间的指定时机执行它们。
-API 本身将在 runtime-core/apiLifecycle.ts 中实现。
+实现生命周期钩子非常简单．
+你只需要在 ComponentInternalInstance 中注册函数，并在渲染期间的指定时机执行它们．
+API 本身将在 runtime-core/apiLifecycle.ts 中实现．
 
-需要注意的一点是，你需要考虑 onMounted/onUnmounted/onUpdated 的调度。
-注册的函数应该在挂载、卸载和更新完全完成后执行。
+需要注意的一点是，你需要考虑 onMounted/onUnmounted/onUpdated 的调度．
+注册的函数应该在挂载，卸载和更新完全完成后执行．
 
-因此，我们将在调度器中实现一种名为"post"的新队列类型。这是在现有队列刷新完成后才会被刷新的队列。
+因此，我们将在调度器中实现一种名为"post"的新队列类型．这是在现有队列刷新完成后才会被刷新的队列．
 图像 ↓
 
 ```ts
@@ -22,8 +22,8 @@ function queueFlush() {
 }
 ```
 
-同时，通过这个，让我们实现一个入队到 pendingPostFlushCbs 的 API。
-并且让我们使用它将渲染器中的 effect 入队到 pendingPostFlushCbs。
+同时，通过这个，让我们实现一个入队到 pendingPostFlushCbs 的 API．
+并且让我们使用它将渲染器中的 effect 入队到 pendingPostFlushCbs．
 
 这次要支持的生命周期钩子：
 

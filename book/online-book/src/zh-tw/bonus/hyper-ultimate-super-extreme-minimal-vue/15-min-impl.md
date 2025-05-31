@@ -12,13 +12,13 @@ cd chibivue
 nr setup ../my-chibivue-project
 ```
 
-專案設定現在完成了。
+專案設定現在完成了．
 
-讓我們現在實現 packages/index.ts。
+讓我們現在實現 packages/index.ts．
 
 ## createApp（1 分鐘）
 
-對於 create app 函式，讓我們考慮一個允許指定 setup 和 render 函式的簽名。從使用者的角度來看，它將這樣使用：
+對於 create app 函式，讓我們考慮一個允許指定 setup 和 render 函式的簽名．從使用者的角度來看，它將這樣使用：
 
 ```ts
 const app = createApp({
@@ -53,15 +53,15 @@ export const createApp = (option: CreateAppOption) => ({
 })
 ```
 
-這部分就是這樣。
+這部分就是這樣．
 
 ## h 函式和虛擬 DOM（0.5 分鐘）
 
-要執行補丁渲染，我們需要虛擬 DOM 和產生它的函式。
+要執行補丁渲染，我們需要虛擬 DOM 和產生它的函式．
 
-虛擬 DOM 使用 JavaScript 物件表示標籤名稱、屬性和子元素。Vue 渲染器處理虛擬 DOM 並將更新應用到實際 DOM。
+虛擬 DOM 使用 JavaScript 物件表示標籤名稱，屬性和子元素．Vue 渲染器處理虛擬 DOM 並將更新應用到實際 DOM．
 
-讓我們考慮一個 VNode，它表示一個名稱、一個點擊事件處理程式和子元素（文字）：
+讓我們考慮一個 VNode，它表示一個名稱，一個點擊事件處理程式和子元素（文字）：
 
 ```ts
 type VNode = { tag: string; onClick: (e: Event) => void; children: string }
@@ -72,13 +72,13 @@ export const h = (
 ): VNode => ({ tag, onClick, children })
 ```
 
-這部分就是這樣。
+這部分就是這樣．
 
 ## 補丁渲染（2 分鐘）
 
-現在讓我們實現渲染器。
+現在讓我們實現渲染器．
 
-這個渲染過程通常被稱為補丁，因為它比較舊的和新的虛擬 DOM 並將差異應用到實際 DOM。
+這個渲染過程通常被稱為補丁，因為它比較舊的和新的虛擬 DOM 並將差異應用到實際 DOM．
 
 函式簽名將是：
 
@@ -88,15 +88,15 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
 }
 ```
 
-n1 表示舊的 VNode，n2 表示新的 VNode，container 是實際 DOM 的根。在這個例子中，`#app` 將是容器（使用 createApp 掛載的元素）。
+n1 表示舊的 VNode，n2 表示新的 VNode，container 是實際 DOM 的根．在這個例子中，`#app` 將是容器（使用 createApp 掛載的元素）．
 
 我們需要考慮兩種類型的操作：
 
 - 掛載  
-  這是初始渲染。如果 n1 為 null，意味著這是第一次渲染，所以我們需要實現掛載過程。
+  這是初始渲染．如果 n1 為 null，意味著這是第一次渲染，所以我們需要實現掛載過程．
 - 補丁  
-  這比較 VNode 並將差異應用到實際 DOM。  
-  但是這次，我們只更新子元素而不檢測差異。
+  這比較 VNode 並將差異應用到實際 DOM．  
+  但是這次，我們只更新子元素而不檢測差異．
 
 讓我們實現它：
 
@@ -115,11 +115,11 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
 }
 ```
 
-這部分就是這樣。
+這部分就是這樣．
 
 ## 響應式系統（2 分鐘）
 
-現在讓我們實現邏輯來追蹤在 setup 選項中定義的狀態變化並觸發 render 函式。這個追蹤狀態變化並執行特定操作的過程稱為"響應式系統"。
+現在讓我們實現邏輯來追蹤在 setup 選項中定義的狀態變化並觸發 render 函式．這個追蹤狀態變化並執行特定操作的過程稱為"響應式系統"．
 
 讓我們考慮使用 `reactive` 函式來定義狀態：
 
@@ -135,9 +135,9 @@ const app = createApp({
 })
 ```
 
-在這種情況下，當使用 `reactive` 函式定義的狀態被修改時，我們希望觸發補丁過程。
+在這種情況下，當使用 `reactive` 函式定義的狀態被修改時，我們希望觸發補丁過程．
 
-它可以使用 Proxy 物件來實現這一點。代理允許我們為 get/set 操作實現功能。在這種情況下，我們可以使用 set 操作在發生 set 操作時執行補丁過程。
+它可以使用 Proxy 物件來實現這一點．代理允許我們為 get/set 操作實現功能．在這種情況下，我們可以使用 set 操作在發生 set 操作時執行補丁過程．
 
 ```ts
 export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
@@ -151,7 +151,7 @@ export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
   })
 ```
 
-問題是，我們應該在 set 操作中觸發什麼？通常，我們會使用 get 操作來追蹤變化，但在這種情況下，我們將在全域範圍內定義一個 `update` 函式並引用它。
+問題是，我們應該在 set 操作中觸發什麼？通常，我們會使用 get 操作來追蹤變化，但在這種情況下，我們將在全域範圍內定義一個 `update` 函式並引用它．
 
 讓我們使用之前實現的 render 函式來建立 update 函式：
 
@@ -191,9 +191,9 @@ export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
 
 ## 模板編譯器（5 分鐘）
 
-到目前為止，我們已經能夠透過允許使用者使用 render 選項和 h 函式來實現宣告式 UI。但是，實際上，我們希望以類似 HTML 的方式編寫它。
+到目前為止，我們已經能夠透過允許使用者使用 render 選項和 h 函式來實現宣告式 UI．但是，實際上，我們希望以類似 HTML 的方式編寫它．
 
-因此，讓我們實現一個模板編譯器，將 HTML 轉換為 h 函式。
+因此，讓我們實現一個模板編譯器，將 HTML 轉換為 h 函式．
 
 目標是將這樣的字串：
 
@@ -207,14 +207,14 @@ export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
 h("button", increment, "state: " + state.count)
 ```
 
-讓我們稍微分解一下。
+讓我們稍微分解一下．
 
 - parse  
-  解析 HTML 字串並將其轉換為稱為 AST（抽象語法樹）的物件。
+  解析 HTML 字串並將其轉換為稱為 AST（抽象語法樹）的物件．
 - codegen  
-  基於 AST 產生所需的程式碼（字串）。
+  基於 AST 產生所需的程式碼（字串）．
 
-現在，讓我們實現 AST 和 parse。
+現在，讓我們實現 AST 和 parse．
 
 ```ts
 type AST = {
@@ -225,9 +225,9 @@ type AST = {
 type Interpolation = { content: string }
 ```
 
-我們這次處理的 AST 如上所示。它類似於 VNode，但完全不同，用於產生程式碼。Interpolation 表示鬍鬚語法。像 <span v-pre>`{{ state.count }}`</span> 這樣的字串被解析為像 <span v-pre>`{ content: "state.count" }`</span> 這樣的物件（AST）。
+我們這次處理的 AST 如上所示．它類似於 VNode，但完全不同，用於產生程式碼．Interpolation 表示鬍鬚語法．像 <span v-pre>`{{ state.count }}`</span> 這樣的字串被解析為像 <span v-pre>`{ content: "state.count" }`</span> 這樣的物件（AST）．
 
-接下來，讓我們實現從給定字串產生 AST 的 parse 函式。現在，讓我們使用正規表示式和一些字串操作快速實現它。
+接下來，讓我們實現從給定字串產生 AST 的 parse 函式．現在，讓我們使用正規表示式和一些字串操作快速實現它．
 
 ```ts
 const parse = (template: string): AST => {
@@ -249,7 +249,7 @@ const parse = (template: string): AST => {
 }
 ```
 
-接下來是 codegen。基於 AST 產生 h 函式的呼叫。
+接下來是 codegen．基於 AST 產生 h 函式的呼叫．
 
 ```ts
 const codegen = (node: AST) =>
@@ -260,27 +260,27 @@ const codegen = (node: AST) =>
     .join('')}\`)`
 ```
 
-狀態從參數 `_ctx` 中引用。
+狀態從參數 `_ctx` 中引用．
 
-透過組合這些，我們可以完成 compile 函式。
+透過組合這些，我們可以完成 compile 函式．
 
 ```ts
 const compile = (template: string): string => codegen(parse(template))
 ```
 
-好吧，實際上，就目前而言，它只是產生 h 函式呼叫的字串，所以它還不能工作。
+好吧，實際上，就目前而言，它只是產生 h 函式呼叫的字串，所以它還不能工作．
 
-我們將與 sfc 編譯器一起實現它。
+我們將與 sfc 編譯器一起實現它．
 
-有了這個，模板編譯器就完成了。
+有了這個，模板編譯器就完成了．
 
 ## sfc 編譯器（vite-plugin）（4 分鐘）
 
-最後！讓我們實現一個 vite 外掛來支援 sfc。
+最後！讓我們實現一個 vite 外掛來支援 sfc．
 
-在 vite 外掛中，有一個名為 transform 的選項，它允許您轉換檔案的內容。
+在 vite 外掛中，有一個名為 transform 的選項，它允許您轉換檔案的內容．
 
-transform 函式回傳類似 `{ code: string }` 的東西，字串被視為原始碼。換句話說，例如，
+transform 函式回傳類似 `{ code: string }` 的東西，字串被視為原始碼．換句話說，例如，
 
 ```ts
 export const VitePluginChibivue = () => ({
@@ -291,17 +291,17 @@ export const VitePluginChibivue = () => ({
 });
 ```
 
-將使所有檔案的內容成為空字串。原始程式碼可以作為第一個參數接收，所以透過正確轉換這個值並在最後回傳它，您可以轉換它。
+將使所有檔案的內容成為空字串．原始程式碼可以作為第一個參數接收，所以透過正確轉換這個值並在最後回傳它，您可以轉換它．
 
-有 5 件事要做。
+有 5 件事要做．
 
-- 從腳本中提取作為預設匯出的內容。
-- 將其轉換為將其分配給變數的程式碼。（為了方便，讓我們稱變數為 A。）
-- 從模板中提取 HTML 字串，並使用我們之前建立的 compile 函式將其轉換為對 h 函式的呼叫。（為了方便，讓我們稱結果為 B。）
-- 產生類似 `Object.assign(A, { render: B })` 的程式碼。
-- 產生將 A 作為預設匯出的程式碼。
+- 從腳本中提取作為預設匯出的內容．
+- 將其轉換為將其分配給變數的程式碼．（為了方便，讓我們稱變數為 A．）
+- 從模板中提取 HTML 字串，並使用我們之前建立的 compile 函式將其轉換為對 h 函式的呼叫．（為了方便，讓我們稱結果為 B．）
+- 產生類似 `Object.assign(A, { render: B })` 的程式碼．
+- 產生將 A 作為預設匯出的程式碼．
 
-現在讓我們實現它。
+現在讓我們實現它．
 
 ```ts
 const compileSFC = (sfc: string): { code: string } => {
@@ -323,7 +323,7 @@ const compileSFC = (sfc: string): { code: string } => {
 }
 ```
 
-之後，在外掛中實現它。
+之後，在外掛中實現它．
 
 ```ts
 export const VitePluginChibivue = () => ({
@@ -335,8 +335,8 @@ export const VitePluginChibivue = () => ({
 
 ## 結束
 
-是的。有了這個，我們已經成功實現到 SFC。
-讓我們再看一下原始碼。
+是的．有了這個，我們已經成功實現到 SFC．
+讓我們再看一下原始碼．
 
 ```ts
 // create app api
@@ -449,6 +449,6 @@ const compileSFC = (sfc: string): { code: string } => {
 }
 ```
 
-令人驚訝的是，我們能夠在大約 110 行中實現它。（現在沒有人會抱怨了，呼...）
+令人驚訝的是，我們能夠在大約 110 行中實現它．（現在沒有人會抱怨了，呼...）
 
 請確保也嘗試主要部分的主要部分！！（雖然這只是一個附錄 😙）

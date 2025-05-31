@@ -2,9 +2,9 @@
 
 ## 开发者接口
 
-让我们从 props 开始。\
-让我们思考一下最终的开发者接口。\
-让我们考虑将 props 作为 `setup` 函数的第一个参数传递。
+让我们从 props 开始．\
+让我们思考一下最终的开发者接口．\
+让我们考虑将 props 作为 `setup` 函数的第一个参数传递．
 
 ```ts
 const MyComponent = {
@@ -33,7 +33,7 @@ const app = createApp({
 
 ## 实现
 
-基于此，让我们思考一下我们想在 `ComponentInternalInstance` 中拥有的信息。\
+基于此，让我们思考一下我们想在 `ComponentInternalInstance` 中拥有的信息．\
 我们需要指定为 `props: { message: { type: String } }` 的 props 定义，以及一个实际保存 props 值的属性，所以我们添加以下内容：
 
 ```ts
@@ -63,7 +63,7 @@ export interface PropOptions<T = any> {
 export type PropType<T> = { new (...args: any[]): T & {} }
 ```
 
-在实现组件时将其添加到选项中。
+在实现组件时将其添加到选项中．
 
 ```ts
 export type ComponentOptions = {
@@ -73,7 +73,7 @@ export type ComponentOptions = {
 }
 ```
 
-当使用 `createComponentInstance` 生成实例时，在生成实例时将 propsOptions 设置到实例中。
+当使用 `createComponentInstance` 生成实例时，在生成实例时将 propsOptions 设置到实例中．
 
 ```ts
 export function createComponentInstance(
@@ -89,11 +89,11 @@ export function createComponentInstance(
     props: {},
 ```
 
-让我们思考如何形成 `instance.props`。\
-在组件挂载时，根据 propsOptions 过滤 vnode 持有的 props。\
-使用 `reactive` 函数将过滤后的对象转换为响应式对象，并将其分配给 `instance.props`。
+让我们思考如何形成 `instance.props`．\
+在组件挂载时，根据 propsOptions 过滤 vnode 持有的 props．\
+使用 `reactive` 函数将过滤后的对象转换为响应式对象，并将其分配给 `instance.props`．
 
-在 `componentProps.ts` 中实现一个名为 `initProps` 的函数来执行这一系列步骤。
+在 `componentProps.ts` 中实现一个名为 `initProps` 的函数来执行这一系列步骤．
 
 ```ts
 export function initProps(
@@ -123,7 +123,7 @@ function setFullProps(
 }
 ```
 
-在挂载时实际执行 `initProps`，并将 props 作为参数传递给 `setup` 函数。
+在挂载时实际执行 `initProps`，并将 props 作为参数传递给 `setup` 函数．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -154,7 +154,7 @@ export type ComponentOptions = {
 }
 ```
 
-此时，props 应该传递给子组件，所以让我们在游乐场中检查它。
+此时，props 应该传递给子组件，所以让我们在游乐场中检查它．
 
 ```ts
 const MyComponent = {
@@ -177,7 +177,7 @@ const app = createApp({
 })
 ```
 
-但是，这还不够，因为当 props 更改时渲染不会更新。
+但是，这还不够，因为当 props 更改时渲染不会更新．
 
 ```ts
 const MyComponent = {
@@ -204,7 +204,7 @@ const app = createApp({
 })
 ```
 
-要使此组件工作，我们需要在 `componentProps.ts` 中实现 `updateProps` 并在组件更新时执行它。
+要使此组件工作，我们需要在 `componentProps.ts` 中实现 `updateProps` 并在组件更新时执行它．
 
 `~/packages/runtime-core/componentProps.ts`
 
@@ -244,7 +244,7 @@ const setupRenderEffect = (
           updateProps(instance, next.props); // 这里
 ```
 
-如果屏幕更新了，那就没问题。\
+如果屏幕更新了，那就没问题．\
 现在，您可以使用 props 将数据传递给组件！做得很好！
 
 ![props](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/props.png)
@@ -252,10 +252,10 @@ const setupRenderEffect = (
 到此为止的源代码：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
-作为附注，虽然这不是必需的，但让我们实现接收 kebab-case props 的能力，就像原始 Vue 中一样。\
-此时，创建一个名为 `~/packages/shared` 的目录，并在其中创建一个名为 `general.ts` 的文件。\
-这是定义通用函数的地方，不仅适用于 `runtime-core` 和 `runtime-dom`。\
-按照原始 Vue，让我们实现 `hasOwn` 和 `camelize`。
+作为附注，虽然这不是必需的，但让我们实现接收 kebab-case props 的能力，就像原始 Vue 中一样．\
+此时，创建一个名为 `~/packages/shared` 的目录，并在其中创建一个名为 `general.ts` 的文件．\
+这是定义通用函数的地方，不仅适用于 `runtime-core` 和 `runtime-dom`．\
+按照原始 Vue，让我们实现 `hasOwn` 和 `camelize`．
 
 `~/packages/shared/general.ts`
 
@@ -272,7 +272,7 @@ export const camelize = (str: string): string => {
 }
 ```
 
-让我们在 `componentProps.ts` 中使用 `camelize`。
+让我们在 `componentProps.ts` 中使用 `camelize`．
 
 ```ts
 export function updateProps(
@@ -307,7 +307,7 @@ function setFullProps(
 }
 ```
 
-现在您应该也能够处理 kebab-case 了。让我们在游乐场中检查它。
+现在您应该也能够处理 kebab-case 了．让我们在游乐场中检查它．
 
 ```ts
 const MyComponent = {

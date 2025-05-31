@@ -2,11 +2,11 @@
 
 ## 基於整理現有實現的思考
 
-到目前為止，我們已經小規模地實現了 createApp API、響應式系統和虛擬 DOM 系統。\
-通過當前的實現，我們可以使用響應式系統動態更改 UI，並使用虛擬 DOM 系統執行高效渲染。\
-然而，作為開發者介面，所有內容都寫在 createAppAPI 中。\
-實際上，我想更多地分割檔案並實現通用組件以實現可重用性。\
-首先，讓我們回顧一下現有實現中當前混亂的部分。請查看 renderer.ts 中的 render 函式。
+到目前為止，我們已經小規模地實現了 createApp API，響應式系統和虛擬 DOM 系統．\
+通過當前的實現，我們可以使用響應式系統動態更改 UI，並使用虛擬 DOM 系統執行高效渲染．\
+然而，作為開發者介面，所有內容都寫在 createAppAPI 中．\
+實際上，我想更多地分割檔案並實現通用組件以實現可重用性．\
+首先，讓我們回顧一下現有實現中當前混亂的部分．請查看 renderer.ts 中的 render 函式．
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
@@ -26,14 +26,14 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-在 render 函式中，直接定義了關於根組件的資訊。\
-實際上，n1、n2、updateComponent 和 effect 對每個組件都存在。\
-事實上，從現在開始，我想在使用者端定義組件（在某種意義上是建構函式）並實例化它。\
-我希望實例具有 n1、n2 和 updateComponent 等屬性。\
-因此，讓我們考慮將這些封裝為組件實例。
+在 render 函式中，直接定義了關於根組件的資訊．\
+實際上，n1，n2，updateComponent 和 effect 對每個組件都存在．\
+事實上，從現在開始，我想在使用者端定義組件（在某種意義上是建構函式）並實例化它．\
+我希望實例具有 n1，n2 和 updateComponent 等屬性．\
+因此，讓我們考慮將這些封裝為組件實例．
 
-讓我們在 `~/packages/runtime-core/component.ts` 中定義一個叫做 `ComponentInternalInstance` 的東西。\
-這將是實例的類型。
+讓我們在 `~/packages/runtime-core/component.ts` 中定義一個叫做 `ComponentInternalInstance` 的東西．\
+這將是實例的類型．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -52,9 +52,9 @@ export type InternalRenderFunction = {
 }
 ```
 
-這個實例擁有的 vnode、subTree 和 next 屬性有點複雜，但從現在開始，我們將實現它，以便可以將 ConcreteComponent 指定為 VNode 的類型。\
-在 instance.vnode 中，我們將保留 VNode 本身。\
-而 subTree 和 next 將保存該組件的渲染結果 VNode。（這與之前的 n1 和 n2 相同）
+這個實例擁有的 vnode，subTree 和 next 屬性有點複雜，但從現在開始，我們將實現它，以便可以將 ConcreteComponent 指定為 VNode 的類型．\
+在 instance.vnode 中，我們將保留 VNode 本身．\
+而 subTree 和 next 將保存該組件的渲染結果 VNode．（這與之前的 n1 和 n2 相同）
 
 在圖像方面，
 
@@ -72,10 +72,10 @@ const App = {
 }
 ```
 
-您可以像這樣使用它，如果讓實例成為 MyComponent 的實例，instance.vnode 將保存 `h(MyComponent, {}, [])` 的結果，instance.subTree 將保存 `h("p", {}, ["hello"])` 的結果。
+您可以像這樣使用它，如果讓實例成為 MyComponent 的實例，instance.vnode 將保存 `h(MyComponent, {}, [])` 的結果，instance.subTree 將保存 `h("p", {}, ["hello"])` 的結果．
 
-現在，讓我們實現它，以便您可以將組件指定為 h 函式的第一個參數。\
-但是，這只是接收定義組件的物件作為類型的問題。\
+現在，讓我們實現它，以便您可以將組件指定為 h 函式的第一個參數．\
+但是，這只是接收定義組件的物件作為類型的問題．\
 在 `~/packages/runtime-core/vnode.ts` 中
 
 ```ts
@@ -91,7 +91,7 @@ export function h(
 ) {..}
 ```
 
-讓我們也確保 VNode 有一個組件實例。
+讓我們也確保 VNode 有一個組件實例．
 
 ```ts
 export interface VNode<HostNode = any> {
@@ -102,10 +102,10 @@ export interface VNode<HostNode = any> {
 }
 ```
 
-因此，渲染器也需要處理組件。\
-實現類似於 `processElement` 和 `processText` 的 `processComponent` 來處理組件，並且還實現 `mountComponent` 和 `patchComponent`（或 `updateComponent`）。
+因此，渲染器也需要處理組件．\
+實現類似於 `processElement` 和 `processText` 的 `processComponent` 來處理組件，並且還實現 `mountComponent` 和 `patchComponent`（或 `updateComponent`）．
 
-首先，讓我們從概述和詳細說明開始。
+首先，讓我們從概述和詳細說明開始．
 
 ```ts
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
@@ -143,13 +143,13 @@ const updateComponent = (n1: VNode, n2: VNode) => {
 }
 ```
 
-現在，讓我們看看 `mountComponent`。有三件事要做。
+現在，讓我們看看 `mountComponent`．有三件事要做．
 
-1. 創建組件的實例。
-2. 執行 `setup` 函式並將結果儲存在實例中。
-3. 創建 `ReactiveEffect` 並將其儲存在實例中。
+1. 創建組件的實例．
+2. 執行 `setup` 函式並將結果儲存在實例中．
+3. 創建 `ReactiveEffect` 並將其儲存在實例中．
 
-首先，讓我們在 `component.ts` 中實現一個函式來創建組件的實例（類似於建構函式）。
+首先，讓我們在 `component.ts` 中實現一個函式來創建組件的實例（類似於建構函式）．
 
 ```ts
 export function createComponentInstance(
@@ -172,7 +172,7 @@ export function createComponentInstance(
 }
 ```
 
-雖然每個屬性的類型都是非空的，但我們在創建實例時用 null 初始化它們（遵循原始 Vue.js 的設計）。
+雖然每個屬性的類型都是非空的，但我們在創建實例時用 null 初始化它們（遵循原始 Vue.js 的設計）．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -183,8 +183,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-接下來是 `setup` 函式。\
-我們需要將之前直接在 `render` 函式中編寫的程式碼移動到這裡，並將結果儲存在實例中而不是使用變數。
+接下來是 `setup` 函式．\
+我們需要將之前直接在 `render` 函式中編寫的程式碼移動到這裡，並將結果儲存在實例中而不是使用變數．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -200,8 +200,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-最後，讓我們將創建 effect 的程式碼合併到一個名為 `setupRenderEffect` 的函式中。\
-同樣，主要任務是將之前直接在 `render` 函式中實現的程式碼移動到這裡，同時利用實例的狀態。
+最後，讓我們將創建 effect 的程式碼合併到一個名為 `setupRenderEffect` 的函式中．\
+同樣，主要任務是將之前直接在 `render` 函式中實現的程式碼移動到這裡，同時利用實例的狀態．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -258,7 +258,7 @@ const setupRenderEffect = (
 }
 ```
 
-※ 1: 請在 `nodeOps` 中實現一個名為 `parentNode` 的函式，用於檢索父 Node。
+※ 1: 請在 `nodeOps` 中實現一個名為 `parentNode` 的函式，用於檢索父 Node．
 
 ```ts
 parentNode: (node) => {
@@ -266,8 +266,8 @@ parentNode: (node) => {
 },
 ```
 
-我認為這並不特別困難，儘管有點長。\
-在 `setupRenderEffect` 函式中，更新函式被註冊為實例的 `update` 方法，所以在 `updateComponent` 中，我們只需要呼叫該函式。
+我認為這並不特別困難，儘管有點長．\
+在 `setupRenderEffect` 函式中，更新函式被註冊為實例的 `update` 方法，所以在 `updateComponent` 中，我們只需要呼叫該函式．
 
 ```ts
 const updateComponent = (n1: VNode, n2: VNode) => {
@@ -277,7 +277,7 @@ const updateComponent = (n1: VNode, n2: VNode) => {
 }
 ```
 
-最後，由於到目前為止在 `render` 函式中定義的實現不再需要，我們將刪除它。
+最後，由於到目前為止在 `render` 函式中定義的實現不再需要，我們將刪除它．
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
@@ -286,8 +286,8 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-現在我們可以渲染組件了。讓我們嘗試創建一個 `playground` 組件作為示例。\
-通過這種方式，我們可以將渲染分為組件。
+現在我們可以渲染組件了．讓我們嘗試創建一個 `playground` 組件作為示例．\
+通過這種方式，我們可以將渲染分為組件．
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'

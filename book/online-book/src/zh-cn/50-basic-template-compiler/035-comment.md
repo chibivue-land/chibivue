@@ -25,18 +25,18 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-无需进一步解释。
+无需进一步解释．
 
 ## AST 和解析器的实现
 
-关于如何实现注释，乍一看，似乎我们可以在解析时简单地忽略它。
+关于如何实现注释，乍一看，似乎我们可以在解析时简单地忽略它．
 
-然而，在 Vue 中，模板中编写的注释会按原样作为 HTML 输出。
+然而，在 Vue 中，模板中编写的注释会按原样作为 HTML 输出．
 
-换句话说，注释也需要被渲染，所以需要在 VNode 上有一个表示，编译器也需要输出该代码。
-此外，还需要一个生成注释节点的操作。
+换句话说，注释也需要被渲染，所以需要在 VNode 上有一个表示，编译器也需要输出该代码．
+此外，还需要一个生成注释节点的操作．
 
-首先，让我们实现 AST 和解析器。
+首先，让我们实现 AST 和解析器．
 
 ### AST
 
@@ -64,7 +64,7 @@ export type TemplateChildNode =
 
 ### 解析器
 
-现在，让我们抛出一个错误。
+现在，让我们抛出一个错误．
 
 ```ts
 function parseChildren(
@@ -133,7 +133,7 @@ function parseComment(context: ParserContext): CommentNode {
 
 ## 代码生成
 
-向 runtime-core 添加表示 Comment 的 VNode。
+向 runtime-core 添加表示 Comment 的 VNode．
 
 ```ts
 export const Comment = Symbol()
@@ -145,9 +145,9 @@ export type VNodeTypes =
   | typeof Fragment
 ```
 
-实现一个名为 createCommentVNode 的函数并将其作为辅助函数公开。
+实现一个名为 createCommentVNode 的函数并将其作为辅助函数公开．
 
-在 codegen 中，生成调用 createCommentVNode 的代码。
+在 codegen 中，生成调用 createCommentVNode 的代码．
 
 ```ts
 export function createCommentVNode(text: string = ''): VNode {
@@ -182,11 +182,11 @@ function genComment(node: CommentNode, context: CodegenContext) {
 
 ## 渲染
 
-让我们实现渲染器。
+让我们实现渲染器．
 
-像往常一样，在 patch 中分支 Comment 的情况，并在挂载时生成注释。
+像往常一样，在 patch 中分支 Comment 的情况，并在挂载时生成注释．
 
-关于 patch，由于这次是静态的，我不会做任何特殊的事情。（在代码中，它只是设置为按原样分配。）
+关于 patch，由于这次是静态的，我不会做任何特殊的事情．（在代码中，它只是设置为按原样分配．）
 
 ```ts
 const patch = (
@@ -224,6 +224,6 @@ const processCommentNode = (
 }
 ```
 
-好了，你现在应该已经实现了注释。让我们检查实际操作！
+好了，你现在应该已经实现了注释．让我们检查实际操作！
 
 到此为止的源代码：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)

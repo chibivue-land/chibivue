@@ -22,9 +22,9 @@ app.mount('#app')
 
 ![fragment_error.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/fragment_error.png)
 
-查看错误消息，似乎与 Function 构造函数有关。
+查看错误消息，似乎与 Function 构造函数有关．
 
-换句话说，代码生成似乎在某种程度上是成功的，所以让我们看看实际生成了什么代码。
+换句话说，代码生成似乎在某种程度上是成功的，所以让我们看看实际生成了什么代码．
 
 ```ts
 return function render(_ctx) {
@@ -36,9 +36,9 @@ return function render(_ctx) {
 }
 ```
 
-`return` 语句后的代码是不正确的。当前的代码生成实现不处理根是数组（即不是单个节点）的情况。
+`return` 语句后的代码是不正确的．当前的代码生成实现不处理根是数组（即不是单个节点）的情况．
 
-我们将修复这个问题。
+我们将修复这个问题．
 
 ## 应该生成什么代码？
 
@@ -64,17 +64,17 @@ return function render(_ctx) {
 }
 ```
 
-这个 `Fragment` 是在 Vue 中定义的符号。
+这个 `Fragment` 是在 Vue 中定义的符号．
 
-换句话说，Fragment 不像 FragmentNode 那样表示为 AST，而是简单地作为 ElementNode 的标签。
+换句话说，Fragment 不像 FragmentNode 那样表示为 AST，而是简单地作为 ElementNode 的标签．
 
-我们将在渲染器中实现 Fragment 的处理，类似于 Text。
+我们将在渲染器中实现 Fragment 的处理，类似于 Text．
 
 ## 实现
 
-Fragment 符号将在 runtime-core/vnode.ts 中实现。
+Fragment 符号将在 runtime-core/vnode.ts 中实现．
 
-让我们将其作为 VNodeTypes 中的新类型添加。
+让我们将其作为 VNodeTypes 中的新类型添加．
 
 ```ts
 export type VNodeTypes = Component | typeof Text | typeof Fragment | string
@@ -82,9 +82,9 @@ export type VNodeTypes = Component | typeof Text | typeof Fragment | string
 export const Fragment = Symbol()
 ```
 
-实现渲染器。
+实现渲染器．
 
-在 patch 函数中为 fragment 添加分支。
+在 patch 函数中为 fragment 添加分支．
 
 ```ts
 if (type === Text) {
@@ -101,11 +101,11 @@ if (type === Text) {
 }
 ```
 
-注意插入或删除元素通常应该用 anchor 作为标记来实现。
+注意插入或删除元素通常应该用 anchor 作为标记来实现．
 
-顾名思义，anchor 表示 fragment 的开始和结束位置。
+顾名思义，anchor 表示 fragment 的开始和结束位置．
 
-起始元素由 VNode 中现有的 `el` 属性表示，但目前没有表示结束的属性。让我们添加它。
+起始元素由 VNode 中现有的 `el` 属性表示，但目前没有表示结束的属性．让我们添加它．
 
 ```ts
 export interface VNode<HostNode = any> {
@@ -118,9 +118,9 @@ export interface VNode<HostNode = any> {
 }
 ```
 
-在挂载期间设置 anchor。
+在挂载期间设置 anchor．
 
-在 mount/patch 中将 fragment 的结束作为 anchor 传递。
+在 mount/patch 中将 fragment 的结束作为 anchor 传递．
 
 ```ts
 const processFragment = (
@@ -148,7 +148,7 @@ const processFragment = (
 }
 ```
 
-当 fragment 的元素在更新期间发生变化时要小心。
+当 fragment 的元素在更新期间发生变化时要小心．
 
 ```ts
 const move = (
@@ -174,7 +174,7 @@ const move = (
 }
 ```
 
-在卸载期间，也依赖 anchor 来删除元素。
+在卸载期间，也依赖 anchor 来删除元素．
 
 ```ts
 const remove = (vnode: VNode) => {
@@ -201,7 +201,7 @@ const removeFragment = (cur: RendererNode, end: RendererNode) => {
 
 ## 测试
 
-我们之前编写的代码应该正确工作。
+我们之前编写的代码应该正确工作．
 
 ```ts
 import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'
@@ -217,9 +217,9 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-目前，我们不能使用像 v-for 这样的指令，所以我们不能编写在模板中使用 fragment 并改变元素数量的描述。
+目前，我们不能使用像 v-for 这样的指令，所以我们不能编写在模板中使用 fragment 并改变元素数量的描述．
 
-让我们通过编写编译后的代码来模拟行为，看看它是如何工作的。
+让我们通过编写编译后的代码来模拟行为，看看它是如何工作的．
 
 ```ts
 import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'

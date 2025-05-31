@@ -2,9 +2,9 @@
 
 ## 组件的代理
 
-组件有一个重要概念叫做代理（Proxy）。  
-简单来说，它是一个允许访问组件实例数据（公共属性）的代理。
-代理结合了 setup 的结果（状态、函数）、data、props 和其他访问。
+组件有一个重要概念叫做代理（Proxy）．  
+简单来说，它是一个允许访问组件实例数据（公共属性）的代理．
+代理结合了 setup 的结果（状态，函数），data，props 和其他访问．
 
 让我们考虑以下代码（包括在 chibivue 中未实现的部分，所以请将其视为常规 Vue）：
 
@@ -50,7 +50,7 @@ export default defineComponent({
 
 这段代码工作正常，但它是如何绑定到模板的？
 
-让我们考虑另一个例子。
+让我们考虑另一个例子．
 
 ```vue
 <script setup>
@@ -67,11 +67,11 @@ const ChildRef = ref()
 </template>
 ```
 
-在这种情况下，你可以通过 ref 访问组件的信息。
+在这种情况下，你可以通过 ref 访问组件的信息．
 
-为了实现这一点，ComponentInternalInstance 有一个名为 proxy 的属性，它保存用于数据访问的代理。
+为了实现这一点，ComponentInternalInstance 有一个名为 proxy 的属性，它保存用于数据访问的代理．
 
-换句话说，模板（渲染函数）和 ref 引用 instance.proxy。
+换句话说，模板（渲染函数）和 ref 引用 instance.proxy．
 
 ```ts
 interface ComponentInternalInstance {
@@ -98,12 +98,12 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 
 让我们实现这个代理！
 
-一旦实现，让我们修改代码以将此代理传递给渲染函数和 ref。
+一旦实现，让我们修改代码以将此代理传递给渲染函数和 ref．
 
 到此为止的源代码：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
 
-※ 顺便说一下，我还实现了 defineComponent 和相关类型检查的实现（这允许我们推断代理数据的类型）。
+※ 顺便说一下，我还实现了 defineComponent 和相关类型检查的实现（这允许我们推断代理数据的类型）．
 
 ![infer_component_types](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/infer_component_types.png)
 
@@ -111,9 +111,9 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 
 https://ja.vuejs.org/api/composition-api-setup.html#setup-context
 
-Vue 有一个名为 setupContext 的概念。这是在 setup 函数中暴露的上下文，包括 emit 和 expose。
+Vue 有一个名为 setupContext 的概念．这是在 setup 函数中暴露的上下文，包括 emit 和 expose．
 
-目前，emit 正在工作，但实现有些粗糙。
+目前，emit 正在工作，但实现有些粗糙．
 
 ```ts
 const setupResult = component.setup(instance.props, {
@@ -121,7 +121,7 @@ const setupResult = component.setup(instance.props, {
 })
 ```
 
-让我们正确定义 SetupContext 接口，并将其表示为实例持有的对象。
+让我们正确定义 SetupContext 接口，并将其表示为实例持有的对象．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -136,14 +136,14 @@ export type SetupContext = {
 }
 ```
 
-然后，在创建实例时，生成 setupContext 并在执行 setup 函数时将此对象作为第二个参数传递。
+然后，在创建实例时，生成 setupContext 并在执行 setup 函数时将此对象作为第二个参数传递．
 
 ## expose
 
-一旦你到达这一点，让我们尝试实现除 emit 之外的 SetupContext。  
-作为这次的例子，让我们实现 expose。
+一旦你到达这一点，让我们尝试实现除 emit 之外的 SetupContext．  
+作为这次的例子，让我们实现 expose．
 
-expose 是一个允许你明确定义公共属性的函数。  
+expose 是一个允许你明确定义公共属性的函数．  
 让我们目标实现如下的开发者接口：
 
 ```ts
@@ -190,9 +190,9 @@ const app = createApp({
 })
 ```
 
-对于不使用 expose 的组件，默认情况下一切仍然是公共的。
+对于不使用 expose 的组件，默认情况下一切仍然是公共的．
 
-作为方向，让我们在实例内部有一个名为 `exposed` 的对象，如果这里设置了值，我们将把这个对象传递给 templateRef 的 ref。
+作为方向，让我们在实例内部有一个名为 `exposed` 的对象，如果这里设置了值，我们将把这个对象传递给 templateRef 的 ref．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -203,15 +203,15 @@ export interface ComponentInternalInstance {
 }
 ```
 
-让我们实现 expose 函数，以便可以在这里注册对象。
+让我们实现 expose 函数，以便可以在这里注册对象．
 
 ## ProxyRefs
 
-在本章中，我们实现了 proxy 和 exposedProxy，但实际上与原始 Vue 有一些差异。
-那就是"ref 被解包"。（在 proxy 的情况下，setupState 具有此属性而不是 proxy。）
+在本章中，我们实现了 proxy 和 exposedProxy，但实际上与原始 Vue 有一些差异．
+那就是"ref 被解包"．（在 proxy 的情况下，setupState 具有此属性而不是 proxy．）
 
-这些是用 ProxyRefs 实现的，处理器在名为 `shallowUnwrapHandlers` 的名称下实现。
-这允许我们在编写模板或处理代理时消除 ref 特定值的冗余。
+这些是用 ProxyRefs 实现的，处理器在名为 `shallowUnwrapHandlers` 的名称下实现．
+这允许我们在编写模板或处理代理时消除 ref 特定值的冗余．
 
 ```ts
 const shallowUnwrapHandlers: ProxyHandler<any> = {
@@ -235,7 +235,7 @@ const shallowUnwrapHandlers: ProxyHandler<any> = {
 </template>
 ```
 
-如果你实现到这一点，以下代码应该工作。
+如果你实现到这一点，以下代码应该工作．
 
 ```ts
 import { createApp, defineComponent, h, ref } from 'chibivue'
@@ -285,7 +285,7 @@ app.mount('#app')
 
 ## 模板绑定和 with 语句
 
-实际上，本章的更改存在一个问题。
+实际上，本章的更改存在一个问题．
 让我们尝试运行以下代码：
 
 ```ts
@@ -298,17 +298,17 @@ const Child2 = {
 }
 ```
 
-这只是一个简单的代码，但它不工作。
-它抱怨 state 未定义。
+这只是一个简单的代码，但它不工作．
+它抱怨 state 未定义．
 
 ![state_is_not_defined](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/state_is_not_defined.png)
 
-原因是当将代理作为参数传递给 with 语句时，必须定义 has。
+原因是当将代理作为参数传递给 with 语句时，必须定义 has．
 
 [使用 with 语句和代理创建动态命名空间 (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with#creating_dynamic_namespaces_using_the_with_statement_and_a_proxy)
 
-所以让我们在 PublicInstanceProxyHandlers 中实现 has。
-如果键存在于 setupState、props 或 ctx 中，它应该返回 true。
+所以让我们在 PublicInstanceProxyHandlers 中实现 has．
+如果键存在于 setupState，props 或 ctx 中，它应该返回 true．
 
 ```ts
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {

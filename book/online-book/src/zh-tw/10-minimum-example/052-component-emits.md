@@ -2,10 +2,10 @@
 
 ## 開發者介面
 
-繼 props 之後，讓我們實現 emits。\
-emits 的實現相對簡單，所以會很快完成。
+繼 props 之後，讓我們實現 emits．\
+emits 的實現相對簡單，所以會很快完成．
 
-在開發者介面方面，emits 將從 setup 函式的第二個參數接收。
+在開發者介面方面，emits 將從 setup 函式的第二個參數接收．
 
 ```ts
 const MyComponent: Component = {
@@ -46,7 +46,7 @@ const app = createApp({
 
 ## 實現
 
-與 props 類似，讓我們創建一個名為 `~/packages/runtime-core/componentEmits.ts` 的檔案並在那裡實現它。\
+與 props 類似，讓我們創建一個名為 `~/packages/runtime-core/componentEmits.ts` 的檔案並在那裡實現它．\
 `~/packages/runtime-core/componentEmits.ts`
 
 ```ts
@@ -101,7 +101,7 @@ export function createComponentInstance(
 }
 ```
 
-您可以將此傳遞給 setup 函式。
+您可以將此傳遞給 setup 函式．
 
 `~/packages/runtime-core/componentOptions.ts`
 

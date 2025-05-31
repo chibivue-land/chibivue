@@ -2,7 +2,7 @@
 
 ## 要实现的开发者接口和当前挑战
 
-首先，看看这个组件。
+首先，看看这个组件．
 
 ```vue
 <script>
@@ -26,11 +26,11 @@ export default {
 </template>
 ```
 
-这个组件有几个问题。  
-由于这个组件是用 SFC 编写的，没有使用 `with` 语句。  
-换句话说，绑定没有正常工作。
+这个组件有几个问题．  
+由于这个组件是用 SFC 编写的，没有使用 `with` 语句．  
+换句话说，绑定没有正常工作．
 
-让我们看看编译后的代码。
+让我们看看编译后的代码．
 
 ```js
 const _sfc_main = {
@@ -60,13 +60,13 @@ function render(_ctx) {
 export default { ..._sfc_main, render }
 ```
 
-- 问题 1：注册为事件处理器的 `increment` 无法访问 `_ctx`。  
-  这是因为在之前的 `v-bind` 实现中没有添加前缀。
-- 问题 2：表达式 `count + count` 无法访问 `_ctx`。  
-  关于 mustache 语法，它只在开头添加 `_ctx.`，无法处理其他标识符。  
-  因此，表达式中出现的所有标识符都需要加上 `_ctx.` 前缀。这适用于所有部分，不仅仅是 mustache。
+- 问题 1：注册为事件处理器的 `increment` 无法访问 `_ctx`．  
+  这是因为在之前的 `v-bind` 实现中没有添加前缀．
+- 问题 2：表达式 `count + count` 无法访问 `_ctx`．  
+  关于 mustache 语法，它只在开头添加 `_ctx.`，无法处理其他标识符．  
+  因此，表达式中出现的所有标识符都需要加上 `_ctx.` 前缀．这适用于所有部分，不仅仅是 mustache．
 
-看起来需要一个过程来为表达式中出现的标识符添加 `_ctx.`。
+看起来需要一个过程来为表达式中出现的标识符添加 `_ctx.`．
 
 ::: details 期望的编译结果
 
@@ -102,24 +102,24 @@ export default { ..._sfc_main, render }
 
 ::: warning
 
-实际上，原始实现采用了稍微不同的方法。
+实际上，原始实现采用了稍微不同的方法．
 
-如下所示，在原始实现中，从 `setup` 函数绑定的任何内容都通过 `$setup` 解析。
+如下所示，在原始实现中，从 `setup` 函数绑定的任何内容都通过 `$setup` 解析．
 
 ![resolve_bindings_original](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_bindings_original.png)
 
-然而，实现这个有点困难，所以我们将简化它并通过添加 `_ctx.` 来实现。（所有 props 和 setup 都将从 `_ctx` 解析）
+然而，实现这个有点困难，所以我们将简化它并通过添加 `_ctx.` 来实现．（所有 props 和 setup 都将从 `_ctx` 解析）
 
 :::
 
 ## 实现方法
 
-简单来说，我们想要做的是"在 ExpressionNode 上的每个标识符（名称）的开头添加 `_ctx.`"。
+简单来说，我们想要做的是"在 ExpressionNode 上的每个标识符（名称）的开头添加 `_ctx.`"．
 
-让我更详细地解释一下。  
-作为回顾，程序通过解析被表示为 AST。  
-表示程序的 AST 主要有两种类型的节点：Expression 和 Statement。  
-这些通常被称为表达式和语句。
+让我更详细地解释一下．  
+作为回顾，程序通过解析被表示为 AST．  
+表示程序的 AST 主要有两种类型的节点：Expression 和 Statement．  
+这些通常被称为表达式和语句．
 
 ```ts
 1 // 这是一个 Expression
@@ -132,11 +132,11 @@ if (!a) a = 1 // 这是一个 Statement
 for (let i = 0; i < 10; i++) a++ // 这是一个 Statement
 ```
 
-我们这里要考虑的是 Expression。  
-有各种类型的表达式。Identifier 是其中之一，它是由标识符表示的表达式。  
+我们这里要考虑的是 Expression．  
+有各种类型的表达式．Identifier 是其中之一，它是由标识符表示的表达式．  
 （你可以将其视为一般的变量名）
 
-Identifier 出现在表达式的各个地方。
+Identifier 出现在表达式的各个地方．
 
 ```ts
 1 // 无
@@ -145,26 +145,26 @@ func() // func --- (2)
 ident + func() // ident, func --- (3)
 ```
 
-这样，Identifier 出现在表达式的各个地方。
+这样，Identifier 出现在表达式的各个地方．
 
-你可以通过在以下网站输入程序来观察 ExpressionNode 上的各种 Identifier，该网站允许你观察 AST。  
+你可以通过在以下网站输入程序来观察 ExpressionNode 上的各种 Identifier，该网站允许你观察 AST．  
 https://astexplorer.net/#/gist/670a1bee71dbd50bec4e6cc176614ef8/9a9ff250b18ccd9000ed253b0b6970696607b774
 
 ## 搜索标识符
 
 现在我们知道了我们想要做什么，我们如何实现它？
 
-看起来很困难，但实际上很简单。我们将使用一个名为 estree-walker 的库。  
+看起来很困难，但实际上很简单．我们将使用一个名为 estree-walker 的库．  
 https://github.com/Rich-Harris/estree-walker
 
-我们将使用这个库来遍历通过 babel 解析获得的 AST。  
-用法非常简单。只需将 AST 传递给 `walk` 函数，并将每个 Node 的处理描述为第二个参数。  
-这个 `walk` 函数逐个节点遍历 AST，到达该 Node 时的处理通过 `enter` 选项完成。  
-除了 `enter`，还有像 `leave` 这样的选项来在该 Node 结束时处理。我们这次只使用 `enter`。
+我们将使用这个库来遍历通过 babel 解析获得的 AST．  
+用法非常简单．只需将 AST 传递给 `walk` 函数，并将每个 Node 的处理描述为第二个参数．  
+这个 `walk` 函数逐个节点遍历 AST，到达该 Node 时的处理通过 `enter` 选项完成．  
+除了 `enter`，还有像 `leave` 这样的选项来在该 Node 结束时处理．我们这次只使用 `enter`．
 
-创建一个名为 `compiler-core/babelUtils.ts` 的新文件，并实现可以对 Identifier 执行操作的实用函数。
+创建一个名为 `compiler-core/babelUtils.ts` 的新文件，并实现可以对 Identifier 执行操作的实用函数．
 
-首先，安装 estree-walker。
+首先，安装 estree-walker．
 
 ```sh
 npm install estree-walker
@@ -191,15 +191,15 @@ export function walkIdentifiers(
 }
 ```
 
-然后，为表达式生成 AST 并将其传递给此函数，在重写节点的同时执行转换。
+然后，为表达式生成 AST 并将其传递给此函数，在重写节点的同时执行转换．
 
 ## transformExpression 的实现
 
 ### InterpolationNode 的 AST 和解析器更改
 
-我们将实现转换过程的主体 transformExpression。
+我们将实现转换过程的主体 transformExpression．
 
-首先，我们将修改 InterpolationNode，使其具有 SimpleExpressionNode 而不是字符串作为其内容。
+首先，我们将修改 InterpolationNode，使其具有 SimpleExpressionNode 而不是字符串作为其内容．
 
 ```ts
 export interface InterpolationNode extends Node {
@@ -209,7 +209,7 @@ export interface InterpolationNode extends Node {
 }
 ```
 
-通过这个更改，我们还需要修改 parseInterpolation。
+通过这个更改，我们还需要修改 parseInterpolation．
 
 ```ts
 function parseInterpolation(
@@ -233,8 +233,8 @@ function parseInterpolation(
 
 ### 转换器的实现（主体）
 
-为了使表达式转换在其他转换器中可用，我们将其提取为名为 `processExpression` 的函数。
-在 transformExpression 中，我们将处理 INTERPOLATION 和 DIRECTIVE 的 ExpressionNode。
+为了使表达式转换在其他转换器中可用，我们将其提取为名为 `processExpression` 的函数．
+在 transformExpression 中，我们将处理 INTERPOLATION 和 DIRECTIVE 的 ExpressionNode．
 
 ```ts
 export const transformExpression: NodeTransform = node => {
@@ -262,15 +262,15 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
 }
 ```
 
-接下来，让我们解释 processExpression 的实现。
-首先，我们将实现一个名为 rewriteIdentifier 的函数来重写 node 内的 Identifier。
-如果 node 是单个 Identifier，我们简单地应用此函数并返回它。
+接下来，让我们解释 processExpression 的实现．
+首先，我们将实现一个名为 rewriteIdentifier 的函数来重写 node 内的 Identifier．
+如果 node 是单个 Identifier，我们简单地应用此函数并返回它．
 
-需要注意的一点是，这个 processExpression 特定于 SFC（单文件组件）情况（不使用 with 语句的情况）。
-换句话说，如果设置了 isBrowser 标志，我们实现它简单地返回 node。
-我们修改实现以通过 ctx 接收标志。
+需要注意的一点是，这个 processExpression 特定于 SFC（单文件组件）情况（不使用 with 语句的情况）．
+换句话说，如果设置了 isBrowser 标志，我们实现它简单地返回 node．
+我们修改实现以通过 ctx 接收标志．
 
-另外，我想保留像 true 和 false 这样的字面量，所以我将为字面量创建一个白名单。
+另外，我想保留像 true 和 false 这样的字面量，所以我将为字面量创建一个白名单．
 
 ```ts
 export function processExpression(
@@ -297,7 +297,7 @@ export function processExpression(
 }
 ```
 
-`makeMap` 是在 vuejs/core 中实现的用于存在性检查的辅助函数，它返回一个布尔值，指示是否与用逗号分隔定义的字符串匹配。
+`makeMap` 是在 vuejs/core 中实现的用于存在性检查的辅助函数，它返回一个布尔值，指示是否与用逗号分隔定义的字符串匹配．
 
 ```ts
 export function makeMap(
@@ -313,18 +313,18 @@ export function makeMap(
 }
 ```
 
-问题在于下一步，即如何转换 SimpleExpressionNode（不是简单的 Identifier）并转换节点。
-在以下讨论中，请注意我们将处理两个不同的 AST：Babel 生成的 JavaScript AST 和 chibivue 定义的 AST。
-为了避免混淆，我们在本章中将前者称为 estree，后者称为 AST。
+问题在于下一步，即如何转换 SimpleExpressionNode（不是简单的 Identifier）并转换节点．
+在以下讨论中，请注意我们将处理两个不同的 AST：Babel 生成的 JavaScript AST 和 chibivue 定义的 AST．
+为了避免混淆，我们在本章中将前者称为 estree，后者称为 AST．
 
-策略分为两个阶段。
+策略分为两个阶段．
 
 1. 在收集节点的同时替换 estree 节点
 2. 基于收集的节点构建 AST
 
-首先，让我们从阶段 1 开始。
-这相对简单。如果我们可以用 Babel 解析原始 SimpleExpressionNode 内容（字符串）并获得 estree，我们可以通过我们之前创建的实用函数传递它并应用 rewriteIdentifier。
-此时，我们收集 estree 节点。
+首先，让我们从阶段 1 开始．
+这相对简单．如果我们可以用 Babel 解析原始 SimpleExpressionNode 内容（字符串）并获得 estree，我们可以通过我们之前创建的实用函数传递它并应用 rewriteIdentifier．
+此时，我们收集 estree 节点．
 
 ```ts
 import { parse } from '@babel/parser'
@@ -356,13 +356,13 @@ export function processExpression(
 }
 ```
 
-需要注意的一点是，到目前为止，我们只操作了 estree，没有操作 ast 节点。
+需要注意的一点是，到目前为止，我们只操作了 estree，没有操作 ast 节点．
 
 ### CompoundExpression
 
-接下来，让我们进入阶段 2。在这里，我们将定义一个名为 `CompoundExpressionNode` 的新 AST Node。
-Compound 意味着"组合"或"复杂性"。这个 Node 有 children，它们采用稍微特殊的值。
-首先，让我们看看 AST 的定义。
+接下来，让我们进入阶段 2．在这里，我们将定义一个名为 `CompoundExpressionNode` 的新 AST Node．
+Compound 意味着"组合"或"复杂性"．这个 Node 有 children，它们采用稍微特殊的值．
+首先，让我们看看 AST 的定义．
 
 ```ts
 export interface CompoundExpressionNode extends Node {
@@ -377,8 +377,8 @@ export interface CompoundExpressionNode extends Node {
 }
 ```
 
-Children 采用如上所示的数组。
-要理解这个 Node 中的 children 代表什么，看具体例子会更容易，所以让我们给出一些例子。
+Children 采用如上所示的数组．
+要理解这个 Node 中的 children 代表什么，看具体例子会更容易，所以让我们给出一些例子．
 
 以下表达式将被解析为以下 CompoundExpressionNode：
 
@@ -400,12 +400,12 @@ count * 2
 }
 ```
 
-这是一种相当奇怪的感觉。"children" 采用字符串类型的原因是因为它采用这种形式。
-在 CompoundExpression 中，Vue 编译器将其分为必要的粒度，并部分表示为字符串或部分表示为 Node。
-具体来说，在像这样重写 Expression 中存在的 Identifier 的情况下，只有 Identifier 部分被分为另一个 SimpleExpressionNode。
+这是一种相当奇怪的感觉．"children" 采用字符串类型的原因是因为它采用这种形式．
+在 CompoundExpression 中，Vue 编译器将其分为必要的粒度，并部分表示为字符串或部分表示为 Node．
+具体来说，在像这样重写 Expression 中存在的 Identifier 的情况下，只有 Identifier 部分被分为另一个 SimpleExpressionNode．
 
-换句话说，我们要做的是基于收集的 estree 的 Identifier Node 和源生成这个 CompoundExpression。
-以下代码是为此的实现。
+换句话说，我们要做的是基于收集的 estree 的 Identifier Node 和源生成这个 CompoundExpression．
+以下代码是为此的实现．
 
 ```ts
 export function processExpression(node: SimpleExpressionNode): ExpressionNode {
@@ -447,10 +447,10 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
 }
 ```
 
-Babel 解析的 Node 有 start 和 end（它对应于原始字符串的位置信息），所以我们基于此从 rawExp 中提取相应的部分并仔细分割。
-请仔细查看源代码了解更多详细信息。如果你理解到目前为止的策略，你应该能够阅读它。（另外，请查看 advancePositionWithClone 等的实现，因为它们是新实现的。）
+Babel 解析的 Node 有 start 和 end（它对应于原始字符串的位置信息），所以我们基于此从 rawExp 中提取相应的部分并仔细分割．
+请仔细查看源代码了解更多详细信息．如果你理解到目前为止的策略，你应该能够阅读它．（另外，请查看 advancePositionWithClone 等的实现，因为它们是新实现的．）
 
-现在我们可以生成 CompoundExpressionNode，让我们也在 Codegen 中支持它。
+现在我们可以生成 CompoundExpressionNode，让我们也在 Codegen 中支持它．
 
 ```ts
 function genInterpolation(
@@ -479,7 +479,7 @@ function genCompoundExpression(
 }
 ```
 
-（genInterpolation 已经变成了只是 genNode，但我现在将保留它。）
+（genInterpolation 已经变成了只是 genNode，但我现在将保留它．）
 
 ## 试试看
 

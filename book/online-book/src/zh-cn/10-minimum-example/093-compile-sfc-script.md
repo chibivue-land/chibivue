@@ -43,17 +43,17 @@ https://babeljs.io
 
 [What is Babel](https://babeljs.io/docs)
 
-如果你熟悉 JavaScript，你可能听说过 Babel。\
-Babel 是一个用于将 JavaScript 转换为向后兼容版本的工具链。\
-简单来说，它是一个从 JS 到 JS 的编译器（转译器）。
+如果你熟悉 JavaScript，你可能听说过 Babel．\
+Babel 是一个用于将 JavaScript 转换为向后兼容版本的工具链．\
+简单来说，它是一个从 JS 到 JS 的编译器（转译器）．
 
-在这种情况下，我将使用 Babel 不仅作为编译器，还作为解析器。\
-Babel 有一个内部解析器用于转换为 AST，因为它扮演编译器的角色。
+在这种情况下，我将使用 Babel 不仅作为编译器，还作为解析器．\
+Babel 有一个内部解析器用于转换为 AST，因为它扮演编译器的角色．
 
-AST 代表抽象语法树，它是 JavaScript 代码的表示。\
+AST 代表抽象语法树，它是 JavaScript 代码的表示．\
 你可以在这里找到 AST 规范 (https://github.com/estree/estree)。\
-虽然你可以参考 GitHub md 文件，但我将简要解释 JavaScript 中的 AST。\
-整个程序由一个 Program AST 节点表示，它包含一个语句数组（为了清晰起见，使用 TS 接口表示）。
+虽然你可以参考 GitHub md 文件，但我将简要解释 JavaScript 中的 AST．\
+整个程序由一个 Program AST 节点表示，它包含一个语句数组（为了清晰起见，使用 TS 接口表示）．
 
 ```ts
 interface Program {
@@ -61,8 +61,8 @@ interface Program {
 }
 ```
 
-Statement 表示 JavaScript 中的"语句"，它是语句的集合。\
-示例包括"变量声明语句"、"if 语句"、"for 语句"和"块语句"。
+Statement 表示 JavaScript 中的"语句"，它是语句的集合．\
+示例包括"变量声明语句"，"if 语句"，"for 语句"和"块语句"．
 
 ```ts
 interface Statement {}
@@ -85,9 +85,9 @@ interface BlockStatement extends Statement {
 // 还有更多
 ```
 
-语句通常在大多数情况下都有一个"表达式"。\
-表达式是可以分配给变量的东西。\
-示例包括"对象"、"二元运算"和"函数调用"。
+语句通常在大多数情况下都有一个"表达式"．\
+表达式是可以分配给变量的东西．\
+示例包括"对象"，"二元运算"和"函数调用"．
 
 ```ts
 interface Expression {}
@@ -120,29 +120,29 @@ interface IfStatement extends Statement {
 }
 ```
 
-通过这种方式，JavaScript 语法被解析为上述 AST。\
-我认为对于那些已经为 chibivue 实现了模板编译器的人来说，这个解释很容易理解。（这是同样的事情）
+通过这种方式，JavaScript 语法被解析为上述 AST．\
+我认为对于那些已经为 chibivue 实现了模板编译器的人来说，这个解释很容易理解．（这是同样的事情）
 
-我使用 Babel 的原因有两个。\
-首先，这只是因为它很麻烦。\
-如果你之前实现过解析器，在参考 estree 的同时实现 JS 解析器在技术上可能是可能的。\
-但是，这非常麻烦，对于"加深对 Vue 的理解"这一目的来说并不是很重要。\
-另一个原因是官方 Vue 也在这部分使用 Babel。
+我使用 Babel 的原因有两个．\
+首先，这只是因为它很麻烦．\
+如果你之前实现过解析器，在参考 estree 的同时实现 JS 解析器在技术上可能是可能的．\
+但是，这非常麻烦，对于"加深对 Vue 的理解"这一目的来说并不是很重要．\
+另一个原因是官方 Vue 也在这部分使用 Babel．
 
 ### magic-string
 
 https://github.com/rich-harris/magic-string
 
-还有另一个我想使用的库。\
-这个库也被官方 Vue 使用。\
-它是一个使字符串操作更容易的库。
+还有另一个我想使用的库．\
+这个库也被官方 Vue 使用．\
+它是一个使字符串操作更容易的库．
 
 ```ts
 const input = 'Hello'
 const s = new MagicString(input)
 ```
 
-你可以像这样生成一个实例，并使用实例提供的便利方法来操作字符串。\
+你可以像这样生成一个实例，并使用实例提供的便利方法来操作字符串．\
 以下是一些示例：
 
 ```ts
@@ -151,10 +151,10 @@ s.prepend('message: ') // 前置到开头
 s.overwrite(9, 13, 'こんにちは') // 在范围内覆写
 ```
 
-没有必要强制使用它，但我将使用它来与官方 Vue 保持一致。
+没有必要强制使用它，但我将使用它来与官方 Vue 保持一致．
 
-无论是 Babel 还是 magic-string，你现在都不需要理解实际用法。\
-我稍后会解释并对齐实现，所以现在有一个粗略的理解就可以了。
+无论是 Babel 还是 magic-string，你现在都不需要理解实际用法．\
+我稍后会解释并对齐实现，所以现在有一个粗略的理解就可以了．
 
 ## 重写脚本的默认导出
 
@@ -178,24 +178,24 @@ const _sfc_main = {
 export default { ..._sfc_main, render }
 ```
 
-换句话说，如果我可以从原始代码的导出语句中提取导出目标并将其分配给名为 `_sfc_main` 的变量，我将实现目标。
+换句话说，如果我可以从原始代码的导出语句中提取导出目标并将其分配给名为 `_sfc_main` 的变量，我将实现目标．
 
-首先，让我们安装必要的库。
+首先，让我们安装必要的库．
 
 ```sh
 pwd # ~
 ni @babel/parser magic-string
 ```
 
-创建一个名为 "rewriteDefault.ts" 的文件。
+创建一个名为 "rewriteDefault.ts" 的文件．
 
 ```sh
 pwd # ~
 touch packages/compiler-sfc/rewriteDefault.ts
 ```
 
-确保函数 "rewriteDefault" 可以接收目标源代码作为 "input" 和要绑定的变量名作为 "as"。\
-将转换后的源代码作为返回值返回。
+确保函数 "rewriteDefault" 可以接收目标源代码作为 "input" 和要绑定的变量名作为 "as"．\
+将转换后的源代码作为返回值返回．
 
 `~/packages/compiler-sfc/rewriteDefault.ts`
 
@@ -206,8 +206,8 @@ export function rewriteDefault(input: string, as: string): string {
 }
 ```
 
-首先，让我们处理导出声明不存在的情况。\
-由于没有导出，绑定一个空对象并完成。
+首先，让我们处理导出声明不存在的情况．\
+由于没有导出，绑定一个空对象并完成．
 
 ```ts
 const defaultExportRE = /((?:^|\n|;)\s*)export(\s*)default/
@@ -227,7 +227,7 @@ export function hasDefaultExport(input: string): boolean {
 }
 ```
 
-这里出现了 Babel 解析器和 magic-string。
+这里出现了 Babel 解析器和 magic-string．
 
 ```ts
 import { parse } from '@babel/parser'
@@ -246,9 +246,9 @@ export function rewriteDefault(input: string, as: string): string {
 }
 ```
 
-从这里开始，我们将基于 Babel 解析器获得的 JavaScript AST（抽象语法树）来操作字符串 `s`。\
-虽然有点长，但我将在源代码的注释中提供额外的解释。\
-基本上，我们遍历 AST 并基于 `type` 属性编写条件语句，并使用 `magic-string` 的方法操作字符串 `s`。
+从这里开始，我们将基于 Babel 解析器获得的 JavaScript AST（抽象语法树）来操作字符串 `s`．\
+虽然有点长，但我将在源代码的注释中提供额外的解释．\
+基本上，我们遍历 AST 并基于 `type` 属性编写条件语句，并使用 `magic-string` 的方法操作字符串 `s`．
 
 ```ts
 export function rewriteDefault(input: string, as: string): string {
@@ -348,8 +348,8 @@ function specifierEnd(input: string, end: number, nodeEnd: number | null) {
 }
 ```
 
-现在你可以重写默认导出了。\
-让我们尝试在插件中使用它。
+现在你可以重写默认导出了．\
+让我们尝试在插件中使用它．
 
 ```ts
 import type { Plugin } from 'vite'
@@ -394,7 +394,7 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-在此之前，让我们做一个小修改。
+在此之前，让我们做一个小修改．
 
 `~/packages/runtime-core/component.ts`
 
@@ -415,4 +415,4 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 ![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
 
-样式没有应用，因为不支持，但现在你可以渲染组件了。
+样式没有应用，因为不支持，但现在你可以渲染组件了．

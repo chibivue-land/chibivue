@@ -2,16 +2,16 @@
 
 ## 虛擬模組
 
-讓我們也支援樣式。\
-在 Vite 中，你可以通過使用 `.css` 副檔名來匯入 CSS 檔案。
+讓我們也支援樣式．\
+在 Vite 中，你可以通過使用 `.css` 副檔名來匯入 CSS 檔案．
 
 ```js
 import 'app.css'
 ```
 
-我們將通過使用 Vite 的虛擬模組來實現這一點。\
-虛擬模組允許你將不存在的檔案保存在記憶體中，就像它們存在一樣。\
-你可以使用 `load` 和 `resolveId` 選項來實現虛擬模組。
+我們將通過使用 Vite 的虛擬模組來實現這一點．\
+虛擬模組允許你將不存在的檔案保存在記憶體中，就像它們存在一樣．\
+你可以使用 `load` 和 `resolveId` 選項來實現虛擬模組．
 
 ```ts
 export default function myPlugin() {
@@ -33,13 +33,13 @@ export default function myPlugin() {
 }
 ```
 
-使用這種機制，我們將把 SFC 的樣式區塊作為虛擬 CSS 檔案載入。\
-如前所述，在 Vite 中，匯入帶有 `.css` 副檔名的檔案就足夠了，所以我們將考慮創建一個名為 `${SFC 檔案名}.css` 的虛擬模組。
+使用這種機制，我們將把 SFC 的樣式區塊作為虛擬 CSS 檔案載入．\
+如前所述，在 Vite 中，匯入帶有 `.css` 副檔名的檔案就足夠了，所以我們將考慮創建一個名為 `${SFC 檔案名}.css` 的虛擬模組．
 
 ## 實現包含 SFC 樣式區塊內容的虛擬模組
 
-對於這個範例，讓我們考慮一個名為 "App.vue" 的檔案，並為其樣式部分實現一個名為 "App.vue.css" 的虛擬模組。\
-過程很簡單：當載入名為 `**.vue.css` 的檔案時，我們將使用 `fs.readFileSync` 從不帶 `.css` 的檔案路徑（即原始 Vue 檔案）檢索 SFC，解析它以提取樣式標籤的內容，並將該內容作為程式碼返回。
+對於這個範例，讓我們考慮一個名為 "App.vue" 的檔案，並為其樣式部分實現一個名為 "App.vue.css" 的虛擬模組．\
+過程很簡單：當載入名為 `**.vue.css` 的檔案時，我們將使用 `fs.readFileSync` 從不帶 `.css` 的檔案路徑（即原始 Vue 檔案）檢索 SFC，解析它以提取樣式標籤的內容，並將該內容作為程式碼返回．
 
 ```ts
 export default function vitePluginChibivue(): Plugin {
@@ -83,13 +83,13 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-現在，讓我們在瀏覽器中檢查。
+現在，讓我們在瀏覽器中檢查．
 
 ![load_virtual_css_module](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module.png)
 
-看起來樣式被正確應用了。
+看起來樣式被正確應用了．
 
-在瀏覽器中，你可以看到 CSS 被匯入，並且虛擬生成了一個 `.vue.css` 檔案。
+在瀏覽器中，你可以看到 CSS 被匯入，並且虛擬生成了一個 `.vue.css` 檔案．
 
 ![load_virtual_css_module2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module2.png)  
 ![load_virtual_css_module3](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module3.png)

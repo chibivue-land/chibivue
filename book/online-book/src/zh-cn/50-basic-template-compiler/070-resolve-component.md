@@ -1,15 +1,15 @@
 # 解析组件
 
-实际上，我们的 chibivue 模板还无法解析组件。
-让我们在这里实现它，因为 Vue.js 提供了几种解析组件的方法。
+实际上，我们的 chibivue 模板还无法解析组件．
+让我们在这里实现它，因为 Vue.js 提供了几种解析组件的方法．
 
-首先，让我们回顾一些解析方法。
+首先，让我们回顾一些解析方法．
 
 ## 组件的解析方法
 
 ### 1. Components 选项（局部注册）
 
-这可能是解析组件最简单的方法。
+这可能是解析组件最简单的方法．
 
 https://vuejs.org/api/options-misc.html#components
 
@@ -31,11 +31,11 @@ export default {
 </template>
 ```
 
-在 components 选项对象中指定的键名成为可以在模板中使用的组件名称。
+在 components 选项对象中指定的键名成为可以在模板中使用的组件名称．
 
 ### 2. 在应用上注册（全局注册）
 
-您可以通过使用创建的 Vue 应用程序的 `.component()` 方法来注册可在整个应用程序中使用的组件。
+您可以通过使用创建的 Vue 应用程序的 `.component()` 方法来注册可在整个应用程序中使用的组件．
 
 https://vuejs.org/guide/components/registration.html#global-registration
 
@@ -52,7 +52,7 @@ app
 
 ### 3. 动态组件 + is 属性
 
-通过使用 is 属性，您可以动态切换组件。
+通过使用 is 属性，您可以动态切换组件．
 
 https://vuejs.org/api/built-in-special-elements.html#component
 
@@ -78,7 +78,7 @@ export default {
 
 ### 4. 在 script setup 中导入
 
-在 script setup 中，您可以直接使用导入的组件。
+在 script setup 中，您可以直接使用导入的组件．
 
 ```vue
 <script setup>
@@ -90,21 +90,21 @@ import MyComponent from './MyComponent.vue'
 </template>
 ```
 
-此外，还有异步组件、嵌入式组件和 `component` 标签，但这次我将尝试处理上述两种（1、2）。
+此外，还有异步组件，嵌入式组件和 `component` 标签，但这次我将尝试处理上述两种（1，2）．
 
-关于 3，如果 1 和 2 可以处理它，那只是一个扩展。至于 4，由于 script setup 尚未实现，我们将暂时搁置。
+关于 3，如果 1 和 2 可以处理它，那只是一个扩展．至于 4，由于 script setup 尚未实现，我们将暂时搁置．
 
 ## 基本方法
 
 解析组件的基本方法如下：
 
-- 在某个地方，存储模板中使用的名称和组件记录。
-- 使用辅助函数根据名称解析组件。
+- 在某个地方，存储模板中使用的名称和组件记录．
+- 使用辅助函数根据名称解析组件．
 
-形式 1 和形式 2 都只是存储名称和组件记录，唯一的区别是它们注册的位置。  
-如果您有记录，您可以在必要时从名称解析组件，因此两种实现都将类似。
+形式 1 和形式 2 都只是存储名称和组件记录，唯一的区别是它们注册的位置．  
+如果您有记录，您可以在必要时从名称解析组件，因此两种实现都将类似．
 
-首先，让我们看一下预期的代码和编译结果。
+首先，让我们看一下预期的代码和编译结果．
 
 ```vue
 <script>
@@ -136,19 +136,19 @@ function render(_ctx) {
 }
 ```
 
-看起来是这样的。
+看起来是这样的．
 
 ## 实现
 
 ### AST
 
-为了生成解析组件的代码，我们需要知道"MyComponent"是一个组件。  
-在解析阶段，我们处理标签名称并在 AST 上将其分为常规 Element 和 Component。
+为了生成解析组件的代码，我们需要知道"MyComponent"是一个组件．  
+在解析阶段，我们处理标签名称并在 AST 上将其分为常规 Element 和 Component．
 
-首先，让我们考虑 AST 的定义。  
-ComponentNode 与常规 Element 一样，具有 props 和 children。  
+首先，让我们考虑 AST 的定义．  
+ComponentNode 与常规 Element 一样，具有 props 和 children．  
 在将这些公共部分合并为 `BaseElementNode` 的同时，我们将现有的 `ElementNode` 重命名为 `PlainElementNode`，  
-并使 `ElementNode` 成为 `PlainElementNode` 和 `ComponentNode` 的联合。
+并使 `ElementNode` 成为 `PlainElementNode` 和 `ComponentNode` 的联合．
 
 ```ts
 // compiler-core/ast.ts
@@ -180,32 +180,32 @@ export interface ComponentNode extends BaseElementNode {
 }
 ```
 
-内容与之前相同，但我们通过 `tagType` 区分它们并将它们视为单独的 AST。  
-我们将在转换阶段使用它来添加辅助函数等。
+内容与之前相同，但我们通过 `tagType` 区分它们并将它们视为单独的 AST．  
+我们将在转换阶段使用它来添加辅助函数等．
 
 ### 解析器
 
-接下来，让我们实现解析器来生成上述 AST。  
-基本上，我们只需要根据标签名称确定 `tagType`。
+接下来，让我们实现解析器来生成上述 AST．  
+基本上，我们只需要根据标签名称确定 `tagType`．
 
-问题是如何确定它是 Element 还是 Component。
+问题是如何确定它是 Element 还是 Component．
 
-基本思路很简单：只需确定它是否是"原生标签"。
+基本思路很简单：只需确定它是否是"原生标签"．
 
 ・  
 ・  
 ・
 
-"等等，等等，这不是我要问的。我们实际上如何实现它？"
+"等等，等等，这不是我要问的．我们实际上如何实现它？"
 
-是的，这是一种暴力方法。我们预定义原生标签名称列表并确定它是否匹配。  
-至于应该枚举哪些项目，所有这些都应该写在规范中，所以我们将信任它并使用它。
+是的，这是一种暴力方法．我们预定义原生标签名称列表并确定它是否匹配．  
+至于应该枚举哪些项目，所有这些都应该写在规范中，所以我们将信任它并使用它．
 
-如果有问题的话，"什么是原生标签"可能因环境而异。  
-在这种情况下，它是浏览器。我的意思是"compiler-core 不应该依赖于环境"。  
-到目前为止，我们已经在 compiler-dom 中实现了这样的 DOM 依赖实现，这个枚举也不例外。
+如果有问题的话，"什么是原生标签"可能因环境而异．  
+在这种情况下，它是浏览器．我的意思是"compiler-core 不应该依赖于环境"．  
+到目前为止，我们已经在 compiler-dom 中实现了这样的 DOM 依赖实现，这个枚举也不例外．
 
-考虑到这一点，我们将实现它，以便可以从解析器外部注入"是否为原生标签"的函数作为选项，考虑到未来的可能性并使其易于在以后添加各种选项。
+考虑到这一点，我们将实现它，以便可以从解析器外部注入"是否为原生标签"的函数作为选项，考虑到未来的可能性并使其易于在以后添加各种选项．
 
 ```ts
 type OptionalOptions = 'isNativeTag' // | TODO: Add more in the future (maybe)
@@ -254,9 +254,9 @@ export const baseParse = (
 }
 ```
 
-现在，在 compiler-dom 中，我们将枚举原生标签名称并将它们作为选项传递。
+现在，在 compiler-dom 中，我们将枚举原生标签名称并将它们作为选项传递．
 
-虽然我提到了 compiler-dom，但枚举本身是在 shared/domTagConfig.ts 中完成的。
+虽然我提到了 compiler-dom，但枚举本身是在 shared/domTagConfig.ts 中完成的．
 
 ```ts
 import { makeMap } from './makeMap'
@@ -278,11 +278,11 @@ export const isHTMLTag = makeMap(HTML_TAGS)
 
 看起来相当可怕，不是吗？
 
-但这是正确的实现。
+但这是正确的实现．
 
 https://github.com/vuejs/core/blob/32bdc5d1900ceb8df1e8ee33ea65af7b4da61051/packages/shared/src/domTagConfig.ts#L6
 
-创建 compiler-dom/parserOptions.ts 并将其传递给编译器。
+创建 compiler-dom/parserOptions.ts 并将其传递给编译器．
 
 ```ts
 // compiler-dom/parserOptions.ts
@@ -313,9 +313,9 @@ export function compile(template: string, option?: CompilerOptions) {
 }
 ```
 
-解析器的实现已完成，所以我们现在将继续实现其余部分。
+解析器的实现已完成，所以我们现在将继续实现其余部分．
 
-其余部分非常简单。我们只需要确定它是否是组件并分配一个 tagType。
+其余部分非常简单．我们只需要确定它是否是组件并分配一个 tagType．
 
 ```ts
 function parseElement(
@@ -350,17 +350,17 @@ function isComponent(tag: string, context: ParserContext) {
 }
 ```
 
-有了这个，解析器和 AST 就完成了。我们现在将继续使用这些来实现转换和代码生成。
+有了这个，解析器和 AST 就完成了．我们现在将继续使用这些来实现转换和代码生成．
 
 ### 转换
 
-在转换中需要做的事情非常简单。
+在转换中需要做的事情非常简单．
 
-在 transformElement 中，如果 Node 是 ComponentNode，我们只需要进行轻微的转换。
+在 transformElement 中，如果 Node 是 ComponentNode，我们只需要进行轻微的转换．
 
-此时，我们还在上下文中注册组件。
-这样做是为了我们可以在代码生成期间集体解析它。
-如后面提到的，组件将在代码生成中作为资产集体解析。
+此时，我们还在上下文中注册组件．
+这样做是为了我们可以在代码生成期间集体解析它．
+如后面提到的，组件将在代码生成中作为资产集体解析．
 
 ```ts
 // compiler-core/transforms/transformElement.ts
@@ -400,7 +400,7 @@ export function toValidAssetId(
 }
 ```
 
-我们还确保在上下文中注册它。
+我们还确保在上下文中注册它．
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
@@ -425,7 +425,7 @@ export function createTransformContext(
 }
 ```
 
-然后，上下文中的所有组件都在目标组件的 RootNode 中注册。
+然后，上下文中的所有组件都在目标组件的 RootNode 中注册．
 
 ```ts
 export interface RootNode extends Node {
@@ -447,11 +447,11 @@ export function transform(root: RootNode, options: TransformOptions) {
 }
 ```
 
-有了这个，剩下的就是在代码生成中使用 RootNode.components。
+有了这个，剩下的就是在代码生成中使用 RootNode.components．
 
 ### 代码生成
 
-代码只是通过将名称传递给辅助函数来生成代码以进行解析，就像我们在开始时看到的编译结果一样。我们将其抽象为"资产"以供将来考虑。
+代码只是通过将名称传递给辅助函数来生成代码以进行解析，就像我们在开始时看到的编译结果一样．我们将其抽象为"资产"以供将来考虑．
 
 ```ts
 export const generate = (ast: RootNode, option: CompilerOptions): string => {
@@ -496,11 +496,11 @@ function genAssets(
 
 ### runtime-core 端的实现
 
-现在我们已经生成了所需的代码，让我们转到 runtime-core 中的实现。
+现在我们已经生成了所需的代码，让我们转到 runtime-core 中的实现．
 
 #### 为组件添加"component"作为选项
 
-这很简单，只需将其添加到选项中。
+这很简单，只需将其添加到选项中．
 
 ```ts
 export type ComponentOptions<
@@ -515,7 +515,7 @@ export type ComponentOptions<
 
 #### 为应用添加"components"作为选项
 
-这也很简单。
+这也很简单．
 
 ```ts
 export interface AppContext {
@@ -551,9 +551,9 @@ export function createAppAPI<HostElement>(
 
 #### 实现从上述两者解析组件的函数
 
-这里没有什么特别需要解释的。
-它搜索本地和全局注册的组件，并返回组件。
-如果找不到，它将名称原样返回作为回退。
+这里没有什么特别需要解释的．
+它搜索本地和全局注册的组件，并返回组件．
+如果找不到，它将名称原样返回作为回退．
 
 ```ts
 // runtime-core/helpers/componentAssets.ts
@@ -583,12 +583,12 @@ function resolve(registry: Record<string, any> | undefined, name: string) {
 }
 ```
 
-需要注意的一点是 `currentRenderingInstance`。
+需要注意的一点是 `currentRenderingInstance`．
 
-为了在 `resolveComponent` 中遍历本地注册的组件，我们需要访问当前正在渲染的组件。
+为了在 `resolveComponent` 中遍历本地注册的组件，我们需要访问当前正在渲染的组件．
 （我们想要搜索正在渲染的组件的 `components` 选项）
 
-考虑到这一点，让我们准备 `currentRenderingInstance` 并在渲染时更新它。
+考虑到这一点，让我们准备 `currentRenderingInstance` 并在渲染时更新它．
 
 ```ts
 // runtime-core/componentRenderContexts.ts
@@ -629,7 +629,7 @@ const setupRenderEffect = (
 
 ## 让我们试试看
 
-太好了！我们终于可以解析组件了。
+太好了！我们终于可以解析组件了．
 
 让我们尝试在 playground 中运行它！
 

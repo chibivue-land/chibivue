@@ -2,14 +2,14 @@
 
 ## 讓我們實現生命週期鉤子
 
-實現生命週期鉤子非常簡單。
-你只需要在 ComponentInternalInstance 中註冊函式，並在渲染期間的指定時機執行它們。
-API 本身將在 runtime-core/apiLifecycle.ts 中實現。
+實現生命週期鉤子非常簡單．
+你只需要在 ComponentInternalInstance 中註冊函式，並在渲染期間的指定時機執行它們．
+API 本身將在 runtime-core/apiLifecycle.ts 中實現．
 
-需要注意的一點是，你需要考慮 onMounted/onUnmounted/onUpdated 的調度。
-註冊的函式應該在掛載、卸載和更新完全完成後執行。
+需要注意的一點是，你需要考慮 onMounted/onUnmounted/onUpdated 的調度．
+註冊的函式應該在掛載，卸載和更新完全完成後執行．
 
-因此，我們將在調度器中實現一種名為"post"的新佇列類型。這是在現有佇列刷新完成後才會被刷新的佇列。
+因此，我們將在調度器中實現一種名為"post"的新佇列類型．這是在現有佇列刷新完成後才會被刷新的佇列．
 圖像 ↓
 
 ```ts
@@ -22,8 +22,8 @@ function queueFlush() {
 }
 ```
 
-同時，透過這個，讓我們實現一個入佇列到 pendingPostFlushCbs 的 API。
-並且讓我們使用它將渲染器中的 effect 入佇列到 pendingPostFlushCbs。
+同時，透過這個，讓我們實現一個入佇列到 pendingPostFlushCbs 的 API．
+並且讓我們使用它將渲染器中的 effect 入佇列到 pendingPostFlushCbs．
 
 這次要支援的生命週期鉤子：
 

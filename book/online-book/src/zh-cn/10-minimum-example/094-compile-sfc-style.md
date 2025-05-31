@@ -2,16 +2,16 @@
 
 ## 虚拟模块
 
-让我们也支持样式。\
-在 Vite 中，你可以通过使用 `.css` 扩展名来导入 CSS 文件。
+让我们也支持样式．\
+在 Vite 中，你可以通过使用 `.css` 扩展名来导入 CSS 文件．
 
 ```js
 import 'app.css'
 ```
 
-我们将通过使用 Vite 的虚拟模块来实现这一点。\
-虚拟模块允许你将不存在的文件保存在内存中，就像它们存在一样。\
-你可以使用 `load` 和 `resolveId` 选项来实现虚拟模块。
+我们将通过使用 Vite 的虚拟模块来实现这一点．\
+虚拟模块允许你将不存在的文件保存在内存中，就像它们存在一样．\
+你可以使用 `load` 和 `resolveId` 选项来实现虚拟模块．
 
 ```ts
 export default function myPlugin() {
@@ -33,13 +33,13 @@ export default function myPlugin() {
 }
 ```
 
-使用这种机制，我们将把 SFC 的样式块作为虚拟 CSS 文件加载。\
-如前所述，在 Vite 中，导入带有 `.css` 扩展名的文件就足够了，所以我们将考虑创建一个名为 `${SFC 文件名}.css` 的虚拟模块。
+使用这种机制，我们将把 SFC 的样式块作为虚拟 CSS 文件加载．\
+如前所述，在 Vite 中，导入带有 `.css` 扩展名的文件就足够了，所以我们将考虑创建一个名为 `${SFC 文件名}.css` 的虚拟模块．
 
 ## 实现包含 SFC 样式块内容的虚拟模块
 
-对于这个示例，让我们考虑一个名为 "App.vue" 的文件，并为其样式部分实现一个名为 "App.vue.css" 的虚拟模块。\
-过程很简单：当加载名为 `**.vue.css` 的文件时，我们将使用 `fs.readFileSync` 从不带 `.css` 的文件路径（即原始 Vue 文件）检索 SFC，解析它以提取样式标签的内容，并将该内容作为代码返回。
+对于这个示例，让我们考虑一个名为 "App.vue" 的文件，并为其样式部分实现一个名为 "App.vue.css" 的虚拟模块．\
+过程很简单：当加载名为 `**.vue.css` 的文件时，我们将使用 `fs.readFileSync` 从不带 `.css` 的文件路径（即原始 Vue 文件）检索 SFC，解析它以提取样式标签的内容，并将该内容作为代码返回．
 
 ```ts
 export default function vitePluginChibivue(): Plugin {
@@ -83,13 +83,13 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-现在，让我们在浏览器中检查。
+现在，让我们在浏览器中检查．
 
 ![load_virtual_css_module](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module.png)
 
-看起来样式被正确应用了。
+看起来样式被正确应用了．
 
-在浏览器中，你可以看到 CSS 被导入，并且虚拟生成了一个 `.vue.css` 文件。
+在浏览器中，你可以看到 CSS 被导入，并且虚拟生成了一个 `.vue.css` 文件．
 
 ![load_virtual_css_module2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module2.png)  
 ![load_virtual_css_module3](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module3.png)

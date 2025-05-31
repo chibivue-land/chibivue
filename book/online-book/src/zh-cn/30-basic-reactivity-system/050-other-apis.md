@@ -1,8 +1,8 @@
 # 其他响应式 API
 
 ::: warning
-这里解释的实现基于当前草拟的[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)之前的版本。  
-一旦[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致。
+这里解释的实现基于当前草拟的[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)之前的版本．  
+一旦[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致．
 :::
 
 ## 让我们实现其他响应式 API！

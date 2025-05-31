@@ -2,12 +2,12 @@
 
 ## 目標開發者介面
 
-現在，讓我們繼續指令的實現。這次，讓我們嘗試支援 v-for。
+現在，讓我們繼續指令的實現．這次，讓我們嘗試支援 v-for．
 
-嗯，我想對於那些之前使用過 Vue.js 的人來說，這是一個熟悉的指令。
+嗯，我想對於那些之前使用過 Vue.js 的人來說，這是一個熟悉的指令．
 
-v-for 有各種語法。
-最基本的是循環遍歷陣列，但你也可以循環遍歷其他東西，如字串、物件鍵、範圍等等。
+v-for 有各種語法．
+最基本的是循環遍歷陣列，但你也可以循環遍歷其他東西，如字串，物件鍵，範圍等等．
 
 https://vuejs.org/v2/guide/list.html
 
@@ -91,15 +91,15 @@ export default {
 </template>
 ```
 
-你可能會想，"我們突然要實現這麼多東西？這不可能！"但不要擔心，我會一步一步地解釋。
+你可能會想，"我們突然要實現這麼多東西？這不可能！"但不要擔心，我會一步一步地解釋．
 
 ## 實現方法
 
-首先，讓我們大致思考一下我們想要如何編譯它，並考慮在實現時可能遇到的困難點。
+首先，讓我們大致思考一下我們想要如何編譯它，並考慮在實現時可能遇到的困難點．
 
-首先，讓我們看看期望的編譯結果。
+首先，讓我們看看期望的編譯結果．
 
-基本結構並不那麼困難。我們將在 runtime-core 中實現一個名為 renderList 的輔助函式來渲染列表，並將其編譯為表達式。
+基本結構並不那麼困難．我們將在 runtime-core 中實現一個名為 renderList 的輔助函式來渲染列表，並將其編譯為表達式．
 
 示例 1：
 
@@ -151,15 +151,15 @@ h(
 )
 ```
 
-將來，作為 renderList 第一個參數傳遞的值預期不僅是陣列，還可能是數字和物件。但是，現在讓我們假設只期望陣列。\_renderList 函式本身的實現可以理解為類似於 Array.prototype.map 的東西。至於除陣列之外的值，你只需要在 \_renderList 中對它們進行規範化，所以現在讓我們忘記它們（只關注陣列）。
+將來，作為 renderList 第一個參數傳遞的值預期不僅是陣列，還可能是數字和物件．但是，現在讓我們假設只期望陣列．\_renderList 函式本身的實現可以理解為類似於 Array.prototype.map 的東西．至於除陣列之外的值，你只需要在 \_renderList 中對它們進行規範化，所以現在讓我們忘記它們（只關注陣列）．
 
-現在，對於那些到目前為止已經實現了各種指令的人來說，實現這種編譯器（轉換器）應該不會太困難。
+現在，對於那些到目前為止已經實現了各種指令的人來說，實現這種編譯器（轉換器）應該不會太困難．
 
 ## 關鍵實現點（困難點）
 
-困難點在於在 SFC（單檔案組件）中使用它時。你還記得在 SFC 中使用的編譯器和在瀏覽器中使用的編譯器之間的區別嗎？是的，就是使用 `_ctx` 解析表達式。
+困難點在於在 SFC（單檔案組件）中使用它時．你還記得在 SFC 中使用的編譯器和在瀏覽器中使用的編譯器之間的區別嗎？是的，就是使用 `_ctx` 解析表達式．
 
-在 v-for 中，使用者定義的局部變數以各種形式出現，所以你需要正確地收集它們並跳過 rewriteIdentifiers。
+在 v-for 中，使用者定義的局部變數以各種形式出現，所以你需要正確地收集它們並跳過 rewriteIdentifiers．
 
 ```ts
 // 錯誤示例
@@ -195,17 +195,17 @@ h(
 )
 ```
 
-從示例 1 到 3，有各種局部變數的定義。
+從示例 1 到 3，有各種局部變數的定義．
 
-你需要分析每個定義並收集要跳過的識別符。
+你需要分析每個定義並收集要跳過的識別符．
 
-現在，讓我們暫時擱置如何實現這一點，從大局開始實現。
+現在，讓我們暫時擱置如何實現這一點，從大局開始實現．
 
 ## AST 的實現
 
-現在，讓我們像往常一樣定義 AST。
+現在，讓我們像往常一樣定義 AST．
 
-與 v-if 一樣，我們將考慮轉換後的 AST（無需實現解析器）。
+與 v-if 一樣，我們將考慮轉換後的 AST（無需實現解析器）．
 
 ```ts
 export const enum NodeTypes {
@@ -268,7 +268,7 @@ export type JSChildNode =
   | FunctionExpression // [!code ++]
 ```
 
-關於 `RENDER_LIST`，像往常一樣，將其添加到 `runtimeHelpers`。
+關於 `RENDER_LIST`，像往常一樣，將其添加到 `runtimeHelpers`．
 
 ```ts
 // runtimeHelpers.ts
@@ -286,7 +286,7 @@ export const helperNameMap: Record<symbol, string> = {
 }
 ```
 
-至於 `ForParseResult`，其定義在 `transform/vFor` 中。
+至於 `ForParseResult`，其定義在 `transform/vFor` 中．
 
 ```ts
 export interface ForParseResult {
@@ -306,20 +306,20 @@ export interface ForParseResult {
 - key: `i`
 - index: `undefined`
 
-`index` 是將物件應用於 `v-for` 時的第三個參數。
+`index` 是將物件應用於 `v-for` 時的第三個參數．
 
 https://vuejs.org/v2/guide/list.html#v-for-with-an-object
 
 ![v_for_ast.drawio.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for_ast.drawio.png)
 
-關於 `value`，如果你使用像 `{ id, name, color, }` 這樣的解構賦值，它將有多個識別符。
+關於 `value`，如果你使用像 `{ id, name, color, }` 這樣的解構賦值，它將有多個識別符．
 
-我們收集由 `value`、`key` 和 `index` 定義的識別符，並跳過添加前綴。
+我們收集由 `value`，`key` 和 `index` 定義的識別符，並跳過添加前綴．
 
 ## codegen 的實現
 
-雖然順序有點顛倒，但讓我們先實現 codegen，因為沒有太多要討論的。
-只需要做兩件事：處理 `NodeTypes.FOR` 和函式表達式的 codegen（這是第一次出現）。
+雖然順序有點顛倒，但讓我們先實現 codegen，因為沒有太多要討論的．
+只需要做兩件事：處理 `NodeTypes.FOR` 和函式表達式的 codegen（這是第一次出現）．
 
 ```ts
 switch (node.type) {
@@ -373,15 +373,15 @@ function genFunctionExpression(
 }
 ```
 
-沒有什麼特別困難的。就這樣結束了。
+沒有什麼特別困難的．就這樣結束了．
 
 ## 轉換器的實現
 
 ### 準備工作
 
-在實現轉換器之前，還有一些準備工作。
+在實現轉換器之前，還有一些準備工作．
 
-正如我們在 `v-on` 中所做的，在 `v-for` 的情況下，執行 `processExpression` 的時機有點特殊（我們需要收集局部變數），所以我們在 `transformExpression` 中跳過它。
+正如我們在 `v-on` 中所做的，在 `v-for` 的情況下，執行 `processExpression` 的時機有點特殊（我們需要收集局部變數），所以我們在 `transformExpression` 中跳過它．
 
 ```ts
 export const transformExpression: NodeTransform = (node, ctx) => {
@@ -405,19 +405,19 @@ export const transformExpression: NodeTransform = (node, ctx) => {
 
 ### 收集識別符
 
-現在，在我們繼續主要實現之前，讓我們思考如何收集識別符。
+現在，在我們繼續主要實現之前，讓我們思考如何收集識別符．
 
-這次，我們需要考慮不僅是像 `fruit` 這樣的簡單識別符，還有像 `{ id, name, color }` 這樣的解構賦值。
-為此，似乎我們需要像往常一樣使用 TreeWalker。
+這次，我們需要考慮不僅是像 `fruit` 這樣的簡單識別符，還有像 `{ id, name, color }` 這樣的解構賦值．
+為此，似乎我們需要像往常一樣使用 TreeWalker．
 
-目前，在 `processExpression` 函式中，實現是搜尋識別符並向它們添加 `_ctx`。但是，這次我們只需要收集識別符而不添加任何東西。讓我們實現這一點。
+目前，在 `processExpression` 函式中，實現是搜尋識別符並向它們添加 `_ctx`．但是，這次我們只需要收集識別符而不添加任何東西．讓我們實現這一點．
 
-首先，讓我們準備一個地方來存儲收集的識別符。由於如果每個 Node 都有它們對於 codegen 和其他目的會很方便，讓我們向 AST 添加一個可以在每個 Node 上保存多個識別符的屬性。
+首先，讓我們準備一個地方來存儲收集的識別符．由於如果每個 Node 都有它們對於 codegen 和其他目的會很方便，讓我們向 AST 添加一個可以在每個 Node 上保存多個識別符的屬性．
 
-目標是 `CompoundExpressionNode` 和 `SimpleExpressionNode`。
+目標是 `CompoundExpressionNode` 和 `SimpleExpressionNode`．
 
 像 `fruit` 這樣的簡單識別符將被添加到 `SimpleExpressionNode`，
-像 `{ id, name, color }` 這樣的解構賦值將被添加到 `CompoundExpressionNode`。（在視覺化方面，它將是一個複合表達式，如 `["{", simpleExpr("id"), ",", simpleExpr("name"), ",", simpleExpr("color"), "}"]`）
+像 `{ id, name, color }` 這樣的解構賦值將被添加到 `CompoundExpressionNode`．（在視覺化方面，它將是一個複合表達式，如 `["{", simpleExpr("id"), ",", simpleExpr("name"), ",", simpleExpr("color"), "}"]`）
 
 ```ts
 export interface SimpleExpressionNode extends Node {
@@ -440,9 +440,9 @@ export interface CompoundExpressionNode extends Node {
 }
 ```
 
-在 `processExpression` 函式中，讓我們在這裡實現收集識別符的邏輯，並透過將收集的識別符添加到轉換器的上下文中來跳過添加前綴。
+在 `processExpression` 函式中，讓我們在這裡實現收集識別符的邏輯，並透過將收集的識別符添加到轉換器的上下文中來跳過添加前綴．
 
-目前，用於添加/刪除識別符的函式被配置為接收單個識別符作為字串，所以讓我們將其更改為假設 `{ identifier: string[] }` 的形式。
+目前，用於添加/刪除識別符的函式被配置為接收單個識別符作為字串，所以讓我們將其更改為假設 `{ identifier: string[] }` 的形式．
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
@@ -488,11 +488,11 @@ const context: TransformContext = {
 }
 ```
 
-現在，讓我們在 `processExpression` 函式中實現收集識別符的邏輯。
+現在，讓我們在 `processExpression` 函式中實現收集識別符的邏輯．
 
-在 `processExpression` 函式中，定義一個名為 `asParams` 的選項，如果設置為 true，實現跳過添加前綴並在 `node.identifiers` 中收集識別符的邏輯。
+在 `processExpression` 函式中，定義一個名為 `asParams` 的選項，如果設置為 true，實現跳過添加前綴並在 `node.identifiers` 中收集識別符的邏輯．
 
-`asParams` 旨在引用在 `renderList` 的回呼函式中定義的參數（局部變數）。
+`asParams` 旨在引用在 `renderList` 的回呼函式中定義的參數（局部變數）．
 
 ```ts
 export function processExpression(
@@ -516,11 +516,11 @@ export function processExpression(
 }
 ```
 
-這就是簡單識別符的結束。問題在於其他情況。
+這就是簡單識別符的結束．問題在於其他情況．
 
-為此，我們將使用在 `babelUtils` 中實現的 `walkIdentifiers`。
+為此，我們將使用在 `babelUtils` 中實現的 `walkIdentifiers`．
 
-由於我們假設定義為函式參數的局部變數，我們將在此函式中將它們轉換為"函式參數"，並在 `walkIdentifier` 中將它們作為 Function params 搜尋。
+由於我們假設定義為函式參數的局部變數，我們將在此函式中將它們轉換為"函式參數"，並在 `walkIdentifier` 中將它們作為 Function params 搜尋．
 
 ```ts
 // 將 asParams 轉換為類似函式參數的形式
@@ -561,11 +561,11 @@ export const isFunctionType = (node: Node): node is Function => {
 }
 ```
 
-我們在這裡做的只是如果 node 是函式則遍歷參數，並將識別符收集到 `identifiers` 中。
+我們在這裡做的只是如果 node 是函式則遍歷參數，並將識別符收集到 `identifiers` 中．
 
-在 `walkIdentifiers` 的呼叫者中，我們定義 `knownIds` 並將其與 `knownIds` 一起傳遞給 `walkIdentifiers` 以收集識別符。
+在 `walkIdentifiers` 的呼叫者中，我們定義 `knownIds` 並將其與 `knownIds` 一起傳遞給 `walkIdentifiers` 以收集識別符．
 
-在 `walkIdentifiers` 中收集後，最後，在生成 CompoundExpression 時基於 `knownIds` 生成識別符。
+在 `walkIdentifiers` 中收集後，最後，在生成 CompoundExpression 時基於 `knownIds` 生成識別符．
 
 ```ts
 const knownIds: Record<string, number> = Object.create(ctx.identifiers)
@@ -588,7 +588,7 @@ ret.identifiers = Object.keys(knownIds) // 基於 knownIds 生成識別符
 return ret
 ```
 
-雖然檔案有點亂序，但 `walkFunctionParams` 和 `markScopeIdentifier` 只是遍歷參數並將 `Node.name` 添加到 `knownIds`。
+雖然檔案有點亂序，但 `walkFunctionParams` 和 `markScopeIdentifier` 只是遍歷參數並將 `Node.name` 添加到 `knownIds`．
 
 ```ts
 export function walkFunctionParams(
@@ -620,16 +620,16 @@ function markScopeIdentifier(
 }
 ```
 
-有了這個，我們應該能夠收集識別符。讓我們使用這個實現 `transformFor` 並完成 v-for 指令！
+有了這個，我們應該能夠收集識別符．讓我們使用這個實現 `transformFor` 並完成 v-for 指令！
 
 ### transformFor
 
-現在我們已經克服了障礙，讓我們像往常一樣使用我們擁有的東西實現轉換器。
+現在我們已經克服了障礙，讓我們像往常一樣使用我們擁有的東西實現轉換器．
 還有一點點，讓我們加油！
 
-像 v-if 一樣，這也涉及結構，所以讓我們使用 `createStructuralDirectiveTransform` 來實現它。
+像 v-if 一樣，這也涉及結構，所以讓我們使用 `createStructuralDirectiveTransform` 來實現它．
 
-我認為如果我用程式碼寫解釋會更容易理解，所以我將在下面提供帶有解釋的程式碼。但是，請在查看這個之前嘗試透過閱讀原始碼自己實現它！
+我認為如果我用程式碼寫解釋會更容易理解，所以我將在下面提供帶有解釋的程式碼．但是，請在查看這個之前嘗試透過閱讀原始碼自己實現它！
 
 ```ts
 // 這是主要結構的實現，類似於 v-if。
@@ -840,12 +840,12 @@ function createParamsList(
 }
 ```
 
-現在，剩下的部分是實際包含在編譯程式碼中的 renderList 的實現，以及註冊轉換器的實現。如果我們能實現這些，v-for 應該就能工作了！
+現在，剩下的部分是實際包含在編譯程式碼中的 renderList 的實現，以及註冊轉換器的實現．如果我們能實現這些，v-for 應該就能工作了！
 
 讓我們嘗試執行它！
 
 ![v_for](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for.png)
 
-看起來進展順利。
+看起來進展順利．
 
 到此為止的原始碼：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/050_v_for)
