@@ -375,7 +375,8 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
     ],
     editLink: {
-      pattern: 'https://github.com/chibivue-land/chibivue/blob/main/book/online-book/src/:path',
+      pattern:
+        'https://github.com/chibivue-land/chibivue/blob/main/book/online-book/src/:path',
       text: '在 GitHub 上編輯此頁面',
     },
     footer: {
