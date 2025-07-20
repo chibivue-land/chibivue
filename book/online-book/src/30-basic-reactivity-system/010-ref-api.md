@@ -53,7 +53,7 @@ class RefImpl<T> {
   }
 
   set value(newVal) {
-    this._value = toReactive(v)
+    this._value = toReactive(newVal)
     triggerRefValue(this)
   }
 }
