@@ -238,3 +238,6 @@ app.mount('#app')
 耶！現在我們可以使用 h 函數來渲染各種標籤！
 
 ![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+
+到此為止的源代碼：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)
