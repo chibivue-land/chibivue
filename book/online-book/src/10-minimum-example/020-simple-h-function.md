@@ -238,3 +238,6 @@ app.mount('#app')
 Yay! Now we can use the h function to render various tags!
 
 ![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

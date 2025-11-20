@@ -240,3 +240,6 @@ app.mount('#app')
 やった！ h 関数でいろんなタグを描画できるようになった！
 
 ![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)
