@@ -60,7 +60,7 @@ Once cloned, run the script to create the project.
 At this time, you should be asked for the **absolute path** of the local vuejs/core source code, so please enter it.
 
 ```bash
-cd chibi-vue
+cd chibivue
 ni
 nr setup:vue
 

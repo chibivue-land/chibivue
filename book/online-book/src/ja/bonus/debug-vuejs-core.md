@@ -60,7 +60,7 @@ clone できたら，プロジェクトを作成するスクリプトを実行�
 この際，ローカルにある vuejs/core のソースコードの**絶対パス**を求められるはずなので，入力してください．
 
 ```bash
-cd chibi-vue
+cd chibivue
 ni
 nr setup:vue
 

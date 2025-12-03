@@ -60,7 +60,7 @@ git clone https://github.com/chibivue-land/chibivue.git
 此時，您應該被要求輸入本地 vuejs/core 原始碼的**絕對路徑**，所以請輸入它．
 
 ```bash
-cd chibi-vue
+cd chibivue
 ni
 nr setup:vue
 
