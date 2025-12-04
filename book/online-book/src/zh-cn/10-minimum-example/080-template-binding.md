@@ -286,6 +286,7 @@ function parseChildren(
     // .
     //
     }
+```
 
 ```ts
 function parseInterpolation(
