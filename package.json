@@ -46,7 +46,7 @@
     "eslint-plugin-import-x": "^4.5.0",
     "fs-extra": "^11.1.1",
     "jsdom": "^26.0.0",
-    "prettier": "4.0.0-alpha.10",
+    "prettier": "4.0.0-alpha.13",
     "rimraf": "^6.0.0",
     "rollup": "^4.28.0",
     "rollup-plugin-dts": "^6.1.1",
