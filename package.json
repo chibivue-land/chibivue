@@ -22,6 +22,7 @@
     "typecheck": "tsgo --noEmit",
     "lint": "oxlint -c .oxlintrc.json .",
     "lint:fix": "oxlint -c .oxlintrc.json --fix .",
+    "lint:text": "textlint book",
     "fmt": "oxfmt .",
     "fmt:check": "oxfmt --check .",
     "test": "vitest run",
