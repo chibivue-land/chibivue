@@ -198,7 +198,7 @@ Twitter(X): https://twitter.com/ubugeeei
 [Vue.js](https://github.com/vuejs) メンバー, [Vue.js Japan User Group](https://github.com/vuejs-jp) コアスタッフ．\
 [chibivue land](https://github.com/chibivue-land) オーナー.
 
-https://ublog.dev/
+https://wtrclred.io/
 
 <div align="center">
 

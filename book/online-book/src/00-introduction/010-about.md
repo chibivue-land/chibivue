@@ -189,7 +189,7 @@ You can also join from the Discord button on the top right of this book's header
 Member of [Vue.js](https://github.com/vuejs), core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp).\
 Owner of [chibivue land](https://github.com/chibivue-land).
 
-https://ublog.dev/
+https://wtrclred.io/
 
 <div align="center">
 

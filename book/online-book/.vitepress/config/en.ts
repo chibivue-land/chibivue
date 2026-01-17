@@ -288,11 +288,11 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             items: [
               {
                 text: 'Router',
-                link: 'en//90-web-application-essentials/010-plugins/010-router',
+                link: '/90-web-application-essentials/010-plugins/010-router',
               },
               {
                 text: 'Preprocessors',
-                link: 'en//90-web-application-essentials/010-plugins/020-preprocessors',
+                link: '/90-web-application-essentials/010-plugins/020-preprocessors',
               },
             ],
           },
@@ -303,11 +303,11 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             items: [
               {
                 text: 'createSSRApp',
-                link: 'en//90-web-application-essentials/020-ssr/010-create-ssr-app',
+                link: '/90-web-application-essentials/020-ssr/010-create-ssr-app',
               },
               {
                 text: 'hydration',
-                link: 'en//90-web-application-essentials/020-ssr/020-hydration',
+                link: '/90-web-application-essentials/020-ssr/020-hydration',
               },
             ],
           },
@@ -317,15 +317,15 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             items: [
               {
                 text: 'KeepAlive',
-                link: 'en//90-web-application-essentials/030-builtins/010-keep-alive',
+                link: '/90-web-application-essentials/030-builtins/010-keep-alive',
               },
               {
                 text: 'Suspense',
-                link: 'en//90-web-application-essentials/030-builtins/020-suspense',
+                link: '/90-web-application-essentials/030-builtins/020-suspense',
               },
               {
                 text: 'Transition',
-                link: 'en//90-web-application-essentials/030-builtins/030-transition',
+                link: '/90-web-application-essentials/030-builtins/030-transition',
               },
             ],
           },
@@ -335,15 +335,15 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             items: [
               {
                 text: 'Static Hoisting',
-                link: 'en//90-web-application-essentials/040-optimizations/010-static-hoisting',
+                link: '/90-web-application-essentials/040-optimizations/010-static-hoisting',
               },
               {
                 text: 'Patch Flags',
-                link: 'en//90-web-application-essentials/040-optimizations/020-patch-flags',
+                link: '/90-web-application-essentials/040-optimizations/020-patch-flags',
               },
               {
                 text: 'Tree Flattening',
-                link: 'en//90-web-application-essentials/040-optimizations/030-tree-flattening',
+                link: '/90-web-application-essentials/040-optimizations/030-tree-flattening',
               },
             ],
           },

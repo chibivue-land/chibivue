@@ -21,9 +21,9 @@ const heroContent: Record<
   },
   ja: {
     tagline:
-      "Vue.js を書く：'Hello, World' のたった一行から、一歩ずつ。",
-    startButton: '学習を始める',
-    vueButton: 'Vue.js 公式',
+      "Writing Vue.js: Step by Step, from just one line of 'Hello, World'.",
+    startButton: 'Start Learning',
+    vueButton: 'Vue.js Official',
   },
   'zh-cn': {
     tagline: "编写 Vue.js：从一行 'Hello, World' 开始，循序渐进。",
@@ -107,14 +107,12 @@ const featuresContent: Record<
     {
       icon: 'vdom',
       title: 'Virtual DOM',
-      description:
-        '从虚拟 DOM 的基本设置到 patch 渲染和调度器的实现。',
+      description: '从虚拟 DOM 的基本设置到 patch 渲染和调度器的实现。',
     },
     {
       icon: 'compiler',
       title: 'Template Compiler',
-      description:
-        '从模板编译器的基本实现到数据绑定和指令的实现。',
+      description: '从模板编译器的基本实现到数据绑定和指令的实现。',
     },
     {
       icon: 'sfc',
@@ -133,14 +131,12 @@ const featuresContent: Record<
     {
       icon: 'vdom',
       title: 'Virtual DOM',
-      description:
-        '從虛擬 DOM 的基本設置到 patch 渲染和調度器的實現。',
+      description: '從虛擬 DOM 的基本設置到 patch 渲染和調度器的實現。',
     },
     {
       icon: 'compiler',
       title: 'Template Compiler',
-      description:
-        '從模板編譯器的基本實現到數據綁定和指令的實現。',
+      description: '從模板編譯器的基本實現到數據綁定和指令的實現。',
     },
     {
       icon: 'sfc',
