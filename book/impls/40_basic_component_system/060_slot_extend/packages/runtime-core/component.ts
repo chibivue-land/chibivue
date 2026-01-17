@@ -1,90 +1,89 @@
-import { EffectScope, type ReactiveEffect } from '../reactivity'
-import { proxyRefs } from '../reactivity/ref'
-import { type AppContext, createAppContext } from './apiCreateApp'
-import { emit } from './componentEmits'
-import type { ComponentOptions } from './componentOptions'
-import { type Props, initProps } from './componentProps'
+import { EffectScope, type ReactiveEffect } from "../reactivity";
+import { proxyRefs } from "../reactivity/ref";
+import { type AppContext, createAppContext } from "./apiCreateApp";
+import { emit } from "./componentEmits";
+import type { ComponentOptions } from "./componentOptions";
+import { type Props, initProps } from "./componentProps";
 import {
   type ComponentPublicInstance,
   PublicInstanceProxyHandlers,
-} from './componentPublicInstance'
+} from "./componentPublicInstance";
 import {
   type InternalSlots,
   type SlotsType,
   type UnwrapSlotsType,
   initSlots,
-} from './componentSlots'
-import { LifecycleHooks } from './enums'
-import type { VNode, VNodeChild } from './vnode'
+} from "./componentSlots";
+import { LifecycleHooks } from "./enums";
+import type { VNode, VNodeChild } from "./vnode";
 
-export type Component = ComponentOptions
+export type Component = ComponentOptions;
 
-export type Data = Record<string, unknown>
+export type Data = Record<string, unknown>;
 
-type LifecycleHook<TFn = Function> = TFn[] | null
+type LifecycleHook<TFn = Function> = TFn[] | null;
 
 export type SetupContext<S extends SlotsType = {}> = {
-  slots: UnwrapSlotsType<S>
-  emit: (e: string, ...args: any[]) => void
-  expose: (exposed?: Record<string, any>) => void
-}
+  slots: UnwrapSlotsType<S>;
+  emit: (e: string, ...args: any[]) => void;
+  expose: (exposed?: Record<string, any>) => void;
+};
 
 export interface ComponentInternalInstance {
-  uid: number
-  type: Component
-  parent: ComponentInternalInstance | null
-  appContext: AppContext
+  uid: number;
+  type: Component;
+  parent: ComponentInternalInstance | null;
+  appContext: AppContext;
 
-  vnode: VNode
-  subTree: VNode
-  next: VNode | null
+  vnode: VNode;
+  subTree: VNode;
+  next: VNode | null;
 
-  effect: ReactiveEffect
-  render: InternalRenderFunction
-  update: () => void
+  effect: ReactiveEffect;
+  render: InternalRenderFunction;
+  update: () => void;
 
-  provides: Data
-  scope: EffectScope
+  provides: Data;
+  scope: EffectScope;
 
-  propsOptions: Props
-  props: Data
-  slots: InternalSlots
-  emit: (event: string, ...args: any[]) => void
+  propsOptions: Props;
+  props: Data;
+  slots: InternalSlots;
+  emit: (event: string, ...args: any[]) => void;
 
-  setupState: Data
-  setupContext: SetupContext | null
+  setupState: Data;
+  setupContext: SetupContext | null;
 
-  proxy: ComponentPublicInstance | null
-  exposed: Record<string, any> | null
-  exposeProxy: Record<string, any> | null
+  proxy: ComponentPublicInstance | null;
+  exposed: Record<string, any> | null;
+  exposeProxy: Record<string, any> | null;
 
-  ctx: Data
+  ctx: Data;
 
-  isMounted: boolean
-  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook
-  [LifecycleHooks.MOUNTED]: LifecycleHook
-  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook
-  [LifecycleHooks.UPDATED]: LifecycleHook
-  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook
-  [LifecycleHooks.UNMOUNTED]: LifecycleHook
+  isMounted: boolean;
+  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
+  [LifecycleHooks.MOUNTED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook;
+  [LifecycleHooks.UPDATED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook;
+  [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 }
 
 export type InternalRenderFunction = {
-  (ctx: ComponentPublicInstance): VNodeChild
-}
+  (ctx: ComponentPublicInstance): VNodeChild;
+};
 
-const emptyAppContext = createAppContext()
+const emptyAppContext = createAppContext();
 
-let uid = 0
+let uid = 0;
 
 export function createComponentInstance(
   vnode: VNode,
   parent: ComponentInternalInstance | null,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component
+  const type = vnode.type as Component;
 
-  const appContext =
-    (parent ? parent.appContext : vnode.appContext) || emptyAppContext
+  const appContext = (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
 
   const instance: ComponentInternalInstance = {
     uid: uid++,
@@ -122,48 +121,45 @@ export function createComponentInstance(
     [LifecycleHooks.UPDATED]: null,
     [LifecycleHooks.BEFORE_UNMOUNT]: null,
     [LifecycleHooks.UNMOUNTED]: null,
-  }
+  };
 
-  instance.emit = emit.bind(null, instance)
+  instance.emit = emit.bind(null, instance);
 
-  instance.ctx = { _: instance }
+  instance.ctx = { _: instance };
 
-  return instance
+  return instance;
 }
 
-export let currentInstance: ComponentInternalInstance | null = null
+export let currentInstance: ComponentInternalInstance | null = null;
 export const setCurrentInstance = (instance: ComponentInternalInstance) => {
-  currentInstance = instance
-  instance.scope.on()
-}
+  currentInstance = instance;
+  instance.scope.on();
+};
 
 export const unsetCurrentInstance = () => {
-  currentInstance && currentInstance.scope.off()
-  currentInstance = null
-}
+  currentInstance && currentInstance.scope.off();
+  currentInstance = null;
+};
 
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props, children } = instance.vnode
-  initProps(instance, props)
-  initSlots(instance, children)
+  const { props, children } = instance.vnode;
+  initProps(instance, props);
+  initSlots(instance, children);
 
-  const { setup, render, template } = instance.type as Component
+  const { setup, render, template } = instance.type as Component;
 
-  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers)
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
 
   if (setup) {
-    setCurrentInstance(instance)
-    const setupContext = (instance.setupContext = createSetupContext(instance))
-    const setupResult = setup(
-      instance.props,
-      setupContext,
-    ) as InternalRenderFunction
-    unsetCurrentInstance()
+    setCurrentInstance(instance);
+    const setupContext = (instance.setupContext = createSetupContext(instance));
+    const setupResult = setup(instance.props, setupContext) as InternalRenderFunction;
+    unsetCurrentInstance();
 
-    if (typeof setupResult === 'function') {
-      instance.render = setupResult
-    } else if (typeof setupResult === 'object' && setupResult !== null) {
-      instance.setupState = proxyRefs(setupResult)
+    if (typeof setupResult === "function") {
+      instance.render = setupResult;
+    } else if (typeof setupResult === "object" && setupResult !== null) {
+      instance.setupState = proxyRefs(setupResult);
     } else {
       // do nothing
     }
@@ -171,26 +167,24 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
   if (compile && !render) {
     if (template) {
-      instance.render = compile(template)
+      instance.render = compile(template);
     }
   }
 
   if (render) {
-    instance.render = render as InternalRenderFunction
+    instance.render = render as InternalRenderFunction;
   }
-}
+};
 
-export function createSetupContext(
-  instance: ComponentInternalInstance,
-): SetupContext {
-  const expose: SetupContext['expose'] = exposed => {
-    instance.exposed = exposed || {}
-  }
+export function createSetupContext(instance: ComponentInternalInstance): SetupContext {
+  const expose: SetupContext["expose"] = (exposed) => {
+    instance.exposed = exposed || {};
+  };
   return {
     slots: instance.slots,
     emit: instance.emit,
     expose,
-  }
+  };
 }
 
 export function getExposeProxy(instance: ComponentInternalInstance) {
@@ -200,20 +194,20 @@ export function getExposeProxy(instance: ComponentInternalInstance) {
       (instance.exposeProxy = new Proxy(proxyRefs(instance.exposed), {
         get(target, key: string) {
           if (key in target) {
-            return target[key]
+            return target[key];
           }
         },
         has(target, key: string) {
-          return key in target
+          return key in target;
         },
       }))
-    )
+    );
   }
 }
 
-type CompileFunction = (template: string) => InternalRenderFunction
-let compile: CompileFunction | undefined
+type CompileFunction = (template: string) => InternalRenderFunction;
+let compile: CompileFunction | undefined;
 
 export function registerRuntimeCompiler(_compile: any) {
-  compile = _compile
+  compile = _compile;
 }

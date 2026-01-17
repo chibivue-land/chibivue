@@ -25,11 +25,11 @@ Currently, I am still in the process of implementation, but after implementation
 
 [examples](https://github.com/chibivue-land/chibivue/tree/main/examples/app)
 
-# 👜 Package Manager
+# 👜 Requirements
 
-This project uses [pnpm](https://pnpm.io/) as a package manager.
-
-And use [ni](https://github.com/antfu/ni) .
+- [Node.js](https://nodejs.org/) v24+
+- [pnpm](https://pnpm.io/) v10+
+- [@antfu/ni](https://github.com/antfu/ni)
 
 ```sh
 # if you don't have ni yet
@@ -68,12 +68,11 @@ $ nr book:dev
 ```sh
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
-$ ni
 
-# generate playground files to ~/example/playground (git ignored)
-$ nr setup:dev
+# install dependencies and generate playground
+$ nr setup
 
-# listen localhost
+# start dev server
 $ nr dev
 ```
 

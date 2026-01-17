@@ -1,18 +1,18 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { createApp } from '../packages'
+import { createApp } from "../packages";
 
-let host: HTMLElement
+let host: HTMLElement;
 const initHost = () => {
-  host = document.createElement('div')
-  host.setAttribute('id', 'host')
-  document.body.appendChild(host)
-}
-beforeEach(() => initHost())
-afterEach(() => host.remove())
+  host = document.createElement("div");
+  host.setAttribute("id", "host");
+  document.body.appendChild(host);
+};
+beforeEach(() => initHost());
+afterEach(() => host.remove());
 
-describe('10_minimum_example/060_template_compiler', () => {
-  it('should render template option', () => {
+describe("10_minimum_example/060_template_compiler", () => {
+  it("should render template option", () => {
     const app = createApp({
       template: `
       <div class="container" style="text-align: center">
@@ -34,8 +34,8 @@ describe('10_minimum_example/060_template_compiler', () => {
         </style>
       </div>
     `,
-    })
-    app.mount('#host')
+    });
+    app.mount("#host");
 
     expect(host.innerHTML).toBe(
       `<div class="container" style="text-align: center">
@@ -52,6 +52,6 @@ describe('10_minimum_example/060_template_compiler', () => {
           }
         </style>
       </div>`,
-    )
-  })
-})
+    );
+  });
+});

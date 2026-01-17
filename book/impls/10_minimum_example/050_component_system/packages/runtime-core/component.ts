@@ -1,28 +1,26 @@
-import type { ReactiveEffect } from '../reactivity'
-import type { ComponentOptions } from './componentOptions'
-import type { VNode, VNodeChild } from './vnode'
+import type { ReactiveEffect } from "../reactivity";
+import type { ComponentOptions } from "./componentOptions";
+import type { VNode, VNodeChild } from "./vnode";
 
-export type Component = ComponentOptions
+export type Component = ComponentOptions;
 
 export interface ComponentInternalInstance {
-  type: Component
-  vnode: VNode
-  subTree: VNode
-  next: VNode | null
-  effect: ReactiveEffect
-  render: InternalRenderFunction
-  update: () => void
-  isMounted: boolean
+  type: Component;
+  vnode: VNode;
+  subTree: VNode;
+  next: VNode | null;
+  effect: ReactiveEffect;
+  render: InternalRenderFunction;
+  update: () => void;
+  isMounted: boolean;
 }
 
 export type InternalRenderFunction = {
-  (): VNodeChild
-}
+  (): VNodeChild;
+};
 
-export function createComponentInstance(
-  vnode: VNode,
-): ComponentInternalInstance {
-  const type = vnode.type as Component
+export function createComponentInstance(vnode: VNode): ComponentInternalInstance {
+  const type = vnode.type as Component;
 
   const instance: ComponentInternalInstance = {
     type,
@@ -33,7 +31,7 @@ export function createComponentInstance(
     update: null!,
     render: null!,
     isMounted: false,
-  }
+  };
 
-  return instance
+  return instance;
 }

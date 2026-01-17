@@ -1,5 +1,5 @@
-import { isFunction } from '@chibivue/shared'
-import type { EmitsOptions } from './componentEmits'
+import { isFunction } from "@chibivue/shared";
+import type { EmitsOptions } from "./componentEmits";
 
 import type {
   ComponentInjectOptions,
@@ -7,12 +7,12 @@ import type {
   ComputedOptions,
   MethodOptions,
   ResolveProps,
-} from './componentOptions'
+} from "./componentOptions";
 import type {
   ComponentPublicInstanceConstructor,
   CreateComponentPublicInstance,
-} from './componentPublicInstance'
-import type { SlotsType } from './componentSlots'
+} from "./componentPublicInstance";
+import type { SlotsType } from "./componentSlots";
 
 type DefineComponent<
   PropOptions = {},
@@ -36,7 +36,7 @@ type DefineComponent<
   S,
   E,
   EE
->
+>;
 
 export function defineComponent<
   PropsOptions = {},
@@ -51,17 +51,7 @@ export function defineComponent<
 >(
   options:
     | ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>
-    | ComponentOptions<
-        PropsOptions,
-        RawBindings,
-        D,
-        C,
-        M,
-        I,
-        S,
-        E,
-        EE
-      >['setup'],
+    | ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>["setup"],
 ): DefineComponent<PropsOptions, RawBindings, D, C, M, I, S, E, EE> {
-  return isFunction(options) ? { setup: options } : (options as any)
+  return (isFunction(options) ? { setup: options } : options) as any;
 }

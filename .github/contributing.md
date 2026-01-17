@@ -48,24 +48,57 @@ You can choose any name for the repository. Feel free to set other information a
 
 #### Installing the necessary tools
 
-- [Node.js](https://nodejs.org/en) (v22.x)
-- [pnpm](https://pnpm.io/) (v9.x)
+- [Node.js](https://nodejs.org/en) (v24+)
+- [pnpm](https://pnpm.io/) (v10+)
 - [@antfu/ni](https://github.com/antfu/ni)
   ni is a great package manager wrapper created by [Anthony Fu](https://github.com/antfu). We assume the use of ni in the chibivue documentation.
 
-### Starting the playground
+### Getting Started
 
-First, install the dependencies.
-
-```sh
-ni
-```
-
-Then, run the following command to start the development server for the online book.
+First, install the dependencies and set up the playground.
 
 ```sh
-nr book:dev
+ni && nr setup
 ```
+
+Then, you can start the development server.
+
+```sh
+nr dev
+```
+
+### Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| **Setup** | |
+| `setup` | Install dependencies and generate playground |
+| `setup:dev` | Generate playground files to examples/playground |
+| `setup:vue` | Set up Vue.js core comparison environment |
+| `setup:book` | Generate chibivue implementation for book readers |
+| **Development** | |
+| `dev` | Start playground dev server |
+| `dev:app` | Start app example dev server |
+| `dev:vapor` | Start vapor mode example dev server |
+| `dev:vue` | Start Vue.js core dev server for comparison |
+| **Build & Quality** | |
+| `build` | Build all packages |
+| `clean` | Remove all dist folders |
+| `typecheck` | Run type checking (tsgo) |
+| `lint` | Run linter (oxlint) |
+| `lint:fix` | Run linter with auto-fix |
+| `fmt` | Format code (oxfmt) |
+| `fmt:check` | Check code formatting |
+| `test` | Run tests once |
+| `test:watch` | Run tests in watch mode |
+| `check` | Run all checks (lint, fmt, typecheck, build, test) |
+| **Book** | |
+| `book:dev` | Start online book dev server |
+| `book:build` | Build online book |
+| `book:preview` | Preview built online book |
+| `book:lint` | Lint book text |
+
+### Running book chapter implementations
 
 If you want to run the source code for each chapter, you can do so with the following command.
 

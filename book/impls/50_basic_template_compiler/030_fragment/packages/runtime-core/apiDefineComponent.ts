@@ -1,16 +1,16 @@
-import type { EmitsOptions } from './componentEmits'
+import type { EmitsOptions } from "./componentEmits";
 import type {
   ComponentInjectOptions,
   ComponentOptions,
   ComputedOptions,
   MethodOptions,
   ResolveProps,
-} from './componentOptions'
+} from "./componentOptions";
 import type {
   ComponentPublicInstanceConstructor,
   CreateComponentPublicInstance,
-} from './componentPublicInstance'
-import type { SlotsType } from './componentSlots'
+} from "./componentPublicInstance";
+import type { SlotsType } from "./componentSlots";
 
 type DefineComponent<
   PropOptions = {},
@@ -34,7 +34,7 @@ type DefineComponent<
   S,
   E,
   EE
->
+>;
 
 export function defineComponent<
   PropsOptions = {},
@@ -49,5 +49,5 @@ export function defineComponent<
 >(
   options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>,
 ): DefineComponent<PropsOptions, RawBindings, D, C, M, I, S, E, EE> {
-  return options as any
+  return options as any;
 }

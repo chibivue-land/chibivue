@@ -1,13 +1,13 @@
-import { createApp, defineComponent, ref } from 'chibivue'
+import { createApp, defineComponent, ref } from "chibivue";
 
 const App = defineComponent({
   setup() {
-    const n = ref(1)
+    const n = ref(1);
     const inc = () => {
-      n.value++
-    }
+      n.value++;
+    };
 
-    return { n, inc }
+    return { n, inc };
   },
 
   template: `
@@ -17,8 +17,8 @@ const App = defineComponent({
     <p v-else-if="n % 3 === 0">Fizz</p>
     <p v-else>{{ n }}</p>
   `,
-})
+});
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.mount('#app')
+app.mount("#app");

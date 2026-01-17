@@ -1,15 +1,15 @@
-import { isFunction } from '@chibivue/shared'
-import { ComponentInternalInstance } from './component'
-import type { ComponentPublicInstance } from './componentPublicInstance'
-import { currentRenderingInstance } from './componentRenderContext'
-import type { VNode } from './vnode'
+import { isFunction } from "@chibivue/shared";
+import type { ComponentInternalInstance } from "./component";
+import type { ComponentPublicInstance } from "./componentPublicInstance";
+import { currentRenderingInstance } from "./componentRenderContext";
+import type { VNode } from "./vnode";
 
 export interface DirectiveBinding<V = any> {
-  instance: ComponentPublicInstance | null
-  value: V
-  oldValue: V | null
-  arg?: string
-  dir: ObjectDirective<any>
+  instance: ComponentPublicInstance | null;
+  value: V;
+  oldValue: V | null;
+  arg?: string;
+  dir: ObjectDirective<any>;
 }
 
 export type DirectiveHook<T = any> = (
@@ -17,43 +17,40 @@ export type DirectiveHook<T = any> = (
   binding: DirectiveBinding,
   vnode: VNode,
   prevVNode: VNode | null,
-) => void
+) => void;
 
 export interface ObjectDirective<T = any> {
-  created?: DirectiveHook<T>
-  beforeMount?: DirectiveHook<T>
-  mounted?: DirectiveHook<T>
-  beforeUpdate?: DirectiveHook<T>
-  updated?: DirectiveHook<T>
-  beforeUnmount?: DirectiveHook<T>
-  unmounted?: DirectiveHook<T>
-  deep?: boolean
+  created?: DirectiveHook<T>;
+  beforeMount?: DirectiveHook<T>;
+  mounted?: DirectiveHook<T>;
+  beforeUpdate?: DirectiveHook<T>;
+  updated?: DirectiveHook<T>;
+  beforeUnmount?: DirectiveHook<T>;
+  unmounted?: DirectiveHook<T>;
+  deep?: boolean;
 }
 
 export type DirectiveArguments = Array<
   | [ObjectDirective | undefined]
   | [ObjectDirective | undefined, any]
   | [ObjectDirective | undefined, any, string]
->
+>;
 
-export function withDirectives<T extends VNode>(
-  vnode: T,
-  directives: DirectiveArguments,
-): T {
-  const internalInstance = currentRenderingInstance
-  if (internalInstance === null) return vnode
+export function withDirectives<T extends VNode>(vnode: T, directives: DirectiveArguments): T {
+  const internalInstance = currentRenderingInstance;
+  if (internalInstance === null) return vnode;
 
-  const instance = internalInstance.proxy
+  const instance = internalInstance.proxy;
 
-  const bindings: DirectiveBinding[] = vnode.dirs || (vnode.dirs = [])
+  const bindings: DirectiveBinding[] = vnode.dirs || (vnode.dirs = []);
   for (let i = 0; i < directives.length; i++) {
-    let [dir, value, arg] = directives[i]
+    let [dir, value, arg] = directives[i];
     if (dir) {
       if (isFunction(dir)) {
         dir = {
           mounted: dir,
           updated: dir,
-        } as ObjectDirective
+        } as ObjectDirective;
       }
       bindings.push({
         dir,
@@ -61,28 +58,28 @@ export function withDirectives<T extends VNode>(
         value,
         oldValue: void 0,
         arg,
-      })
+      });
     }
   }
-  return vnode
+  return vnode;
 }
 
 export function invokeDirectiveHook(
   vnode: VNode,
   prevVNode: VNode | null,
   name: keyof ObjectDirective,
-) {
-  const bindings = vnode.dirs!
-  const oldBindings = prevVNode && prevVNode.dirs!
+): void {
+  const bindings = vnode.dirs!;
+  const oldBindings = prevVNode && prevVNode.dirs!;
   for (let i = 0; i < bindings.length; i++) {
-    const binding = bindings[i]
+    const binding = bindings[i];
     if (oldBindings) {
-      binding.oldValue = oldBindings[i].value
+      binding.oldValue = oldBindings[i].value;
     }
 
-    const hook = binding.dir[name] as DirectiveHook | undefined
+    const hook = binding.dir[name] as DirectiveHook | undefined;
     if (hook) {
-      hook(vnode.el, binding, vnode, prevVNode)
+      hook(vnode.el, binding, vnode, prevVNode);
     }
   }
 }

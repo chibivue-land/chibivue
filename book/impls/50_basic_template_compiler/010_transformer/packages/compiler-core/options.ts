@@ -1,10 +1,10 @@
-import type { DirectiveTransform, NodeTransform } from './transform'
+import type { DirectiveTransform, NodeTransform } from "./transform";
 
 export type CompilerOptions = {
-  isBrowser?: boolean
-}
+  isBrowser?: boolean;
+};
 
 export interface TransformOptions {
-  nodeTransforms?: NodeTransform[]
-  directiveTransforms?: Record<string, DirectiveTransform | undefined>
+  nodeTransforms?: NodeTransform[];
+  directiveTransforms?: Record<string, DirectiveTransform | undefined>;
 }

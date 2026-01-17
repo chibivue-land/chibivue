@@ -16,8 +16,8 @@
 
 - 运行时：[Node.js](https://nodejs.org/en) v22
 - 语言：[TypeScript](https://www.typescriptlang.org/)
-- 包管理器：[pnpm](https://pnpm.io/) v9
-- 构建工具：[Vite](https://vite.dev/) v6
+- 包管理器：[pnpm](https://pnpm.io/) v10
+- 构建工具：[Vite](https://vite.dev/) v8
 
 ## 安装 Node.js
 

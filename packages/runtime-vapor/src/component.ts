@@ -1,46 +1,37 @@
-import type { AppContext, VNode } from '@chibivue/runtime-core'
-import { createAppContext } from '@chibivue/runtime-core'
+import type { AppContext, VNode } from "@chibivue/runtime-core";
+import { createAppContext } from "@chibivue/runtime-core";
 
-import type {
-  ComponentInternalInstance,
-  Data,
-  LifecycleHook,
-} from '@chibivue/runtime-core'
-import {
-  LifecycleHooks,
-  setCurrentInstance,
-  unsetCurrentInstance,
-} from '@chibivue/runtime-core'
+import type { ComponentInternalInstance, Data, LifecycleHook } from "@chibivue/runtime-core";
+import { LifecycleHooks, setCurrentInstance, unsetCurrentInstance } from "@chibivue/runtime-core";
 
-import type { VaporNode } from '.'
+import type { VaporNode } from ".";
 
-export type VaporComponent = (self: VaporComponentInternalInstance) => VaporNode
+export type VaporComponent = (self: VaporComponentInternalInstance) => VaporNode;
 
 export interface VaporComponentInternalInstance {
-  __is_vapor: true
-  uid: number
-  type: VaporComponent
-  parent: ComponentInternalInstance | VaporComponentInternalInstance | null
-  appContext: AppContext
+  __is_vapor: true;
+  uid: number;
+  type: VaporComponent;
+  parent: ComponentInternalInstance | VaporComponentInternalInstance | null;
+  appContext: AppContext;
 
-  provides: Data
+  provides: Data;
 
-  isMounted: boolean
-  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook
-  [LifecycleHooks.MOUNTED]: LifecycleHook
-  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook
-  [LifecycleHooks.UPDATED]: LifecycleHook
-  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook
-  [LifecycleHooks.UNMOUNTED]: LifecycleHook
+  isMounted: boolean;
+  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
+  [LifecycleHooks.MOUNTED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook;
+  [LifecycleHooks.UPDATED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook;
+  [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 }
 
-let uid = 0
+let uid = 0;
 export const createVaporComponentInstance = (
   vnode: VNode,
   parent?: ComponentInternalInstance | VaporComponentInternalInstance | null,
 ): VaporComponentInternalInstance => {
-  const appContext =
-    (parent ? parent.appContext : vnode.appContext) || createAppContext()
+  const appContext = (parent ? parent.appContext : vnode.appContext) || createAppContext();
 
   const instance: VaporComponentInternalInstance = {
     __is_vapor: true,
@@ -58,21 +49,21 @@ export const createVaporComponentInstance = (
     [LifecycleHooks.UPDATED]: null,
     [LifecycleHooks.BEFORE_UNMOUNT]: null,
     [LifecycleHooks.UNMOUNTED]: null,
-  }
-  return instance
-}
+  };
+  return instance;
+};
 
 export const initialRenderVaporComponent = (
   instance: VaporComponentInternalInstance,
 ): VaporNode => {
-  setCurrentInstance(instance as any) //TODO: types
-  const el = instance.type(instance)
-  unsetCurrentInstance()
-  return el
-}
+  setCurrentInstance(instance as any); //TODO: types
+  const el = instance.type(instance);
+  unsetCurrentInstance();
+  return el;
+};
 
 export const isVapor = (
   instance: ComponentInternalInstance | VaporComponentInternalInstance,
 ): instance is VaporComponentInternalInstance => {
-  return (instance as any).__is_vapor
-}
+  return (instance as any).__is_vapor;
+};

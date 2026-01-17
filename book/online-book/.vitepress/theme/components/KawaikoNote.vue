@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from "vue";
 
 interface Props {
-  variant?: 'base' | 'angry' | 'fanny' | 'question' | 'surprise' | 'warning'
-  type?: 'info' | 'tip' | 'warning' | 'danger' | 'success'
-  title?: string
-  position?: 'left' | 'right'
-  size?: 'sm' | 'md' | 'lg'
+  variant?: "base" | "angry" | "funny" | "question" | "surprise" | "warning";
+  type?: "info" | "tip" | "warning" | "danger" | "success";
+  title?: string;
+  position?: "left" | "right";
+  size?: "sm" | "md" | "lg";
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: 'base',
-  type: 'info',
-  position: 'left',
-  size: 'md',
-})
+  variant: "base",
+  type: "info",
+  position: "left",
+  size: "md",
+});
 
 const mascotImages: Record<string, string> = {
-  base: 'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko.png',
+  base: "https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko.png",
   angry:
-    'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_angry.png',
-  fanny:
-    'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_fanny.png',
+    "https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_angry.png",
+  funny:
+    "https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_funny.png",
   question:
-    'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_question.png',
+    "https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_question.png",
   surprise:
-    'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_surprise.png',
+    "https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_surprise.png",
   warning:
-    'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_warning.png',
-}
+    "https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_warning.png",
+};
 
 const typeToVariantMap: Record<string, string> = {
-  warning: 'warning',
-  danger: 'angry',
-  tip: 'fanny',
-  success: 'base',
-  info: 'question',
-}
+  warning: "warning",
+  danger: "angry",
+  tip: "funny",
+  success: "base",
+  info: "question",
+};
 
 const effectiveVariant = computed(() => {
-  if (props.variant !== 'base') return props.variant
-  return typeToVariantMap[props.type] || 'base'
-})
+  if (props.variant !== "base") return props.variant;
+  return typeToVariantMap[props.type] || "base";
+});
 
-const mascotSrc = computed(() => mascotImages[effectiveVariant.value])
+const mascotSrc = computed(() => mascotImages[effectiveVariant.value]);
 </script>
 
 <template>

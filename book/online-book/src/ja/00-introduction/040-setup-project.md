@@ -23,8 +23,8 @@
 
 - ランタイム: [Node.js](https://nodejs.org/en) v22
 - 言語: [TypeScript](https://www.typescriptlang.org/)
-- パッケージマネージャ: [pnpm](https://pnpm.io/) v9
-- ビルドツール: [Vite](https://vite.dev/) v6
+- パッケージマネージャ: [pnpm](https://pnpm.io/) v10
+- ビルドツール: [Vite](https://vite.dev/) v8
 
 ## Node.js インストール
 

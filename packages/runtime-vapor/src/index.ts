@@ -1,48 +1,48 @@
-import type { RootRenderFunction, VNode } from '@chibivue/runtime-core'
-import { createRenderer } from '@chibivue/runtime-core'
-import { nodeOps, patchProp } from '@chibivue/runtime-dom'
+import type { RootRenderFunction, VNode } from "@chibivue/runtime-core";
+import { createRenderer } from "@chibivue/runtime-core";
+import { nodeOps, patchProp } from "@chibivue/runtime-dom";
 
-import type { VaporComponentInternalInstance } from './component'
+import type { VaporComponentInternalInstance } from "./component";
 
-export * from './component'
+export * from "./component";
 
-export type VaporNode = Element & { __is_vapor: true }
+export type VaporNode = Element & { __is_vapor: true };
 
 export const template = (tmp: string): VaporNode => {
-  const container = document.createElement('div')
-  container.innerHTML = tmp
-  const el = container.firstElementChild as VaporNode
-  el.__is_vapor = true
-  return el
-}
+  const container = document.createElement("div");
+  container.innerHTML = tmp;
+  const el = container.firstElementChild as VaporNode;
+  el.__is_vapor = true;
+  return el;
+};
 
-export const setText = (target: Element, format: string, ...values: any[]) => {
+export const setText = (target: Element, format: string, ...values: any[]): void => {
   const fmt = (): string => {
-    let text = format
+    let text = format;
     for (let i = 0; i < values.length; i++) {
-      text = text.replace('{}', values[i])
+      text = text.replace("{}", values[i]);
     }
-    return text
-  }
+    return text;
+  };
 
-  if (!target) return
+  if (!target) return;
 
   if (!values.length) {
-    target.textContent = fmt()
-    return
+    target.textContent = fmt();
+    return;
   }
 
   if (!format && values.length) {
-    target.textContent = values.join('')
-    return
+    target.textContent = values.join("");
+    return;
   }
 
-  target.textContent = fmt()
-}
+  target.textContent = fmt();
+};
 
-export const on = (element: Element, event: string, callback: () => void) => {
-  element.addEventListener(event, callback)
-}
+export const on = (element: Element, event: string, callback: () => void): void => {
+  element.addEventListener(event, callback);
+};
 
 /*
  *
@@ -50,13 +50,12 @@ export const on = (element: Element, event: string, callback: () => void) => {
  *
  */
 
-const renderer = createRenderer({ ...nodeOps, patchProp })
+const renderer = createRenderer({ ...nodeOps, patchProp });
 
-const render = ((...args) =>
-  renderer.render(...args)) as RootRenderFunction<Element>
+const render = ((...args) => renderer.render(...args)) as RootRenderFunction<Element>;
 
 export const createComponent = (
   self: VaporComponentInternalInstance,
   component: VNode,
   container: VaporNode,
-) => render(component, container, self)
+): void => render(component, container, self);

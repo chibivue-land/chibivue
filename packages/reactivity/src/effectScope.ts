@@ -1,83 +1,83 @@
-import type { ReactiveEffect } from './effect'
+import type { ReactiveEffect } from "./effect";
 
-let activeEffectScope: EffectScope | undefined
+let activeEffectScope: EffectScope | undefined;
 
 export class EffectScope {
-  private _active = true
+  private _active = true;
 
-  effects: ReactiveEffect[] = []
-  cleanups: (() => void)[] = []
+  effects: ReactiveEffect[] = [];
+  cleanups: (() => void)[] = [];
 
-  parent: EffectScope | undefined
-  scopes: EffectScope[] | undefined
+  parent: EffectScope | undefined;
+  scopes: EffectScope[] | undefined;
 
   constructor() {
-    this.parent = activeEffectScope
+    this.parent = activeEffectScope;
   }
 
-  get active() {
-    return this._active
+  get active(): boolean {
+    return this._active;
   }
 
   run<T>(fn: () => T): T | undefined {
     if (this._active) {
-      const currentEffectScope = activeEffectScope
+      const currentEffectScope = activeEffectScope;
       try {
-        activeEffectScope = this
-        return fn()
+        activeEffectScope = this;
+        return fn();
       } finally {
-        activeEffectScope = currentEffectScope
+        activeEffectScope = currentEffectScope;
       }
     }
   }
 
-  on() {
-    activeEffectScope = this
+  on(): void {
+    activeEffectScope = this;
   }
 
-  off() {
-    activeEffectScope = this.parent
+  off(): void {
+    activeEffectScope = this.parent;
   }
 
-  stop() {
+  stop(): void {
     if (this._active) {
-      let i, l
+      let i, l;
       for (i = 0, l = this.effects.length; i < l; i++) {
-        this.effects[i].stop()
+        this.effects[i].stop();
       }
       for (i = 0, l = this.cleanups.length; i < l; i++) {
-        this.cleanups[i]()
+        this.cleanups[i]();
       }
       if (this.scopes) {
         for (i = 0, l = this.scopes.length; i < l; i++) {
-          this.scopes[i].stop()
+          this.scopes[i].stop();
         }
       }
-      this.parent = undefined
-      this._active = false
+      this.parent = undefined;
+      this._active = false;
     }
   }
 }
 
-export function effectScope() {
-  return new EffectScope()
+export function effectScope(): EffectScope {
+  return new EffectScope();
 }
 
 export function recordEffectScope(
   effect: ReactiveEffect,
   scope: EffectScope | undefined = activeEffectScope,
-) {
+): void {
   if (scope && scope.active) {
-    scope.effects.push(effect)
+    scope.effects.push(effect);
   }
 }
 
-export function getCurrentScope() {
-  return activeEffectScope
+export function getCurrentScope(): EffectScope | undefined {
+  return activeEffectScope;
 }
 
-export function onScopeDispose(fn: () => void) {
+export function onScopeDispose(fn: () => void): void {
   if (activeEffectScope) {
-    activeEffectScope.cleanups.push(fn)
+    activeEffectScope.cleanups.push(fn);
   }
 }

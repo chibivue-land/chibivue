@@ -1,39 +1,32 @@
-import { hasChanged, isObject } from '@chibivue/shared'
-import { ITERATE_KEY, track, trigger } from './effect'
-import {
-  ReactiveFlags,
-  type Target,
-  isReadonly,
-  reactive,
-  readonly,
-  toRaw,
-} from './reactive'
+import { hasChanged, isObject } from "@chibivue/shared";
+import { ITERATE_KEY, track, trigger } from "./effect";
+import { ReactiveFlags, type Target, isReadonly, reactive, readonly, toRaw } from "./reactive";
 
-const get = createGetter()
-const shallowGet = createGetter(false, true)
-const readonlyGet = createGetter(true)
+const get = createGetter();
+const shallowGet = createGetter(false, true);
+const readonlyGet = createGetter(true);
 
 function createGetter(isReadonly = false, shallow = false) {
   return function get(target: Target, key: string | symbol, receiver: object) {
     if (key === ReactiveFlags.IS_REACTIVE) {
-      return !isReadonly
+      return !isReadonly;
     } else if (key === ReactiveFlags.IS_READONLY) {
-      return isReadonly
+      return isReadonly;
     } else if (key === ReactiveFlags.IS_SHALLOW) {
-      return shallow
+      return shallow;
     } else {
-      track(target, key)
-      const res = Reflect.get(target, key, receiver)
+      track(target, key);
+      const res = Reflect.get(target, key, receiver);
       if (isObject(res)) {
-        return isReadonly ? readonly(res) : reactive(res)
+        return isReadonly ? readonly(res) : reactive(res);
       }
-      return res
+      return res;
     }
-  }
+  };
 }
 
-const set = createSetter()
-const shallowSet = createSetter(true)
+const set = createSetter();
+const shallowSet = createSetter(true);
 
 function createSetter(shallow = false) {
   return function set(
@@ -42,44 +35,44 @@ function createSetter(shallow = false) {
     value: unknown,
     receiver: object,
   ): boolean {
-    if (isReadonly(target)) return false
+    if (isReadonly(target)) return false;
 
-    let oldValue = (target as any)[key]
+    let oldValue = (target as any)[key];
     if (!shallow) {
-      oldValue = toRaw(oldValue)
-      value = toRaw(value)
+      oldValue = toRaw(oldValue);
+      value = toRaw(value);
     } else {
     }
 
-    const result = Reflect.set(target, key, value, receiver)
+    const result = Reflect.set(target, key, value, receiver);
     if (hasChanged(value, oldValue)) {
-      trigger(target, key)
+      trigger(target, key);
     }
 
-    return result
-  }
+    return result;
+  };
 }
 
 export const mutableHandlers: ProxyHandler<object> = {
   get,
   set,
   ownKeys(target) {
-    track(target, ITERATE_KEY)
-    return Reflect.ownKeys(target)
+    track(target, ITERATE_KEY);
+    return Reflect.ownKeys(target);
   },
-}
+};
 
 export const readonlyHandlers: ProxyHandler<object> = {
   get: readonlyGet,
   set(_target, _key) {
-    return true
+    return true;
   },
   deleteProperty(_target, _key) {
-    return true
+    return true;
   },
-}
+};
 
-export const shallowReactiveHandlers = Object.assign({}, mutableHandlers, {
+export const shallowReactiveHandlers: ProxyHandler<object> = Object.assign({}, mutableHandlers, {
   get: shallowGet,
   set: shallowSet,
-})
+});

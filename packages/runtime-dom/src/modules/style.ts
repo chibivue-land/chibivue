@@ -1,46 +1,42 @@
-import { isArray, isString } from '@chibivue/shared'
+import { isArray, isString } from "@chibivue/shared";
 
-type Style = string | Record<string, string | string[]> | null
+type Style = string | Record<string, string | string[]> | null;
 
-export function patchStyle(el: Element, prev: Style, next: Style) {
-  const style = (el as HTMLElement).style
-  const isCssString = isString(next)
+export function patchStyle(el: Element, prev: Style, next: Style): void {
+  const style = (el as HTMLElement).style;
+  const isCssString = isString(next);
   if (next && !isCssString) {
     if (prev && !isString(prev)) {
       for (const key in prev) {
         if (next[key] == null) {
-          setStyle(style, key, '')
+          setStyle(style, key, "");
         }
       }
     }
     for (const key in next) {
-      setStyle(style, key, next[key])
+      setStyle(style, key, next[key]);
     }
   } else {
     if (isCssString) {
       if (prev !== next) {
-        style.cssText = next as string
+        style.cssText = next as string;
       }
     } else if (prev) {
-      el.removeAttribute('style')
+      el.removeAttribute("style");
     }
   }
 }
 
-function setStyle(
-  style: CSSStyleDeclaration,
-  name: string,
-  val: string | string[],
-) {
+function setStyle(style: CSSStyleDeclaration, name: string, val: string | string[]) {
   if (isArray(val)) {
-    val.forEach(v => setStyle(style, name, v))
+    val.forEach((v) => setStyle(style, name, v));
   } else {
-    if (val == null) val = ''
-    if (name.startsWith('--')) {
+    if (val == null) val = "";
+    if (name.startsWith("--")) {
       // custom property definition
-      style.setProperty(name, val)
+      style.setProperty(name, val);
     } else {
-      style[name as any] = val
+      style[name as any] = val;
     }
   }
 }

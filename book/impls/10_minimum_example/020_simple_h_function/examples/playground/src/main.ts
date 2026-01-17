@@ -1,20 +1,20 @@
-import { createApp, h } from 'chibivue'
+import { createApp, h } from "chibivue";
 
 const app = createApp({
   render() {
-    return h('div', { id: 'my-app' }, [
-      h('p', { style: 'color: red; font-weight: bold;' }, ['Hello world.']),
+    return h("div", { id: "my-app" }, [
+      h("p", { style: "color: red; font-weight: bold;" }, ["Hello world."]),
       h(
-        'button',
+        "button",
         {
           onClick() {
-            alert('Hello world!')
+            alert("Hello world!");
           },
         },
-        ['click me!'],
+        ["click me!"],
       ),
-    ])
+    ]);
   },
-})
+});
 
-app.mount('#app')
+app.mount("#app");

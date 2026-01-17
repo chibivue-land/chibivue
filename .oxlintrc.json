@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxlint/main/npm/oxlint/configuration_schema.json",
+  "ignorePatterns": ["examples/vuejs-core"],
+  "rules": {
+    "no-unused-vars": "off",
+    "no-unused-expressions": "off",
+    "no-useless-escape": "off",
+    "no-this-alias": "off",
+    "no-async-promise-executor": "off",
+    "only-used-in-recursion": "off",
+    "no-non-null-asserted-optional-chain": "off",
+    "no-wrapper-object-types": "off",
+    "unicorn/no-new-array": "off",
+    "unicorn/no-useless-spread": "off",
+    "unicorn/no-useless-fallback-in-spread": "off"
+  }
+}

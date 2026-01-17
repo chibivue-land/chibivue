@@ -1,25 +1,20 @@
-import { isOn } from '@chibivue/shared'
-import { patchEvent } from './modules/events'
-import type { RendererOptions } from '@chibivue/runtime-core'
-import { patchAttr } from './modules/attrs'
-import { patchStyle } from './modules/style'
+import { isOn } from "@chibivue/shared";
+import { patchEvent } from "./modules/events";
+import type { RendererOptions } from "@chibivue/runtime-core";
+import { patchAttr } from "./modules/attrs";
+import { patchStyle } from "./modules/style";
 
-type DOMRendererOptions = RendererOptions<Node, Element>
+type DOMRendererOptions = RendererOptions<Node, Element>;
 
-export const patchProp: DOMRendererOptions['patchProp'] = (
-  el,
-  key,
-  prevValue,
-  nextValue,
-) => {
+export const patchProp: DOMRendererOptions["patchProp"] = (el, key, prevValue, nextValue) => {
   // if (key === "class") {
   //   // TODO: patch class
   // }
-  if (key === 'style') {
-    patchStyle(el, prevValue, nextValue)
+  if (key === "style") {
+    patchStyle(el, prevValue, nextValue);
   } else if (isOn(key)) {
-    patchEvent(el, key, nextValue)
+    patchEvent(el, key, nextValue);
   } else {
-    patchAttr(el, key, nextValue)
+    patchAttr(el, key, nextValue);
   }
-}
+};

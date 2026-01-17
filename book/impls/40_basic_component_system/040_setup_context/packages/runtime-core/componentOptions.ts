@@ -1,14 +1,14 @@
-import type { SetupContext } from './component'
-import type { PropType } from './componentProps'
-import type { ComponentPublicInstance } from './componentPublicInstance'
-import type { VNode } from './vnode'
+import type { SetupContext } from "./component";
+import type { PropType } from "./componentProps";
+import type { ComponentPublicInstance } from "./componentPublicInstance";
+import type { VNode } from "./vnode";
 
 export type ComponentOptions<P = {}, B = {}> = {
-  props?: P
-  setup?: (props: InferPropTypes<P>, ctx: SetupContext) => (() => VNode) | B
-  render?: (ctx: ComponentPublicInstance<InferPropTypes<P>, B>) => VNode
-  template?: string
-}
+  props?: P;
+  setup?: (props: InferPropTypes<P>, ctx: SetupContext) => (() => VNode) | B;
+  render?: (ctx: ComponentPublicInstance<InferPropTypes<P>, B>) => VNode;
+  template?: string;
+};
 
-type InferPropTypes<T> = { [K in keyof T]: InferPropType<T[K]> }
-type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never
+type InferPropTypes<T> = { [K in keyof T]: InferPropType<T[K]> };
+type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never;

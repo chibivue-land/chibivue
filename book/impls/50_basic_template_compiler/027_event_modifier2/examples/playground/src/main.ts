@@ -1,20 +1,20 @@
-import { createApp, defineComponent, ref } from 'chibivue'
+import { createApp, defineComponent, ref } from "chibivue";
 
 const App = defineComponent({
   setup() {
-    const inputText = ref('')
+    const inputText = ref("");
 
-    const buffer = ref('')
+    const buffer = ref("");
     const handleInput = (e: Event) => {
-      const target = e.target as HTMLInputElement
-      buffer.value = target.value
-    }
+      const target = e.target as HTMLInputElement;
+      buffer.value = target.value;
+    };
     const submit = () => {
-      inputText.value = buffer.value
-      buffer.value = ''
-    }
+      inputText.value = buffer.value;
+      buffer.value = "";
+    };
 
-    return { inputText, buffer, handleInput, submit }
+    return { inputText, buffer, handleInput, submit };
   },
 
   template: `<div>
@@ -30,8 +30,8 @@ const App = defineComponent({
     </form>
     <p>inputText: {{ inputText }}</p>
 </div>`,
-})
+});
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.mount('#app')
+app.mount("#app");

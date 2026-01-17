@@ -1,14 +1,14 @@
-import type { App, InjectionKey } from 'chibivue'
+import type { App, InjectionKey } from "chibivue";
 
-export let activeStore: Store | undefined
-export const setActiveStore = (store: Store | undefined) =>
-  (activeStore = store)
+export let activeStore: Store | undefined;
+export const setActiveStore = (store: Store | undefined): Store | undefined =>
+  (activeStore = store);
 
-export type StateTree = Record<string | number | symbol, any>
+export type StateTree = Record<string | number | symbol, any>;
 
 export interface Store {
-  install: (app: App) => void
-  _s: Map<string, StateTree>
+  install: (app: App) => void;
+  _s: Map<string, StateTree>;
 }
 
-export const storeSymbol: InjectionKey<Store> = Symbol()
+export const storeSymbol: InjectionKey<Store> = Symbol();

@@ -16,8 +16,8 @@ I'll list the tools and versions we'll be using:
 
 - Runtime: [Node.js](https://nodejs.org/en) v22
 - Language: [TypeScript](https://www.typescriptlang.org/)
-- Package Manager: [pnpm](https://pnpm.io/) v9
-- Build Tool: [Vite](https://vite.dev/) v6
+- Package Manager: [pnpm](https://pnpm.io/) v10
+- Build Tool: [Vite](https://vite.dev/) v8
 
 ## Installing Node.js
 

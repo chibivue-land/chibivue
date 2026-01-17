@@ -1,7 +1,7 @@
-import { isString } from '../shared'
-import { CREATE_VNODE } from './runtimeHelpers'
-import type { TransformContext } from './transform'
-import type { PropsExpression } from './transforms/transformElement'
+import { isString } from "../shared";
+import { CREATE_VNODE } from "./runtimeHelpers";
+import type { TransformContext } from "./transform";
+import type { PropsExpression } from "./transforms/transformElement";
 
 export const enum NodeTypes {
   ROOT,
@@ -24,41 +24,41 @@ export const enum NodeTypes {
 }
 
 export interface Node {
-  type: NodeTypes
-  loc: SourceLocation
+  type: NodeTypes;
+  loc: SourceLocation;
 }
 
-export type ParentNode = RootNode | ElementNode
+export type ParentNode = RootNode | ElementNode;
 
-export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode
+export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
 
 export interface SimpleExpressionNode extends Node {
-  type: NodeTypes.SIMPLE_EXPRESSION
-  content: string
-  isStatic: boolean
+  type: NodeTypes.SIMPLE_EXPRESSION;
+  content: string;
+  isStatic: boolean;
 }
 
 export interface CompoundExpressionNode extends Node {
-  type: NodeTypes.COMPOUND_EXPRESSION
+  type: NodeTypes.COMPOUND_EXPRESSION;
   children: (
     | SimpleExpressionNode
     | CompoundExpressionNode
     | InterpolationNode
     | TextNode
     | string
-  )[]
+  )[];
 }
 
-export type TemplateTextChildNode = TextNode | InterpolationNode
+export type TemplateTextChildNode = TextNode | InterpolationNode;
 
 export interface VNodeCall extends Node {
-  type: NodeTypes.VNODE_CALL
-  tag: string | symbol
-  props: PropsExpression | undefined
+  type: NodeTypes.VNODE_CALL;
+  tag: string | symbol;
+  props: PropsExpression | undefined;
   children:
     | TemplateChildNode[] // multiple children
     | TemplateTextChildNode
-    | undefined
+    | undefined;
 }
 
 export type JSChildNode =
@@ -66,112 +66,109 @@ export type JSChildNode =
   | CallExpression
   | ObjectExpression
   | ArrayExpression
-  | ExpressionNode
+  | ExpressionNode;
 
 export interface CallExpression extends Node {
-  type: NodeTypes.JS_CALL_EXPRESSION
-  callee: string | symbol
-  arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[]
+  type: NodeTypes.JS_CALL_EXPRESSION;
+  callee: string | symbol;
+  arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[];
 }
 
 export interface ObjectExpression extends Node {
-  type: NodeTypes.JS_OBJECT_EXPRESSION
-  properties: Array<Property>
+  type: NodeTypes.JS_OBJECT_EXPRESSION;
+  properties: Array<Property>;
 }
 
 export interface Property extends Node {
-  type: NodeTypes.JS_PROPERTY
-  key: ExpressionNode
-  value: JSChildNode
+  type: NodeTypes.JS_PROPERTY;
+  key: ExpressionNode;
+  value: JSChildNode;
 }
 
 export interface ArrayExpression extends Node {
-  type: NodeTypes.JS_ARRAY_EXPRESSION
-  elements: Array<string | Node>
+  type: NodeTypes.JS_ARRAY_EXPRESSION;
+  elements: Array<string | Node>;
 }
 
 export interface RootNode extends Node {
-  type: NodeTypes.ROOT
-  children: TemplateChildNode[]
-  codegenNode: (TemplateChildNode | VNodeCall)[] | undefined
-  helpers: Set<symbol>
+  type: NodeTypes.ROOT;
+  children: TemplateChildNode[];
+  codegenNode: (TemplateChildNode | VNodeCall)[] | undefined;
+  helpers: Set<symbol>;
 }
 
 export interface ElementNode extends Node {
-  type: NodeTypes.ELEMENT
-  tag: string
-  props: Array<AttributeNode | DirectiveNode>
-  children: TemplateChildNode[]
-  isSelfClosing: boolean
-  codegenNode: VNodeCall | SimpleExpressionNode | undefined
+  type: NodeTypes.ELEMENT;
+  tag: string;
+  props: Array<AttributeNode | DirectiveNode>;
+  children: TemplateChildNode[];
+  isSelfClosing: boolean;
+  codegenNode: VNodeCall | SimpleExpressionNode | undefined;
 }
 
 export interface TextNode extends Node {
-  type: NodeTypes.TEXT
-  content: string
+  type: NodeTypes.TEXT;
+  content: string;
 }
 
-export type TemplateChildNode = ElementNode | TextNode | InterpolationNode
+export type TemplateChildNode = ElementNode | TextNode | InterpolationNode;
 
 export interface AttributeNode extends Node {
-  type: NodeTypes.ATTRIBUTE
-  name: string
-  value: TextNode | undefined
+  type: NodeTypes.ATTRIBUTE;
+  name: string;
+  value: TextNode | undefined;
 }
 
 export interface DirectiveNode extends Node {
-  type: NodeTypes.DIRECTIVE
-  name: string
-  exp: ExpressionNode | undefined
-  arg: ExpressionNode | undefined
-  modifiers: string[]
+  type: NodeTypes.DIRECTIVE;
+  name: string;
+  exp: ExpressionNode | undefined;
+  arg: ExpressionNode | undefined;
+  modifiers: string[];
 }
 
 export interface SourceLocation {
-  start: Position
-  end: Position
-  source: string
+  start: Position;
+  end: Position;
+  source: string;
 }
 
 export interface Position {
-  offset: number // from start of file
-  line: number
-  column: number
+  offset: number; // from start of file
+  line: number;
+  column: number;
 }
 
 export interface InterpolationNode extends Node {
-  type: NodeTypes.INTERPOLATION
-  content: ExpressionNode
+  type: NodeTypes.INTERPOLATION;
+  content: ExpressionNode;
 }
 
 export const locStub: SourceLocation = {
-  source: '',
+  source: "",
   start: { line: 1, column: 1, offset: 0 },
   end: { line: 1, column: 1, offset: 0 },
-}
+};
 
-export function createRoot(
-  children: TemplateChildNode[],
-  loc: SourceLocation = locStub,
-): RootNode {
+export function createRoot(children: TemplateChildNode[], loc: SourceLocation = locStub): RootNode {
   return {
     type: NodeTypes.ROOT,
     children,
     helpers: new Set(),
     codegenNode: undefined,
     loc,
-  }
+  };
 }
 
 export function createVNodeCall(
   context: TransformContext | null,
-  tag: VNodeCall['tag'],
-  props?: VNodeCall['props'],
-  children?: VNodeCall['children'],
+  tag: VNodeCall["tag"],
+  props?: VNodeCall["props"],
+  children?: VNodeCall["children"],
   loc: SourceLocation = locStub,
 ): VNodeCall {
   if (context) {
-    context.helper(CREATE_VNODE)
+    context.helper(CREATE_VNODE);
   }
   return {
     type: NodeTypes.VNODE_CALL,
@@ -179,34 +176,34 @@ export function createVNodeCall(
     props,
     children,
     loc,
-  }
+  };
 }
 
 export function createArrayExpression(
-  elements: ArrayExpression['elements'],
+  elements: ArrayExpression["elements"],
   loc: SourceLocation = locStub,
 ): ArrayExpression {
   return {
     type: NodeTypes.JS_ARRAY_EXPRESSION,
     elements,
     loc,
-  }
+  };
 }
 
 export function createObjectExpression(
-  properties: ObjectExpression['properties'],
+  properties: ObjectExpression["properties"],
   loc: SourceLocation = locStub,
 ): ObjectExpression {
   return {
     type: NodeTypes.JS_OBJECT_EXPRESSION,
     properties,
     loc,
-  }
+  };
 }
 
 export function createObjectProperty(
-  key: Property['key'] | string,
-  value: Property['value'],
+  key: Property["key"] | string,
+  value: Property["value"],
   loc: SourceLocation = locStub,
 ): Property {
   return {
@@ -214,12 +211,12 @@ export function createObjectProperty(
     key: isString(key) ? createSimpleExpression(key, true) : key,
     value,
     loc,
-  }
+  };
 }
 
 export function createSimpleExpression(
-  content: SimpleExpressionNode['content'],
-  isStatic: SimpleExpressionNode['isStatic'] = false,
+  content: SimpleExpressionNode["content"],
+  isStatic: SimpleExpressionNode["isStatic"] = false,
   loc: SourceLocation = locStub,
 ): SimpleExpressionNode {
   return {
@@ -227,23 +224,23 @@ export function createSimpleExpression(
     isStatic,
     content,
     loc,
-  }
+  };
 }
 
 export function createCompoundExpression(
-  children: CompoundExpressionNode['children'],
+  children: CompoundExpressionNode["children"],
   loc: SourceLocation = locStub,
 ): CompoundExpressionNode {
   return {
     type: NodeTypes.COMPOUND_EXPRESSION,
     children,
     loc,
-  }
+  };
 }
 
-export function createCallExpression<T extends CallExpression['callee']>(
+export function createCallExpression<T extends CallExpression["callee"]>(
   callee: T,
-  args: CallExpression['arguments'] = [],
+  args: CallExpression["arguments"] = [],
   loc: SourceLocation = locStub,
 ): CallExpression {
   return {
@@ -251,5 +248,5 @@ export function createCallExpression<T extends CallExpression['callee']>(
     loc,
     callee,
     arguments: args,
-  } as CallExpression
+  } as CallExpression;
 }

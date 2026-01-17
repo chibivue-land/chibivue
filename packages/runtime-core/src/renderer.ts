@@ -2,28 +2,28 @@ import {
   type VaporComponentInternalInstance,
   createVaporComponentInstance,
   initialRenderVaporComponent,
-} from '@chibivue/runtime-vapor'
-import { ReactiveEffect } from '@chibivue/reactivity'
-import { ShapeFlags, invokeArrayFns, isFunction } from '@chibivue/shared'
+} from "@chibivue/runtime-vapor";
+import { ReactiveEffect } from "@chibivue/reactivity";
+import { ShapeFlags, invokeArrayFns, isFunction } from "@chibivue/shared";
 
-import { createAppAPI } from './apiCreateApp'
+import { createAppAPI } from "./apiCreateApp";
 import {
   type ComponentInternalInstance,
   type Data,
   createComponentInstance,
   setupComponent,
-} from './component'
-import { updateProps } from './componentProps'
-import { renderComponentRoot } from './componentRenderUtils'
-import { invokeDirectiveHook } from './directives'
-import { setRef } from './rendererTemplateRef'
+} from "./component";
+import { updateProps } from "./componentProps";
+import { renderComponentRoot } from "./componentRenderUtils";
+import { invokeDirectiveHook } from "./directives";
+import { setRef } from "./rendererTemplateRef";
 import {
   type SchedulerJob,
   flushPostFlushCbs,
   flushPreFlushCbs,
   queueJob,
   queuePostFlushCb,
-} from './scheduler'
+} from "./scheduler";
 import {
   Comment,
   Fragment,
@@ -32,39 +32,29 @@ import {
   type VNodeArrayChildren,
   isSameVNodeType,
   normalizeVNode,
-} from './vnode'
+} from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: VNode | null,
   container: HostElement,
-  parentComponent:
-    | ComponentInternalInstance
-    | VaporComponentInternalInstance
-    | null,
-) => void
+  parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
+) => void;
 
-export interface RendererOptions<
-  HostNode = RendererNode,
-  HostElement = RendererElement,
-> {
-  patchProp(el: HostElement, key: string, prevValue: any, nextValue: any): void
+export interface RendererOptions<HostNode = RendererNode, HostElement = RendererElement> {
+  patchProp(el: HostElement, key: string, prevValue: any, nextValue: any): void;
 
-  insert(
-    parentNode: HostNode,
-    newNode: HostNode,
-    anchor?: HostNode | null,
-  ): void
-  remove(child: HostNode): void
+  insert(parentNode: HostNode, newNode: HostNode, anchor?: HostNode | null): void;
+  remove(child: HostNode): void;
 
-  createElement(tagName: string): HostElement
-  createComment(text: string): HostNode
-  createText(text: string): Text
+  createElement(tagName: string): HostElement;
+  createComment(text: string): HostNode;
+  createText(text: string): Text;
 
-  setText(node: HostNode, text: string): void
-  setElementText(node: HostElement, text: string): void
+  setText(node: HostNode, text: string): void;
+  setElementText(node: HostElement, text: string): void;
 
-  parentNode(node: HostNode): HostNode | null
-  nextSibling(node: HostNode): HostNode | null
+  parentNode(node: HostNode): HostNode | null;
+  nextSibling(node: HostNode): HostNode | null;
 }
 
 // Renderer Node can technically be any object in the context of core renderer
@@ -72,7 +62,7 @@ export interface RendererOptions<
 // functions provided via options, so the internal constraint is really just
 // a generic object.
 export interface RendererNode {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export interface RendererElement extends RendererNode {}
@@ -85,83 +75,69 @@ type PatchFn = (
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent:
-    | ComponentInternalInstance
-    | VaporComponentInternalInstance
-    | null,
-) => void
+  parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
+) => void;
 
 type ProcessVaporComponentFn = (
   n1: VNode | null,
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent:
-    | ComponentInternalInstance
-    | VaporComponentInternalInstance
-    | null,
-) => void
+  parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
+) => void;
 
 type ProcessTextOrCommentFn = (
   n1: VNode | null,
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-) => void
+) => void;
 
 type MountChildrenFn = (
   children: VNodeArrayChildren,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent:
-    | ComponentInternalInstance
-    | VaporComponentInternalInstance
-    | null,
-) => void
+  parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
+) => void;
 
 type PatchChildrenFn = (
   n1: VNode | null,
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent:
-    | ComponentInternalInstance
-    | VaporComponentInternalInstance
-    | null,
-) => void
+  parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
+) => void;
 
-type MoveFn = (
-  vnode: VNode,
-  container: RendererElement,
-  anchor: RendererNode | null,
-) => void
+type MoveFn = (vnode: VNode, container: RendererElement, anchor: RendererNode | null) => void;
 
 type MountComponentFn = (
   initialVNode: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent:
-    | ComponentInternalInstance
-    | VaporComponentInternalInstance
-    | null,
-) => void
+  parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
+) => void;
 
-type NextFn = (vnode: VNode) => RendererNode | null
+type NextFn = (vnode: VNode) => RendererNode | null;
 
-type UnmountFn = (vnode: VNode) => void
-type RemoveFn = (vnode: VNode) => void
+type UnmountFn = (vnode: VNode) => void;
+type RemoveFn = (vnode: VNode) => void;
 
-type UnmountChildrenFn = (children: VNode[]) => void
+type UnmountChildrenFn = (children: VNode[]) => void;
 
 type SetupRenderEffectFn = (
   instance: ComponentInternalInstance,
   initialVNode: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-) => void
+) => void;
+
+export interface Renderer {
+  render: RootRenderFunction;
+  createApp: ReturnType<typeof createAppAPI>;
+}
 
 // implementation
-export function createRenderer(options: RendererOptions) {
+export function createRenderer(options: RendererOptions): Renderer {
   const {
     insert: hostInsert,
     remove: hostRemove,
@@ -173,34 +149,28 @@ export function createRenderer(options: RendererOptions) {
     setElementText: hostSetElementText,
     parentNode: hostParentNode,
     nextSibling: hostNextSibling,
-  } = options
+  } = options;
 
-  const patch: PatchFn = (
-    n1,
-    n2,
-    container,
-    anchor,
-    parentComponent = null,
-  ) => {
-    const { type, ref, shapeFlag } = n2
+  const patch: PatchFn = (n1, n2, container, anchor, parentComponent = null) => {
+    const { type, ref, shapeFlag } = n2;
     if (isFunction(type)) {
-      processVaporComponent(n1, n2, container, anchor, parentComponent)
+      processVaporComponent(n1, n2, container, anchor, parentComponent);
     } else if (type === Text) {
-      processText(n1, n2, container, anchor)
+      processText(n1, n2, container, anchor);
     } else if (type === Comment) {
-      processCommentNode(n1, n2, container, anchor)
+      processCommentNode(n1, n2, container, anchor);
     } else if (type === Fragment) {
-      processFragment(n1, n2, container, anchor, parentComponent)
+      processFragment(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.ELEMENT) {
-      processElement(n1, n2, container, anchor, parentComponent)
+      processElement(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.COMPONENT) {
-      processComponent(n1, n2, container, anchor, parentComponent)
+      processComponent(n1, n2, container, anchor, parentComponent);
     }
 
     if (ref) {
-      setRef(ref, n2)
+      setRef(ref, n2);
     }
-  }
+  };
 
   const processVaporComponent: ProcessVaporComponentFn = (
     n1,
@@ -210,45 +180,38 @@ export function createRenderer(options: RendererOptions) {
     parentComponent,
   ) => {
     if (n1 == null) {
-      mountVaporComponent(n2, container, anchor, parentComponent)
+      mountVaporComponent(n2, container, anchor, parentComponent);
     } else {
       // do nothing
       // reactivity patch
     }
-  }
+  };
 
   const mountVaporComponent = (
     vnode: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
   ) => {
-    const instance = createVaporComponentInstance(vnode, parentComponent)
-    const el = (vnode.el = initialRenderVaporComponent(instance))
-    const { bm, m } = instance
-    if (bm) invokeArrayFns(bm)
-    hostInsert(el, container, anchor)
-    instance.isMounted = true
-    if (m) queuePostFlushCb(m)
-  }
+    const instance = createVaporComponentInstance(vnode, parentComponent);
+    const el = (vnode.el = initialRenderVaporComponent(instance));
+    const { bm, m } = instance;
+    if (bm) invokeArrayFns(bm);
+    hostInsert(el, container, anchor);
+    instance.isMounted = true;
+    if (m) queuePostFlushCb(m);
+  };
 
   const processText: ProcessTextOrCommentFn = (n1, n2, container, anchor) => {
     if (n1 == null) {
-      hostInsert(
-        (n2.el = hostCreateText(n2.children as string)),
-        container,
-        anchor!,
-      )
+      hostInsert((n2.el = hostCreateText(n2.children as string)), container, anchor!);
     } else {
-      const el = (n2.el = n1.el!)
+      const el = (n2.el = n1.el!);
       if (n2.children !== n1.children) {
-        hostSetText(el, n2.children as string)
+        hostSetText(el, n2.children as string);
       }
     }
-  }
+  };
 
   const processCommentNode = (
     n1: VNode | null,
@@ -257,223 +220,184 @@ export function createRenderer(options: RendererOptions) {
     anchor: RendererElement | null,
   ) => {
     if (n1 == null) {
-      hostInsert(
-        (n2.el = hostCreateComment((n2.children as string) || '')),
-        container,
-        anchor,
-      )
+      hostInsert((n2.el = hostCreateComment((n2.children as string) || "")), container, anchor);
     } else {
-      n2.el = n1.el
+      n2.el = n1.el;
     }
-  }
+  };
 
   const processElement = (
     n1: VNode | null,
     n2: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
   ) => {
     if (n1 == null) {
-      mountElement(n2, container, anchor, parentComponent)
+      mountElement(n2, container, anchor, parentComponent);
     } else {
-      patchElement(n1, n2, parentComponent)
+      patchElement(n1, n2, parentComponent);
     }
-  }
+  };
 
   const mountElement = (
     vnode: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
   ) => {
-    let el: RendererElement
-    const { type, props, shapeFlag, dirs } = vnode
+    let el: RendererElement;
+    const { type, props, shapeFlag, dirs } = vnode;
 
-    el = vnode.el = hostCreateElement(type as string)
+    el = vnode.el = hostCreateElement(type as string);
 
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
-      hostSetElementText(el, vnode.children as string)
+      hostSetElementText(el, vnode.children as string);
     } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-      mountChildren(
-        vnode.children as VNodeArrayChildren,
-        el,
-        null,
-        parentComponent,
-      )
+      mountChildren(vnode.children as VNodeArrayChildren, el, null, parentComponent);
     }
 
-    dirs && invokeDirectiveHook(vnode, null, 'created')
+    dirs && invokeDirectiveHook(vnode, null, "created");
 
     if (props) {
       for (const key in props) {
-        hostPatchProp(el, key, null, props[key])
+        hostPatchProp(el, key, null, props[key]);
       }
     }
 
-    dirs && invokeDirectiveHook(vnode, null, 'beforeMount')
-    hostInsert(el, container, anchor!)
-    dirs && invokeDirectiveHook(vnode, null, 'mounted')
-  }
+    dirs && invokeDirectiveHook(vnode, null, "beforeMount");
+    hostInsert(el, container, anchor!);
+    dirs && invokeDirectiveHook(vnode, null, "mounted");
+  };
 
   const patchElement = (
     n1: VNode,
     n2: VNode,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
   ) => {
-    const el = (n2.el = n1.el!)
-    const { dirs } = n2
+    const el = (n2.el = n1.el!);
+    const { dirs } = n2;
 
-    const oldProps = n1.props ?? {}
-    const newProps = n2.props ?? {}
+    const oldProps = n1.props ?? {};
+    const newProps = n2.props ?? {};
 
-    dirs && invokeDirectiveHook(n2, n1, 'beforeUpdate')
-    patchChildren(n1, n2, el, null, parentComponent)
-    patchProps(el, oldProps, newProps)
-    dirs && invokeDirectiveHook(n2, n1, 'updated')
-  }
+    dirs && invokeDirectiveHook(n2, n1, "beforeUpdate");
+    patchChildren(n1, n2, el, null, parentComponent);
+    patchProps(el, oldProps, newProps);
+    dirs && invokeDirectiveHook(n2, n1, "updated");
+  };
 
   const processComponent = (
     n1: VNode | null,
     n2: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null = null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null = null,
   ) => {
     if (n1 == null) {
-      mountComponent(n2, container, anchor, parentComponent)
+      mountComponent(n2, container, anchor, parentComponent);
     } else {
-      updateComponent(n1, n2)
+      updateComponent(n1, n2);
     }
-  }
+  };
 
   const patchProps = (el: RendererElement, oldProps: Data, newProps: Data) => {
     for (const key in oldProps) {
       if (!(key in newProps)) {
-        hostPatchProp(el, key, oldProps[key], null)
+        hostPatchProp(el, key, oldProps[key], null);
       }
     }
     for (const key in newProps) {
-      const next = newProps[key]
-      const prev = oldProps[key]
+      const next = newProps[key];
+      const prev = oldProps[key];
       // defer patching value
       if (next !== prev) {
-        hostPatchProp(el, key, prev, next)
+        hostPatchProp(el, key, prev, next);
       }
     }
-  }
+  };
 
   const processFragment = (
     n1: VNode | null,
     n2: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
   ) => {
-    const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(''))!
-    const fragmentEndAnchor = (n2.anchor = n1 ? n1.anchor : hostCreateText(''))!
+    const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(""))!;
+    const fragmentEndAnchor = (n2.anchor = n1 ? n1.anchor : hostCreateText(""))!;
 
     if (n1 == null) {
-      hostInsert(fragmentStartAnchor, container, anchor)
-      hostInsert(fragmentEndAnchor, container, anchor)
+      hostInsert(fragmentStartAnchor, container, anchor);
+      hostInsert(fragmentEndAnchor, container, anchor);
       mountChildren(
         n2.children as VNodeArrayChildren,
         container,
         fragmentEndAnchor,
         parentComponent,
-      )
+      );
     } else {
-      patchChildren(n1, n2, container, fragmentEndAnchor, parentComponent)
+      patchChildren(n1, n2, container, fragmentEndAnchor, parentComponent);
     }
-  }
+  };
 
-  const mountChildren: MountChildrenFn = (
-    children,
-    container,
-    anchor,
-    parentComponent,
-  ) => {
+  const mountChildren: MountChildrenFn = (children, container, anchor, parentComponent) => {
     for (let i = 0; i < children.length; i++) {
-      const child = (children[i] = normalizeVNode(children[i]))
-      patch(null, child, container, anchor, parentComponent)
+      const child = (children[i] = normalizeVNode(children[i]));
+      patch(null, child, container, anchor, parentComponent);
     }
-  }
+  };
 
-  const mountComponent: MountComponentFn = (
-    initialVNode,
-    container,
-    anchor,
-    parentComponent,
-  ) => {
+  const mountComponent: MountComponentFn = (initialVNode, container, anchor, parentComponent) => {
     // prettier-ignore
     const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(initialVNode, parentComponent));
-    setupComponent(instance)
-    setupRenderEffect(instance, initialVNode, container, anchor)
-  }
+    setupComponent(instance);
+    setupRenderEffect(instance, initialVNode, container, anchor);
+  };
 
   const updateComponent = (n1: VNode, n2: VNode) => {
-    const instance = (n2.component = n1.component)!
-    instance.next = n2
-    instance.update()
-  }
+    const instance = (n2.component = n1.component)!;
+    instance.next = n2;
+    instance.update();
+  };
 
-  const setupRenderEffect: SetupRenderEffectFn = (
-    instance,
-    initialVNode,
-    container,
-    anchor,
-  ) => {
+  const setupRenderEffect: SetupRenderEffectFn = (instance, initialVNode, container, anchor) => {
     const componentUpdateFn = () => {
-      const { bm, m, bu, u } = instance
+      const { bm, m, bu, u } = instance;
 
       if (!instance.isMounted) {
         // beforeMount hook
         if (bm) {
-          invokeArrayFns(bm)
+          invokeArrayFns(bm);
         }
 
-        const subTree = (instance.subTree = renderComponentRoot(instance))
-        patch(null, subTree, container, anchor, instance)
-        initialVNode.el = subTree.el
-        instance.isMounted = true
+        const subTree = (instance.subTree = renderComponentRoot(instance));
+        patch(null, subTree, container, anchor, instance);
+        initialVNode.el = subTree.el;
+        instance.isMounted = true;
 
         // mounted hook
         if (m) {
-          queuePostFlushCb(m)
+          queuePostFlushCb(m);
         }
       } else {
-        let { next, vnode } = instance
+        let { next, vnode } = instance;
 
         // beforeUpdate hook
         if (bu) {
-          invokeArrayFns(bu)
+          invokeArrayFns(bu);
         }
 
         if (next) {
-          next.el = vnode.el
-          updateComponentPreRender(instance, next)
+          next.el = vnode.el;
+          updateComponentPreRender(instance, next);
         } else {
-          next = vnode
+          next = vnode;
         }
 
-        const prevTree = instance.subTree
-        const nextTree = renderComponentRoot(instance)
-        instance.subTree = nextTree
+        const prevTree = instance.subTree;
+        const nextTree = renderComponentRoot(instance);
+        instance.subTree = nextTree;
 
         patch(
           prevTree,
@@ -481,88 +405,68 @@ export function createRenderer(options: RendererOptions) {
           hostParentNode(prevTree.el!)!,
           getNextHostNode(prevTree),
           instance,
-        )
-        next.el = nextTree.el
+        );
+        next.el = nextTree.el;
 
         // updated hook
         if (u) {
-          queuePostFlushCb(u)
+          queuePostFlushCb(u);
         }
       }
-    }
+    };
     const effect = (instance.effect = new ReactiveEffect(
       componentUpdateFn,
       () => queueJob(update),
       instance.scope,
-    ))
-    const update: SchedulerJob = (instance.update = () => effect.run())
-    update.id = instance.uid
+    ));
+    const update: SchedulerJob = (instance.update = () => effect.run());
+    update.id = instance.uid;
 
-    update()
-  }
+    update();
+  };
 
-  const updateComponentPreRender = (
-    instance: ComponentInternalInstance,
-    nextVNode: VNode,
-  ) => {
-    nextVNode.component = instance
-    instance.vnode = nextVNode
-    instance.next = null
-    updateProps(instance, nextVNode.props)
-    flushPreFlushCbs()
-  }
+  const updateComponentPreRender = (instance: ComponentInternalInstance, nextVNode: VNode) => {
+    nextVNode.component = instance;
+    instance.vnode = nextVNode;
+    instance.next = null;
+    updateProps(instance, nextVNode.props);
+    flushPreFlushCbs();
+  };
 
-  const patchChildren: PatchChildrenFn = (
-    n1,
-    n2,
-    container,
-    anchor,
-    parentComponent,
-  ) => {
-    const c1 = n1 && n1.children
-    const prevShapeFlag = n1 ? n1.shapeFlag : 0
-    const c2 = n2.children
-    const { shapeFlag } = n2
+  const patchChildren: PatchChildrenFn = (n1, n2, container, anchor, parentComponent) => {
+    const c1 = n1 && n1.children;
+    const prevShapeFlag = n1 ? n1.shapeFlag : 0;
+    const c2 = n2.children;
+    const { shapeFlag } = n2;
 
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-        unmountChildren(c1 as VNode[])
+        unmountChildren(c1 as VNode[]);
       }
       if (c2 !== c1) {
-        hostSetElementText(container, c2 as string)
+        hostSetElementText(container, c2 as string);
       }
     } else {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-          patchKeyedChildren(
-            c1 as VNode[],
-            c2 as VNode[],
-            container,
-            anchor,
-            parentComponent,
-          )
+          patchKeyedChildren(c1 as VNode[], c2 as VNode[], container, anchor, parentComponent);
         } else {
           // no new children, just unmount old
-          unmountChildren(c1 as VNode[])
+          unmountChildren(c1 as VNode[]);
         }
       } else {
         // prev children was text OR null
         // new children is array OR null
         if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
-          hostSetElementText(container, '')
+          hostSetElementText(container, "");
         }
         // mount new if array
         if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-          mountChildren(
-            c2 as VNodeArrayChildren,
-            container,
-            anchor,
-            parentComponent,
-          )
+          mountChildren(c2 as VNodeArrayChildren, container, anchor, parentComponent);
         }
       }
     }
-  }
+  };
 
   // can be all-keyed or mixed
   const patchKeyedChildren = (
@@ -570,43 +474,40 @@ export function createRenderer(options: RendererOptions) {
     c2: VNode[],
     container: RendererElement,
     parentAnchor: RendererNode | null,
-    parentComponent:
-      | ComponentInternalInstance
-      | VaporComponentInternalInstance
-      | null,
+    parentComponent: ComponentInternalInstance | VaporComponentInternalInstance | null,
   ) => {
-    let i = 0
-    const l2 = c2.length
-    let e1 = c1.length - 1 // prev ending index
-    let e2 = l2 - 1 // next ending index
+    let i = 0;
+    const l2 = c2.length;
+    let e1 = c1.length - 1; // prev ending index
+    let e2 = l2 - 1; // next ending index
 
     // 1. sync from start
     // (a b) c
     // (a b) d e
     while (i <= e1 && i <= e2) {
-      const n1 = c1[i]
-      const n2 = (c2[i] = normalizeVNode(c2[i]))
+      const n1 = c1[i];
+      const n2 = (c2[i] = normalizeVNode(c2[i]));
       if (isSameVNodeType(n1, n2)) {
-        patch(n1, n2, container, null, parentComponent)
+        patch(n1, n2, container, null, parentComponent);
       } else {
-        break
+        break;
       }
-      i++
+      i++;
     }
 
     // 2. sync from end
     // a (b c)
     // d e (b c)
     while (i <= e1 && i <= e2) {
-      const n1 = c1[e1]
-      const n2 = (c2[i] = normalizeVNode(c2[i]))
+      const n1 = c1[e1];
+      const n2 = (c2[i] = normalizeVNode(c2[i]));
       if (isSameVNodeType(n1, n2)) {
-        patch(n1, n2, container, null, parentComponent)
+        patch(n1, n2, container, null, parentComponent);
       } else {
-        break
+        break;
       }
-      e1--
-      e2--
+      e1--;
+      e2--;
     }
 
     // 3. common sequence + mount
@@ -618,17 +519,11 @@ export function createRenderer(options: RendererOptions) {
     // i = 0, e1 = -1, e2 = 0
     if (i > e1) {
       if (i <= e2) {
-        const nextPos = e2 + 1
-        const anchor = nextPos < l2 ? (c2[nextPos] as VNode).el : parentAnchor
+        const nextPos = e2 + 1;
+        const anchor = nextPos < l2 ? (c2[nextPos] as VNode).el : parentAnchor;
         while (i <= e2) {
-          patch(
-            null,
-            (c2[i] = normalizeVNode(c2[i])),
-            container,
-            anchor,
-            parentComponent,
-          )
-          i++
+          patch(null, (c2[i] = normalizeVNode(c2[i])), container, anchor, parentComponent);
+          i++;
         }
       }
     }
@@ -642,8 +537,8 @@ export function createRenderer(options: RendererOptions) {
     // i = 0, e1 = 0, e2 = -1
     else if (i > e2) {
       while (i <= e1) {
-        unmount(c1[i])
-        i++
+        unmount(c1[i]);
+        i++;
       }
     }
 
@@ -652,240 +547,228 @@ export function createRenderer(options: RendererOptions) {
     // [i ... e2 + 1]: a b [e d c h] f g
     // i = 2, e1 = 4, e2 = 5
     else {
-      const s1 = i // prev starting index
-      const s2 = i // next starting index
+      const s1 = i; // prev starting index
+      const s2 = i; // next starting index
 
       // 5.1 build key:index map for newChildren
-      const keyToNewIndexMap: Map<string | number | symbol, number> = new Map()
+      const keyToNewIndexMap: Map<string | number | symbol, number> = new Map();
       for (i = s2; i <= e2; i++) {
-        const nextChild = (c2[i] = normalizeVNode(c2[i]))
+        const nextChild = (c2[i] = normalizeVNode(c2[i]));
         if (nextChild.key != null) {
-          keyToNewIndexMap.set(nextChild.key, i)
+          keyToNewIndexMap.set(nextChild.key, i);
         }
       }
 
       // 5.2 loop through old children left to be patched and try to patch
       // matching nodes & remove nodes that are no longer present
-      let j
-      let patched = 0
-      const toBePatched = e2 - s2 + 1
-      let moved = false
+      let j;
+      let patched = 0;
+      const toBePatched = e2 - s2 + 1;
+      let moved = false;
       // used to track whether any node has moved
-      let maxNewIndexSoFar = 0
+      let maxNewIndexSoFar = 0;
       // works as Map<newIndex, oldIndex>
       // Note that oldIndex is offset by +1
       // and oldIndex = 0 is a special value indicating the new node has
       // no corresponding old node.
       // used for determining longest stable subsequence
-      const newIndexToOldIndexMap = new Array(toBePatched)
-      for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
+      const newIndexToOldIndexMap = new Array(toBePatched);
+      for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0;
 
       for (i = s1; i <= e1; i++) {
-        const prevChild = c1[i]
+        const prevChild = c1[i];
         if (patched >= toBePatched) {
           // all new children have been patched so this can only be a removal
-          unmount(prevChild)
-          continue
+          unmount(prevChild);
+          continue;
         }
-        let newIndex
+        let newIndex;
         if (prevChild.key != null) {
-          newIndex = keyToNewIndexMap.get(prevChild.key)
+          newIndex = keyToNewIndexMap.get(prevChild.key);
         } else {
           // key-less node, try to locate a key-less node of the same type
           for (j = s2; j <= e2; j++) {
-            if (
-              newIndexToOldIndexMap[j - s2] === 0 &&
-              isSameVNodeType(prevChild, c2[j] as VNode)
-            ) {
-              newIndex = j
-              break
+            if (newIndexToOldIndexMap[j - s2] === 0 && isSameVNodeType(prevChild, c2[j] as VNode)) {
+              newIndex = j;
+              break;
             }
           }
         }
         if (newIndex === undefined) {
-          unmount(prevChild)
+          unmount(prevChild);
         } else {
-          newIndexToOldIndexMap[newIndex - s2] = i + 1
+          newIndexToOldIndexMap[newIndex - s2] = i + 1;
           if (newIndex >= maxNewIndexSoFar) {
-            maxNewIndexSoFar = newIndex
+            maxNewIndexSoFar = newIndex;
           } else {
-            moved = true
+            moved = true;
           }
-          patch(
-            prevChild,
-            c2[newIndex] as VNode,
-            container,
-            null,
-            parentComponent,
-          )
-          patched++
+          patch(prevChild, c2[newIndex] as VNode, container, null, parentComponent);
+          patched++;
         }
       }
 
       // 5.3 move and mount
       // generate longest stable subsequence only when nodes have moved
-      const increasingNewIndexSequence = moved
-        ? getSequence(newIndexToOldIndexMap)
-        : []
-      j = increasingNewIndexSequence.length - 1
+      const increasingNewIndexSequence = moved ? getSequence(newIndexToOldIndexMap) : [];
+      j = increasingNewIndexSequence.length - 1;
       // looping backwards so that we can use last patched node as anchor
       for (i = toBePatched - 1; i >= 0; i--) {
-        const nextIndex = s2 + i
-        const nextChild = c2[nextIndex] as VNode
-        const anchor =
-          nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor
+        const nextIndex = s2 + i;
+        const nextChild = c2[nextIndex] as VNode;
+        const anchor = nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor;
         if (newIndexToOldIndexMap[i] === 0) {
           // mount new
-          patch(null, nextChild, container, anchor, parentComponent)
+          patch(null, nextChild, container, anchor, parentComponent);
         } else if (moved) {
           // move if:
           // There is no stable subsequence (e.g. a reverse)
           // OR current node is not among the stable sequence
           if (j < 0 || i !== increasingNewIndexSequence[j]) {
-            move(nextChild, container, anchor)
+            move(nextChild, container, anchor);
           } else {
-            j--
+            j--;
           }
         }
       }
     }
-  }
+  };
 
   const move: MoveFn = (vnode, container, anchor) => {
-    const { type, children, el, shapeFlag } = vnode
+    const { type, children, el, shapeFlag } = vnode;
     if (shapeFlag & ShapeFlags.COMPONENT) {
-      move(vnode.component!.subTree, container, anchor)
-      return
+      move(vnode.component!.subTree, container, anchor);
+      return;
     }
 
     if (type === Fragment) {
-      hostInsert(el!, container, anchor)
+      hostInsert(el!, container, anchor);
       for (let i = 0; i < (children as VNode[]).length; i++) {
-        move((children as VNode[])[i], container, anchor)
+        move((children as VNode[])[i], container, anchor);
       }
-      hostInsert(vnode.anchor!, container, anchor)
-      return
+      hostInsert(vnode.anchor!, container, anchor);
+      return;
     }
 
-    hostInsert(el!, container, anchor!)
-  }
+    hostInsert(el!, container, anchor!);
+  };
 
-  const unmount: UnmountFn = vnode => {
-    const { shapeFlag, children } = vnode
+  const unmount: UnmountFn = (vnode) => {
+    const { shapeFlag, children } = vnode;
     if (shapeFlag & ShapeFlags.COMPONENT) {
-      unmountComponent(vnode.component!)
+      unmountComponent(vnode.component!);
     } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-      unmountChildren(children as VNode[])
+      unmountChildren(children as VNode[]);
     }
-    remove(vnode)
-  }
+    remove(vnode);
+  };
 
-  const remove: RemoveFn = vnode => {
-    const { el, type, anchor } = vnode
+  const remove: RemoveFn = (vnode) => {
+    const { el, type, anchor } = vnode;
     if (type === Fragment) {
-      removeFragment(el!, anchor!)
+      removeFragment(el!, anchor!);
     }
 
-    hostRemove(el!)
-  }
+    hostRemove(el!);
+  };
 
   const removeFragment = (cur: RendererNode, end: RendererNode) => {
-    let next
+    let next;
     while (cur !== end) {
-      next = hostNextSibling(cur)!
-      hostRemove(cur)
-      cur = next
+      next = hostNextSibling(cur)!;
+      hostRemove(cur);
+      cur = next;
     }
-    hostRemove(end)
-  }
+    hostRemove(end);
+  };
 
   const unmountComponent = (instance: ComponentInternalInstance) => {
-    const { subTree, scope, bum, um } = instance
+    const { subTree, scope, bum, um } = instance;
 
     // beforeUnmount hook
     if (bum) {
-      invokeArrayFns(bum)
+      invokeArrayFns(bum);
     }
 
-    scope.stop()
-    unmount(subTree)
+    scope.stop();
+    unmount(subTree);
 
     // unmounted hook
     if (um) {
-      queuePostFlushCb(um)
+      queuePostFlushCb(um);
     }
-  }
+  };
 
-  const unmountChildren: UnmountChildrenFn = children => {
+  const unmountChildren: UnmountChildrenFn = (children) => {
     for (let i = 0; i < children.length; i++) {
-      unmount(children[i])
+      unmount(children[i]);
     }
-  }
+  };
 
-  const getNextHostNode: NextFn = vnode => {
+  const getNextHostNode: NextFn = (vnode) => {
     if (vnode.shapeFlag & ShapeFlags.COMPONENT) {
-      return getNextHostNode(vnode.component!.subTree)
+      return getNextHostNode(vnode.component!.subTree);
     }
-    return hostNextSibling(vnode.el!)
-  }
+    return hostNextSibling(vnode.el!);
+  };
 
   const render: RootRenderFunction = (vnode, container, parent) => {
     if (vnode === null) {
       if (container._vnode) {
-        unmount(container._vnode)
+        unmount(container._vnode);
       }
     } else {
-      patch((container as any)._vnode || null, vnode, container, null, parent)
+      patch((container as any)._vnode || null, vnode, container, null, parent);
     }
-    flushPreFlushCbs()
-    flushPostFlushCbs()
-    ;(container as any)._vnode = vnode
-  }
+    flushPreFlushCbs();
+    flushPostFlushCbs();
+    (container as any)._vnode = vnode;
+  };
 
   return {
-    render,
+    render: render,
     createApp: createAppAPI(render),
-  }
+  };
 }
 
 // https://en.wikipedia.org/wiki/Longest_increasing_subsequence
 function getSequence(arr: number[]): number[] {
-  const p = arr.slice()
-  const result = [0]
-  let i, j, u, v, c
-  const len = arr.length
+  const p = arr.slice();
+  const result = [0];
+  let i, j, u, v, c;
+  const len = arr.length;
   for (i = 0; i < len; i++) {
-    const arrI = arr[i]
+    const arrI = arr[i];
     if (arrI !== 0) {
-      j = result[result.length - 1]
+      j = result[result.length - 1];
       if (arr[j] < arrI) {
-        p[i] = j
-        result.push(i)
-        continue
+        p[i] = j;
+        result.push(i);
+        continue;
       }
-      u = 0
-      v = result.length - 1
+      u = 0;
+      v = result.length - 1;
       while (u < v) {
-        c = (u + v) >> 1
+        c = (u + v) >> 1;
         if (arr[result[c]] < arrI) {
-          u = c + 1
+          u = c + 1;
         } else {
-          v = c
+          v = c;
         }
       }
       if (arrI < arr[result[u]]) {
         if (u > 0) {
-          p[i] = result[u - 1]
+          p[i] = result[u - 1];
         }
-        result[u] = i
+        result[u] = i;
       }
     }
   }
-  u = result.length
-  v = result[u - 1]
+  u = result.length;
+  v = result[u - 1];
   while (u-- > 0) {
-    result[u] = v
-    v = p[v]
+    result[u] = v;
+    v = p[v];
   }
-  return result
+  return result;
 }

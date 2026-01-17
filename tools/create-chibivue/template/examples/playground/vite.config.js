@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 
 export default defineConfig({
   resolve: {
@@ -6,4 +6,4 @@ export default defineConfig({
       chibivue: `${process.cwd()}/../../packages`,
     },
   },
-})
+});

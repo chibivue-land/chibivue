@@ -25,11 +25,11 @@ chibivue 是 [vuejs/core](https://github.com/vuejs/core) 的最小化实现。
 
 [示例](https://github.com/chibivue-land/chibivue/tree/main/examples/app)
 
-# 👜 包管理器
+# 👜 环境要求
 
-这个项目使用 [pnpm](https://pnpm.io/) 作为包管理器。
-
-并使用 [ni](https://github.com/antfu/ni)。
+- [Node.js](https://nodejs.org/) v24+
+- [pnpm](https://pnpm.io/) v10+
+- [@antfu/ni](https://github.com/antfu/ni)
 
 ```sh
 # 如果你还没有 ni
@@ -72,12 +72,11 @@ $ nr book:dev
 ```sh
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
-$ ni
 
-# 生成游乐场文件到 ~/example/playground（git 忽略）
-$ nr setup:dev
+# 安装依赖并生成游乐场
+$ nr setup
 
-# 监听本地主机
+# 启动开发服务器
 $ nr dev
 ```
 
