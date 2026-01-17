@@ -33,8 +33,9 @@ export interface SFCScriptBlock extends SFCBlock {
   scriptSetupAst?: import("@babel/types").Statement[];
 }
 
-export declare interface SFCStyleBlock extends SFCBlock {
+export interface SFCStyleBlock extends SFCBlock {
   type: "style";
+  scoped?: boolean;
 }
 
 export interface SFCDescriptor {
@@ -138,7 +139,9 @@ function createBlock(node: ElementNode, source: string): SFCBlock {
       if (p.name === "lang") {
         // TODO: parse lang
       } else if (type === "style") {
-        // TODO: parse style block
+        if (p.name === "scoped") {
+          (block as SFCStyleBlock).scoped = true;
+        }
       } else if (type === "script" && p.name === "setup") {
         (block as SFCScriptBlock).setup = attrs.setup;
       }

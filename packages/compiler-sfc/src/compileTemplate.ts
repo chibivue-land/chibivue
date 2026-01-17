@@ -22,16 +22,21 @@ export interface SFCTemplateCompileOptions {
   source: string;
   compiler?: TemplateCompiler;
   compilerOptions?: CompilerOptions;
+  id?: string;
+  scoped?: boolean;
 }
 
 export function compileTemplate({
   source,
   compiler = CompilerDOM,
   compilerOptions,
+  id,
+  scoped,
 }: SFCTemplateCompileOptions): SFCTemplateCompileResults {
   let { code, ast, preamble } = compiler.compile(source, {
     ...compilerOptions,
     isBrowser: false,
+    scopeId: scoped ? id : undefined,
   });
   return { code: code, ast, source, preamble };
 }

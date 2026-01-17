@@ -48,6 +48,7 @@ export interface CodegenContext {
   runtimeGlobalName: string;
   runtimeModuleName: string;
   inline?: boolean;
+  scopeId?: string;
   helper(key: symbol): string;
   push(code: string, node?: CodegenNode): void;
   indent(): void;
@@ -58,7 +59,7 @@ export interface CodegenContext {
 
 function createCodegenContext(
   ast: RootNode,
-  { isBrowser = false }: CodegenOptions,
+  { isBrowser = false, scopeId }: CodegenOptions,
 ): CodegenContext {
   const context: CodegenContext = {
     source: ast.loc.source,
@@ -70,6 +71,7 @@ function createCodegenContext(
     runtimeGlobalName: `ChibiVue`,
     runtimeModuleName: "chibivue",
     isBrowser,
+    scopeId,
     helper(key) {
       return `_${helperNameMap[key]}`;
     },
@@ -101,6 +103,7 @@ function createCodegenContext(
 export function generate(ast: RootNode, options: CodegenOptions): CodegenResult {
   const context = createCodegenContext(ast, {
     isBrowser: options.isBrowser,
+    scopeId: options.scopeId,
   });
   const { push } = context;
   const isSetupInlined = !options.isBrowser && !!options.inline;
@@ -262,19 +265,50 @@ function genComment(node: CommentNode, context: CodegenContext) {
 }
 
 function genVNodeCall(node: VNodeCall, context: CodegenContext) {
-  const { push, helper } = context;
+  const { push, helper, scopeId } = context;
   const { tag, props, children, directives } = node;
   if (directives) {
     push(helper(WITH_DIRECTIVES) + `(`);
   }
   push(helper(CREATE_ELEMENT_VNODE) + `(`, node);
-  genNodeList(genNullableArgs([tag, props, children]), context);
+
+  // Add scopeId to props if present
+  let propsWithScope = props;
+  if (scopeId) {
+    const scopeIdProp = `"data-v-${scopeId}": ""`;
+    if (props) {
+      // Merge with existing props
+      propsWithScope = `{ ...${genPropsString(props, context)}, ${scopeIdProp} }` as any;
+    } else {
+      propsWithScope = `{ ${scopeIdProp} }` as any;
+    }
+    genNodeList(genNullableArgs([tag, propsWithScope, children]), context);
+  } else {
+    genNodeList(genNullableArgs([tag, props, children]), context);
+  }
+
   push(`)`);
   if (directives) {
     push(`, `);
     genNode(directives, context);
     push(`)`);
   }
+}
+
+function genPropsString(props: VNodeCall["props"], context: CodegenContext): string {
+  if (!props) return "{}";
+  if (typeof props === "string") return props;
+
+  // Generate the props to a temporary string
+  const tempContext: CodegenContext = {
+    ...context,
+    code: "",
+    push(code: string) {
+      tempContext.code += code;
+    },
+  };
+  genNode(props, tempContext);
+  return tempContext.code;
 }
 
 function genNullableArgs(args: any[]): CallExpression["arguments"] {

@@ -37,9 +37,7 @@ describe("50_basic_template_compiler/085_component_slot_insert", () => {
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe(
-      "<header>Header Content</header><main>Main Content</main>"
-    );
+    expect(host.innerHTML).toBe("<header>Header Content</header><main>Main Content</main>");
   });
 
   it("should compile implicit default slot", () => {

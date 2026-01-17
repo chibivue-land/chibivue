@@ -10,7 +10,10 @@ import type {
   ObjectExpression,
   ObjectPattern,
   Statement,
+  TSFunctionType,
+  TSTypeLiteral,
 } from "@babel/types";
+import { walk } from "estree-walker";
 import MagicString from "magic-string";
 
 import type { BindingMetadata } from "@chibivue/compiler-core";
@@ -40,10 +43,12 @@ export function compileScript(
 ): SFCScriptBlock {
   let { script, scriptSetup, source } = sfc;
 
+  const parserPlugins = ["typescript"] as const;
+
   // prettier-ignore
-  const scriptAst = _parse(script?.content ?? "", { sourceType: "module" }).program;
+  const scriptAst = _parse(script?.content ?? "", { sourceType: "module", plugins: [...parserPlugins] }).program;
   // prettier-ignore
-  const scriptSetupAst = _parse(scriptSetup?.content ?? "", { sourceType: "module" }).program;
+  const scriptSetupAst = _parse(scriptSetup?.content ?? "", { sourceType: "module", plugins: [...parserPlugins] }).program;
 
   if (!scriptSetup) {
     if (!script) {
@@ -69,9 +74,18 @@ export function compileScript(
 
   let defaultExport: Node | undefined;
   let propsRuntimeDecl: Node | undefined;
+  let propsTypeDecl: TSTypeLiteral | undefined;
   let propsIdentifier: string | undefined;
   let emitsRuntimeDecl: Node | undefined;
+  let emitsTypeDecl: TSTypeLiteral | undefined;
   let emitIdentifier: string | undefined;
+
+  // Props destructure support
+  interface PropsDestructureBinding {
+    local: string;
+    default?: string;
+  }
+  const propsDestructuredBindings: Record<string, PropsDestructureBinding> = Object.create(null);
 
   const scriptStartOffset = script && script.loc.start.offset;
   const scriptEndOffset = script && script.loc.end.offset;
@@ -98,18 +112,95 @@ export function compileScript(
     if (!isCallOf(node, DEFINE_PROPS)) {
       return false;
     }
-    propsRuntimeDecl = node.arguments[0];
+
+    const callExpr = node as CallExpression;
+
+    // Check for type parameters: defineProps<{ foo: string }>()
+    if (callExpr.typeParameters && callExpr.typeParameters.params.length > 0) {
+      const typeArg = callExpr.typeParameters.params[0];
+      if (typeArg.type === "TSTypeLiteral") {
+        propsTypeDecl = typeArg;
+      }
+    } else {
+      // Runtime declaration
+      propsRuntimeDecl = node.arguments[0];
+    }
+
     if (declId) {
-      propsIdentifier = scriptSetup!.content.slice(declId.start!, declId.end!);
+      if (declId.type === "ObjectPattern") {
+        // Props destructure: const { foo, bar = 'default' } = defineProps(...)
+        processPropsDestructure(declId);
+      } else {
+        propsIdentifier = scriptSetup!.content.slice(declId.start!, declId.end!);
+      }
     }
     return true;
+  }
+
+  function processPropsDestructure(pattern: ObjectPattern) {
+    for (const prop of pattern.properties) {
+      if (prop.type === "ObjectProperty") {
+        const key = prop.key;
+        const value = prop.value;
+
+        // Get property name
+        let propKey: string;
+        if (key.type === "Identifier") {
+          propKey = key.name;
+        } else if (key.type === "StringLiteral") {
+          propKey = key.value;
+        } else {
+          continue;
+        }
+
+        // Get local variable name and default value
+        let local: string;
+        let defaultValue: string | undefined;
+
+        if (value.type === "Identifier") {
+          // const { count } = defineProps(...)
+          local = value.name;
+        } else if (value.type === "AssignmentPattern") {
+          // const { count = 0 } = defineProps(...)
+          if (value.left.type === "Identifier") {
+            local = value.left.name;
+            defaultValue = scriptSetup!.content.slice(value.right.start!, value.right.end!);
+          } else {
+            continue;
+          }
+        } else {
+          continue;
+        }
+
+        propsDestructuredBindings[propKey] = { local, default: defaultValue };
+      } else if (prop.type === "RestElement") {
+        // const { id, ...rest } = defineProps(...)
+        // Rest element needs special handling - for now, just skip
+        if (prop.argument.type === "Identifier") {
+          // We could support this later by creating a computed ref
+        }
+      }
+    }
   }
 
   function processDefineEmits(node: Node, declId?: LVal): boolean {
     if (!isCallOf(node, DEFINE_EMITS)) {
       return false;
     }
-    emitsRuntimeDecl = node.arguments[0];
+
+    const callExpr = node as CallExpression;
+
+    // Check for type parameters: defineEmits<{ (e: 'change'): void }>()
+    if (callExpr.typeParameters && callExpr.typeParameters.params.length > 0) {
+      const typeArg = callExpr.typeParameters.params[0];
+      if (typeArg.type === "TSTypeLiteral") {
+        emitsTypeDecl = typeArg;
+      }
+    } else {
+      // Runtime declaration
+      emitsRuntimeDecl = node.arguments[0];
+    }
+
     if (declId) {
       emitIdentifier =
         declId.type === "Identifier"
@@ -326,6 +417,77 @@ export function compileScript(
       bindingMetadata[key] = BindingTypes.PROPS;
     }
   }
+  // Register props from type declaration
+  if (propsTypeDecl) {
+    for (const key of extractPropsKeysFromType(propsTypeDecl)) {
+      bindingMetadata[key] = BindingTypes.PROPS;
+    }
+  }
+  // Register destructured props as PROPS bindings
+  for (const key in propsDestructuredBindings) {
+    const { local } = propsDestructuredBindings[key];
+    bindingMetadata[local] = BindingTypes.PROPS;
+  }
+
+  // 7.5 Transform destructured props accesses to __props.xxx
+  if (Object.keys(propsDestructuredBindings).length > 0) {
+    // Build a map from local variable name to prop key
+    const localToPropKey: Record<string, string> = {};
+    for (const key in propsDestructuredBindings) {
+      const { local } = propsDestructuredBindings[key];
+      localToPropKey[local] = key;
+    }
+
+    // Walk the script setup AST and replace accesses
+    for (const node of scriptSetupAst.body) {
+      // Skip the defineProps call itself (already removed)
+      if (node.type === "ImportDeclaration") continue;
+
+      walk(node as any, {
+        enter(child: any, parent: any) {
+          if (child.type === "Identifier" && localToPropKey[child.name]) {
+            // Check if this is a reference (not a declaration or property key)
+            if (parent) {
+              // Skip if it's a property key in object
+              if (parent.type === "Property" && parent.key === child && !parent.computed) {
+                return;
+              }
+              // Skip if it's a member expression property
+              if (parent.type === "MemberExpression" && parent.property === child && !parent.computed) {
+                return;
+              }
+              // Skip if it's a function parameter
+              if (
+                (parent.type === "FunctionDeclaration" ||
+                  parent.type === "FunctionExpression" ||
+                  parent.type === "ArrowFunctionExpression") &&
+                parent.params?.includes(child)
+              ) {
+                return;
+              }
+              // Skip if it's a variable declaration id
+              if (parent.type === "VariableDeclarator" && parent.id === child) {
+                return;
+              }
+              // Skip if it's part of object pattern
+              if (parent.type === "ObjectProperty" && parent.value === child && parent.shorthand) {
+                // For shorthand like { foo } in destructure, skip
+                const grandParent = (this as any).parent;
+                if (grandParent && grandParent.type === "ObjectPattern") {
+                  return;
+                }
+              }
+            }
+
+            const propKey = localToPropKey[child.name];
+            const replacement = `__props.${propKey}`;
+            s.overwrite(child.start! + startOffset, child.end! + startOffset, replacement);
+          }
+        },
+      });
+    }
+  }
+
   for (const [key, { imported, source }] of Object.entries(userImports)) {
     bindingMetadata[key] =
       imported === "*" || (imported === "default" && source.endsWith(".vue")) || source === "vue"
@@ -375,12 +537,28 @@ export function compileScript(
   let runtimeOptions = ``;
   if (propsRuntimeDecl) {
     let declCode = scriptSetup.content.slice(propsRuntimeDecl.start!, propsRuntimeDecl.end!).trim();
+
+    // Merge defaults from destructuring
+    const hasDefaults = Object.values(propsDestructuredBindings).some((b) => b.default);
+    if (hasDefaults) {
+      // Parse the runtime decl and merge defaults
+      declCode = mergePropsDefaults(declCode, propsDestructuredBindings);
+    }
+
+    runtimeOptions += `\n  props: ${declCode},`;
+  } else if (propsTypeDecl) {
+    // Generate runtime props from type declaration
+    const declCode = genRuntimePropsFromType(propsTypeDecl, propsDestructuredBindings);
     runtimeOptions += `\n  props: ${declCode},`;
   }
   if (emitsRuntimeDecl) {
     runtimeOptions += `\n  emits: ${scriptSetup.content
       .slice(emitsRuntimeDecl.start!, emitsRuntimeDecl.end!)
       .trim()},`;
+  } else if (emitsTypeDecl) {
+    // Generate runtime emits from type declaration
+    const declCode = genRuntimeEmitsFromType(emitsTypeDecl);
+    runtimeOptions += `\n  emits: ${declCode},`;
   }
 
   if (defaultExport) {
@@ -697,4 +875,195 @@ function isStaticNode(node: Node): boolean {
 
 function isLiteralNode(node: Node) {
   return node.type.endsWith("Literal");
+}
+
+interface PropsDestructureBinding {
+  local: string;
+  default?: string;
+}
+
+function extractPropsKeysFromType(typeDecl: TSTypeLiteral): string[] {
+  const keys: string[] = [];
+  for (const member of typeDecl.members) {
+    if (member.type === "TSPropertySignature" && member.key.type === "Identifier") {
+      keys.push(member.key.name);
+    }
+  }
+  return keys;
+}
+
+function genRuntimePropsFromType(
+  typeDecl: TSTypeLiteral,
+  destructuredBindings: Record<string, PropsDestructureBinding>,
+): string {
+  const props: string[] = [];
+
+  for (const member of typeDecl.members) {
+    if (member.type === "TSPropertySignature" && member.key.type === "Identifier") {
+      const key = member.key.name;
+      const isOptional = !!member.optional;
+      const typeAnnotation = member.typeAnnotation?.typeAnnotation;
+
+      // Get runtime type
+      const runtimeTypes = typeAnnotation ? resolveRuntimeType(typeAnnotation) : ["null"];
+      const typeStr = runtimeTypes.length === 1 ? runtimeTypes[0] : `[${runtimeTypes.join(", ")}]`;
+
+      // Check for default value from destructuring
+      const binding = destructuredBindings[key];
+      const hasDefault = binding?.default;
+
+      if (hasDefault) {
+        props.push(`${key}: { type: ${typeStr}, required: false, default: ${binding.default} }`);
+      } else if (isOptional) {
+        props.push(`${key}: { type: ${typeStr}, required: false }`);
+      } else {
+        props.push(`${key}: { type: ${typeStr}, required: true }`);
+      }
+    }
+  }
+
+  return `{ ${props.join(", ")} }`;
+}
+
+function resolveRuntimeType(node: Node): string[] {
+  switch (node.type) {
+    case "TSStringKeyword":
+      return ["String"];
+    case "TSNumberKeyword":
+      return ["Number"];
+    case "TSBooleanKeyword":
+      return ["Boolean"];
+    case "TSArrayType":
+      return ["Array"];
+    case "TSFunctionType":
+      return ["Function"];
+    case "TSObjectKeyword":
+    case "TSTypeLiteral":
+      return ["Object"];
+    case "TSUnionType": {
+      const types: string[] = [];
+      for (const t of node.types) {
+        // Skip null/undefined in union
+        if (t.type === "TSNullKeyword" || t.type === "TSUndefinedKeyword") {
+          continue;
+        }
+        types.push(...resolveRuntimeType(t));
+      }
+      return types.length > 0 ? types : ["null"];
+    }
+    case "TSTypeReference":
+      if (node.typeName.type === "Identifier") {
+        const name = node.typeName.name;
+        // Built-in type mapping
+        if (name === "Array") return ["Array"];
+        if (name === "Function") return ["Function"];
+        if (name === "Object") return ["Object"];
+        if (name === "String") return ["String"];
+        if (name === "Number") return ["Number"];
+        if (name === "Boolean") return ["Boolean"];
+        // Custom types default to null (will be validated at runtime)
+        return ["null"];
+      }
+      return ["Object"];
+    default:
+      return ["null"];
+  }
+}
+
+function genRuntimeEmitsFromType(typeDecl: TSTypeLiteral): string {
+  const events: string[] = [];
+
+  for (const member of typeDecl.members) {
+    // Handle call signatures: { (e: 'change', value: string): void }
+    if (member.type === "TSCallSignatureDeclaration") {
+      const params = member.parameters;
+      if (params && params.length > 0) {
+        const firstParam = params[0];
+        if (firstParam.type === "Identifier" && firstParam.typeAnnotation) {
+          const typeAnn = firstParam.typeAnnotation.typeAnnotation;
+          if (typeAnn.type === "TSLiteralType" && typeAnn.literal.type === "StringLiteral") {
+            events.push(`"${typeAnn.literal.value}"`);
+          }
+        }
+      }
+    }
+    // Handle property signatures: { change: (value: string) => void }
+    else if (member.type === "TSPropertySignature" && member.key.type === "Identifier") {
+      events.push(`"${member.key.name}"`);
+    }
+  }
+
+  return `[${events.join(", ")}]`;
+}
+
+function mergePropsDefaults(
+  declCode: string,
+  destructuredBindings: Record<string, PropsDestructureBinding>,
+): string {
+  // Simple implementation: parse the object and merge defaults
+  // For a more robust implementation, use Babel to transform the AST
+  try {
+    const ast = _parse(`(${declCode})`, { sourceType: "module" }).program.body[0];
+    if (ast.type !== "ExpressionStatement") return declCode;
+
+    const expr = ast.expression;
+    if (expr.type !== "ObjectExpression") return declCode;
+
+    // Build the merged props object
+    const props: string[] = [];
+    const processedKeys = new Set<string>();
+
+    for (const prop of expr.properties) {
+      if (prop.type === "SpreadElement") {
+        // Keep spread elements as-is
+        props.push(declCode.slice(prop.start! - 1, prop.end! - 1));
+        continue;
+      }
+
+      const keyNode = prop.key;
+      let key: string;
+      if (keyNode.type === "Identifier") {
+        key = keyNode.name;
+      } else if (keyNode.type === "StringLiteral") {
+        key = keyNode.value;
+      } else {
+        // Keep computed keys as-is
+        props.push(declCode.slice(prop.start! - 1, prop.end! - 1));
+        continue;
+      }
+
+      processedKeys.add(key);
+      const binding = destructuredBindings[key];
+
+      if (binding?.default) {
+        // Has default value from destructuring
+        const valueCode = declCode.slice(prop.value.start! - 1, prop.value.end! - 1);
+
+        // Check if value is already an object with type
+        if (prop.value.type === "ObjectExpression") {
+          // { type: String } -> { type: String, default: value }
+          const hasDefault = prop.value.properties.some(
+            (p: any) => p.type === "ObjectProperty" && p.key.type === "Identifier" && p.key.name === "default",
+          );
+          if (!hasDefault) {
+            props.push(`${key}: { ...${valueCode}, default: ${binding.default} }`);
+          } else {
+            props.push(`${key}: ${valueCode}`);
+          }
+        } else {
+          // String -> { type: String, default: value }
+          props.push(`${key}: { type: ${valueCode}, default: ${binding.default} }`);
+        }
+      } else {
+        // No default, keep as-is
+        const valueCode = declCode.slice(prop.value.start! - 1, prop.value.end! - 1);
+        props.push(`${key}: ${valueCode}`);
+      }
+    }
+
+    return `{ ${props.join(", ")} }`;
+  } catch {
+    // If parsing fails, return original
+    return declCode;
+  }
 }

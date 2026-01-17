@@ -136,7 +136,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 Reactivity の最適化",
+            text: "Reactivity の最適化",
             link: "/ja/30-basic-reactivity-system/005-reactivity-optimization",
           },
           {
@@ -240,38 +240,50 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/ja/50-basic-template-compiler/085-component-slot-insert",
           },
           {
-            text: "🚧 その他のディレクティブ",
+            text: "その他のディレクティブ",
             link: "/ja/50-basic-template-compiler/090-other-directives",
           },
           {
-            text: "🚧 微調整",
+            text: "コンパイラの細かい調整",
             link: "/ja/50-basic-template-compiler/100-chore-compiler",
           },
           {
-            text: "🚧 カスタムディレクティブ",
+            text: "パーサーの最適化",
+            link: "/ja/50-basic-template-compiler/110-parser-optimization",
+          },
+          {
+            text: "カスタムディレクティブ",
             link: "/ja/50-basic-template-compiler/500-custom-directive",
           },
         ],
       },
       {
-        text: "🚧 Basic SFC Compiler",
+        text: "Basic SFC Compiler",
         collapsed: true,
         items: [
           {
-            text: "🚧 script setup に対応する",
+            text: "script setup に対応する",
             link: "/ja/60-basic-sfc-compiler/010-script-setup",
           },
           {
-            text: "🚧 defineProps に対応する",
+            text: "defineProps に対応する",
             link: "/ja/60-basic-sfc-compiler/020-define-props",
           },
           {
-            text: "🚧 defineEmits に対応する",
+            text: "defineEmits に対応する",
             link: "/ja/60-basic-sfc-compiler/030-define-emits",
           },
           {
-            text: "🚧 Scoped CSS に対応する",
+            text: "Scoped CSS に対応する",
             link: "/ja/60-basic-sfc-compiler/040-scoped-css",
+          },
+          {
+            text: "Props の分割代入に対応する",
+            link: "/ja/60-basic-sfc-compiler/050-props-destructure",
+          },
+          {
+            text: "型ベースの defineProps/defineEmits",
+            link: "/ja/60-basic-sfc-compiler/060-type-based-macros",
           },
         ],
       },

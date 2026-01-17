@@ -161,7 +161,9 @@ export function isTemplateNode(
   node: RootNode | TemplateChildNode,
 ): node is PlainElementNode & { tag: "template" } {
   return (
-    node.type === NodeTypes.ELEMENT && node.tagType === ElementTypes.ELEMENT && node.tag === "template"
+    node.type === NodeTypes.ELEMENT &&
+    node.tagType === ElementTypes.ELEMENT &&
+    node.tag === "template"
   );
 }
 

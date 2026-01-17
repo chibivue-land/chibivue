@@ -50,10 +50,7 @@ export function buildSlots(
     const slotElement = children[i];
     let slotDir: DirectiveNode | undefined;
 
-    if (
-      !isTemplateNode(slotElement) ||
-      !(slotDir = findDir(slotElement, "slot", true))
-    ) {
+    if (!isTemplateNode(slotElement) || !(slotDir = findDir(slotElement, "slot", true))) {
       // not a <template v-slot>, skip.
       if (slotElement.type !== NodeTypes.COMMENT) {
         implicitDefaultChildren.push(slotElement);
@@ -63,10 +60,7 @@ export function buildSlots(
 
     hasTemplateSlots = true;
     const { children: slotChildren, loc: slotLoc } = slotElement;
-    const {
-      arg: slotName = createSimpleExpression(`default`, true),
-      exp: slotProps,
-    } = slotDir;
+    const { arg: slotName = createSimpleExpression(`default`, true), exp: slotProps } = slotDir;
 
     const slotFunction = buildSlotFn(slotProps, slotChildren, slotLoc, context);
     slotsProperties.push(createObjectProperty(slotName, slotFunction));
@@ -76,10 +70,7 @@ export function buildSlots(
     if (!hasTemplateSlots) {
       // implicit default slot (on component)
       slotsProperties.push(
-        createObjectProperty(
-          `default`,
-          buildSlotFn(undefined, children, node.loc, context),
-        ),
+        createObjectProperty(`default`, buildSlotFn(undefined, children, node.loc, context)),
       );
     } else if (implicitDefaultChildren.length) {
       // implicit default slot (mixed with named slots)

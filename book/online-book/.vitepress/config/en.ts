@@ -139,7 +139,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 Reactivity Optimization",
+            text: "Reactivity Optimization",
             link: "/30-basic-reactivity-system/005-reactivity-optimization",
           },
           {
@@ -243,21 +243,25 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/080-slot",
           },
           {
-            text: "🚧 Other Directives",
+            text: "Other Directives",
             link: "/50-basic-template-compiler/090-other-directives",
           },
           {
-            text: "🚧 Chore Compiler",
+            text: "Compiler Refinements",
             link: "/50-basic-template-compiler/100-chore-compiler",
           },
           {
-            text: "🚧 Custom Directives",
+            text: "Parser Optimization",
+            link: "/50-basic-template-compiler/110-parser-optimization",
+          },
+          {
+            text: "Custom Directives",
             link: "/50-basic-template-compiler/500-custom-directive",
           },
         ],
       },
       {
-        text: "🚧 Basic SFC Compiler",
+        text: "Basic SFC Compiler",
         collapsed: true,
         items: [
           {
@@ -275,6 +279,14 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           {
             text: "Supporting Scoped CSS",
             link: "/60-basic-sfc-compiler/040-scoped-css",
+          },
+          {
+            text: "Supporting Props Destructure",
+            link: "/60-basic-sfc-compiler/050-props-destructure",
+          },
+          {
+            text: "Type-based defineProps/defineEmits",
+            link: "/60-basic-sfc-compiler/060-type-based-macros",
           },
         ],
       },

@@ -139,7 +139,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 响应式优化",
+            text: "响应式优化",
             link: "/zh-cn/30-basic-reactivity-system/005-reactivity-optimization",
           },
           {
@@ -243,21 +243,25 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-cn/50-basic-template-compiler/085-component-slot-insert",
           },
           {
-            text: "🚧 其他指令",
+            text: "其他指令",
             link: "/zh-cn/50-basic-template-compiler/090-other-directives",
           },
           {
-            text: "🚧 编译器细节优化",
+            text: "编译器细节优化",
             link: "/zh-cn/50-basic-template-compiler/100-chore-compiler",
           },
           {
-            text: "🚧 自定义指令",
+            text: "解析器优化",
+            link: "/zh-cn/50-basic-template-compiler/110-parser-optimization",
+          },
+          {
+            text: "自定义指令",
             link: "/zh-cn/50-basic-template-compiler/500-custom-directive",
           },
         ],
       },
       {
-        text: "🚧 基础 SFC 编译器",
+        text: "基础 SFC 编译器",
         collapsed: true,
         items: [
           {
@@ -275,6 +279,14 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           {
             text: "支持作用域 CSS",
             link: "/zh-cn/60-basic-sfc-compiler/040-scoped-css",
+          },
+          {
+            text: "支持 Props 解构",
+            link: "/zh-cn/60-basic-sfc-compiler/050-props-destructure",
+          },
+          {
+            text: "基于类型的 defineProps/defineEmits",
+            link: "/zh-cn/60-basic-sfc-compiler/060-type-based-macros",
           },
         ],
       },

@@ -61,6 +61,7 @@ export interface ParserContext {
   offset: number;
   line: number;
   column: number;
+  inVPre: boolean;
 }
 
 export function baseParse(content: string, rawOptions: ParserOptions): RootNode {
@@ -83,6 +84,7 @@ function createParserContext(content: string, rawOptions: ParserOptions): Parser
     offset: 0,
     originalSource: content,
     source: content,
+    inVPre: false,
   };
 }
 
@@ -98,7 +100,10 @@ function parseChildren(
     let node: TemplateChildNode | TemplateChildNode[] | undefined = undefined;
     if (mode === TextModes.DATA || mode === TextModes.RCDATA) {
       if (startsWith(s, context.options.delimiters![0])) {
-        node = parseInterpolation(context, mode);
+        // Skip mustache when in v-pre
+        if (!context.inVPre) {
+          node = parseInterpolation(context, mode);
+        }
       } else if (mode === TextModes.DATA && s[0] === "<") {
         if (s[1] === "!") {
           // https://html.spec.whatwg.org/multipage/parsing.html#markup-declaration-open-state
@@ -242,7 +247,18 @@ function parseElement(context: ParserContext, ancestors: ElementNode[]): Element
   const parent = last(ancestors);
   const element = parseTag(context, TagType.Start);
 
+  // Check for v-pre
+  const isPreBoundary = element.props.some(
+    (p) => p.type === NodeTypes.DIRECTIVE && p.name === "pre",
+  );
+  if (isPreBoundary) {
+    context.inVPre = true;
+  }
+
   if (element.isSelfClosing) {
+    if (isPreBoundary) {
+      context.inVPre = false;
+    }
     return element;
   }
 
@@ -257,6 +273,11 @@ function parseElement(context: ParserContext, ancestors: ElementNode[]): Element
   // End tag.
   if (startsWithEndTagOpen(context.source, element.tag)) {
     parseTag(context, TagType.End);
+  }
+
+  // End of v-pre
+  if (isPreBoundary) {
+    context.inVPre = false;
   }
 
   return element;
@@ -364,6 +385,21 @@ function parseAttribute(
 
   // directive
   const loc = getSelection(context, start);
+
+  // Don't parse as directive when in v-pre (except for v-pre itself)
+  if (context.inVPre && name !== "v-pre") {
+    return {
+      type: NodeTypes.ATTRIBUTE,
+      name,
+      value: value && {
+        type: NodeTypes.TEXT,
+        content: value.content,
+        loc: value.loc,
+      },
+      loc,
+    };
+  }
+
   if (/^(v-[A-Za-z0-9-]|:|\.|@|#)/.test(name)) {
     const match = /(?:^v-([a-z0-9-]+))?(?:(?::|^\.|^@|^#)(\[[^\]]+\]|[^\.]+))?(.+)?$/i.exec(name)!;
 

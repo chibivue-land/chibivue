@@ -2,6 +2,7 @@ export interface ChibiVueQuery {
   chibivue?: boolean;
   type?: "script" | "template" | "style";
   index?: number;
+  scoped?: boolean;
   raw?: boolean;
   url?: boolean;
 }
@@ -17,6 +18,9 @@ export function parseChibiVueRequest(id: string): {
   }
   if (query.index != null) {
     query.index = Number(query.index);
+  }
+  if (query.scoped != null) {
+    query.scoped = true;
   }
   if (query.raw != null) {
     query.raw = true;

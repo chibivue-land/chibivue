@@ -139,7 +139,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 響應式最佳化",
+            text: "響應式最佳化",
             link: "/zh-tw/30-basic-reactivity-system/005-reactivity-optimization",
           },
           {
@@ -243,21 +243,25 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/50-basic-template-compiler/085-component-slot-insert",
           },
           {
-            text: "🚧 其他指令",
+            text: "其他指令",
             link: "/zh-tw/50-basic-template-compiler/090-other-directives",
           },
           {
-            text: "🚧 編譯器細節優化",
+            text: "編譯器細節優化",
             link: "/zh-tw/50-basic-template-compiler/100-chore-compiler",
           },
           {
-            text: "🚧 自訂指令",
+            text: "解析器優化",
+            link: "/zh-tw/50-basic-template-compiler/110-parser-optimization",
+          },
+          {
+            text: "自訂指令",
             link: "/zh-tw/50-basic-template-compiler/500-custom-directive",
           },
         ],
       },
       {
-        text: "🚧 基礎 SFC 編譯器",
+        text: "基礎 SFC 編譯器",
         collapsed: true,
         items: [
           {
@@ -275,6 +279,14 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           {
             text: "支援作用域 CSS",
             link: "/zh-tw/60-basic-sfc-compiler/040-scoped-css",
+          },
+          {
+            text: "支援 Props 解構",
+            link: "/zh-tw/60-basic-sfc-compiler/050-props-destructure",
+          },
+          {
+            text: "基於類型的 defineProps/defineEmits",
+            link: "/zh-tw/60-basic-sfc-compiler/060-type-based-macros",
           },
         ],
       },

@@ -11,6 +11,9 @@ export async function transformMain(
 ): Promise<{ code: string }> {
   const { descriptor } = createDescriptor(filename, code, options);
 
+  // Check if any style is scoped
+  const hasScoped = descriptor.styles.some((s) => s.scoped);
+
   // script
   const { code: scriptCode } = genScriptCode(descriptor, options);
 
@@ -20,7 +23,7 @@ export async function transformMain(
   let templateCode = "";
 
   if (hasTemplateImport) {
-    const { code } = genTemplateCode(descriptor, options);
+    const { code } = genTemplateCode(descriptor, options, hasScoped);
     templateCode = code;
   }
 
@@ -67,8 +70,10 @@ async function genStyleCode(descriptor: SFCDescriptor): Promise<string> {
   let stylesCode = ``;
 
   for (let i = 0; i < descriptor.styles.length; i++) {
+    const style = descriptor.styles[i];
     const src = descriptor.filename;
-    const query = `?chibivue&type=style&index=${i}&lang.css`;
+    const scoped = style.scoped ? "&scoped=true" : "";
+    const query = `?chibivue&type=style&index=${i}${scoped}&lang.css`;
     const styleRequest = src + query;
     stylesCode += `\nimport ${JSON.stringify(styleRequest)}`;
   }
@@ -76,7 +81,10 @@ async function genStyleCode(descriptor: SFCDescriptor): Promise<string> {
   return stylesCode;
 }
 
-function genTemplateCode(descriptor: SFCDescriptor, options: ResolvedOptions) {
+function genTemplateCode(descriptor: SFCDescriptor, options: ResolvedOptions, hasScoped: boolean) {
   const template = descriptor.template!;
-  return transformTemplateInMain(template.content.trim(), options);
+  return transformTemplateInMain(template.content.trim(), options, {
+    id: descriptor.id,
+    scoped: hasScoped,
+  });
 }

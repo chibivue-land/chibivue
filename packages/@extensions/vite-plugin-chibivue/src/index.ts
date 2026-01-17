@@ -29,7 +29,19 @@ export default function chibiVuePlugin(): Plugin {
       const { filename, query } = parseChibiVueRequest(id);
       if (query.chibivue) {
         const descriptor = getDescriptor(filename, options)!;
-        if (query.type === "style") return { code: descriptor.styles[query.index!].content };
+        if (query.type === "style") {
+          const style = descriptor.styles[query.index!];
+          if (query.scoped) {
+            const { code } = options.compiler.compileStyle({
+              source: style.content,
+              filename,
+              id: descriptor.id,
+              scoped: true,
+            });
+            return { code };
+          }
+          return { code: style.content };
+        }
       }
     },
 
