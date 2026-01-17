@@ -273,8 +273,9 @@ export function compileScript(
         const decl = node.declarations[i];
         const init = decl.init;
         if (init) {
-          const isDefineProps = processDefineProps(init, decl.id);
-          const isDefineEmits = processDefineEmits(init, decl.id);
+          const declId = decl.id.type === "VoidPattern" ? undefined : decl.id;
+          const isDefineProps = processDefineProps(init, declId);
+          const isDefineEmits = processDefineEmits(init, declId);
           if (isDefineProps || isDefineEmits) {
             if (left === 1) {
               s.remove(node.start! + startOffset, node.end! + startOffset);

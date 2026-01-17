@@ -10,6 +10,6 @@
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^22.10.1"
+    "@types/node": "^24.10.9"
   }
 }
