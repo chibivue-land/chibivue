@@ -1,85 +1,145 @@
 /**
- * Colors
+ * chibivue Theme Colors - New Branding
+ * Based on og.png design: Mint/Turquoise + Navy
  * -------------------------------------------------------------------------- */
 
 :root {
-  --vp-c-brand-1: #4092aa;
-  --c-blue: #4092aa;
-  --c-blue-dark: #2c3e50;
-  --c-blue-darker: #1e2a38;
-  --c-blue-light: #5e9ab5;
-  --c-blue-lighter: #7fb1c2;
+  /* Primary Brand Colors - Mint/Turquoise */
+  --c-mint-50: #e8faf6;
+  --c-mint-100: #c5f2e8;
+  --c-mint-200: #8be4d3;
+  --c-mint-300: #50d6bd;
+  --c-mint-400: #2cc9a8;
+  --c-mint-500: #1ab394;
+  --c-mint-600: #159d82;
+  --c-mint-700: #0f8770;
+  --c-mint-800: #0a715e;
+  --c-mint-900: #055c4c;
 
-  --c-teal: #0c5053;
-  --c-teal-light: #27696d;
+  /* Navy Text Colors */
+  --c-navy-900: #1a2744;
+  --c-navy-800: #243352;
+  --c-navy-700: #2e3f60;
+  --c-navy-600: #3a4d72;
+  --c-navy-500: #4a5f87;
+  --c-navy-400: #6b7fa3;
+  --c-navy-300: #9aaac4;
+  --c-navy-200: #c4d0e1;
+  --c-navy-100: #e4eaf2;
 
-  --c-white-dark: #f8f8f8;
-  --vp-c-black-darker: #0d121b;
-  --vp-c-black: #111827;
-  --vp-c-black-light: #161f32;
-  --vp-c-black-lighter: #262a44;
+  /* Mascot Colors */
+  --c-duck-yellow: #f4d35e;
+  --c-duck-orange: #e8a545;
+  --c-duck-brown: #8b6914;
 
+  /* Legacy color mappings for compatibility */
+  --c-blue: var(--c-mint-500);
+  --c-blue-dark: var(--c-navy-800);
+  --c-blue-darker: var(--c-navy-900);
+  --c-blue-light: var(--c-mint-400);
+  --c-blue-lighter: var(--c-mint-300);
+  --c-teal: var(--c-mint-700);
+  --c-teal-light: var(--c-mint-600);
   --c-green-light: #8ae99c;
   --c-green: #52ce63;
   --c-green-dark: #51a256;
   --c-green-darker: #316334;
 
-  --vp-c-text-dark-1: #d9e6eb;
-  --vp-c-text-dark-2: #c4dde6;
-  --vp-c-text-dark-3: #abc4cc;
-  --c-text-light-1: #2c3e50;
-  --c-text-light-2: #476582;
-  --c-text-light-3: #90a4b7;
-  /* #f9fafb */
+  /* VitePress Brand Variables - Light Mode */
+  --vp-c-brand-1: var(--c-mint-600);
+  --vp-c-brand-2: var(--c-mint-500);
+  --vp-c-brand-3: var(--c-mint-400);
+  --vp-c-brand-soft: rgba(26, 179, 148, 0.14);
 
-  /* light theme is a bit different */
-  --vp-c-brand: var(--c-green-darker);
-  --vp-c-brand-light: var(--c-green);
-  --vp-c-brand-lighter: var(--c-blue-lighter);
-  --vp-c-brand-lightest: var(--c-blue-lighter);
+  /* Text Colors - Light Mode */
+  --vp-c-text-1: var(--c-navy-900);
+  --vp-c-text-2: var(--c-navy-700);
+  --vp-c-text-3: var(--c-navy-500);
+  --c-text-light-1: var(--c-navy-900);
+  --c-text-light-2: var(--c-navy-700);
+  --c-text-light-3: var(--c-navy-500);
 
-  --vp-c-brand-dark: var(--c-green-dark);
-  --vp-c-brand-darker: var(--c-green-darker);
-  --vp-c-brand-dimm: rgba(100, 108, 255, 0.08);
-  --vp-c-brand-text: var(--c-text-light-1);
-  --c-bg-accent: var(--c-white-dark);
+  /* Background Colors - Light Mode */
+  --c-white-dark: #f8fafb;
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-soft: var(--c-mint-50);
+  --vp-c-bg-mute: var(--c-navy-100);
+  --vp-c-bg-alt: #f8fafb;
+
+  /* Border Colors */
+  --vp-c-border: var(--c-navy-200);
+  --vp-c-divider: var(--c-navy-100);
+
+  /* Gradient for hero - Light Mode */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(
+    135deg,
+    var(--c-mint-600) 0%,
+    var(--c-mint-400) 50%,
+    var(--c-green-light) 100%
+  );
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    var(--c-mint-300) 0%,
+    var(--c-mint-100) 50%,
+    rgba(26, 179, 148, 0.3) 100%
+  );
+  --vp-home-hero-image-filter: blur(44px);
 }
 
-html.dark:root {
-  --vp-c-brand: var(--c-blue);
-  --vp-c-brand-dark: var(--c-blue-dark);
-  --vp-c-brand-darker: var(--c-blue-darker);
-  --vp-c-brand-light: var(--c-blue-light);
+/**
+ * Dark Mode
+ * -------------------------------------------------------------------------- */
 
-  --vp-c-bg-alpha-with-backdrop: rgba(20, 25, 36, 0.7);
-  --vp-c-bg-alpha-without-backdrop: rgba(20, 25, 36, 0.9);
+html.dark {
+  /* VitePress Brand Variables - Dark Mode */
+  --vp-c-brand-1: var(--c-mint-400);
+  --vp-c-brand-2: var(--c-mint-500);
+  --vp-c-brand-3: var(--c-mint-600);
+  --vp-c-brand-soft: rgba(44, 201, 168, 0.16);
 
-  --vp-code-line-highlight-color: rgba(0, 0, 0, 0.5);
+  /* Text Colors - Dark Mode */
+  --vp-c-text-1: #e2ebf0;
+  --vp-c-text-2: #b8c9d4;
+  --vp-c-text-3: #8a9fb0;
+  --vp-c-text-dark-1: #e2ebf0;
+  --vp-c-text-dark-2: #b8c9d4;
+  --vp-c-text-dark-3: #8a9fb0;
 
-  --vp-c-text: var(--c-text-dark-1);
-  --vp-c-brand-text: var(--c-text-light-1);
-  --c-text-light: var(--c-text-dark-2);
-  --c-text-lighter: var(--c-text-dark-3);
-  --c-divider: var(--c-divider-dark);
-  --c-bg-accent: var(--vp-c-black-light);
-
-  --vp-c-bg: var(--vp-c-black);
-  --vp-c-bg-soft: var(--vp-c-black-light);
-  --vp-c-bg-soft-up: var(--vp-c-black-lighter);
-  --vp-c-bg-mute: var(--vp-c-black-light);
-  --vp-c-bg-soft-mute: var(--vp-c-black-lighter);
+  /* Background Colors - Dark Mode */
+  --vp-c-black-darker: #0d121b;
+  --vp-c-black: #0f1724;
+  --vp-c-black-light: #151e2d;
+  --vp-c-black-lighter: #1b2637;
+  --vp-c-bg: #0f1724;
+  --vp-c-bg-soft: #151e2d;
+  --vp-c-bg-mute: #1b2637;
   --vp-c-bg-alt: #0d121b;
   --vp-c-bg-elv: var(--vp-c-bg-soft);
-  --vp-c-bg-elv-mute: var(--vp-c-bg-soft-mute);
+  --vp-c-bg-elv-mute: var(--vp-c-bg-mute);
+  --vp-c-bg-soft-up: var(--vp-c-black-lighter);
+  --vp-c-bg-soft-mute: var(--vp-c-black-lighter);
   --vp-c-mute: var(--vp-c-bg-mute);
   --vp-c-mute-dark: var(--vp-c-black-lighter);
   --vp-c-mute-darker: var(--vp-c-black-darker);
+  --c-bg-accent: var(--vp-c-black-light);
 
-  --vp-home-hero-name-background: -webkit-linear-gradient(
-    78deg,
-    var(--c-blue) 30%,
-    var(--c-green-light)
+  /* Border Colors - Dark Mode */
+  --vp-c-border: #2a3a50;
+  --vp-c-divider: #1f2d40;
+
+  /* Hero gradient - Dark Mode */
+  --vp-home-hero-name-background: linear-gradient(
+    135deg,
+    var(--c-mint-400) 0%,
+    var(--c-mint-300) 50%,
+    #5dddc2 100%
   );
+
+  --vp-c-bg-alpha-with-backdrop: rgba(15, 23, 36, 0.7);
+  --vp-c-bg-alpha-without-backdrop: rgba(15, 23, 36, 0.9);
+
+  --vp-code-line-highlight-color: rgba(26, 179, 148, 0.1);
 }
 
 /**
@@ -88,31 +148,59 @@ html.dark:root {
 
 :root {
   --vp-button-brand-border: transparent;
-  --vp-button-brand-bg: var(--c-teal-light);
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-bg: var(--c-mint-600);
   --vp-button-brand-hover-border: transparent;
-  --vp-button-brand-hover-bg: var(--c-teal);
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-hover-bg: var(--c-mint-700);
   --vp-button-brand-active-border: transparent;
-  --vp-button-brand-active-bg: var(--c-teal-light);
+  --vp-button-brand-active-text: #ffffff;
+  --vp-button-brand-active-bg: var(--c-mint-800);
+}
+
+html.dark {
+  --vp-button-brand-bg: var(--c-mint-500);
+  --vp-button-brand-hover-bg: var(--c-mint-600);
+  --vp-button-brand-active-bg: var(--c-mint-700);
+}
+
+/**
+ * Component: Custom Containers (tip, warning, info, etc.)
+ * -------------------------------------------------------------------------- */
+
+:root {
+  /* Tip - use mint */
+  --vp-custom-block-tip-border: var(--c-mint-300);
+  --vp-custom-block-tip-text: var(--c-navy-800);
+  --vp-custom-block-tip-bg: rgba(26, 179, 148, 0.1);
+  --vp-custom-block-tip-code-bg: rgba(26, 179, 148, 0.15);
+
+  /* Info - use teal */
+  --vp-custom-block-info-border: var(--c-mint-400);
+  --vp-custom-block-info-text: var(--c-navy-800);
+  --vp-custom-block-info-bg: rgba(44, 201, 168, 0.1);
+
+  /* Warning - use duck yellow */
+  --vp-custom-block-warning-border: var(--c-duck-yellow);
+  --vp-custom-block-warning-text: var(--c-navy-800);
+  --vp-custom-block-warning-bg: rgba(244, 211, 94, 0.12);
+
+  /* Danger - softer red */
+  --vp-custom-block-danger-border: #e85d75;
+  --vp-custom-block-danger-text: var(--c-navy-800);
+  --vp-custom-block-danger-bg: rgba(232, 93, 117, 0.1);
+}
+
+html.dark {
+  --vp-custom-block-tip-text: #e2ebf0;
+  --vp-custom-block-info-text: #e2ebf0;
+  --vp-custom-block-warning-text: #e2ebf0;
+  --vp-custom-block-danger-text: #e2ebf0;
 }
 
 /**
  * Component: Home
  * -------------------------------------------------------------------------- */
-
-:root {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(
-    292deg,
-    var(--c-green-dark) 50%,
-    var(--c-green-light)
-  );
-  --vp-home-hero-image-background-image: linear-gradient(
-    15deg,
-    var(--c-green-light) 65%,
-    var(--c-blue) 30%
-  );
-  --vp-home-hero-image-filter: blur(40px);
-}
 
 .VPHero .VPImage.image-src {
   max-height: 192px;
@@ -137,36 +225,218 @@ html.dark:root {
 }
 
 /**
- * Component: Algolia
+ * Component: Code Blocks
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-code-block-bg: #f8fafb;
+  --vp-code-block-divider-color: var(--c-mint-200);
+  --vp-code-line-diff-add-color: rgba(26, 179, 148, 0.12);
+  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.12);
+  --vp-code-line-highlight-color: rgba(26, 179, 148, 0.08);
+  --vp-code-copy-code-hover-bg: var(--c-mint-100);
+}
+
+html.dark {
+  --vp-code-block-bg: #0d1117;
+  --vp-code-block-divider-color: var(--c-mint-800);
+  --vp-code-line-diff-add-color: rgba(26, 179, 148, 0.15);
+  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.15);
+  --vp-code-line-highlight-color: rgba(26, 179, 148, 0.1);
+  --vp-code-copy-code-hover-bg: rgba(26, 179, 148, 0.2);
+}
+
+/* Language label styling */
+div[class*='language-'] > span.lang {
+  color: var(--c-mint-600);
+  font-weight: 500;
+}
+
+html.dark div[class*='language-'] > span.lang {
+  color: var(--c-mint-400);
+}
+
+/**
+ * Component: Layout - Wide Display Support
+ * -------------------------------------------------------------------------- */
+
+/* Wide display support */
+@media (min-width: 1600px) {
+  :root {
+    --vp-layout-max-width: 1600px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --vp-layout-max-width: 1800px;
+  }
+}
+
+/* Content area max-width for readability on wide displays */
+@media (min-width: 1440px) {
+  .VPDoc:not(.has-aside) .content-container {
+    max-width: 900px;
+  }
+
+  .VPDoc.has-aside .content-container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .VPDoc:not(.has-aside) .content-container {
+    max-width: 960px;
+  }
+
+  .VPDoc.has-aside .content-container {
+    max-width: 800px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .VPDoc:not(.has-aside) .content-container {
+    max-width: 1024px;
+  }
+
+  .VPDoc.has-aside .content-container {
+    max-width: 848px;
+  }
+}
+
+
+/* Ultra-wide display support */
+@media (min-width: 2000px) {
+  :root {
+    --vp-sidebar-width: 380px;
+  }
+
+  .VPDoc:not(.has-aside) .content-container {
+    max-width: 1100px;
+  }
+
+  .VPDoc.has-aside .content-container {
+    max-width: 920px;
+  }
+
+  /* Increase aside width for better balance */
+  .VPDoc .aside {
+    max-width: 280px;
+  }
+}
+
+@media (min-width: 2400px) {
+  :root {
+    --vp-sidebar-width: 400px;
+  }
+
+  .VPDoc:not(.has-aside) .content-container {
+    max-width: 1200px;
+  }
+
+  .VPDoc.has-aside .content-container {
+    max-width: 1000px;
+  }
+
+  .VPDoc .aside {
+    max-width: 300px;
+  }
+}
+
+/**
+ * Component: Sidebar
+ * -------------------------------------------------------------------------- */
+
+.VPSidebarItem.level-0 > .item > .text {
+  font-weight: 600;
+  color: var(--c-navy-800);
+}
+
+html.dark .VPSidebarItem.level-0 > .item > .text {
+  color: var(--c-mint-300);
+}
+
+/* Active item styling */
+.VPSidebarItem.is-active > .item > .indicator {
+  background-color: var(--c-mint-500);
+}
+
+.VPSidebarItem.is-active > .item > .text {
+  color: var(--c-mint-600);
+}
+
+html.dark .VPSidebarItem.is-active > .item > .text {
+  color: var(--c-mint-400);
+}
+
+/* Hover effect */
+.VPSidebarItem .item:hover .text {
+  color: var(--c-mint-600);
+}
+
+html.dark .VPSidebarItem .item:hover .text {
+  color: var(--c-mint-400);
+}
+
+/**
+ * Component: Algolia / DocSearch
  * -------------------------------------------------------------------------- */
 
 .DocSearch {
-  --docsearch-primary-color: var(--vp-c-brand) !important;
+  --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
 html.dark .DocSearch,
 html.dark .DocSearch-Modal {
-  /* --docsearch-text-color: var(--c-white-dark); */
   --docsearch-container-background: rgba(9, 10, 17, 0.8);
   --docsearch-modal-background: var(--vp-c-black);
   --docsearch-modal-shadow: inset 1px 1px 0 0 #2c2e40, 0 3px 8px 0 #000309;
-  /* --docsearch-searchbox-background: var(--c-black-lighter); */
-  /* --docsearch-searchbox-focus-background: var(--c-black-light); */
-  --docsearch-hit-color: var(--c-text-dark-1);
-  --docsearch-hit-active-color: var(--c-text-light-1);
+  --docsearch-hit-color: #e2ebf0;
+  --docsearch-hit-active-color: var(--c-navy-900);
   --docsearch-hit-shadow: none;
   --docsearch-hit-background: var(--vp-c-black-light);
   --docsearch-footer-background: var(--vp-c-black-light);
   --docsearch-footer-shadow: inset 0 1px 0 0 rgba(73, 76, 106, 0.5),
     0 -4px 8px 0 rgba(0, 0, 0, 0.2);
-  --docsearch-logo-color: var(--vp-c-brand);
-  --docsearch-muted-color: var(--c-text-light-3);
+  --docsearch-logo-color: var(--vp-c-brand-1);
+  --docsearch-muted-color: var(--c-navy-400);
 }
 
 html.dark .DocSearch-Logo svg .cls-1,
 html.dark .DocSearch-Logo svg .cls-2 {
-  fill: var(--vp-c-brand);
+  fill: var(--vp-c-brand-1);
 }
+
+/**
+ * Component: Links
+ * -------------------------------------------------------------------------- */
+
+.vp-doc a {
+  color: var(--c-mint-600);
+  text-decoration: underline;
+  text-decoration-color: var(--c-mint-200);
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
+}
+
+.vp-doc a:hover {
+  color: var(--c-mint-700);
+  text-decoration-color: var(--c-mint-400);
+}
+
+html.dark .vp-doc a {
+  color: var(--c-mint-400);
+  text-decoration-color: var(--c-mint-700);
+}
+
+html.dark .vp-doc a:hover {
+  color: var(--c-mint-300);
+  text-decoration-color: var(--c-mint-500);
+}
+
+/**
+ * Component: Sponsor Button
+ * -------------------------------------------------------------------------- */
 
 .become-sponsor {
   font-size: 0.9em;
@@ -178,14 +448,14 @@ html.dark .DocSearch-Logo svg .cls-2 {
   border-radius: 2em;
   transition: all 0.15s ease;
   box-sizing: border-box;
-  border: 2px solid var(--c-blue-dark);
+  border: 2px solid var(--c-mint-600);
 }
 
 .become-sponsor:hover {
-  background-color: var(--c-blue);
+  background-color: var(--c-mint-500);
   text-decoration: none;
-  border-color: var(--c-blue);
-  color: var(--c-text-light-1);
+  border-color: var(--c-mint-500);
+  color: #ffffff;
 }
 
 .sponsors-top .become-sponsor {
@@ -194,6 +464,10 @@ html.dark .DocSearch-Logo svg .cls-2 {
   width: auto;
   max-width: 150px;
 }
+
+/**
+ * Component: Kbd
+ * -------------------------------------------------------------------------- */
 
 kbd {
   display: inline-block;
@@ -206,4 +480,48 @@ kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 var(--vp-c-bg-soft-mute);
   line-height: 0.95em;
+}
+
+/**
+ * Custom Scrollbar
+ * -------------------------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vp-c-bg-soft);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-mint-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-mint-400);
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: var(--c-mint-700);
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--c-mint-600);
+}
+
+/**
+ * Reduced Motion Support
+ * -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

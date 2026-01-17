@@ -34,8 +34,7 @@ export const sharedConfig = defineConfig({
       'meta',
       {
         property: 'og:image',
-        content:
-          'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true',
+        content: 'https://book.chibivue.land/og.png',
       },
     ],
     ['meta', { property: 'og:image:alt', content: 'chibivue' }],
@@ -54,8 +53,7 @@ export const sharedConfig = defineConfig({
       'meta',
       {
         name: 'twitter:image',
-        content:
-          'https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true',
+        content: 'https://book.chibivue.land/og.png',
       },
     ],
     ['meta', { name: 'twitter:image:alt', content: 'chibivue' }],

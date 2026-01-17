@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./book/images/logo/chibivue-img.png" width="600">
+  <img src="./book/online-book/src/public/og.png" width="600">
 </p>
 
 <div align="center">
