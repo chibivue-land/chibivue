@@ -2,10 +2,31 @@
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 
-const { page, frontmatter } = useData()
+const { page, frontmatter, lang } = useData()
 
 const KAWAIKO_WARNING =
   'https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko_warning.png'
+
+const i18n: Record<string, { label: string; message: string }> = {
+  en: {
+    label: 'Work in Progress',
+    message: 'This page is under construction. Content may change.',
+  },
+  ja: {
+    label: '準備中',
+    message: 'このページは準備中です。内容が変更される可能性があります。',
+  },
+  'zh-cn': {
+    label: '正在施工',
+    message: '此页面正在建设中，内容可能会有所变更。',
+  },
+  'zh-tw': {
+    label: '正在施工',
+    message: '此頁面正在建設中，內容可能會有所變更。',
+  },
+}
+
+const currentI18n = computed(() => i18n[lang.value] || i18n.en)
 
 // Check if page is WIP based on frontmatter or title containing 🚧 or "WIP"
 const isWip = computed(() => {
@@ -19,8 +40,10 @@ const wipMessage = computed(() => {
   if (typeof frontmatter.value.wip === 'string') {
     return frontmatter.value.wip
   }
-  return 'このページは準備中です。内容が変更される可能性があります。'
+  return currentI18n.value.message
 })
+
+const wipLabel = computed(() => currentI18n.value.label)
 </script>
 
 <template>
@@ -33,7 +56,7 @@ const wipMessage = computed(() => {
         loading="eager"
       />
       <div class="wip-banner__text">
-        <span class="wip-banner__label">Work in Progress</span>
+        <span class="wip-banner__label">{{ wipLabel }}</span>
         <p class="wip-banner__message">{{ wipMessage }}</p>
       </div>
     </div>

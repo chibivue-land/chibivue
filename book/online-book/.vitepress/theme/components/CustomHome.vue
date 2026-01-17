@@ -21,17 +21,17 @@ const heroContent: Record<
   },
   ja: {
     tagline:
-      "Writing Vue.js: Step by Step, from just one line of 'Hello, World'.",
+      "Vue.js を書く：'Hello, World' のたった一行から、一歩ずつ。",
     startButton: '学習を始める',
     vueButton: 'Vue.js 公式',
   },
   'zh-cn': {
-    tagline: "Writing Vue.js: Step by Step, from just one line of 'Hello, World'.",
+    tagline: "编写 Vue.js：从一行 'Hello, World' 开始，循序渐进。",
     startButton: '开始学习',
     vueButton: 'Vue.js 官方',
   },
   'zh-tw': {
-    tagline: "Writing Vue.js: Step by Step, from just one line of 'Hello, World'.",
+    tagline: "編寫 Vue.js：從一行 'Hello, World' 開始，循序漸進。",
     startButton: '開始學習',
     vueButton: 'Vue.js 官方',
   },
