@@ -22,7 +22,7 @@
     "typecheck": "tsgo --noEmit",
     "lint": "oxlint -c .oxlintrc.json .",
     "lint:fix": "oxlint -c .oxlintrc.json --fix .",
-    "fmt": "oxfmt --write .",
+    "fmt": "oxfmt .",
     "fmt:check": "oxfmt --check .",
     "test": "vitest run",
     "test:watch": "vitest",

@@ -22,8 +22,6 @@ describe("50_basic_template_compiler/050_v_for", () => {
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe(
-      '<ul><li key="1">1</li><li key="2">2</li><li key="3">3</li></ul>',
-    );
+    expect(host.innerHTML).toBe('<ul><li key="1">1</li><li key="2">2</li><li key="3">3</li></ul>');
   });
 });

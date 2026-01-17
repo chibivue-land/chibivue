@@ -26,7 +26,7 @@ export default {
     const { descriptor } = parse(source);
 
     expect(descriptor.template).not.toBeNull();
-    expect(descriptor.template?.content).toContain("class=\"container\"");
+    expect(descriptor.template?.content).toContain('class="container"');
 
     expect(descriptor.script).not.toBeNull();
     expect(descriptor.script?.content).toContain("export default");

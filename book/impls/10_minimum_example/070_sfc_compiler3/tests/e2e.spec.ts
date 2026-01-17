@@ -25,7 +25,7 @@ export default {
     expect(descriptor.template?.content).toContain("{{ message }}");
 
     expect(descriptor.script).not.toBeNull();
-    expect(descriptor.script?.content).toContain("message: \"hello\"");
+    expect(descriptor.script?.content).toContain('message: "hello"');
   });
 
   it("should compile template for non-browser mode", () => {

@@ -27,11 +27,15 @@ describe("40_basic_component_system/060_slot_extend", () => {
     const app = createApp({
       setup() {
         return () =>
-          h(Child, {}, {
-            header: () => h("span", {}, ["Header"]),
-            default: () => h("span", {}, ["Content"]),
-            footer: () => h("span", {}, ["Footer"]),
-          });
+          h(
+            Child,
+            {},
+            {
+              header: () => h("span", {}, ["Header"]),
+              default: () => h("span", {}, ["Content"]),
+              footer: () => h("span", {}, ["Footer"]),
+            },
+          );
       },
     });
     app.mount("#host");

@@ -18,9 +18,13 @@ describe("30_basic_reactivity_system/140_effect_scope", () => {
 
     const scope = new EffectScope();
     scope.run(() => {
-      const effect = new ReactiveEffect(() => {
-        callback(count.value);
-      }, null, scope);
+      const effect = new ReactiveEffect(
+        () => {
+          callback(count.value);
+        },
+        null,
+        scope,
+      );
       effect.run();
     });
 

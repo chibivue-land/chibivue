@@ -26,14 +26,10 @@ describe("20_basic_virtual_dom/010_patch_keyed_children", () => {
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe(
-      '<ul><li key="1">1</li><li key="2">2</li><li key="3">3</li></ul>',
-    );
+    expect(host.innerHTML).toBe('<ul><li key="1">1</li><li key="2">2</li><li key="3">3</li></ul>');
 
     state.list = [3, 2, 1];
     await Promise.resolve();
-    expect(host.innerHTML).toBe(
-      '<ul><li key="3">3</li><li key="2">2</li><li key="1">1</li></ul>',
-    );
+    expect(host.innerHTML).toBe('<ul><li key="3">3</li><li key="2">2</li><li key="1">1</li></ul>');
   });
 });
