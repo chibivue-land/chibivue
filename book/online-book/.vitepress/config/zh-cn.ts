@@ -129,7 +129,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-cn/20-basic-virtual-dom/030-scheduler",
           },
           {
-            text: "🚧 未处理 Props 的补丁",
+            text: "未处理 Props 的补丁",
             link: "/zh-cn/20-basic-virtual-dom/040-patch-other-attrs",
           },
         ],

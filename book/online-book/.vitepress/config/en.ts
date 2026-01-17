@@ -129,7 +129,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/20-basic-virtual-dom/030-scheduler",
           },
           {
-            text: "🚧 Patch for Unhandled Props",
+            text: "Patch for Unhandled Props",
             link: "/20-basic-virtual-dom/040-patch-other-attrs",
           },
         ],

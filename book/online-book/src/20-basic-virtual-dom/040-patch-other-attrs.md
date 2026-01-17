@@ -39,7 +39,126 @@ It can be implemented anywhere as long as it does not deviate from the design of
 
 ## innerHTML / textContent
 
-innerHTML and textContent are a bit special compared to other Props.
+innerHTML and textContent are a bit special compared to other Props.\
 This is because if an element with this Prop has child elements, they need to be unmounted.
 
-TODO: Write
+For example, consider the following case:
+
+```ts
+h('div', { innerHTML: '<p>hello</p>' }, [
+  h(SomeComponent, {}, [])
+])
+```
+
+In this case, the content of the div element will be overwritten by `innerHTML` to `<p>hello</p>`.\
+However, `SomeComponent` passed as children already exists in the virtual DOM, and if it is not properly unmounted, the following problems will occur:
+
+- Event listeners will not be removed
+- Component lifecycle hooks (such as onUnmounted) will not be called
+- It can cause memory leaks
+
+Therefore, when setting innerHTML or textContent, existing child elements need to be unmounted.
+
+### Implementation
+
+First, extend the type definition of `patchProp` to accept `prevChildren` and `unmountChildren`.
+
+`~/packages/runtime-core/renderer.ts`
+
+```ts
+export interface RendererOptions<HostNode = RendererNode, HostElement = RendererElement> {
+  patchProp(
+    el: HostElement,
+    key: string,
+    prevValue: any,
+    nextValue: any,
+    prevChildren?: VNode<HostNode>[], // Added
+    unmountChildren?: (children: VNode<HostNode>[]) => void, // Added
+  ): void;
+  // ...
+}
+```
+
+Next, implement the handling of innerHTML/textContent in the `patchDOMProp` function.
+
+`~/packages/runtime-dom/modules/props.ts`
+
+```ts
+export function patchDOMProp(
+  el: any,
+  key: string,
+  value: any,
+  prevChildren: any,
+  unmountChildren: any,
+) {
+  if (key === 'innerHTML' || key === 'textContent') {
+    // Unmount existing child elements if any
+    if (prevChildren) {
+      unmountChildren(prevChildren)
+    }
+    el[key] = value == null ? '' : value
+    return
+  }
+
+  // ... (handling of other props)
+}
+```
+
+Then, pass `prevChildren` and `unmountChildren` when calling `patchDOMProp` from `patchProp`.
+
+`~/packages/runtime-dom/patchProp.ts`
+
+```ts
+export const patchProp: DOMRendererOptions['patchProp'] = (
+  el,
+  key,
+  prevValue,
+  nextValue,
+  prevChildren,
+  unmountChildren,
+) => {
+  if (key === 'style') {
+    patchStyle(el, prevValue, nextValue)
+  } else if (isOn(key)) {
+    patchEvent(el, key, nextValue)
+  } else if (shouldSetAsProp(el, key)) {
+    patchDOMProp(el, key, nextValue, prevChildren, unmountChildren) // Pass prevChildren, unmountChildren
+  } else {
+    patchAttr(el, key, nextValue)
+  }
+}
+```
+
+Finally, pass the appropriate arguments when calling `hostPatchProp` in renderer.ts.
+
+`~/packages/runtime-core/renderer.ts` `mountElement` and `patchElement`
+
+```ts
+const mountElement = (vnode: VNode, container: RendererElement, anchor: RendererElement | null) => {
+  let el: RendererElement
+  const { type, props } = vnode
+  el = vnode.el = hostCreateElement(type as string)
+
+  mountChildren(vnode.children as VNode[], el, anchor)
+
+  if (props) {
+    for (const key in props) {
+      hostPatchProp(
+        el,
+        key,
+        null,
+        props[key],
+        vnode.children as VNode[], // Added
+        unmountChildren, // Added
+      )
+    }
+  }
+
+  hostInsert(el, container)
+}
+```
+
+Now, when innerHTML or textContent is used, existing child elements will be properly unmounted.
+
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/060_other_props)
