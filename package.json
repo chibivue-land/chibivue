@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "author": "ubugeeei",
+  "license": "MIT",
   "engines": {
     "node": ">=24"
   },
