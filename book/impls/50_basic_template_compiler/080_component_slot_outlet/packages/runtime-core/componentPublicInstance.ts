@@ -112,7 +112,8 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
       hasOwn(setupState, key) ||
       ((normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key)) ||
       hasOwn(data, key) ||
-      hasOwn(ctx, key)
+      hasOwn(ctx, key) ||
+      hasOwn(publicPropertiesMap, key)
     );
   },
 };

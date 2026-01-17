@@ -12,21 +12,25 @@ beforeEach(() => initHost());
 afterEach(() => host.remove());
 
 describe("10_minimum_example/020_simple_h_function", () => {
-  it("should render vdom and trigger click handler", () => {
-    const onClick = vi.fn(() => {});
+  it("should render with h function", () => {
     const app = createApp({
       render() {
-        return h("div", { id: "my-app" }, [
-          h("p", { style: "color: red; font-weight: bold;" }, ["Hello world."]),
-          h("button", { id: "btn", onClick }, ["click me!"]),
-        ]);
+        return h("div", { id: "my-app" }, [h("p", {}, ["Hello world."])]);
       },
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe(
-      '<div id="my-app"><p style="color: red; font-weight: bold;">Hello world.</p><button id="btn">click me!</button></div>',
-    );
+    expect(host.innerHTML).toBe('<div id="my-app"><p>Hello world.</p></div>');
+  });
+
+  it("should handle click events", () => {
+    const onClick = vi.fn();
+    const app = createApp({
+      render() {
+        return h("button", { id: "btn", onClick }, ["click me"]);
+      },
+    });
+    app.mount("#host");
 
     const btn = host.querySelector("#btn") as HTMLButtonElement;
     btn.click();

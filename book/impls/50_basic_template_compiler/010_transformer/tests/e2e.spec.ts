@@ -11,15 +11,13 @@ const initHost = () => {
 beforeEach(() => initHost());
 afterEach(() => host.remove());
 
-describe("10_minimum_example/015_package_architecture", () => {
-  it("should render a message", () => {
+describe("50_basic_template_compiler/010_transformer", () => {
+  it("should compile and render template", () => {
     const app = createApp({
-      render() {
-        return "Hello world.";
-      },
+      template: `<div>Hello World</div>`,
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe("Hello world.");
+    expect(host.innerHTML).toBe("<div>Hello World</div>");
   });
 });

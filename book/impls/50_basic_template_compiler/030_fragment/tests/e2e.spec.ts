@@ -11,15 +11,13 @@ const initHost = () => {
 beforeEach(() => initHost());
 afterEach(() => host.remove());
 
-describe("10_minimum_example/015_package_architecture", () => {
-  it("should render a message", () => {
+describe("50_basic_template_compiler/030_fragment", () => {
+  it("should render fragment (multiple root elements)", () => {
     const app = createApp({
-      render() {
-        return "Hello world.";
-      },
+      template: `<span>first</span><span>second</span>`,
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe("Hello world.");
+    expect(host.innerHTML).toBe("<span>first</span><span>second</span>");
   });
 });

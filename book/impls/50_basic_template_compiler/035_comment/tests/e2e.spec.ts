@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { createApp } from "../packages";
+import { createApp, createCommentVNode, h } from "../packages";
 
 let host: HTMLElement;
 const initHost = () => {
@@ -11,15 +11,15 @@ const initHost = () => {
 beforeEach(() => initHost());
 afterEach(() => host.remove());
 
-describe("10_minimum_example/015_package_architecture", () => {
-  it("should render a message", () => {
+describe("50_basic_template_compiler/035_comment", () => {
+  it("should render comments using createCommentVNode", () => {
     const app = createApp({
       render() {
-        return "Hello world.";
+        return h("div", {}, [createCommentVNode(" comment ")]);
       },
     });
     app.mount("#host");
 
-    expect(host.innerHTML).toBe("Hello world.");
+    expect(host.innerHTML).toBe("<div><!-- comment --></div>");
   });
 });

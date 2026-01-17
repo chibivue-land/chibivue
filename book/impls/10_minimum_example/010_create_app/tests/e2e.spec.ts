@@ -12,13 +12,14 @@ beforeEach(() => initHost());
 afterEach(() => host.remove());
 
 describe("10_minimum_example/010_create_app", () => {
-  it("should render text", () => {
+  it("should render a message", () => {
     const app = createApp({
       render() {
         return "Hello world.";
       },
     });
     app.mount("#host");
+
     expect(host.innerHTML).toBe("Hello world.");
   });
 });
