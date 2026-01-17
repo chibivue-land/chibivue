@@ -236,6 +236,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/ja/50-basic-template-compiler/080-component-slot-outlet",
           },
           {
+            text: "スロットに対応する (利用編)",
+            link: "/ja/50-basic-template-compiler/085-component-slot-insert",
+          },
+          {
             text: "🚧 その他のディレクティブ",
             link: "/ja/50-basic-template-compiler/090-other-directives",
           },

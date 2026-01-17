@@ -239,8 +239,8 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/50-basic-template-compiler/080-component-slot-outlet",
           },
           {
-            text: "🚧 插槽",
-            link: "/zh-tw/50-basic-template-compiler/080-slot",
+            text: "支援插槽（使用）",
+            link: "/zh-tw/50-basic-template-compiler/085-component-slot-insert",
           },
           {
             text: "🚧 其他指令",
