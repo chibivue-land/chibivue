@@ -218,6 +218,48 @@ export function updateProps(
 }
 ```
 
+Let's organize the flow of component update processing.\
+When a parent component re-renders, the props passed to child components may change.\
+The flow is as follows:
+
+1. The parent component's `render` function is executed, generating a new VNode for the child component
+2. In the `patch` process, `processComponent` is called, comparing the existing component (`n1`) with the new VNode (`n2`)
+3. If an existing component exists, the `updateComponent` function is called
+
+First, add the `next` property to `ComponentInternalInstance`.
+
+```ts
+export interface ComponentInternalInstance {
+  // .
+  // .
+  vnode: VNode // Current VNode
+  next: VNode | null // When there's an update request from parent, the new VNode is set here
+  // .
+  // .
+}
+```
+
+Next, implement the update processing for already mounted components in `processComponent`.
+
+```ts
+const processComponent = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+  if (n1 == null) {
+    mountComponent(n2, container);
+  } else {
+    updateComponent(n1, n2); // Added
+  }
+};
+
+const updateComponent = (n1: VNode, n2: VNode) => {
+  const instance = (n2.component = n1.component)!; // Inherit the instance reference from old VNode to new VNode
+  instance.next = n2; // Set the new VNode to next
+  instance.update(); // Trigger component update
+};
+```
+
+In `updateComponent`, we set the new VNode (`n2`) to `instance.next` and then call `instance.update()`.\
+This triggers the execution of `componentUpdateFn`.
+
 `~/packages/runtime-core/renderer.ts`
 
 ```ts
@@ -237,12 +279,19 @@ const setupRenderEffect = (
         let { next, vnode } = instance;
 
         if (next) {
-          next.el = vnode.el;
-          next.component = instance;
-          instance.vnode = next;
-          instance.next = null;
-          updateProps(instance, next.props); // here
+          // When there's an update request from parent (e.g., props changed)
+          next.el = vnode.el; // Inherit the current DOM element reference to the new VNode
+          next.component = instance; // Set the instance reference to the new VNode
+          instance.vnode = next; // Switch the instance's "current VNode" to the new one
+          instance.next = null; // Reset to null as it's been processed
+          updateProps(instance, next.props); // Update the instance's props with the new props
+        }
+        // If next doesn't exist, it's a re-render due to changes in the component's own reactive state
 ```
+
+When `instance.next` exists, it means there was an update request from the parent component (such as props changes).\
+In this case, we reflect the new VNode's information to the instance before updating the props.\
+When `instance.next` doesn't exist, it's a re-render due to changes in the component's own internal state (reactive values).
 
 If the screen is updated, it's OK.\
 Now, you can pass data to the component using props! Great job!

@@ -218,6 +218,48 @@ export function updateProps(
 }
 ```
 
+让我们整理一下组件更新处理的流程．\
+当父组件重新渲染时，传递给子组件的 props 可能会改变．\
+流程如下：
+
+1. 父组件的 `render` 函数被执行，为子组件生成新的 VNode
+2. 在 `patch` 处理中，`processComponent` 被调用，比较现有组件（`n1`）和新的 VNode（`n2`）
+3. 如果存在现有组件，则调用 `updateComponent` 函数
+
+首先，在 `ComponentInternalInstance` 中添加 `next` 属性．
+
+```ts
+export interface ComponentInternalInstance {
+  // .
+  // .
+  vnode: VNode // 当前的VNode
+  next: VNode | null // 当有来自父组件的更新请求时，新的VNode会被设置在这里
+  // .
+  // .
+}
+```
+
+接下来，在 `processComponent` 中实现已挂载组件的更新处理．
+
+```ts
+const processComponent = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+  if (n1 == null) {
+    mountComponent(n2, container);
+  } else {
+    updateComponent(n1, n2); // 添加
+  }
+};
+
+const updateComponent = (n1: VNode, n2: VNode) => {
+  const instance = (n2.component = n1.component)!; // 将实例引用从旧VNode继承到新VNode
+  instance.next = n2; // 将新VNode设置到next
+  instance.update(); // 触发组件更新
+};
+```
+
+在 `updateComponent` 中，我们将新的 VNode（`n2`）设置到 `instance.next`，然后调用 `instance.update()`．\
+这会触发 `componentUpdateFn` 的执行．
+
 `~/packages/runtime-core/renderer.ts`
 
 ```ts
@@ -237,12 +279,19 @@ const setupRenderEffect = (
         let { next, vnode } = instance;
 
         if (next) {
-          next.el = vnode.el;
-          next.component = instance;
-          instance.vnode = next;
-          instance.next = null;
-          updateProps(instance, next.props); // 这里
+          // 当有来自父组件的更新请求时（例如，props 改变了）
+          next.el = vnode.el; // 将当前DOM元素引用继承到新VNode
+          next.component = instance; // 将实例引用设置到新VNode
+          instance.vnode = next; // 将实例的"当前VNode"切换为新的
+          instance.next = null; // 已处理完毕，重置为null
+          updateProps(instance, next.props); // 用新的props更新实例的props
+        }
+        // 如果next不存在，则是由于组件自身响应式状态变化而导致的重新渲染
 ```
+
+当 `instance.next` 存在时，意味着有来自父组件的更新请求（如 props 改变）．\
+在这种情况下，我们先将新 VNode 的信息反映到实例中，然后再更新 props．\
+当 `instance.next` 不存在时，则是由于组件自身内部状态（响应式值）的变化而导致的重新渲染．
 
 如果屏幕更新了，那就没问题．\
 现在，您可以使用 props 将数据传递给组件！做得很好！
