@@ -14,7 +14,7 @@
 現在，讓我們快速進入環境設置！\
 我將列出我們將使用的工具和版本：
 
-- 運行時：[Node.js](https://nodejs.org/en) v22
+- 運行時：[Node.js](https://nodejs.org/en) v24
 - 語言：[TypeScript](https://www.typescriptlang.org/)
 - 套件管理器：[pnpm](https://pnpm.io/) v10
 - 構建工具：[Vite](https://vite.dev/) v8

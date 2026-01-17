@@ -1,0 +1,191 @@
+{
+  "$schema": "https://raw.githubusercontent.com/shikijs/shiki/main/packages/shiki/themes/schema.json",
+  "name": "chibivue-terminal",
+  "displayName": "Chibivue Terminal",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#0a0f14",
+    "editor.foreground": "#8be4d3",
+    "editor.lineHighlightBackground": "#1a2744",
+    "editor.selectionBackground": "#2cc9a855",
+    "editorCursor.foreground": "#2cc9a8",
+    "editorWhitespace.foreground": "#1f2d40"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": {
+        "foreground": "#4a5f87",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": ["string", "string.quoted", "string.template"],
+      "settings": {
+        "foreground": "#f4d35e"
+      }
+    },
+    {
+      "scope": ["constant.numeric", "constant.language.boolean"],
+      "settings": {
+        "foreground": "#e8a545"
+      }
+    },
+    {
+      "scope": ["constant.language", "constant.other"],
+      "settings": {
+        "foreground": "#e8a545"
+      }
+    },
+    {
+      "scope": [
+        "keyword",
+        "keyword.control",
+        "keyword.operator.new",
+        "keyword.operator.expression",
+        "storage.type",
+        "storage.modifier"
+      ],
+      "settings": {
+        "foreground": "#2cc9a8"
+      }
+    },
+    {
+      "scope": ["keyword.operator", "punctuation"],
+      "settings": {
+        "foreground": "#6b9e8a"
+      }
+    },
+    {
+      "scope": [
+        "entity.name.function",
+        "meta.function-call",
+        "support.function"
+      ],
+      "settings": {
+        "foreground": "#5dddc2"
+      }
+    },
+    {
+      "scope": [
+        "entity.name.type",
+        "entity.name.class",
+        "support.class",
+        "support.type"
+      ],
+      "settings": {
+        "foreground": "#8ae99c"
+      }
+    },
+    {
+      "scope": ["entity.name.tag", "meta.tag"],
+      "settings": {
+        "foreground": "#2cc9a8"
+      }
+    },
+    {
+      "scope": ["entity.other.attribute-name"],
+      "settings": {
+        "foreground": "#8be4d3"
+      }
+    },
+    {
+      "scope": [
+        "variable",
+        "variable.other",
+        "variable.parameter"
+      ],
+      "settings": {
+        "foreground": "#b8e4d8"
+      }
+    },
+    {
+      "scope": ["variable.language.this", "variable.language.super"],
+      "settings": {
+        "foreground": "#e85d75",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": [
+        "meta.import",
+        "keyword.control.import",
+        "keyword.control.export",
+        "keyword.control.from"
+      ],
+      "settings": {
+        "foreground": "#9aaac4"
+      }
+    },
+    {
+      "scope": ["support.constant", "constant.other.placeholder"],
+      "settings": {
+        "foreground": "#e8a545"
+      }
+    },
+    {
+      "scope": ["meta.object-literal.key"],
+      "settings": {
+        "foreground": "#50d6bd"
+      }
+    },
+    {
+      "scope": ["punctuation.definition.template-expression"],
+      "settings": {
+        "foreground": "#2cc9a8"
+      }
+    },
+    {
+      "scope": ["entity.name.tag.html", "entity.name.tag.xml"],
+      "settings": {
+        "foreground": "#2cc9a8"
+      }
+    },
+    {
+      "scope": ["punctuation.definition.tag"],
+      "settings": {
+        "foreground": "#4a8a7a"
+      }
+    },
+    {
+      "scope": ["text.html.vue-html meta.tag.other.unrecognized"],
+      "settings": {
+        "foreground": "#5dddc2"
+      }
+    },
+    {
+      "scope": [
+        "source.directive",
+        "entity.other.attribute-name.directive"
+      ],
+      "settings": {
+        "foreground": "#8ae99c"
+      }
+    },
+    {
+      "scope": ["markup.heading"],
+      "settings": {
+        "foreground": "#2cc9a8",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": ["markup.bold"],
+      "settings": {
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": ["markup.italic"],
+      "settings": {
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": ["markup.inline.raw", "markup.fenced_code"],
+      "settings": {
+        "foreground": "#f4d35e"
+      }
+    }
+  ]
+}

@@ -1,4 +1,6 @@
 import { defineConfig } from "vitepress";
+import chibivueThemeDark from "../theme/chibivue-theme.json";
+import chibivueThemeLight from "../theme/chibivue-theme-light.json";
 
 export const sharedConfig = defineConfig({
   title: "The chibivue Book",
@@ -7,6 +9,12 @@ export const sharedConfig = defineConfig({
   lang: "ja",
   srcDir: "src",
   srcExclude: ["__wip"],
+  markdown: {
+    theme: {
+      light: chibivueThemeLight as any,
+      dark: chibivueThemeDark as any,
+    },
+  },
   head: [
     [
       "link",

@@ -21,7 +21,7 @@
 さて，早速ですが環境構築からやっていきましょう！\
 一応先に今回構築する環境の内容を列挙しておきます
 
-- ランタイム: [Node.js](https://nodejs.org/en) v22
+- ランタイム: [Node.js](https://nodejs.org/en) v24
 - 言語: [TypeScript](https://www.typescriptlang.org/)
 - パッケージマネージャ: [pnpm](https://pnpm.io/) v10
 - ビルドツール: [Vite](https://vite.dev/) v8

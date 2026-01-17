@@ -225,35 +225,104 @@ html.dark {
 }
 
 /**
- * Component: Code Blocks
+ * Component: Code Blocks - Retro Terminal Style
  * -------------------------------------------------------------------------- */
 
+/* Light Mode - Paper/vintage terminal style */
 :root {
-  --vp-code-block-bg: #f8fafb;
-  --vp-code-block-divider-color: var(--c-mint-200);
-  --vp-code-line-diff-add-color: rgba(26, 179, 148, 0.12);
-  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.12);
-  --vp-code-line-highlight-color: rgba(26, 179, 148, 0.08);
-  --vp-code-copy-code-hover-bg: var(--c-mint-100);
+  --vp-code-block-bg: #f5f5f0;
+  --vp-code-block-divider-color: #d0d8d5;
+  --vp-code-line-diff-add-color: rgba(26, 138, 110, 0.15);
+  --vp-code-line-diff-remove-color: rgba(192, 64, 80, 0.15);
+  --vp-code-line-highlight-color: rgba(26, 138, 110, 0.1);
+  --vp-code-copy-code-hover-bg: rgba(26, 138, 110, 0.2);
+  --vp-code-color: #1a5c4a;
 }
 
+/* Dark Mode - Terminal style */
 html.dark {
-  --vp-code-block-bg: #0d1117;
-  --vp-code-block-divider-color: var(--c-mint-800);
-  --vp-code-line-diff-add-color: rgba(26, 179, 148, 0.15);
-  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.15);
-  --vp-code-line-highlight-color: rgba(26, 179, 148, 0.1);
-  --vp-code-copy-code-hover-bg: rgba(26, 179, 148, 0.2);
+  --vp-code-block-bg: #0a0f14;
+  --vp-code-block-divider-color: #1a2744;
+  --vp-code-line-diff-add-color: rgba(44, 201, 168, 0.2);
+  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.2);
+  --vp-code-line-highlight-color: rgba(44, 201, 168, 0.15);
+  --vp-code-copy-code-hover-bg: rgba(44, 201, 168, 0.3);
+  --vp-code-color: #8be4d3;
 }
 
-/* Language label styling */
+/* Code block frame - Light Mode */
+div[class*='language-'] {
+  border: 1px solid #d0d8d5;
+  box-shadow: 0 2px 8px rgba(26, 92, 74, 0.08);
+}
+
+/* Code block frame - Dark Mode */
+html.dark div[class*='language-'] {
+  border: 1px solid #1a2744;
+  box-shadow: 0 0 20px rgba(44, 201, 168, 0.1), inset 0 0 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Scanline effect - Dark Mode only */
+html.dark div[class*='language-']::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.05) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Language label styling - Light Mode */
 div[class*='language-'] > span.lang {
-  color: var(--c-mint-600);
-  font-weight: 500;
+  color: #1a8a6e;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
 }
 
+/* Language label styling - Dark Mode */
 html.dark div[class*='language-'] > span.lang {
-  color: var(--c-mint-400);
+  color: #2cc9a8;
+}
+
+/* Line numbers - Light Mode */
+div[class*='language-'] .line-numbers {
+  color: #7a9a8a;
+  border-right: 1px solid #d0d8d5;
+}
+
+/* Line numbers - Dark Mode */
+html.dark div[class*='language-'] .line-numbers {
+  color: #4a5f87;
+  border-right: 1px solid #1a2744;
+}
+
+/* Inline code - Light Mode */
+:not(pre) > code {
+  background-color: #f0f5f3 !important;
+  color: #1a5c4a !important;
+  border: 1px solid #d0d8d5;
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Inline code - Dark Mode */
+html.dark :not(pre) > code {
+  background-color: #0a0f14 !important;
+  color: #8be4d3 !important;
+  border: 1px solid #1a2744;
 }
 
 /**
