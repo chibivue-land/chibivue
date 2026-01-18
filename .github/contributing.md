@@ -114,8 +114,8 @@ The project includes a WebContainer-based playground (`book/playground`) that al
 To start the playground:
 
 ```sh
-nr playground:generate  # Generate chapter data from book/impls
-nr playground           # Start the playground dev server
+nr play:generate  # Generate chapter data from book/impls
+nr play           # Start the playground dev server
 ```
 
 The playground supports:
@@ -125,7 +125,7 @@ The playground supports:
 - Persisting edits to localStorage
 - Resetting files to their original state
 
-If you modify chapter implementations in `book/impls/`, run `nr playground:generate` to update the playground data.
+If you modify chapter implementations in `book/impls/`, run `nr play:generate` to update the playground data.
 
 #### Creating a branch (start making changes)
 
