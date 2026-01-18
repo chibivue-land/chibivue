@@ -21,9 +21,9 @@ function handleClick() {
 
 <KawaikoNote variant="question" title="defineProps との違いは？">
 
-`defineProps` は親から子へのデータの流れ（Props Down），\
-`defineEmits` は子から親へのイベントの流れ（Events Up）を担当します．\
-Vue の単方向データフローを支える重要な仕組みです！
+`defineProps` は親から子へデータを渡す仕組み，\
+`defineEmits` は子から親へイベントを通知する仕組みです．\
+セットで覚えておきましょう！
 
 </KawaikoNote>
 

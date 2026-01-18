@@ -225,14 +225,6 @@ function genRuntimePropsFromType(
 }
 ```
 
-<KawaikoNote variant="surprise" title="コンパイル時の型消去！">
-
-TypeScript の型は JavaScript にコンパイルされると消えてしまいます．\
-Vue のコンパイラは，型情報をランタイム定義に変換することで，\
-型の恩恵をランタイムでも受けられるようにしています！
-
-</KawaikoNote>
-
 ## defineEmits の型処理
 
 `defineEmits` も同様に型引数を処理します．
@@ -393,19 +385,12 @@ function handleClick() {
 
 ## 今後の拡張
 
-現在の chibivue では型ベースのマクロは未実装ですが，以下の機能も検討できます：
+以下の機能も検討できます：
 
 - **インターフェース参照**: 別ファイルで定義した型の参照
 - **Mapped Types**: `Partial<T>` などの変換型
 - **Generic コンポーネント**: ジェネリック型パラメータを持つコンポーネント
 - **型のみのインポート**: `import type` の処理
-
-<KawaikoNote variant="base" title="実装に挑戦！">
-
-この章で説明した仕組みを参考に，ぜひ型ベースのマクロを実装してみてください！\
-TypeScript AST の操作を学ぶ良い機会になります．
-
-</KawaikoNote>
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)

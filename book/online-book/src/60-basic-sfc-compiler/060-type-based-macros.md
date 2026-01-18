@@ -225,14 +225,6 @@ function genRuntimePropsFromType(
 }
 ```
 
-<KawaikoNote variant="surprise" title="Compile-time Type Erasure!">
-
-TypeScript types disappear when compiled to JavaScript.\
-Vue's compiler transforms type information into runtime definitions,\
-allowing you to benefit from types at runtime!
-
-</KawaikoNote>
-
 ## defineEmits Type Processing
 
 `defineEmits` processes type arguments similarly.
@@ -393,19 +385,12 @@ function handleClick() {
 
 ## Future Enhancements
 
-Type-based macros are not yet implemented in chibivue, but these features could be considered:
+These features could also be considered:
 
 - **Interface references**: Referencing types defined in other files
 - **Mapped Types**: Transform types like `Partial<T>`
 - **Generic components**: Components with generic type parameters
 - **Type-only imports**: Processing `import type`
-
-<KawaikoNote variant="base" title="Try Implementing It!">
-
-Use the concepts explained in this chapter to implement type-based macros yourself!\
-It's a great opportunity to learn TypeScript AST manipulation.
-
-</KawaikoNote>
 
 Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)

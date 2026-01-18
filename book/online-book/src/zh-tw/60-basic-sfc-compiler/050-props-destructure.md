@@ -296,18 +296,10 @@ console.log(count, message)
 
 ## 未來擴展
 
-當前 chibivue 未實現 Props 解構，但可以考慮以下功能：
+可以考慮以下功能：
 
 - **別名支援**：支援 `const { count: c } = defineProps(...)`
-- **巢狀解構**：支援 `const { user: { name } } = defineProps(...)`
 - **陣列模式**：與陣列形式的 props 定義組合
-
-<KawaikoNote variant="base" title="嘗試實現！">
-
-參考本章介紹的原理，嘗試自己實現 Props 解構！\
-這是練習 AST 操作和轉換的好機會．
-
-</KawaikoNote>
 
 到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)

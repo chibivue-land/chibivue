@@ -21,9 +21,9 @@ function handleClick() {
 
 <KawaikoNote variant="question" title="与 defineProps 有什么区别？">
 
-`defineProps` 处理从父到子的数据流（Props Down），\
-`defineEmits` 处理从子到父的事件流（Events Up）．\
-这些是支撑 Vue 单向数据流的重要机制！
+`defineProps` 用于从父组件向子组件传递数据，\
+`defineEmits` 用于从子组件向父组件通知事件。\
+记住它们是一对！
 
 </KawaikoNote>
 

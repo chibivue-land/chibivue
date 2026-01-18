@@ -296,18 +296,10 @@ console.log(count, message)
 
 ## Future Enhancements
 
-Props Destructure is not yet implemented in chibivue, but these features could be considered:
+These features could also be considered:
 
 - **Alias support**: Support for `const { count: c } = defineProps(...)`
-- **Nested destructure**: Support for `const { user: { name } } = defineProps(...)`
 - **Array patterns**: Combination with array-style props definition
-
-<KawaikoNote variant="base" title="Try Implementing It!">
-
-Use the concepts explained in this chapter to implement Props Destructure yourself!\
-It's great practice for AST manipulation and transformation.
-
-</KawaikoNote>
 
 Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)

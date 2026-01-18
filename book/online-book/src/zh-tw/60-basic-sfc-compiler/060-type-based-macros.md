@@ -225,14 +225,6 @@ function genRuntimePropsFromType(
 }
 ```
 
-<KawaikoNote variant="surprise" title="編譯時類型擦除！">
-
-TypeScript 類型在編譯為 JavaScript 時會消失．\
-Vue 的編譯器將類型資訊轉換為執行時定義，\
-使你可以在執行時也受益於類型！
-
-</KawaikoNote>
-
 ## defineEmits 的類型處理
 
 `defineEmits` 同樣處理類型參數．
@@ -393,19 +385,12 @@ function handleClick() {
 
 ## 未來擴展
 
-當前 chibivue 未實現基於類型的巨集，但可以考慮以下功能：
+可以考慮以下功能：
 
 - **介面參照**：參照其他檔案中定義的類型
 - **對映類型**：`Partial<T>` 等變換類型
 - **泛型組件**：帶有泛型類型參數的組件
 - **僅類型導入**：處理 `import type`
-
-<KawaikoNote variant="base" title="嘗試實現！">
-
-參考本章介紹的原理，嘗試自己實現基於類型的巨集！\
-這是學習 TypeScript AST 操作的好機會．
-
-</KawaikoNote>
 
 到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)

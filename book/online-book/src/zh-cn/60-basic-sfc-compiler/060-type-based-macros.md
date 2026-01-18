@@ -225,14 +225,6 @@ function genRuntimePropsFromType(
 }
 ```
 
-<KawaikoNote variant="surprise" title="编译时类型擦除！">
-
-TypeScript 类型在编译为 JavaScript 时会消失．\
-Vue 的编译器将类型信息转换为运行时定义，\
-使你可以在运行时也受益于类型！
-
-</KawaikoNote>
-
 ## defineEmits 的类型处理
 
 `defineEmits` 同样处理类型参数．
@@ -393,19 +385,12 @@ function handleClick() {
 
 ## 未来扩展
 
-当前 chibivue 未实现基于类型的宏，但可以考虑以下功能：
+可以考虑以下功能：
 
 - **接口引用**：引用其他文件中定义的类型
 - **映射类型**：`Partial<T>` 等变换类型
 - **泛型组件**：带有泛型类型参数的组件
 - **仅类型导入**：处理 `import type`
-
-<KawaikoNote variant="base" title="尝试实现！">
-
-参考本章介绍的原理，尝试自己实现基于类型的宏！\
-这是学习 TypeScript AST 操作的好机会．
-
-</KawaikoNote>
 
 到此为止的源代码：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)
