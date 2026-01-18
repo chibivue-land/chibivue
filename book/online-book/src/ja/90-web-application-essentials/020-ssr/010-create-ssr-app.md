@@ -2,7 +2,7 @@
 
 ## SSR とは
 
-Server Side Rendering (SSR) は、Vue.js アプリケーションをサーバー上で HTML 文字列にレンダリングし、クライアントに送信する技術です。これにより以下のメリットがあります：
+Server Side Rendering (SSR) は，Vue.js アプリケーションをサーバー上で HTML 文字列にレンダリングし，クライアントに送信する技術です．これにより以下のメリットがあります：
 
 1. **SEO の向上**: 検索エンジンのクローラーが完全なコンテンツを取得できる
 2. **初期表示の高速化**: ブラウザは JavaScript の実行を待たずに HTML を表示できる
@@ -10,7 +10,7 @@ Server Side Rendering (SSR) は、Vue.js アプリケーションをサーバー
 
 ## パッケージ構成
 
-chibivue の SSR 実装は `@chibivue/server-renderer` パッケージで提供されています。
+chibivue の SSR 実装は `@chibivue/server-renderer` パッケージで提供されています．
 
 ```
 packages/server-renderer/src/
@@ -26,7 +26,7 @@ packages/server-renderer/src/
 
 ### SSRBuffer
 
-SSR では、レンダリング結果を効率的に構築するために `SSRBuffer` というデータ構造を使用します。
+SSR では，レンダリング結果を効率的に構築するために `SSRBuffer` というデータ構造を使用します．
 
 ```ts
 // packages/server-renderer/src/render.ts
@@ -42,7 +42,7 @@ export type PushFn = (item: SSRBufferItem) => void;
 
 ### SSRContext
 
-SSR 時のコンテキスト情報を保持します。
+SSR 時のコンテキスト情報を保持します．
 
 ```ts
 export type SSRContext = {
@@ -94,7 +94,7 @@ export async function renderToString(
 
 ### バッファの展開
 
-ネストされたバッファと Promise を再帰的に展開します。
+ネストされたバッファと Promise を再帰的に展開します．
 
 ```ts
 function nestedUnrollBuffer(
@@ -158,7 +158,7 @@ function unrollBufferSync(buffer: SSRBuffer): string {
 
 ## createBuffer の実装
 
-バッファを効率的に構築するためのファクトリ関数です。
+バッファを効率的に構築するためのファクトリ関数です．
 
 ```ts
 // packages/server-renderer/src/render.ts
@@ -267,7 +267,7 @@ function renderComponentSubTree(
 
 ### renderVNode
 
-各種 VNode タイプに応じてレンダリングを行います。
+各種 VNode タイプに応じてレンダリングを行います．
 
 ```ts
 export function renderVNode(
@@ -312,7 +312,7 @@ export function renderVNode(
 
 ### renderElementVNode
 
-HTML 要素を文字列にレンダリングします。
+HTML 要素を文字列にレンダリングします．
 
 ```ts
 function renderElementVNode(
@@ -361,7 +361,7 @@ function renderElementVNode(
 
 ### renderVNodeChildren
 
-子要素を順番にレンダリングします。
+子要素を順番にレンダリングします．
 
 ```ts
 export function renderVNodeChildren(
@@ -377,7 +377,7 @@ export function renderVNodeChildren(
 
 ### renderTeleportVNode
 
-Teleport コンポーネントの SSR 対応です。
+Teleport コンポーネントの SSR 対応です．
 
 ```ts
 function renderTeleportVNode(
@@ -454,7 +454,7 @@ function ssrIsIgnoredKey(key: string): boolean {
 
 ### ssrRenderDynamicAttr
 
-動的な属性をレンダリングします。
+動的な属性をレンダリングします．
 
 ```ts
 export function ssrRenderDynamicAttr(
@@ -545,11 +545,11 @@ function applySSRDirectives(
 }
 ```
 
-ディレクティブが `getSSRProps` を実装していれば、その結果を props にマージします。
+ディレクティブが `getSSRProps` を実装していれば，その結果を props にマージします．
 
 ## エスケープ処理
 
-XSS を防ぐための HTML エスケープです。
+XSS を防ぐための HTML エスケープです．
 
 ```ts
 // packages/server-renderer/src/helpers/ssrUtils.ts
@@ -649,12 +649,12 @@ HTML 文字列
 
 chibivue の SSR 実装は以下の要素で構成されています：
 
-1. **SSRBuffer**: 効率的な文字列構築のためのバッファシステム（文字列の自動結合、非同期対応）
+1. **SSRBuffer**: 効率的な文字列構築のためのバッファシステム（文字列の自動結合，非同期対応）
 2. **renderComponentVNode**: コンポーネントの VNode を HTML に変換（非同期 setup 対応）
 3. **renderVNode**: 各種 VNode タイプに応じたレンダリング分岐
-4. **renderElementVNode**: HTML 要素の文字列化（void タグ、特殊プロパティ対応）
-5. **ssrRenderAttrs**: 属性のレンダリング（class/style 正規化、boolean 属性、安全性チェック）
+4. **renderElementVNode**: HTML 要素の文字列化（void タグ，特殊プロパティ対応）
+5. **ssrRenderAttrs**: 属性のレンダリング（class/style 正規化，boolean 属性，安全性チェック）
 6. **エスケープ処理**: XSS 対策のための HTML エスケープ
 7. **ディレクティブ対応**: `getSSRProps` による SSR 時のプロパティ注入
 
-次のセクションでは、SSR で生成された HTML をクライアントサイドで「復元」する hydration について学びます。
+次のセクションでは，SSR で生成された HTML をクライアントサイドで「復元」する hydration について学びます．

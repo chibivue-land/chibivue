@@ -1,13 +1,13 @@
 # Props の分割代入に対応する
 
 ::: info この章について
-この章では，Vue 3.5 で導入された Reactive Props Destructure 機能の実装方法を学びます。\
-Props を分割代入しながらリアクティビティを維持する仕組みを理解しましょう。
+この章では，Vue 3.5 で導入された Reactive Props Destructure 機能の実装方法を学びます．\
+Props を分割代入しながらリアクティビティを維持する仕組みを理解しましょう．
 :::
 
 ## Reactive Props Destructure とは
 
-Vue 3.5 から，`<script setup>` 内で `defineProps` の戻り値を分割代入できるようになりました。
+Vue 3.5 から，`<script setup>` 内で `defineProps` の戻り値を分割代入できるようになりました．
 
 ```vue
 <script setup>
@@ -22,12 +22,12 @@ const { count, message = 'default' } = defineProps({
 </template>
 ```
 
-この機能により，props へのアクセスがよりシンプルになります。
+この機能により，props へのアクセスがよりシンプルになります．
 
 <KawaikoNote variant="question" title="なぜ特別な対応が必要？">
 
-通常の JavaScript では，オブジェクトを分割代入すると値がコピーされ，元のオブジェクトとの接続が切れます。\
-しかし Vue の props はリアクティブである必要があります。\
+通常の JavaScript では，オブジェクトを分割代入すると値がコピーされ，元のオブジェクトとの接続が切れます．\
+しかし Vue の props はリアクティブである必要があります．\
 コンパイラが分割代入を `__props.xxx` へのアクセスに変換することで，リアクティビティを維持します！
 
 </KawaikoNote>
@@ -74,7 +74,7 @@ export default {
 
 ## 分割代入パターンの検出
 
-`defineProps` の戻り値が `ObjectPattern`（分割代入パターン）に代入されているかを検出します。
+`defineProps` の戻り値が `ObjectPattern`（分割代入パターン）に代入されているかを検出します．
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -108,7 +108,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## 分割代入の処理
 
-`ObjectPattern` から各プロパティを抽出し，バインディングとして登録します。
+`ObjectPattern` から各プロパティを抽出し，バインディングとして登録します．
 
 ```ts
 function processPropsDestructure(pattern: ObjectPattern) {
@@ -159,7 +159,7 @@ function processPropsDestructure(pattern: ObjectPattern) {
 
 ## デフォルト値の処理
 
-分割代入でデフォルト値が指定された場合，props 定義にマージします。
+分割代入でデフォルト値が指定された場合，props 定義にマージします．
 
 ```ts
 function genRuntimeProps(): string | undefined {
@@ -201,7 +201,7 @@ function mergeDefaults(
 
 ## Props アクセスの変換
 
-テンプレートおよびスクリプト内で，分割代入された変数へのアクセスを `__props.xxx` に変換します。
+テンプレートおよびスクリプト内で，分割代入された変数へのアクセスを `__props.xxx` に変換します．
 
 ```ts
 function processPropsAccess(source: string): string {
@@ -234,7 +234,7 @@ function processPropsAccess(source: string): string {
 
 ## Rest パターンの対応
 
-`...rest` パターンにも対応できます。
+`...rest` パターンにも対応できます．
 
 ```vue
 <script setup>
@@ -305,7 +305,7 @@ console.log(count, message)
 <KawaikoNote variant="base" title="実装に挑戦！">
 
 この章で説明した仕組みを参考に，ぜひ Props Destructure を実装してみてください！\
-AST の操作と変換の良い練習になります。
+AST の操作と変換の良い練習になります．
 
 </KawaikoNote>
 

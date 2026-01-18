@@ -1,13 +1,13 @@
 # 解析器优化
 
 ::: info 关于本章
-本章介绍 Vue 3.4 中引入的新解析器架构。\
-基于 htmlparser2 的状态机 tokenizer 使解析速度提高了 2 倍。
+本章介绍 Vue 3.4 中引入的新解析器架构．\
+基于 htmlparser2 的状态机 tokenizer 使解析速度提高了 2 倍．
 :::
 
 ## 背景
 
-在 Vue 3.4 中，模板编译器的内部实现进行了重大重构。到目前为止，我们在 chibivue 中实现的解析器是基于 Vue 3.3 及更早版本的架构。
+在 Vue 3.4 中，模板编译器的内部实现进行了重大重构．到目前为止，我们在 chibivue 中实现的解析器是基于 Vue 3.3 及更早版本的架构．
 
 ### 传统解析器（Vue 3.3 及更早版本）
 
@@ -98,13 +98,13 @@ class Tokenizer {
 <KawaikoNote variant="surprise" title="速度提升 2 倍！">
 
 这个状态机 tokenizer 实现了**一致的 2 倍**解析速度提升！\
-令人惊讶的是，仅仅通过避免正则表达式和前瞻搜索，一个字符一个字符地顺序处理，就能实现如此显著的性能提升。
+令人惊讶的是，仅仅通过避免正则表达式和前瞻搜索，一个字符一个字符地顺序处理，就能实现如此显著的性能提升．
 
 </KawaikoNote>
 
 ## 状态机 Tokenizer
 
-状态机 tokenizer 根据当前状态决定如何处理下一个字符。
+状态机 tokenizer 根据当前状态决定如何处理下一个字符．
 
 ### 状态定义
 
@@ -183,7 +183,7 @@ e → Interpolation
 
 ## Visitor 模式
 
-新解析器使用 **Visitor 模式**将 tokenizer 与 AST 构建分离。
+新解析器使用 **Visitor 模式**将 tokenizer 与 AST 构建分离．
 
 ### Callbacks 接口
 
@@ -268,13 +268,13 @@ class Parser implements Callbacks {
 
 1. **关注点分离**：Tokenizer 只专注于字符解析，Parser 只专注于 AST 构建
 2. **可测试性**：每个组件可以独立测试
-3. **可复用性**：Tokenizer 可以重用于其他目的（语法高亮、Lint 等）
+3. **可复用性**：Tokenizer 可以重用于其他目的（语法高亮，Lint 等）
 4. **性能**：不生成不必要的中间数据结构
 
 <KawaikoNote variant="question" title="什么是 Visitor 模式？">
 
-Visitor 模式是一种"将数据结构与其处理分离"的设计模式。\
-Tokenizer "只读取模板并发出事件"，Parser "只接收事件并构建 AST"——简单的职责划分。\
+Visitor 模式是一种"将数据结构与其处理分离"的设计模式．\
+Tokenizer "只读取模板并发出事件"，Parser "只接收事件并构建 AST"——简单的职责划分．\
 这使得代码更容易理解和测试！
 
 </KawaikoNote>
@@ -289,19 +289,19 @@ Tokenizer "只读取模板并发出事件"，Parser "只接收事件并构建 AS
 | 中型 | ~2x |
 | 大型 | ~2x |
 
-实现了一致的 2 倍加速。
+实现了一致的 2 倍加速．
 
 此改进惠及整个生态系统：
 - **Volar**：IDE 补全和类型检查
 - **vue-tsc**：类型检查
-- **构建工具**：Vite、Webpack 等
-- **社区插件**：ESLint、Prettier 等
+- **构建工具**：Vite，Webpack 等
+- **社区插件**：ESLint，Prettier 等
 
 ## chibivue 中的实现
 
 ::: warning
-当前 chibivue 使用传统的递归下降解析器。\
-迁移到 Vue 3.4 风格的 tokenizer 正在考虑作为未来的工作。
+当前 chibivue 使用传统的递归下降解析器．\
+迁移到 Vue 3.4 风格的 tokenizer 正在考虑作为未来的工作．
 :::
 
 基本实现概要：
@@ -309,8 +309,8 @@ Tokenizer "只读取模板并发出事件"，Parser "只接收事件并构建 AS
 <KawaikoNote variant="base" title="有兴趣就来挑战！">
 
 本章介绍的状态机 tokenizer 在 chibivue 中还没有实现，但如果你有兴趣，可以尝试自己实现！\
-参考 Vue 3.4 的源代码和 htmlparser2 会加深你的理解。\
-解析器优化是框架开发中非常重要的技能。
+参考 Vue 3.4 的源代码和 htmlparser2 会加深你的理解．\
+解析器优化是框架开发中非常重要的技能．
 
 </KawaikoNote>
 
@@ -395,7 +395,7 @@ export class Tokenizer {
 - Vue 3.4 引入了基于 htmlparser2 的状态机 tokenizer
 - 通过只扫描模板字符串一次，解析速度提高了 2 倍
 - Visitor 模式分离了 tokenizer 和 AST 构建，提高了可维护性
-- 此优化惠及整个生态系统（Volar、vue-tsc 等）
+- 此优化惠及整个生态系统（Volar，vue-tsc 等）
 
 ## 参考链接
 

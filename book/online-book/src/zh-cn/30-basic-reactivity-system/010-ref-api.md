@@ -1,7 +1,7 @@
 # ref api（基础响应式系统开始）
 
 ::: tip 前置知识
-在阅读本章之前，我们建议阅读[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)以了解基于 alien-signals 的优化响应式系统的概念。
+在阅读本章之前，我们建议阅读[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)以了解基于 alien-signals 的优化响应式系统的概念．
 :::
 
 ## ref api 的回顾（和实现）

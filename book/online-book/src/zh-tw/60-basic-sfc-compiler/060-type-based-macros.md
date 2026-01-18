@@ -1,13 +1,13 @@
 # 基於類型的 defineProps / defineEmits
 
 ::: info 關於本章
-本章介紹如何使用 TypeScript 類型參數實現 `defineProps` 和 `defineEmits`。\
-學習如何從類型定義生成執行時定義。
+本章介紹如何使用 TypeScript 類型參數實現 `defineProps` 和 `defineEmits`．\
+學習如何從類型定義生成執行時定義．
 :::
 
 ## 什麼是基於類型的宣告？
 
-在 Vue 3 中，你可以使用 TypeScript 泛型宣告 `defineProps` 和 `defineEmits`。
+在 Vue 3 中，你可以使用 TypeScript 泛型宣告 `defineProps` 和 `defineEmits`．
 
 ```vue
 <script setup lang="ts">
@@ -27,9 +27,9 @@ const emit = defineEmits<{
 
 <KawaikoNote variant="question" title="為什麼基於類型更方便？">
 
-執行時宣告使用 `Number`、`String` 等，\
+執行時宣告使用 `Number`，`String` 等，\
 但基於類型的宣告可以直接使用 TypeScript 的類型系統！\
-IDE 的補全和錯誤檢查也更加強大。
+IDE 的補全和錯誤檢查也更加強大．
 
 </KawaikoNote>
 
@@ -69,7 +69,7 @@ export default {
 
 ## 檢測類型參數
 
-檢測 `defineProps` 或 `defineEmits` 是否有類型參數。
+檢測 `defineProps` 或 `defineEmits` 是否有類型參數．
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -101,7 +101,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## 解析類型
 
-解析 TypeScript 類型字面量以提取屬性資訊。
+解析 TypeScript 類型字面量以提取屬性資訊．
 
 ```ts
 interface PropTypeData {
@@ -144,7 +144,7 @@ function extractPropsFromType(
 
 ## 類型到建構函數的轉換
 
-將 TypeScript 類型轉換為 JavaScript 建構函數。
+將 TypeScript 類型轉換為 JavaScript 建構函數．
 
 ```ts
 function resolveType(node: TSType): string[] {
@@ -201,7 +201,7 @@ function resolveType(node: TSType): string[] {
 
 ## 生成執行時定義
 
-從解析的類型資訊生成執行時 props 定義。
+從解析的類型資訊生成執行時 props 定義．
 
 ```ts
 function genRuntimePropsFromType(
@@ -227,7 +227,7 @@ function genRuntimePropsFromType(
 
 <KawaikoNote variant="surprise" title="編譯時類型擦除！">
 
-TypeScript 類型在編譯為 JavaScript 時會消失。\
+TypeScript 類型在編譯為 JavaScript 時會消失．\
 Vue 的編譯器將類型資訊轉換為執行時定義，\
 使你可以在執行時也受益於類型！
 
@@ -235,7 +235,7 @@ Vue 的編譯器將類型資訊轉換為執行時定義，\
 
 ## defineEmits 的類型處理
 
-`defineEmits` 同樣處理類型參數。
+`defineEmits` 同樣處理類型參數．
 
 ```ts
 let emitsTypeDecl: TSFunctionType[] | undefined
@@ -321,7 +321,7 @@ export default {
 
 ## withDefaults 支援
 
-要為基於類型的 props 指定預設值，使用 `withDefaults`。
+要為基於類型的 props 指定預設值，使用 `withDefaults`．
 
 ```vue
 <script setup lang="ts">
@@ -403,7 +403,7 @@ function handleClick() {
 <KawaikoNote variant="base" title="嘗試實現！">
 
 參考本章介紹的原理，嘗試自己實現基於類型的巨集！\
-這是學習 TypeScript AST 操作的好機會。
+這是學習 TypeScript AST 操作的好機會．
 
 </KawaikoNote>
 

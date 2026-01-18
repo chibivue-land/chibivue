@@ -1,13 +1,13 @@
 # 支援 defineProps
 
 ::: info 關於本章
-本章介紹如何實現 `<script setup>` 中使用的 `defineProps` 巨集。\
-學習編譯器巨集的工作原理以及 props 宣告的處理方式。
+本章介紹如何實現 `<script setup>` 中使用的 `defineProps` 巨集．\
+學習編譯器巨集的工作原理以及 props 宣告的處理方式．
 :::
 
 ## 什麼是 defineProps？
 
-`defineProps` 是一個編譯器巨集，用於在 `<script setup>` 內宣告組件的 props。
+`defineProps` 是一個編譯器巨集，用於在 `<script setup>` 內宣告組件的 props．
 
 ```vue
 <script setup>
@@ -26,8 +26,8 @@ console.log(props.title)
 
 <KawaikoNote variant="question" title="什麼是編譯器巨集？">
 
-`defineProps` 不是普通函數。它是**編譯器巨集**。\
-它在編譯時會被特殊處理，在執行時會被擦除。\
+`defineProps` 不是普通函數．它是**編譯器巨集**．\
+它在編譯時會被特殊處理，在執行時會被擦除．\
 這就是為什麼不需要匯入就可以使用！
 
 </KawaikoNote>
@@ -72,7 +72,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## AST 遍歷
 
-遍歷 `<script setup>` 的主體來檢測 `defineProps`。
+遍歷 `<script setup>` 的主體來檢測 `defineProps`．
 
 ```ts
 // 2.2 process <script setup> body
@@ -105,7 +105,7 @@ for (const node of scriptSetupAst.body) {
 
 ## 註冊 Props 綁定
 
-作為 props 宣告的變數會被註冊到綁定元資料中，以便從模板中引用。
+作為 props 宣告的變數會被註冊到綁定元資料中，以便從模板中引用．
 
 ```ts
 // 7. analyze binding metadata
@@ -116,11 +116,11 @@ if (propsRuntimeDecl) {
 }
 ```
 
-通過註冊為 `BindingTypes.PROPS`，模板編譯器可以正確處理對 props 的存取。
+通過註冊為 `BindingTypes.PROPS`，模板編譯器可以正確處理對 props 的存取．
 
 ## 處理 Props 識別符
 
-當賦值給變數如 `const props = defineProps(...)` 時，需要使該變數可存取。
+當賦值給變數如 `const props = defineProps(...)` 時，需要使該變數可存取．
 
 ```ts
 // 9. finalize setup() argument signature
@@ -133,7 +133,7 @@ if (propsIdentifier) {
 
 ## 新增到選項
 
-最終，props 定義作為組件選項輸出。
+最終，props 定義作為組件選項輸出．
 
 ```ts
 // 11. finalize default export
@@ -231,8 +231,8 @@ import ChildComponent from './ChildComponent.vue'
 <KawaikoNote variant="base" title="實現完成！">
 
 defineProps 的實現完成了！\
-現在你理解了編譯器巨集的基本機制。\
-下一章我們將學習如何實現 `defineEmits` 巨集。
+現在你理解了編譯器巨集的基本機制．\
+下一章我們將學習如何實現 `defineEmits` 巨集．
 
 </KawaikoNote>
 

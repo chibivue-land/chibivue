@@ -1,13 +1,13 @@
 # 基于类型的 defineProps / defineEmits
 
 ::: info 关于本章
-本章介绍如何使用 TypeScript 类型参数实现 `defineProps` 和 `defineEmits`。\
-学习如何从类型定义生成运行时定义。
+本章介绍如何使用 TypeScript 类型参数实现 `defineProps` 和 `defineEmits`．\
+学习如何从类型定义生成运行时定义．
 :::
 
 ## 什么是基于类型的声明？
 
-在 Vue 3 中，你可以使用 TypeScript 泛型声明 `defineProps` 和 `defineEmits`。
+在 Vue 3 中，你可以使用 TypeScript 泛型声明 `defineProps` 和 `defineEmits`．
 
 ```vue
 <script setup lang="ts">
@@ -27,9 +27,9 @@ const emit = defineEmits<{
 
 <KawaikoNote variant="question" title="为什么基于类型更方便？">
 
-运行时声明使用 `Number`、`String` 等，\
+运行时声明使用 `Number`，`String` 等，\
 但基于类型的声明可以直接使用 TypeScript 的类型系统！\
-IDE 的补全和错误检查也更加强大。
+IDE 的补全和错误检查也更加强大．
 
 </KawaikoNote>
 
@@ -69,7 +69,7 @@ export default {
 
 ## 检测类型参数
 
-检测 `defineProps` 或 `defineEmits` 是否有类型参数。
+检测 `defineProps` 或 `defineEmits` 是否有类型参数．
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -101,7 +101,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## 解析类型
 
-解析 TypeScript 类型字面量以提取属性信息。
+解析 TypeScript 类型字面量以提取属性信息．
 
 ```ts
 interface PropTypeData {
@@ -144,7 +144,7 @@ function extractPropsFromType(
 
 ## 类型到构造函数的转换
 
-将 TypeScript 类型转换为 JavaScript 构造函数。
+将 TypeScript 类型转换为 JavaScript 构造函数．
 
 ```ts
 function resolveType(node: TSType): string[] {
@@ -201,7 +201,7 @@ function resolveType(node: TSType): string[] {
 
 ## 生成运行时定义
 
-从解析的类型信息生成运行时 props 定义。
+从解析的类型信息生成运行时 props 定义．
 
 ```ts
 function genRuntimePropsFromType(
@@ -227,7 +227,7 @@ function genRuntimePropsFromType(
 
 <KawaikoNote variant="surprise" title="编译时类型擦除！">
 
-TypeScript 类型在编译为 JavaScript 时会消失。\
+TypeScript 类型在编译为 JavaScript 时会消失．\
 Vue 的编译器将类型信息转换为运行时定义，\
 使你可以在运行时也受益于类型！
 
@@ -235,7 +235,7 @@ Vue 的编译器将类型信息转换为运行时定义，\
 
 ## defineEmits 的类型处理
 
-`defineEmits` 同样处理类型参数。
+`defineEmits` 同样处理类型参数．
 
 ```ts
 let emitsTypeDecl: TSFunctionType[] | undefined
@@ -321,7 +321,7 @@ export default {
 
 ## withDefaults 支持
 
-要为基于类型的 props 指定默认值，使用 `withDefaults`。
+要为基于类型的 props 指定默认值，使用 `withDefaults`．
 
 ```vue
 <script setup lang="ts">
@@ -403,7 +403,7 @@ function handleClick() {
 <KawaikoNote variant="base" title="尝试实现！">
 
 参考本章介绍的原理，尝试自己实现基于类型的宏！\
-这是学习 TypeScript AST 操作的好机会。
+这是学习 TypeScript AST 操作的好机会．
 
 </KawaikoNote>
 

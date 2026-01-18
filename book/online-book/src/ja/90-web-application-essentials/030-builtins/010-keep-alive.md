@@ -2,7 +2,7 @@
 
 ## KeepAlive とは
 
-`<KeepAlive>` は、コンポーネントのインスタンスを破棄せずにキャッシュして再利用するための組み込みコンポーネントです。通常、コンポーネントが切り替わると古いコンポーネントはアンマウントされ、状態が失われますが、KeepAlive を使用することでコンポーネントの状態を保持したまま表示を切り替えることができます。
+`<KeepAlive>` は，コンポーネントのインスタンスを破棄せずにキャッシュして再利用するための組み込みコンポーネントです．通常，コンポーネントが切り替わると古いコンポーネントはアンマウントされ，状態が失われますが，KeepAlive を使用することでコンポーネントの状態を保持したまま表示を切り替えることができます．
 
 主なユースケース：
 
@@ -40,7 +40,7 @@ type MatchPattern = string | RegExp | (string | RegExp)[];
 
 ### KeepAliveContext
 
-KeepAlive コンポーネントは、レンダラーとやり取りするための特別なコンテキストを持ちます。
+KeepAlive コンポーネントは，レンダラーとやり取りするための特別なコンテキストを持ちます．
 
 ```ts
 export interface KeepAliveContext extends ComponentInternalInstance {
@@ -71,11 +71,11 @@ let current: VNode | null = null;
 const storageContainer = instance.renderer.o.createElement("div");
 ```
 
-KeepAlive は、`cache` Map を使ってコンポーネントの VNode をキャッシュします。`keys` Set は LRU（Least Recently Used）アルゴリズムのための順序管理に使用されます。
+KeepAlive は，`cache` Map を使ってコンポーネントの VNode をキャッシュします．`keys` Set は LRU（Least Recently Used）アルゴリズムのための順序管理に使用されます．
 
 ### activate 関数
 
-キャッシュからコンポーネントを復元して表示します。
+キャッシュからコンポーネントを復元して表示します．
 
 ```ts
 instance.activate = (vnode, container, anchor, _parentComponent) => {
@@ -101,7 +101,7 @@ instance.activate = (vnode, container, anchor, _parentComponent) => {
 
 ### deactivate 関数
 
-コンポーネントを非表示にしてキャッシュします。
+コンポーネントを非表示にしてキャッシュします．
 
 ```ts
 instance.deactivate = (vnode: VNode) => {
@@ -118,11 +118,11 @@ instance.deactivate = (vnode: VNode) => {
 };
 ```
 
-通常のアンマウントと異なり、DOM 要素は削除されず隠しコンテナに移動されるだけです。
+通常のアンマウントと異なり，DOM 要素は削除されず隠しコンテナに移動されるだけです．
 
 ### render 関数
 
-KeepAlive の核となるロジックです。
+KeepAlive の核となるロジックです．
 
 ```ts
 return (): VNode | undefined => {
@@ -192,7 +192,7 @@ return (): VNode | undefined => {
 
 ### ShapeFlags による制御
 
-KeepAlive は ShapeFlags を使用してレンダラーと連携します。
+KeepAlive は ShapeFlags を使用してレンダラーと連携します．
 
 ```ts
 // このコンポーネントは KeepAlive で管理されるべき
@@ -202,7 +202,7 @@ vnode.shapeFlag |= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
 vnode.shapeFlag |= ShapeFlags.COMPONENT_KEPT_ALIVE;
 ```
 
-レンダラーはこれらのフラグを見て、通常のマウント/アンマウントの代わりに activate/deactivate を呼び出します。
+レンダラーはこれらのフラグを見て，通常のマウント/アンマウントの代わりに activate/deactivate を呼び出します．
 
 ### include/exclude のマッチング
 
@@ -248,7 +248,7 @@ function resetShapeFlag(vnode: VNode): void {
 
 ## ライフサイクルフック
 
-KeepAlive で管理されるコンポーネントは、追加のライフサイクルフックを使用できます：
+KeepAlive で管理されるコンポーネントは，追加のライフサイクルフックを使用できます：
 
 - **onActivated**: コンポーネントがアクティブになったとき
 - **onDeactivated**: コンポーネントが非アクティブになったとき
@@ -314,7 +314,7 @@ export default {
 
 ## レンダラーとの連携
 
-KeepAlive はレンダラーと密接に連携して動作します。
+KeepAlive はレンダラーと密接に連携して動作します．
 
 ### mountComponent での KeepAlive 検出
 
@@ -447,4 +447,4 @@ KeepAlive の実装は以下の要素で構成されています：
 5. **renderer 注入**: KeepAlive は patch/move/unmount 関数への参照を保持
 6. **include/exclude/max**: 柔軟なキャッシュ制御
 
-KeepAlive はコンポーネントの状態を保持しながらパフォーマンスを向上させる強力な機能ですが、メモリ使用量とのトレードオフがあるため、適切な `max` 値の設定が重要です。
+KeepAlive はコンポーネントの状態を保持しながらパフォーマンスを向上させる強力な機能ですが，メモリ使用量とのトレードオフがあるため，適切な `max` 値の設定が重要です．

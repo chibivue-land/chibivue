@@ -2,7 +2,7 @@
 
 ## Transition とは
 
-`<Transition>` は、要素やコンポーネントの表示・非表示の切り替え時にアニメーションを適用するための組み込みコンポーネントです。CSS トランジション/アニメーションと連携して、スムーズな UI 遷移を実現します。
+`<Transition>` は，要素やコンポーネントの表示・非表示の切り替え時にアニメーションを適用するための組み込みコンポーネントです．CSS トランジション/アニメーションと連携して，スムーズな UI 遷移を実現します．
 
 主なユースケース：
 
@@ -83,7 +83,7 @@ export interface TransitionHooks<HostElement = Element> {
 }
 ```
 
-レンダラーはこのインターフェースを通じて Transition と連携します。
+レンダラーはこのインターフェースを通じて Transition と連携します．
 
 ## CSS クラスのライフサイクル
 
@@ -91,15 +91,15 @@ Transition は以下の CSS クラスを自動的に付与・削除します：
 
 ### Enter（要素の表示）
 
-1. **v-enter-from**: 開始状態。要素が挿入される前に追加、1フレーム後に削除
-2. **v-enter-active**: アクティブ状態。トランジション全体で適用
-3. **v-enter-to**: 終了状態。開始から1フレーム後に追加、トランジション終了時に削除
+1. **v-enter-from**: 開始状態．要素が挿入される前に追加，1 フレーム後に削除
+2. **v-enter-active**: アクティブ状態．トランジション全体で適用
+3. **v-enter-to**: 終了状態．開始から 1 フレーム後に追加，トランジション終了時に削除
 
 ### Leave（要素の非表示）
 
-1. **v-leave-from**: 開始状態。leave トランジション開始時に追加、1フレーム後に削除
-2. **v-leave-active**: アクティブ状態。トランジション全体で適用
-3. **v-leave-to**: 終了状態。開始から1フレーム後に追加、トランジション終了時に削除
+1. **v-leave-from**: 開始状態．leave トランジション開始時に追加，1 フレーム後に削除
+2. **v-leave-active**: アクティブ状態．トランジション全体で適用
+3. **v-leave-to**: 終了状態．開始から 1 フレーム後に追加，トランジション終了時に削除
 
 ```
 Enter:
@@ -119,7 +119,7 @@ Leave:
 
 ### resolveTransitionProps
 
-Props を解析し、TransitionHooks を生成します。
+Props を解析し，TransitionHooks を生成します．
 
 ```ts
 export function resolveTransitionProps(
@@ -191,11 +191,11 @@ export function removeTransitionClass(
 }
 ```
 
-`_vtc`（Vue Transition Classes）プロパティで、現在適用されているトランジションクラスを追跡します。
+`_vtc`（Vue Transition Classes）プロパティで，現在適用されているトランジションクラスを追跡します．
 
 ### nextFrame
 
-CSS トランジションを正しく動作させるため、2フレーム待ってからクラスを変更します。
+CSS トランジションを正しく動作させるため，2 フレーム待ってからクラスを変更します．
 
 ```ts
 function nextFrame(cb: () => void): void {
@@ -205,7 +205,7 @@ function nextFrame(cb: () => void): void {
 }
 ```
 
-1フレーム目でブラウザが初期状態を認識し、2フレーム目で変更を適用することで、トランジションが確実に発火します。
+1 フレーム目でブラウザが初期状態を認識し，2 フレーム目で変更を適用することで，トランジションが確実に発火します．
 
 ### Enter フック
 
@@ -229,7 +229,7 @@ const makeEnterHook = (isAppear: boolean) => {
 ```
 
 1. ユーザー定義フックを呼び出し
-2. 2フレーム後に from クラスを削除、to クラスを追加
+2. 2 フレーム後に from クラスを削除，to クラスを追加
 3. トランジション終了を検知して完了処理
 
 ### Leave フック
@@ -257,7 +257,7 @@ leave(el, done) {
 
 ### getTransitionInfo
 
-CSS から transition/animation の情報を取得します。
+CSS から transition/animation の情報を取得します．
 
 ```ts
 export function getTransitionInfo(
@@ -301,7 +301,7 @@ export function getTransitionInfo(
 
 ### whenTransitionEnds
 
-トランジション終了時にコールバックを実行します。
+トランジション終了時にコールバックを実行します．
 
 ```ts
 export function whenTransitionEnds(
@@ -355,7 +355,7 @@ export function whenTransitionEnds(
 
 ### forceReflow
 
-CSS トランジションを確実に発火させるため、強制的にリフローを発生させます。
+CSS トランジションを確実に発火させるため，強制的にリフローを発生させます．
 
 ```ts
 export function forceReflow(): number {
@@ -363,7 +363,7 @@ export function forceReflow(): number {
 }
 ```
 
-`offsetHeight` を読み取ることで、ブラウザにスタイルの再計算を強制します。
+`offsetHeight` を読み取ることで，ブラウザにスタイルの再計算を強制します．
 
 ## Transition コンポーネント本体
 
@@ -389,7 +389,7 @@ const Transition = (
 };
 ```
 
-Transition 自体は DOM 要素をレンダリングせず、子の VNode に `transition` プロパティを付与するだけです。レンダラーはこのプロパティを見てフックを呼び出します。
+Transition 自体は DOM 要素をレンダリングせず，子の VNode に `transition` プロパティを付与するだけです．レンダラーはこのプロパティを見てフックを呼び出します．
 
 ## 使用例
 
@@ -493,7 +493,7 @@ function onLeave(el, done) {
 
 ### VNode.transition プロパティ
 
-VNode には `transition` プロパティがあり、ここに TransitionHooks が格納されます。
+VNode には `transition` プロパティがあり，ここに TransitionHooks が格納されます．
 
 ```ts
 // packages/runtime-core/src/vnode.ts
@@ -507,7 +507,7 @@ export interface VNode<HostNode = any> {
 
 ### Transition コンポーネントでの設定
 
-Transition コンポーネントは、子の VNode に `transition` プロパティを設定します。
+Transition コンポーネントは，子の VNode に `transition` プロパティを設定します．
 
 ```ts
 const Transition = (
@@ -533,7 +533,7 @@ const Transition = (
 
 ### レンダラーでの処理
 
-レンダラーは VNode の `transition` プロパティを検出し、適切なタイミングでフックを呼び出します：
+レンダラーは VNode の `transition` プロパティを検出し，適切なタイミングでフックを呼び出します：
 
 1. **要素の挿入時**: `beforeEnter` → DOM 挿入 → `enter`
 2. **要素の削除時**: `leave` → DOM 削除
@@ -609,10 +609,10 @@ child.transition = innerProps
 Transition の実装は以下の要素で構成されています：
 
 1. **CSS クラス管理**: enter/leave の各フェーズでクラスを付与・削除
-2. **nextFrame**: 2フレーム待機でトランジション発火を保証
+2. **nextFrame**: 2 フレーム待機でトランジション発火を保証
 3. **forceReflow**: 強制リフローでスタイル再計算
 4. **whenTransitionEnds**: transitionend/animationend の監視
 5. **JavaScript フック**: CSS を使わないアニメーションのサポート
 6. **VNode.transition**: レンダラーがフックを呼び出すためのプロパティ
 
-Transition は CSS トランジション/アニメーションと密接に連携し、ブラウザの描画パイプラインを理解した上で実装されています。
+Transition は CSS トランジション/アニメーションと密接に連携し，ブラウザの描画パイプラインを理解した上で実装されています．

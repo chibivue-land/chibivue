@@ -1,13 +1,13 @@
 # 型ベースの defineProps / defineEmits
 
 ::: info この章について
-この章では，TypeScript の型引数を使った `defineProps` と `defineEmits` の実装方法を学びます。\
-型定義からランタイム定義を生成する仕組みを理解しましょう。
+この章では，TypeScript の型引数を使った `defineProps` と `defineEmits` の実装方法を学びます．\
+型定義からランタイム定義を生成する仕組みを理解しましょう．
 :::
 
 ## 型ベースの宣言とは
 
-Vue 3 では，`defineProps` と `defineEmits` を TypeScript のジェネリクスで宣言できます。
+Vue 3 では，`defineProps` と `defineEmits` を TypeScript のジェネリクスで宣言できます．
 
 ```vue
 <script setup lang="ts">
@@ -29,7 +29,7 @@ const emit = defineEmits<{
 
 ランタイム宣言では `Number`, `String` などを使いますが，\
 型ベースなら TypeScript の型システムをそのまま使えます！\
-IDE の補完やエラーチェックも強力になります。
+IDE の補完やエラーチェックも強力になります．
 
 </KawaikoNote>
 
@@ -69,7 +69,7 @@ export default {
 
 ## 型引数の検出
 
-`defineProps` や `defineEmits` が型引数を持っているかを検出します。
+`defineProps` や `defineEmits` が型引数を持っているかを検出します．
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -101,7 +101,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## 型の解析
 
-TypeScript の型リテラルを解析して，プロパティ情報を抽出します。
+TypeScript の型リテラルを解析して，プロパティ情報を抽出します．
 
 ```ts
 interface PropTypeData {
@@ -144,7 +144,7 @@ function extractPropsFromType(
 
 ## 型からコンストラクタへの変換
 
-TypeScript の型を JavaScript のコンストラクタに変換します。
+TypeScript の型を JavaScript のコンストラクタに変換します．
 
 ```ts
 function resolveType(node: TSType): string[] {
@@ -201,7 +201,7 @@ function resolveType(node: TSType): string[] {
 
 ## ランタイム定義の生成
 
-解析した型情報からランタイム用の props 定義を生成します。
+解析した型情報からランタイム用の props 定義を生成します．
 
 ```ts
 function genRuntimePropsFromType(
@@ -227,7 +227,7 @@ function genRuntimePropsFromType(
 
 <KawaikoNote variant="surprise" title="コンパイル時の型消去！">
 
-TypeScript の型は JavaScript にコンパイルされると消えてしまいます。\
+TypeScript の型は JavaScript にコンパイルされると消えてしまいます．\
 Vue のコンパイラは，型情報をランタイム定義に変換することで，\
 型の恩恵をランタイムでも受けられるようにしています！
 
@@ -235,7 +235,7 @@ Vue のコンパイラは，型情報をランタイム定義に変換するこ�
 
 ## defineEmits の型処理
 
-`defineEmits` も同様に型引数を処理します。
+`defineEmits` も同様に型引数を処理します．
 
 ```ts
 let emitsTypeDecl: TSFunctionType[] | undefined
@@ -321,7 +321,7 @@ export default {
 
 ## withDefaults の対応
 
-型ベースの props でデフォルト値を指定するには `withDefaults` を使います。
+型ベースの props でデフォルト値を指定するには `withDefaults` を使います．
 
 ```vue
 <script setup lang="ts">
@@ -403,7 +403,7 @@ function handleClick() {
 <KawaikoNote variant="base" title="実装に挑戦！">
 
 この章で説明した仕組みを参考に，ぜひ型ベースのマクロを実装してみてください！\
-TypeScript AST の操作を学ぶ良い機会になります。
+TypeScript AST の操作を学ぶ良い機会になります．
 
 </KawaikoNote>
 

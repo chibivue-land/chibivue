@@ -2,9 +2,9 @@
 
 ## 什麼是 Vapor 模式？
 
-Vapor 模式是 Vue.js 的一種新的編譯策略，通過直接進行 DOM 操作而不使用虛擬 DOM 來提高性能。
+Vapor 模式是 Vue.js 的一種新的編譯策略，通過直接進行 DOM 操作而不使用虛擬 DOM 來提高性能．
 
-在傳統的 Vue.js 中，當組件的狀態發生變化時，會重新生成虛擬 DOM，進行差異檢測（diffing），然後更新實際的 DOM。在 Vapor 模式中，消除了虛擬 DOM 的開銷，當響應式值發生變化時，只直接執行必要的 DOM 操作。
+在傳統的 Vue.js 中，當組件的狀態發生變化時，會重新生成虛擬 DOM，進行差異檢測（diffing），然後更新實際的 DOM．在 Vapor 模式中，消除了虛擬 DOM 的開銷，當響應式值發生變化時，只直接執行必要的 DOM 操作．
 
 ## 詳細資源
 
@@ -12,12 +12,12 @@ Vapor 模式是 Vue.js 的一種新的編譯策略，通過直接進行 DOM 操�
 
 **[reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor)**
 
-該倉庫提供了 Vue.js Vapor 模式內部實現的深入解釋。
+該倉庫提供了 Vue.js Vapor 模式內部實現的深入解釋．
 
 ## chibivue 中的 Vapor 實現
 
-chibivue 在 `runtime-vapor` 套件中提供了最小的 Vapor 實現。
-讓我們看一個簡單的實現來理解基本概念。
+chibivue 在 `runtime-vapor` 套件中提供了最小的 Vapor 實現．
+讓我們看一個簡單的實現來理解基本概念．
 
 ### 基本思想
 
@@ -42,7 +42,7 @@ export const template = (tmp: string): VaporNode => {
 };
 ```
 
-這個函數接收一個 HTML 字符串並返回一個實際的 DOM 元素。它直接操作 DOM，而不經過虛擬 DOM。
+這個函數接收一個 HTML 字符串並返回一個實際的 DOM 元素．它直接操作 DOM，而不經過虛擬 DOM．
 
 ### setText 函數
 
@@ -78,7 +78,7 @@ export const setText = (
 };
 ```
 
-當響應式值發生變化時，會調用這個函數，直接更新 DOM 的文本內容。
+當響應式值發生變化時，會調用這個函數，直接更新 DOM 的文本內容．
 
 ### on 函數
 
@@ -116,7 +116,7 @@ export interface VaporComponentInternalInstance {
 }
 ```
 
-Vapor 組件是一個接收實例並返回 VaporNode（實際的 DOM 元素）的函數。
+Vapor 組件是一個接收實例並返回 VaporNode（實際的 DOM 元素）的函數．
 
 ### 編譯結果對比
 
@@ -153,6 +153,6 @@ function render(_ctx) {
 
 ## 總結
 
-Vapor 模式是一種通過消除虛擬 DOM 開銷來提高性能的新方法。chibivue 的 `runtime-vapor` 套件提供了這個概念的最小實現。
+Vapor 模式是一種通過消除虛擬 DOM 開銷來提高性能的新方法．chibivue 的 `runtime-vapor` 套件提供了這個概念的最小實現．
 
-有關更詳細的實現和 Vue.js 官方的 Vapor 模式，請參閱 [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor)。
+有關更詳細的實現和 Vue.js 官方的 Vapor 模式，請參閱 [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor)．

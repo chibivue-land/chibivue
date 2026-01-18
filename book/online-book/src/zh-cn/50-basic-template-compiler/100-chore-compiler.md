@@ -1,18 +1,18 @@
 # 编译器细节优化
 
-在本章中，我们将对模板编译器进行一些调整以提高其质量。\
+在本章中，我们将对模板编译器进行一些调整以提高其质量．\
 主要涉及以下两个主题：
 
 1. **空白处理** - 删除和压缩不必要的空白
 2. **文本节点合并** - 高效合并相邻的文本节点
 
-这些是为了提高生成代码质量的优化，而不是可见的功能。
+这些是为了提高生成代码质量的优化，而不是可见的功能．
 
 ## 空白处理
 
 ### 问题
 
-在当前的实现中，模板中的所有空白都会被原样保留。\
+在当前的实现中，模板中的所有空白都会被原样保留．\
 考虑以下模板：
 
 ```html
@@ -22,12 +22,12 @@
 </div>
 ```
 
-在当前实现中，`<div>` 和 `<span>` 之间的换行和缩进会作为文本节点被保留。\
-这会生成不必要的节点，可能影响性能。
+在当前实现中，`<div>` 和 `<span>` 之间的换行和缩进会作为文本节点被保留．\
+这会生成不必要的节点，可能影响性能．
 
 ### Vue.js 的方法
 
-Vue.js 使用 `whitespace` 选项来控制空白的处理方式。
+Vue.js 使用 `whitespace` 选项来控制空白的处理方式．
 
 ```ts
 type WhitespaceStrategy = 'preserve' | 'condense'
@@ -62,7 +62,7 @@ type WhitespaceStrategy = 'preserve' | 'condense'
 
 ### 实现
 
-首先，在 `ParserOptions` 中添加 `whitespace` 选项。
+首先，在 `ParserOptions` 中添加 `whitespace` 选项．
 
 `packages/compiler-core/src/options.ts`：
 
@@ -73,7 +73,7 @@ export interface ParserOptions {
 }
 ```
 
-在 `packages/compiler-core/src/parse.ts` 中添加空白处理函数。
+在 `packages/compiler-core/src/parse.ts` 中添加空白处理函数．
 
 ```ts
 function isAllWhitespace(content: string): boolean {
@@ -170,7 +170,7 @@ function condenseWhitespace(
 }
 ```
 
-然后在解析元素时调用此函数。
+然后在解析元素时调用此函数．
 
 ```ts
 function parseElement(
@@ -194,7 +194,7 @@ function parseElement(
 }
 ```
 
-同样对根节点应用相同的处理。
+同样对根节点应用相同的处理．
 
 ```ts
 export const baseParse = (
@@ -212,7 +212,7 @@ export const baseParse = (
 
 ### 问题
 
-在当前实现中，文本节点和 mustache 语法（`{{ }}`）被作为单独的节点处理。
+在当前实现中，文本节点和 mustache 语法（`{{ }}`）被作为单独的节点处理．
 
 ```html
 <div>abc {{ d }} {{ e }}</div>
@@ -224,11 +224,11 @@ export const baseParse = (
 - `TEXT`: " "
 - `INTERPOLATION`: e
 
-在代码生成时单独处理这些节点效率不高。
+在代码生成时单独处理这些节点效率不高．
 
 ### Vue.js 的方法
 
-Vue.js 使用名为 `transformText` 的转换器将相邻的文本节点和 mustache 语法合并为一个 `CompoundExpression`。
+Vue.js 使用名为 `transformText` 的转换器将相邻的文本节点和 mustache 语法合并为一个 `CompoundExpression`．
 
 合并后：
 ```ts
@@ -236,11 +236,11 @@ Vue.js 使用名为 `transformText` 的转换器将相邻的文本节点和 must
 createCompoundExpression(['abc ', d, ' ', e])
 ```
 
-这允许在代码生成时输出高效的连接操作。
+这允许在代码生成时输出高效的连接操作．
 
 ### 实现
 
-创建 `packages/compiler-core/src/transforms/transformText.ts`。
+创建 `packages/compiler-core/src/transforms/transformText.ts`．
 
 ```ts
 import type { NodeTransform } from '../transform'
@@ -358,7 +358,7 @@ function isStaticNode(node: any): boolean {
 }
 ```
 
-在 `packages/compiler-core/src/utils.ts` 中添加 `isText` 辅助函数。
+在 `packages/compiler-core/src/utils.ts` 中添加 `isText` 辅助函数．
 
 ```ts
 export function isText(
@@ -368,7 +368,7 @@ export function isText(
 }
 ```
 
-在 `packages/compiler-core/src/ast.ts` 中添加 `TEXT_CALL` 节点类型和 `createCallExpression`。
+在 `packages/compiler-core/src/ast.ts` 中添加 `TEXT_CALL` 节点类型和 `createCallExpression`．
 
 ```ts
 export const enum NodeTypes {
@@ -396,7 +396,7 @@ export function createCallExpression(
 }
 ```
 
-在 `packages/compiler-core/src/runtimeHelpers.ts` 中添加 `CREATE_TEXT`。
+在 `packages/compiler-core/src/runtimeHelpers.ts` 中添加 `CREATE_TEXT`．
 
 ```ts
 export const CREATE_TEXT = Symbol('createTextVNode')
@@ -409,7 +409,7 @@ export const helperNameMap: Record<symbol, string> = {
 
 ### 注册转换器
 
-在 `packages/compiler-core/src/compile.ts` 中注册转换器。
+在 `packages/compiler-core/src/compile.ts` 中注册转换器．
 
 ```ts
 import { transformText } from './transforms/transformText'
@@ -434,7 +434,7 @@ export function getBaseTransformPreset(): TransformPreset {
 
 ### 更新代码生成
 
-在 `packages/compiler-core/src/codegen.ts` 中添加 `TEXT_CALL` 节点处理。
+在 `packages/compiler-core/src/codegen.ts` 中添加 `TEXT_CALL` 节点处理．
 
 ```ts
 function genNode(node: any, context: CodegenContext) {
@@ -449,7 +449,7 @@ function genNode(node: any, context: CodegenContext) {
 
 ### 更新运行时
 
-在 `packages/runtime-core/src/vnode.ts` 中添加 `createTextVNode`。
+在 `packages/runtime-core/src/vnode.ts` 中添加 `createTextVNode`．
 
 ```ts
 export function createTextVNode(text: string = ' ', flag: number = 0): VNode {
@@ -457,7 +457,7 @@ export function createTextVNode(text: string = ' ', flag: number = 0): VNode {
 }
 ```
 
-从 `packages/runtime-core/src/index.ts` 导出。
+从 `packages/runtime-core/src/index.ts` 导出．
 
 ```ts
 export { createTextVNode } from './vnode'
@@ -488,7 +488,7 @@ export default {
 
 检查编译结果时，你应该看到：
 - 不必要的空白（换行和缩进）已被删除
-- `Hello `、`{{ name }}` 和 `!` 已被合并
+- `Hello `，`{{ name }}` 和 `!` 已被合并
 
 编译器的质量现在得到了提升！
 

@@ -1,13 +1,13 @@
 # 支援 Scoped CSS
 
 ::: info 關於本章
-本章介紹如何實現 Vue 的 Scoped CSS 功能。\
-學習如何為每個組件隔離樣式，防止樣式衝突。
+本章介紹如何實現 Vue 的 Scoped CSS 功能．\
+學習如何為每個組件隔離樣式，防止樣式衝突．
 :::
 
 ## 什麼是 Scoped CSS？
 
-Scoped CSS 是將 `<style scoped>` 中定義的樣式僅應用於該組件的功能。
+Scoped CSS 是將 `<style scoped>` 中定義的樣式僅應用於該組件的功能．
 
 ```vue
 <template>
@@ -21,12 +21,12 @@ Scoped CSS 是將 `<style scoped>` 中定義的樣式僅應用於該組件的功
 </style>
 ```
 
-此樣式不會影響其他組件中具有相同類名的元素。
+此樣式不會影響其他組件中具有相同類名的元素．
 
 <KawaikoNote variant="question" title="為什麼需要 Scoped CSS？">
 
-在大型應用中，不同組件可能使用相同的類名。\
-沒有 Scoped CSS，樣式可能會意外影響其他組件。\
+在大型應用中，不同組件可能使用相同的類名．\
+沒有 Scoped CSS，樣式可能會意外影響其他組件．\
 通過為每個組件隔離樣式，可以安全地進行樣式設計！
 
 </KawaikoNote>
@@ -68,7 +68,7 @@ Scoped CSS 通過以下步驟實現：
 
 ## 生成作用域 ID
 
-為每個組件生成唯一 ID。通常使用檔案路徑的雜湊值。
+為每個組件生成唯一 ID．通常使用檔案路徑的雜湊值．
 
 ```ts
 // packages/compiler-sfc/src/parse.ts
@@ -101,7 +101,7 @@ export function parse(
 
 ## 擴展 SFCStyleBlock
 
-為樣式區塊新增 scoped 資訊。
+為樣式區塊新增 scoped 資訊．
 
 ```ts
 // packages/compiler-sfc/src/parse.ts
@@ -129,7 +129,7 @@ function createBlock(node: ElementNode, source: string): SFCBlock {
 
 ## 模板轉換
 
-在模板編譯期間為元素新增 scopeId 屬性。
+在模板編譯期間為元素新增 scopeId 屬性．
 
 ```ts
 // packages/compiler-core/src/codegen.ts
@@ -158,7 +158,7 @@ function genVNodeCall(node: VNodeCall, context: CodegenContext) {
 
 ## 樣式轉換
 
-為 CSS 選擇器新增作用域屬性選擇器。
+為 CSS 選擇器新增作用域屬性選擇器．
 
 ```ts
 // packages/compiler-sfc/src/compileStyle.ts
@@ -244,8 +244,8 @@ load(id) {
 
 <KawaikoNote variant="surprise" title="PostCSS 的力量！">
 
-我們使用 PostCSS 進行樣式轉換。\
-PostCSS 是一個可以將 CSS 作為 AST 處理的工具，使選擇器轉換變得簡單。\
+我們使用 PostCSS 進行樣式轉換．\
+PostCSS 是一個可以將 CSS 作為 AST 處理的工具，使選擇器轉換變得簡單．\
 Vue.js 內部也使用 PostCSS！
 
 </KawaikoNote>
@@ -278,15 +278,15 @@ Vue.js 內部也使用 PostCSS！
 </style>
 ```
 
-兩個組件使用相同的類名 `.text`，但顯示不同的顏色。
+兩個組件使用相同的類名 `.text`，但顯示不同的顏色．
 
 ## 特殊選擇器
 
-Scoped CSS 支援幾個特殊的選擇器。
+Scoped CSS 支援幾個特殊的選擇器．
 
 ### :deep() 選擇器
 
-用於修改子組件的樣式。
+用於修改子組件的樣式．
 
 ```vue
 <style scoped>
@@ -306,7 +306,7 @@ Scoped CSS 支援幾個特殊的選擇器。
 
 ### ::v-slotted() 選擇器
 
-為插槽內容套用樣式。
+為插槽內容套用樣式．
 
 ```vue
 <style scoped>
@@ -324,13 +324,13 @@ Scoped CSS 支援幾個特殊的選擇器。
 }
 ```
 
-`-s` 後綴表示「slotted（插槽）」。
+`-s` 後綴表示「slotted（插槽）」．
 由於插槽內容來自父組件，
-使用特殊的插槽作用域 ID 而不是常規的作用域 ID。
+使用特殊的插槽作用域 ID 而不是常規的作用域 ID．
 
 ### :global() 選擇器
 
-在 scoped 樣式區塊中定義全域樣式。
+在 scoped 樣式區塊中定義全域樣式．
 
 ```vue
 <style scoped>
@@ -350,7 +350,7 @@ Scoped CSS 支援幾個特殊的選擇器。
 
 ## 使用 v-bind() 的動態樣式
 
-可以在 CSS 中使用組件狀態。
+可以在 CSS 中使用組件狀態．
 
 ```vue
 <script setup>
@@ -373,12 +373,12 @@ const color = ref('red')
 }
 ```
 
-`v-bind()` 被轉換為 CSS 自訂屬性（CSS 變數）。
-在執行時，CSS 變數的值作為組件的內聯樣式設定。
+`v-bind()` 被轉換為 CSS 自訂屬性（CSS 變數）．
+在執行時，CSS 變數的值作為組件的內聯樣式設定．
 
 ### 使用複雜表達式
 
-透過引號包裹可以使用複雜的表達式。
+透過引號包裹可以使用複雜的表達式．
 
 ```vue
 <style scoped>
@@ -397,7 +397,7 @@ const color = ref('red')
 - 每次值更改時都會觸發樣式重新計算
 - 對於頻繁更改的值，直接使用內聯樣式可能更有效率
 
-對於動畫或頻繁更新，請考慮使用內聯樣式或 CSS 動畫代替 `v-bind()`。
+對於動畫或頻繁更新，請考慮使用內聯樣式或 CSS 動畫代替 `v-bind()`．
 
 </KawaikoNote>
 
@@ -411,7 +411,7 @@ const color = ref('red')
 <KawaikoNote variant="base" title="嘗試實現！">
 
 參考本章介紹的原理，嘗試自己實現 Scoped CSS！\
-這也是學習如何使用 PostCSS 的好機會。
+這也是學習如何使用 PostCSS 的好機會．
 
 </KawaikoNote>
 

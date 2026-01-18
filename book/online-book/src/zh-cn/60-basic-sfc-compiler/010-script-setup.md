@@ -1,13 +1,13 @@
 # 支持 script setup
 
 ::: info 关于本章
-本章介绍如何实现 Vue 3 的 `<script setup>` 语法。\
-学习 script setup 的工作原理，以更简洁的方式编写组件。
+本章介绍如何实现 Vue 3 的 `<script setup>` 语法．\
+学习 script setup 的工作原理，以更简洁的方式编写组件．
 :::
 
 ## 什么是 script setup？
 
-`<script setup>` 是 Vue 3.2 引入的编译时语法糖。与传统的 Options API 或 Composition API 相比，它可以更简洁地编写组件。
+`<script setup>` 是 Vue 3.2 引入的编译时语法糖．与传统的 Options API 或 Composition API 相比，它可以更简洁地编写组件．
 
 ```vue
 <!-- 传统写法 -->
@@ -37,7 +37,7 @@ const increment = () => count.value++
 
 <KawaikoNote variant="surprise" title="简洁多了！">
 
-使用 script setup，不需要 `export default` 或 `return`，导入的组件也会自动注册。\
+使用 script setup，不需要 `export default` 或 `return`，导入的组件也会自动注册．\
 代码变得非常干净！
 
 </KawaikoNote>
@@ -48,12 +48,12 @@ script setup 的编译包含以下步骤：
 
 1. **导入分析和提升**：提取 import 语句并移动到文件顶部
 2. **绑定分析**：跟踪变量声明和函数定义
-3. **宏处理**：处理 defineProps、defineEmits 等（后续章节介绍）
+3. **宏处理**：处理 defineProps，defineEmits 等（后续章节介绍）
 4. **代码转换**：转换为 setup 函数并生成 return 语句
 
 ## compileScript 函数
 
-`compileScript` 函数是编译 SFC 脚本部分的核心函数。
+`compileScript` 函数是编译 SFC 脚本部分的核心函数．
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -88,7 +88,7 @@ export function compileScript(
 
 ## 导入提升
 
-script setup 内的 import 语句需要移动（提升）到生成代码的开头。
+script setup 内的 import 语句需要移动（提升）到生成代码的开头．
 
 ```ts
 // 1.2 walk import declarations of <script setup>
@@ -119,14 +119,14 @@ for (const node of scriptSetupAst.body) {
 
 <KawaikoNote variant="question" title="为什么需要提升？">
 
-在生成的代码中，import 语句需要放在 `setup()` 函数外部。\
-提升将 `<script setup>` 内的导入移动到正确的位置。
+在生成的代码中，import 语句需要放在 `setup()` 函数外部．\
+提升将 `<script setup>` 内的导入移动到正确的位置．
 
 </KawaikoNote>
 
 ## 绑定分析
 
-为了正确解析模板中引用的变量，我们需要分析脚本中的绑定。
+为了正确解析模板中引用的变量，我们需要分析脚本中的绑定．
 
 ```ts
 function walkDeclaration(
@@ -171,7 +171,7 @@ function walkDeclaration(
 
 ## 内联模板
 
-使用 script setup 时，模板可以内联到 setup 函数内部。
+使用 script setup 时，模板可以内联到 setup 函数内部．
 
 ```ts
 // 10. generate return statement
@@ -222,7 +222,7 @@ export default {
 
 ## 与 Vite 插件集成
 
-Vite 插件检测并编译 script setup。
+Vite 插件检测并编译 script setup．
 
 ```ts
 // packages/@extensions/vite-plugin-chibivue/src/script.ts
@@ -269,8 +269,8 @@ const increment = () => {
 <KawaikoNote variant="base" title="实现完成！">
 
 script setup 的基本实现完成了！\
-与传统写法相比，现在可以更简洁地编写组件。\
-下一章我们将学习如何实现 `defineProps` 和 `defineEmits` 宏。
+与传统写法相比，现在可以更简洁地编写组件．\
+下一章我们将学习如何实现 `defineProps` 和 `defineEmits` 宏．
 
 </KawaikoNote>
 

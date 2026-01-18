@@ -2,11 +2,11 @@
 
 ## Patch Flags とは
 
-Patch Flags は、コンパイラが生成する最適化ヒントです。VNode にフラグを付与することで、ランタイムの差分検出（diffing）アルゴリズムが不要なチェックをスキップし、パフォーマンスを向上させます。
+Patch Flags は，コンパイラが生成する最適化ヒントです．VNode にフラグを付与することで，ランタイムの差分検出（diffing）アルゴリズムが不要なチェックをスキップし，パフォーマンスを向上させます．
 
 ### 最適化の仕組み
 
-通常の Virtual DOM の差分検出では、すべてのプロパティと子要素を比較する必要があります。しかし、コンパイラはテンプレートを解析する段階で「どの部分が動的か」を知っています。この情報を Patch Flags として VNode に埋め込むことで、ランタイムは変更される可能性のある部分だけをチェックできます。
+通常の Virtual DOM の差分検出では，すべてのプロパティと子要素を比較する必要があります．しかし，コンパイラはテンプレートを解析する段階で「どの部分が動的か」を知っています．この情報を Patch Flags として VNode に埋め込むことで，ランタイムは変更される可能性のある部分だけをチェックできます．
 
 ## PatchFlags の定義
 
@@ -88,7 +88,7 @@ export const enum PatchFlags {
 
 ## ビット演算による組み合わせ
 
-Patch Flags はビットフラグとして設計されており、複数のフラグを組み合わせることができます。
+Patch Flags はビットフラグとして設計されており，複数のフラグを組み合わせることができます．
 
 ```ts
 // フラグの組み合わせ
@@ -247,21 +247,21 @@ function patchFragment(n1: VNode, n2: VNode) {
 
 ### CACHED (-1)
 
-静的な VNode がキャッシュされていることを示します。
+静的な VNode がキャッシュされていることを示します．
 
 ```js
 const _hoisted_1 = createVNode("div", null, "Static", -1 /* CACHED */);
 ```
 
-キャッシュされた VNode は差分検出をスキップできます。
+キャッシュされた VNode は差分検出をスキップできます．
 
 ### BAIL (-2)
 
-最適化モードを終了するヒントです。ユーザーが手書きの render 関数を使用している場合など、コンパイラの最適化が適用できない場合に使用されます。
+最適化モードを終了するヒントです．ユーザーが手書きの render 関数を使用している場合など，コンパイラの最適化が適用できない場合に使用されます．
 
 ## dynamicProps
 
-`patchFlag` と一緒に使用される `dynamicProps` 配列は、どの props が動的かを明示します。
+`patchFlag` と一緒に使用される `dynamicProps` 配列は，どの props が動的かを明示します．
 
 ```ts
 // 動的な props が value と disabled
@@ -273,11 +273,11 @@ createVNode("input",
 )
 ```
 
-これにより、`type` は静的なので比較をスキップし、`value` と `disabled` のみをチェックできます。
+これにより，`type` は静的なので比較をスキップし，`value` と `disabled` のみをチェックできます．
 
 ## Block Tree との連携
 
-Patch Flags は Block Tree 最適化と連携して動作します。Block は `dynamicChildren` 配列を持ち、動的な子ノードのみを追跡します。
+Patch Flags は Block Tree 最適化と連携して動作します．Block は `dynamicChildren` 配列を持ち，動的な子ノードのみを追跡します．
 
 ```ts
 const block = openBlock();
@@ -288,7 +288,7 @@ const vnode = createBlock("div", null, [
 // block.dynamicChildren = [動的な p のみ]
 ```
 
-Block の更新時は `dynamicChildren` のみを走査すれば良いため、静的な子ノードの比較をスキップできます。
+Block の更新時は `dynamicChildren` のみを走査すれば良いため，静的な子ノードの比較をスキップできます．
 
 ## 最適化の効果
 
@@ -306,7 +306,7 @@ Block の更新時は `dynamicChildren` のみを走査すれば良いため、�
 合計: O(k + l)
 ```
 
-テンプレートの大部分が静的な場合、この最適化は大きな効果を発揮します。
+テンプレートの大部分が静的な場合，この最適化は大きな効果を発揮します．
 
 ## まとめ
 
@@ -318,4 +318,4 @@ Patch Flags の実装は以下の要素で構成されています：
 4. **dynamicProps**: 動的な props を明示的に追跡
 5. **Block Tree 連携**: 動的な子ノードのみを効率的に更新
 
-Patch Flags は Vue 3 の Virtual DOM パフォーマンスを大幅に向上させる重要な最適化技術です。コンパイラとランタイムが協調することで、テンプレートベースのフレームワークの利点を最大限に活かしています。
+Patch Flags は Vue 3 の Virtual DOM パフォーマンスを大幅に向上させる重要な最適化技術です．コンパイラとランタイムが協調することで，テンプレートベースのフレームワークの利点を最大限に活かしています．

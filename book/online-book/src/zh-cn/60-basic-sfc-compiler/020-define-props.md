@@ -1,13 +1,13 @@
 # 支持 defineProps
 
 ::: info 关于本章
-本章介绍如何实现 `<script setup>` 中使用的 `defineProps` 宏。\
-学习编译器宏的工作原理以及 props 声明的处理方式。
+本章介绍如何实现 `<script setup>` 中使用的 `defineProps` 宏．\
+学习编译器宏的工作原理以及 props 声明的处理方式．
 :::
 
 ## 什么是 defineProps？
 
-`defineProps` 是一个编译器宏，用于在 `<script setup>` 内声明组件的 props。
+`defineProps` 是一个编译器宏，用于在 `<script setup>` 内声明组件的 props．
 
 ```vue
 <script setup>
@@ -26,8 +26,8 @@ console.log(props.title)
 
 <KawaikoNote variant="question" title="什么是编译器宏？">
 
-`defineProps` 不是普通函数。它是**编译器宏**。\
-它在编译时会被特殊处理，在运行时会被擦除。\
+`defineProps` 不是普通函数．它是**编译器宏**．\
+它在编译时会被特殊处理，在运行时会被擦除．\
 这就是为什么不需要导入就可以使用！
 
 </KawaikoNote>
@@ -72,7 +72,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## AST 遍历
 
-遍历 `<script setup>` 的主体来检测 `defineProps`。
+遍历 `<script setup>` 的主体来检测 `defineProps`．
 
 ```ts
 // 2.2 process <script setup> body
@@ -105,7 +105,7 @@ for (const node of scriptSetupAst.body) {
 
 ## 注册 Props 绑定
 
-作为 props 声明的变量会被注册到绑定元数据中，以便从模板中引用。
+作为 props 声明的变量会被注册到绑定元数据中，以便从模板中引用．
 
 ```ts
 // 7. analyze binding metadata
@@ -116,11 +116,11 @@ if (propsRuntimeDecl) {
 }
 ```
 
-通过注册为 `BindingTypes.PROPS`，模板编译器可以正确处理对 props 的访问。
+通过注册为 `BindingTypes.PROPS`，模板编译器可以正确处理对 props 的访问．
 
 ## 处理 Props 标识符
 
-当赋值给变量如 `const props = defineProps(...)` 时，需要使该变量可访问。
+当赋值给变量如 `const props = defineProps(...)` 时，需要使该变量可访问．
 
 ```ts
 // 9. finalize setup() argument signature
@@ -133,7 +133,7 @@ if (propsIdentifier) {
 
 ## 添加到选项
 
-最终，props 定义作为组件选项输出。
+最终，props 定义作为组件选项输出．
 
 ```ts
 // 11. finalize default export
@@ -231,8 +231,8 @@ import ChildComponent from './ChildComponent.vue'
 <KawaikoNote variant="base" title="实现完成！">
 
 defineProps 的实现完成了！\
-现在你理解了编译器宏的基本机制。\
-下一章我们将学习如何实现 `defineEmits` 宏。
+现在你理解了编译器宏的基本机制．\
+下一章我们将学习如何实现 `defineEmits` 宏．
 
 </KawaikoNote>
 

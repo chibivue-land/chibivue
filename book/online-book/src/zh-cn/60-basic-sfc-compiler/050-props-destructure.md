@@ -1,13 +1,13 @@
 # 支持 Props 解构
 
 ::: info 关于本章
-本章介绍如何实现 Vue 3.5 的响应式 Props 解构功能。\
-学习如何在解构 props 的同时保持响应性。
+本章介绍如何实现 Vue 3.5 的响应式 Props 解构功能．\
+学习如何在解构 props 的同时保持响应性．
 :::
 
 ## 什么是响应式 Props 解构？
 
-从 Vue 3.5 开始，你可以在 `<script setup>` 中解构 `defineProps` 的返回值。
+从 Vue 3.5 开始，你可以在 `<script setup>` 中解构 `defineProps` 的返回值．
 
 ```vue
 <script setup>
@@ -22,12 +22,12 @@ const { count, message = 'default' } = defineProps({
 </template>
 ```
 
-这个功能使访问 props 更加简单。
+这个功能使访问 props 更加简单．
 
 <KawaikoNote variant="question" title="为什么需要特殊处理？">
 
-在普通的 JavaScript 中，解构对象会复制值，并断开与原始对象的连接。\
-但是 Vue 的 props 需要保持响应性。\
+在普通的 JavaScript 中，解构对象会复制值，并断开与原始对象的连接．\
+但是 Vue 的 props 需要保持响应性．\
 编译器将解构访问转换为 `__props.xxx` 访问来保持响应性！
 
 </KawaikoNote>
@@ -74,7 +74,7 @@ export default {
 
 ## 检测解构模式
 
-检测 `defineProps` 的返回值是否被赋值给 `ObjectPattern`（解构模式）。
+检测 `defineProps` 的返回值是否被赋值给 `ObjectPattern`（解构模式）．
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -108,7 +108,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## 处理解构
 
-从 `ObjectPattern` 中提取每个属性并注册为绑定。
+从 `ObjectPattern` 中提取每个属性并注册为绑定．
 
 ```ts
 function processPropsDestructure(pattern: ObjectPattern) {
@@ -159,7 +159,7 @@ function processPropsDestructure(pattern: ObjectPattern) {
 
 ## 默认值处理
 
-当在解构中指定默认值时，将其合并到 props 定义中。
+当在解构中指定默认值时，将其合并到 props 定义中．
 
 ```ts
 function genRuntimeProps(): string | undefined {
@@ -201,7 +201,7 @@ function mergeDefaults(
 
 ## 转换 Props 访问
 
-在模板和脚本中，将解构变量的访问转换为 `__props.xxx`。
+在模板和脚本中，将解构变量的访问转换为 `__props.xxx`．
 
 ```ts
 function processPropsAccess(source: string): string {
@@ -234,7 +234,7 @@ function processPropsAccess(source: string): string {
 
 ## Rest 模式支持
 
-也可以支持 `...rest` 模式。
+也可以支持 `...rest` 模式．
 
 ```vue
 <script setup>
@@ -305,7 +305,7 @@ console.log(count, message)
 <KawaikoNote variant="base" title="尝试实现！">
 
 参考本章介绍的原理，尝试自己实现 Props 解构！\
-这是练习 AST 操作和转换的好机会。
+这是练习 AST 操作和转换的好机会．
 
 </KawaikoNote>
 

@@ -2,9 +2,9 @@
 
 ## 什么是 Vapor 模式？
 
-Vapor 模式是 Vue.js 的一种新的编译策略，通过直接进行 DOM 操作而不使用虚拟 DOM 来提高性能。
+Vapor 模式是 Vue.js 的一种新的编译策略，通过直接进行 DOM 操作而不使用虚拟 DOM 来提高性能．
 
-在传统的 Vue.js 中，当组件的状态发生变化时，会重新生成虚拟 DOM，进行差异检测（diffing），然后更新实际的 DOM。在 Vapor 模式中，消除了虚拟 DOM 的开销，当响应式值发生变化时，只直接执行必要的 DOM 操作。
+在传统的 Vue.js 中，当组件的状态发生变化时，会重新生成虚拟 DOM，进行差异检测（diffing），然后更新实际的 DOM．在 Vapor 模式中，消除了虚拟 DOM 的开销，当响应式值发生变化时，只直接执行必要的 DOM 操作．
 
 ## 详细资源
 
@@ -12,12 +12,12 @@ Vapor 模式是 Vue.js 的一种新的编译策略，通过直接进行 DOM 操�
 
 **[reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor)**
 
-该仓库提供了 Vue.js Vapor 模式内部实现的深入解释。
+该仓库提供了 Vue.js Vapor 模式内部实现的深入解释．
 
 ## chibivue 中的 Vapor 实现
 
-chibivue 在 `runtime-vapor` 包中提供了最小的 Vapor 实现。
-让我们看一个简单的实现来理解基本概念。
+chibivue 在 `runtime-vapor` 包中提供了最小的 Vapor 实现．
+让我们看一个简单的实现来理解基本概念．
 
 ### 基本思想
 
@@ -42,7 +42,7 @@ export const template = (tmp: string): VaporNode => {
 };
 ```
 
-这个函数接收一个 HTML 字符串并返回一个实际的 DOM 元素。它直接操作 DOM，而不经过虚拟 DOM。
+这个函数接收一个 HTML 字符串并返回一个实际的 DOM 元素．它直接操作 DOM，而不经过虚拟 DOM．
 
 ### setText 函数
 
@@ -78,7 +78,7 @@ export const setText = (
 };
 ```
 
-当响应式值发生变化时，会调用这个函数，直接更新 DOM 的文本内容。
+当响应式值发生变化时，会调用这个函数，直接更新 DOM 的文本内容．
 
 ### on 函数
 
@@ -116,7 +116,7 @@ export interface VaporComponentInternalInstance {
 }
 ```
 
-Vapor 组件是一个接收实例并返回 VaporNode（实际的 DOM 元素）的函数。
+Vapor 组件是一个接收实例并返回 VaporNode（实际的 DOM 元素）的函数．
 
 ### 编译结果对比
 
@@ -153,6 +153,6 @@ function render(_ctx) {
 
 ## 总结
 
-Vapor 模式是一种通过消除虚拟 DOM 开销来提高性能的新方法。chibivue 的 `runtime-vapor` 包提供了这个概念的最小实现。
+Vapor 模式是一种通过消除虚拟 DOM 开销来提高性能的新方法．chibivue 的 `runtime-vapor` 包提供了这个概念的最小实现．
 
-有关更详细的实现和 Vue.js 官方的 Vapor 模式，请参阅 [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor)。
+有关更详细的实现和 Vue.js 官方的 Vapor 模式，请参阅 [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor)．

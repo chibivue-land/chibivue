@@ -1,13 +1,13 @@
 # 自訂指令
 
 ::: info 關於本章
-本章實現 Vue 的自訂指令功能。\
-您將學習如何定義像 `v-focus` 這樣的自訂指令，並對元素執行直接操作。
+本章實現 Vue 的自訂指令功能．\
+您將學習如何定義像 `v-focus` 這樣的自訂指令，並對元素執行直接操作．
 :::
 
 ## 什麼是自訂指令？
 
-Vue 的自訂指令是用於對 DOM 元素執行低階操作的功能。當需要進行元件抽象無法處理的直接 DOM 操作時使用。
+Vue 的自訂指令是用於對 DOM 元素執行低階操作的功能．當需要進行元件抽象無法處理的直接 DOM 操作時使用．
 
 典型用例：
 
@@ -33,7 +33,7 @@ const vFocus = {
 
 <KawaikoNote variant="question" title="什麼時候使用？">
 
-自訂指令用於「想直接操作 DOM」的場景。\
+自訂指令用於「想直接操作 DOM」的場景．\
 建議盡量用元件處理能用元件處理的事情，只在真正需要直接 DOM 操作時才使用指令！
 
 </KawaikoNote>
@@ -70,9 +70,9 @@ const myDirective = {
 每個鉤子接收以下參數：
 
 - `el`：指令綁定的元素
-- `binding`：傳遞給指令的資訊（值、參數等）
+- `binding`：傳遞給指令的資訊（值，參數等）
 - `vnode`：對應 el 的 VNode
-- `prevVnode`：更新前的 VNode（僅 beforeUpdate、updated）
+- `prevVnode`：更新前的 VNode（僅 beforeUpdate，updated）
 
 ## 實現概述
 
@@ -165,7 +165,7 @@ export function withDirectives<T extends VNode>(
 
 <KawaikoNote variant="funny" title="簡單！">
 
-`withDirectives` 只是給 VNode 新增 `dirs` 屬性。\
+`withDirectives` 只是給 VNode 新增 `dirs` 屬性．\
 實際的鉤子呼叫由渲染器完成，所以這個實現只是簡單地將資訊附加到 VNode 上！
 
 </KawaikoNote>
@@ -385,7 +385,7 @@ const color = ref('red')
 <KawaikoNote variant="base" title="實現完成！">
 
 自訂指令的實現完成了！\
-透過執行時、渲染器和編譯器的協同工作，現在可以使用像 `v-focus` 這樣的自訂指令了。\
+透過執行時，渲染器和編譯器的協同工作，現在可以使用像 `v-focus` 這樣的自訂指令了．\
 v-model 內部也是作為指令實現的，請務必查看！
 
 </KawaikoNote>

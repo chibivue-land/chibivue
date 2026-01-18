@@ -1,13 +1,13 @@
 # defineEmits に対応する
 
 ::: info この章について
-この章では，`<script setup>` で使用する `defineEmits` マクロの実装方法を学びます。\
-子コンポーネントから親コンポーネントへのイベント発行の仕組みを理解しましょう。
+この章では，`<script setup>` で使用する `defineEmits` マクロの実装方法を学びます．\
+子コンポーネントから親コンポーネントへのイベント発行の仕組みを理解しましょう．
 :::
 
 ## defineEmits とは
 
-`defineEmits` は `<script setup>` 内でコンポーネントが発行するイベントを宣言するためのコンパイラマクロです。
+`defineEmits` は `<script setup>` 内でコンポーネントが発行するイベントを宣言するためのコンパイラマクロです．
 
 ```vue
 <script setup>
@@ -21,8 +21,8 @@ function handleClick() {
 
 <KawaikoNote variant="question" title="defineProps との違いは？">
 
-`defineProps` は親から子へのデータの流れ（Props Down）、\
-`defineEmits` は子から親へのイベントの流れ（Events Up）を担当します。\
+`defineProps` は親から子へのデータの流れ（Props Down），\
+`defineEmits` は子から親へのイベントの流れ（Events Up）を担当します．\
 Vue の双方向データフローの両輪ですね！
 
 </KawaikoNote>
@@ -70,7 +70,7 @@ function processDefineEmits(node: Node, declId?: LVal): boolean {
 
 ## AST の走査
 
-defineProps と同様に，`<script setup>` の本文を走査して `defineEmits` を検出します。
+defineProps と同様に，`<script setup>` の本文を走査して `defineEmits` を検出します．
 
 ```ts
 // 2.2 process <script setup> body
@@ -101,7 +101,7 @@ for (const node of scriptSetupAst.body) {
 
 ## emit 関数のセットアップ
 
-`defineEmits` で取得した emit 関数は，setup 関数の第2引数（SetupContext）から取得します。
+`defineEmits` で取得した emit 関数は，setup 関数の第 2 引数（SetupContext）から取得します．
 
 ```ts
 // 9. finalize setup() argument signature
@@ -233,8 +233,8 @@ const text = ref('')
 <KawaikoNote variant="base" title="実装完了！">
 
 defineEmits の実装が完了しました！\
-これで props と emits の両方のコンパイラマクロが使えるようになりました。\
-次の章では scoped CSS の実装を学びます。
+これで props と emits の両方のコンパイラマクロが使えるようになりました．\
+次の章では scoped CSS の実装を学びます．
 
 </KawaikoNote>
 

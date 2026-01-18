@@ -1,13 +1,13 @@
 # 支持 defineEmits
 
 ::: info 关于本章
-本章介绍如何实现 `<script setup>` 中使用的 `defineEmits` 宏。\
-学习子组件向父组件发送事件的机制。
+本章介绍如何实现 `<script setup>` 中使用的 `defineEmits` 宏．\
+学习子组件向父组件发送事件的机制．
 :::
 
 ## 什么是 defineEmits？
 
-`defineEmits` 是一个编译器宏，用于在 `<script setup>` 内声明组件发出的事件。
+`defineEmits` 是一个编译器宏，用于在 `<script setup>` 内声明组件发出的事件．
 
 ```vue
 <script setup>
@@ -22,7 +22,7 @@ function handleClick() {
 <KawaikoNote variant="question" title="与 defineProps 有什么区别？">
 
 `defineProps` 处理从父到子的数据流（Props Down），\
-`defineEmits` 处理从子到父的事件流（Events Up）。\
+`defineEmits` 处理从子到父的事件流（Events Up）．\
 它们是 Vue 双向数据流的两个轮子！
 
 </KawaikoNote>
@@ -70,7 +70,7 @@ function processDefineEmits(node: Node, declId?: LVal): boolean {
 
 ## AST 遍历
 
-与 defineProps 类似，遍历 `<script setup>` 的主体来检测 `defineEmits`。
+与 defineProps 类似，遍历 `<script setup>` 的主体来检测 `defineEmits`．
 
 ```ts
 // 2.2 process <script setup> body
@@ -101,7 +101,7 @@ for (const node of scriptSetupAst.body) {
 
 ## 设置 emit 函数
 
-从 `defineEmits` 获取的 emit 函数从 setup 函数的第二个参数（SetupContext）中获取。
+从 `defineEmits` 获取的 emit 函数从 setup 函数的第二个参数（SetupContext）中获取．
 
 ```ts
 // 9. finalize setup() argument signature
@@ -233,8 +233,8 @@ const text = ref('')
 <KawaikoNote variant="base" title="实现完成！">
 
 defineEmits 的实现完成了！\
-现在可以使用 props 和 emits 两个编译器宏了。\
-下一章我们将学习如何实现 scoped CSS。
+现在可以使用 props 和 emits 两个编译器宏了．\
+下一章我们将学习如何实现 scoped CSS．
 
 </KawaikoNote>
 

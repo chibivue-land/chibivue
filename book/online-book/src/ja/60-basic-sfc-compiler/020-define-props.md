@@ -1,13 +1,13 @@
 # defineProps に対応する
 
 ::: info この章について
-この章では，`<script setup>` で使用する `defineProps` マクロの実装方法を学びます。\
-コンパイラマクロの仕組みと，props の宣言がどのように処理されるかを理解しましょう。
+この章では，`<script setup>` で使用する `defineProps` マクロの実装方法を学びます．\
+コンパイラマクロの仕組みと，props の宣言がどのように処理されるかを理解しましょう．
 :::
 
 ## defineProps とは
 
-`defineProps` は `<script setup>` 内でコンポーネントの props を宣言するためのコンパイラマクロです。
+`defineProps` は `<script setup>` 内でコンポーネントの props を宣言するためのコンパイラマクロです．
 
 ```vue
 <script setup>
@@ -26,8 +26,8 @@ console.log(props.title)
 
 <KawaikoNote variant="question" title="コンパイラマクロって？">
 
-`defineProps` は通常の関数ではありません。**コンパイラマクロ**です。\
-コンパイル時に特別な処理が行われ，実行時には消去されます。\
+`defineProps` は通常の関数ではありません．**コンパイラマクロ**です．\
+コンパイル時に特別な処理が行われ，実行時には消去されます．\
 そのため，import なしで使えるんです！
 
 </KawaikoNote>
@@ -72,7 +72,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## AST の走査
 
-`<script setup>` の本文を走査して `defineProps` を検出します。
+`<script setup>` の本文を走査して `defineProps` を検出します．
 
 ```ts
 // 2.2 process <script setup> body
@@ -105,7 +105,7 @@ for (const node of scriptSetupAst.body) {
 
 ## props バインディングの登録
 
-props として宣言された変数は，テンプレートから参照できるようにバインディングメタデータに登録します。
+props として宣言された変数は，テンプレートから参照できるようにバインディングメタデータに登録します．
 
 ```ts
 // 7. analyze binding metadata
@@ -116,11 +116,11 @@ if (propsRuntimeDecl) {
 }
 ```
 
-`BindingTypes.PROPS` として登録することで，テンプレートコンパイラは props へのアクセスを正しく処理できます。
+`BindingTypes.PROPS` として登録することで，テンプレートコンパイラは props へのアクセスを正しく処理できます．
 
 ## props 識別子の処理
 
-`const props = defineProps(...)` のように変数に代入された場合，その変数で props にアクセスできるようにします。
+`const props = defineProps(...)` のように変数に代入された場合，その変数で props にアクセスできるようにします．
 
 ```ts
 // 9. finalize setup() argument signature
@@ -133,7 +133,7 @@ if (propsIdentifier) {
 
 ## オプションへの追加
 
-最終的に，props 定義はコンポーネントオプションとして出力されます。
+最終的に，props 定義はコンポーネントオプションとして出力されます．
 
 ```ts
 // 11. finalize default export
@@ -231,8 +231,8 @@ import ChildComponent from './ChildComponent.vue'
 <KawaikoNote variant="base" title="実装完了！">
 
 defineProps の実装が完了しました！\
-コンパイラマクロの基本的な仕組みを理解できましたね。\
-次の章では `defineEmits` マクロの実装を学びます。
+コンパイラマクロの基本的な仕組みを理解できましたね．\
+次の章では `defineEmits` マクロの実装を学びます．
 
 </KawaikoNote>
 

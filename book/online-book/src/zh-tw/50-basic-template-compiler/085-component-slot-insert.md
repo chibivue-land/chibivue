@@ -2,10 +2,10 @@
 
 ## 插槽插入
 
-接下來是插槽插入端的實現。\
-這是在父組件端表示為 `<template #slot-name>` 的部分的編譯。
+接下來是插槽插入端的實現．\
+這是在父組件端表示為 `<template #slot-name>` 的部分的編譯．
 
-正如開頭所解釋的，插槽被編譯為如下程式碼。
+正如開頭所解釋的，插槽被編譯為如下程式碼．
 
 ```js
 h(Comp, null, {
@@ -15,11 +15,11 @@ h(Comp, null, {
 })
 ```
 
-也就是說，組件的子元素被作為 `SlotsExpression`（ObjectExpression）處理，每個插槽作為 `FunctionExpression` 產生，並用 `withCtx` 包裝。
+也就是說，組件的子元素被作為 `SlotsExpression`（ObjectExpression）處理，每個插槽作為 `FunctionExpression` 產生，並用 `withCtx` 包裝．
 
 ## withCtx 的作用
 
-`withCtx` 是一個輔助函式，用於在正確的組件實例上下文中執行插槽函式。這確保了插槽內的響應式依賴被追蹤到正確的組件。
+`withCtx` 是一個輔助函式，用於在正確的組件實例上下文中執行插槽函式．這確保了插槽內的響應式依賴被追蹤到正確的組件．
 
 ```ts
 export function withCtx(
@@ -43,8 +43,8 @@ export function withCtx(
 
 ## 更新 AST
 
-首先，讓我們更新 AST 定義。\
-新增一個名為 `SlotsExpression` 的類型，並在 `FunctionExpression` 中新增一個 `isSlot` 標誌來表示它是一個插槽函式。
+首先，讓我們更新 AST 定義．\
+新增一個名為 `SlotsExpression` 的類型，並在 `FunctionExpression` 中新增一個 `isSlot` 標誌來表示它是一個插槽函式．
 
 ```ts
 // SlotsExpression is an ObjectExpression that represents the slots object
@@ -60,7 +60,7 @@ export interface FunctionExpression extends Node {
 }
 ```
 
-此外，將 `SlotsExpression` 新增到 `VNodeCall` 的 `children` 類型中。
+此外，將 `SlotsExpression` 新增到 `VNodeCall` 的 `children` 類型中．
 
 ```ts
 export interface VNodeCall extends Node {
@@ -78,7 +78,7 @@ export interface VNodeCall extends Node {
 
 ## 新增輔助函式
 
-在 `runtimeHelpers.ts` 中新增 `WITH_CTX`。
+在 `runtimeHelpers.ts` 中新增 `WITH_CTX`．
 
 ```ts
 export const WITH_CTX = Symbol()
@@ -91,7 +91,7 @@ export const helperNameMap: Record<symbol, string> = {
 
 ## 新增工具函式
 
-在 `utils.ts` 中新增 `findDir` 和 `isTemplateNode` 工具函式。
+在 `utils.ts` 中新增 `findDir` 和 `isTemplateNode` 工具函式．
 
 ```ts
 export function isTemplateNode(
@@ -122,11 +122,11 @@ export function findDir(
 }
 ```
 
-`isTemplateNode` 判斷是否是 `<template>` 標籤，`findDir` 查詢指定名稱的指令。
+`isTemplateNode` 判斷是否是 `<template>` 標籤，`findDir` 查詢指定名稱的指令．
 
 ## 實現 buildSlots
 
-在 `transforms/vSlot.ts` 中實現處理插槽插入的 `buildSlots` 函式。
+在 `transforms/vSlot.ts` 中實現處理插槽插入的 `buildSlots` 函式．
 
 ```ts
 import {
@@ -256,7 +256,7 @@ function buildSlotFn(
 
 ## 更新 transformElement
 
-最後，更新 `transformElement.ts`，使用 `buildSlots` 處理組件的子元素。
+最後，更新 `transformElement.ts`，使用 `buildSlots` 處理組件的子元素．
 
 ```ts
 import { buildSlots } from './vSlot'
@@ -285,8 +285,8 @@ if (node.children.length > 0) {
 }
 ```
 
-這樣，插槽插入端的編譯就完成了。\
-組件的子元素會自動轉換為插槽物件，產生如下程式碼。
+這樣，插槽插入端的編譯就完成了．\
+組件的子元素會自動轉換為插槽物件，產生如下程式碼．
 
 ```vue
 <Comp>
