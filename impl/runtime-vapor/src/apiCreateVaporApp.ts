@@ -1,4 +1,4 @@
-import type { App, AppContext, VNode, Component } from "@chibivue/runtime-core";
+import type { App, AppContext, VNode, Component, Plugin } from "@chibivue/runtime-core";
 import { createAppContext, createVNode } from "@chibivue/runtime-core";
 import type { VaporComponentInternalInstance, VaporComponent } from "./component";
 import { createVaporComponentInstance, initialRenderVaporComponent } from "./component";
@@ -18,44 +18,24 @@ export interface VaporApp extends App {
  */
 export function createVaporApp(rootComponent: VaporComponent): VaporApp {
   const context = createAppContext();
+  const installedPlugins = new Set<Plugin>();
 
   const app: VaporApp = {
     _component: rootComponent,
+    _props: null,
     _context: context,
     _container: null,
     _instance: null,
 
-    get config() {
-      return context.config;
-    },
-
-    use(plugin: any, ...options: any[]) {
-      if (typeof plugin.install === "function") {
-        plugin.install(app, ...options);
-      } else if (typeof plugin === "function") {
-        plugin(app, ...options);
-      }
+    use(plugin: Plugin, ...options: any[]) {
+      if (installedPlugins.has(plugin)) return app;
+      installedPlugins.add(plugin);
+      plugin.install(app, ...options);
       return app;
     },
 
-    mixin(mixin: any) {
-      context.mixins.push(mixin);
-      return app;
-    },
-
-    component(name: string, component?: Component) {
-      if (!component) {
-        return context.components[name];
-      }
+    component(name: string, component: Component) {
       context.components[name] = component;
-      return app;
-    },
-
-    directive(name: string, directive?: any) {
-      if (!directive) {
-        return context.directives[name];
-      }
-      context.directives[name] = directive;
       return app;
     },
 
@@ -95,18 +75,10 @@ export function createVaporApp(rootComponent: VaporComponent): VaporApp {
 
       // Mark as mounted
       instance.isMounted = true;
-
-      return app;
-    },
-
-    unmount() {
-      if (app._container) {
-        app._container.innerHTML = "";
-      }
-      app._instance = null;
-      app._container = null;
     },
   } as VaporApp;
+
+  context.app = app;
 
   return app;
 }
@@ -131,44 +103,24 @@ export function createVaporApp(rootComponent: VaporComponent): VaporApp {
  */
 export function createVaporSSRApp(rootComponent: VaporComponent): VaporApp {
   const context = createAppContext();
+  const installedPlugins = new Set<Plugin>();
 
   const app: VaporApp = {
     _component: rootComponent,
+    _props: null,
     _context: context,
     _container: null,
     _instance: null,
 
-    get config() {
-      return context.config;
-    },
-
-    use(plugin: any, ...options: any[]) {
-      if (typeof plugin.install === "function") {
-        plugin.install(app, ...options);
-      } else if (typeof plugin === "function") {
-        plugin(app, ...options);
-      }
+    use(plugin: Plugin, ...options: any[]) {
+      if (installedPlugins.has(plugin)) return app;
+      installedPlugins.add(plugin);
+      plugin.install(app, ...options);
       return app;
     },
 
-    mixin(mixin: any) {
-      context.mixins.push(mixin);
-      return app;
-    },
-
-    component(name: string, component?: Component) {
-      if (!component) {
-        return context.components[name];
-      }
+    component(name: string, component: Component) {
       context.components[name] = component;
-      return app;
-    },
-
-    directive(name: string, directive?: any) {
-      if (!directive) {
-        return context.directives[name];
-      }
-      context.directives[name] = directive;
       return app;
     },
 
@@ -213,18 +165,10 @@ export function createVaporSSRApp(rootComponent: VaporComponent): VaporApp {
         container.appendChild(el);
         instance.isMounted = true;
       }
-
-      return app;
-    },
-
-    unmount() {
-      if (app._container) {
-        app._container.innerHTML = "";
-      }
-      app._instance = null;
-      app._container = null;
     },
   } as VaporApp;
+
+  context.app = app;
 
   return app;
 }

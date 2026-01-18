@@ -186,14 +186,17 @@ function transformVBind(dir: DirectiveNode, elementId: number, context: Transfor
   const propName = (dir.arg as SimpleExpressionNode).content;
 
   // Register as effect for reactive props
-  context.registerEffect([dir.exp as SimpleExpressionNode], [
-    {
-      type: IRNodeTypes.SET_PROP,
-      element: elementId,
-      key: propName,
-      value: dir.exp as SimpleExpressionNode,
-    },
-  ]);
+  context.registerEffect(
+    [dir.exp as SimpleExpressionNode],
+    [
+      {
+        type: IRNodeTypes.SET_PROP,
+        element: elementId,
+        key: propName,
+        value: dir.exp as SimpleExpressionNode,
+      },
+    ],
+  );
 }
 
 function transformText(node: TextNode, context: TransformContext): void {
@@ -207,11 +210,14 @@ function transformInterpolation(node: InterpolationNode, context: TransformConte
   context.template += `<!---->`;
 
   // Register effect for text update
-  context.registerEffect([node.content as SimpleExpressionNode], [
-    {
-      type: IRNodeTypes.SET_TEXT,
-      element: elementId,
-      values: [node.content as SimpleExpressionNode],
-    },
-  ]);
+  context.registerEffect(
+    [node.content as SimpleExpressionNode],
+    [
+      {
+        type: IRNodeTypes.SET_TEXT,
+        element: elementId,
+        values: [node.content as SimpleExpressionNode],
+      },
+    ],
+  );
 }

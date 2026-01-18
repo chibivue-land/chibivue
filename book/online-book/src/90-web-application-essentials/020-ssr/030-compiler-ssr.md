@@ -1,51 +1,51 @@
 # Compiler SSR
 
-## SSR コンパイラとは
+## What is the SSR Compiler?
 
-SSR コンパイラ（`@chibivue/compiler-ssr`）は，テンプレートを SSR に最適化されたコードにコンパイルするパッケージです．
+The SSR compiler (`@chibivue/compiler-ssr`) is a package that compiles templates into SSR-optimized code.
 
-通常のクライアントサイドコンパイルでは VNode を生成するコードを出力しますが，SSR コンパイラは直接 HTML 文字列を生成するコードを出力します．これにより，サーバーサイドでのレンダリング効率が向上します．
+While normal client-side compilation outputs code that generates VNodes, the SSR compiler outputs code that directly generates HTML strings. This improves rendering efficiency on the server side.
 
-<KawaikoNote variant="base" title="クライアントと SSR の違い">
+<KawaikoNote variant="base" title="Client vs SSR Difference">
 
-クライアントサイドでは:
+On the client side:
 ```js
-// VNode を返す
+// Returns VNode
 return _createElementVNode("div", { class: "hello" }, "Hello")
 ```
 
-SSR では:
+In SSR:
 ```js
-// 直接 HTML 文字列を push
+// Directly push HTML string
 _push(`<div class="hello">Hello</div>`)
 ```
 
-SSR では VNode を経由せず直接文字列を生成するので効率的です！
+SSR is efficient because it generates strings directly without going through VNodes!
 
 </KawaikoNote>
 
-## パッケージ構成
+## Package Structure
 
 ```
 packages/compiler-ssr/src/
-├── index.ts                    # メインエントリーポイント
-├── runtimeHelpers.ts           # SSR ヘルパー関数の定義
-├── ssrCodegenTransform.ts      # SSR コード生成変換
+├── index.ts                    # Main entry point
+├── runtimeHelpers.ts           # SSR helper function definitions
+├── ssrCodegenTransform.ts      # SSR code generation transform
 └── transforms/
-    ├── ssrTransformElement.ts   # 要素の変換
-    ├── ssrTransformComponent.ts # コンポーネントの変換
-    ├── ssrVIf.ts               # v-if の変換
-    └── ssrVFor.ts              # v-for の変換
+    ├── ssrTransformElement.ts   # Element transformation
+    ├── ssrTransformComponent.ts # Component transformation
+    ├── ssrVIf.ts               # v-if transformation
+    └── ssrVFor.ts              # v-for transformation
 ```
 
-## コンパイルの流れ
+## Compilation Flow
 
-SSR コンパイルは以下の手順で行われます：
+SSR compilation follows these steps:
 
-1. **パース**: テンプレートを AST に変換（`@chibivue/compiler-dom` の `parse` を使用）
-2. **変換**: SSR 用の NodeTransform を適用
-3. **SSR Codegen Transform**: AST を SSR 用のコード生成ノードに変換
-4. **コード生成**: 最終的な JavaScript コードを生成
+1. **Parse**: Convert template to AST (using `parse` from `@chibivue/compiler-dom`)
+2. **Transform**: Apply SSR NodeTransforms
+3. **SSR Codegen Transform**: Convert AST to SSR code generation nodes
+4. **Code Generation**: Generate final JavaScript code
 
 ```ts
 // packages/compiler-ssr/src/index.ts
@@ -64,7 +64,7 @@ export function compile(source: string | RootNode, options: CompilerOptions = {}
     ],
   });
 
-  // テンプレート AST を SSR 用のコード生成 AST に変換
+  // Convert template AST to SSR codegen AST
   ssrCodegenTransform(ast, options);
 
   return generate(ast, options);
@@ -73,7 +73,7 @@ export function compile(source: string | RootNode, options: CompilerOptions = {}
 
 ## SSR Transform Context
 
-SSR 変換で使用されるコンテキストです．
+The context used in SSR transformation.
 
 ```ts
 // packages/compiler-ssr/src/ssrCodegenTransform.ts
@@ -91,7 +91,7 @@ export interface SSRTransformContext {
 
 ### pushStringPart
 
-文字列パートをバッファに追加します．連続する文字列は自動的に結合されます．
+Adds a string part to the buffer. Consecutive strings are automatically concatenated.
 
 ```ts
 pushStringPart(part) {
@@ -104,7 +104,7 @@ pushStringPart(part) {
   const bufferedElements = currentString.elements;
   const lastItem = bufferedElements[bufferedElements.length - 1];
   if (isString(part) && isString(lastItem)) {
-    // 連続する文字列は結合
+    // Concatenate consecutive strings
     bufferedElements[bufferedElements.length - 1] += part;
   } else {
     bufferedElements.push(part);
@@ -114,21 +114,21 @@ pushStringPart(part) {
 
 ### pushStatement
 
-制御フロー文（if/for）をバッファに追加します．
+Adds control flow statements (if/for) to the buffer.
 
 ```ts
 pushStatement(statement) {
-  // 現在の文字列バッファを閉じる
+  // Close current string buffer
   currentString = null;
   body.push(statement);
 }
 ```
 
-## 要素の変換
+## Element Transformation
 
 ### ssrTransformElement
 
-HTML 要素を SSR 用のコードに変換します．
+Transforms HTML elements into SSR code.
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrTransformElement.ts
@@ -140,14 +140,14 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
   return function ssrPostTransformElement() {
     const openTag: TemplateLiteral["elements"] = [`<${node.tag}`];
 
-    // 属性の処理
+    // Process attributes
     for (const prop of node.props) {
       if (prop.type === NodeTypes.ATTRIBUTE) {
         openTag.push(` ${prop.name}="${escapeHtml(prop.value.content)}"`);
       } else if (prop.type === NodeTypes.DIRECTIVE) {
-        // v-bind の処理
+        // Handle v-bind
         if (prop.name === "bind" && prop.arg && prop.exp) {
-          // class, style, その他の属性を処理
+          // Process class, style, and other attributes
         }
       }
     }
@@ -157,26 +157,26 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
 };
 ```
 
-#### 属性のバインディング
+#### Attribute Binding
 
-- **静的属性**: 直接文字列として出力
-- **v-bind:class**: `ssrRenderClass` ヘルパーを使用
-- **v-bind:style**: `ssrRenderStyle` ヘルパーを使用
-- **その他の動的属性**: `ssrRenderAttr` または `ssrRenderDynamicAttr` を使用
+- **Static attributes**: Output directly as strings
+- **v-bind:class**: Use `ssrRenderClass` helper
+- **v-bind:style**: Use `ssrRenderStyle` helper
+- **Other dynamic attributes**: Use `ssrRenderAttr` or `ssrRenderDynamicAttr`
 
 ### ssrProcessElement
 
-変換後の要素を処理してコードを生成します．
+Processes transformed elements to generate code.
 
 ```ts
 export function ssrProcessElement(node: PlainElementNode, context: SSRTransformContext): void {
-  // 開始タグを出力
+  // Output opening tag
   for (const element of node.ssrCodegenNode!.elements) {
     context.pushStringPart(element);
   }
   context.pushStringPart(`>`);
 
-  // v-html の処理
+  // Handle v-html
   const vHtml = node.props.find(p => p.type === NodeTypes.DIRECTIVE && p.name === "html");
   if (vHtml && vHtml.exp) {
     context.pushStringPart(vHtml.exp);
@@ -184,16 +184,16 @@ export function ssrProcessElement(node: PlainElementNode, context: SSRTransformC
     processChildren(node, context);
   }
 
-  // 閉じタグ（void 要素以外）
+  // Closing tag (except void elements)
   if (!isVoidTag(node.tag)) {
     context.pushStringPart(`</${node.tag}>`);
   }
 }
 ```
 
-## コンポーネントの変換
+## Component Transformation
 
-コンポーネントは実行時に `ssrRenderComponent` を通じてレンダリングされます．
+Components are rendered at runtime through `ssrRenderComponent`.
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrTransformComponent.ts
@@ -207,7 +207,7 @@ export function ssrProcessComponent(
     createCallExpression(context.helper(SSR_RENDER_COMPONENT), [
       createSimpleExpression(`_component_${node.tag}`, false),
       // props
-      node.props.length ? /* props オブジェクト */ : createSimpleExpression(`null`, false),
+      node.props.length ? /* props object */ : createSimpleExpression(`null`, false),
       // slots
       createSimpleExpression(`null`, false),
       // parent component
@@ -220,9 +220,9 @@ export function ssrProcessComponent(
 }
 ```
 
-## v-if の変換
+## v-if Transformation
 
-v-if は JavaScript の if 文に変換されます．
+v-if is transformed into JavaScript if statements.
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrVIf.ts
@@ -247,20 +247,20 @@ export function ssrProcessIf(node: IfNode, context: SSRTransformContext): void {
     }
   }
 
-  // else がない場合は空コメントを出力
+  // Output empty comment if no else
   if (!currentIf.alternate) {
     currentIf.alternate = createBlockStatement([createCallExpression(`_push`, ["`<!---->`"])]);
   }
 }
 ```
 
-入力:
+Input:
 ```html
 <div v-if="show">Visible</div>
 <div v-else>Hidden</div>
 ```
 
-出力:
+Output:
 ```js
 if (show) {
   _push(`<div>Visible</div>`)
@@ -269,9 +269,9 @@ if (show) {
 }
 ```
 
-## v-for の変換
+## v-for Transformation
 
-v-for は `ssrRenderList` ヘルパーを使用して変換されます．
+v-for is transformed using the `ssrRenderList` helper.
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrVFor.ts
@@ -279,7 +279,7 @@ export function ssrProcessFor(node: ForNode, context: SSRTransformContext): void
   const renderLoop = createFunctionExpression(createForLoopParams(node.parseResult));
   renderLoop.body = processChildrenAsStatement(node, context);
 
-  // フラグメントマーカー
+  // Fragment markers
   context.pushStringPart(`<!--[-->`);
   context.pushStatement(
     createCallExpression(context.helper(SSR_RENDER_LIST), [node.source, renderLoop]),
@@ -288,12 +288,12 @@ export function ssrProcessFor(node: ForNode, context: SSRTransformContext): void
 }
 ```
 
-入力:
+Input:
 ```html
 <div v-for="item in items" :key="item.id">{{ item.name }}</div>
 ```
 
-出力:
+Output:
 ```js
 _push(`<!--[-->`)
 _ssrRenderList(items, (item) => {
@@ -302,9 +302,9 @@ _ssrRenderList(items, (item) => {
 _push(`<!--]-->`)
 ```
 
-## SSR ヘルパー
+## SSR Helpers
 
-SSR コンパイラは以下のランタイムヘルパーを使用します．これらは `@chibivue/server-renderer` から提供されます．
+The SSR compiler uses the following runtime helpers, provided by `@chibivue/server-renderer`.
 
 ```ts
 // packages/compiler-ssr/src/runtimeHelpers.ts
@@ -320,21 +320,21 @@ export const SSR_RENDER_COMPONENT: unique symbol = Symbol(`ssrRenderComponent`);
 export const SSR_RENDER_VNODE: unique symbol = Symbol(`ssrRenderVNode`);
 ```
 
-### ヘルパーの役割
+### Helper Roles
 
-| ヘルパー | 役割 |
-|---------|------|
-| `ssrInterpolate` | テキスト補間のエスケープ |
-| `ssrRenderAttrs` | オブジェクト形式の属性をレンダリング |
-| `ssrRenderClass` | class のレンダリング |
-| `ssrRenderStyle` | style のレンダリング |
-| `ssrRenderList` | v-for のイテレーション |
-| `ssrRenderComponent` | コンポーネントの VNode 作成 |
-| `ssrRenderVNode` | VNode を HTML 文字列に変換 |
+| Helper | Role |
+|--------|------|
+| `ssrInterpolate` | Escape text interpolation |
+| `ssrRenderAttrs` | Render object-format attributes |
+| `ssrRenderClass` | Render class |
+| `ssrRenderStyle` | Render style |
+| `ssrRenderList` | v-for iteration |
+| `ssrRenderComponent` | Create component VNode |
+| `ssrRenderVNode` | Convert VNode to HTML string |
 
-## SFC との統合
+## SFC Integration
 
-compiler-sfc は SSR モードでのコンパイルをサポートしています．
+compiler-sfc supports compilation in SSR mode.
 
 ```ts
 // packages/compiler-sfc/src/compileTemplate.ts
@@ -358,11 +358,11 @@ export function compileTemplate({
 }
 ```
 
-`ssr: true` を指定すると，自動的に SSR コンパイラが使用されます．
+Specifying `ssr: true` automatically uses the SSR compiler.
 
-## 生成されるコード例
+## Generated Code Example
 
-入力テンプレート:
+Input template:
 ```html
 <div class="container">
   <h1>{{ title }}</h1>
@@ -372,7 +372,7 @@ export function compileTemplate({
 </div>
 ```
 
-生成されるコード:
+Generated code:
 ```js
 import { ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from 'chibivue/server-renderer'
 
@@ -385,13 +385,13 @@ function ssrRender(_ctx, _push, _parent, _attrs) {
 }
 ```
 
-<KawaikoNote variant="surprise" title="SSR コンパイラの利点">
+<KawaikoNote variant="surprise" title="SSR Compiler Benefits">
 
-SSR コンパイラを使うと:
-- VNode のオーバーヘッドがない
-- テンプレートリテラルで効率的に文字列を生成
-- 静的な部分は直接文字列として出力される
+Using the SSR compiler provides:
+- No VNode overhead
+- Efficient string generation with template literals
+- Static parts are output directly as strings
 
-これらにより，サーバーサイドでのレンダリングパフォーマンスが向上します！
+These improve server-side rendering performance!
 
 </KawaikoNote>

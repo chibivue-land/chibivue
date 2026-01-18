@@ -93,10 +93,10 @@ nr dev
 | `test:watch` | Run tests in watch mode |
 | `check` | Run all checks (lint, fmt, typecheck, build, test) |
 | **Book** | |
-| `book:dev` | Start online book dev server |
-| `book:build` | Build online book |
-| `book:preview` | Preview built online book |
-| `book:lint` | Lint book text |
+| `dev` | Start online book dev server |
+| `build` | Build online book |
+| `preview` | Preview built online book |
+| `lint:text` | Lint book text |
 
 ### Running book chapter implementations
 
@@ -106,6 +106,19 @@ If you want to run the source code for each chapter, you can do so with the foll
 cd book/impls/${section-name}/${chapter-name}
 nr dev
 ```
+
+### Online Playground
+
+The online book includes a WebContainer-based playground that allows readers to try each chapter's implementation directly in the browser. You can access it from the "Playground" link in the navigation bar.
+
+The playground supports:
+- Selecting different chapters to explore
+- Editing code with Monaco editor
+- Running the development server in the browser
+- Persisting edits to localStorage
+- Resetting files to their original state
+
+The playground data is automatically generated from `book/impls/` at build time. If you modify chapter implementations, the playground will reflect those changes after rebuilding.
 
 #### Creating a branch (start making changes)
 

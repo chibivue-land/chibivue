@@ -26,10 +26,7 @@ import {
 import { type SSRTransformContext, processChildren } from "../ssrCodegenTransform";
 
 export const ssrTransformElement: NodeTransform = (node, context) => {
-  if (
-    node.type !== NodeTypes.ELEMENT ||
-    node.tagType !== ElementTypes.ELEMENT
-  ) {
+  if (node.type !== NodeTypes.ELEMENT || node.tagType !== ElementTypes.ELEMENT) {
     return;
   }
 
@@ -42,15 +39,14 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
         if (prop.name === "key" || prop.name === "ref") {
           continue;
         }
-        openTag.push(
-          ` ${prop.name}` + (prop.value ? `="${escapeHtml(prop.value.content)}"` : ``),
-        );
+        openTag.push(` ${prop.name}` + (prop.value ? `="${escapeHtml(prop.value.content)}"` : ``));
       } else if (prop.type === NodeTypes.DIRECTIVE) {
         // handle v-bind
         if (prop.name === "bind" && prop.arg && prop.exp) {
-          const attrName = prop.arg.type === NodeTypes.SIMPLE_EXPRESSION && prop.arg.isStatic
-            ? prop.arg.content
-            : null;
+          const attrName =
+            prop.arg.type === NodeTypes.SIMPLE_EXPRESSION && prop.arg.isStatic
+              ? prop.arg.content
+              : null;
 
           if (attrName) {
             if (attrName === "key" || attrName === "ref") {
@@ -76,20 +72,14 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
                 );
               } else if (isSSRSafeAttrName(mappedName)) {
                 openTag.push(
-                  createCallExpression(context.helper(SSR_RENDER_ATTR), [
-                    prop.arg,
-                    prop.exp,
-                  ]),
+                  createCallExpression(context.helper(SSR_RENDER_ATTR), [prop.arg, prop.exp]),
                 );
               }
             }
           } else {
             // dynamic attribute name
             openTag.push(
-              createCallExpression(context.helper(SSR_RENDER_DYNAMIC_ATTR), [
-                prop.arg!,
-                prop.exp,
-              ]),
+              createCallExpression(context.helper(SSR_RENDER_DYNAMIC_ATTR), [prop.arg!, prop.exp]),
             );
           }
         }
@@ -108,10 +98,7 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
   };
 };
 
-export function ssrProcessElement(
-  node: PlainElementNode,
-  context: SSRTransformContext,
-): void {
+export function ssrProcessElement(node: PlainElementNode, context: SSRTransformContext): void {
   const elementsToAdd = node.ssrCodegenNode!.elements;
   for (const element of elementsToAdd) {
     context.pushStringPart(element);
@@ -121,20 +108,14 @@ export function ssrProcessElement(
   context.pushStringPart(`>`);
 
   // handle v-html
-  const vHtml = node.props.find(
-    (p) => p.type === NodeTypes.DIRECTIVE && p.name === "html",
-  );
+  const vHtml = node.props.find((p) => p.type === NodeTypes.DIRECTIVE && p.name === "html");
   if (vHtml && vHtml.type === NodeTypes.DIRECTIVE && vHtml.exp) {
     context.pushStringPart(vHtml.exp);
   } else if (node.children.length) {
     // handle v-text
-    const vText = node.props.find(
-      (p) => p.type === NodeTypes.DIRECTIVE && p.name === "text",
-    );
+    const vText = node.props.find((p) => p.type === NodeTypes.DIRECTIVE && p.name === "text");
     if (vText && vText.type === NodeTypes.DIRECTIVE && vText.exp) {
-      context.pushStringPart(
-        createCallExpression(context.helper(SSR_RENDER_ATTRS), [vText.exp]),
-      );
+      context.pushStringPart(createCallExpression(context.helper(SSR_RENDER_ATTRS), [vText.exp]));
     } else {
       processChildren(node, context);
     }

@@ -16,11 +16,130 @@ Vapor 组件的工作方式：
 Vapor SSR 有两种主要方法：
 
 1. **Mock DOM**：创建一个捕获操作并将其转换为 HTML 的假 DOM 环境
-2. **单独的 SSR 编译器**：生成直接输出 HTML 字符串的不同代码
+2. **重用 VNode SSR**：在服务器端使用标准的 VNode 基础 SSR，在客户端作为 Vapor 进行水合
 
-chibivue 在 `server-renderer` 中实现了 Mock DOM 方法的简化版本．
+Vue.js 的 [PR #13226](https://github.com/vuejs/core/pull/13226) 采用了第二种方法．chibivue 也实现了类似的方法．
 
-## 实现
+<KawaikoNote variant="base" title="Vue.js 的方法">
+Vue.js 的 Vapor SSR 在服务器端使用现有的 VNode 基础 SSR（compiler-ssr），在客户端使用 `createVaporSSRApp` 进行水合。这消除了创建单独 SSR 编译器的需要。
+</KawaikoNote>
+
+## 实现方式
+
+### 服务器端：使用 VNode SSR
+
+在 Vapor SSR 中，Vapor 组件在服务器端被编译为常规的 VNode 基础组件．这允许直接使用 `@chibivue/compiler-ssr`．
+
+```ts
+// compiler-sfc/src/compileTemplate.ts
+export function compileTemplate({
+  source,
+  ssr = false,
+  vapor = false,
+}: SFCTemplateCompileOptions): SFCTemplateCompileResults {
+  // 即使在 Vapor + SSR 模式下也使用 compiler-ssr
+  const defaultCompiler = ssr
+    ? (CompilerSSR as TemplateCompiler)
+    : CompilerDOM;
+
+  let { code, ast, preamble } = defaultCompiler.compile(source, {
+    ...compilerOptions,
+    ssr,
+  });
+
+  // 在 Vapor + SSR 模式下添加 __vapor 标志
+  if (vapor && ssr) {
+    code = code.replace(
+      /export (function|const) ssrRender/,
+      "export const __vapor = true;\nexport $1 ssrRender",
+    );
+  }
+
+  return { code, ast, source, preamble };
+}
+```
+
+`__vapor` 标志表示在水合时应使用 Vapor 模式．
+
+### 客户端：createVaporSSRApp
+
+在客户端，使用 `createVaporSSRApp` 来水合 SSR 渲染的 HTML．
+
+```ts
+// runtime-vapor/src/apiCreateVaporApp.ts
+export function createVaporSSRApp(rootComponent: VaporComponent): VaporApp {
+  const context = createAppContext();
+
+  const app: VaporApp = {
+    // ... 通用应用配置 ...
+
+    mount(containerOrSelector: Element | string) {
+      const container = typeof containerOrSelector === "string"
+        ? document.querySelector(containerOrSelector)
+        : containerOrSelector;
+
+      if (container?.hasChildNodes()) {
+        // 当存在 SSR 内容时进入水合模式
+        const vnode = createVNode(rootComponent as any);
+        vnode.appContext = context;
+        const instance = hydrateVaporComponent(vnode, container, null);
+        app._instance = instance;
+      } else {
+        // 没有 SSR 内容时进行正常挂载
+        // ...
+      }
+    },
+  };
+
+  return app;
+}
+```
+
+### 水合
+
+水合过程重用现有的 DOM 元素，同时设置响应性和事件监听器．
+
+```ts
+// runtime-vapor/src/hydration.ts
+export function hydrateVaporComponent(
+  vnode: VNode,
+  container: Element,
+  parentInstance: VaporComponentInternalInstance | null = null,
+): VaporComponentInternalInstance {
+  const instance = createVaporComponentInstance(vnode, parentInstance);
+
+  // 设置水合上下文
+  const ctx: VaporHydrationContext = {
+    node: container.firstChild,
+    parent: container,
+  };
+
+  setCurrentInstance(instance as any);
+  (instance as any).__hydrationCtx = ctx;
+
+  try {
+    const comp = instance.type as VaporComponent;
+    // 执行组件 - template() 找到现有的 DOM
+    const el = comp(instance);
+
+    // 标记为已挂载
+    instance.isMounted = true;
+
+    // 调用 mounted 钩子
+    const { m } = instance as any;
+    if (m) invokeArrayFns(m);
+
+    return instance;
+  } finally {
+    unsetCurrentInstance();
+    delete (instance as any).__hydrationCtx;
+  }
+}
+```
+
+## Mock DOM 方法
+
+chibivue 也在 `server-renderer` 中实现了 Mock DOM 方法．当不使用 VNode SSR 时，这可以作为后备方案．
 
 ### SSR 元素
 
@@ -37,10 +156,6 @@ class SSRElement {
     this.tagName = tagName.toLowerCase();
   }
 
-  get firstChild(): SSRElement | SSRText | null {
-    return this.children[0] || null;
-  }
-
   setAttribute(name: string, value: string): void {
     this.attributes.set(name, value);
   }
@@ -55,11 +170,9 @@ class SSRElement {
 
   toHTML(): string {
     let html = `<${this.tagName}`;
-
     for (const [name, value] of this.attributes) {
       html += ` ${name}="${escapeHtml(value)}"`;
     }
-
     html += ">";
 
     if (this.textContent) {
@@ -76,164 +189,85 @@ class SSRElement {
 }
 ```
 
-关键点是 `toHTML()` 将内存中的表示转换回 HTML 字符串．
-
-### SSR Document
-
-我们还创建一个模拟的 `document` 对象：
-
-```ts
-class SSRDocument {
-  createElement(tagName: string): SSRElement {
-    return new SSRElement(tagName);
-  }
-
-  createTextNode(text: string): SSRText {
-    return new SSRText(text);
-  }
-
-  createComment(text: string): SSRText {
-    return new SSRText(`<!--${text}-->`);
-  }
-}
-```
-
-### 渲染 Vapor 组件
-
-`renderVaporComponentToString` 函数设置 SSR 环境并执行组件：
-
-```ts
-export function renderVaporComponentToString(
-  vnode: VNode,
-  parentInstance: VaporComponentInternalInstance | null = null
-): SSRBuffer | Promise<SSRBuffer> {
-  const instance = createVaporComponentInstance(vnode, parentInstance);
-  return renderVaporComponentSubTree(instance);
-}
-
-function renderVaporComponentSubTree(
-  instance: VaporComponentInternalInstance
-): SSRBuffer {
-  const { getBuffer, push } = createBuffer();
-  const comp = instance.type as VaporComponent;
-
-  if (isFunction(comp)) {
-    try {
-      // 设置 SSR 环境
-      setupSSRVaporGlobals();
-
-      // 执行 vapor 组件
-      comp(instance);
-
-      // 获取渲染的 HTML
-      push(ssrContext.getHTML());
-
-      // 恢复全局变量
-      restoreVaporGlobals();
-    } catch (e) {
-      console.warn(`Vapor SSR render failed:`, e);
-      push(`<!---->`);
-    }
-  }
-
-  return getBuffer();
-}
-```
-
-## SSR 中的事件处理
-
-注意 `addEventListener` 在 SSR 中是空操作：
-
-```ts
-addEventListener(): void {
-  // SSR 中不做任何操作 - 事件仅在客户端
-}
-```
-
-事件处理器仅在客户端工作．当页面在浏览器中加载时，水合（hydration）将附加实际的事件监听器．
-
-<KawaikoNote type="warning" title="需要水合">
-服务器渲染的 HTML 是静态的．为了获得交互性，你需要在客户端水合 Vapor 组件，这将设置响应式 effect 和事件监听器．
-</KawaikoNote>
-
-## SSR 辅助函数
-
-我们还提供用于生成 SSR 输出的辅助函数：
-
-```ts
-// 使用占位符支持渲染文本
-export function ssrVaporSetText(format: string, ...values: any[]): string {
-  let text = format;
-  for (let i = 0; i < values.length; i++) {
-    text = text.replace("{}", String(values[i]));
-  }
-  return escapeHtml(text);
-}
-
-// 直接传递模板 HTML
-export function ssrVaporTemplate(html: string): string {
-  return html;
-}
-```
-
 ## 使用示例
 
-以下是如何在服务器上渲染 Vapor 组件：
+### 服务器端
 
 ```ts
 import { createVNode } from "chibivue";
-import { renderVaporComponentToString } from "@chibivue/server-renderer";
+import { renderToString } from "@chibivue/server-renderer";
+import App from "./App.vue";
 
-// 一个简单的 vapor 组件
-const Counter = (self) => {
-  const el = template("<button>Count: 0</button>");
-  return el;
-};
+// 将组件渲染为 HTML 字符串
+const html = await renderToString(createVNode(App));
 
-// 渲染为字符串
-const vnode = createVNode(Counter);
-const buffer = await renderVaporComponentToString(vnode);
-const html = unrollBuffer(buffer);
+// 发送 HTML 响应
+res.send(`
+<!DOCTYPE html>
+<html>
+  <head><title>My App</title></head>
+  <body>
+    <div id="app">${html}</div>
+    <script type="module" src="/src/entry-client.ts"></script>
+  </body>
+</html>
+`);
+```
 
-console.log(html);
-// 输出: <button>Count: 0</button>
+### 客户端
+
+```ts
+// entry-client.ts
+import { createVaporSSRApp } from "@chibivue/runtime-vapor";
+import App from "./App.vue";
+
+// 水合 SSR 渲染的 HTML
+createVaporSSRApp(App).mount("#app");
 ```
 
 ## 与虚拟 DOM SSR 的比较
 
 | 方面 | 虚拟 DOM SSR | Vapor SSR |
 |--------|-----------------|-----------|
-| 渲染 | 遍历 VNode 树，生成 HTML | 模拟 DOM，捕获操作 |
-| 复杂性 | 简单的递归渲染 | 需要 DOM 模拟层 |
-| 输出 | 相同的 HTML 结构 | 相同的 HTML 结构 |
-| 水合 | 标准水合 | 需要 Vapor 特定的水合 |
+| 服务器渲染 | 遍历 VNode 树，生成 HTML | 相同（使用 VNode SSR） |
+| 客户端水合 | 使用 VNode diff | 直接引用/操作 DOM |
+| 包大小 | 需要虚拟 DOM 运行时 | 轻量级 Vapor 运行时 |
+| 更新性能 | 经过 diff 算法 | 直接 DOM 操作 |
 
-两种方法产生相同的 HTML 输出，但实现不同．虚拟 DOM 方法在概念上更简单，因为它已经使用数据结构（VNodes）而不是实际的 DOM 元素．
+## 架构优势
+
+Vue.js 风格的 Vapor SSR 方法具有以下优势：
+
+1. **代码重用**：可以直接使用现有的 `compiler-ssr`
+2. **一致的输出**：服务器生成的 HTML 与常规 VNode SSR 相同
+3. **渐进式迁移**：可以与非 Vapor 组件共存
+4. **可维护性**：无需维护单独的 SSR 编译器
+
+<KawaikoNote variant="warning" title="需要水合">
+服务器渲染的 HTML 是静态的。为了获得交互性，你需要在客户端水合 Vapor 组件，这将设置响应式 effect 和事件监听器。
+</KawaikoNote>
 
 ## 限制
 
 当前实现是最小的，有一些限制：
 
 1. **不支持流式传输**：整个组件在返回之前被渲染
-2. **有限的 DOM API 覆盖**：只模拟了基本的 DOM 操作
-3. **不支持异步组件**：异步 vapor 组件可能无法正常工作
+2. **不支持 Suspense**：异步组件的 SSR 支持有限
+3. **水合不匹配**：客户端和服务器输出不同时的警告功能未实现
 
-<KawaikoNote type="info" title="未来改进">
+<KawaikoNote variant="base" title="未来改进">
 更完整的实现将包括：
-- 完整的 DOM API 模拟
-- 对大型页面的流式传输支持
-- 与 Vapor 编译器更好地集成以获得优化的 SSR 输出
+- 流式 SSR 支持
+- 水合不匹配检测
+- Suspense 集成
 </KawaikoNote>
 
 ## 总结
 
-Vapor SSR 的工作方式：
+Vapor SSR 的工作方式如下：
 
-1. 创建将元素数据存储在内存中的模拟 DOM 类
-2. 在渲染期间用我们的模拟替换全局 `document`
-3. 执行 Vapor 组件，构建模拟 DOM 树
-4. 将模拟 DOM 树转换回 HTML 字符串
+1. **服务器端**：使用 `compiler-ssr` 生成 HTML 字符串（与 VNode SSR 相同）
+2. **客户端**：使用 `createVaporSSRApp` 进行水合
+3. **水合**：重用现有的 DOM 元素，同时设置响应性
 
-这种方法允许 Vapor 组件无需修改即可在服务器上工作，但需要在客户端进行水合步骤以恢复交互性．
-
-Vapor 编译器和 Vapor SSR 的组合让你获得直接 DOM 操作的性能优势，同时保持服务器渲染 Vue 应用程序的能力．
+这种方法允许 Vapor 组件享受 SSR 的好处，同时在客户端获得直接 DOM 操作的性能优势．

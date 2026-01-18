@@ -165,7 +165,9 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   } else {
     push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
     if (ssr && ast.ssrHelpers?.length) {
-      push(`import { ${ast.ssrHelpers.map(aliasHelper).join(", ")} } from '${runtimeModuleName}/server-renderer'\n`);
+      push(
+        `import { ${ast.ssrHelpers.map(aliasHelper).join(", ")} } from '${runtimeModuleName}/server-renderer'\n`,
+      );
     }
   }
 

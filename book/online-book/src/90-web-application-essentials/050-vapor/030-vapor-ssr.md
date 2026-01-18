@@ -16,11 +16,130 @@ On the server, there's no `document` object. We need a different approach to gen
 There are two main approaches to Vapor SSR:
 
 1. **Mock DOM**: Create a fake DOM environment that captures operations and converts them to HTML
-2. **Separate SSR Compiler**: Generate different code for SSR that outputs HTML strings directly
+2. **Reuse VNode SSR**: Use standard VNode-based SSR on the server, hydrate as Vapor on the client
 
-chibivue implements a simplified version of the mock DOM approach in `server-renderer`.
+Vue.js [PR #13226](https://github.com/vuejs/core/pull/13226) adopts the second approach. chibivue implements a similar approach.
+
+<KawaikoNote variant="base" title="Vue.js Approach">
+Vue.js Vapor SSR uses the existing VNode-based SSR (compiler-ssr) on the server side, and uses `createVaporSSRApp` for hydration on the client side. This eliminates the need to create a separate SSR compiler.
+</KawaikoNote>
 
 ## Implementation
+
+### Server-Side: Using VNode SSR
+
+In Vapor SSR, Vapor components are compiled as regular VNode-based components on the server side. This allows `@chibivue/compiler-ssr` to be used directly.
+
+```ts
+// compiler-sfc/src/compileTemplate.ts
+export function compileTemplate({
+  source,
+  ssr = false,
+  vapor = false,
+}: SFCTemplateCompileOptions): SFCTemplateCompileResults {
+  // Use compiler-ssr even in Vapor + SSR mode
+  const defaultCompiler = ssr
+    ? (CompilerSSR as TemplateCompiler)
+    : CompilerDOM;
+
+  let { code, ast, preamble } = defaultCompiler.compile(source, {
+    ...compilerOptions,
+    ssr,
+  });
+
+  // Add __vapor flag in Vapor + SSR mode
+  if (vapor && ssr) {
+    code = code.replace(
+      /export (function|const) ssrRender/,
+      "export const __vapor = true;\nexport $1 ssrRender",
+    );
+  }
+
+  return { code, ast, source, preamble };
+}
+```
+
+The `__vapor` flag indicates that Vapor mode should be used during hydration.
+
+### Client-Side: createVaporSSRApp
+
+On the client side, `createVaporSSRApp` is used to hydrate SSR-rendered HTML.
+
+```ts
+// runtime-vapor/src/apiCreateVaporApp.ts
+export function createVaporSSRApp(rootComponent: VaporComponent): VaporApp {
+  const context = createAppContext();
+
+  const app: VaporApp = {
+    // ... common app configuration ...
+
+    mount(containerOrSelector: Element | string) {
+      const container = typeof containerOrSelector === "string"
+        ? document.querySelector(containerOrSelector)
+        : containerOrSelector;
+
+      if (container?.hasChildNodes()) {
+        // Hydration mode when SSR content exists
+        const vnode = createVNode(rootComponent as any);
+        vnode.appContext = context;
+        const instance = hydrateVaporComponent(vnode, container, null);
+        app._instance = instance;
+      } else {
+        // Normal mount when no SSR content
+        // ...
+      }
+    },
+  };
+
+  return app;
+}
+```
+
+### Hydration
+
+The hydration process reuses existing DOM elements while setting up reactivity and event listeners.
+
+```ts
+// runtime-vapor/src/hydration.ts
+export function hydrateVaporComponent(
+  vnode: VNode,
+  container: Element,
+  parentInstance: VaporComponentInternalInstance | null = null,
+): VaporComponentInternalInstance {
+  const instance = createVaporComponentInstance(vnode, parentInstance);
+
+  // Set up hydration context
+  const ctx: VaporHydrationContext = {
+    node: container.firstChild,
+    parent: container,
+  };
+
+  setCurrentInstance(instance as any);
+  (instance as any).__hydrationCtx = ctx;
+
+  try {
+    const comp = instance.type as VaporComponent;
+    // Execute component - template() finds existing DOM
+    const el = comp(instance);
+
+    // Mark as mounted
+    instance.isMounted = true;
+
+    // Invoke mounted hooks
+    const { m } = instance as any;
+    if (m) invokeArrayFns(m);
+
+    return instance;
+  } finally {
+    unsetCurrentInstance();
+    delete (instance as any).__hydrationCtx;
+  }
+}
+```
+
+## Mock DOM Approach
+
+chibivue also implements the Mock DOM approach in `server-renderer`. This serves as a fallback when VNode SSR is not used.
 
 ### SSR Elements
 
@@ -37,10 +156,6 @@ class SSRElement {
     this.tagName = tagName.toLowerCase();
   }
 
-  get firstChild(): SSRElement | SSRText | null {
-    return this.children[0] || null;
-  }
-
   setAttribute(name: string, value: string): void {
     this.attributes.set(name, value);
   }
@@ -55,11 +170,9 @@ class SSRElement {
 
   toHTML(): string {
     let html = `<${this.tagName}`;
-
     for (const [name, value] of this.attributes) {
       html += ` ${name}="${escapeHtml(value)}"`;
     }
-
     html += ">";
 
     if (this.textContent) {
@@ -76,164 +189,85 @@ class SSRElement {
 }
 ```
 
-The key insight is that `toHTML()` converts the in-memory representation back to an HTML string.
-
-### SSR Document
-
-We also create a mock `document` object:
-
-```ts
-class SSRDocument {
-  createElement(tagName: string): SSRElement {
-    return new SSRElement(tagName);
-  }
-
-  createTextNode(text: string): SSRText {
-    return new SSRText(text);
-  }
-
-  createComment(text: string): SSRText {
-    return new SSRText(`<!--${text}-->`);
-  }
-}
-```
-
-### Rendering Vapor Components
-
-The `renderVaporComponentToString` function sets up the SSR environment and executes the component:
-
-```ts
-export function renderVaporComponentToString(
-  vnode: VNode,
-  parentInstance: VaporComponentInternalInstance | null = null
-): SSRBuffer | Promise<SSRBuffer> {
-  const instance = createVaporComponentInstance(vnode, parentInstance);
-  return renderVaporComponentSubTree(instance);
-}
-
-function renderVaporComponentSubTree(
-  instance: VaporComponentInternalInstance
-): SSRBuffer {
-  const { getBuffer, push } = createBuffer();
-  const comp = instance.type as VaporComponent;
-
-  if (isFunction(comp)) {
-    try {
-      // Set up SSR environment
-      setupSSRVaporGlobals();
-
-      // Execute the vapor component
-      comp(instance);
-
-      // Get the rendered HTML
-      push(ssrContext.getHTML());
-
-      // Restore globals
-      restoreVaporGlobals();
-    } catch (e) {
-      console.warn(`Vapor SSR render failed:`, e);
-      push(`<!---->`);
-    }
-  }
-
-  return getBuffer();
-}
-```
-
-## Event Handling in SSR
-
-Notice that `addEventListener` is a no-op in SSR:
-
-```ts
-addEventListener(): void {
-  // No-op in SSR - events are client-side only
-}
-```
-
-Event handlers only work on the client side. When the page loads in the browser, hydration will attach the actual event listeners.
-
-<KawaikoNote type="warning" title="Hydration Required">
-The server-rendered HTML is static. For interactivity, you need to hydrate the Vapor components on the client side, which will set up the reactive effects and event listeners.
-</KawaikoNote>
-
-## SSR Helper Functions
-
-We also provide helper functions for generating SSR output:
-
-```ts
-// Render text with placeholder support
-export function ssrVaporSetText(format: string, ...values: any[]): string {
-  let text = format;
-  for (let i = 0; i < values.length; i++) {
-    text = text.replace("{}", String(values[i]));
-  }
-  return escapeHtml(text);
-}
-
-// Pass through template HTML
-export function ssrVaporTemplate(html: string): string {
-  return html;
-}
-```
-
 ## Usage Example
 
-Here's how you might render a Vapor component on the server:
+### Server-Side
 
 ```ts
 import { createVNode } from "chibivue";
-import { renderVaporComponentToString } from "@chibivue/server-renderer";
+import { renderToString } from "@chibivue/server-renderer";
+import App from "./App.vue";
 
-// A simple vapor component
-const Counter = (self) => {
-  const el = template("<button>Count: 0</button>");
-  return el;
-};
+// Render component to HTML string
+const html = await renderToString(createVNode(App));
 
-// Render to string
-const vnode = createVNode(Counter);
-const buffer = await renderVaporComponentToString(vnode);
-const html = unrollBuffer(buffer);
+// Send HTML response
+res.send(`
+<!DOCTYPE html>
+<html>
+  <head><title>My App</title></head>
+  <body>
+    <div id="app">${html}</div>
+    <script type="module" src="/src/entry-client.ts"></script>
+  </body>
+</html>
+`);
+```
 
-console.log(html);
-// Output: <button>Count: 0</button>
+### Client-Side
+
+```ts
+// entry-client.ts
+import { createVaporSSRApp } from "@chibivue/runtime-vapor";
+import App from "./App.vue";
+
+// Hydrate SSR-rendered HTML
+createVaporSSRApp(App).mount("#app");
 ```
 
 ## Comparison with Virtual DOM SSR
 
 | Aspect | Virtual DOM SSR | Vapor SSR |
 |--------|-----------------|-----------|
-| Rendering | Traverses VNode tree, generates HTML | Mocks DOM, captures operations |
-| Complexity | Straightforward recursive rendering | Requires DOM mocking layer |
-| Output | Same HTML structure | Same HTML structure |
-| Hydration | Standard hydration | Vapor-specific hydration needed |
+| Server Rendering | Traverses VNode tree, generates HTML | Same (uses VNode SSR) |
+| Client Hydration | Uses VNode diff | Directly references/manipulates DOM |
+| Bundle Size | Requires Virtual DOM runtime | Lightweight Vapor runtime |
+| Update Performance | Goes through diff algorithm | Direct DOM manipulation |
 
-Both approaches produce the same HTML output, but the implementation differs. The virtual DOM approach is conceptually simpler since it already works with data structures (VNodes) rather than actual DOM elements.
+## Architecture Benefits
+
+The Vue.js-style Vapor SSR approach has the following benefits:
+
+1. **Code Reuse**: Existing `compiler-ssr` can be used directly
+2. **Consistent Output**: Server-generated HTML is identical to regular VNode SSR
+3. **Gradual Migration**: Can coexist with non-Vapor components
+4. **Maintainability**: No need to maintain a separate SSR compiler
+
+<KawaikoNote variant="warning" title="Hydration Required">
+The server-rendered HTML is static. For interactivity, you need to hydrate the Vapor components on the client side, which will set up the reactive effects and event listeners.
+</KawaikoNote>
 
 ## Limitations
 
 The current implementation is minimal and has some limitations:
 
 1. **No streaming support**: The entire component is rendered before returning
-2. **Limited DOM API coverage**: Only basic DOM operations are mocked
-3. **No async component support**: Async vapor components may not work correctly
+2. **No Suspense support**: Async component SSR support is limited
+3. **Hydration mismatch**: Warning functionality for client/server output differences is not implemented
 
-<KawaikoNote type="info" title="Future Improvements">
+<KawaikoNote variant="base" title="Future Improvements">
 A more complete implementation would include:
-- Full DOM API mocking
-- Streaming support for large pages
-- Better integration with the Vapor compiler for optimized SSR output
+- Streaming SSR support
+- Hydration mismatch detection
+- Suspense integration
 </KawaikoNote>
 
 ## Summary
 
-Vapor SSR works by:
+Vapor SSR works as follows:
 
-1. Creating mock DOM classes that store element data in memory
-2. Swapping the global `document` with our mock during rendering
-3. Executing the Vapor component, which builds up the mock DOM tree
-4. Converting the mock DOM tree back to an HTML string
+1. **Server-Side**: Use `compiler-ssr` to generate HTML strings (same as VNode SSR)
+2. **Client-Side**: Use `createVaporSSRApp` for hydration
+3. **Hydration**: Reuse existing DOM elements while setting up reactivity
 
-This approach allows Vapor components to work on the server without modification, though it requires a hydration step on the client to restore interactivity.
-
-The combination of Vapor Compiler and Vapor SSR gives you the performance benefits of direct DOM manipulation while maintaining the ability to server-render your Vue applications.
+This approach allows Vapor components to benefit from SSR while gaining the performance benefits of direct DOM manipulation on the client side.

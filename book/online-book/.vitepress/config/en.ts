@@ -320,6 +320,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "Hydration",
                 link: "/90-web-application-essentials/020-ssr/020-hydration",
               },
+              {
+                text: "Compiler SSR",
+                link: "/90-web-application-essentials/020-ssr/030-compiler-ssr",
+              },
             ],
           },
           {

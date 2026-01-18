@@ -320,6 +320,10 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "Hydration（水合）",
                 link: "/zh-tw/90-web-application-essentials/020-ssr/020-hydration",
               },
+              {
+                text: "Compiler SSR",
+                link: "/zh-tw/90-web-application-essentials/020-ssr/030-compiler-ssr",
+              },
             ],
           },
           {

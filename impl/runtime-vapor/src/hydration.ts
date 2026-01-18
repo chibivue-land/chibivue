@@ -69,10 +69,7 @@ export function hydrateVaporComponent(
  * Hydrate template - find existing DOM element instead of creating new one.
  * This is used during client-side hydration of SSR-rendered Vapor components.
  */
-export function hydrateTemplate(
-  ctx: VaporHydrationContext,
-  _html: string,
-): Element {
+export function hydrateTemplate(ctx: VaporHydrationContext, _html: string): Element {
   // In hydration mode, we don't create new elements
   // Instead, we return the existing SSR-rendered element
   const el = ctx.node as Element;

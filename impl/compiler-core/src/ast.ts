@@ -488,9 +488,7 @@ export function createConditionalExpression(
 }
 
 // SSR factories
-export function createTemplateLiteral(
-  elements: TemplateLiteral["elements"],
-): TemplateLiteral {
+export function createTemplateLiteral(elements: TemplateLiteral["elements"]): TemplateLiteral {
   return {
     type: NodeTypes.JS_TEMPLATE_LITERAL,
     elements,
@@ -498,9 +496,7 @@ export function createTemplateLiteral(
   };
 }
 
-export function createBlockStatement(
-  body: BlockStatement["body"],
-): BlockStatement {
+export function createBlockStatement(body: BlockStatement["body"]): BlockStatement {
   return {
     type: NodeTypes.JS_BLOCK_STATEMENT,
     body,

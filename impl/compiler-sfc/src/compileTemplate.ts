@@ -50,9 +50,7 @@ export function compileTemplate({
   //
   // Note: In Vapor SSR mode, the server-side rendering uses standard VNode SSR.
   // The __vapor flag is used to indicate that hydration should use Vapor mode.
-  const defaultCompiler = ssr
-    ? (CompilerSSR as TemplateCompiler)
-    : CompilerDOM;
+  const defaultCompiler = ssr ? (CompilerSSR as TemplateCompiler) : CompilerDOM;
 
   let { code, ast, preamble } = (compiler || defaultCompiler).compile(source, {
     ...compilerOptions,

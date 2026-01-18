@@ -74,35 +74,23 @@ function createSSRTransformContext(
   };
 }
 
-export function createChildContext(
-  parent: SSRTransformContext,
-): SSRTransformContext {
+export function createChildContext(parent: SSRTransformContext): SSRTransformContext {
   return createSSRTransformContext(parent.root, parent.options, parent.helpers);
 }
 
-export function ssrCodegenTransform(
-  ast: RootNode,
-  options: CompilerOptions,
-): void {
+export function ssrCodegenTransform(ast: RootNode, options: CompilerOptions): void {
   const context = createSSRTransformContext(ast, options);
 
-  const isFragment =
-    ast.children.length > 1 &&
-    ast.children.some((c) => c.type !== NodeTypes.TEXT);
+  const isFragment = ast.children.length > 1 && ast.children.some((c) => c.type !== NodeTypes.TEXT);
   processChildren(ast, context, isFragment);
   ast.codegenNode = createBlockStatement(context.body);
 
   // Finalize helpers
   ast.ssrHelpers = Array.from(
-    new Set([
-      ...Array.from(ast.helpers).filter((h) => h in ssrHelpers),
-      ...context.helpers,
-    ]),
+    new Set([...Array.from(ast.helpers).filter((h) => h in ssrHelpers), ...context.helpers]),
   );
 
-  ast.helpers = new Set(
-    Array.from(ast.helpers).filter((h) => !(h in ssrHelpers)),
-  );
+  ast.helpers = new Set(Array.from(ast.helpers).filter((h) => !(h in ssrHelpers)));
 }
 
 interface Container {

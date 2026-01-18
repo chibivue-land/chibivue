@@ -299,7 +299,14 @@ function genVaporPreambleLegacy(context: VaporCodegenContext, isBrowser?: boolea
   }
 }
 
-import { NodeTypes, type TextNode, type ElementNode, type InterpolationNode, type DirectiveNode, type TemplateChildNode } from "@chibivue/compiler-core";
+import {
+  NodeTypes,
+  type TextNode,
+  type ElementNode,
+  type InterpolationNode,
+  type DirectiveNode,
+  type TemplateChildNode,
+} from "@chibivue/compiler-core";
 
 interface TemplateRef {
   varName: string;

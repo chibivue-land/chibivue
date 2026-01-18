@@ -59,7 +59,7 @@ export type { DirectiveBinding, DirectiveHook, ObjectDirective } from "./directi
 
 export { withDirectives } from "./directives";
 
-export type { CreateAppFunction, App, AppContext } from "./apiCreateApp";
+export type { CreateAppFunction, App, AppContext, Plugin } from "./apiCreateApp";
 export { createAppContext } from "./apiCreateApp";
 export { defineComponent } from "./apiDefineComponent";
 export {

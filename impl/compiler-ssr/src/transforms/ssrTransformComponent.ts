@@ -10,10 +10,7 @@ import { SSR_RENDER_COMPONENT, SSR_RENDER_VNODE } from "../runtimeHelpers";
 import type { SSRTransformContext } from "../ssrCodegenTransform";
 
 export const ssrTransformComponent: NodeTransform = (node, context) => {
-  if (
-    node.type !== NodeTypes.ELEMENT ||
-    node.tagType !== ElementTypes.COMPONENT
-  ) {
+  if (node.type !== NodeTypes.ELEMENT || node.tagType !== ElementTypes.COMPONENT) {
     return;
   }
 
