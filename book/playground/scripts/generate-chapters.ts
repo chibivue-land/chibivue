@@ -33,7 +33,14 @@ const SECTION_NAMES: Record<string, string> = {
 };
 
 // Files to exclude from reading
-const EXCLUDE_FILES = [".gitignore", "node_modules", "dist", ".DS_Store", "pnpm-lock.yaml", "package-lock.json"];
+const EXCLUDE_FILES = [
+  ".gitignore",
+  "node_modules",
+  "dist",
+  ".DS_Store",
+  "pnpm-lock.yaml",
+  "package-lock.json",
+];
 
 // File extensions to include
 const INCLUDE_EXTENSIONS = [".ts", ".js", ".vue", ".html", ".css", ".json"];
