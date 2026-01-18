@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "paths": {
+      "chibivue": ["./packages"]
+    },
+    "moduleResolution": "Bundler",
+    "allowJs": true,
+    "esModuleInterop": true
+  },
+  "include": ["packages/**/*.ts", "examples/**/**.ts"],
+  "exclude": ["node_modules", "dist"]
+}

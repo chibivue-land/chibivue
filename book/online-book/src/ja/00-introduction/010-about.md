@@ -191,14 +191,18 @@ Twitter(X): https://twitter.com/ubugeeei
 
 ## 著者について
 
-**ubugeeei (うぶげ)** 
+**ubugeeei (もののけ王)**
 
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
 [Vue.js](https://github.com/vuejs) メンバー, [Vue.js Japan User Group](https://github.com/vuejs-jp) コアスタッフ．\
-[chibivue land](https://github.com/chibivue-land) オーナー.
+[chibivue land](https://github.com/chibivue-land) King. 👉 https://chibivue.land
+
+その他にも [vize](https://github.com/ubugeeei/vize) (Rust 製の Vue.js ツールチェイン) や [ox-content](https://github.com/ubugeeei/ox-content) (Rust 製のドキュメンテーションツールチェイン) の開発も行っています．
 
 https://wtrclred.io/
+
+もしよろしければ，スポンサーとして応援していただけると嬉しいです！ 👉 https://github.com/sponsors/ubugeeei
 
 <div align="center">
 

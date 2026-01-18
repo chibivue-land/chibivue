@@ -280,14 +280,133 @@ Vue.js also uses PostCSS internally!
 
 Both components use the same class name `.text`, but they display in different colors.
 
+## Special Selectors
+
+Scoped CSS supports several special selectors.
+
+### :deep() Selector
+
+Used when you want to style child components.
+
+```vue
+<style scoped>
+:deep(.child-class) {
+  color: blue;
+}
+</style>
+```
+
+Transformed output:
+
+```css
+[data-v-xxx] .child-class {
+  color: blue;
+}
+```
+
+### ::v-slotted() Selector
+
+Applies styles to slotted content.
+
+```vue
+<style scoped>
+::v-slotted(.slot-content) {
+  font-weight: bold;
+}
+</style>
+```
+
+Transformed output:
+
+```css
+.slot-content[data-v-xxx-s] {
+  font-weight: bold;
+}
+```
+
+The `-s` suffix stands for "slotted".
+Since slotted content comes from the parent component,
+a special slotted scope ID is used instead of the regular scope ID.
+
+### :global() Selector
+
+Defines global styles within a scoped style block.
+
+```vue
+<style scoped>
+:global(.global-class) {
+  margin: 0;
+}
+</style>
+```
+
+Transformed output:
+
+```css
+.global-class {
+  margin: 0;
+}
+```
+
+## Dynamic Styles with v-bind()
+
+You can use component state in CSS.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const color = ref('red')
+</script>
+
+<style scoped>
+.text {
+  color: v-bind(color);
+}
+</style>
+```
+
+Transformed output:
+
+```css
+.text[data-v-xxx] {
+  color: var(--xxx-color);
+}
+```
+
+`v-bind()` is converted to a CSS custom property (CSS variable).
+At runtime, the CSS variable value is set as an inline style on the component.
+
+### Using Complex Expressions
+
+You can use complex expressions by wrapping them in quotes.
+
+```vue
+<style scoped>
+.box {
+  width: v-bind('size + "px"');
+  background: v-bind('theme.colors.primary');
+}
+</style>
+```
+
+<KawaikoNote variant="warning" title="Performance Considerations for v-bind()">
+
+`v-bind()` is a convenient feature, but it has performance implications:
+
+- Each `v-bind()` is set as a CSS custom property in inline styles
+- Style recalculation is triggered every time the value changes
+- For frequently changing values, using inline styles directly may be more efficient
+
+For animations or frequent updates, consider using inline styles or CSS animations instead of `v-bind()`.
+
+</KawaikoNote>
+
 ## Future Enhancements
 
-Scoped CSS is not yet implemented in chibivue, but these features could be considered:
+These features could also be considered:
 
-- **:deep() selector**: Style child components
-- **:slotted() selector**: Style slotted content
-- **:global() selector**: Define global styles
 - **CSS Modules**: Automatic class name generation
+- **CSS-in-JS Integration**: Enhanced dynamic styling
 
 <KawaikoNote variant="base" title="Try Implementing It!">
 
@@ -295,6 +414,9 @@ Use the concepts explained in this chapter to implement Scoped CSS yourself!\
 It's also a great opportunity to learn how to use PostCSS.
 
 </KawaikoNote>
+
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/040_scoped_css)
 
 ## Summary
 

@@ -238,6 +238,9 @@ In the next chapter, we'll learn how to implement scoped CSS.
 
 </KawaikoNote>
 
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/030_define_emits)
+
 ## Summary
 
 - `defineEmits` is a macro for declaring events from child to parent

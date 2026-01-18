@@ -238,6 +238,9 @@ defineEmits 的实现完成了！\
 
 </KawaikoNote>
 
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/030_define_emits)
+
 ## 总结
 
 - `defineEmits` 是声明子到父事件发送的宏

@@ -280,14 +280,133 @@ Vue.js 内部也使用 PostCSS！
 
 两个组件使用相同的类名 `.text`，但显示不同的颜色。
 
+## 特殊选择器
+
+Scoped CSS 支持几个特殊的选择器。
+
+### :deep() 选择器
+
+用于修改子组件的样式。
+
+```vue
+<style scoped>
+:deep(.child-class) {
+  color: blue;
+}
+</style>
+```
+
+转换后：
+
+```css
+[data-v-xxx] .child-class {
+  color: blue;
+}
+```
+
+### ::v-slotted() 选择器
+
+为插槽内容应用样式。
+
+```vue
+<style scoped>
+::v-slotted(.slot-content) {
+  font-weight: bold;
+}
+</style>
+```
+
+转换后：
+
+```css
+.slot-content[data-v-xxx-s] {
+  font-weight: bold;
+}
+```
+
+`-s` 后缀表示"slotted（插槽）"。
+由于插槽内容来自父组件，
+使用特殊的插槽作用域 ID 而不是常规的作用域 ID。
+
+### :global() 选择器
+
+在 scoped 样式块中定义全局样式。
+
+```vue
+<style scoped>
+:global(.global-class) {
+  margin: 0;
+}
+</style>
+```
+
+转换后：
+
+```css
+.global-class {
+  margin: 0;
+}
+```
+
+## 使用 v-bind() 的动态样式
+
+可以在 CSS 中使用组件状态。
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const color = ref('red')
+</script>
+
+<style scoped>
+.text {
+  color: v-bind(color);
+}
+</style>
+```
+
+转换后：
+
+```css
+.text[data-v-xxx] {
+  color: var(--xxx-color);
+}
+```
+
+`v-bind()` 被转换为 CSS 自定义属性（CSS 变量）。
+在运行时，CSS 变量的值作为组件的内联样式设置。
+
+### 使用复杂表达式
+
+通过引号包裹可以使用复杂的表达式。
+
+```vue
+<style scoped>
+.box {
+  width: v-bind('size + "px"');
+  background: v-bind('theme.colors.primary');
+}
+</style>
+```
+
+<KawaikoNote variant="warning" title="v-bind() 的性能考虑">
+
+`v-bind()` 是一个方便的功能，但有性能影响：
+
+- 每个 `v-bind()` 作为 CSS 自定义属性设置在内联样式中
+- 每次值更改时都会触发样式重新计算
+- 对于频繁更改的值，直接使用内联样式可能更高效
+
+对于动画或频繁更新，请考虑使用内联样式或 CSS 动画代替 `v-bind()`。
+
+</KawaikoNote>
+
 ## 未来扩展
 
-当前 chibivue 未实现 Scoped CSS，但可以考虑以下功能：
+还可以考虑以下功能：
 
-- **:deep() 选择器**：修改子组件的样式
-- **:slotted() 选择器**：插槽内容的样式
-- **:global() 选择器**：定义全局样式
 - **CSS Modules**：自动类名生成
+- **CSS-in-JS 集成**：增强动态样式
 
 <KawaikoNote variant="base" title="尝试实现！">
 
@@ -295,6 +414,9 @@ Vue.js 内部也使用 PostCSS！
 这也是学习如何使用 PostCSS 的好机会。
 
 </KawaikoNote>
+
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/040_scoped_css)
 
 ## 总结
 

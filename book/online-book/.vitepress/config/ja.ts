@@ -259,7 +259,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Basic SFC Compiler",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "script setup に対応する",
@@ -288,8 +288,8 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Web Application Essentials",
-        collapsed: true,
+        text: "Web Application Essentials",
+        collapsed: false,
         items: [
           {
             text: "🚧 Plugin",
@@ -306,11 +306,11 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             ],
           },
           {
-            text: "🚧 Server Side Rendering",
+            text: "Server Side Rendering",
             collapsed: false,
             items: [
               {
-                text: "🚧 createSSRApp",
+                text: "createSSRApp",
                 link: "/ja/90-web-application-essentials/020-ssr/010-create-ssr-app",
               },
               {
@@ -320,38 +320,44 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             ],
           },
           {
-            text: "🚧 Builtins",
+            text: "Builtins",
             collapsed: false,
             items: [
               {
-                text: "🚧 KeepAlive",
+                text: "KeepAlive",
                 link: "/ja/90-web-application-essentials/030-builtins/010-keep-alive",
               },
               {
-                text: "🚧 Suspense",
-                link: "/ja/90-web-application-essentials/030-builtins/020-suspense",
-              },
-              {
-                text: "🚧 Transition",
+                text: "Transition",
                 link: "/ja/90-web-application-essentials/030-builtins/030-transition",
               },
             ],
           },
           {
-            text: "🚧 Optimizations",
+            text: "Optimizations",
             collapsed: false,
             items: [
               {
-                text: "🚧 Static Hoisting",
+                text: "Static Hoisting",
                 link: "/ja/90-web-application-essentials/040-optimizations/010-static-hoisting",
               },
               {
-                text: "🚧 Patch Flags",
+                text: "Patch Flags",
                 link: "/ja/90-web-application-essentials/040-optimizations/020-patch-flags",
               },
               {
                 text: "🚧 Tree Flattening",
                 link: "/ja/90-web-application-essentials/040-optimizations/030-tree-flattening",
+              },
+            ],
+          },
+          {
+            text: "Vapor Mode",
+            collapsed: false,
+            items: [
+              {
+                text: "Vapor Mode",
+                link: "/ja/90-web-application-essentials/050-vapor/010-introduction",
               },
             ],
           },
@@ -363,7 +369,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: "15 分で Vue を作る",
-            collapsed: true,
+            collapsed: false,
             items: [
               {
                 text: "chibivue、デカくないですか...?",

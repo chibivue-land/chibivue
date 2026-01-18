@@ -238,6 +238,9 @@ defineEmits の実装が完了しました！\
 
 </KawaikoNote>
 
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/030_define_emits)
+
 ## まとめ
 
 - `defineEmits` は子から親へのイベント発行を宣言するマクロ

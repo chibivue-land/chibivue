@@ -309,6 +309,9 @@ It's great practice for AST manipulation and transformation.
 
 </KawaikoNote>
 
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)
+
 ## Summary
 
 - Props Destructure was introduced in Vue 3.5

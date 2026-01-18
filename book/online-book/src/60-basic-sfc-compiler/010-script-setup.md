@@ -274,6 +274,9 @@ In the next chapter, we'll learn how to implement the `defineProps` and `defineE
 
 </KawaikoNote>
 
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/010_script_setup)
+
 ## Summary
 
 - `<script setup>` is syntactic sugar for writing Composition API more concisely

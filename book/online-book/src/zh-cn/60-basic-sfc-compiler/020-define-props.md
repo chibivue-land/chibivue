@@ -236,6 +236,9 @@ defineProps 的实现完成了！\
 
 </KawaikoNote>
 
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/020_define_props)
+
 ## 总结
 
 - `defineProps` 是编译器宏，在编译时处理

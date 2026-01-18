@@ -236,6 +236,9 @@ In the next chapter, we'll learn how to implement the `defineEmits` macro.
 
 </KawaikoNote>
 
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/020_define_props)
+
 ## Summary
 
 - `defineProps` is a compiler macro processed at compile time

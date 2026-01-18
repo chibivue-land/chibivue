@@ -236,6 +236,9 @@ defineProps 的實現完成了！\
 
 </KawaikoNote>
 
+到此為止的原始碼：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/020_define_props)
+
 ## 總結
 
 - `defineProps` 是編譯器巨集，在編譯時處理

@@ -95,7 +95,7 @@ app.mount('#app')
 
 ```sh
 pwd # ~
-nlx create-vite
+pnpm dlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -203,7 +203,7 @@ createApp(App).mount('#app')
 
 ```sh
 pwd # ~/plugin-sample
-nr dev
+pnpm dev
 ```
 
 ![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)

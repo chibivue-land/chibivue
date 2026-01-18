@@ -236,6 +236,9 @@ defineProps の実装が完了しました！\
 
 </KawaikoNote>
 
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/020_define_props)
+
 ## まとめ
 
 - `defineProps` はコンパイラマクロで，コンパイル時に処理される

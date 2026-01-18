@@ -13,7 +13,7 @@ rm -rf ./plugin-sample
 
 ```sh
 pwd # ~
-ni vite
+pnpm add vite
 ```
 
 这是插件的主要部分，但由于这原本超出了 vuejs/core 的范围，我们将在 `packages` 目录中创建一个名为 `@extensions` 的目录并在那里实现它．

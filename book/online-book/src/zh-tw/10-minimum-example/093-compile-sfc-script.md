@@ -184,7 +184,7 @@ export default { ..._sfc_main, render }
 
 ```sh
 pwd # ~
-ni @babel/parser magic-string
+pnpm add @babel/parser magic-string
 ```
 
 創建一個名為 "rewriteDefault.ts" 的檔案．

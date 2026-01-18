@@ -215,15 +215,15 @@ That completes the v-html implementation!
 v-cloak is a directive used to hide an element until the component is mounted.\
 It's used in combination with CSS to prevent users from seeing uncompiled template syntax (like mustaches).
 
-```html
-<style>
+```css
 [v-cloak] {
   display: none;
 }
-</style>
+```
 
+```text
 <div v-cloak>
-  {{ message }}
+  ｛｛ message ｝｝
 </div>
 ```
 
@@ -303,13 +303,13 @@ That completes the v-cloak implementation!
 v-pre is a directive that skips compilation for this element and all its children.\
 It's used when you want to display mustache syntax as-is.
 
-```vue
+```text
 <template>
-  <span v-pre>{{ this will not be compiled }}</span>
+  <span v-pre>｛｛ this will not be compiled ｝｝</span>
 </template>
 ```
 
-The template above will display the text `{{ this will not be compiled }}` as-is.
+The template above will display the text `｛｛ this will not be compiled ｝｝` as-is.
 
 https://vuejs.org/api/built-in-directives.html#v-pre
 
@@ -468,7 +468,7 @@ export default {
     <div v-html="rawHtml"></div>
 
     <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+    <span v-pre>｛｛ msg ｝｝ will not be compiled</span>
   </div>
 </template>
 ```

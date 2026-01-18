@@ -274,6 +274,9 @@ script setup の基本実装が完了しました！\
 
 </KawaikoNote>
 
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/010_script_setup)
+
 ## まとめ
 
 - `<script setup>` は Composition API をより簡潔に書けるシンタックスシュガー

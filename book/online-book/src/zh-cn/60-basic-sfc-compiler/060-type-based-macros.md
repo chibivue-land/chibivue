@@ -407,6 +407,9 @@ function handleClick() {
 
 </KawaikoNote>
 
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)
+
 ## 总结
 
 - 基于类型的 defineProps/defineEmits 使用 TypeScript 类型参数

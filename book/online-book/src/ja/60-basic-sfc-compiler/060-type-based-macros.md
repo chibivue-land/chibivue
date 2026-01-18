@@ -407,6 +407,9 @@ TypeScript AST の操作を学ぶ良い機会になります。
 
 </KawaikoNote>
 
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)
+
 ## まとめ
 
 - 型ベースの defineProps/defineEmits は TypeScript の型引数を使う

@@ -215,15 +215,15 @@ export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
 v-cloak はコンポーネントがマウントされるまで要素を隠すためのディレクティブです．\
 CSS と組み合わせて使用し，コンパイル前のテンプレート構文（マスタッシュなど）がユーザーに見えてしまうのを防ぎます．
 
-```html
-<style>
+```css
 [v-cloak] {
   display: none;
 }
-</style>
+```
 
+```text
 <div v-cloak>
-  {{ message }}
+  ｛｛ message ｝｝
 </div>
 ```
 
@@ -303,13 +303,13 @@ export interface RendererOptions<
 v-pre はこの要素とすべての子要素のコンパイルをスキップするためのディレクティブです．\
 マスタッシュ構文などをそのまま表示したい場合に使用します．
 
-```vue
+```text
 <template>
-  <span v-pre>{{ this will not be compiled }}</span>
+  <span v-pre>｛｛ this will not be compiled ｝｝</span>
 </template>
 ```
 
-上記のテンプレートは `{{ this will not be compiled }}` というテキストをそのまま表示します．
+上記のテンプレートは `｛｛ this will not be compiled ｝｝` というテキストをそのまま表示します．
 
 https://vuejs.org/api/built-in-directives.html#v-pre
 
@@ -468,7 +468,7 @@ export default {
     <div v-html="rawHtml"></div>
 
     <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+    <span v-pre>｛｛ msg ｝｝ will not be compiled</span>
   </div>
 </template>
 ```

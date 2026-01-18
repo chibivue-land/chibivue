@@ -309,6 +309,9 @@ console.log(count, message)
 
 </KawaikoNote>
 
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)
+
 ## 总结
 
 - Props 解构是 Vue 3.5 引入的功能

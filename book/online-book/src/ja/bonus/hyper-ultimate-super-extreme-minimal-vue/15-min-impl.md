@@ -9,7 +9,7 @@ cd chibivue
 
 # setup コマンドでプロジェクトを作成します。
 # 引数にはプロジェクトのルートパスを指定します。
-nr setup ../my-chibivue-project
+pnpm setup ../my-chibivue-project
 ```
 
 これでプロジェクトの設定はおしまいです．

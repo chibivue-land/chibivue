@@ -262,7 +262,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "基础 SFC 编译器",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "支持 script setup",
@@ -291,8 +291,8 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Web 应用程序要点",
-        collapsed: true,
+        text: "Web 应用程序要点",
+        collapsed: false,
         items: [
           {
             text: "🚧 插件",
@@ -310,7 +310,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
 
           {
-            text: "🚧 服务端渲染",
+            text: "服务端渲染",
             collapsed: false,
             items: [
               {
@@ -318,22 +318,18 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/zh-cn/90-web-application-essentials/020-ssr/010-create-ssr-app",
               },
               {
-                text: "水合",
+                text: "🚧 水合",
                 link: "/zh-cn/90-web-application-essentials/020-ssr/020-hydration",
               },
             ],
           },
           {
-            text: "🚧 内置组件",
+            text: "内置组件",
             collapsed: false,
             items: [
               {
                 text: "KeepAlive",
                 link: "/zh-cn/90-web-application-essentials/030-builtins/010-keep-alive",
-              },
-              {
-                text: "Suspense",
-                link: "/zh-cn/90-web-application-essentials/030-builtins/020-suspense",
               },
               {
                 text: "Transition",
@@ -342,7 +338,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             ],
           },
           {
-            text: "🚧 优化",
+            text: "优化",
             collapsed: false,
             items: [
               {
@@ -354,8 +350,18 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/zh-cn/90-web-application-essentials/040-optimizations/020-patch-flags",
               },
               {
-                text: "树扁平化",
+                text: "🚧 树扁平化",
                 link: "/zh-cn/90-web-application-essentials/040-optimizations/030-tree-flattening",
+              },
+            ],
+          },
+          {
+            text: "Vapor 模式",
+            collapsed: false,
+            items: [
+              {
+                text: "Vapor 模式",
+                link: "/zh-cn/90-web-application-essentials/050-vapor/010-introduction",
               },
             ],
           },
@@ -367,7 +373,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: "15分钟编写 Vue.js",
-            collapsed: true,
+            collapsed: false,
             items: [
               {
                 text: "chibivue，不是很小吗...？",

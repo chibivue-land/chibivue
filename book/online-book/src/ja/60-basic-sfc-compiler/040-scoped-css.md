@@ -280,14 +280,133 @@ Vue.js も内部で PostCSS を使っています！
 
 両方のコンポーネントが同じクラス名 `.text` を使用していますが，それぞれ異なる色で表示されます。
 
+## 特殊セレクタ
+
+Scoped CSS では，いくつかの特殊なセレクタがサポートされています。
+
+### :deep() セレクタ
+
+子コンポーネントのスタイルを変更したい場合に使用します。
+
+```vue
+<style scoped>
+:deep(.child-class) {
+  color: blue;
+}
+</style>
+```
+
+変換後：
+
+```css
+[data-v-xxx] .child-class {
+  color: blue;
+}
+```
+
+### ::v-slotted() セレクタ
+
+スロットに渡されたコンテンツにスタイルを適用します。
+
+```vue
+<style scoped>
+::v-slotted(.slot-content) {
+  font-weight: bold;
+}
+</style>
+```
+
+変換後：
+
+```css
+.slot-content[data-v-xxx-s] {
+  font-weight: bold;
+}
+```
+
+`-s` サフィックスは「slotted（スロット）」を意味します。
+スロットコンテンツは親コンポーネントから渡されるため，
+通常のスコープ ID ではなく，特別なスロット用のスコープ ID が使われます。
+
+### :global() セレクタ
+
+グローバルスタイルを scoped スタイル内で定義します。
+
+```vue
+<style scoped>
+:global(.global-class) {
+  margin: 0;
+}
+</style>
+```
+
+変換後：
+
+```css
+.global-class {
+  margin: 0;
+}
+```
+
+## v-bind() による動的スタイル
+
+CSS 内でコンポーネントの状態を使用できます。
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const color = ref('red')
+</script>
+
+<style scoped>
+.text {
+  color: v-bind(color);
+}
+</style>
+```
+
+変換後：
+
+```css
+.text[data-v-xxx] {
+  color: var(--xxx-color);
+}
+```
+
+`v-bind()` は CSS カスタムプロパティ（CSS 変数）に変換されます。
+実行時に，コンポーネントのインライン style として CSS 変数の値が設定されます。
+
+### 複雑な式の使用
+
+クォートで囲むことで，複雑な式も使用できます。
+
+```vue
+<style scoped>
+.box {
+  width: v-bind('size + "px"');
+  background: v-bind('theme.colors.primary');
+}
+</style>
+```
+
+<KawaikoNote variant="warning" title="v-bind() のパフォーマンスについて">
+
+`v-bind()` は便利な機能ですが，パフォーマンスに影響があります：
+
+- 各 `v-bind()` は CSS カスタムプロパティとしてインラインスタイルに設定されます
+- 値が変更されるたびにスタイルの再計算がトリガーされます
+- 頻繁に変更される値の場合，直接インラインスタイルを使用する方が効率的です
+
+アニメーションや頻繁な更新には，`v-bind()` よりもインラインスタイルや CSS アニメーションを検討してください。
+
+</KawaikoNote>
+
 ## 今後の拡張
 
-現在の chibivue では Scoped CSS は未実装ですが，以下の機能も検討できます：
+以下の機能も検討できます：
 
-- **:deep() セレクタ**: 子コンポーネントのスタイルを変更
-- **:slotted() セレクタ**: スロット内容のスタイル
-- **:global() セレクタ**: グローバルスタイルの定義
 - **CSS Modules**: クラス名の自動生成
+- **CSS-in-JS との統合**: 動的スタイリングの強化
 
 <KawaikoNote variant="base" title="実装に挑戦！">
 
@@ -295,6 +414,9 @@ Vue.js も内部で PostCSS を使っています！
 PostCSS の使い方を学ぶ良い機会にもなります。
 
 </KawaikoNote>
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/040_scoped_css)
 
 ## まとめ
 

@@ -9,7 +9,7 @@ cd chibivue
 
 # 使用設定指令建立專案。
 # 將專案的根路徑指定為參數。
-nr setup ../my-chibivue-project
+pnpm setup ../my-chibivue-project
 ```
 
 專案設定現在完成了．

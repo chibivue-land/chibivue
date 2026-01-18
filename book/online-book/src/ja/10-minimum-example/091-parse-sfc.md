@@ -13,7 +13,7 @@ rm -rf ./plugin-sample
 
 ```sh
 pwd # ~
-ni vite
+pnpm add vite
 ```
 
 plugin の本体なのですが，本来これは vuejs/core の範囲外なので packages に　`@extensions`　というディレクトリを切ってそこに実装していきます．

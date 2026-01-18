@@ -274,6 +274,9 @@ script setup 的基本實現完成了！\
 
 </KawaikoNote>
 
+到此為止的原始碼：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/010_script_setup)
+
 ## 總結
 
 - `<script setup>` 是更簡潔編寫 Composition API 的語法糖

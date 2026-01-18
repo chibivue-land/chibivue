@@ -215,15 +215,15 @@ export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
 v-cloak 是一個用於在元件掛載前隱藏元素的指令。\
 它與 CSS 配合使用，防止使用者看到未編譯的模板語法（如 mustache）。
 
-```html
-<style>
+```css
 [v-cloak] {
   display: none;
 }
-</style>
+```
 
+```text
 <div v-cloak>
-  {{ message }}
+  ｛｛ message ｝｝
 </div>
 ```
 
@@ -303,13 +303,13 @@ export interface RendererOptions<
 v-pre 是一個跳過該元素及其所有子元素編譯的指令。\
 當你想要原樣顯示 mustache 語法時使用。
 
-```vue
+```text
 <template>
-  <span v-pre>{{ this will not be compiled }}</span>
+  <span v-pre>｛｛ this will not be compiled ｝｝</span>
 </template>
 ```
 
-上面的模板將原樣顯示文字 `{{ this will not be compiled }}`。
+上面的模板將原樣顯示文字 `｛｛ this will not be compiled ｝｝`。
 
 https://vuejs.org/api/built-in-directives.html#v-pre
 
@@ -468,7 +468,7 @@ export default {
     <div v-html="rawHtml"></div>
 
     <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+    <span v-pre>｛｛ msg ｝｝ will not be compiled</span>
   </div>
 </template>
 ```

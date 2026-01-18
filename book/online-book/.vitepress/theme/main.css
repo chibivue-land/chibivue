@@ -232,9 +232,9 @@ html.dark {
 :root {
   --vp-code-block-bg: #f5f5f0;
   --vp-code-block-divider-color: #d0d8d5;
-  --vp-code-line-diff-add-color: rgba(26, 138, 110, 0.15);
-  --vp-code-line-diff-remove-color: rgba(192, 64, 80, 0.15);
-  --vp-code-line-highlight-color: rgba(26, 138, 110, 0.1);
+  --vp-code-line-diff-add-color: rgba(26, 138, 110, 0.4);
+  --vp-code-line-diff-remove-color: rgba(192, 64, 80, 0.3);
+  --vp-code-line-highlight-color: rgba(26, 138, 110, 0.2);
   --vp-code-copy-code-hover-bg: rgba(26, 138, 110, 0.2);
   --vp-code-color: #1a5c4a;
 }
@@ -243,9 +243,9 @@ html.dark {
 html.dark {
   --vp-code-block-bg: #0a0f14;
   --vp-code-block-divider-color: #1a2744;
-  --vp-code-line-diff-add-color: rgba(44, 201, 168, 0.2);
-  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.2);
-  --vp-code-line-highlight-color: rgba(44, 201, 168, 0.15);
+  --vp-code-line-diff-add-color: rgba(44, 201, 168, 0.35);
+  --vp-code-line-diff-remove-color: rgba(232, 93, 117, 0.28);
+  --vp-code-line-highlight-color: rgba(44, 201, 168, 0.2);
   --vp-code-copy-code-hover-bg: rgba(44, 201, 168, 0.3);
   --vp-code-color: #8be4d3;
 }

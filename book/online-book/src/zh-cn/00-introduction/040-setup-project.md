@@ -28,21 +28,6 @@
 你们中的许多人可能通常使用 npm 或 yarn．对于这本书，我们将使用 pnpm，所以请也安装它．命令大多与 npm 相似．
 https://pnpm.io/installation
 
-除了上述内容，本书还使用 [ni](https://github.com/antfu/ni)，可以幽默地称为"包管理器管理器"．  
-（它是由 Vue.js 核心团队的 antfu 创建的．）
-
-如果您还没有设置它，请也安装它：
-
-```sh
-$ npm i -g @antfu/ni
-```
-
-[ni](https://github.com/antfu/ni) 是一个方便的工具，可以自动为您在各种包管理器之间切换．
-
-有趣的是，这个工具也在 Vue.js 的实际开发中使用．  
-https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
-
-对于包安装，启动开发服务器和其他任务，我们将使用 ni 命令．
 
 ## 创建项目
 
@@ -62,7 +47,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 
    ```sh
    $ cd chibivue
-   $ nr setup ../my-chibivue-project
+   $ pnpm setup:book ../my-chibivue-project
    ```
 
 :::
@@ -91,7 +76,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 ## 请创建一个专门用于 chibivue 的目录并导航到其中。（此后将省略此类注释。）
 pwd # ~/
 pnpm init
-ni -D @types/node
+pnpm add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -130,7 +115,7 @@ console.log("Hello, World")
 pwd # ~/
 mkdir examples
 cd examples
-nlx create-vite
+pnpm dlx create-vite
 
 ## --------- 使用 Vite CLI 设置
 ## Project name: playground
@@ -239,7 +224,7 @@ export default defineConfig({
 
 ```sh
 pwd # ~
-nr dev
+pnpm dev
 ```
 
 访问使用此命令启动的开发服务器．如果显示消息，则设置完成．

@@ -238,6 +238,9 @@ defineEmits 的實現完成了！\
 
 </KawaikoNote>
 
+到此為止的原始碼：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/030_define_emits)
+
 ## 總結
 
 - `defineEmits` 是宣告子到父事件發送的巨集

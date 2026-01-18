@@ -28,21 +28,6 @@ Most of you are probably familiar with this step. Please set it up on your own. 
 Many of you might typically use npm or yarn. For this book, we will be using pnpm, so please install it as well. The commands are mostly similar to npm.
 https://pnpm.io/installation
 
-In addition to the above, this book also uses [ni](https://github.com/antfu/ni), which can be humorously referred to as a "package manager manager".  
-(It was created by antfu from the Vue.js core team.)
-
-If you haven't set it up yet, please also install it:
-
-```sh
-$ npm i -g @antfu/ni
-```
-
-[ni](https://github.com/antfu/ni) is a handy tool that automatically switches between various package managers for you.
-
-Interestingly, this tool is also used in the actual development of Vue.js.  
-https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
-
-For package installations, starting the development server, and other tasks, we will be using the ni command.
 
 ## Creating the Project
 
@@ -62,7 +47,7 @@ If you find the manual process tedious, please feel free to use this tool!
 
    ```sh
    $ cd chibivue
-   $ nr setup ../my-chibivue-project
+   $ pnpm setup:book ../my-chibivue-project
    ```
 
 :::
@@ -91,7 +76,7 @@ Below are the steps to construct it.
 ## Please create a directory specifically for chibivue and navigate into it. (Such notes will be omitted hereafter.)
 pwd # ~/
 pnpm init
-ni -D @types/node
+pnpm add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -130,7 +115,7 @@ console.log("Hello, World")
 pwd # ~/
 mkdir examples
 cd examples
-nlx create-vite
+pnpm dlx create-vite
 
 ## --------- Setting up with the Vite CLI
 ## Project name: playground
@@ -239,7 +224,7 @@ Append the following to ~/package.json
 
 ```sh
 pwd # ~
-nr dev
+pnpm dev
 ```
 
 Access the developer server that started with this command. If a message displays, then the setup is complete.

@@ -9,6 +9,7 @@ const PACKAGES = [
   "runtime-core",
   "runtime-dom",
   "runtime-vapor",
+  "server-renderer",
   "reactivity",
   "shared",
   "@extensions/chibivue-router",
@@ -18,9 +19,9 @@ const PACKAGES = [
 
 export default defineConfig(
   PACKAGES.map((pkg) => ({
-    input: `packages/${pkg}/src/index.ts`,
+    input: `impl/${pkg}/src/index.ts`,
     output: {
-      dir: `packages/${pkg}/dist`,
+      dir: `impl/${pkg}/dist`,
       format: "esm",
       entryFileNames: "index.js",
     },

@@ -38,21 +38,6 @@
 基本的なコマンドは npm とほとんど一緒です．  
 https://pnpm.io/installation
 
-また，本書では上記に加え，パッケージマネージャのマネージャ(?) である [ni](https://github.com/antfu/ni) を使っています．  
-(Vue.js core team の [antfu](https://github.com/antfu) さんが作っています．)
-
-こちらのセットアップがまだな方はこちらも合わせてインストールしてください．
-
-```sh
-$ npm i -g @antfu/ni
-```
-
-ni は様々なパッケージマネージャを自動で使い分けてくれる便利ツールです．  
-
-こちらは実は本家の Vue.js の開発でも使われています．
-https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
-
-パッケージのインストールや開発サーバーの起動などは ni のコマンドを使っていきます．
 
 ## プロジェクトの作成
 
@@ -71,7 +56,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 
    ```sh
    $ cd chibivue
-   $ nr setup ../my-chibivue-project
+   $ pnpm setup:book ../my-chibivue-project
    ```
 
 :::
@@ -105,7 +90,7 @@ packages に chibivue 本体の TypeScript ファイル群を実装して，exam
 ## 実際はchibivue用のディレクトリを作って移動してください (以下、同様の注釈は省略します。)
 pwd # ~/
 pnpm init
-ni -D @types/node
+pnpm add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -144,7 +129,7 @@ console.log("Hello, World");
 pwd # ~/
 mkdir examples
 cd examples
-nlx create-vite
+pnpm dlx create-vite
 
 ## --------- create vite cliの設定
 ## Project name: playground
@@ -259,7 +244,7 @@ tsconfig.json の中身を以下のように書き換えます．
 
 ```sh
 pwd # ~
-nr dev
+pnpm dev
 ```
 
 このコマンドで立ち上がった開発者サーバーにアクセスし，メッセージが表示されていれば完了です！

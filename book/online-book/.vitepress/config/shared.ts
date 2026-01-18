@@ -68,6 +68,13 @@ export const sharedConfig = defineConfig({
     outline: "deep",
     i18nRouting: true,
     socialLinks: [
+      {
+        icon: {
+          svg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><image href="https://raw.githubusercontent.com/chibivue-land/art/main/kawaiko.png" width="20" height="20"/></svg>',
+        },
+        link: "https://chibivue.land",
+        ariaLabel: "chibivue.land",
+      },
       { icon: "github", link: "https://github.com/chibivue-land/chibivue" },
       { icon: "twitter", link: "https://twitter.com/ubugeeei" },
       { icon: "discord", link: "https://discord.gg/aVHvmbmSRy" },

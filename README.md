@@ -1,229 +1,114 @@
 <p align="center">
-  <img src="./book/online-book/src/public/og.png" width="600">
+  <img src="./book/online-book/src/public/logo.png" width="200">
 </p>
 
-<div align="center">
+<h1 align="center">chibivue</h1>
 
-### [**Writing Vue.js: Step by Step, from just one line of "Hello, World".**](https://book.chibivue.land)
+<p align="center">
+  <b>Writing Vue.js: Step by Step, from just one line of "Hello, World".</b>
+</p>
 
-https://book.chibivue.land
+<p align="center">
+  <a href="https://book.chibivue.land">Online Book</a> ·
+  <a href="https://discord.gg/aVHvmbmSRy">Discord</a> ·
+  <a href="https://github.com/sponsors/ubugeeei">Sponsor</a>
+</p>
 
-</div>
+<p align="center">
+  <a href="./README-zh-cn.md">简体中文</a> ·
+  <a href="./README-zh-tw.md">繁體中文</a>
+</p>
 
 ---
 
-chibivue is minimal [vuejs/core](https://github.com/vuejs/core) implementations.  
-(Reactivity System, Virtual DOM and Patch Rendering, Component System, Template Compiler, SFC Compiler)
+**chibivue** is a minimal implementation of [Vue.js](https://github.com/vuejs/core) for educational purposes.
 
-"`chibi`" means "`small`" in Japanese.
+- Reactivity System
+- Virtual DOM & Patch Rendering
+- Component System
+- Template Compiler
+- SFC Compiler
+- Vapor Mode (experimental)
 
-This project began in February 2023 with the goal of simplifying the understanding of Vue's core implementation.
+> "chibi" means "small" in Japanese.
 
-Currently, I am still in the process of implementation, but after implementation, I intend to post explanatory articles as well.
-
-(For now, I plan to post Japanese first.)
-
-[examples](https://github.com/chibivue-land/chibivue/tree/main/examples/app)
-
-# 👜 Requirements
-
-- [Node.js](https://nodejs.org/) v24+
-- [pnpm](https://pnpm.io/) v10+
-- [@antfu/ni](https://github.com/antfu/ni)
-
-```sh
-# if you don't have ni yet
-npm i -g @antfu/ni
-```
-
-# 📔 Online Book
+## Online Book
 
 [![Pages Deploy](https://github.com/chibivue-land/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/chibivue-land/chibivue/actions/workflows/deploy.yml)
 
-> total: 370,000 chars ↑ (japanese)
+| Language | URL |
+|----------|-----|
+| English | https://book.chibivue.land |
+| 日本語 | https://book.chibivue.land/ja |
+| 简体中文 | https://book.chibivue.land/zh-cn |
+| 繁體中文 | https://book.chibivue.land/zh-tw |
 
-### book url (GitHub Pages)
+## Quick Start
 
-English: https://book.chibivue.land/
+### Requirements
 
-Japaneses: https://book.chibivue.land/ja
+- [Node.js](https://nodejs.org/) v24+
+- [pnpm](https://pnpm.io/) v10+
 
-### open book on localhost
-
-```sh
-$ git clone https://github.com/chibivue-land/chibivue
-$ cd chibivue
-$ ni
-$ nr book:dev
-```
-
-### view on github
-
-[English](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src) | [Japanese](https://github.com/chibivue-land/chibivue/tree/main/book/online-book/src/ja)
-<br/>
-<br/>
-
-# 🎥 playground
+### Read the Book Locally
 
 ```sh
-$ git clone https://github.com/chibivue-land/chibivue
-$ cd chibivue
-
-# install dependencies and generate playground
-$ nr setup
-
-# start dev server
-$ nr dev
+git clone https://github.com/chibivue-land/chibivue
+cd chibivue
+pnpm install
+pnpm dev
 ```
 
-# ⚠️ status
+### Try the Implementation
 
-This online book is currently a work in progress.
+```sh
+pnpm setup      # Generate playground
+pnpm impl:dev   # Start dev server
+```
 
-Please refer to the information below for the progress status.
+## Implementation Status
 
-### Reactivity System
+### Core Features
 
-| feature         | impl | book |
-| --------------- | ---- | ---- |
-| ref             | ✅   | ✅   |
-| computed        | ✅   | ✅   |
-| reactive        | ✅   | ✅   |
-| readonly        | ✅   | ✅   |
-| watch           | ✅   | ✅   |
-| watchEffect     | ✅   | ✅   |
-| isRef           | ✅   | ✅   |
-| unref           | ✅   | ✅   |
-| toRef           | ✅   | ✅   |
-| toRefs          | ✅   | ✅   |
-| isProxy         | ✅   | ✅   |
-| isReactive      | ✅   | ✅   |
-| isReadonly      | ✅   | ✅   |
-| shallowRef      | ✅   | ✅   |
-| triggerRef      | ✅   | ✅   |
-| shallowReactive | ✅   | ✅   |
-| customRef       | ✅   | ✅   |
-| toRaw           | ✅   | ✅   |
-| effectScope     | ✅   | ✅   |
-| getCurrentScope | ✅   | ✅   |
-| onScopeDispose  | ✅   | ✅   |
-| template refs   | ✅   | ✅   |
+| Category | Feature | Status |
+|----------|---------|--------|
+| Reactivity | ref, reactive, computed, watch, effectScope | ✅ |
+| Virtual DOM | h function, patch rendering, scheduler | ✅ |
+| Component | Options API, Composition API, lifecycle hooks | ✅ |
+| Component | props, emit, provide/inject, slots | ✅ |
+| Template | v-bind, v-on, v-if, v-for, v-model | ✅ |
+| SFC | template, script, style, script setup | ✅ |
+| SFC | defineProps, defineEmits, scoped CSS | ✅ |
+| Extensions | Router, Store | ✅ |
+| Vapor Mode | Basic implementation | ✅ |
+| SSR | Server-side rendering | 🚧 |
 
-### Virtual Dom & Renderer
+## Bonus Track
 
-| feature         | impl | book |
-| --------------- | ---- | ---- |
-| h function      | ✅   | ✅   |
-| patch rendering | ✅   | ✅   |
-| key attribute   | ✅   | ✅   |
-| scheduler       | ✅   | ✅   |
-| nextTick        | ✅   | ✅   |
-| ssr             |      |      |
+**Hyper Ultimate Super Extreme Minimal Vue**
 
-### Component System
+Implements createApp, Virtual DOM, Reactivity, Template Compiler, and SFC Compiler in just **110 lines**.
 
-| feature                      | impl | book |
-| ---------------------------- | ---- | ---- |
-| Options API (typed)          | ✅   | ✅   |
-| Composition API              | ✅   | ✅   |
-| lifecycle hooks              | ✅   | ✅   |
-| props / emit                 | ✅   | ✅   |
-| expose                       | ✅   | ✅   |
-| provide / inject             | ✅   | ✅   |
-| slot (default)               | ✅   | ✅   |
-| slot (named/scoped)          | ✅   | ✅   |
-| async component and suspense |      |      |
+[Read the Chapter](https://book.chibivue.land/bonus/hyper-ultimate-super-extreme-minimal-vue) · [View Source](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
-### Template Compiler
+## Contributing
 
-| feature            | impl | book |
-| ------------------ | ---- | ---- |
-| v-bind             | ✅   | ✅   |
-| v-on               | ✅   | ✅   |
-| event modifier     | ✅   | ✅   |
-| v-if               | ✅   | ✅   |
-| v-for              | ✅   | ✅   |
-| v-model            | ✅   |      |
-| v-show             |      |      |
-| mustache           | ✅   | ✅   |
-| slot (default)     |      |      |
-| slot (named)       |      |      |
-| slot (scoped)      |      |      |
-| dynamic component  |      |      |
-| comment out        | ✅   | ✅   |
-| fragment           | ✅   | ✅   |
-| bind expressions   | ✅   | ✅   |
-| resolve components | ✅   | ✅   |
+See [contributing.md](.github/contributing.md).
 
-### SFC Compiler
+## Community
 
-| feature                          | impl | book |
-| -------------------------------- | ---- | ---- |
-| basics (template, script, style) | ✅   | ✅   |
-| scoped css                       |      |      |
-| script setup                     | ✅   |      |
-| compiler macro                   | ✅   |      |
+Join our [Discord Server](https://discord.gg/aVHvmbmSRy) for discussions, questions, and announcements.
 
-### Extensions and Other Builtin
-
-| feature    | impl | book |
-| ---------- | ---- | ---- |
-| store      | ✅   |      |
-| router     | ✅   |      |
-| keep-alive |      |      |
-| suspense   |      |      |
-
-# 🗓️ Big Plans
-
-- Complete Basic Template Compiler
-  - Slots
-- Complete Basic SFC Compiler
-  - script setup
-  - compiler macro
-- Overall restructuring
-  - Fixing typos and errors
-  - Reviewing English version of the text
-  - Making explanations more understandable
-- Implementation and explanation of SSR / SSG
-- Implementation and explanation of compile-time optimization  
-  Tree flattening and static hoisting, among others
-- Incorporate refactoring of the parser that will likely be included in Vue.js 3.4  
-　https://github.com/vuejs/core/pull/9674
-- Incorporate refactoring of the reactivity package that will likely be included in Vue.js 3.4  
-  https://github.com/vuejs/core/pull/5912
-- 🌟 Implementation and explanation of \***\*Vapor Mode\*\***  
-  Since the official version has not been released, we will implement it based on our predictions.  
-  https://github.com/vuejs/core-vapor/tree/main
-
-# 🎉 Bonus Track
-
-This is bonus track on writing Vue.js in 15 minutes because chibivue has gotten so big.
-
-This chapter implements createApp / virtual dom / patch / reactivity / template compiler / sfc compiler in just 110 lines of source code.
-
-The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 minutes**"
-
-[Online Book](https://book.chibivue.land/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
-
-<img src="./book/images/hyper-ultimate-super-extreme-minimal-vue.png">
-
-# Contributing
-
-Please see [contributing.md](https://github.com/chibivue-land/chibivue/blob/main/.github/contributing.md).
-
+---
 
 <div align="center">
 
-# Sponsors
+## Sponsors
 
 <a href="https://github.com/sponsors/ubugeeei">
   <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
 </a>
 
-If you'd like to support my work, I would greatly appreciate it!
-
-https://github.com/sponsors/ubugeeei
-
-</div>
+[Become a Sponsor](https://github.com/sponsors/ubugeeei)
 
 </div>

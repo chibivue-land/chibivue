@@ -33,7 +33,7 @@ git clone https://github.com/vuejs/core.git vuejs-core
 ```bash
 cd vuejs-core
 ni
-nr test
+pnpm test
 ```
 
 您可以运行测试，所以请随意修改您感兴趣的源代码并运行测试．
@@ -62,7 +62,7 @@ git clone https://github.com/chibivue-land/chibivue.git
 ```bash
 cd chibivue
 ni
-nr setup:vue
+pnpm setup:vue
 
 # 💁 input your local vuejs/core absolute path:
 #   e.g. /Users/ubugeeei/oss/vuejs-core
@@ -76,7 +76,7 @@ nr setup:vue
 然后，当您想要启动时，您可以使用以下命令启动它，并在修改 vuejs/core 源代码的同时检查操作．
 
 ```bash
-nr dev:vue
+pnpm dev:vue
 ```
 
 当然，playground 端的 HMR，

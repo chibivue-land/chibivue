@@ -239,8 +239,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/080-component-slot-outlet",
           },
           {
-            text: "🚧 Slots",
-            link: "/50-basic-template-compiler/080-slot",
+            text: "Support for Slots (Usage)",
+            link: "/50-basic-template-compiler/085-component-slot-insert",
           },
           {
             text: "Other Directives",
@@ -262,7 +262,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Basic SFC Compiler",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "Supporting script setup",
@@ -291,8 +291,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Web Application Essentials",
-        collapsed: true,
+        text: "Web Application Essentials",
+        collapsed: false,
         items: [
           {
             text: "🚧 Plugin",
@@ -310,7 +310,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
 
           {
-            text: "🚧 Server Side Rendering",
+            text: "Server Side Rendering",
             collapsed: false,
             items: [
               {
@@ -318,22 +318,18 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/90-web-application-essentials/020-ssr/010-create-ssr-app",
               },
               {
-                text: "hydration",
+                text: "🚧 hydration",
                 link: "/90-web-application-essentials/020-ssr/020-hydration",
               },
             ],
           },
           {
-            text: "🚧 Builtins",
+            text: "Builtins",
             collapsed: false,
             items: [
               {
                 text: "KeepAlive",
                 link: "/90-web-application-essentials/030-builtins/010-keep-alive",
-              },
-              {
-                text: "Suspense",
-                link: "/90-web-application-essentials/030-builtins/020-suspense",
               },
               {
                 text: "Transition",
@@ -342,7 +338,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             ],
           },
           {
-            text: "🚧 Optimizations",
+            text: "Optimizations",
             collapsed: false,
             items: [
               {
@@ -354,8 +350,18 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/90-web-application-essentials/040-optimizations/020-patch-flags",
               },
               {
-                text: "Tree Flattening",
+                text: "🚧 Tree Flattening",
                 link: "/90-web-application-essentials/040-optimizations/030-tree-flattening",
+              },
+            ],
+          },
+          {
+            text: "Vapor Mode",
+            collapsed: false,
+            items: [
+              {
+                text: "Vapor Mode",
+                link: "/90-web-application-essentials/050-vapor/010-introduction",
               },
             ],
           },
@@ -367,7 +373,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         items: [
           {
             text: "Writing Vue.js in 15 minutes.",
-            collapsed: true,
+            collapsed: false,
             items: [
               {
                 text: "chibivue, isn't it small...?",

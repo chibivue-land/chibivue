@@ -1,0 +1,10 @@
+{
+  "name": "@chibivue/server-renderer",
+  "version": "1.0.0-beta.1",
+  "main": "dist/index.js",
+  "author": "ubugeeei <ubuge1122@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@chibivue/runtime-core": "*"
+  }
+}

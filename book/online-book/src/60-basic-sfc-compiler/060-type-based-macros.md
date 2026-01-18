@@ -407,6 +407,9 @@ It's a great opportunity to learn TypeScript AST manipulation.
 
 </KawaikoNote>
 
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)
+
 ## Summary
 
 - Type-based defineProps/defineEmits use TypeScript type arguments
