@@ -44,22 +44,22 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Check fmt
-        run: pnpm fmt:check
+        run: pnpm impl:fmt:check
 
       - name: Check lint
-        run: pnpm lint
+        run: pnpm impl:lint
 
       - name: Check lint text
         run: pnpm lint:text
 
       - name: Check types
-        run: pnpm typecheck
+        run: pnpm impl:typecheck
 
-      - name: Check building
-        run: pnpm build
+      - name: Check impl building
+        run: pnpm impl:build
 
       - name: Check test
-        run: pnpm test
+        run: pnpm impl:test
 
       - name: Build book
-        run: pnpm run book:build
+        run: pnpm build

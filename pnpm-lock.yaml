@@ -121,29 +121,35 @@ importers:
         specifier: ^6.0.0
         version: 6.2.3(@types/node@24.10.9)(lightningcss@1.30.2)(tsx@4.20.3)
 
-  packages/@extensions/chibivue-router: {}
+  impl/@extensions/chibivue-router: {}
 
-  packages/@extensions/chibivue-store: {}
+  impl/@extensions/chibivue-store: {}
 
-  packages/@extensions/vite-plugin-chibivue: {}
+  impl/@extensions/vite-plugin-chibivue: {}
 
-  packages/chibivue: {}
+  impl/chibivue: {}
 
-  packages/compiler-core: {}
+  impl/compiler-core: {}
 
-  packages/compiler-dom: {}
+  impl/compiler-dom: {}
 
-  packages/compiler-sfc: {}
+  impl/compiler-sfc: {}
 
-  packages/reactivity: {}
+  impl/reactivity: {}
 
-  packages/runtime-core: {}
+  impl/runtime-core: {}
 
-  packages/runtime-dom: {}
+  impl/runtime-dom: {}
 
-  packages/runtime-vapor: {}
+  impl/runtime-vapor: {}
 
-  packages/shared: {}
+  impl/server-renderer:
+    dependencies:
+      '@chibivue/runtime-core':
+        specifier: workspace:*
+        version: link:../runtime-core
+
+  impl/shared: {}
 
 packages:
 

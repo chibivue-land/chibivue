@@ -5,6 +5,6 @@
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@chibivue/runtime-core": "*"
+    "@chibivue/runtime-core": "workspace:*"
   }
 }
