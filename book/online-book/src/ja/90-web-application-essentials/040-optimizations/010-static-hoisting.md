@@ -358,3 +358,6 @@ Static Hoisting の実装は以下の要素で構成されています：
 5. **genHoists**: 巻き上げられたノードをコード生成
 
 この最適化により，大きなテンプレートで多くの静的コンテンツがある場合に，再レンダリングのパフォーマンスが大幅に向上します．特に，ヘッダー，フッター，サイドバーなど変更されない UI 部分で効果的です．
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/040_static_hoisting)

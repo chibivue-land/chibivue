@@ -292,15 +292,15 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 Plugin",
+            text: "プラグイン",
             collapsed: false,
             items: [
               {
-                text: "🚧 Router",
+                text: "ルーター",
                 link: "/ja/90-web-application-essentials/010-plugins/010-router",
               },
               {
-                text: "🚧 Preprocessors",
+                text: "CSS プリプロセッサ",
                 link: "/ja/90-web-application-essentials/010-plugins/020-preprocessors",
               },
             ],
@@ -310,17 +310,17 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             collapsed: false,
             items: [
               {
-                text: "createSSRApp",
+                text: "renderToString",
                 link: "/ja/90-web-application-essentials/020-ssr/010-create-ssr-app",
               },
               {
-                text: "🚧 hydration",
+                text: "Hydration",
                 link: "/ja/90-web-application-essentials/020-ssr/020-hydration",
               },
             ],
           },
           {
-            text: "Builtins",
+            text: "組み込みコンポーネント",
             collapsed: false,
             items: [
               {
@@ -334,7 +334,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             ],
           },
           {
-            text: "Optimizations",
+            text: "最適化",
             collapsed: false,
             items: [
               {
@@ -346,7 +346,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/ja/90-web-application-essentials/040-optimizations/020-patch-flags",
               },
               {
-                text: "🚧 Tree Flattening",
+                text: "Tree Flattening",
                 link: "/ja/90-web-application-essentials/040-optimizations/030-tree-flattening",
               },
             ],

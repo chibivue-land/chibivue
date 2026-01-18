@@ -368,3 +368,6 @@ Todo だけまとめておきます．
 
 ここからは本家 Vue の実装を見てもらってもいいですし，もちろん chibivue を参考にしてもらっても良いです．
 (おすすめなのは本家 Vue を実際に読みながらです．)
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/010_patch_keyed_children)

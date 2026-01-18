@@ -319,3 +319,6 @@ Patch Flags の実装は以下の要素で構成されています：
 5. **Block Tree 連携**: 動的な子ノードのみを効率的に更新
 
 Patch Flags は Vue 3 の Virtual DOM パフォーマンスを大幅に向上させる重要な最適化技術です．コンパイラとランタイムが協調することで，テンプレートベースのフレームワークの利点を最大限に活かしています．
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/050_patch_flags)

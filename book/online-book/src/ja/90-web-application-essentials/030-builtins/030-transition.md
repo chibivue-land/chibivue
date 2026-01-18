@@ -616,3 +616,6 @@ Transition の実装は以下の要素で構成されています：
 6. **VNode.transition**: レンダラーがフックを呼び出すためのプロパティ
 
 Transition は CSS トランジション/アニメーションと密接に連携し，ブラウザの描画パイプラインを理解した上で実装されています．
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/030_transition)

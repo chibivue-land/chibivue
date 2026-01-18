@@ -658,3 +658,6 @@ chibivue の SSR 実装は以下の要素で構成されています：
 7. **ディレクティブ対応**: `getSSRProps` による SSR 時のプロパティ注入
 
 次のセクションでは，SSR で生成された HTML をクライアントサイドで「復元」する hydration について学びます．
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/010_ssr)

@@ -295,7 +295,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 外掛",
+            text: "外掛",
             collapsed: false,
             items: [
               {
@@ -303,22 +303,21 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/zh-tw/90-web-application-essentials/010-plugins/010-router",
               },
               {
-                text: "預處理器",
+                text: "CSS 預處理器",
                 link: "/zh-tw/90-web-application-essentials/010-plugins/020-preprocessors",
               },
             ],
           },
-
           {
             text: "伺服器端渲染",
             collapsed: false,
             items: [
               {
-                text: "createSSRApp",
+                text: "renderToString",
                 link: "/zh-tw/90-web-application-essentials/020-ssr/010-create-ssr-app",
               },
               {
-                text: "🚧 水合",
+                text: "Hydration（水合）",
                 link: "/zh-tw/90-web-application-essentials/020-ssr/020-hydration",
               },
             ],
@@ -350,7 +349,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/zh-tw/90-web-application-essentials/040-optimizations/020-patch-flags",
               },
               {
-                text: "🚧 樹扁平化",
+                text: "樹扁平化",
                 link: "/zh-tw/90-web-application-essentials/040-optimizations/030-tree-flattening",
               },
             ],

@@ -295,7 +295,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "🚧 Plugin",
+            text: "Plugins",
             collapsed: false,
             items: [
               {
@@ -303,28 +303,27 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/90-web-application-essentials/010-plugins/010-router",
               },
               {
-                text: "Preprocessors",
+                text: "CSS Preprocessors",
                 link: "/90-web-application-essentials/010-plugins/020-preprocessors",
               },
             ],
           },
-
           {
             text: "Server Side Rendering",
             collapsed: false,
             items: [
               {
-                text: "createSSRApp",
+                text: "renderToString",
                 link: "/90-web-application-essentials/020-ssr/010-create-ssr-app",
               },
               {
-                text: "🚧 hydration",
+                text: "Hydration",
                 link: "/90-web-application-essentials/020-ssr/020-hydration",
               },
             ],
           },
           {
-            text: "Builtins",
+            text: "Built-in Components",
             collapsed: false,
             items: [
               {
@@ -350,7 +349,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/90-web-application-essentials/040-optimizations/020-patch-flags",
               },
               {
-                text: "🚧 Tree Flattening",
+                text: "Tree Flattening",
                 link: "/90-web-application-essentials/040-optimizations/030-tree-flattening",
               },
             ],

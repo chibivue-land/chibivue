@@ -448,3 +448,6 @@ KeepAlive の実装は以下の要素で構成されています：
 6. **include/exclude/max**: 柔軟なキャッシュ制御
 
 KeepAlive はコンポーネントの状態を保持しながらパフォーマンスを向上させる強力な機能ですが，メモリ使用量とのトレードオフがあるため，適切な `max` 値の設定が重要です．
+
+ここまでのソースコード:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/020_keep_alive)
