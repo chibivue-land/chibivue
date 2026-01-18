@@ -1,13 +1,13 @@
-import { createApp, defineComponent, ref } from 'chibivue'
+import { createApp, defineComponent, ref } from "chibivue";
 
 const App = defineComponent({
   setup() {
-    const count = ref(0)
+    const count = ref(0);
     const increment = (e: Event) => {
-      console.log(e)
-      count.value++
-    }
-    return { count, increment }
+      console.log(e);
+      count.value++;
+    };
+    return { count, increment };
   },
 
   template: `<div>
@@ -23,8 +23,8 @@ const App = defineComponent({
     <button @click="increment($event)">@click="increment($event)"</button>
     <button @click="e => increment(e)">@click="e => increment(e)"</button>
 </div>`,
-})
+});
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.mount('#app')
+app.mount("#app");

@@ -1,6 +1,6 @@
 {
   "name": "01_project_setup",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,12 +8,12 @@
   },
   "keywords": [],
   "author": "ubugeeei <ubuge1122@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.10.1"
+    "@types/node": "^24.10.9"
   },
   "dependencies": {
-    "@babel/parser": "^7.21.8",
-    "magic-string": "^0.30.0"
+    "@babel/parser": "^7.28.6",
+    "magic-string": "^0.30.21"
   }
 }

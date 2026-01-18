@@ -1,5 +1,12 @@
 # Understanding the Template Compiler
 
+<KawaikoNote variant="question" title="What is a compiler?">
+
+A "compiler" is a translator. It converts human-friendly formats (template)
+to machine-friendly formats (h functions)!
+
+</KawaikoNote>
+
 ## Actually, we have everything we need for the operation so far (?)
 
 So far, we have implemented the Reactivity System, Virtual DOM, and Component.
@@ -148,6 +155,13 @@ To narrow down the scope a little more, it is this part:
 // ↓
 h('p', { class: 'hello' }, ['Hello World'])
 ```
+
+<KawaikoNote variant="funny" title="The true nature of templates">
+
+Templates are ultimately converted to h function calls.
+In other words, the h function we implemented earlier will also be used here!
+
+</KawaikoNote>
 
 Let's implement it step by step in several phases.
 

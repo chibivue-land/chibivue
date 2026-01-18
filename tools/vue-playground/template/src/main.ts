@@ -1,7 +1,7 @@
-import { createApp } from 'vue'
+import { createApp } from "vue";
 
 // @ts-expect-error
-const modules = import.meta.glob('./*.(vue|js)')
-const mod = (modules['.' + location.pathname] || modules['./App.vue'])()
+const modules = import.meta.glob("./*.(vue|js)");
+const mod = (modules["." + location.pathname] || modules["./App.vue"])();
 
-mod.then(({ default: mod }: any) => createApp(mod).mount('#app'))
+mod.then(({ default: mod }: any) => createApp(mod).mount("#app"));

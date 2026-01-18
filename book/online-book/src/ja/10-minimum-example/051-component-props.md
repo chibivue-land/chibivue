@@ -217,6 +217,48 @@ export function updateProps(
 }
 ```
 
+ここで，コンポーネントの更新処理の流れを整理しておきましょう．\
+親コンポーネントが再レンダリングされると，子コンポーネントに渡される props も変わる可能性があります．\
+この時の流れは以下のようになります：
+
+1. 親コンポーネントの `render` 関数が実行され，子コンポーネントの新しい VNode が生成される
+2. `patch` 処理で `processComponent` が呼ばれ，既存のコンポーネント（`n1`）と新しい VNode（`n2`）の比較が行われる
+3. 既存のコンポーネントが存在する場合は `updateComponent` 関数が呼ばれる
+
+まず，`ComponentInternalInstance` に `next` プロパティを追加します．
+
+```ts
+export interface ComponentInternalInstance {
+  // .
+  // .
+  vnode: VNode // 現在のVNode
+  next: VNode | null // 親からの更新要求があった場合に、新しいVNodeがここにセットされる
+  // .
+  // .
+}
+```
+
+次に，`processComponent` で既にマウントされているコンポーネントの更新処理を実装します．
+
+```ts
+const processComponent = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+  if (n1 == null) {
+    mountComponent(n2, container);
+  } else {
+    updateComponent(n1, n2); // 追加
+  }
+};
+
+const updateComponent = (n1: VNode, n2: VNode) => {
+  const instance = (n2.component = n1.component)!; // 古いVNodeから新しいVNodeにインスタンスの参照を引き継ぐ
+  instance.next = n2; // 新しいVNodeをnextにセット
+  instance.update(); // コンポーネントの更新をトリガー
+};
+```
+
+`updateComponent` では，新しい VNode (`n2`) を `instance.next` にセットしてから `instance.update()` を呼び出します．\
+これにより `componentUpdateFn` が実行されます．
+
 `~/packages/runtime-core/renderer.ts`
 
 ```ts
@@ -236,12 +278,19 @@ const setupRenderEffect = (
         let { next, vnode } = instance;
 
         if (next) {
-          next.el = vnode.el;
-          next.component = instance;
-          instance.vnode = next;
-          instance.next = null;
-          updateProps(instance, next.props); // ここ
+          // 親からの更新要求がある場合（props が変更された場合など）
+          next.el = vnode.el; // 新しいVNodeに現在のDOM要素への参照を引き継ぐ
+          next.component = instance; // 新しいVNodeにインスタンスへの参照をセット
+          instance.vnode = next; // インスタンスの「現在のVNode」を新しいものに切り替える
+          instance.next = null; // 処理済みなのでnullにリセット
+          updateProps(instance, next.props); // 新しいpropsでインスタンスのpropsを更新
+        }
+        // nextがない場合は、コンポーネント自身のリアクティブな状態変更による更新
 ```
+
+`instance.next` が存在する場合，それは親コンポーネントからの更新要求（props の変更など）があったことを意味します．\
+この場合，新しい VNode の情報をインスタンスに反映させてから，props を更新します．\
+`instance.next` が存在しない場合は，コンポーネント自身の内部状態（リアクティブな値）の変更による再レンダリングです．
 
 これで画面が更新されるようになれば OK です．\
 これで props を利用することによってコンポーネントにデータを受け渡せるようになりました！　やったね！

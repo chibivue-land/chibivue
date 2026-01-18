@@ -2,7 +2,16 @@
 
 ## 這次我們的目標開發者介面
 
-從這裡開始，我們將討論 Vue.js 的精髓，即響應式系統．  
+從這裡開始，我們將討論 Vue.js 的精髓，即響應式系統．
+
+<KawaikoNote variant="surprise" title="重頭戲來了！">
+
+這是 Vue.js 的核心！\
+一旦理解了響應式系統，你就會明白 Vue.js 的「魔法」是如何實現的．\
+雖然有點難，但讓我們一起努力吧！
+
+</KawaikoNote>
+
 之前的實現雖然看起來類似於 Vue.js，但在功能上實際上並不是 Vue.js．  
 我只是實現了初始的開發者介面，並使其能夠顯示各種 HTML．
 
@@ -136,6 +145,14 @@ app.mount('#app')
 
 關鍵是一個名為 Proxy 的對象．
 
+<KawaikoNote variant="question" title="Proxy 是什麼？">
+
+Proxy 是 JavaScript 的標準功能，不是 Vue.js 發明的．\
+可以理解為「監視和自定義對象訪問的機制」！\
+通過它，我們可以檢測到「值被讀取」或「值被修改」．
+
+</KawaikoNote>
+
 首先，讓我解釋一下它們，而不是關於響應式系統的實現方法．
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
@@ -191,5 +208,12 @@ const o = new Proxy(
 ```
 
 ![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+
+<KawaikoNote variant="funny" title="這就是響應式的秘密！">
+
+用 get 檢測「讀取」，用 set 檢測「寫入」...\
+也就是說，在 set 的時機調用「更新螢幕的處理」，就能實現 **值變化時自動更新螢幕** 的魔法！
+
+</KawaikoNote>
 
 這就是理解 Proxy 的程度．

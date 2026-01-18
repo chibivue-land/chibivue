@@ -1,4 +1,4 @@
-import { isArray, isString } from '../shared'
+import { isArray, isString } from "../shared";
 import {
   type ArrayExpression,
   type CallExpression,
@@ -12,159 +12,152 @@ import {
   type TemplateChildNode,
   type TextNode,
   type VNodeCall,
-} from './ast'
-import type { CompilerOptions } from './options'
+} from "./ast";
+import type { CompilerOptions } from "./options";
 
 const CONSTANT = {
-  vNodeFuncName: 'h',
-  ctxIdent: '_ctx',
-}
+  vNodeFuncName: "h",
+  ctxIdent: "_ctx",
+};
 
-type CodegenNode = TemplateChildNode | JSChildNode
+type CodegenNode = TemplateChildNode | JSChildNode;
 
 export interface CodegenContext {
-  source: string
-  code: string
-  indentLevel: number
-  line: 1
-  column: 1
-  offset: 0
-  runtimeGlobalName: string
-  push(code: string, node?: CodegenNode): void
-  indent(): void
-  deindent(withoutNewLine?: boolean): void
-  newline(): void
+  source: string;
+  code: string;
+  indentLevel: number;
+  line: 1;
+  column: 1;
+  offset: 0;
+  runtimeGlobalName: string;
+  push(code: string, node?: CodegenNode): void;
+  indent(): void;
+  deindent(withoutNewLine?: boolean): void;
+  newline(): void;
 }
 
 function createCodegenContext(ast: RootNode): CodegenContext {
   const context: CodegenContext = {
     source: ast.loc.source,
-    code: '',
+    code: "",
     column: 1,
     line: 1,
     offset: 0,
     indentLevel: 0,
-    runtimeGlobalName: 'ChibiVue',
+    runtimeGlobalName: "ChibiVue",
     push(code) {
-      context.code += code
+      context.code += code;
     },
     indent() {
-      newline(++context.indentLevel)
+      newline(++context.indentLevel);
     },
     deindent(withoutNewLine = false) {
       if (withoutNewLine) {
-        --context.indentLevel
+        --context.indentLevel;
       } else {
-        newline(--context.indentLevel)
+        newline(--context.indentLevel);
       }
     },
     newline() {
-      newline(context.indentLevel)
+      newline(context.indentLevel);
     },
-  }
+  };
 
   function newline(n: number) {
-    context.push('\n' + `  `.repeat(n))
+    context.push("\n" + `  `.repeat(n));
   }
 
-  return context
+  return context;
 }
 
-export const generate = (
-  ast: RootNode,
-  option: Required<CompilerOptions>,
-): string => {
-  const context = createCodegenContext(ast)
+export const generate = (ast: RootNode, option: Required<CompilerOptions>): string => {
+  const context = createCodegenContext(ast);
 
-  const { push } = context
+  const { push } = context;
 
-  const args = [CONSTANT.ctxIdent]
-  const signature = args.join(', ')
+  const args = [CONSTANT.ctxIdent];
+  const signature = args.join(", ");
 
   if (option.isBrowser) {
-    push('return ')
+    push("return ");
   }
-  push(`function render(${signature}) { `)
+  push(`function render(${signature}) { `);
 
   if (option.isBrowser) {
-    context.indent()
-    push(`with (_ctx) {`)
+    context.indent();
+    push(`with (_ctx) {`);
   }
 
-  context.indent()
-  genFunctionPreamble(ast, context) // NOTE: 将来的には関数の外に出す
+  context.indent();
+  genFunctionPreamble(ast, context); // NOTE: 将来的には関数の外に出す
 
-  push(`return `)
+  push(`return `);
   if (ast.children) {
-    ast.children.forEach(codegenNode => {
-      genNode(codegenNode, context, option)
-    })
+    ast.children.forEach((codegenNode) => {
+      genNode(codegenNode, context, option);
+    });
   }
 
-  context.deindent()
-  push(` }`)
+  context.deindent();
+  push(` }`);
 
   if (option.isBrowser) {
-    context.deindent()
-    push(` }`)
+    context.deindent();
+    push(` }`);
   }
 
-  return context.code
-}
+  return context.code;
+};
 
 function genFunctionPreamble(_ast: RootNode, context: CodegenContext) {
-  const { push, newline, runtimeGlobalName } = context
-  const helpers = [CONSTANT.vNodeFuncName].join(', ')
-  push(`const { ${helpers} } = ${runtimeGlobalName}\n`)
-  newline()
+  const { push, newline, runtimeGlobalName } = context;
+  const helpers = [CONSTANT.vNodeFuncName].join(", ");
+  push(`const { ${helpers} } = ${runtimeGlobalName}\n`);
+  newline();
 }
 
-const genNode = (
-  node: CodegenNode,
-  context: CodegenContext,
-  option: Required<CompilerOptions>,
-) => {
+const genNode = (node: CodegenNode, context: CodegenContext, option: Required<CompilerOptions>) => {
   if (isString(node)) {
-    context.push(node)
-    return
+    context.push(node);
+    return;
   }
 
   switch (node.type) {
     case NodeTypes.ELEMENT:
-      genNode(node.codegenNode!, context, option)
-      break
+      genNode(node.codegenNode!, context, option);
+      break;
     case NodeTypes.TEXT:
-      genText(node, context)
-      break
+      genText(node, context);
+      break;
     case NodeTypes.SIMPLE_EXPRESSION:
-      genExpression(node, context)
-      break
+      genExpression(node, context);
+      break;
     case NodeTypes.INTERPOLATION:
-      genInterpolation(node, context, option)
-      break
+      genInterpolation(node, context, option);
+      break;
     case NodeTypes.VNODE_CALL:
-      genVNodeCall(node, context, option)
-      break
+      genVNodeCall(node, context, option);
+      break;
     case NodeTypes.JS_OBJECT_EXPRESSION:
-      genObjectExpression(node, context, option)
-      break
+      genObjectExpression(node, context, option);
+      break;
     case NodeTypes.JS_ARRAY_EXPRESSION:
-      genArrayExpression(node, context, option)
-      break
+      genArrayExpression(node, context, option);
+      break;
     default:
       // make sure we exhaust all possible types
-      const exhaustiveCheck: never = node
-      return exhaustiveCheck
+      const exhaustiveCheck: never = node;
+      return exhaustiveCheck;
   }
-}
+};
 
 function genText(node: TextNode, context: CodegenContext) {
-  context.push(JSON.stringify(node.content), node)
+  context.push(JSON.stringify(node.content), node);
 }
 
 function genExpression(node: SimpleExpressionNode, context: CodegenContext) {
-  const { content, isStatic } = node
-  context.push(isStatic ? JSON.stringify(content) : content, node)
+  const { content, isStatic } = node;
+  context.push(isStatic ? JSON.stringify(content) : content, node);
 }
 
 function genInterpolation(
@@ -172,44 +165,37 @@ function genInterpolation(
   context: CodegenContext,
   option: Required<CompilerOptions>,
 ) {
-  const { push } = context
+  const { push } = context;
   if (!option.isBrowser) {
-    push(`${CONSTANT.ctxIdent}.`)
+    push(`${CONSTANT.ctxIdent}.`);
   }
-  push(node.content)
+  push(node.content);
 }
 
-function genExpressionAsPropertyKey(
-  node: ExpressionNode,
-  context: CodegenContext,
-) {
-  const { push } = context
+function genExpressionAsPropertyKey(node: ExpressionNode, context: CodegenContext) {
+  const { push } = context;
   if (node.isStatic) {
-    push(JSON.stringify(node.content), node)
+    push(JSON.stringify(node.content), node);
   } else {
-    push(`[${node.content}]`, node)
+    push(`[${node.content}]`, node);
   }
 }
 
-function genVNodeCall(
-  node: VNodeCall,
-  context: CodegenContext,
-  option: Required<CompilerOptions>,
-) {
-  const { push } = context
-  const { tag, props, children } = node
+function genVNodeCall(node: VNodeCall, context: CodegenContext, option: Required<CompilerOptions>) {
+  const { push } = context;
+  const { tag, props, children } = node;
 
-  push(CONSTANT.vNodeFuncName + `(`, node)
-  genNodeList(genNullableArgs([tag, props, children]), context, option)
-  push(`)`)
+  push(CONSTANT.vNodeFuncName + `(`, node);
+  genNodeList(genNullableArgs([tag, props, children]), context, option);
+  push(`)`);
 }
 
-function genNullableArgs(args: any[]): CallExpression['arguments'] {
-  let i = args.length
+function genNullableArgs(args: any[]): CallExpression["arguments"] {
+  let i = args.length;
   while (i--) {
-    if (args[i] != null) break
+    if (args[i] != null) break;
   }
-  return args.slice(0, i + 1).map(arg => arg || `null`)
+  return args.slice(0, i + 1).map((arg) => arg || `null`);
 }
 
 function genObjectExpression(
@@ -217,27 +203,27 @@ function genObjectExpression(
   context: CodegenContext,
   option: Required<CompilerOptions>,
 ) {
-  const { push } = context
-  const { properties } = node
+  const { push } = context;
+  const { properties } = node;
 
   if (!properties.length) {
-    push(`{}`, node)
-    return
+    push(`{}`, node);
+    return;
   }
 
-  push(`{ `)
+  push(`{ `);
   for (let i = 0; i < properties.length; i++) {
-    const { key, value } = properties[i]
+    const { key, value } = properties[i];
     // key
-    genExpressionAsPropertyKey(key, context)
-    push(`: `)
+    genExpressionAsPropertyKey(key, context);
+    push(`: `);
     // value
-    genNode(value, context, option)
+    genNode(value, context, option);
     if (i < properties.length - 1) {
-      push(`,`)
+      push(`,`);
     }
   }
-  push(` }`)
+  push(` }`);
 }
 
 function genArrayExpression(
@@ -245,7 +231,7 @@ function genArrayExpression(
   context: CodegenContext,
   option: Required<CompilerOptions>,
 ) {
-  genNodeListAsArray(node.elements as CodegenNode[], context, option)
+  genNodeListAsArray(node.elements as CodegenNode[], context, option);
 }
 
 function genNodeListAsArray(
@@ -253,9 +239,9 @@ function genNodeListAsArray(
   context: CodegenContext,
   option: Required<CompilerOptions>,
 ) {
-  context.push(`[`)
-  genNodeList(nodes, context, option)
-  context.push(`]`)
+  context.push(`[`);
+  genNodeList(nodes, context, option);
+  context.push(`]`);
 }
 
 function genNodeList(
@@ -264,19 +250,19 @@ function genNodeList(
   option: Required<CompilerOptions>,
   comma: boolean = true,
 ) {
-  const { push } = context
+  const { push } = context;
   for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i]
+    const node = nodes[i];
     if (isString(node)) {
-      push(node)
+      push(node);
     } else if (isArray(node)) {
-      genNodeListAsArray(node, context, option)
+      genNodeListAsArray(node, context, option);
     } else {
-      genNode(node, context, option)
+      genNode(node, context, option);
     }
 
     if (i < nodes.length - 1) {
-      comma && push(', ')
+      comma && push(", ");
     }
   }
 }

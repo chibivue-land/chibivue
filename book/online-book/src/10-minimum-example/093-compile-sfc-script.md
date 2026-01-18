@@ -184,7 +184,7 @@ First, let's install the necessary libraries.
 
 ```sh
 pwd # ~
-ni @babel/parser magic-string
+pnpm add @babel/parser magic-string
 ```
 
 Create a file called "rewriteDefault.ts".

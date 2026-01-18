@@ -2,6 +2,13 @@
 
 ## What is the h function?
 
+<KawaikoNote variant="question" title="What does 'h' stand for?">
+
+`h` is short for `hyperscript`. Since it's a function that expresses
+HTML (Hyper Text Markup Language) in JavaScript, it got this name!
+
+</KawaikoNote>
+
 So far, we have made the following source code work:
 
 ```ts
@@ -83,8 +90,15 @@ const app: App = {
 Well, the only thing that has changed is that we changed the `message` string to an `node` object.  
 All we have to do now is perform DOM operations based on the object in the render function.
 
-Actually, this object has a name, "Virtual DOM".  
-We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.\
+Actually, this object has a name, "Virtual DOM".
+We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.
+
+<KawaikoNote variant="funny" title="The true nature of Virtual DOM">
+
+"Virtual DOM" might sound complex, but it's just a JavaScript object!
+It represents the DOM with a simple `{ type, props, children }` structure.
+
+</KawaikoNote>
 
 ## Implementing the h function
 
@@ -238,6 +252,13 @@ app.mount('#app')
 Yay! Now we can use the h function to render various tags!
 
 ![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+
+<KawaikoNote variant="surprise" title="h function complete!">
+
+Now you can express HTML in JavaScript!
+With nested structures, you can create any complex UI.
+
+</KawaikoNote>
 
 Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

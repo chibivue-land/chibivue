@@ -1,5 +1,11 @@
 ## Surrounding Knowledge
 
+<KawaikoNote variant="question" title="What is SFC?">
+
+SFC is a Vue-specific format that combines template, script, and style in one file.
+It's saved as `.vue` files and converted to JavaScript by build tools!
+
+</KawaikoNote>
 
 ## How is SFC implemented?
 
@@ -96,7 +102,7 @@ Since there may be few people who have never written a Vite plugin, let's start 
 
 ```sh
 pwd # ~
-nlx create-vite
+pnpm dlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -204,7 +210,7 @@ Let's check it in the browser.
 
 ```sh
 pwd # ~/plugin-sample
-nr dev
+pnpm dev
 ```
 
 ![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)

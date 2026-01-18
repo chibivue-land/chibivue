@@ -1,8 +1,7 @@
 # ref api（基礎響應式系統開始）
 
-::: warning
-這裡解釋的實現基於當前草擬的[響應式優化](/zh-tw/30-basic-reactivity-system/005-reactivity-optimization)之前的版本．  
-一旦[響應式優化](/zh-tw/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的內容將更新以與其保持一致．
+::: tip 前置知識
+在閱讀本章之前，我們建議閱讀[響應式優化](/zh-tw/30-basic-reactivity-system/005-reactivity-optimization)以了解基於 alien-signals 的優化響應式系統的概念．
 :::
 
 ## ref api 的回顧（和實現）

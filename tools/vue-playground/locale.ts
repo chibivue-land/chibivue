@@ -1,4 +1,4 @@
-import { t } from 'chainsi'
+import { t } from "chainsi";
 
 export const locale = {
   prompts: {
@@ -37,10 +37,10 @@ export const locale = {
   },
   errors: {
     targetDirHasAlreadyExist: {
-      $t: () => `${t('[Error] Target directory has already exist!').red._}\n`,
+      $t: () => `${t("[Error] Target directory has already exist!").red._}\n`,
     },
     noEmptyPathInput: {
-      $t: () => `${t('[Invalid input] empty input is not allowed.').red._}\n`,
+      $t: () => `${t("[Invalid input] empty input is not allowed.").red._}\n`,
     },
     noRelativePathInput: {
       $t: () =>
@@ -48,4 +48,4 @@ export const locale = {
         `${t('[Invalid input] input must be an').red._} ${t('absolute').yellow.bold.underline._} ${t('path').red._}\n`,
     },
   },
-}
+};

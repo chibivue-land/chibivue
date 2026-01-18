@@ -14,10 +14,10 @@
 現在，讓我們快速進入環境設置！\
 我將列出我們將使用的工具和版本：
 
-- 運行時：[Node.js](https://nodejs.org/en) v22
+- 運行時：[Node.js](https://nodejs.org/en) v24
 - 語言：[TypeScript](https://www.typescriptlang.org/)
-- 套件管理器：[pnpm](https://pnpm.io/) v9
-- 構建工具：[Vite](https://vite.dev/) v6
+- 套件管理器：[pnpm](https://pnpm.io/) v10
+- 構建工具：[Vite](https://vite.dev/) v8
 
 ## 安裝 Node.js
 
@@ -28,21 +28,6 @@
 你們中的許多人可能通常使用 npm 或 yarn．對於這本書，我們將使用 pnpm，所以請也安裝它．命令大多與 npm 相似．
 https://pnpm.io/installation
 
-除了上述內容，本書還使用 [ni](https://github.com/antfu/ni)，可以幽默地稱為「套件管理器管理器」．  
-（它是由 Vue.js 核心團隊的 antfu 創建的．）
-
-如果您還沒有設置它，請也安裝它：
-
-```sh
-$ npm i -g @antfu/ni
-```
-
-[ni](https://github.com/antfu/ni) 是一個方便的工具，可以自動為您在各種套件管理器之間切換．
-
-有趣的是，這個工具也在 Vue.js 的實際開發中使用．  
-https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
-
-對於套件安裝，啟動開發伺服器和其他任務，我們將使用 ni 命令．
 
 ## 創建項目
 
@@ -62,7 +47,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 
    ```sh
    $ cd chibivue
-   $ nr setup ../my-chibivue-project
+   $ pnpm setup:book ../my-chibivue-project
    ```
 
 :::
@@ -91,7 +76,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 ## 請創建一個專門用於 chibivue 的目錄並導航到其中。（此後將省略此類註釋。）
 pwd # ~/
 pnpm init
-ni -D @types/node
+pnpm add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -130,7 +115,7 @@ console.log("Hello, World")
 pwd # ~/
 mkdir examples
 cd examples
-nlx create-vite
+pnpm dlx create-vite
 
 ## --------- 使用 Vite CLI 設置
 ## Project name: playground
@@ -239,7 +224,7 @@ export default defineConfig({
 
 ```sh
 pwd # ~
-nr dev
+pnpm dev
 ```
 
 訪問使用此命令啟動的開發伺服器．如果顯示消息，則設置完成．

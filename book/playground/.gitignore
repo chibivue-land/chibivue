@@ -1,0 +1,5 @@
+node_modules
+dist
+*.local
+.DS_Store
+src/chapters.generated.ts

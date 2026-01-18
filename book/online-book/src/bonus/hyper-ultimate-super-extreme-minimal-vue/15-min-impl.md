@@ -9,7 +9,7 @@ cd chibivue
 
 # Create a project using the setup command.
 # Specify the root path of the project as an argument.
-nr setup ../my-chibivue-project
+pnpm setup ../my-chibivue-project
 ```
 
 The project setup is now complete.

@@ -233,7 +233,81 @@ arg が動的な場合は，特定が不可能なため，normalizeProps とい�
 
 とっても良さそうです！
 
+## Same-name Shorthand (Vue 3.4+)
+
+Vue 3.4 から，属性名と変数名が同じ場合の省略記法がサポートされています．
+
+```vue
+<!-- 従来の記法 -->
+<div :id="id" :class="class" :style="style"></div>
+
+<!-- Same-name Shorthand -->
+<div :id :class :style></div>
+```
+
+この機能を実装するには，パーサーとトランスフォーマーを修正する必要があります．
+
+### パーサーでの対応
+
+`:prop` のように値が省略された場合，`exp` は undefined になります．
+
+```ts
+return {
+  type: NodeTypes.DIRECTIVE,
+  name: dirName,
+  exp: value && {  // value がない場合は exp は undefined
+    type: NodeTypes.SIMPLE_EXPRESSION,
+    content: value.content,
+    isStatic: false,
+    loc: value.loc,
+  },
+  loc,
+  arg,
+};
+```
+
+### トランスフォーマーでの対応
+
+`transformBind` で `exp` が undefined の場合，`arg` の内容を `exp` として使用します．
+
+```ts
+export const transformBind: DirectiveTransform = (dir, _node, context) => {
+  let { exp } = dir;
+  const arg = dir.arg!;
+
+  // Same-name shorthand: :prop は :prop="prop" と同じ
+  if (!exp) {
+    if (arg.type !== NodeTypes.SIMPLE_EXPRESSION || !arg.isStatic) {
+      // 動的な引数には対応しない
+      context.onError(
+        createCompilerError(ErrorCodes.X_V_BIND_NO_EXPRESSION, dir.loc)
+      );
+      return { props: [] };
+    }
+    // arg の内容を exp として使用
+    const propName = camelize(arg.content);
+    exp = {
+      type: NodeTypes.SIMPLE_EXPRESSION,
+      content: propName,
+      isStatic: false,
+      loc: arg.loc,
+    };
+  }
+
+  if (arg.type !== NodeTypes.SIMPLE_EXPRESSION) {
+    arg.children.unshift(`(`);
+    arg.children.push(`) || ""`);
+  } else if (!arg.isStatic) {
+    arg.content = `${arg.content} || ""`;
+  }
+
+  return { props: [createObjectProperty(arg, exp)] };
+};
+```
+
+これにより，`:id` と書くだけで `:id="id"` と同じ意味になります．
+
 次回は v-on を実装していきます．
 
-ここまでのソースコード:  
+ここまでのソースコード:
 [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/020_v_bind)

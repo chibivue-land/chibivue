@@ -1,8 +1,7 @@
 # ref api (Basic Reactivity System Start)
 
-::: warning
-The implementation explained here is based on the version prior to the currently drafted [Reactivity Optimization](/30-basic-reactivity-system/005-reactivity-optimization).  \
-Once [Reactivity Optimization](/30-basic-reactivity-system/005-reactivity-optimization) is completed, the content of this chapter will be updated to align with it.
+::: tip Prerequisites
+Before reading this chapter, we recommend reading [Reactivity Optimization](/30-basic-reactivity-system/005-reactivity-optimization) to understand the concepts of the alien-signals based optimized reactivity system.
 :::
 
 ## Review of ref api (and implementation)

@@ -2,7 +2,16 @@
 
 ## Developer interface we aim for this time
 
-From here, we will talk about the essence of Vue.js, which is the Reactivity System.  
+From here, we will talk about the essence of Vue.js, which is the Reactivity System.
+
+<KawaikoNote variant="surprise" title="Here we go!">
+
+This is the heart of Vue.js!\
+Once you understand the Reactivity System, you'll understand Vue.js's "magic".\
+It's a bit challenging, but let's tackle it together!
+
+</KawaikoNote>
+
 The previous implementation, although it looks similar to Vue.js, is not actually Vue.js in terms of functionality.  
 I simply implemented the initial developer interface and made it possible to display various HTML.
 
@@ -136,6 +145,14 @@ This is the main theme for this time. I want to execute `updateComponent` when t
 
 The key to this is an object called Proxy.
 
+<KawaikoNote variant="question" title="What's Proxy?">
+
+Proxy is a standard JavaScript feature, not something Vue.js invented.\
+Think of it as "a mechanism to monitor and customize access to objects"!\
+With this, we can detect when "a value was read" or "a value was changed".
+
+</KawaikoNote>
+
 First, let me explain about each of them, not about the implementation method of the Reactivity System.
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
@@ -191,6 +208,13 @@ const o = new Proxy(
 ```
 
 ![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+
+<KawaikoNote variant="funny" title="This is the secret of reactivity!">
+
+We can detect "reads" with get and "writes" with set...\
+So if we call "screen update logic" at set timing, we achieve the magic of **automatic screen updates when values change**!
+
+</KawaikoNote>
 
 This is the extent of understanding Proxy.
 

@@ -2,7 +2,16 @@
 
 ## 这次我们的目标开发者接口
 
-从这里开始，我们将讨论 Vue.js 的精髓，即响应式系统．  
+从这里开始，我们将讨论 Vue.js 的精髓，即响应式系统．
+
+<KawaikoNote variant="surprise" title="重头戏来了！">
+
+这是 Vue.js 的核心！\
+一旦理解了响应式系统，你就会明白 Vue.js 的「魔法」是如何实现的．\
+虽然有点难，但让我们一起努力吧！
+
+</KawaikoNote>
+
 之前的实现虽然看起来类似于 Vue.js，但在功能上实际上并不是 Vue.js．  
 我只是实现了初始的开发者接口，并使其能够显示各种 HTML．
 
@@ -136,6 +145,14 @@ app.mount('#app')
 
 关键是一个名为 Proxy 的对象．
 
+<KawaikoNote variant="question" title="Proxy 是什么？">
+
+Proxy 是 JavaScript 的标准功能，不是 Vue.js 发明的．\
+可以理解为「监视和自定义对象访问的机制」！\
+通过它，我们可以检测到「值被读取」或「值被修改」．
+
+</KawaikoNote>
+
 首先，让我解释一下它们，而不是关于响应式系统的实现方法．
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
@@ -191,5 +208,12 @@ const o = new Proxy(
 ```
 
 ![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+
+<KawaikoNote variant="funny" title="这就是响应式的秘密！">
+
+用 get 检测「读取」，用 set 检测「写入」...\
+也就是说，在 set 的时机调用「更新屏幕的处理」，就能实现 **值变化时自动更新屏幕** 的魔法！
+
+</KawaikoNote>
 
 这就是理解 Proxy 的程度．

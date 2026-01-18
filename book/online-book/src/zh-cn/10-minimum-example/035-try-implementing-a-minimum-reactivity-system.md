@@ -16,6 +16,14 @@
 
 首先，Vue.js 的响应式系统涉及 `target`，`Proxy`，`ReactiveEffect`，`Dep`，`track`，`trigger`，`targetMap` 和 `activeEffect`（目前是 `activeSub`）．
 
+<KawaikoNote variant="warning" title="角色很多！">
+
+突然出现了很多术语，但不要慌！\
+如果我们一个一个地看每个角色，拼图的碎片就会拼在一起．\
+首先，让我们目标是「大致把握全貌」．
+
+</KawaikoNote>
+
 首先，让我们谈谈 targetMap 的结构．
 targetMap 是某个目标的键和 deps 的映射．
 Target 指的是您想要使其响应式的对象，dep 指的是您想要执行的效果（函数）．您可以这样想．
@@ -73,6 +81,15 @@ targetMap 的键是"某个目标"．在这个例子中，state1 和 state2 对�
 在部分 `() => h("p", {}, name: ${state1.name})` 中，映射 `state1->name->updateComponentFn` 被注册，在部分 `watch(() => state2.count, onCountUpdated)` 中，映射 `state2->count->onCountUpdated` 被注册．
 
 这个基本结构负责其余部分，然后我们考虑如何创建（注册）targetMap 以及如何执行效果．
+
+<KawaikoNote variant="funny" title="简单地想">
+
+**targetMap** 是一个记录「谁影响谁」的笔记本．\
+当 `state1.name` 改变时 → 运行 `updateComponent`\
+当 `state2.count` 改变时 → 运行 `onCountUpdated`\
+它记录了这些关系！
+
+</KawaikoNote>
 
 这就是 `track` 和 `trigger` 概念的用武之地．
 顾名思义，`track` 是在 `targetMap` 中注册的函数，`trigger` 是从 `targetMap` 检索效果并执行它的函数．
@@ -468,5 +485,13 @@ const render: RootRenderFunction = (vnode, container) => {
 现在似乎工作正常！
 
 现在我们可以使用 `reactive` 更新屏幕！
+
+<KawaikoNote variant="surprise" title="恭喜！">
+
+响应式系统的基础已经完成！\
+你理解了 Vue.js「值变化时自动更新屏幕」魔法背后的秘密了吗？\
+克服了这一关，你对 Vue.js 内部已经有了很深的理解！
+
+</KawaikoNote>
 
 到此为止的源代码：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)

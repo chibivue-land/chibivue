@@ -182,14 +182,18 @@ https://twitter.com/ubugeeei
 
 ## 關於作者
 
-**ubugeeei**
+**ubugeeei (もののけ王)**
 
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
 [Vue.js](https://github.com/vuejs) 成員，[Vue.js Japan User Group](https://github.com/vuejs-jp) 核心工作人員．\
-[chibivue land](https://github.com/chibivue-land) 所有者．
+[chibivue land](https://github.com/chibivue-land) King. 👉 https://chibivue.land
 
-https://ublog.dev/
+我還在開發 [vize](https://github.com/ubugeeei/vize)（Rust 製作的 Vue.js 工具鏈）和 [ox-content](https://github.com/ubugeeei/ox-content)（Rust 製作的文檔工具鏈）．
+
+https://wtrclred.io/
+
+如果您願意，請作為贊助商支持我！ 👉 https://github.com/sponsors/ubugeeei
 
 <div align="center">
 

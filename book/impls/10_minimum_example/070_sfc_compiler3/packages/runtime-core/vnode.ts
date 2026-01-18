@@ -1,28 +1,28 @@
-import type { ComponentInternalInstance } from './component'
+import type { ComponentInternalInstance } from "./component";
 
-export type VNodeTypes = string | typeof Text | object
+export type VNodeTypes = string | typeof Text | object;
 
-export const Text = Symbol()
+export const Text = Symbol();
 
 export interface VNode<HostNode = any> {
-  type: VNodeTypes
-  props: VNodeProps | null
-  children: VNodeNormalizedChildren
+  type: VNodeTypes;
+  props: VNodeProps | null;
+  children: VNodeNormalizedChildren;
 
-  el: HostNode | undefined
+  el: HostNode | undefined;
 
-  component: ComponentInternalInstance | null
+  component: ComponentInternalInstance | null;
 }
 
 export interface VNodeProps {
-  [key: string]: any
+  [key: string]: any;
 }
 
-export type VNodeNormalizedChildren = string | VNodeArrayChildren
-export type VNodeArrayChildren = Array<VNodeArrayChildren | VNodeChildAtom>
+export type VNodeNormalizedChildren = string | VNodeArrayChildren;
+export type VNodeArrayChildren = Array<VNodeArrayChildren | VNodeChildAtom>;
 
-export type VNodeChild = VNodeChildAtom | VNodeArrayChildren
-type VNodeChildAtom = VNode | string
+export type VNodeChild = VNodeChildAtom | VNodeArrayChildren;
+type VNodeChildAtom = VNode | string;
 
 export function createVNode(
   type: VNodeTypes,
@@ -35,14 +35,14 @@ export function createVNode(
     children: children,
     el: undefined,
     component: null,
-  }
-  return vnode
+  };
+  return vnode;
 }
 
 export function normalizeVNode(child: VNodeChild): VNode {
-  if (typeof child === 'object') {
-    return { ...child } as VNode
+  if (typeof child === "object") {
+    return { ...child } as VNode;
   } else {
-    return createVNode(Text, null, String(child))
+    return createVNode(Text, null, String(child));
   }
 }

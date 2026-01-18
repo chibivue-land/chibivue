@@ -1,71 +1,70 @@
-import { EffectScope, type ReactiveEffect } from '../reactivity'
-import { type AppContext, createAppContext } from './apiCreateApp'
-import { emit } from './componentEmits'
-import type { ComponentOptions } from './componentOptions'
-import { type Props, initProps } from './componentProps'
+import { EffectScope, type ReactiveEffect } from "../reactivity";
+import { type AppContext, createAppContext } from "./apiCreateApp";
+import { emit } from "./componentEmits";
+import type { ComponentOptions } from "./componentOptions";
+import { type Props, initProps } from "./componentProps";
 import {
   type ComponentPublicInstance,
   PublicInstanceProxyHandlers,
-} from './componentPublicInstance'
-import { LifecycleHooks } from './enums'
-import type { VNode, VNodeChild } from './vnode'
+} from "./componentPublicInstance";
+import { LifecycleHooks } from "./enums";
+import type { VNode, VNodeChild } from "./vnode";
 
-export type Component = ComponentOptions
+export type Component = ComponentOptions;
 
-export type Data = Record<string, unknown>
+export type Data = Record<string, unknown>;
 
-type LifecycleHook<TFn = Function> = TFn[] | null
+type LifecycleHook<TFn = Function> = TFn[] | null;
 
 export interface ComponentInternalInstance {
-  uid: number
-  type: Component
-  parent: ComponentInternalInstance | null
-  appContext: AppContext
+  uid: number;
+  type: Component;
+  parent: ComponentInternalInstance | null;
+  appContext: AppContext;
 
-  vnode: VNode
-  subTree: VNode
-  next: VNode | null
+  vnode: VNode;
+  subTree: VNode;
+  next: VNode | null;
 
-  effect: ReactiveEffect
-  render: InternalRenderFunction
-  update: () => void
+  effect: ReactiveEffect;
+  render: InternalRenderFunction;
+  update: () => void;
 
-  provides: Data
-  scope: EffectScope
+  provides: Data;
+  scope: EffectScope;
 
-  propsOptions: Props
-  props: Data
-  emit: (event: string, ...args: any[]) => void
-  setupState: Data
+  propsOptions: Props;
+  props: Data;
+  emit: (event: string, ...args: any[]) => void;
+  setupState: Data;
 
-  proxy: ComponentPublicInstance | null
-  ctx: Data
+  proxy: ComponentPublicInstance | null;
+  ctx: Data;
 
-  isMounted: boolean
-  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook
-  [LifecycleHooks.MOUNTED]: LifecycleHook
-  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook
-  [LifecycleHooks.UPDATED]: LifecycleHook
-  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook
-  [LifecycleHooks.UNMOUNTED]: LifecycleHook
+  isMounted: boolean;
+  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
+  [LifecycleHooks.MOUNTED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook;
+  [LifecycleHooks.UPDATED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook;
+  [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 }
 
 export type InternalRenderFunction = {
-  (ctx: ComponentPublicInstance): VNodeChild
-}
+  (ctx: ComponentPublicInstance): VNodeChild;
+};
 
-const emptyAppContext = createAppContext()
+const emptyAppContext = createAppContext();
 
-let uid = 0
+let uid = 0;
 
 export function createComponentInstance(
   vnode: VNode,
   parent: ComponentInternalInstance | null,
 ): ComponentInternalInstance {
-  const type = vnode.type as Component
+  const type = vnode.type as Component;
 
-  const appContext =
-    (parent ? parent.appContext : vnode.appContext) || emptyAppContext
+  const appContext = (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
 
   const instance: ComponentInternalInstance = {
     uid: uid++,
@@ -98,66 +97,66 @@ export function createComponentInstance(
     [LifecycleHooks.UPDATED]: null,
     [LifecycleHooks.BEFORE_UNMOUNT]: null,
     [LifecycleHooks.UNMOUNTED]: null,
-  }
+  };
 
-  instance.emit = emit.bind(null, instance)
+  instance.emit = emit.bind(null, instance);
 
-  instance.ctx = { _: instance }
+  instance.ctx = { _: instance };
 
-  return instance
+  return instance;
 }
 
-export let currentInstance: ComponentInternalInstance | null = null
+export let currentInstance: ComponentInternalInstance | null = null;
 export const setCurrentInstance = (instance: ComponentInternalInstance) => {
-  currentInstance = instance
-  instance.scope.on()
-}
+  currentInstance = instance;
+  instance.scope.on();
+};
 
 export const unsetCurrentInstance = () => {
-  currentInstance && currentInstance.scope.off()
-  currentInstance = null
-}
+  currentInstance && currentInstance.scope.off();
+  currentInstance = null;
+};
 
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode
-  initProps(instance, props)
+  const { props } = instance.vnode;
+  initProps(instance, props);
 
-  const component = instance.type as Component
+  const component = instance.type as Component;
 
-  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers)
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
 
   if (component.setup) {
-    setCurrentInstance(instance)
+    setCurrentInstance(instance);
     const setupResult = component.setup(instance.props, {
       emit: instance.emit,
-    }) as InternalRenderFunction
-    unsetCurrentInstance()
+    }) as InternalRenderFunction;
+    unsetCurrentInstance();
 
-    if (typeof setupResult === 'function') {
-      instance.render = setupResult
-    } else if (typeof setupResult === 'object' && setupResult !== null) {
-      instance.setupState = setupResult
+    if (typeof setupResult === "function") {
+      instance.render = setupResult;
+    } else if (typeof setupResult === "object" && setupResult !== null) {
+      instance.setupState = setupResult;
     } else {
       // do nothing
     }
   }
 
   if (compile && !component.render) {
-    const template = component.template ?? ''
+    const template = component.template ?? "";
     if (template) {
-      instance.render = compile(template)
+      instance.render = compile(template);
     }
   }
 
-  const { render } = component
+  const { render } = component;
   if (render) {
-    instance.render = render as InternalRenderFunction
+    instance.render = render as InternalRenderFunction;
   }
-}
+};
 
-type CompileFunction = (template: string) => InternalRenderFunction
-let compile: CompileFunction | undefined
+type CompileFunction = (template: string) => InternalRenderFunction;
+let compile: CompileFunction | undefined;
 
 export function registerRuntimeCompiler(_compile: any) {
-  compile = _compile
+  compile = _compile;
 }

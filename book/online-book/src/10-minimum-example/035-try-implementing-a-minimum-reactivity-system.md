@@ -16,6 +16,14 @@ To clarify the purpose again, the purpose this time is to "execute `updateCompon
 
 First, Vue.js's Reactivity System involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect` (currently `activeSub`).
 
+<KawaikoNote variant="warning" title="Lots of characters!">
+
+Many terms suddenly appeared, but don't panic!\
+If we look at each role one by one, the puzzle pieces will fit together.\
+First, let's aim to "roughly grasp the big picture".
+
+</KawaikoNote>
+
 First, let's talk about the structure of targetMap.
 targetMap is a mapping of keys and deps for a certain target.
 Target refers to the object you want to make reactive, and dep refers to the effect (function) you want to execute. You can think of it that way.
@@ -74,6 +82,15 @@ In the part `() => h("p", {}, name: ${state1.name})`, the mapping `state1->name-
 
 This basic structure is responsible for the rest, and then we think about how to create (register) targetMap and how to execute the effect.
 
+<KawaikoNote variant="funny" title="Think simply">
+
+**targetMap** is a notebook that records "who affects whom".\
+When `state1.name` changes → run `updateComponent`\
+When `state2.count` changes → run `onCountUpdated`\
+It records these relationships!
+
+</KawaikoNote>
+
 That's where the concepts of `track` and `trigger` come in.
 As the names suggest, `track` is a function that registers in `targetMap`, and `trigger` is a function that retrieves the effect from `targetMap` and executes it.
 
@@ -125,6 +142,14 @@ function reactive<T>(target: T) {
 ```
 
 ![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+
+<KawaikoNote variant="base" title="Key points so far">
+
+- **track**: Called when "reading" a value, registers "run X when this value changes"
+- **trigger**: Called when "writing" a value, executes registered handlers
+- **reactive**: A function that creates a Proxy with this mechanism
+
+</KawaikoNote>
 
 Here, you may notice one missing element. That is, "which function to register in track?".
 The answer is the concept of `activeEffect`.
@@ -468,5 +493,13 @@ Now, how about this?
 Now it seems to be working fine!
 
 Now we can update the screen with `reactive`!
+
+<KawaikoNote variant="surprise" title="Congratulations!">
+
+The basics of the Reactivity System are complete!\
+Do you understand the secret behind Vue.js's "magic" of automatic screen updates?\
+By overcoming this, you now have a deep understanding of Vue.js internals!
+
+</KawaikoNote>
 
 Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)

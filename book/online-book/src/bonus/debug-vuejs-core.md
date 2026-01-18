@@ -33,7 +33,7 @@ Then,
 ```bash
 cd vuejs-core
 ni
-nr test
+pnpm test
 ```
 
 You can run the tests, so feel free to modify the source code you are interested in and run the tests.
@@ -62,7 +62,7 @@ At this time, you should be asked for the **absolute path** of the local vuejs/c
 ```bash
 cd chibivue
 ni
-nr setup:vue
+pnpm setup:vue
 
 # 💁 input your local vuejs/core absolute path:
 #   e.g. /Users/ubugeeei/oss/vuejs-core
@@ -76,7 +76,7 @@ This will create a Vue project in the chibivue repository that points to the loc
 Then, when you want to start, you can start it with the following command and check the operation while modifying the vuejs/core source code.
 
 ```bash
-nr dev:vue
+pnpm dev:vue
 ```
 
 Of course, HMR on the playground side,

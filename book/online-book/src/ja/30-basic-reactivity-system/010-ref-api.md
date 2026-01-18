@@ -1,8 +1,7 @@
 # ref api (Basic Reactivity System 部門スタート)
 
-::: warning
-ここで説明される実装は現在執筆中の [Reactivity の最適化](/ja/30-basic-reactivity-system/005-reactivity-optimization) 以前のものになります．\
-[Reactivity の最適化](/ja/30-basic-reactivity-system/005-reactivity-optimization)　が完成次第，このチャプターの内容もそれに沿うように変更されます．
+::: tip 前提知識
+このチャプターを読む前に，[Reactivity の最適化](/ja/30-basic-reactivity-system/005-reactivity-optimization) を読んで，alien-signals ベースの最適化されたリアクティビティシステムの概念を理解しておくことをお勧めします．
 :::
 
 ## ref api のおさらい (と実装)

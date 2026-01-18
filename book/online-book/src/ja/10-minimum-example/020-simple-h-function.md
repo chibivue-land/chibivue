@@ -2,6 +2,13 @@
 
 ## h function とは
 
+<KawaikoNote variant="question" title="h って何の略？">
+
+`h` は `hyperscript` の略です．HTML (Hyper Text Markup Language) を
+JavaScript で表現するための関数なので，この名前がついています！
+
+</KawaikoNote>
+
 ここまでで，以下のようなソースコードが動作するようになりました．
 
 ```ts
@@ -84,8 +91,15 @@ const app: App = {
 変わったところというと，message という文字列ではなく node というオブジェクトに変えただけです．  
 あとは render 関数でオブジェクトを元に DOM 操作をすれば OK です．
 
-実は，このオブジェクトには名前がついていて，「仮想 DOM」と言います．  
+実は，このオブジェクトには名前がついていて，「仮想 DOM」と言います．
 仮想 DOM については仮想 DOM のチャプターで詳しく解説するので，とりあえず名前だけ覚えてもらえれば大丈夫です．
+
+<KawaikoNote variant="funny" title="仮想 DOM の正体">
+
+「仮想 DOM」と聞くと難しそうですが，中身はただの JavaScript オブジェクト！
+`{ type, props, children }` という構造で DOM を表現しているだけです．
+
+</KawaikoNote>
 
 ## h function を実装する
 
@@ -240,6 +254,13 @@ app.mount('#app')
 やった！ h 関数でいろんなタグを描画できるようになった！
 
 ![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+
+<KawaikoNote variant="surprise" title="h 関数完成！">
+
+これで HTML を JavaScript で表現できるようになりました！
+入れ子構造でどんな複雑な画面も作れます．
+
+</KawaikoNote>
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

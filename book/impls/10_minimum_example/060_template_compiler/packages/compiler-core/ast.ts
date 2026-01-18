@@ -5,39 +5,39 @@ export const enum NodeTypes {
 }
 
 export interface Node {
-  type: NodeTypes
-  loc: SourceLocation
+  type: NodeTypes;
+  loc: SourceLocation;
 }
 
 export interface ElementNode extends Node {
-  type: NodeTypes.ELEMENT
-  tag: string
-  props: Array<AttributeNode>
-  children: TemplateChildNode[]
-  isSelfClosing: boolean
+  type: NodeTypes.ELEMENT;
+  tag: string;
+  props: Array<AttributeNode>;
+  children: TemplateChildNode[];
+  isSelfClosing: boolean;
 }
 
 export interface TextNode extends Node {
-  type: NodeTypes.TEXT
-  content: string
+  type: NodeTypes.TEXT;
+  content: string;
 }
 
-export type TemplateChildNode = ElementNode | TextNode
+export type TemplateChildNode = ElementNode | TextNode;
 
 export interface AttributeNode extends Node {
-  type: NodeTypes.ATTRIBUTE
-  name: string
-  value: TextNode | undefined
+  type: NodeTypes.ATTRIBUTE;
+  name: string;
+  value: TextNode | undefined;
 }
 
 export interface SourceLocation {
-  start: Position
-  end: Position
-  source: string
+  start: Position;
+  end: Position;
+  source: string;
 }
 
 export interface Position {
-  offset: number // from start of file
-  line: number
-  column: number
+  offset: number; // from start of file
+  line: number;
+  column: number;
 }

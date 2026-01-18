@@ -182,14 +182,18 @@ You can also join from the Discord button on the top right of this book's header
 
 ## About the Author
 
-**ubugeeei**
+**ubugeeei (mononokeking)**
 
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
 Member of [Vue.js](https://github.com/vuejs), core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp).\
-Owner of [chibivue land](https://github.com/chibivue-land).
+[chibivue land](https://github.com/chibivue-land) King. 👉 https://chibivue.land
 
-https://ublog.dev/
+I'm also developing [vize](https://github.com/ubugeeei/vize) (Vue.js toolchain in Rust) and [ox-content](https://github.com/ubugeeei/ox-content) (documentation toolchain in Rust).
+
+https://wtrclred.io/
+
+If you'd like, I would appreciate your support as a sponsor! 👉 https://github.com/sponsors/ubugeeei
 
 <div align="center">
 

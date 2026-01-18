@@ -9,7 +9,7 @@ cd chibivue
 
 # 使用设置命令创建项目。
 # 将项目的根路径指定为参数。
-nr setup ../my-chibivue-project
+pnpm setup ../my-chibivue-project
 ```
 
 项目设置现在完成了．

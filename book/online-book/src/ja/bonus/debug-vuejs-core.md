@@ -33,7 +33,7 @@ git clone https://github.com/vuejs/core.git vuejs-core
 ```bash
 cd vuejs-core
 ni
-nr test
+pnpm test
 ```
 
 でテストを実行する事ができるので，適宜気になるソースコードをいじってみてテストを実行してみましょう．
@@ -62,7 +62,7 @@ clone できたら，プロジェクトを作成するスクリプトを実行�
 ```bash
 cd chibivue
 ni
-nr setup:vue
+pnpm setup:vue
 
 # 💁 input your local vuejs/core absolute path:
 #   e.g. /Users/ubugeeei/oss/vuejs-core
@@ -76,7 +76,7 @@ nr setup:vue
 あとは起動したい時に以下のコマンドで起動して，vuejs/core のソースコードをいじりながら動作を確認する事ができます．
 
 ```bash
-nr dev:vue
+pnpm dev:vue
 ```
 
 playground 側の HMR はもちろん，

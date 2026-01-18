@@ -1,18 +1,18 @@
-import { createApp, reactive } from 'chibivue'
+import { createApp, reactive } from "chibivue";
 
 const app = createApp({
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const state = reactive({ message: "Hello, chibivue!", input: "" });
 
     const changeMessage = () => {
-      state.message += '!'
-    }
+      state.message += "!";
+    };
 
     const handleInput = (e: InputEvent) => {
-      state.input = (e.target as HTMLInputElement)?.value ?? ''
-    }
+      state.input = (e.target as HTMLInputElement)?.value ?? "";
+    };
 
-    return { state, changeMessage, handleInput }
+    return { state, changeMessage, handleInput };
   },
 
   template: `
@@ -46,6 +46,6 @@ const app = createApp({
       </style>
     </div>
   `,
-})
+});
 
-app.mount('#app')
+app.mount("#app");

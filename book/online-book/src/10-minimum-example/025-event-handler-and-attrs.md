@@ -1,4 +1,11 @@
-# Let’s work on supporting event handlers and attributes.
+# Let's work on supporting event handlers and attributes.
+
+<KawaikoNote variant="question" title="What are props?">
+
+Props is short for "properties" - information passed to elements.
+Event handlers (like onClick) and attributes (like style, class) are all handled as props!
+
+</KawaikoNote>
 
 ## Since it's lonely just to display
 
@@ -231,6 +238,13 @@ We can now register event handlers with the h function!
 
 ![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
 
+<KawaikoNote variant="funny" title="The invoker trick">
+
+If you register event handlers directly, you need to remove/add them on every update.
+By wrapping with an invoker, you can just swap the value instead!
+
+</KawaikoNote>
+
 ## Trying to support other props
 
 After this, it's just a matter of doing the same thing with setAttribute.\
@@ -265,5 +279,12 @@ app.mount('#app')
 
 Now we can handle a wide range of HTML!
 
-Source code up to this point:  
+<KawaikoNote variant="surprise" title="Props support complete!">
+
+With events and attributes supported, you can now create interactive UIs!
+Things are starting to feel like a real app.
+
+</KawaikoNote>
+
+Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

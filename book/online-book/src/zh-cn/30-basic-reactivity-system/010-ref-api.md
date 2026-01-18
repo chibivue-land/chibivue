@@ -1,8 +1,7 @@
 # ref api（基础响应式系统开始）
 
-::: warning
-这里解释的实现基于当前草拟的[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)之前的版本．  
-一旦[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)完成，本章的内容将更新以与其保持一致．
+::: tip 前置知识
+在阅读本章之前，我们建议阅读[响应式优化](/zh-cn/30-basic-reactivity-system/005-reactivity-optimization)以了解基于 alien-signals 的优化响应式系统的概念．
 :::
 
 ## ref api 的回顾（和实现）

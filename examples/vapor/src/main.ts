@@ -1,7 +1,7 @@
-import { createApp } from 'chibivue'
+import { createApp } from "chibivue";
 
 // @ts-expect-error
-import App from './App.vue'
+import App from "./App.vue";
 
-const app = createApp(App)
-app.mount('#app')
+const app = createApp(App);
+app.mount("#app");

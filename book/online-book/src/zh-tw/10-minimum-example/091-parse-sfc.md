@@ -13,7 +13,7 @@ rm -rf ./plugin-sample
 
 ```sh
 pwd # ~
-ni vite
+pnpm add vite
 ```
 
 這是外掛程式的主要部分，但由於這原本超出了 vuejs/core 的範圍，我們將在 `packages` 目錄中創建一個名為 `@extensions` 的目錄並在那裡實現它．

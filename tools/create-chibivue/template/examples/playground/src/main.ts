@@ -1,3 +1,3 @@
-import { helloChibivue } from 'chibivue'
+import { helloChibivue } from "chibivue";
 
-helloChibivue()
+helloChibivue();

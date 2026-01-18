@@ -1,6 +1,6 @@
 {
   "name": "@examples/app",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "type": "module",
   "scripts": {
     "dev": "vite"
@@ -8,5 +8,6 @@
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
     "vite": "^6.0.0"
-  }
+  },
+  "license": "MIT"
 }

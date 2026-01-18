@@ -39,7 +39,126 @@ const newProps = n2.props || {}
 
 ## innerHTML / textContent
 
-innerHTML 和 textContent 与其他 Props 相比有点特殊．
+innerHTML 和 textContent 与其他 Props 相比有点特殊．\
 这是因为如果具有此 Prop 的元素有子元素，它们需要被卸载．
 
-TODO: 编写
+例如，考虑以下情况：
+
+```ts
+h('div', { innerHTML: '<p>hello</p>' }, [
+  h(SomeComponent, {}, [])
+])
+```
+
+在这种情况下，div 元素的内容将被 `innerHTML` 覆盖为 `<p>hello</p>`．\
+然而，作为 children 传递的 `SomeComponent` 已经存在于虚拟 DOM 中，如果不正确卸载它，将会发生以下问题：
+
+- 事件监听器不会被移除
+- 组件生命周期钩子（如 onUnmounted）不会被调用
+- 可能导致内存泄漏
+
+因此，在设置 innerHTML 或 textContent 时，需要卸载现有的子元素．
+
+### 实现
+
+首先，扩展 `patchProp` 的类型定义以接受 `prevChildren` 和 `unmountChildren`．
+
+`~/packages/runtime-core/renderer.ts`
+
+```ts
+export interface RendererOptions<HostNode = RendererNode, HostElement = RendererElement> {
+  patchProp(
+    el: HostElement,
+    key: string,
+    prevValue: any,
+    nextValue: any,
+    prevChildren?: VNode<HostNode>[], // 添加
+    unmountChildren?: (children: VNode<HostNode>[]) => void, // 添加
+  ): void;
+  // ...
+}
+```
+
+接下来，在 `patchDOMProp` 函数中实现 innerHTML/textContent 的处理．
+
+`~/packages/runtime-dom/modules/props.ts`
+
+```ts
+export function patchDOMProp(
+  el: any,
+  key: string,
+  value: any,
+  prevChildren: any,
+  unmountChildren: any,
+) {
+  if (key === 'innerHTML' || key === 'textContent') {
+    // 如果存在子元素则卸载
+    if (prevChildren) {
+      unmountChildren(prevChildren)
+    }
+    el[key] = value == null ? '' : value
+    return
+  }
+
+  // ... (其他 props 的处理)
+}
+```
+
+然后，在从 `patchProp` 调用 `patchDOMProp` 时传递 `prevChildren` 和 `unmountChildren`．
+
+`~/packages/runtime-dom/patchProp.ts`
+
+```ts
+export const patchProp: DOMRendererOptions['patchProp'] = (
+  el,
+  key,
+  prevValue,
+  nextValue,
+  prevChildren,
+  unmountChildren,
+) => {
+  if (key === 'style') {
+    patchStyle(el, prevValue, nextValue)
+  } else if (isOn(key)) {
+    patchEvent(el, key, nextValue)
+  } else if (shouldSetAsProp(el, key)) {
+    patchDOMProp(el, key, nextValue, prevChildren, unmountChildren) // 传递 prevChildren, unmountChildren
+  } else {
+    patchAttr(el, key, nextValue)
+  }
+}
+```
+
+最后，在 renderer.ts 中调用 `hostPatchProp` 时传递适当的参数．
+
+`~/packages/runtime-core/renderer.ts` 的 `mountElement` 和 `patchElement`
+
+```ts
+const mountElement = (vnode: VNode, container: RendererElement, anchor: RendererElement | null) => {
+  let el: RendererElement
+  const { type, props } = vnode
+  el = vnode.el = hostCreateElement(type as string)
+
+  mountChildren(vnode.children as VNode[], el, anchor)
+
+  if (props) {
+    for (const key in props) {
+      hostPatchProp(
+        el,
+        key,
+        null,
+        props[key],
+        vnode.children as VNode[], // 添加
+        unmountChildren, // 添加
+      )
+    }
+  }
+
+  hostInsert(el, container)
+}
+```
+
+现在，当使用 innerHTML 或 textContent 时，现有的子元素将被正确卸载．
+
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/060_other_props)

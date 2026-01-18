@@ -1,3 +1,3 @@
 export type CompilerOptions = {
-  isBrowser?: boolean
-}
+  isBrowser?: boolean;
+};

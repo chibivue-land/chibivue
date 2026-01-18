@@ -1,7 +1,0 @@
-{
-  "name": "@chibivue/compiler-sfc",
-  "version": "0.0.18",
-  "main": "dist/index.js",
-  "author": "ubugeeei <ubuge1122@gmail.com>",
-  "license": "MIT"
-}

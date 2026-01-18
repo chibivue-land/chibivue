@@ -1,5 +1,12 @@
 # Single File Component で開発したい (周辺知識編)
 
+<KawaikoNote variant="question" title="SFC って何？">
+
+SFC は template, script, style を 1 ファイルにまとめた Vue 独自の形式です．
+`.vue` ファイルとして保存し，ビルドツールで JavaScript に変換されます！
+
+</KawaikoNote>
+
 ## SFC はどうやって実現されている？
 
 ここからはいよいよ SFC (Single File Component) の対応をやっていきます．  
@@ -97,7 +104,7 @@ Vite のプラグインを書いたことのない方も少ないと思うので
 
 ```sh
 pwd # ~
-nlx create-vite
+pnpm dlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -203,7 +210,7 @@ createApp(App).mount('#app')
 
 ```sh
 pwd # ~/plugin-sample
-nr dev
+pnpm dev
 ```
 
 ![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)

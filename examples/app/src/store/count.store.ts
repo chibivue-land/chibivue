@@ -1,16 +1,16 @@
-import { ref } from 'chibivue'
-import { defineStore } from 'chibivue-store'
+import { ref } from "chibivue";
+import { defineStore } from "chibivue-store";
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
+export const useCounterStore = defineStore("counter", () => {
+  const count = ref(0);
 
   const increment = () => {
-    count.value++
-  }
+    count.value++;
+  };
 
   const reset = () => {
-    count.value = 0
-  }
+    count.value = 0;
+  };
 
-  return { count, increment, reset }
-})
+  return { count, increment, reset };
+});

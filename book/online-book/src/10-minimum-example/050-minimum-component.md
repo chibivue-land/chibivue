@@ -1,9 +1,16 @@
 # I want to develop using a component-based approach.
 
+<KawaikoNote variant="question" title="Why components?">
+
+Components are a mechanism to divide UI into reusable parts.
+Instead of writing the same button multiple times, you define it once and reuse it!
+
+</KawaikoNote>
+
 ## Thinking based on organizing existing implementations
 
 So far, we have implemented createApp API, Reactivity System, and Virtual DOM system in a small scale.\
-With the current implementation, we can dynamically change the UI using the Reactivity System and perform efficient rendering using the Virtual DOM system. \
+With the current implementation, we can dynamically change the UI using the Reactivity System and perform diff rendering using the Virtual DOM system. \
 However, as a developer interface, everything is written in createAppAPI.\
 In reality, I want to divide the files more and implement generic components for reusability.\
 First, let's review the parts that are currently messy in the existing implementation. Please take a look at the render function in renderer.ts.
@@ -286,8 +293,15 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-Now we can render components. Let's try creating a `playground` component as an example.\
+Now we can render components. Let's try creating a `playground` component as an example.
 In this way, we can divide the rendering into components.
+
+<KawaikoNote variant="funny" title="Role of instances">
+
+The component "blueprint" and "instance" are different things.
+Even if you line up the same CounterComponent 3 times, each one has its own independent state!
+
+</KawaikoNote>
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -318,6 +332,13 @@ const app = createApp({
 
 app.mount('#app')
 ```
+
+<KawaikoNote variant="surprise" title="Component system complete!">
+
+Now you can componentize UI!
+This mechanism is essential in real app development.
+
+</KawaikoNote>
 
 Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)

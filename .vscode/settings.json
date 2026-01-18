@@ -18,14 +18,16 @@
     "lightningcss",
     "nocheck",
     "onwarn",
+    "oxfmt",
+    "oxlint",
     "paren",
     "Parens",
     "RAWTEXT",
     "RCDATA",
     "resetsix",
+    "rolldown",
     "textlint",
     "tokei",
-    "tseslint",
     "unref",
     "vdom",
     "vitepress",
@@ -40,5 +42,11 @@
     "vuejs-core": "vue",
     "@extensions": "lib"
   },
-  "material-icon-theme.files.associations": {}
+  "material-icon-theme.files.associations": {},
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit"
+  },
+  "oxc.enable": true
 }

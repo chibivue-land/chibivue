@@ -1,5 +1,12 @@
 # Take a break
 
+<KawaikoNote variant="surprise" title="Great job!">
+
+Congratulations on completing the Minimal Example Section!
+You've now experienced the core parts of Vue.js.
+
+</KawaikoNote>
+
 ## Minimal Example section is over!
 
 At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done 😁\
@@ -350,3 +357,10 @@ Therefore, from now on, the explanations will be kept to a rough policy, and you
 (N-no, it's not that I'm getting lazy to write in detail or anything like that!) \
 Well, it's fun to implement it as the book says, but once it starts to take shape, it's more fun to do it yourself and it leads to a deeper understanding. \
 From here on, please consider this book as a kind of guideline, and the main content is in the original Vue source code!
+
+<KawaikoNote variant="funny" title="The real journey begins!">
+
+With the knowledge you've gained so far, you can now read the Vue.js source code.
+Feel free to proceed to the sections that interest you, or dive into the original code - enjoy it your way!
+
+</KawaikoNote>

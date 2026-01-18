@@ -283,7 +283,3 @@ export function renderSlot(slots: Slots, name: string): VNode {
 
 ここまでのソースコード:\
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/080_component_slot_outlet)
-
-## スロットの挿入
-
-TBD

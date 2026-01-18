@@ -1,1 +1,1 @@
-import 'chibivue'
+import "chibivue";

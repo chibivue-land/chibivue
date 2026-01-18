@@ -1,26 +1,23 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "temp",
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["DOM", "ES2020"],
-    "strict": true,
-    "paths": {
-      "@chibivue/*": ["./packages/*/src"],
-      "chibivue": ["./packages/chibivue/src"],
-      // extensions
-      "chibivue-store": ["./packages/@extensions/chibivue-store/src"],
-      "chibivue-router": ["./packages/@extensions/chibivue-router/src"],
-      "vite-plugin-chibivue": [
-        "./packages/@extensions/vite-plugin-chibivue/src"
-      ]
-    },
-    "types": ["vitest/globals"],
     "moduleResolution": "Bundler",
-    "allowJs": true,
-    "esModuleInterop": true
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "declaration": true,
+    "isolatedDeclarations": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "@chibivue/*": ["./impl/*/src"],
+      "chibivue": ["./impl/chibivue/src"],
+      "chibivue-store": ["./impl/@extensions/chibivue-store/src"],
+      "chibivue-router": ["./impl/@extensions/chibivue-router/src"],
+      "vite-plugin-chibivue": ["./impl/@extensions/vite-plugin-chibivue/src"]
+    }
   },
-  "include": ["packages/**/*.ts", "examples/**/**.ts", "examples/**/**.vue"],
-  "exclude": ["./**/node_modules", "./**/dist"]
+  "include": ["impl/**/*.ts", "examples/**/*.ts", "examples/**/*.vue"],
+  "exclude": ["**/node_modules", "**/dist", "examples/vuejs-core"]
 }

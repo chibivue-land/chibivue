@@ -18,6 +18,14 @@ Proxy を用いた実装の流れについて説明してみます．
 
 まず，Vue.js のリアクティビティシステムには `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
 
+<KawaikoNote variant="warning" title="登場人物が多い！">
+
+いきなりたくさんの用語が出てきましたが，焦らないでください！\
+一つずつ役割を見ていけば，パズルのピースがはまるように理解できます．\
+まずは「全体像をぼんやり掴む」ことを目指しましょう．
+
+</KawaikoNote>
+
 まず，targetMap の構造についてです．  
 targetMap はある target の key と dep のマッピングです．  
 target というのはリアクティブにしたいオブジェクト，dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です．  
@@ -76,6 +84,15 @@ targetMap の key は「ある target」 です．この例では state1 と sta
 
 基本的な構造はこれが担っていて，あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます．
 
+<KawaikoNote variant="funny" title="シンプルに考えると">
+
+**targetMap** は「誰が誰に影響を与えるか」を記録するメモ帳です．\
+`state1.name` が変わったら → `updateComponent` を実行\
+`state2.count` が変わったら → `onCountUpdated` を実行\
+という関係を記録しています！
+
+</KawaikoNote>
+
 そこで登場する概念が `track` と `trigger` です．
 それぞれ名前の通り，`track` は `TargetMap` に登録する関数，`trigger` は `TargetMap` から作用を取り出して実行する関数です．
 
@@ -127,6 +144,14 @@ function reactive<T>(target: T) {
 ```
 
 ![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+
+<KawaikoNote variant="base" title="ここまでのポイント">
+
+- **track**: 値を「読んだとき」に呼ばれ，「この値が変わったら○○を実行してね」と登録
+- **trigger**: 値を「書き換えたとき」に呼ばれ，登録された処理を実行
+- **reactive**: この仕組みを持った Proxy を作る関数
+
+</KawaikoNote>
 
 ここで，一つ足りない要素について気づくかもしれません．それは「track ではどの関数を登録するの?」という点です．
 答えを言ってしまうと，これが `activeEffect` という概念です．
@@ -471,5 +496,13 @@ const render: RootRenderFunction = (vnode, container) => {
 今度は大丈夫そうです!
 
 これで reactive に画面を更新できるようになりました!!
+
+<KawaikoNote variant="surprise" title="おめでとう！">
+
+リアクティビティシステムの基本が完成しました！\
+Vue.js の「値を変えたら画面が更新される」魔法の正体，理解できましたか？\
+ここを乗り越えたあなたは，Vue.js の内部をかなり深く理解しています！
+
+</KawaikoNote>
 
 ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)
