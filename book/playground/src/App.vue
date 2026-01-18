@@ -13,12 +13,16 @@ const fileContents = ref<Map<string, string>>(new Map());
 const originalContents = ref<Map<string, string>>(new Map());
 const modifiedFiles = ref<Set<string>>(new Set());
 const terminalOutput = ref<string[]>([]);
+const consoleOutput = ref<{ type: string; message: string; timestamp: Date }[]>([]);
+const activeTab = ref<'terminal' | 'console'>('terminal');
 const previewUrl = ref("");
+const previewIframe = ref<HTMLIFrameElement | null>(null);
 const isLoading = ref(false);
 const isBooting = ref(false);
 const isInitializing = ref(true);
 const editorContainer = ref<HTMLDivElement | null>(null);
 const terminalContainer = ref<HTMLDivElement | null>(null);
+const consoleContainer = ref<HTMLDivElement | null>(null);
 const expandedDirs = ref<Set<string>>(new Set());
 const sidebarWidth = ref(240);
 const terminalHeight = ref(200);
@@ -29,42 +33,29 @@ let webcontainer: WebContainer | null = null;
 let editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 let monaco: typeof Monaco | null = null;
 
+// Clean terminal output - strip TUI control sequences
+function cleanTerminalOutput(text: string): string {
+  return text
+    // Remove cursor movement and screen clearing
+    .replace(/\x1b\[\d*[ABCDEFGJKST]/g, '')
+    .replace(/\x1b\[\d*;\d*[Hf]/g, '')
+    .replace(/\x1b\[\??\d*[hl]/g, '')
+    .replace(/\x1b\[[\d;]*m/g, '') // Remove all color codes for clean output
+    .replace(/\x1b\]\d*;[^\x07]*\x07/g, '') // OSC sequences
+    .replace(/\x1b\[[\d;]*[A-Za-z]/g, '') // Any remaining CSI
+    .replace(/\x1b[78]/g, '') // Save/restore cursor
+    .replace(/\r/g, '') // Carriage returns
+    .replace(/\x07/g, '') // Bell
+    .trim();
+}
+
 // ANSI to HTML conversion with full color support
 function ansiToHtml(text: string): string {
-  const ansiColors: Record<string, string> = {
-    '30': '#4a5568', '31': '#fc8181', '32': '#68d391', '33': '#f6e05e',
-    '34': '#63b3ed', '35': '#d6bcfa', '36': '#4fd1c5', '37': '#e2e8f0',
-    '90': '#718096', '91': '#feb2b2', '92': '#9ae6b4', '93': '#faf089',
-    '94': '#90cdf4', '95': '#e9d8fd', '96': '#81e6d9', '97': '#f7fafc',
-    '40': '#1a202c', '41': '#c53030', '42': '#2f855a', '43': '#d69e2e',
-    '44': '#2b6cb0', '45': '#805ad5', '46': '#2c7a7b', '47': '#e2e8f0',
-  };
+  // First clean up TUI sequences
+  const cleaned = cleanTerminalOutput(text);
+  if (!cleaned) return '';
 
-  let result = text
-    .replace(/\x1b\[([0-9;]+)m/g, (_, codes) => {
-      const codeList = codes.split(';');
-      let openTags = '';
-      for (const code of codeList) {
-        if (ansiColors[code]) {
-          const isBg = parseInt(code) >= 40;
-          openTags += `<span style="${isBg ? 'background' : 'color'}:${ansiColors[code]}">`;
-        }
-        if (code === '0' || code === '39') {
-          return '</span>';
-        }
-        if (code === '1') {
-          openTags += '<strong>';
-        }
-        if (code === '22') {
-          return '</strong>';
-        }
-      }
-      return openTags;
-    })
-    .replace(/\x1b\[\d*[A-Za-z]/g, '')
-    .replace(/\x1b\]/g, '');
-
-  return result;
+  return cleaned;
 }
 
 // Computed
@@ -265,7 +256,7 @@ async function bootWebContainer() {
   if (isBooting.value) return;
 
   isBooting.value = true;
-  terminalOutput.value = ["$ Booting WebContainer..."];
+  terminalOutput.value = ["Booting WebContainer..."];
 
   try {
     if (!webcontainer) {
@@ -289,15 +280,18 @@ async function bootWebContainer() {
     }
 
     await webcontainer.mount(files);
-    terminalOutput.value.push("$ Files mounted");
+    terminalOutput.value.push("Files mounted successfully");
 
-    terminalOutput.value.push("$ npm install");
-    const installProcess = await webcontainer.spawn("npm", ["install"]);
+    terminalOutput.value.push("Installing dependencies with pnpm...");
+    const installProcess = await webcontainer.spawn("pnpm", ["install", "--prefer-offline"]);
 
     installProcess.output.pipeTo(
       new WritableStream({
         write(data) {
-          terminalOutput.value.push(data);
+          const cleaned = cleanTerminalOutput(data);
+          if (cleaned && !cleaned.includes('Progress:')) {
+            terminalOutput.value.push(cleaned);
+          }
         },
       }),
     );
@@ -307,23 +301,26 @@ async function bootWebContainer() {
       throw new Error(`Install failed with exit code ${installExitCode}`);
     }
 
-    terminalOutput.value.push("$ npm run dev");
-    const devProcess = await webcontainer.spawn("npm", ["run", "dev"]);
+    terminalOutput.value.push("Starting dev server...");
+    const devProcess = await webcontainer.spawn("pnpm", ["run", "dev"]);
 
     devProcess.output.pipeTo(
       new WritableStream({
         write(data) {
-          terminalOutput.value.push(data);
+          const cleaned = cleanTerminalOutput(data);
+          if (cleaned) {
+            terminalOutput.value.push(cleaned);
+          }
         },
       }),
     );
 
     webcontainer.on("server-ready", (_port, url) => {
       previewUrl.value = url;
-      terminalOutput.value.push(`\x1b[32m$ Server ready at ${url}\x1b[0m`);
+      terminalOutput.value.push(`Server ready at ${url}`);
     });
   } catch (e) {
-    terminalOutput.value.push(`\x1b[31m$ Error: ${e}\x1b[0m`);
+    terminalOutput.value.push(`Error: ${e}`);
     console.error(e);
   } finally {
     isBooting.value = false;
@@ -334,19 +331,19 @@ async function applyChanges() {
   if (!webcontainer || modifiedFiles.value.size === 0) return;
 
   isLoading.value = true;
-  terminalOutput.value.push("$ Applying changes...");
+  terminalOutput.value.push("Applying changes...");
 
   try {
     for (const path of modifiedFiles.value) {
       const content = fileContents.value.get(path);
       if (content !== undefined) {
         await webcontainer.fs.writeFile(path, content);
-        terminalOutput.value.push(`\x1b[33m$ Updated: ${path}\x1b[0m`);
+        terminalOutput.value.push(`Updated: ${path}`);
       }
     }
-    terminalOutput.value.push("\x1b[32m$ Changes applied. HMR should trigger.\x1b[0m");
+    terminalOutput.value.push("Changes applied. HMR should trigger.");
   } catch (e) {
-    terminalOutput.value.push(`\x1b[31m$ Error: ${e}\x1b[0m`);
+    terminalOutput.value.push(`Error: ${e}`);
   } finally {
     isLoading.value = false;
   }
@@ -467,40 +464,50 @@ const FileTreeItem = defineComponent({
   },
 });
 
+// Initialize editor after DOM is ready
+async function initEditor() {
+  if (!monaco || !editorContainer.value || editor) return;
+
+  editor = monaco.editor.create(editorContainer.value, {
+    value: "",
+    language: "typescript",
+    theme: "vs-dark",
+    automaticLayout: true,
+    minimap: { enabled: false },
+    fontSize: 13,
+    lineNumbers: "on",
+    scrollBeyondLastLine: false,
+    wordWrap: "on",
+    padding: { top: 12 },
+    fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+    fontLigatures: true,
+    renderLineHighlight: 'gutter',
+    smoothScrolling: true,
+    cursorBlinking: 'smooth',
+    cursorSmoothCaretAnimation: 'on',
+  });
+
+  editor.onDidChangeModelContent(() => {
+    onEditorChange(editor!.getValue());
+  });
+
+  // Update editor with current file content
+  updateEditor();
+}
+
 // Lifecycle
 onMounted(async () => {
   monaco = await loader.init();
-
-  if (editorContainer.value) {
-    editor = monaco.editor.create(editorContainer.value, {
-      value: "",
-      language: "typescript",
-      theme: "vs-dark",
-      automaticLayout: true,
-      minimap: { enabled: false },
-      fontSize: 13,
-      lineNumbers: "on",
-      scrollBeyondLastLine: false,
-      wordWrap: "on",
-      padding: { top: 12 },
-      fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
-      fontLigatures: true,
-      renderLineHighlight: 'gutter',
-      smoothScrolling: true,
-      cursorBlinking: 'smooth',
-      cursorSmoothCaretAnimation: 'on',
-    });
-
-    editor.onDidChangeModelContent(() => {
-      onEditorChange(editor!.getValue());
-    });
-  }
 
   if (chapters.length > 0) {
     await selectChapter(chapters[0].id);
   }
 
   isInitializing.value = false;
+
+  // Wait for DOM to render, then init editor
+  await nextTick();
+  await initEditor();
 });
 
 onUnmounted(() => {
@@ -582,9 +589,9 @@ watch(terminalOutput, async () => {
 
     <!-- Main content -->
     <div class="playground-main">
-      <div class="main-panels" :style="{ gridTemplateColumns: `${sidebarWidth}px 1fr 1fr` }">
+      <div class="main-panels">
         <!-- File explorer -->
-        <aside class="file-explorer">
+        <aside class="file-explorer" :style="{ width: `${sidebarWidth}px` }">
           <div class="panel-header">
             <span class="panel-title">Explorer</span>
             <span class="file-count" v-if="selectedChapter">{{ selectedChapter.files.length }} files</span>
@@ -664,7 +671,7 @@ watch(terminalOutput, async () => {
             v-html="ansiToHtml(line)"
           ></div>
           <div v-if="terminalOutput.length === 0" class="terminal-empty">
-            <span class="terminal-prompt">$</span> Ready. Click Run to start the dev server...
+            Ready. Click Run to start the dev server...
           </div>
         </div>
       </div>
@@ -948,19 +955,19 @@ watch(terminalOutput, async () => {
 
 .main-panels {
   flex: 1;
-  display: grid;
+  display: flex;
   overflow: hidden;
   min-height: 0;
 }
 
 /* Resize Handles */
 .resize-handle-vertical {
-  width: 4px;
+  width: 6px;
   background: transparent;
   cursor: col-resize;
   position: relative;
-  margin: 0 -2px;
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .resize-handle-vertical::after {
@@ -1030,6 +1037,7 @@ watch(terminalOutput, async () => {
   overflow: hidden;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .file-count {
@@ -1174,6 +1182,8 @@ watch(terminalOutput, async () => {
   flex-direction: column;
   overflow: hidden;
   border-right: 1px solid var(--border);
+  flex: 1;
+  min-width: 0;
 }
 
 .editor-header {
@@ -1231,6 +1241,8 @@ watch(terminalOutput, async () => {
   flex-direction: column;
   overflow: hidden;
   background: var(--bg-secondary);
+  flex: 1;
+  min-width: 0;
 }
 
 .preview-url {

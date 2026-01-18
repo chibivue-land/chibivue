@@ -192,11 +192,21 @@ function loadChapters(): Chapter[] {
       // Fix vite.config.ts to use the correct path for WebContainer
       const fixedPlaygroundFiles = playgroundFiles.map((f) => {
         if (f.path === "vite.config.ts") {
-          // Replace relative path to packages with the flat structure path
-          const fixedContent = f.content.replace(
-            /path\.resolve\(dirname,\s*["']\.\.\/\.\.\/packages["']\)/g,
-            'path.resolve(dirname, "packages")',
-          );
+          // Replace relative paths to packages with the flat structure path
+          let fixedContent = f.content
+            .replace(
+              /path\.resolve\(dirname,\s*["']\.\.\/\.\.\/packages["']\)/g,
+              'path.resolve(dirname, "packages")',
+            )
+            // Fix import paths for @extensions
+            .replace(
+              /from\s+["']\.\.\/\.\.\/packages\/@extensions\/([^"']+)["']/g,
+              'from "packages/@extensions/$1"',
+            )
+            .replace(
+              /import\s+(\w+)\s+from\s+["']\.\.\/\.\.\/packages\/@extensions\/([^"']+)["']/g,
+              'import $1 from "./packages/@extensions/$2"',
+            );
           return { ...f, content: fixedContent };
         }
         return f;
