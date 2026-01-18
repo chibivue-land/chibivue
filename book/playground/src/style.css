@@ -1,14 +1,49 @@
+/**
+ * chibivue Playground Theme
+ * Based on chibivue branding: Mint/Turquoise + Navy
+ */
+
 :root {
-  --bg-primary: #1a1a2e;
-  --bg-secondary: #16213e;
-  --bg-tertiary: #0f3460;
-  --text-primary: #eaeaea;
-  --text-secondary: #a0a0a0;
-  --accent: #e94560;
-  --accent-hover: #ff6b6b;
-  --border: #2a2a4a;
-  --success: #4ade80;
-  --warning: #fbbf24;
+  /* Primary Brand Colors - Mint/Turquoise */
+  --c-mint-50: #e8faf6;
+  --c-mint-100: #c5f2e8;
+  --c-mint-200: #8be4d3;
+  --c-mint-300: #50d6bd;
+  --c-mint-400: #2cc9a8;
+  --c-mint-500: #1ab394;
+  --c-mint-600: #159d82;
+  --c-mint-700: #0f8770;
+  --c-mint-800: #0a715e;
+
+  /* Navy Colors */
+  --c-navy-900: #1a2744;
+  --c-navy-800: #243352;
+  --c-navy-700: #2e3f60;
+  --c-navy-600: #3a4d72;
+  --c-navy-500: #4a5f87;
+  --c-navy-400: #6b7fa3;
+  --c-navy-300: #9aaac4;
+  --c-navy-200: #c4d0e1;
+  --c-navy-100: #e4eaf2;
+
+  /* Duck Mascot Colors */
+  --c-duck-yellow: #f4d35e;
+
+  /* Dark Theme (default) */
+  --bg-primary: #0f1724;
+  --bg-secondary: #151e2d;
+  --bg-tertiary: #1b2637;
+  --bg-elevated: #243352;
+  --text-primary: #e2ebf0;
+  --text-secondary: #b8c9d4;
+  --text-muted: #8a9fb0;
+  --accent: var(--c-mint-400);
+  --accent-hover: var(--c-mint-300);
+  --accent-soft: rgba(44, 201, 168, 0.16);
+  --border: #2a3a50;
+  --border-light: #1f2d40;
+  --success: var(--c-mint-400);
+  --warning: var(--c-duck-yellow);
 }
 
 * {
@@ -28,4 +63,23 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-mint-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-mint-600);
 }

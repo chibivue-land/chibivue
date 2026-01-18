@@ -17,6 +17,8 @@ interface Chapter {
   sectionOrder: string;
   name: string;
   files: ChapterFile[];
+  bookUrl: string;
+  vueDocUrl?: string;
 }
 
 // Section display names
@@ -31,6 +33,60 @@ const SECTION_NAMES: Record<string, string> = {
   "90_web_application_essentials": "Web Application Essentials",
   bonus: "Bonus",
 };
+
+// Vue.js documentation URLs mapped by chapter keywords
+const VUE_DOC_URLS: Record<string, string> = {
+  create_app: "https://vuejs.org/api/application.html#createapp",
+  h_function: "https://vuejs.org/api/render-function.html#h",
+  virtual_dom: "https://vuejs.org/guide/extras/rendering-mechanism.html#virtual-dom",
+  reactivity: "https://vuejs.org/guide/essentials/reactivity-fundamentals.html",
+  reactive: "https://vuejs.org/api/reactivity-core.html#reactive",
+  ref: "https://vuejs.org/api/reactivity-core.html#ref",
+  computed: "https://vuejs.org/api/reactivity-core.html#computed",
+  watch: "https://vuejs.org/api/reactivity-core.html#watch",
+  component: "https://vuejs.org/guide/essentials/component-basics.html",
+  props: "https://vuejs.org/guide/components/props.html",
+  emits: "https://vuejs.org/guide/components/events.html",
+  slots: "https://vuejs.org/guide/components/slots.html",
+  provide: "https://vuejs.org/guide/components/provide-inject.html",
+  inject: "https://vuejs.org/guide/components/provide-inject.html",
+  template: "https://vuejs.org/guide/essentials/template-syntax.html",
+  v_bind: "https://vuejs.org/api/built-in-directives.html#v-bind",
+  v_on: "https://vuejs.org/api/built-in-directives.html#v-on",
+  v_if: "https://vuejs.org/api/built-in-directives.html#v-if",
+  v_for: "https://vuejs.org/api/built-in-directives.html#v-for",
+  v_model: "https://vuejs.org/api/built-in-directives.html#v-model",
+  sfc: "https://vuejs.org/guide/scaling-up/sfc.html",
+  script_setup: "https://vuejs.org/api/sfc-script-setup.html",
+  scoped_css: "https://vuejs.org/api/sfc-css-features.html#scoped-css",
+  css_modules: "https://vuejs.org/api/sfc-css-features.html#css-modules",
+  lifecycle: "https://vuejs.org/guide/essentials/lifecycle.html",
+  scheduler: "https://vuejs.org/api/general.html#nexttick",
+  transition: "https://vuejs.org/guide/built-ins/transition.html",
+  teleport: "https://vuejs.org/guide/built-ins/teleport.html",
+  suspense: "https://vuejs.org/guide/built-ins/suspense.html",
+  keep_alive: "https://vuejs.org/guide/built-ins/keep-alive.html",
+  custom_directive: "https://vuejs.org/guide/reusability/custom-directives.html",
+  composition_api: "https://vuejs.org/guide/extras/composition-api-faq.html",
+  compiler: "https://vuejs.org/guide/extras/rendering-mechanism.html#templates-vs-render-functions",
+};
+
+function getVueDocUrl(chapterDir: string): string | undefined {
+  const normalized = chapterDir.toLowerCase();
+  for (const [keyword, url] of Object.entries(VUE_DOC_URLS)) {
+    if (normalized.includes(keyword.replace(/_/g, ""))) {
+      return url;
+    }
+  }
+  return undefined;
+}
+
+function getBookUrl(section: string, chapterDir: string): string {
+  // Convert underscore to hyphen for URL
+  const sectionSlug = section.replace(/_/g, "-");
+  const chapterSlug = chapterDir.replace(/_/g, "-");
+  return `/ja/${sectionSlug}/${chapterSlug}.html`;
+}
 
 // Files to exclude from reading
 const EXCLUDE_FILES = [
@@ -151,12 +207,15 @@ function loadChapters(): Chapter[] {
 
       if (allFiles.length === 0) continue;
 
+      const vueDocUrl = getVueDocUrl(chapterDir);
       chapters.push({
         id: `${section}/${chapterDir}`,
         section: sectionName,
         sectionOrder: section,
         name: getChapterName(chapterDir),
         files: allFiles,
+        bookUrl: getBookUrl(section, chapterDir),
+        ...(vueDocUrl && { vueDocUrl }),
       });
     }
   }

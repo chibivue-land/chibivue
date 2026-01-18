@@ -16,12 +16,56 @@ const terminalOutput = ref<string[]>([]);
 const previewUrl = ref("");
 const isLoading = ref(false);
 const isBooting = ref(false);
+const isInitializing = ref(true);
 const editorContainer = ref<HTMLDivElement | null>(null);
 const terminalContainer = ref<HTMLDivElement | null>(null);
+const expandedDirs = ref<Set<string>>(new Set());
+const sidebarWidth = ref(240);
+const terminalHeight = ref(200);
+const isResizingSidebar = ref(false);
+const isResizingTerminal = ref(false);
 
 let webcontainer: WebContainer | null = null;
 let editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 let monaco: typeof Monaco | null = null;
+
+// ANSI to HTML conversion with full color support
+function ansiToHtml(text: string): string {
+  const ansiColors: Record<string, string> = {
+    '30': '#4a5568', '31': '#fc8181', '32': '#68d391', '33': '#f6e05e',
+    '34': '#63b3ed', '35': '#d6bcfa', '36': '#4fd1c5', '37': '#e2e8f0',
+    '90': '#718096', '91': '#feb2b2', '92': '#9ae6b4', '93': '#faf089',
+    '94': '#90cdf4', '95': '#e9d8fd', '96': '#81e6d9', '97': '#f7fafc',
+    '40': '#1a202c', '41': '#c53030', '42': '#2f855a', '43': '#d69e2e',
+    '44': '#2b6cb0', '45': '#805ad5', '46': '#2c7a7b', '47': '#e2e8f0',
+  };
+
+  let result = text
+    .replace(/\x1b\[([0-9;]+)m/g, (_, codes) => {
+      const codeList = codes.split(';');
+      let openTags = '';
+      for (const code of codeList) {
+        if (ansiColors[code]) {
+          const isBg = parseInt(code) >= 40;
+          openTags += `<span style="${isBg ? 'background' : 'color'}:${ansiColors[code]}">`;
+        }
+        if (code === '0' || code === '39') {
+          return '</span>';
+        }
+        if (code === '1') {
+          openTags += '<strong>';
+        }
+        if (code === '22') {
+          return '</strong>';
+        }
+      }
+      return openTags;
+    })
+    .replace(/\x1b\[\d*[A-Za-z]/g, '')
+    .replace(/\x1b\]/g, '');
+
+  return result;
+}
 
 // Computed
 const selectedChapter = computed(() => chapters.find((c) => c.id === selectedChapterId.value));
@@ -73,7 +117,6 @@ const fileTree = computed(() => {
   return tree;
 });
 
-// Storage key for persisting edits
 const storageKey = computed(() => `chibivue-playground-${selectedChapterId.value}`);
 
 // Methods
@@ -119,23 +162,36 @@ async function selectChapter(chapterId: string) {
   modifiedFiles.value.clear();
   terminalOutput.value = [];
   previewUrl.value = "";
+  expandedDirs.value.clear();
 
   const chapter = chapters.find((c) => c.id === chapterId);
   if (!chapter) return;
 
-  // Load original contents
   for (const file of chapter.files) {
     originalContents.value.set(file.path, file.content);
     fileContents.value.set(file.path, file.content);
   }
 
-  // Load saved edits from storage
   loadFromStorage();
 
-  // Select first non-directory file
+  for (const file of chapter.files) {
+    const firstDir = file.path.split("/")[0];
+    if (firstDir !== file.path) {
+      expandedDirs.value.add(firstDir);
+    }
+  }
+
   const firstFile = chapter.files.find((f) => !f.path.includes("/") || f.path.split("/").length <= 2);
   if (firstFile) {
     selectFile(firstFile.path);
+  }
+}
+
+function toggleDir(path: string) {
+  if (expandedDirs.value.has(path)) {
+    expandedDirs.value.delete(path);
+  } else {
+    expandedDirs.value.add(path);
   }
 }
 
@@ -209,14 +265,13 @@ async function bootWebContainer() {
   if (isBooting.value) return;
 
   isBooting.value = true;
-  terminalOutput.value = ["Booting WebContainer..."];
+  terminalOutput.value = ["$ Booting WebContainer..."];
 
   try {
     if (!webcontainer) {
       webcontainer = await WebContainer.boot();
     }
 
-    // Mount files
     const files: Record<string, any> = {};
     for (const [path, content] of fileContents.value) {
       const parts = path.split("/");
@@ -234,10 +289,9 @@ async function bootWebContainer() {
     }
 
     await webcontainer.mount(files);
-    terminalOutput.value.push("Files mounted successfully");
+    terminalOutput.value.push("$ Files mounted");
 
-    // Install dependencies
-    terminalOutput.value.push("Installing dependencies...");
+    terminalOutput.value.push("$ npm install");
     const installProcess = await webcontainer.spawn("npm", ["install"]);
 
     installProcess.output.pipeTo(
@@ -253,10 +307,7 @@ async function bootWebContainer() {
       throw new Error(`Install failed with exit code ${installExitCode}`);
     }
 
-    terminalOutput.value.push("Dependencies installed");
-
-    // Start dev server
-    terminalOutput.value.push("Starting dev server...");
+    terminalOutput.value.push("$ npm run dev");
     const devProcess = await webcontainer.spawn("npm", ["run", "dev"]);
 
     devProcess.output.pipeTo(
@@ -267,13 +318,12 @@ async function bootWebContainer() {
       }),
     );
 
-    // Wait for server ready
     webcontainer.on("server-ready", (_port, url) => {
       previewUrl.value = url;
-      terminalOutput.value.push(`Server ready at ${url}`);
+      terminalOutput.value.push(`\x1b[32m$ Server ready at ${url}\x1b[0m`);
     });
   } catch (e) {
-    terminalOutput.value.push(`Error: ${e}`);
+    terminalOutput.value.push(`\x1b[31m$ Error: ${e}\x1b[0m`);
     console.error(e);
   } finally {
     isBooting.value = false;
@@ -284,69 +334,133 @@ async function applyChanges() {
   if (!webcontainer || modifiedFiles.value.size === 0) return;
 
   isLoading.value = true;
-  terminalOutput.value.push("Applying changes...");
+  terminalOutput.value.push("$ Applying changes...");
 
   try {
     for (const path of modifiedFiles.value) {
       const content = fileContents.value.get(path);
       if (content !== undefined) {
         await webcontainer.fs.writeFile(path, content);
-        terminalOutput.value.push(`Updated: ${path}`);
+        terminalOutput.value.push(`\x1b[33m$ Updated: ${path}\x1b[0m`);
       }
     }
-    terminalOutput.value.push("Changes applied. Hot reload should trigger.");
+    terminalOutput.value.push("\x1b[32m$ Changes applied. HMR should trigger.\x1b[0m");
   } catch (e) {
-    terminalOutput.value.push(`Error applying changes: ${e}`);
+    terminalOutput.value.push(`\x1b[31m$ Error: ${e}\x1b[0m`);
   } finally {
     isLoading.value = false;
   }
 }
 
-// FileTreeItem component (inline)
+// Resize handlers
+function startResizeSidebar(e: MouseEvent) {
+  isResizingSidebar.value = true;
+  document.addEventListener('mousemove', resizeSidebar);
+  document.addEventListener('mouseup', stopResizeSidebar);
+  e.preventDefault();
+}
+
+function resizeSidebar(e: MouseEvent) {
+  if (isResizingSidebar.value) {
+    sidebarWidth.value = Math.max(180, Math.min(400, e.clientX));
+  }
+}
+
+function stopResizeSidebar() {
+  isResizingSidebar.value = false;
+  document.removeEventListener('mousemove', resizeSidebar);
+  document.removeEventListener('mouseup', stopResizeSidebar);
+}
+
+function startResizeTerminal(e: MouseEvent) {
+  isResizingTerminal.value = true;
+  document.addEventListener('mousemove', resizeTerminal);
+  document.addEventListener('mouseup', stopResizeTerminal);
+  e.preventDefault();
+}
+
+function resizeTerminal(e: MouseEvent) {
+  if (isResizingTerminal.value) {
+    const containerRect = document.querySelector('.playground-main')?.getBoundingClientRect();
+    if (containerRect) {
+      terminalHeight.value = Math.max(100, Math.min(400, containerRect.bottom - e.clientY));
+    }
+  }
+}
+
+function stopResizeTerminal() {
+  isResizingTerminal.value = false;
+  document.removeEventListener('mousemove', resizeTerminal);
+  document.removeEventListener('mouseup', stopResizeTerminal);
+}
+
+// FileTreeItem component
 const FileTreeItem = defineComponent({
   name: "FileTreeItem",
   props: {
     item: { type: Object, required: true },
     selectedFile: { type: String, default: null },
     modifiedFiles: { type: Set, required: true },
+    expandedDirs: { type: Set, required: true },
     depth: { type: Number, default: 0 },
   },
-  emits: ["select"],
+  emits: ["select", "toggle"],
   setup(props, { emit }) {
     return () => {
       const item = props.item as any;
       const isSelected = props.selectedFile === item.path;
       const isModified = (props.modifiedFiles as Set<string>).has(item.path);
+      const isExpanded = (props.expandedDirs as Set<string>).has(item.path);
+
+      const getFileIcon = (name: string) => {
+        if (name.endsWith('.vue')) return { icon: 'V', class: 'icon-vue' };
+        if (name.endsWith('.ts')) return { icon: 'T', class: 'icon-ts' };
+        if (name.endsWith('.js')) return { icon: 'J', class: 'icon-js' };
+        if (name.endsWith('.json')) return { icon: '{', class: 'icon-json' };
+        if (name.endsWith('.css')) return { icon: '#', class: 'icon-css' };
+        if (name.endsWith('.html')) return { icon: '<', class: 'icon-html' };
+        return { icon: 'f', class: 'icon-default' };
+      };
 
       if (item.isDirectory) {
         return h("div", { class: "tree-directory" }, [
-          h("div", { class: "tree-item directory", style: { paddingLeft: `${props.depth * 12}px` } }, [
-            h("span", { class: "folder-icon" }, "\u{1F4C1}"),
-            h("span", item.name),
+          h("div", {
+            class: "tree-item directory",
+            style: { paddingLeft: `${props.depth * 14 + 8}px` },
+            onClick: () => emit("toggle", item.path),
+          }, [
+            h("span", { class: ["chevron", { expanded: isExpanded }] }),
+            h("span", { class: "folder-icon" }),
+            h("span", { class: "item-name" }, item.name),
           ]),
-          ...(item.children || []).map((child: any) =>
-            h(FileTreeItem, {
-              item: child,
-              selectedFile: props.selectedFile,
-              modifiedFiles: props.modifiedFiles,
-              depth: props.depth + 1,
-              onSelect: (path: string) => emit("select", path),
-            }),
-          ),
+          isExpanded
+            ? (item.children || []).map((child: any) =>
+                h(FileTreeItem, {
+                  item: child,
+                  selectedFile: props.selectedFile,
+                  modifiedFiles: props.modifiedFiles,
+                  expandedDirs: props.expandedDirs,
+                  depth: props.depth + 1,
+                  onSelect: (path: string) => emit("select", path),
+                  onToggle: (path: string) => emit("toggle", path),
+                }),
+              )
+            : null,
         ]);
       }
 
+      const fileIcon = getFileIcon(item.name);
       return h(
         "div",
         {
           class: ["tree-item", "file", { selected: isSelected, modified: isModified }],
-          style: { paddingLeft: `${props.depth * 12 + 8}px` },
+          style: { paddingLeft: `${props.depth * 14 + 24}px` },
           onClick: () => emit("select", item.path),
         },
         [
-          h("span", { class: "file-icon" }, "\u{1F4C4}"),
-          h("span", item.name),
-          isModified ? h("span", { class: "modified-dot" }, "\u2022") : null,
+          h("span", { class: ["file-icon-badge", fileIcon.class] }, fileIcon.icon),
+          h("span", { class: "item-name" }, item.name),
+          isModified ? h("span", { class: "modified-badge" }) : null,
         ],
       );
     };
@@ -355,7 +469,6 @@ const FileTreeItem = defineComponent({
 
 // Lifecycle
 onMounted(async () => {
-  // Initialize Monaco
   monaco = await loader.init();
 
   if (editorContainer.value) {
@@ -365,10 +478,17 @@ onMounted(async () => {
       theme: "vs-dark",
       automaticLayout: true,
       minimap: { enabled: false },
-      fontSize: 14,
+      fontSize: 13,
       lineNumbers: "on",
       scrollBeyondLastLine: false,
       wordWrap: "on",
+      padding: { top: 12 },
+      fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+      fontLigatures: true,
+      renderLineHighlight: 'gutter',
+      smoothScrolling: true,
+      cursorBlinking: 'smooth',
+      cursorSmoothCaretAnimation: 'on',
     });
 
     editor.onDidChangeModelContent(() => {
@@ -376,10 +496,11 @@ onMounted(async () => {
     });
   }
 
-  // Select first chapter if available
   if (chapters.length > 0) {
     await selectChapter(chapters[0].id);
   }
+
+  isInitializing.value = false;
 });
 
 onUnmounted(() => {
@@ -387,7 +508,6 @@ onUnmounted(() => {
   webcontainer?.teardown();
 });
 
-// Auto-scroll terminal
 watch(terminalOutput, async () => {
   await nextTick();
   if (terminalContainer.value) {
@@ -397,14 +517,32 @@ watch(terminalOutput, async () => {
 </script>
 
 <template>
-  <div class="playground">
+  <!-- Loading Overlay -->
+  <div v-if="isInitializing" class="loading-overlay">
+    <div class="loading-content">
+      <img src="/kawaiko.png" alt="chibivue" class="loading-logo" />
+      <div class="loading-spinner-container">
+        <div class="loading-spinner"></div>
+      </div>
+      <p class="loading-text">Initializing Playground...</p>
+    </div>
+  </div>
+
+  <div v-else class="playground">
     <!-- Header -->
     <header class="playground-header">
-      <div class="header-left">
-        <h1 class="logo">chibivue Playground</h1>
+      <div class="header-brand">
+        <img src="/kawaiko.png" alt="chibivue" class="brand-logo" />
+        <div class="brand-text">
+          <h1 class="brand-title">chibivue</h1>
+          <span class="brand-subtitle">Playground</span>
+        </div>
+      </div>
+
+      <div class="header-center">
         <div class="chapter-selector">
           <select :value="selectedChapterId" @change="selectChapter(($event.target as HTMLSelectElement).value)">
-            <option value="" disabled>Select a chapter</option>
+            <option value="" disabled>Select a chapter...</option>
             <optgroup v-for="(chapterList, section) in groupedChapters" :key="section" :label="section">
               <option v-for="chapter in chapterList" :key="chapter.id" :value="chapter.id">
                 {{ chapter.name }}
@@ -412,145 +550,326 @@ watch(terminalOutput, async () => {
             </optgroup>
           </select>
         </div>
+
+        <div v-if="selectedChapter" class="chapter-links">
+          <a :href="selectedChapter.bookUrl" target="_blank" class="link-btn link-book">
+            <span class="link-icon">📖</span>
+            Book
+          </a>
+          <a v-if="selectedChapter.vueDocUrl" :href="selectedChapter.vueDocUrl" target="_blank" class="link-btn link-vue">
+            <span class="link-icon">📗</span>
+            Vue Docs
+          </a>
+        </div>
       </div>
 
-      <div class="actions">
-        <button @click="bootWebContainer" :disabled="!selectedChapterId || isBooting" class="btn btn-primary">
-          {{ isBooting ? "Booting..." : previewUrl ? "Restart" : "Run" }}
+      <div class="header-actions">
+        <button @click="bootWebContainer" :disabled="!selectedChapterId || isBooting" class="btn btn-run">
+          <span v-if="isBooting" class="btn-spinner"></span>
+          <span v-else class="btn-icon">▶</span>
+          {{ isBooting ? "Starting..." : previewUrl ? "Restart" : "Run" }}
         </button>
-        <button @click="applyChanges" :disabled="!previewUrl || modifiedFiles.size === 0 || isLoading" class="btn">
-          Apply Changes
+        <button @click="applyChanges" :disabled="!previewUrl || modifiedFiles.size === 0 || isLoading" class="btn btn-apply">
+          <span class="btn-icon">⟳</span>
+          Apply
         </button>
-        <button @click="resetAllFiles" :disabled="!selectedChapterId || modifiedFiles.size === 0" class="btn btn-danger">
-          Reset All
+        <button @click="resetAllFiles" :disabled="!selectedChapterId || modifiedFiles.size === 0" class="btn btn-reset">
+          <span class="btn-icon">↺</span>
+          Reset
         </button>
       </div>
     </header>
 
     <!-- Main content -->
-    <div class="playground-content">
-      <!-- File explorer -->
-      <aside class="file-explorer">
-        <div class="file-explorer-header">Files</div>
-        <div class="file-tree">
-          <template v-for="item in fileTree" :key="item.path">
-            <FileTreeItem
-              :item="item"
-              :selected-file="selectedFile"
-              :modified-files="modifiedFiles"
-              @select="selectFile"
-            />
-          </template>
-        </div>
-      </aside>
-
-      <!-- Editor -->
-      <main class="editor-panel">
-        <div class="editor-header">
-          <span v-if="selectedFile">
-            {{ selectedFile }}
-            <span v-if="modifiedFiles.has(selectedFile)" class="modified-indicator">*</span>
-          </span>
-          <span v-else class="no-file">No file selected</span>
-          <button
-            v-if="selectedFile && modifiedFiles.has(selectedFile)"
-            @click="resetFile"
-            class="btn btn-small"
-          >
-            Reset
-          </button>
-        </div>
-        <div ref="editorContainer" class="editor-container"></div>
-      </main>
-
-      <!-- Preview & Terminal -->
-      <aside class="preview-panel">
-        <div class="preview-container">
-          <div class="preview-header">Preview</div>
-          <iframe v-if="previewUrl" :src="previewUrl" class="preview-frame"></iframe>
-          <div v-else class="preview-placeholder">
-            Click "Run" to start the development server
+    <div class="playground-main">
+      <div class="main-panels" :style="{ gridTemplateColumns: `${sidebarWidth}px 1fr 1fr` }">
+        <!-- File explorer -->
+        <aside class="file-explorer">
+          <div class="panel-header">
+            <span class="panel-title">Explorer</span>
+            <span class="file-count" v-if="selectedChapter">{{ selectedChapter.files.length }} files</span>
           </div>
-        </div>
+          <div class="file-tree">
+            <template v-for="item in fileTree" :key="item.path">
+              <FileTreeItem
+                :item="item"
+                :selected-file="selectedFile"
+                :modified-files="modifiedFiles"
+                :expanded-dirs="expandedDirs"
+                @select="selectFile"
+                @toggle="toggleDir"
+              />
+            </template>
+          </div>
+        </aside>
 
-        <div class="terminal-container">
-          <div class="terminal-header">Terminal</div>
-          <div ref="terminalContainer" class="terminal-output">
-            <div v-for="(line, index) in terminalOutput" :key="index" class="terminal-line">
-              {{ line }}
+        <!-- Sidebar resize handle -->
+        <div class="resize-handle-vertical" @mousedown="startResizeSidebar"></div>
+
+        <!-- Editor -->
+        <main class="editor-panel">
+          <div class="panel-header editor-header">
+            <div class="tab-bar" v-if="selectedFile">
+              <div class="tab active">
+                <span class="tab-name">{{ selectedFile.split('/').pop() }}</span>
+                <span v-if="modifiedFiles.has(selectedFile)" class="tab-modified"></span>
+              </div>
+            </div>
+            <div v-else class="tab-bar-empty">No file selected</div>
+            <button
+              v-if="selectedFile && modifiedFiles.has(selectedFile)"
+              @click="resetFile"
+              class="btn btn-tiny"
+            >
+              Reset File
+            </button>
+          </div>
+          <div ref="editorContainer" class="editor-container"></div>
+        </main>
+
+        <!-- Preview -->
+        <aside class="preview-panel">
+          <div class="panel-header">
+            <span class="panel-title">Preview</span>
+            <span v-if="previewUrl" class="preview-url">{{ previewUrl }}</span>
+          </div>
+          <div class="preview-content">
+            <iframe v-if="previewUrl" :src="previewUrl" class="preview-frame"></iframe>
+            <div v-else class="preview-placeholder">
+              <img src="/kawaiko.png" alt="chibivue" class="placeholder-logo" />
+              <p class="placeholder-text">Select a chapter and click <strong>Run</strong> to start</p>
             </div>
           </div>
+        </aside>
+      </div>
+
+      <!-- Terminal resize handle -->
+      <div class="resize-handle-horizontal" @mousedown="startResizeTerminal"></div>
+
+      <!-- Terminal -->
+      <div class="terminal-panel" :style="{ height: `${terminalHeight}px` }">
+        <div class="panel-header terminal-header">
+          <span class="panel-title">Terminal</span>
+          <div class="terminal-actions">
+            <button @click="terminalOutput = []" class="terminal-btn" title="Clear">
+              <span>Clear</span>
+            </button>
+          </div>
         </div>
-      </aside>
+        <div ref="terminalContainer" class="terminal-output">
+          <div
+            v-for="(line, index) in terminalOutput"
+            :key="index"
+            class="terminal-line"
+            v-html="ansiToHtml(line)"
+          ></div>
+          <div v-if="terminalOutput.length === 0" class="terminal-empty">
+            <span class="terminal-prompt">$</span> Ready. Click Run to start the dev server...
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--c-navy-900) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 24px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.loading-spinner-container {
+  margin: 20px auto;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+/* Main Layout */
 .playground {
   display: flex;
   flex-direction: column;
   height: 100vh;
   background: var(--bg-primary);
+  overflow: hidden;
 }
 
+/* Header */
 .playground-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  background: var(--bg-secondary);
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 56px;
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.header-left {
+.header-brand {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
 }
 
-.logo {
-  font-size: 18px;
-  font-weight: 600;
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--accent);
   margin: 0;
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .chapter-selector select {
-  padding: 8px 16px;
+  padding: 8px 36px 8px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--bg-primary);
   color: var(--text-primary);
-  min-width: 300px;
-  font-size: 14px;
+  min-width: 280px;
+  font-size: 13px;
   cursor: pointer;
+  transition: all 0.2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a9fb0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.chapter-selector select:hover {
+  border-color: var(--c-mint-600);
 }
 
 .chapter-selector select:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-.actions {
+.chapter-links {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
-.btn {
-  padding: 8px 18px;
-  border: 1px solid var(--border);
+.link-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
   border-radius: 6px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
+  text-decoration: none;
   transition: all 0.2s;
 }
 
-.btn:hover:not(:disabled) {
-  background: var(--border);
+.link-book {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.link-book:hover {
+  background: var(--c-mint-600);
+  color: white;
+}
+
+.link-vue {
+  background: rgba(66, 184, 131, 0.15);
+  color: #42b883;
+}
+
+.link-vue:hover {
+  background: #42b883;
+  color: white;
+}
+
+.link-icon {
+  font-size: 14px;
+}
+
+/* Actions */
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .btn:disabled {
@@ -558,59 +877,172 @@ watch(terminalOutput, async () => {
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background: var(--accent);
+.btn-icon {
+  font-size: 14px;
+}
+
+.btn-run {
+  background: linear-gradient(135deg, var(--c-mint-500) 0%, var(--c-mint-600) 100%);
   color: white;
-  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(26, 179, 148, 0.3);
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: var(--accent-hover);
+.btn-run:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--c-mint-400) 0%, var(--c-mint-500) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 179, 148, 0.4);
 }
 
-.btn-danger {
-  color: var(--accent);
-  border-color: var(--accent);
+.btn-apply {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
-.btn-danger:hover:not(:disabled) {
-  background: var(--accent);
-  color: white;
+.btn-apply:hover:not(:disabled) {
+  background: var(--c-navy-600);
+  border-color: var(--c-mint-600);
 }
 
-.btn-small {
+.btn-reset {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-reset:hover:not(:disabled) {
+  background: rgba(255, 100, 100, 0.1);
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.btn-tiny {
   padding: 4px 10px;
-  font-size: 12px;
+  font-size: 11px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
 }
 
-.playground-content {
-  display: grid;
-  grid-template-columns: 220px 1fr 420px;
+.btn-tiny:hover {
+  background: var(--bg-elevated);
+}
+
+/* Main Content */
+.playground-main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.file-explorer {
-  border-right: 1px solid var(--border);
-  overflow: auto;
-  background: var(--bg-secondary);
+.main-panels {
+  flex: 1;
+  display: grid;
+  overflow: hidden;
+  min-height: 0;
 }
 
-.file-explorer-header,
-.editor-header,
-.preview-header,
-.terminal-header {
+/* Resize Handles */
+.resize-handle-vertical {
+  width: 4px;
+  background: transparent;
+  cursor: col-resize;
+  position: relative;
+  margin: 0 -2px;
+  z-index: 10;
+}
+
+.resize-handle-vertical::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1px;
+  width: 2px;
+  height: 100%;
+  background: var(--border);
+  transition: background 0.2s;
+}
+
+.resize-handle-vertical:hover::after,
+.resize-handle-vertical:active::after {
+  background: var(--accent);
+}
+
+.resize-handle-horizontal {
+  height: 4px;
+  background: transparent;
+  cursor: row-resize;
+  position: relative;
+  margin: -2px 0;
+  z-index: 10;
+}
+
+.resize-handle-horizontal::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  transition: background 0.2s;
+}
+
+.resize-handle-horizontal:hover::after,
+.resize-handle-horizontal:active::after {
+  background: var(--accent);
+}
+
+/* Panel Header */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 14px;
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary);
   background: var(--bg-tertiary);
   border-bottom: 1px solid var(--border);
+  min-height: 38px;
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+/* File Explorer */
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+}
+
+.file-count {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .file-tree {
+  flex: 1;
+  overflow: auto;
   padding: 8px 0;
 }
 
@@ -620,58 +1052,172 @@ watch(terminalOutput, async () => {
   gap: 6px;
   padding: 6px 10px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-primary);
-  transition: background 0.15s;
+  transition: all 0.15s;
+  user-select: none;
+  border-left: 2px solid transparent;
 }
 
-:deep(.tree-item.file:hover) {
+:deep(.tree-item:hover) {
   background: var(--bg-tertiary);
 }
 
 :deep(.tree-item.selected) {
-  background: var(--accent);
-  color: white;
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
 }
 
-:deep(.tree-item.modified) {
+:deep(.tree-item.modified .item-name) {
   color: var(--warning);
 }
 
-:deep(.tree-item.selected.modified) {
-  color: white;
+:deep(.chevron) {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
 }
 
-:deep(.file-icon),
+:deep(.chevron::before) {
+  content: '▶';
+}
+
+:deep(.chevron.expanded) {
+  transform: rotate(90deg);
+}
+
 :deep(.folder-icon) {
-  font-size: 14px;
+  width: 16px;
+  height: 16px;
+  background: var(--c-duck-yellow);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
 }
 
-:deep(.modified-dot) {
-  color: var(--warning);
-  margin-left: 4px;
-  font-weight: bold;
+:deep(.folder-icon::before) {
+  content: '📁';
+  font-size: 12px;
 }
 
+:deep(.file-icon-badge) {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+:deep(.icon-vue) {
+  background: #42b883;
+  color: white;
+}
+
+:deep(.icon-ts) {
+  background: #3178c6;
+  color: white;
+}
+
+:deep(.icon-js) {
+  background: #f7df1e;
+  color: #323330;
+}
+
+:deep(.icon-json) {
+  background: #5a5a5a;
+  color: #f5d67b;
+}
+
+:deep(.icon-css) {
+  background: #264de4;
+  color: white;
+}
+
+:deep(.icon-html) {
+  background: #e44d26;
+  color: white;
+}
+
+:deep(.icon-default) {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+:deep(.item-name) {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:deep(.modified-badge) {
+  width: 6px;
+  height: 6px;
+  background: var(--warning);
+  border-radius: 50%;
+}
+
+/* Editor Panel */
 .editor-panel {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border-right: 1px solid var(--border);
 }
 
 .editor-header {
+  padding: 0;
+  background: var(--bg-secondary);
+}
+
+.tab-bar {
   display: flex;
-  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.tab {
+  display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
 }
 
-.no-file {
+.tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+  background: linear-gradient(180deg, transparent 0%, var(--accent-soft) 100%);
+}
+
+.tab-name {
+  font-weight: 500;
+}
+
+.tab-modified {
+  width: 6px;
+  height: 6px;
+  background: var(--warning);
+  border-radius: 50%;
+}
+
+.tab-bar-empty {
+  padding: 10px 16px;
+  color: var(--text-muted);
+  font-size: 12px;
   font-style: italic;
-}
-
-.modified-indicator {
-  color: var(--warning);
-  margin-left: 4px;
 }
 
 .editor-container {
@@ -679,17 +1225,32 @@ watch(terminalOutput, async () => {
   min-height: 0;
 }
 
+/* Preview Panel */
 .preview-panel {
   display: flex;
   flex-direction: column;
-  border-left: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--bg-secondary);
 }
 
-.preview-container {
+.preview-url {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: monospace;
+  background: var(--bg-primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview-content {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 .preview-frame {
@@ -701,34 +1262,88 @@ watch(terminalOutput, async () => {
 .preview-placeholder {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
-  font-size: 14px;
-  padding: 20px;
+  gap: 16px;
+  padding: 24px;
   text-align: center;
 }
 
-.terminal-container {
-  height: 220px;
+.placeholder-logo {
+  width: 80px;
+  height: 80px;
+  opacity: 0.6;
+  animation: float 3s ease-in-out infinite;
+}
+
+.placeholder-text {
+  color: var(--text-muted);
+  font-size: 13px;
+  max-width: 200px;
+}
+
+.placeholder-text strong {
+  color: var(--accent);
+}
+
+/* Terminal */
+.terminal-panel {
   display: flex;
   flex-direction: column;
+  background: #0d1117;
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.terminal-header {
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+}
+
+.terminal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-btn {
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  color: #8b949e;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.terminal-btn:hover {
+  background: #21262d;
+  border-color: #8b949e;
+  color: #c9d1d9;
 }
 
 .terminal-output {
   flex: 1;
   overflow: auto;
-  padding: 10px 14px;
-  background: #0d0d0d;
-  font-family: "Fira Code", "Consolas", "Monaco", monospace;
+  padding: 12px 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 12px;
-  color: #00ff00;
+  line-height: 1.7;
+  color: #c9d1d9;
 }
 
 .terminal-line {
   white-space: pre-wrap;
   word-break: break-all;
-  line-height: 1.5;
+}
+
+.terminal-empty {
+  color: #484f58;
+}
+
+.terminal-prompt {
+  color: #58a6ff;
+  font-weight: 600;
 }
 </style>
