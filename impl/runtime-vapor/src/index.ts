@@ -7,6 +7,8 @@ import { invokeArrayFns } from "@chibivue/shared";
 import type { VaporComponentInternalInstance } from "./component";
 
 export * from "./component";
+export * from "./hydration";
+export * from "./apiCreateVaporApp";
 
 export type VaporNode = Element & { __is_vapor: true };
 

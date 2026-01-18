@@ -16,7 +16,7 @@ First, let's talk about the top-level directories:
 ```sh
 book # Contains materials related to the online book
 
-packages # Contains the latest source code of chibivue. Not directly related to the online book.
+impl # Contains the latest source code of chibivue packages (runtime-core, runtime-dom, reactivity, compiler-core, compiler-dom, compiler-sfc, compiler-vapor, runtime-vapor, server-renderer, etc.)
 
 examples # Contains sample code using the packages. Not directly related to the online book.
 
@@ -158,6 +158,6 @@ Basically, all PRs are managed by @ubugeeei, so please contact @ubugeeei for any
 
 This is a guide to the changes you make. Here are a few points to keep in mind.
 
-- When making changes to the online book, please make sure that the content is consistent in both the Japanese and English versions.
+- When making changes to the online book, please make sure that the content is consistent across all language versions (English, Japanese, Simplified Chinese, Traditional Chinese).
 - When making changes to the source code of each chapter, please appropriately incorporate those changes into the source code of subsequent chapters.
 - When including images, figures, or text from other sources, please make sure to provide proper attribution.
