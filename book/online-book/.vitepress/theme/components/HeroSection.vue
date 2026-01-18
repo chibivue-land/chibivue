@@ -1,4 +1,6 @@
 <script setup lang="ts">
+declare const __CHIBIVUE_VERSION__: string
+
 defineProps<{
   content: {
     tagline: string
@@ -7,6 +9,8 @@ defineProps<{
   }
   startLink: string
 }>()
+
+const version = __CHIBIVUE_VERSION__
 </script>
 
 <template>
@@ -20,6 +24,7 @@ defineProps<{
       <div class="hero-text">
         <h1 class="hero-title">
           <span class="gradient-text">chibivue</span>
+          <span class="version-badge">v{{ version }}</span>
         </h1>
         <p class="hero-tagline">{{ content.tagline }}</p>
 
@@ -161,6 +166,19 @@ defineProps<{
   font-size: clamp(3rem, 10vw, 5rem);
   font-weight: 800;
   letter-spacing: -0.02em;
+}
+
+.version-badge {
+  display: inline-block;
+  vertical-align: super;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  font-weight: 600;
+  padding: 0.25em 0.6em;
+  margin-left: 0.5rem;
+  background: rgba(26, 179, 148, 0.15);
+  border: 1px solid rgba(26, 179, 148, 0.4);
+  border-radius: 6px;
+  color: var(--c-mint-400, #2cc9a8);
 }
 
 .hero-tagline {
@@ -507,6 +525,12 @@ html:not(.dark) .hero-section .snippet {
   background: rgba(255, 255, 255, 0.95) !important;
   border-color: rgba(26, 179, 148, 0.35) !important;
   box-shadow: 0 4px 16px rgba(26, 179, 148, 0.12) !important;
+  color: #1ab394 !important;
+}
+
+html:not(.dark) .hero-section .version-badge {
+  background: rgba(26, 179, 148, 0.1) !important;
+  border-color: rgba(26, 179, 148, 0.5) !important;
   color: #1ab394 !important;
 }
 </style>

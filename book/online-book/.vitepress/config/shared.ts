@@ -1,8 +1,14 @@
 import { defineConfig } from "vitepress";
 import chibivueThemeDark from "../theme/chibivue-theme.json";
 import chibivueThemeLight from "../theme/chibivue-theme-light.json";
+import pkg from "../../../../package.json";
 
 export const sharedConfig = defineConfig({
+  vite: {
+    define: {
+      __CHIBIVUE_VERSION__: JSON.stringify(pkg.version),
+    },
+  },
   title: "The chibivue Book",
   appearance: "dark",
   description: 'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
