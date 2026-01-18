@@ -210,6 +210,10 @@ function loadChapters(): Chapter[] {
 })();
 </script>`;
 
+      // Check if this chapter uses vite-plugin-chibivue (needs extra dependencies)
+      const viteConfigFile = playgroundFiles.find((f) => f.path === "vite.config.ts");
+      const usesVitePlugin = viteConfigFile?.content.includes("vite-plugin-chibivue");
+
       // Fix vite.config.ts and inject console hook into index.html
       const fixedPlaygroundFiles = playgroundFiles.map((f) => {
         if (f.path === "vite.config.ts") {
@@ -234,6 +238,19 @@ function loadChapters(): Chapter[] {
         if (f.path === "index.html") {
           const fixedContent = f.content.replace(/<head>/i, `<head>\n${consoleHookScript}`);
           return { ...f, content: fixedContent };
+        }
+        // Add extra dependencies to package.json if using vite-plugin-chibivue
+        if (f.path === "package.json" && usesVitePlugin) {
+          try {
+            const pkg = JSON.parse(f.content);
+            pkg.dependencies = pkg.dependencies || {};
+            pkg.dependencies["@babel/parser"] = "^7.28.6";
+            pkg.dependencies["magic-string"] = "^0.30.21";
+            pkg.dependencies["estree-walker"] = "^3.0.3";
+            return { ...f, content: JSON.stringify(pkg, null, 2) + "\n" };
+          } catch {
+            return f;
+          }
         }
         return f;
       });

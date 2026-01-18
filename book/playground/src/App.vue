@@ -894,41 +894,56 @@ watch(consoleOutput, async () => {
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--c-navy-900) 100%);
+  background: linear-gradient(135deg, #0a0f18 0%, #0f1724 50%, #0a1628 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
+.loading-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(44, 201, 168, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(44, 201, 168, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
 .loading-content {
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .loading-logo {
-  width: 120px;
-  height: 120px;
-  margin-bottom: 24px;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 32px;
   animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(44, 201, 168, 0.2));
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-12px) scale(1.02); }
 }
 
 .loading-spinner-container {
-  margin: 20px auto;
+  margin: 24px auto;
+  position: relative;
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border);
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(44, 201, 168, 0.1);
   border-top-color: var(--accent);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   margin: 0 auto;
+  box-shadow: 0 0 20px rgba(44, 201, 168, 0.2);
 }
 
 @keyframes spin {
@@ -936,9 +951,11 @@ watch(consoleOutput, async () => {
 }
 
 .loading-text {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin-top: 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 20px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
 }
 
 /* Main Layout */
@@ -946,8 +963,19 @@ watch(consoleOutput, async () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--c-navy-900) 50%, #0d1520 100%);
+  background: #0a0f18;
   overflow: hidden;
+  position: relative;
+}
+
+.playground::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 100% 60% at 0% 0%, rgba(44, 201, 168, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 100%, rgba(26, 39, 68, 0.5) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 /* Header */
@@ -955,24 +983,35 @@ watch(consoleOutput, async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  height: 60px;
-  background: rgba(21, 30, 45, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(44, 201, 168, 0.1);
+  padding: 0 20px;
+  height: 56px;
+  background: linear-gradient(180deg, rgba(15, 23, 36, 0.95) 0%, rgba(10, 15, 24, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(44, 201, 168, 0.08);
   flex-shrink: 0;
   position: relative;
+  z-index: 100;
+}
+
+.playground-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 10%, rgba(44, 201, 168, 0.15) 50%, transparent 90%);
 }
 
 .playground-header::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .header-brand {
@@ -1310,19 +1349,19 @@ watch(consoleOutput, async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  background: linear-gradient(180deg, rgba(27, 38, 55, 0.95) 0%, rgba(21, 30, 45, 0.9) 100%);
-  border-bottom: 1px solid rgba(44, 201, 168, 0.08);
-  min-height: 42px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(15, 23, 36, 0.98) 0%, rgba(10, 15, 24, 0.95) 100%);
+  border-bottom: 1px solid rgba(44, 201, 168, 0.06);
+  min-height: 40px;
   backdrop-filter: blur(8px);
 }
 
 .panel-title {
-  font-weight: 700;
-  font-size: 10px;
+  font-weight: 600;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--c-mint-400);
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1330,10 +1369,10 @@ watch(consoleOutput, async () => {
 
 .panel-title::before {
   content: '';
-  width: 3px;
-  height: 12px;
+  width: 2px;
+  height: 14px;
   background: linear-gradient(180deg, var(--c-mint-400) 0%, var(--c-mint-600) 100%);
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 /* File Explorer */
@@ -1341,39 +1380,40 @@ watch(consoleOutput, async () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(21, 30, 45, 0.95) 100%);
-  border-right: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(12, 18, 28, 0.98) 0%, rgba(8, 12, 20, 0.95) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
   flex-shrink: 0;
 }
 
 .file-count {
   font-size: 10px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-weight: 500;
+  color: var(--c-mint-400);
+  background: rgba(44, 201, 168, 0.1);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid rgba(44, 201, 168, 0.15);
 }
 
 .file-tree {
   flex: 1;
   overflow: auto;
-  padding: 6px 8px;
+  padding: 8px 6px;
 }
 
 :deep(.tree-directory) {
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 :deep(.tree-item) {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 12px;
+  gap: 10px;
+  padding: 6px 10px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
-  transition: all 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   border-radius: 6px;
   margin: 1px 0;
@@ -1381,7 +1421,7 @@ watch(consoleOutput, async () => {
 }
 
 :deep(.tree-item:hover) {
-  background: rgba(44, 201, 168, 0.08);
+  background: rgba(44, 201, 168, 0.06);
   color: var(--text-primary);
 }
 
@@ -1525,78 +1565,79 @@ watch(consoleOutput, async () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-right: 1px solid rgba(44, 201, 168, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
   flex: 1;
   min-width: 0;
-  background: linear-gradient(180deg, #0f1724 0%, #0d1520 100%);
+  background: #0c1018;
 }
 
 .editor-header {
   padding: 0;
-  background: linear-gradient(180deg, rgba(21, 30, 45, 0.98) 0%, rgba(15, 23, 36, 0.95) 100%);
-  border-bottom: 1px solid rgba(44, 201, 168, 0.06);
+  background: linear-gradient(180deg, rgba(12, 16, 24, 0.98) 0%, rgba(10, 14, 22, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .tab-bar {
   display: flex;
-  padding: 0 12px;
-  gap: 4px;
+  padding: 0 8px;
+  gap: 2px;
+  align-items: flex-end;
 }
 
 .tab {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 18px;
-  font-size: 13px;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
   color: var(--text-muted);
   border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  border-radius: 8px 8px 0 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 6px 6px 0 0;
   margin-bottom: -1px;
+  background: transparent;
 }
 
 .tab:hover {
   color: var(--text-secondary);
-  background: rgba(44, 201, 168, 0.05);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .tab.active {
   color: var(--text-primary);
-  border-bottom-color: var(--accent);
-  background: linear-gradient(180deg, rgba(44, 201, 168, 0.08) 0%, rgba(44, 201, 168, 0.03) 100%);
+  border-bottom-color: var(--c-mint-400);
+  background: rgba(44, 201, 168, 0.05);
 }
 
 .tab-name {
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.2px;
 }
 
 .tab-modified {
-  width: 8px;
-  height: 8px;
-  background: linear-gradient(135deg, var(--c-duck-yellow) 0%, #e5b800 100%);
+  width: 7px;
+  height: 7px;
+  background: var(--c-duck-yellow);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(244, 211, 94, 0.5);
+  box-shadow: 0 0 6px rgba(244, 211, 94, 0.6);
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(0.9); }
+  50% { opacity: 0.6; transform: scale(0.85); }
 }
 
 .tab-bar-empty {
-  padding: 12px 18px;
+  padding: 10px 16px;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
   font-style: italic;
 }
 
 .editor-container {
   flex: 1;
   min-height: 0;
-  border-radius: 0 0 0 8px;
 }
 
 /* Preview Panel */
@@ -1604,7 +1645,7 @@ watch(consoleOutput, async () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(21, 30, 45, 0.9) 0%, rgba(13, 21, 32, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(10, 15, 24, 0.98) 0%, rgba(8, 12, 20, 0.95) 100%);
   flex: 1;
   min-width: 0;
 }
@@ -1613,14 +1654,14 @@ watch(consoleOutput, async () => {
   font-size: 10px;
   color: var(--c-mint-400);
   font-family: 'JetBrains Mono', monospace;
-  background: rgba(44, 201, 168, 0.1);
-  padding: 4px 10px;
+  background: rgba(44, 201, 168, 0.08);
+  padding: 3px 10px;
   border-radius: 6px;
-  max-width: 200px;
+  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border: 1px solid rgba(44, 201, 168, 0.15);
+  border: 1px solid rgba(44, 201, 168, 0.12);
 }
 
 .preview-content {
@@ -1628,17 +1669,19 @@ watch(consoleOutput, async () => {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  margin: 8px;
-  border-radius: 12px;
+  margin: 10px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .preview-frame {
   flex: 1;
   border: none;
   background: white;
-  border-radius: 8px;
 }
 
 .preview-placeholder {
@@ -1647,41 +1690,43 @@ watch(consoleOutput, async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 32px;
+  gap: 24px;
+  padding: 40px;
   text-align: center;
-  background: radial-gradient(ellipse at center, rgba(44, 201, 168, 0.03) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(44, 201, 168, 0.04) 0%, transparent 70%);
 }
 
 .placeholder-logo {
-  width: 120px;
-  height: 120px;
-  opacity: 0.9;
+  width: 100px;
+  height: 100px;
+  opacity: 0.85;
   animation: float 3s ease-in-out infinite;
-  filter: drop-shadow(0 8px 20px rgba(44, 201, 168, 0.3));
+  filter: drop-shadow(0 12px 24px rgba(44, 201, 168, 0.25));
 }
 
 .placeholder-text {
   color: var(--text-muted);
-  font-size: 14px;
-  max-width: 220px;
-  line-height: 1.6;
+  font-size: 13px;
+  max-width: 200px;
+  line-height: 1.7;
 }
 
 .placeholder-text strong {
   color: var(--c-mint-400);
   font-weight: 600;
-  padding: 2px 8px;
-  background: rgba(44, 201, 168, 0.15);
+  padding: 2px 10px;
+  background: rgba(44, 201, 168, 0.12);
   border-radius: 4px;
+  border: 1px solid rgba(44, 201, 168, 0.15);
 }
 
 /* Terminal */
 .terminal-panel {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0f1419 0%, #0a0e13 100%);
-  border-top: 1px solid rgba(44, 201, 168, 0.1);
+  background: #090c10;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
   flex-shrink: 0;
   position: relative;
 }
@@ -1693,53 +1738,52 @@ watch(consoleOutput, async () => {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-  opacity: 0.2;
+  background: linear-gradient(90deg, transparent 10%, rgba(44, 201, 168, 0.15) 50%, transparent 90%);
 }
 
 .terminal-header {
-  background: linear-gradient(180deg, rgba(22, 27, 34, 0.98) 0%, rgba(15, 20, 25, 0.95) 100%);
-  border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+  background: linear-gradient(180deg, rgba(12, 16, 24, 0.98) 0%, rgba(9, 12, 16, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .terminal-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .terminal-btn {
-  padding: 5px 12px;
-  background: rgba(33, 38, 45, 0.6);
-  border: 1px solid rgba(48, 54, 61, 0.8);
-  border-radius: 6px;
-  color: #8b949e;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  color: var(--text-muted);
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .terminal-btn:hover {
-  background: rgba(33, 38, 45, 0.9);
-  border-color: var(--c-mint-600);
+  background: rgba(44, 201, 168, 0.1);
+  border-color: rgba(44, 201, 168, 0.2);
   color: var(--c-mint-400);
 }
 
 .terminal-output {
   flex: 1;
   overflow: auto;
-  padding: 14px 18px;
+  padding: 12px 16px;
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  font-size: 12px;
-  line-height: 1.8;
-  color: #e6edf3;
-  background: linear-gradient(180deg, rgba(13, 17, 23, 0.95) 0%, rgba(10, 14, 19, 0.98) 100%);
+  font-size: 11px;
+  line-height: 1.7;
+  color: #c9d1d9;
+  background: rgba(9, 12, 16, 0.95);
 }
 
 .terminal-line {
   white-space: pre-wrap;
   word-break: break-all;
-  padding: 2px 0;
+  padding: 1px 0;
 }
 
 .terminal-empty {
@@ -1752,7 +1796,7 @@ watch(consoleOutput, async () => {
 
 .terminal-empty::before {
   content: '●';
-  color: var(--c-mint-600);
+  color: var(--c-mint-500);
   animation: blink 1.5s ease-in-out infinite;
 }
 
@@ -1769,46 +1813,45 @@ watch(consoleOutput, async () => {
 /* Output Tabs */
 .output-tabs {
   display: flex;
-  gap: 4px;
+  gap: 2px;
 }
 
 .output-tab {
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
-  color: #6e7681;
-  font-size: 12px;
+  color: var(--text-muted);
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   letter-spacing: 0.3px;
 }
 
 .output-tab:hover {
-  color: #adbac7;
-  background: rgba(44, 201, 168, 0.03);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .output-tab.active {
   color: var(--c-mint-400);
   border-bottom-color: var(--c-mint-400);
-  background: linear-gradient(180deg, rgba(44, 201, 168, 0.08) 0%, transparent 100%);
+  background: rgba(44, 201, 168, 0.05);
 }
 
 .console-badge {
-  background: linear-gradient(135deg, var(--c-mint-500) 0%, var(--c-mint-600) 100%);
+  background: var(--c-mint-500);
   color: white;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 10px;
-  min-width: 18px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  min-width: 16px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(44, 201, 168, 0.3);
 }
 
 /* Console Output */
@@ -1817,19 +1860,19 @@ watch(consoleOutput, async () => {
   overflow: auto;
   padding: 10px 14px;
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  font-size: 12px;
-  line-height: 1.7;
-  background: linear-gradient(180deg, rgba(13, 17, 23, 0.95) 0%, rgba(10, 14, 19, 0.98) 100%);
+  font-size: 11px;
+  line-height: 1.6;
+  background: rgba(9, 12, 16, 0.95);
 }
 
 .console-entry {
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin-bottom: 4px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-bottom: 3px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: flex-start;
-  transition: background 0.15s;
+  transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 2px solid transparent;
 }
 
@@ -1839,54 +1882,54 @@ watch(consoleOutput, async () => {
 
 .console-time {
   color: #484f58;
-  font-size: 10px;
+  font-size: 9px;
   flex-shrink: 0;
   font-weight: 500;
 }
 
 .console-type {
-  font-weight: 700;
+  font-weight: 600;
   flex-shrink: 0;
-  font-size: 10px;
+  font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 1px 6px;
+  letter-spacing: 0.4px;
+  padding: 1px 5px;
   border-radius: 3px;
 }
 
 .console-message {
-  color: #e6edf3;
+  color: #c9d1d9;
   word-break: break-all;
 }
 
 .console-log .console-type {
   color: #6e7681;
-  background: rgba(110, 118, 129, 0.15);
+  background: rgba(110, 118, 129, 0.12);
 }
 
 .console-info .console-type {
   color: #58a6ff;
-  background: rgba(88, 166, 255, 0.15);
+  background: rgba(88, 166, 255, 0.12);
 }
 
 .console-warn {
-  background: rgba(210, 153, 34, 0.08);
+  background: rgba(210, 153, 34, 0.06);
   border-left-color: #d29922;
 }
 
 .console-warn .console-type {
   color: #d29922;
-  background: rgba(210, 153, 34, 0.2);
+  background: rgba(210, 153, 34, 0.15);
 }
 
 .console-error {
-  background: rgba(248, 81, 73, 0.08);
+  background: rgba(248, 81, 73, 0.06);
   border-left-color: #f85149;
 }
 
 .console-error .console-type {
   color: #f85149;
-  background: rgba(248, 81, 73, 0.2);
+  background: rgba(248, 81, 73, 0.15);
 }
 
 .console-error .console-message {
