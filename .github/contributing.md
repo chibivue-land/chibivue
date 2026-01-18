@@ -107,9 +107,16 @@ cd book/impls/${section-name}/${chapter-name}
 nr dev
 ```
 
-### Online Playground
+### Book Playground
 
-The online book includes a WebContainer-based playground that allows readers to try each chapter's implementation directly in the browser. You can access it from the "Playground" link in the navigation bar.
+The project includes a WebContainer-based playground (`book/playground`) that allows readers to try each chapter's implementation directly in the browser.
+
+To start the playground:
+
+```sh
+nr playground:generate  # Generate chapter data from book/impls
+nr playground           # Start the playground dev server
+```
 
 The playground supports:
 - Selecting different chapters to explore
@@ -118,7 +125,7 @@ The playground supports:
 - Persisting edits to localStorage
 - Resetting files to their original state
 
-The playground data is automatically generated from `book/impls/` at build time. If you modify chapter implementations, the playground will reflect those changes after rebuilding.
+If you modify chapter implementations in `book/impls/`, run `nr playground:generate` to update the playground data.
 
 #### Creating a branch (start making changes)
 
