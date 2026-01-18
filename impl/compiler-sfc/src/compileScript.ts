@@ -983,8 +983,12 @@ function genRuntimeEmitsFromType(typeDecl: TSTypeLiteral): string {
       const params = member.parameters;
       if (params && params.length > 0) {
         const firstParam = params[0];
-        if (firstParam.type === "Identifier" && firstParam.typeAnnotation) {
-          const typeAnn = firstParam.typeAnnotation.typeAnnotation;
+        if (
+          firstParam.type === "Identifier" &&
+          firstParam.typeAnnotation &&
+          "typeAnnotation" in firstParam.typeAnnotation
+        ) {
+          const typeAnn = firstParam.typeAnnotation.typeAnnotation as any;
           if (typeAnn.type === "TSLiteralType" && typeAnn.literal.type === "StringLiteral") {
             events.push(`"${typeAnn.literal.value}"`);
           }
@@ -1038,6 +1042,12 @@ function mergePropsDefaults(
 
       processedKeys.add(key);
       const binding = destructuredBindings[key];
+
+      // Skip ObjectMethod - only process ObjectProperty
+      if (prop.type !== "ObjectProperty") {
+        props.push(declCode.slice(prop.start! - 1, prop.end! - 1));
+        continue;
+      }
 
       if (binding?.default) {
         // Has default value from destructuring

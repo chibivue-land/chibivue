@@ -1,6 +1,7 @@
+import type { Component } from "chibivue";
 import { computed, defineComponent, h, ref } from "chibivue";
 
-export default defineComponent(() => {
+const InlineComponent: Component = defineComponent(() => {
   const count = ref(0);
   const increment = () => {
     count.value++;
@@ -16,3 +17,5 @@ export default defineComponent(() => {
       h("button", { onClick: increment }, "increment"),
     ]);
 });
+
+export default InlineComponent;

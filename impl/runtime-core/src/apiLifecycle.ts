@@ -8,7 +8,7 @@ export function injectHook(
   target: ComponentInternalInstance | VaporComponentInternalInstance | null = currentInstance,
 ): Function | undefined {
   if (target) {
-    const hooks = target[type] || (target[type] = []);
+    const hooks = (target as any)[type] || ((target as any)[type] = []);
     const wrappedHook = (...args: unknown[]) => {
       setCurrentInstance(target);
       const res = hook(...args);

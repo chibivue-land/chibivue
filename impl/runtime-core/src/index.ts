@@ -36,6 +36,7 @@ export { renderList } from "./helpers/renderList";
 
 export {
   type VNode,
+  type VNodeProps,
   type VNodeProps as VNodeData,
   type VNodeArrayChildren,
   createVNode,

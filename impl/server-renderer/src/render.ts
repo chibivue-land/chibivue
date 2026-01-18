@@ -64,7 +64,7 @@ export function renderComponentVNode(
   vnode: VNode,
   parentComponent: ComponentInternalInstance | null = null,
 ): SSRBuffer | Promise<SSRBuffer> {
-  const instance = (vnode.component = createComponentInstance(vnode, parentComponent, null));
+  const instance = (vnode.component = createComponentInstance(vnode, parentComponent));
   const res = setupComponent(instance);
   const hasAsyncSetup = isPromise(res);
 
@@ -85,7 +85,7 @@ function renderComponentSubTree(
     const root = comp(instance.props, {
       slots: instance.slots,
       emit: instance.emit,
-      attrs: instance.attrs,
+      attrs: {},
     });
     if (root) {
       renderVNode(push, normalizeVNode(root), instance);
@@ -93,13 +93,13 @@ function renderComponentSubTree(
   } else if (instance.render) {
     const prev = setCurrentInstance(instance);
     try {
-      const root = instance.render(instance.proxy!);
+      const root = instance.render(instance.proxy!, instance.data, instance.ctx);
       if (root) {
         instance.subTree = normalizeVNode(root);
         renderVNode(push, instance.subTree, instance);
       }
     } finally {
-      unsetCurrentInstance(prev);
+      unsetCurrentInstance();
     }
   } else {
     console.warn(`Component is missing render function.`);

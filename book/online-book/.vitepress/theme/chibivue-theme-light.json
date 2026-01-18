@@ -15,7 +15,7 @@
     {
       "scope": ["comment", "punctuation.definition.comment"],
       "settings": {
-        "foreground": "#7a9a8a",
+        "foreground": "#5a7a6a",
         "fontStyle": "italic"
       }
     },
@@ -53,7 +53,7 @@
     {
       "scope": ["keyword.operator", "punctuation"],
       "settings": {
-        "foreground": "#4a7a6a"
+        "foreground": "#2a5a4a"
       }
     },
     {
@@ -114,7 +114,7 @@
         "keyword.control.from"
       ],
       "settings": {
-        "foreground": "#5a7a9a"
+        "foreground": "#3a5a7a"
       }
     },
     {
@@ -126,7 +126,7 @@
     {
       "scope": ["meta.object-literal.key"],
       "settings": {
-        "foreground": "#0d6d5c"
+        "foreground": "#0a5a4a"
       }
     },
     {
@@ -144,7 +144,7 @@
     {
       "scope": ["punctuation.definition.tag"],
       "settings": {
-        "foreground": "#4a8a7a"
+        "foreground": "#1a6a5a"
       }
     },
     {

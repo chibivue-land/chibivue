@@ -33,7 +33,7 @@ export interface TransitionProps {
 export interface TransitionHooks<HostElement = Element> {
   mode: string;
   beforeEnter(el: HostElement): void;
-  enter(el: HostElement): void;
+  enter(el: HostElement, done: () => void): void;
   leave(el: HostElement, remove: () => void): void;
   clone(vnode: VNode): TransitionHooks<HostElement>;
 }
@@ -100,14 +100,15 @@ export function resolveTransitionProps(
 
   const makeEnterHook = (isAppear: boolean) => {
     return (el: Element, done: () => void) => {
+      const _el = el as Element & ElementWithTransition;
       const hook = isAppear ? onAppear : onEnter;
-      const resolve = () => finishEnter(el, isAppear, done);
+      const resolve = () => finishEnter(_el, isAppear, done);
       callHook(hook, [el, resolve]);
       nextFrame(() => {
-        removeTransitionClass(el, isAppear ? appearFromClass : enterFromClass);
-        addTransitionClass(el, isAppear ? appearToClass : enterToClass);
+        removeTransitionClass(_el, isAppear ? appearFromClass : enterFromClass);
+        addTransitionClass(_el, isAppear ? appearToClass : enterToClass);
         if (!hasExplicitCallback(hook)) {
-          whenTransitionEnds(el, type, enterDuration, resolve);
+          whenTransitionEnds(_el, type, enterDuration, resolve);
         }
       });
     };
@@ -117,22 +118,24 @@ export function resolveTransitionProps(
     ...rawProps,
     mode,
     beforeEnter(el) {
+      const _el = el as Element & ElementWithTransition;
       callHook(onBeforeEnter, [el]);
-      addTransitionClass(el, enterFromClass);
-      addTransitionClass(el, enterActiveClass);
+      addTransitionClass(_el, enterFromClass);
+      addTransitionClass(_el, enterActiveClass);
     },
     enter: makeEnterHook(false),
     leave(el, done) {
-      const resolve = () => finishLeave(el, done);
-      addTransitionClass(el, leaveFromClass);
+      const _el = el as Element & ElementWithTransition;
+      const resolve = () => finishLeave(_el, done);
+      addTransitionClass(_el, leaveFromClass);
       // force reflow
       forceReflow();
-      addTransitionClass(el, leaveActiveClass);
+      addTransitionClass(_el, leaveActiveClass);
       nextFrame(() => {
-        removeTransitionClass(el, leaveFromClass);
-        addTransitionClass(el, leaveToClass);
+        removeTransitionClass(_el, leaveFromClass);
+        addTransitionClass(_el, leaveToClass);
         if (!hasExplicitCallback(onLeave)) {
-          whenTransitionEnds(el, type, leaveDuration, resolve);
+          whenTransitionEnds(_el, type, leaveDuration, resolve);
         }
       });
       callHook(onLeave, [el, resolve]);
@@ -181,7 +184,10 @@ function nextFrame(cb: () => void): void {
   });
 }
 
-function callHook(hook: ((el: Element, done?: () => void) => void) | undefined, args: any[]): void {
+function callHook(
+  hook: ((el: Element, done: () => void) => void) | ((el: Element) => void) | undefined,
+  args: any[],
+): void {
   if (hook) {
     hook(...(args as [any, any]));
   }
@@ -278,7 +284,8 @@ export function whenTransitionEnds(
   };
 
   if (explicitTimeout) {
-    return setTimeout(resolveIfNotStale, explicitTimeout);
+    setTimeout(resolveIfNotStale, explicitTimeout);
+    return;
   }
 
   const { type, timeout, propCount } = getTransitionInfo(el, expectedType);

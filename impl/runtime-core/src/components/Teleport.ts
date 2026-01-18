@@ -148,7 +148,7 @@ export interface TeleportInternals {
 export type TeleportVNode = VNode<RendererNode> & { props: TeleportProps | null };
 
 function isTeleportDisabled(props: TeleportProps | null): boolean {
-  return props !== null && (props.disabled || props.disabled === "");
+  return props !== null && !!props.disabled;
 }
 
 function resolveTarget<T = RendererElement>(

@@ -62,7 +62,7 @@ export function defineAsyncComponent<T extends Component = { new (): any }>(
               throw err;
             }
           })
-          .then((comp: AsyncComponentResolveResult) => {
+          .then((comp) => {
             if (thisRequest !== pendingRequest && pendingRequest) {
               return pendingRequest;
             }

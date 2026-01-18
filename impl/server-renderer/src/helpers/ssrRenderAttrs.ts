@@ -74,7 +74,7 @@ export function ssrRenderStyle(raw: unknown): string {
     return escapeHtml(raw);
   }
   const styles = normalizeStyle(raw);
-  return escapeHtml(stringifyStyle(styles));
+  return escapeHtml(stringifyStyle(styles as Record<string, string | number> | null));
 }
 
 function stringifyStyle(styles: Record<string, string | number> | null): string {

@@ -9,6 +9,12 @@ export interface App<HostElement = any> {
   component(name: string, component: Component): this;
   mount(rootContainer: HostElement | string): void;
   provide<T>(key: InjectionKey<T> | string, value: T): this;
+  /** @internal */
+  _component: Component;
+  /** @internal */
+  _props: Record<string, unknown> | null;
+  /** @internal */
+  _context: AppContext;
 }
 
 export type CreateAppFunction<HostElement> = (rootComponent: Component) => App<HostElement>;
@@ -39,6 +45,10 @@ export function createAppAPI<HostElement>(
     const installedPlugins = new Set();
 
     const app: App = (context.app = {
+      _component: rootComponent,
+      _props: null,
+      _context: context,
+
       use(plugin: Plugin, ...options: any[]) {
         // skip duplicate plugins
         if (installedPlugins.has(plugin)) return app;

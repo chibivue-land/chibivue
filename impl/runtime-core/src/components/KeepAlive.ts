@@ -67,7 +67,7 @@ const KeepAliveImpl = {
       queuePostFlushCb(() => {
         instance.isDeactivated = false;
         if (instance.a) {
-          instance.a.forEach((hook: () => void) => hook());
+          instance.a.forEach((hook) => (hook as () => void)());
         }
       });
     };
@@ -77,7 +77,7 @@ const KeepAliveImpl = {
       queuePostFlushCb(() => {
         const instance = vnode.component!;
         if (instance.da) {
-          instance.da.forEach((hook: () => void) => hook());
+          instance.da.forEach((hook) => (hook as () => void)());
         }
         instance.isDeactivated = true;
       });

@@ -40,8 +40,10 @@ function walk(
           const codegenNode = child.codegenNode as VNodeCall | undefined;
           if (codegenNode && codegenNode.type === NodeTypes.VNODE_CALL) {
             codegenNode.isStatic = true;
-            context.hoists.push(codegenNode);
-            child.codegenNode = context.hoist(codegenNode) as VNodeCall;
+            context.hoists.push(codegenNode as unknown as TemplateChildNode);
+            child.codegenNode = context.hoist(
+              codegenNode as unknown as TemplateChildNode,
+            ) as unknown as VNodeCall;
           }
         }
       } else {
