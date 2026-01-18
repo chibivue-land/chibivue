@@ -7,6 +7,8 @@ export * from "./shapeFlags";
 export * from "./patchFlags";
 export * from "./makeMap";
 export * from "./domTagConfig";
+export * from "./domAttrConfig";
+export * from "./escapeHtml";
 
 const onRE = /^on[^a-z]/;
 export const isOn = (key: string): boolean => onRE.test(key);

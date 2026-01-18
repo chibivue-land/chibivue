@@ -35,6 +35,11 @@ export const enum NodeTypes {
   JS_ARRAY_EXPRESSION,
   JS_FUNCTION_EXPRESSION,
   JS_CONDITIONAL_EXPRESSION,
+
+  // SSR codegen
+  JS_TEMPLATE_LITERAL,
+  JS_IF_STATEMENT,
+  JS_BLOCK_STATEMENT,
 }
 
 export const enum ElementTypes {
@@ -108,7 +113,7 @@ export type JSChildNode =
 export interface CallExpression extends Node {
   type: NodeTypes.JS_CALL_EXPRESSION;
   callee: string | symbol;
-  arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[];
+  arguments: (string | JSChildNode | TemplateLiteral | TemplateChildNode | TemplateChildNode[])[];
 }
 
 export interface ObjectExpression extends Node {
@@ -130,6 +135,7 @@ export interface FunctionExpression extends Node {
   type: NodeTypes.JS_FUNCTION_EXPRESSION;
   params: ExpressionNode | string | (ExpressionNode | string)[] | undefined;
   returns?: TemplateChildNode | TemplateChildNode[] | JSChildNode;
+  body?: BlockStatement | IfStatement;
   newline: boolean;
   /**
    * This flag is for codegen to determine whether it needs to generate the
@@ -151,13 +157,33 @@ export interface ConditionalExpression extends Node {
   newline: boolean;
 }
 
+// SSR types
+export interface TemplateLiteral extends Node {
+  type: NodeTypes.JS_TEMPLATE_LITERAL;
+  elements: (string | JSChildNode)[];
+}
+
+export interface IfStatement extends Node {
+  type: NodeTypes.JS_IF_STATEMENT;
+  test: JSChildNode;
+  consequent: BlockStatement;
+  alternate: IfStatement | BlockStatement | undefined;
+}
+
+export interface BlockStatement extends Node {
+  type: NodeTypes.JS_BLOCK_STATEMENT;
+  body: (JSChildNode | IfStatement)[];
+}
+
 export interface RootNode extends Node {
   type: NodeTypes.ROOT;
   children: TemplateChildNode[];
-  codegenNode?: TemplateChildNode | VNodeCall;
+  codegenNode?: TemplateChildNode | VNodeCall | BlockStatement;
   helpers: Set<symbol>;
   components: string[];
   hoists: (TemplateChildNode | ExpressionNode)[];
+  // SSR
+  ssrHelpers?: symbol[];
 }
 
 export type ElementNode = PlainElementNode | ComponentNode | TemplateNode;
@@ -174,6 +200,7 @@ export interface BaseElementNode extends Node {
 export interface PlainElementNode extends BaseElementNode {
   tagType: ElementTypes.ELEMENT;
   codegenNode: VNodeCall | SimpleExpressionNode | undefined;
+  ssrCodegenNode?: TemplateLiteral;
 }
 
 export interface TemplateNode extends BaseElementNode {
@@ -456,6 +483,41 @@ export function createConditionalExpression(
     consequent,
     alternate,
     newline,
+    loc: locStub,
+  };
+}
+
+// SSR factories
+export function createTemplateLiteral(
+  elements: TemplateLiteral["elements"],
+): TemplateLiteral {
+  return {
+    type: NodeTypes.JS_TEMPLATE_LITERAL,
+    elements,
+    loc: locStub,
+  };
+}
+
+export function createBlockStatement(
+  body: BlockStatement["body"],
+): BlockStatement {
+  return {
+    type: NodeTypes.JS_BLOCK_STATEMENT,
+    body,
+    loc: locStub,
+  };
+}
+
+export function createIfStatement(
+  test: IfStatement["test"],
+  consequent: IfStatement["consequent"],
+  alternate?: IfStatement["alternate"],
+): IfStatement {
+  return {
+    type: NodeTypes.JS_IF_STATEMENT,
+    test,
+    consequent,
+    alternate,
     loc: locStub,
   };
 }

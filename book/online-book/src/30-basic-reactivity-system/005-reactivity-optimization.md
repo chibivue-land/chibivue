@@ -14,19 +14,12 @@ To further research push-pull based implementations, Johnson Chu (@nicekid1), a 
 alien-signals is a signal library reimplemented based on Vue 3.4's Reactivity System, featuring:
 
 - **Lightweight**: Minimal memory footprint
-- **Fast**: Approximately 4x (400%) the performance of Vue 3.4's Reactivity System
-- **Memory efficient**: Approximately 13% reduction in memory usage
+- **Fast**: Performance improvements
+- **Memory efficient**: Reduced memory usage
 
 These achievements will be ported to Vue's core Reactivity System in Vue 3.6.
 
 Reference: [vuejs/core#12349](https://github.com/vuejs/core/pull/12349)
-
-<KawaikoNote variant="surprise" title="4x Performance!">
-
-alien-signals was reimplemented based on Vue 3.4's Reactivity System and achieved an incredible **4x performance improvement**!\
-With this being incorporated into Vue 3.6, all Vue users will benefit from these optimizations.
-
-</KawaikoNote>
 
 ## Push-Pull Reactivity Algorithm
 

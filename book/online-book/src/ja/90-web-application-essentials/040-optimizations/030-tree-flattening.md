@@ -66,9 +66,8 @@ dynamicChildren = [p]
 <KawaikoNote variant="funny" title="劇的な効率化！">
 
 1000 個のノードのうち 10 個だけが動的な場合，
-従来: 1000 回の比較
-Tree Flattening: 10 回の比較
-100 倍の効率化が可能です．
+従来は 1000 回の比較が必要ですが，
+Tree Flattening なら 10 回の比較で済みます．
 
 </KawaikoNote>
 
@@ -311,22 +310,13 @@ function patchElement(
 
 ## 最適化の効果
 
-### ベンチマーク例
+1000 個のリストアイテムのうち，1 つだけを更新するケースを考えると：
 
-1000 個のリストアイテムのうち，1 つだけを更新するケース：
+- **フル diff**: 1000 個以上のノードを走査
+- **Patch Flags のみ**: 1000 個のノードを走査（プロパティ比較は最適化）
+- **Tree Flattening**: 動的なノード（1 個）のみを走査
 
-| 手法 | 走査ノード数 | 相対パフォーマンス |
-|------|-------------|------------------|
-| フル diff | 1000+ | 1x |
-| Patch Flags のみ | 1000 | 2-3x |
-| Tree Flattening | 1 | 50-100x |
-
-<KawaikoNote variant="surprise" title="驚異的な効率化！">
-
-大規模なアプリケーションでは，Tree Flattening によって更新パフォーマンスが数十倍向上することがあります．
-これが Vue 3 が高速と言われる理由の一つです．
-
-</KawaikoNote>
+このように，動的ノードが少ないほど Tree Flattening の効果は大きくなります．
 
 ## Block が壊れるケース
 

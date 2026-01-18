@@ -5,6 +5,7 @@ import type {
   RootNode,
 } from "@chibivue/compiler-core";
 import * as CompilerDOM from "@chibivue/compiler-dom";
+import * as CompilerSSR from "@chibivue/compiler-ssr";
 
 export interface TemplateCompiler {
   compile(template: string, options: CompilerOptions): CodegenResult;
@@ -24,19 +25,26 @@ export interface SFCTemplateCompileOptions {
   compilerOptions?: CompilerOptions;
   id?: string;
   scoped?: boolean;
+  ssr?: boolean;
 }
 
 export function compileTemplate({
   source,
-  compiler = CompilerDOM,
+  compiler,
   compilerOptions,
   id,
   scoped,
+  ssr = false,
 }: SFCTemplateCompileOptions): SFCTemplateCompileResults {
-  let { code, ast, preamble } = compiler.compile(source, {
+  const defaultCompiler = ssr
+    ? (CompilerSSR as TemplateCompiler)
+    : CompilerDOM;
+
+  let { code, ast, preamble } = (compiler || defaultCompiler).compile(source, {
     ...compilerOptions,
     isBrowser: false,
     scopeId: scoped ? id : undefined,
+    ssr,
   });
   return { code: code, ast, source, preamble };
 }

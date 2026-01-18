@@ -4,6 +4,13 @@
 
 现在，让我们开始逐步实现 chibivue．我们应该如何进行实现？
 
+<KawaikoNote variant="question" title="开始实现！">
+
+这是深入 Vue.js 内部实现的激动人心的时刻！
+"从哪里开始"实际上是一个重要的要点．
+
+</KawaikoNote>
+
 这是作者在创建新东西时总是牢记的一点：首先，思考软件将如何被使用．\
 为了方便起见，让我们称之为"开发者接口"．
 
@@ -68,6 +75,13 @@ app.mount('#app')
 原因是在许多情况下，高级描述被转换为低级描述并执行．\
 换句话说，选项 1 和 2 最终都在内部转换为选项 3 的形式．\
 这种转换的实现称为"编译器"．
+
+<KawaikoNote variant="funny" title="从低级开始！">
+
+"低级"听起来可能很弱，但实际上恰恰相反！
+这是基础，没有坚实的基础，你无法构建更高级的功能．
+
+</KawaikoNote>
 
 所以，让我们从实现像选项 3 这样的开发者接口开始！
 
@@ -136,5 +150,12 @@ app.mount('#app')
 
 ![hello_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_createApp.png)
 
-到此为止的源代码：  
+<KawaikoNote variant="surprise" title="第一步完成！">
+
+只用了几十行代码，一个 Vue.js 风格的应用就运行起来了！
+这小小的一步是理解框架的一大步．
+
+</KawaikoNote>
+
+到此为止的源代码：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)

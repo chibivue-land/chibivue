@@ -2,6 +2,13 @@
 
 ## 什么是 h 函数？
 
+<KawaikoNote variant="question" title="'h' 代表什么？">
+
+`h` 是 `hyperscript` 的缩写．因为它是一个用 JavaScript 表达
+HTML（Hyper Text Markup Language）的函数，所以得名！
+
+</KawaikoNote>
+
 到目前为止，我们已经让以下源代码工作：
 
 ```ts

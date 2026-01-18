@@ -1,13 +1,16 @@
-import {
-  type ElementNode,
-  type InterpolationNode,
-  NodeTypes,
-  type RootNode,
-  type SimpleExpressionNode,
-  type TemplateChildNode,
-  type TextNode,
-  type DirectiveNode,
-} from "@chibivue/compiler-core";
+import type { SimpleExpressionNode, RootNode } from "@chibivue/compiler-core";
+
+import type {
+  RootIRNode,
+  BlockIRNode,
+  OperationNode,
+  SetTextIRNode,
+  SetEventIRNode,
+  SetPropIRNode,
+  IfIRNode,
+  ForIRNode,
+} from "./ir";
+import { IRNodeTypes } from "./ir";
 
 export interface VaporCodegenResult {
   code: string;
@@ -23,7 +26,6 @@ export interface VaporCodegenOptions {
 interface VaporCodegenContext {
   code: string;
   indentLevel: number;
-  helpers: Set<symbol>;
   push(code: string): void;
   indent(): void;
   deindent(): void;
@@ -34,7 +36,6 @@ function createVaporCodegenContext(): VaporCodegenContext {
   const context: VaporCodegenContext = {
     code: "",
     indentLevel: 0,
-    helpers: new Set(),
     push(code: string) {
       context.code += code;
     },
@@ -53,6 +54,177 @@ function createVaporCodegenContext(): VaporCodegenContext {
   return context;
 }
 
+export function generateVaporFromIR(
+  ir: RootIRNode,
+  options: VaporCodegenOptions = {},
+): VaporCodegenResult {
+  const context = createVaporCodegenContext();
+  const { push, indent, deindent, newline } = context;
+  const isSetupInlined = !options.isBrowser && !!options.inline;
+
+  // Generate preamble
+  const preambleContext = isSetupInlined ? createVaporCodegenContext() : context;
+  genVaporPreamble(preambleContext, options.isBrowser);
+
+  // Generate component function
+  push(`((_self) => {`);
+  indent();
+
+  // Generate template call
+  const template = ir.template[0] || "";
+  push(`const _root = _template(\`${template}\`);`);
+  newline();
+
+  // Generate element references
+  const block = ir.block;
+  const elementCount = countElements(block);
+
+  for (let i = 0; i < elementCount; i++) {
+    push(`const _el${i} = _root${generateElementPath(i, elementCount)};`);
+    newline();
+  }
+
+  // Generate operations (non-reactive)
+  for (const op of block.operation) {
+    genOperation(op, context);
+  }
+
+  // Generate effects (reactive)
+  for (const effect of block.effect) {
+    push(`_renderEffect(() => {`);
+    indent();
+    for (const op of effect.operations) {
+      genOperation(op, context);
+    }
+    deindent();
+    push(`});`);
+    newline();
+  }
+
+  // Return root element
+  push(`return _root;`);
+  deindent();
+  push(`})`);
+
+  return {
+    code: context.code,
+    preamble: isSetupInlined ? preambleContext.code : "",
+    ast: ir.node,
+  };
+}
+
+function genVaporPreamble(context: VaporCodegenContext, isBrowser?: boolean) {
+  const { push, newline } = context;
+
+  if (isBrowser) {
+    push(
+      `const { template: _template, setText: _setText, on: _on, setClass: _setClass, setStyle: _setStyle, setAttr: _setAttr, renderEffect: _renderEffect } = ChibiVueVapor`,
+    );
+    newline();
+    push(`return `);
+  } else {
+    push(
+      `import { template as _template, setText as _setText, on as _on, setClass as _setClass, setStyle as _setStyle, setAttr as _setAttr, renderEffect as _renderEffect } from "@chibivue/runtime-vapor"`,
+    );
+    newline();
+    newline();
+  }
+}
+
+function genOperation(op: OperationNode, context: VaporCodegenContext): void {
+  const { push, newline } = context;
+
+  switch (op.type) {
+    case IRNodeTypes.SET_TEXT:
+      genSetText(op, context);
+      break;
+    case IRNodeTypes.SET_EVENT:
+      genSetEvent(op, context);
+      break;
+    case IRNodeTypes.SET_PROP:
+      genSetProp(op, context);
+      break;
+    case IRNodeTypes.IF:
+      genIf(op, context);
+      break;
+    case IRNodeTypes.FOR:
+      genFor(op, context);
+      break;
+  }
+}
+
+function genSetText(op: SetTextIRNode, context: VaporCodegenContext): void {
+  const { push, newline } = context;
+  const values = op.values.map((v) => genExpression(v)).join(", ");
+  push(`_setText(_el${op.element}, "", ${values});`);
+  newline();
+}
+
+function genSetEvent(op: SetEventIRNode, context: VaporCodegenContext): void {
+  const { push, newline } = context;
+  const modifiersArg = op.modifiers?.length ? `, ${JSON.stringify(op.modifiers)}` : "";
+  push(`_on(_el${op.element}, "${op.key}", ${genExpression(op.value)}${modifiersArg});`);
+  newline();
+}
+
+function genSetProp(op: SetPropIRNode, context: VaporCodegenContext): void {
+  const { push, newline } = context;
+  const key = op.key;
+  const value = genExpression(op.value);
+
+  if (key === "class") {
+    push(`_setClass(_el${op.element}, ${value});`);
+  } else if (key === "style") {
+    push(`_setStyle(_el${op.element}, ${value});`);
+  } else {
+    push(`_setAttr(_el${op.element}, "${key}", ${value});`);
+  }
+  newline();
+}
+
+function genIf(op: IfIRNode, context: VaporCodegenContext): void {
+  const { push, indent, deindent, newline } = context;
+  // TODO: Implement v-if code generation
+  push(`// TODO: v-if (id: ${op.id})`);
+  newline();
+}
+
+function genFor(op: ForIRNode, context: VaporCodegenContext): void {
+  const { push, newline } = context;
+  // TODO: Implement v-for code generation
+  push(`// TODO: v-for (id: ${op.id})`);
+  newline();
+}
+
+function genExpression(exp: SimpleExpressionNode): string {
+  return exp.content;
+}
+
+function countElements(block: BlockIRNode): number {
+  let count = block.returns.length;
+  // Also count elements referenced in operations and effects
+  for (const op of block.operation) {
+    if ("element" in op && typeof op.element === "number") {
+      count = Math.max(count, op.element + 1);
+    }
+  }
+  for (const effect of block.effect) {
+    for (const op of effect.operations) {
+      if ("element" in op && typeof op.element === "number") {
+        count = Math.max(count, op.element + 1);
+      }
+    }
+  }
+  return count;
+}
+
+function generateElementPath(index: number, total: number): string {
+  if (total <= 1) return "";
+  if (index === 0) return ".firstChild";
+  return `.childNodes[${index}]`;
+}
+
+// Legacy function for backward compatibility
 export function generateVapor(
   ast: RootNode,
   options: VaporCodegenOptions = {},
@@ -62,11 +234,11 @@ export function generateVapor(
   const isSetupInlined = !options.isBrowser && !!options.inline;
 
   // Analyze template and collect info
-  const templateInfo = analyzeTemplate(ast, context);
+  const templateInfo = analyzeTemplate(ast);
 
   // Generate preamble
   const preambleContext = isSetupInlined ? createVaporCodegenContext() : context;
-  genVaporPreamble(preambleContext, options.isBrowser);
+  genVaporPreambleLegacy(preambleContext, options.isBrowser);
 
   // Generate component function
   push(`((_self) => {`);
@@ -85,7 +257,7 @@ export function generateVapor(
   // Generate effects for dynamic bindings
   for (const binding of templateInfo.bindings) {
     if (binding.type === "text") {
-      push(`_effect(() => {`);
+      push(`_renderEffect(() => {`);
       indent();
       push(`_setText(${binding.target}, "", ${binding.expression});`);
       deindent();
@@ -109,25 +281,25 @@ export function generateVapor(
   };
 }
 
-function genVaporPreamble(context: VaporCodegenContext, isBrowser?: boolean) {
+function genVaporPreambleLegacy(context: VaporCodegenContext, isBrowser?: boolean) {
   const { push, newline } = context;
 
   if (isBrowser) {
-    push(`const { template: _template, setText: _setText, on: _on } = ChibiVueVapor`);
-    newline();
-    push(`const { effect: _effect } = ChibiVue`);
+    push(
+      `const { template: _template, setText: _setText, on: _on, renderEffect: _renderEffect } = ChibiVueVapor`,
+    );
     newline();
     push(`return `);
   } else {
     push(
-      `import { template as _template, setText as _setText, on as _on } from "@chibivue/runtime-vapor"`,
+      `import { template as _template, setText as _setText, on as _on, renderEffect as _renderEffect } from "@chibivue/runtime-vapor"`,
     );
-    newline();
-    push(`import { effect as _effect } from "chibivue"`);
     newline();
     newline();
   }
 }
+
+import { NodeTypes, type TextNode, type ElementNode, type InterpolationNode, type DirectiveNode, type TemplateChildNode } from "@chibivue/compiler-core";
 
 interface TemplateRef {
   varName: string;
@@ -147,7 +319,7 @@ interface TemplateAnalysis {
   bindings: TemplateBinding[];
 }
 
-function analyzeTemplate(ast: RootNode, context: VaporCodegenContext): TemplateAnalysis {
+function analyzeTemplate(ast: RootNode): TemplateAnalysis {
   const refs: TemplateRef[] = [];
   const bindings: TemplateBinding[] = [];
   let refCounter = 0;

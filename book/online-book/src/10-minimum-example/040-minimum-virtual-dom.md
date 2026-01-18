@@ -2,6 +2,14 @@
 
 ## What is Virtual DOM used for?
 
+<KawaikoNote variant="question" title="Why Virtual DOM?">
+
+The purpose of Virtual DOM is "diff updates".
+It identifies the parts that have changed and performs only necessary DOM operations!
+(However, Virtual DOM itself has overhead, so it's not a silver bullet)
+
+</KawaikoNote>
+
 By introducing the Reactivity System in the previous chapter, we were able to dynamically update the screen. Let's take a look at the content of the current render function again.
 
 ```ts
@@ -414,5 +422,12 @@ Now that we can perform diff rendering, let's take a look at the playground.
 ![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
 
 We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
+
+<KawaikoNote variant="surprise" title="Virtual DOM complete!">
+
+The diff detection mechanism is now implemented! This is the core technology of frameworks.
+Experience how the "heart of the framework" works with just a few hundred lines of code!
+
+</KawaikoNote>
 
 Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

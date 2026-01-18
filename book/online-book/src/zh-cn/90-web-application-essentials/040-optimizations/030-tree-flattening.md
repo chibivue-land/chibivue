@@ -66,9 +66,8 @@ dynamicChildren = [p]
 <KawaikoNote variant="funny" title="戏剧性的效率提升！">
 
 如果 1000 个节点中只有 10 个是动态的：
-传统方法：1000 次比较
-Tree Flattening：10 次比较
-可能实现 100 倍的效率提升．
+传统方法需要 1000 次比较，
+但 Tree Flattening 只需要 10 次比较．
 
 </KawaikoNote>
 
@@ -311,22 +310,13 @@ function patchElement(
 
 ## 优化效果
 
-### 基准测试示例
+考虑 1000 个列表项中只更新 1 个的情况：
 
-1000 个列表项中只更新 1 个的情况：
+- **完整 diff**：遍历 1000 个以上的节点
+- **仅 Patch Flags**：遍历 1000 个节点（属性比较被优化）
+- **Tree Flattening**：只遍历动态节点（1 个）
 
-| 方法 | 遍历节点数 | 相对性能 |
-|------|-----------|---------|
-| 完整 diff | 1000+ | 1x |
-| 仅 Patch Flags | 1000 | 2-3x |
-| Tree Flattening | 1 | 50-100x |
-
-<KawaikoNote variant="surprise" title="惊人的效率！">
-
-在大规模应用程序中，Tree Flattening 可以将更新性能提升数十倍．
-这是 Vue 3 被称为快速的原因之一．
-
-</KawaikoNote>
+动态节点越少，Tree Flattening 的效果就越大．
 
 ## Block 失效的情况
 

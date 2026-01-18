@@ -14,19 +14,12 @@ Vue.js の Reactivity System は，Vue 3.4 で大幅なパフォーマンス最�
 alien-signals は Vue 3.4 の Reactivity System をベースに再実装されたシグナルライブラリで，以下の特徴があります:
 
 - **軽量**: 最小限のメモリ使用量
-- **高速**: Vue 3.4 の Reactivity System の約 4 倍（400%）のパフォーマンス
-- **メモリ効率**: 約 13% のメモリ使用量削減
+- **高速**: パフォーマンスの改善
+- **メモリ効率**: メモリ使用量の削減
 
 これらの成果は，Vue 3.6 で Vue 本体の Reactivity System に移植されることになりました．
 
 参考: [vuejs/core#12349](https://github.com/vuejs/core/pull/12349)
-
-<KawaikoNote variant="surprise" title="パフォーマンス 4 倍！">
-
-alien-signals は Vue 3.4 の Reactivity System をベースに再実装され，なんと**約 4 倍**のパフォーマンス向上を達成しました！\
-この成果が Vue 3.6 に組み込まれることで，すべての Vue ユーザーがその恩恵を受けられます．
-
-</KawaikoNote>
 
 ## Push-Pull リアクティビティアルゴリズム
 

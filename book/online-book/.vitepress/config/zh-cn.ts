@@ -362,6 +362,14 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "Vapor 模式",
                 link: "/zh-cn/90-web-application-essentials/050-vapor/010-introduction",
               },
+              {
+                text: "Vapor 编译器",
+                link: "/zh-cn/90-web-application-essentials/050-vapor/020-vapor-compiler",
+              },
+              {
+                text: "Vapor SSR",
+                link: "/zh-cn/90-web-application-essentials/050-vapor/030-vapor-ssr",
+              },
             ],
           },
         ],

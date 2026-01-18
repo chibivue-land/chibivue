@@ -6,6 +6,8 @@ import type {
 } from "@chibivue/compiler-core";
 import { baseCompile, baseParse } from "@chibivue/compiler-core";
 
+export { registerRuntimeHelpers } from "@chibivue/compiler-core";
+
 import type { CodegenResult } from "./codegen";
 import { parserOptions } from "./parserOptions";
 export { parserOptions } from "./parserOptions";

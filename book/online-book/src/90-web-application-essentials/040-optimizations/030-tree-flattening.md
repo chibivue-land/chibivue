@@ -66,9 +66,8 @@ dynamicChildren = [p]
 <KawaikoNote variant="funny" title="Dramatic efficiency improvement!">
 
 If only 10 out of 1000 nodes are dynamic:
-Traditional: 1000 comparisons
-Tree Flattening: 10 comparisons
-100x efficiency improvement is possible.
+Traditional approach requires 1000 comparisons,
+but Tree Flattening needs only 10 comparisons.
 
 </KawaikoNote>
 
@@ -311,22 +310,13 @@ function patchElement(
 
 ## Optimization Effect
 
-### Benchmark Example
+Consider the case of updating only 1 item out of 1000 list items:
 
-Case of updating only 1 item out of 1000 list items:
+- **Full diff**: Traverses 1000+ nodes
+- **Patch Flags only**: Traverses 1000 nodes (property comparison is optimized)
+- **Tree Flattening**: Traverses only dynamic nodes (1 node)
 
-| Method | Nodes Traversed | Relative Performance |
-|--------|-----------------|---------------------|
-| Full diff | 1000+ | 1x |
-| Patch Flags only | 1000 | 2-3x |
-| Tree Flattening | 1 | 50-100x |
-
-<KawaikoNote variant="surprise" title="Amazing efficiency!">
-
-In large-scale applications, Tree Flattening can improve update performance by dozens of times.
-This is one of the reasons Vue 3 is known for being fast.
-
-</KawaikoNote>
+The fewer dynamic nodes there are, the greater the effect of Tree Flattening.
 
 ## Cases Where Blocks Break
 

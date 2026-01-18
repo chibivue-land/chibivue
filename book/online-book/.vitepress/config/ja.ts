@@ -317,6 +317,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "Hydration",
                 link: "/ja/90-web-application-essentials/020-ssr/020-hydration",
               },
+              {
+                text: "Compiler SSR",
+                link: "/ja/90-web-application-essentials/020-ssr/030-compiler-ssr",
+              },
             ],
           },
           {
@@ -358,6 +362,14 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
               {
                 text: "Vapor Mode",
                 link: "/ja/90-web-application-essentials/050-vapor/010-introduction",
+              },
+              {
+                text: "Vapor Compiler",
+                link: "/ja/90-web-application-essentials/050-vapor/020-vapor-compiler",
+              },
+              {
+                text: "Vapor SSR",
+                link: "/ja/90-web-application-essentials/050-vapor/030-vapor-ssr",
               },
             ],
           },

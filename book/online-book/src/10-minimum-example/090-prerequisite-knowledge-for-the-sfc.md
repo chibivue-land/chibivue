@@ -1,5 +1,11 @@
 ## Surrounding Knowledge
 
+<KawaikoNote variant="question" title="What is SFC?">
+
+SFC is a Vue-specific format that combines template, script, and style in one file.
+It's saved as `.vue` files and converted to JavaScript by build tools!
+
+</KawaikoNote>
 
 ## How is SFC implemented?
 

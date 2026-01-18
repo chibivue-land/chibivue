@@ -362,6 +362,14 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "Vapor Mode",
                 link: "/90-web-application-essentials/050-vapor/010-introduction",
               },
+              {
+                text: "Vapor Compiler",
+                link: "/90-web-application-essentials/050-vapor/020-vapor-compiler",
+              },
+              {
+                text: "Vapor SSR",
+                link: "/90-web-application-essentials/050-vapor/030-vapor-ssr",
+              },
             ],
           },
         ],

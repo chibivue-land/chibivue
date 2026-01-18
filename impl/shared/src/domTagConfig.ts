@@ -12,4 +12,7 @@ const HTML_TAGS =
   "option,output,progress,select,textarea,details,dialog,menu," +
   "summary,template,blockquote,iframe,tfoot";
 
+const VOID_TAGS = "area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr";
+
 export const isHTMLTag: (key: string) => boolean = /*#__PURE__*/ makeMap(HTML_TAGS);
+export const isVoidTag: (key: string) => boolean = /*#__PURE__*/ makeMap(VOID_TAGS);

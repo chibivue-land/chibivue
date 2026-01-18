@@ -43,6 +43,7 @@ export const enum BindingTypes {
 export interface CodegenOptions extends SharedTransformCodegenOptions {
   inline?: boolean;
   scopeId?: string;
+  ssr?: boolean;
 }
 
 export type CompilerOptions = ParserOptions & TransformOptions & CodegenOptions;
