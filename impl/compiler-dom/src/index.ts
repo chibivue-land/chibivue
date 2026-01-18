@@ -8,6 +8,7 @@ import { baseCompile, baseParse } from "@chibivue/compiler-core";
 
 import type { CodegenResult } from "./codegen";
 import { parserOptions } from "./parserOptions";
+export { parserOptions } from "./parserOptions";
 import { transformModel } from "./transforms/vModel";
 import { transformOn } from "./transforms/vOn";
 import { transformVText } from "./transforms/vText";

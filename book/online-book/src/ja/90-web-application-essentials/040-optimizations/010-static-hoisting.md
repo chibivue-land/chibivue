@@ -4,6 +4,14 @@
 
 Static Hoisting は，テンプレートコンパイル時の最適化テクニックの一つです．テンプレート内の静的な（リアクティブな依存関係を持たない）ノードを検出し，レンダー関数の外部に「巻き上げ」（hoist）することで，再レンダリング時のパフォーマンスを向上させます．
 
+<KawaikoNote variant="question" title="なぜ巻き上げ（hoist）と呼ぶ？">
+
+JavaScript の「変数の巻き上げ（hoisting）」と同じ発想です．
+レンダー関数の中にある静的なコードを，関数の外に「持ち上げる」ことで，
+関数が呼ばれるたびに再生成する必要がなくなります！
+
+</KawaikoNote>
+
 ### 最適化の効果
 
 1. **VNode 生成のスキップ**: 静的なノードは初回のみ生成され，再利用される
@@ -46,6 +54,13 @@ function render() {
   ])
 }
 ```
+
+<KawaikoNote variant="funny" title="劇的ビフォーアフター！">
+
+毎回 VNode を生成していたのが，一度生成した VNode を使い回すだけに．
+ヘッダーやフッターなど，変わらない部分が多いほど効果絶大です！
+
+</KawaikoNote>
 
 ## 実装の概要
 
@@ -358,6 +373,13 @@ Static Hoisting の実装は以下の要素で構成されています：
 5. **genHoists**: 巻き上げられたノードをコード生成
 
 この最適化により，大きなテンプレートで多くの静的コンテンツがある場合に，再レンダリングのパフォーマンスが大幅に向上します．特に，ヘッダー，フッター，サイドバーなど変更されない UI 部分で効果的です．
+
+<KawaikoNote variant="surprise" title="Static Hoisting 完成！">
+
+コンパイラが「この部分は変わらないな」と判断して自動的に最適化してくれます．
+テンプレートベースのフレームワークならではの強みですね！
+
+</KawaikoNote>
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/040_static_hoisting)

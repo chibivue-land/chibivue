@@ -1,5 +1,12 @@
 # テンプレートコンパイラ
 
+<KawaikoNote variant="question" title="コンパイラって何？">
+
+「コンパイラ」は翻訳機です．人間が書きやすい形式（template）から，
+機械が実行しやすい形式（h 関数）に変換します！
+
+</KawaikoNote>
+
 ## 実はここまでで動作に必要なものは揃った ( ? )
 
 これまで，リアクティビティシステムや仮想 DOM，コンポーネントなどを実装してきました．  
@@ -150,6 +157,13 @@ const app = createApp({
 // ↓
 h('p', { class: 'hello' }, ['Hello World'])
 ```
+
+<KawaikoNote variant="funny" title="テンプレートの正体">
+
+template は最終的に h 関数の呼び出しに変換されます．
+つまり，今まで実装した h 関数がここでも活躍するわけです！
+
+</KawaikoNote>
 
 いくつかのフェーズに分けて，段階的に実装を進めていきましょう．
 

@@ -1,9 +1,16 @@
 # コンポーネント指向で開発したい
 
+<KawaikoNote variant="question" title="なぜコンポーネント？">
+
+コンポーネントは UI を再利用可能な部品に分割する仕組みです．
+同じボタンを何度も書く代わりに，一度定義して使い回せます！
+
+</KawaikoNote>
+
 ## 既存実装の整理ベースで考える
 
 これまで，createApp API やリアクティビティシステム， 仮想 DOM を小さく実装してきました．  
-今現時点での実装ではリアクティビティシステムによって UI を動的に変更することもできますし， 仮想 DOM によって効率的なレンダリングを行うことができているのですが，開発者インタフェースとしては全ての内容を createApp API に書く感じになってしまっています．  
+今現時点での実装ではリアクティビティシステムによって UI を動的に変更することもできますし，仮想 DOM によって差分レンダリングを行うことができているのですが，開発者インタフェースとしては全ての内容を createApp API に書く感じになってしまっています．  
 実際にはもっとファイルを分割したり，再利用のために汎用的なコンポーネントを実装したいです．  
 まずは既存実装の散らかってしまっている部分を見直してみます．renderer.ts の render 関数をみてください．
 
@@ -285,8 +292,15 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-これで Component をレンダリングすることができました．試しに playground コンポーネントを作ってみてみましょう．  
+これで Component をレンダリングすることができました．試しに playground コンポーネントを作ってみてみましょう．
 このように，コンポーネントに分割してレンダリングができるようになっているかと思います．
+
+<KawaikoNote variant="funny" title="インスタンスの役割">
+
+コンポーネントの「設計図」と「インスタンス」は別物です．
+同じ CounterComponent を 3 つ並べても，それぞれが独立した状態を持てます！
+
+</KawaikoNote>
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -318,7 +332,14 @@ const app = createApp({
 app.mount('#app')
 ```
 
-ここまでのソースコード:  
+<KawaikoNote variant="surprise" title="コンポーネントシステム完成！">
+
+これで UI を部品化できるようになりました！
+実際のアプリ開発でも，この仕組みが大活躍します．
+
+</KawaikoNote>
+
+ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
 
 

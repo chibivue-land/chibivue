@@ -8,6 +8,14 @@ Server Side Rendering (SSR) は，Vue.js アプリケーションをサーバー
 2. **初期表示の高速化**: ブラウザは JavaScript の実行を待たずに HTML を表示できる
 3. **パフォーマンスの改善**: 特に低速なデバイスやネットワーク環境で効果的
 
+<KawaikoNote variant="question" title="SSR と SPA の違い">
+
+通常の SPA では，クライアントが空の HTML を受け取り，JavaScript で DOM を構築します．
+SSR では，サーバーで完成した HTML を送るので，ユーザーはすぐにコンテンツを見ることができます．
+JavaScript のダウンロード・実行を待たずにコンテンツが表示されるのがポイントです！
+
+</KawaikoNote>
+
 ## パッケージ構成
 
 chibivue の SSR 実装は `@chibivue/server-renderer` パッケージで提供されています．
@@ -191,6 +199,14 @@ export function createBuffer(): { getBuffer: () => SSRBuffer; push: PushFn } {
 1. 連続する文字列は自動的に結合（メモリ効率化）
 2. `appendable` フラグで結合可能かを追跡
 3. 非同期要素があれば `hasAsync` フラグを設定
+
+<KawaikoNote variant="funny" title="バッファの賢い工夫">
+
+「こんにちは」「世界」という連続する文字列は，配列に別々に入れるより
+「こんにちは世界」と結合した方がメモリ効率が良いですよね．
+`appendable` フラグでこれを自動的にやってくれます！
+
+</KawaikoNote>
 
 ## コンポーネントのレンダリング
 
@@ -549,6 +565,14 @@ function applySSRDirectives(
 
 ## エスケープ処理
 
+<KawaikoNote variant="warning" title="セキュリティは超重要！">
+
+SSR ではユーザー入力がそのまま HTML に出力される可能性があります．
+エスケープ処理を怠ると，XSS（クロスサイトスクリプティング）攻撃の標的になってしまいます．
+`escapeHtml` は SSR において必須のセキュリティ対策です！
+
+</KawaikoNote>
+
 XSS を防ぐための HTML エスケープです．
 
 ```ts
@@ -644,6 +668,14 @@ unrollBuffer(buffer)
   ↓
 HTML 文字列
 ```
+
+<KawaikoNote variant="surprise" title="SSR の基本が完成！">
+
+`renderToString` で VNode を HTML 文字列に変換できるようになりました．
+次のセクションで学ぶ hydration と組み合わせると，
+SSR の恩恵を受けながらインタラクティブな SPA を実現できます！
+
+</KawaikoNote>
 
 ## まとめ
 

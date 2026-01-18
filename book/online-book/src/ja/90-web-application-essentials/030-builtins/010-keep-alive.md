@@ -4,6 +4,13 @@
 
 `<KeepAlive>` は，コンポーネントのインスタンスを破棄せずにキャッシュして再利用するための組み込みコンポーネントです．通常，コンポーネントが切り替わると古いコンポーネントはアンマウントされ，状態が失われますが，KeepAlive を使用することでコンポーネントの状態を保持したまま表示を切り替えることができます．
 
+<KawaikoNote variant="question" title="なぜ KeepAlive が必要？">
+
+例えばタブ切り替えのある画面で，入力中のフォームがあるタブから別のタブに移動して戻ってきたとき，
+入力内容が消えてしまったら困りますよね．KeepAlive はそんな「状態を保持したい」というニーズに応えます！
+
+</KawaikoNote>
+
 主なユースケース：
 
 1. **タブ切り替え**: フォーム入力中にタブを切り替えても入力内容を保持
@@ -119,6 +126,13 @@ instance.deactivate = (vnode: VNode) => {
 ```
 
 通常のアンマウントと異なり，DOM 要素は削除されず隠しコンテナに移動されるだけです．
+
+<KawaikoNote variant="funny" title="隠しコンテナのトリック">
+
+非表示にするコンポーネントは画面外の「隠れ家」に移動させておきます．
+必要になったら「隠れ家」から取り出すだけなので，再構築の手間が省けます！
+
+</KawaikoNote>
 
 ### render 関数
 
@@ -434,6 +448,14 @@ deactivate
   → cache に保持されたまま
 ```
 
+<KawaikoNote variant="warning" title="メモリ使用量に注意！">
+
+KeepAlive でキャッシュされたコンポーネントはメモリに残り続けます．
+キャッシュしすぎるとメモリを圧迫するので，`max` プロパティで上限を設定しましょう．
+LRU（最近使われていないものから削除）で自動的に管理されます！
+
+</KawaikoNote>
+
 ## まとめ
 
 KeepAlive の実装は以下の要素で構成されています：
@@ -448,6 +470,13 @@ KeepAlive の実装は以下の要素で構成されています：
 6. **include/exclude/max**: 柔軟なキャッシュ制御
 
 KeepAlive はコンポーネントの状態を保持しながらパフォーマンスを向上させる強力な機能ですが，メモリ使用量とのトレードオフがあるため，適切な `max` 値の設定が重要です．
+
+<KawaikoNote variant="surprise" title="KeepAlive 完成！">
+
+コンポーネントを「消さずに隠す」というシンプルなアイデアですが，
+レンダラーとの連携や LRU キャッシュなど，実装はなかなか奥深いですね！
+
+</KawaikoNote>
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/020_keep_alive)

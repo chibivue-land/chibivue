@@ -6,6 +6,7 @@ const PACKAGES = [
   "compiler-core",
   "compiler-dom",
   "compiler-sfc",
+  "compiler-vapor",
   "runtime-core",
   "runtime-dom",
   "runtime-vapor",

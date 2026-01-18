@@ -4,6 +4,14 @@
 
 `<Transition>` は，要素やコンポーネントの表示・非表示の切り替え時にアニメーションを適用するための組み込みコンポーネントです．CSS トランジション/アニメーションと連携して，スムーズな UI 遷移を実現します．
 
+<KawaikoNote variant="question" title="なぜ Transition が必要？">
+
+要素の表示/非表示を `v-if` で切り替えると，瞬間的に消えたり現れたりします．
+Transition を使うと，フェードイン/アウトやスライドなどの
+アニメーションを簡単に追加できます！
+
+</KawaikoNote>
+
 主なユースケース：
 
 1. **v-if / v-show との組み合わせ**: 条件付きレンダリング時のアニメーション
@@ -207,6 +215,15 @@ function nextFrame(cb: () => void): void {
 
 1 フレーム目でブラウザが初期状態を認識し，2 フレーム目で変更を適用することで，トランジションが確実に発火します．
 
+<KawaikoNote variant="funny" title="2 フレーム待つ理由">
+
+「なぜ 2 回も `requestAnimationFrame` を呼ぶの？」と思いますよね．
+1 回目でブラウザに「これが初期状態だよ」と教え，
+2 回目で「これが終了状態だよ」と教えることで，
+ブラウザがトランジションを認識できるようになります！
+
+</KawaikoNote>
+
 ### Enter フック
 
 ```ts
@@ -364,6 +381,14 @@ export function forceReflow(): number {
 ```
 
 `offsetHeight` を読み取ることで，ブラウザにスタイルの再計算を強制します．
+
+<KawaikoNote variant="warning" title="なぜリフローを強制する？">
+
+CSS クラスを連続で追加しても，ブラウザは最適化のために
+スタイルの再計算をまとめて行うことがあります．
+`offsetHeight` を読むことで「今すぐ計算して！」と強制できます．
+
+</KawaikoNote>
 
 ## Transition コンポーネント本体
 
@@ -616,6 +641,14 @@ Transition の実装は以下の要素で構成されています：
 6. **VNode.transition**: レンダラーがフックを呼び出すためのプロパティ
 
 Transition は CSS トランジション/アニメーションと密接に連携し，ブラウザの描画パイプラインを理解した上で実装されています．
+
+<KawaikoNote variant="surprise" title="Transition 完成！">
+
+CSS のクラス操作だけでなく，フレームのタイミングやリフローの制御など，
+ブラウザの仕組みを深く理解した実装になっています．
+意外と奥が深いですね！
+
+</KawaikoNote>
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/030_transition)

@@ -1,5 +1,12 @@
 # Single File Component で開発したい (周辺知識編)
 
+<KawaikoNote variant="question" title="SFC って何？">
+
+SFC は template, script, style を 1 ファイルにまとめた Vue 独自の形式です．
+`.vue` ファイルとして保存し，ビルドツールで JavaScript に変換されます！
+
+</KawaikoNote>
+
 ## SFC はどうやって実現されている？
 
 ここからはいよいよ SFC (Single File Component) の対応をやっていきます．  

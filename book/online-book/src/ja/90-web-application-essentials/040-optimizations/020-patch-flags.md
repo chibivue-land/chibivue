@@ -4,6 +4,14 @@
 
 Patch Flags は，コンパイラが生成する最適化ヒントです．VNode にフラグを付与することで，ランタイムの差分検出（diffing）アルゴリズムが不要なチェックをスキップし，パフォーマンスを向上させます．
 
+<KawaikoNote variant="question" title="なぜコンパイラが最適化？">
+
+テンプレートを書く人間は「ここは動的」「ここは静的」と把握していますが，
+従来の Virtual DOM はそれを知りません．コンパイラがその情報をランタイムに伝えることで，
+無駄な比較を省けるようになります！
+
+</KawaikoNote>
+
 ### 最適化の仕組み
 
 通常の Virtual DOM の差分検出では，すべてのプロパティと子要素を比較する必要があります．しかし，コンパイラはテンプレートを解析する段階で「どの部分が動的か」を知っています．この情報を Patch Flags として VNode に埋め込むことで，ランタイムは変更される可能性のある部分だけをチェックできます．
@@ -103,6 +111,13 @@ if (flag & PatchFlags.CLASS) {
   // CLASS フラグが設定されている
 }
 ```
+
+<KawaikoNote variant="funny" title="ビット演算の魔法">
+
+`1 << 1` は `2`，`1 << 2` は `4`...ビットをずらすだけで独立したフラグが作れます．
+`|`（OR）で組み合わせ，`&`（AND）でチェック．シンプルだけど超効率的！
+
+</KawaikoNote>
 
 ## テンプレートからの生成例
 
@@ -319,6 +334,13 @@ Patch Flags の実装は以下の要素で構成されています：
 5. **Block Tree 連携**: 動的な子ノードのみを効率的に更新
 
 Patch Flags は Vue 3 の Virtual DOM パフォーマンスを大幅に向上させる重要な最適化技術です．コンパイラとランタイムが協調することで，テンプレートベースのフレームワークの利点を最大限に活かしています．
+
+<KawaikoNote variant="surprise" title="Patch Flags 完成！">
+
+「テンプレートを解析できるなら，最適化のヒントも出せるよね」という発想から生まれた技術です．
+JSX にはない，テンプレートコンパイラならではの強みをぜひ体感してください！
+
+</KawaikoNote>
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/050_patch_flags)
