@@ -189,7 +189,28 @@ function loadChapters(): Chapter[] {
         content: f.content,
       }));
 
-      // Fix vite.config.ts to use the correct path for WebContainer
+      // Console hook script to inject into index.html
+      const consoleHookScript = `<script>
+(function() {
+  const originalConsole = { log: console.log, info: console.info, warn: console.warn, error: console.error };
+  ['log', 'info', 'warn', 'error'].forEach(level => {
+    console[level] = function(...args) {
+      originalConsole[level].apply(console, args);
+      try {
+        window.parent.postMessage({ type: 'console', level, args: args.map(a => {
+          try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+          catch { return String(a); }
+        })}, '*');
+      } catch {}
+    };
+  });
+  window.onerror = (msg, src, line, col, err) => {
+    window.parent.postMessage({ type: 'console', level: 'error', args: [msg + ' at ' + src + ':' + line] }, '*');
+  };
+})();
+</script>`;
+
+      // Fix vite.config.ts and inject console hook into index.html
       const fixedPlaygroundFiles = playgroundFiles.map((f) => {
         if (f.path === "vite.config.ts") {
           // Replace relative paths to packages with the flat structure path
@@ -201,12 +222,17 @@ function loadChapters(): Chapter[] {
             // Fix import paths for @extensions
             .replace(
               /from\s+["']\.\.\/\.\.\/packages\/@extensions\/([^"']+)["']/g,
-              'from "packages/@extensions/$1"',
+              'from "./packages/@extensions/$1"',
             )
             .replace(
               /import\s+(\w+)\s+from\s+["']\.\.\/\.\.\/packages\/@extensions\/([^"']+)["']/g,
               'import $1 from "./packages/@extensions/$2"',
             );
+          return { ...f, content: fixedContent };
+        }
+        // Inject console hook into index.html
+        if (f.path === "index.html") {
+          const fixedContent = f.content.replace(/<head>/i, `<head>\n${consoleHookScript}`);
           return { ...f, content: fixedContent };
         }
         return f;

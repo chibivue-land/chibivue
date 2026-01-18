@@ -29,6 +29,13 @@ const terminalHeight = ref(200);
 const isResizingSidebar = ref(false);
 const isResizingTerminal = ref(false);
 
+// Chapter selector state
+const isSelectorOpen = ref(false);
+const searchQuery = ref("");
+const searchInputRef = ref<HTMLInputElement | null>(null);
+const selectorRef = ref<HTMLDivElement | null>(null);
+const highlightedIndex = ref(-1);
+
 let webcontainer: WebContainer | null = null;
 let editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 let monaco: typeof Monaco | null = null;
@@ -71,6 +78,29 @@ const groupedChapters = computed(() => {
   }
   return groups;
 });
+
+// Filtered chapters based on search query
+const filteredChapters = computed(() => {
+  const query = searchQuery.value.toLowerCase().trim();
+  if (!query) return chapters;
+  return chapters.filter(c =>
+    c.name.toLowerCase().includes(query) ||
+    c.section.toLowerCase().includes(query)
+  );
+});
+
+const filteredGroupedChapters = computed(() => {
+  const groups: Record<string, Chapter[]> = {};
+  for (const chapter of filteredChapters.value) {
+    if (!groups[chapter.section]) {
+      groups[chapter.section] = [];
+    }
+    groups[chapter.section].push(chapter);
+  }
+  return groups;
+});
+
+const flatFilteredChapters = computed(() => filteredChapters.value);
 
 const fileTree = computed(() => {
   if (!selectedChapter.value) return [];
@@ -391,6 +421,49 @@ function stopResizeTerminal() {
   document.removeEventListener('mouseup', stopResizeTerminal);
 }
 
+// Chapter selector methods
+function openSelector() {
+  isSelectorOpen.value = true;
+  searchQuery.value = "";
+  highlightedIndex.value = -1;
+  nextTick(() => {
+    searchInputRef.value?.focus();
+  });
+}
+
+function closeSelector() {
+  isSelectorOpen.value = false;
+  searchQuery.value = "";
+  highlightedIndex.value = -1;
+}
+
+function handleSelectorSelect(chapterId: string) {
+  selectChapter(chapterId);
+  closeSelector();
+}
+
+function handleSelectorKeydown(e: KeyboardEvent) {
+  const chapters = flatFilteredChapters.value;
+  if (e.key === 'Escape') {
+    closeSelector();
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    highlightedIndex.value = Math.min(highlightedIndex.value + 1, chapters.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    highlightedIndex.value = Math.max(highlightedIndex.value - 1, 0);
+  } else if (e.key === 'Enter' && highlightedIndex.value >= 0) {
+    e.preventDefault();
+    handleSelectorSelect(chapters[highlightedIndex.value].id);
+  }
+}
+
+function handleClickOutside(e: MouseEvent) {
+  if (selectorRef.value && !selectorRef.value.contains(e.target as Node)) {
+    closeSelector();
+  }
+}
+
 // FileTreeItem component
 const FileTreeItem = defineComponent({
   name: "FileTreeItem",
@@ -495,9 +568,23 @@ async function initEditor() {
   updateEditor();
 }
 
+// Console message handler
+function handleConsoleMessage(event: MessageEvent) {
+  if (event.data?.type === 'console') {
+    consoleOutput.value.push({
+      type: event.data.level || 'log',
+      message: event.data.args?.map((a: any) => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') || '',
+      timestamp: new Date(),
+    });
+  }
+}
+
 // Lifecycle
 onMounted(async () => {
   monaco = await loader.init();
+
+  // Listen for console messages from iframe
+  window.addEventListener('message', handleConsoleMessage);
 
   if (chapters.length > 0) {
     await selectChapter(chapters[0].id);
@@ -513,6 +600,19 @@ onMounted(async () => {
 onUnmounted(() => {
   editor?.dispose();
   webcontainer?.teardown();
+  window.removeEventListener('message', handleConsoleMessage);
+  document.removeEventListener('click', handleClickOutside);
+});
+
+// Watch for selector open state to add/remove click outside listener
+watch(isSelectorOpen, (isOpen) => {
+  if (isOpen) {
+    setTimeout(() => {
+      document.addEventListener('click', handleClickOutside);
+    }, 0);
+  } else {
+    document.removeEventListener('click', handleClickOutside);
+  }
 });
 
 watch(terminalOutput, async () => {
@@ -521,6 +621,13 @@ watch(terminalOutput, async () => {
     terminalContainer.value.scrollTop = terminalContainer.value.scrollHeight;
   }
 });
+
+watch(consoleOutput, async () => {
+  await nextTick();
+  if (consoleContainer.value) {
+    consoleContainer.value.scrollTop = consoleContainer.value.scrollHeight;
+  }
+}, { deep: true });
 </script>
 
 <template>
@@ -547,15 +654,73 @@ watch(terminalOutput, async () => {
       </div>
 
       <div class="header-center">
-        <div class="chapter-selector">
-          <select :value="selectedChapterId" @change="selectChapter(($event.target as HTMLSelectElement).value)">
-            <option value="" disabled>Select a chapter...</option>
-            <optgroup v-for="(chapterList, section) in groupedChapters" :key="section" :label="section">
-              <option v-for="chapter in chapterList" :key="chapter.id" :value="chapter.id">
-                {{ chapter.name }}
-              </option>
-            </optgroup>
-          </select>
+        <!-- Custom Chapter Selector -->
+        <div ref="selectorRef" class="chapter-selector-custom">
+          <button class="selector-trigger" @click="openSelector">
+            <span class="selector-icon">📚</span>
+            <span class="selector-text">
+              {{ selectedChapter ? selectedChapter.name : 'Select a chapter...' }}
+            </span>
+            <span class="selector-arrow" :class="{ open: isSelectorOpen }">▼</span>
+          </button>
+
+          <!-- Dropdown -->
+          <Teleport to="body">
+            <div v-if="isSelectorOpen" class="selector-dropdown" @keydown="handleSelectorKeydown">
+              <div class="selector-header">
+                <div class="search-wrapper">
+                  <span class="search-icon">🔍</span>
+                  <input
+                    ref="searchInputRef"
+                    v-model="searchQuery"
+                    type="text"
+                    class="search-input"
+                    placeholder="Search chapters..."
+                    @keydown="handleSelectorKeydown"
+                  />
+                  <span v-if="searchQuery" class="search-clear" @click="searchQuery = ''">✕</span>
+                </div>
+              </div>
+
+              <div class="selector-content">
+                <template v-if="Object.keys(filteredGroupedChapters).length > 0">
+                  <div
+                    v-for="(chapterList, section) in filteredGroupedChapters"
+                    :key="section"
+                    class="selector-group"
+                  >
+                    <div class="group-header">{{ section }}</div>
+                    <div
+                      v-for="(chapter, idx) in chapterList"
+                      :key="chapter.id"
+                      class="selector-item"
+                      :class="{
+                        selected: chapter.id === selectedChapterId,
+                        highlighted: flatFilteredChapters.indexOf(chapter) === highlightedIndex
+                      }"
+                      @click="handleSelectorSelect(chapter.id)"
+                      @mouseenter="highlightedIndex = flatFilteredChapters.indexOf(chapter)"
+                    >
+                      <span class="item-check" v-if="chapter.id === selectedChapterId">✓</span>
+                      <span class="item-name">{{ chapter.name }}</span>
+                    </div>
+                  </div>
+                </template>
+                <div v-else class="selector-empty">
+                  <span>No chapters found</span>
+                </div>
+              </div>
+
+              <div class="selector-footer">
+                <span class="footer-hint">
+                  <kbd>↑</kbd><kbd>↓</kbd> Navigate
+                  <kbd>Enter</kbd> Select
+                  <kbd>Esc</kbd> Close
+                </span>
+                <span class="chapter-count">{{ filteredChapters.length }} chapters</span>
+              </div>
+            </div>
+          </Teleport>
         </div>
 
         <div v-if="selectedChapter" class="chapter-links">
@@ -653,17 +818,46 @@ watch(terminalOutput, async () => {
       <!-- Terminal resize handle -->
       <div class="resize-handle-horizontal" @mousedown="startResizeTerminal"></div>
 
-      <!-- Terminal -->
+      <!-- Terminal & Console Panel -->
       <div class="terminal-panel" :style="{ height: `${terminalHeight}px` }">
         <div class="panel-header terminal-header">
-          <span class="panel-title">Terminal</span>
+          <div class="output-tabs">
+            <button
+              :class="['output-tab', { active: activeTab === 'terminal' }]"
+              @click="activeTab = 'terminal'"
+            >
+              Terminal
+            </button>
+            <button
+              :class="['output-tab', { active: activeTab === 'console' }]"
+              @click="activeTab = 'console'"
+            >
+              Console
+              <span v-if="consoleOutput.length > 0" class="console-badge">{{ consoleOutput.length }}</span>
+            </button>
+          </div>
           <div class="terminal-actions">
-            <button @click="terminalOutput = []" class="terminal-btn" title="Clear">
-              <span>Clear</span>
+            <button
+              v-if="activeTab === 'terminal'"
+              @click="terminalOutput = []"
+              class="terminal-btn"
+              title="Clear"
+            >
+              Clear
+            </button>
+            <button
+              v-else
+              @click="consoleOutput = []"
+              class="terminal-btn"
+              title="Clear"
+            >
+              Clear
             </button>
           </div>
         </div>
-        <div ref="terminalContainer" class="terminal-output">
+
+        <!-- Terminal Output -->
+        <div v-show="activeTab === 'terminal'" ref="terminalContainer" class="terminal-output">
           <div
             v-for="(line, index) in terminalOutput"
             :key="index"
@@ -672,6 +866,22 @@ watch(terminalOutput, async () => {
           ></div>
           <div v-if="terminalOutput.length === 0" class="terminal-empty">
             Ready. Click Run to start the dev server...
+          </div>
+        </div>
+
+        <!-- Console Output -->
+        <div v-show="activeTab === 'console'" ref="consoleContainer" class="console-output">
+          <div
+            v-for="(entry, index) in consoleOutput"
+            :key="index"
+            :class="['console-entry', `console-${entry.type}`]"
+          >
+            <span class="console-time">{{ entry.timestamp.toLocaleTimeString() }}</span>
+            <span class="console-type">[{{ entry.type }}]</span>
+            <span class="console-message">{{ entry.message }}</span>
+          </div>
+          <div v-if="consoleOutput.length === 0" class="terminal-empty">
+            Console output will appear here when the app runs...
           </div>
         </div>
       </div>
@@ -696,8 +906,8 @@ watch(terminalOutput, async () => {
 }
 
 .loading-logo {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   margin-bottom: 24px;
   animation: float 3s ease-in-out infinite;
 }
@@ -736,7 +946,7 @@ watch(terminalOutput, async () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--c-navy-900) 50%, #0d1520 100%);
   overflow: hidden;
 }
 
@@ -745,27 +955,42 @@ watch(terminalOutput, async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  height: 56px;
-  background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 60px;
+  background: rgba(21, 30, 45, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(44, 201, 168, 0.1);
   flex-shrink: 0;
+  position: relative;
+}
+
+.playground-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.3;
 }
 
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .brand-logo {
-  width: 36px;
-  height: 36px;
-  transition: transform 0.3s ease;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 2px 8px rgba(44, 201, 168, 0.3));
 }
 
 .brand-logo:hover {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.15) rotate(8deg);
+  filter: drop-shadow(0 4px 12px rgba(44, 201, 168, 0.5));
 }
 
 .brand-text {
@@ -774,17 +999,23 @@ watch(terminalOutput, async () => {
 }
 
 .brand-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--accent);
+  font-size: 18px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--c-mint-300) 0%, var(--c-mint-500) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0;
   line-height: 1.2;
+  letter-spacing: -0.5px;
 }
 
 .brand-subtitle {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .header-center {
@@ -793,32 +1024,59 @@ watch(terminalOutput, async () => {
   gap: 16px;
 }
 
-.chapter-selector select {
-  padding: 8px 36px 8px 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg-primary);
+/* Custom Chapter Selector */
+.chapter-selector-custom {
+  position: relative;
+}
+
+.selector-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  background: rgba(27, 38, 55, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(44, 201, 168, 0.15);
+  border-radius: 12px;
   color: var(--text-primary);
-  min-width: 280px;
+  min-width: 300px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a9fb0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.chapter-selector select:hover {
-  border-color: var(--c-mint-600);
+.selector-trigger:hover {
+  border-color: var(--c-mint-500);
+  background: rgba(36, 51, 82, 0.8);
+  box-shadow: 0 4px 16px rgba(44, 201, 168, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
 }
 
-.chapter-selector select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+.selector-icon {
+  font-size: 16px;
 }
 
+.selector-text {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selector-arrow {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+.selector-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Selector Dropdown - uses Teleport so needs :global or in global CSS */
 .chapter-links {
   display: flex;
   gap: 8px;
@@ -828,60 +1086,83 @@ watch(terminalOutput, async () => {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
 }
 
 .link-book {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: linear-gradient(135deg, rgba(44, 201, 168, 0.15) 0%, rgba(44, 201, 168, 0.08) 100%);
+  color: var(--c-mint-300);
+  border-color: rgba(44, 201, 168, 0.2);
 }
 
 .link-book:hover {
-  background: var(--c-mint-600);
+  background: linear-gradient(135deg, var(--c-mint-500) 0%, var(--c-mint-600) 100%);
   color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 201, 168, 0.3);
 }
 
 .link-vue {
-  background: rgba(66, 184, 131, 0.15);
-  color: #42b883;
+  background: linear-gradient(135deg, rgba(66, 184, 131, 0.15) 0%, rgba(66, 184, 131, 0.08) 100%);
+  color: #5fd9a4;
+  border-color: rgba(66, 184, 131, 0.2);
 }
 
 .link-vue:hover {
-  background: #42b883;
+  background: linear-gradient(135deg, #42b883 0%, #35a070 100%);
   color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(66, 184, 131, 0.3);
 }
 
 .link-icon {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* Actions */
 .header-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 8px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn:hover::before {
+  opacity: 1;
 }
 
 .btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
+  transform: none !important;
 }
 
 .btn-icon {
@@ -889,38 +1170,48 @@ watch(terminalOutput, async () => {
 }
 
 .btn-run {
-  background: linear-gradient(135deg, var(--c-mint-500) 0%, var(--c-mint-600) 100%);
+  background: linear-gradient(135deg, var(--c-mint-400) 0%, var(--c-mint-600) 100%);
   color: white;
-  box-shadow: 0 2px 8px rgba(26, 179, 148, 0.3);
+  box-shadow: 0 4px 15px rgba(44, 201, 168, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .btn-run:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--c-mint-400) 0%, var(--c-mint-500) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(26, 179, 148, 0.4);
+  background: linear-gradient(135deg, var(--c-mint-300) 0%, var(--c-mint-500) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 201, 168, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-run:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(44, 201, 168, 0.3);
 }
 
 .btn-apply {
-  background: var(--bg-elevated);
+  background: rgba(36, 51, 82, 0.8);
   color: var(--text-primary);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(44, 201, 168, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-apply:hover:not(:disabled) {
-  background: var(--c-navy-600);
-  border-color: var(--c-mint-600);
+  background: rgba(46, 63, 96, 0.9);
+  border-color: var(--c-mint-500);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 201, 168, 0.2);
 }
 
 .btn-reset {
-  background: transparent;
+  background: rgba(36, 51, 82, 0.5);
   color: var(--text-secondary);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .btn-reset:hover:not(:disabled) {
-  background: rgba(255, 100, 100, 0.1);
-  color: #ff6b6b;
-  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff8a8a;
+  border-color: rgba(255, 107, 107, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-spinner {
@@ -929,20 +1220,23 @@ watch(terminalOutput, async () => {
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 .btn-tiny {
-  padding: 4px 10px;
+  padding: 5px 12px;
   font-size: 11px;
-  background: var(--bg-tertiary);
+  background: rgba(27, 38, 55, 0.8);
   color: var(--text-secondary);
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  font-weight: 500;
 }
 
 .btn-tiny:hover {
-  background: var(--bg-elevated);
+  background: rgba(36, 51, 82, 0.9);
+  color: var(--text-primary);
+  border-color: rgba(44, 201, 168, 0.3);
 }
 
 /* Main Content */
@@ -1016,18 +1310,30 @@ watch(terminalOutput, async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: var(--bg-tertiary);
-  border-bottom: 1px solid var(--border);
-  min-height: 38px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, rgba(27, 38, 55, 0.95) 0%, rgba(21, 30, 45, 0.9) 100%);
+  border-bottom: 1px solid rgba(44, 201, 168, 0.08);
+  min-height: 42px;
+  backdrop-filter: blur(8px);
 }
 
 .panel-title {
-  font-weight: 600;
-  font-size: 11px;
+  font-weight: 700;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
+  letter-spacing: 1.2px;
+  color: var(--c-mint-400);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title::before {
+  content: '';
+  width: 3px;
+  height: 12px;
+  background: linear-gradient(180deg, var(--c-mint-400) 0%, var(--c-mint-600) 100%);
+  border-radius: 2px;
 }
 
 /* File Explorer */
@@ -1035,45 +1341,72 @@ watch(terminalOutput, async () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--bg-secondary);
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(21, 30, 45, 0.95) 100%);
   border-right: 1px solid var(--border);
   flex-shrink: 0;
 }
 
 .file-count {
   font-size: 10px;
-  color: var(--text-muted);
-  background: var(--bg-primary);
-  padding: 2px 6px;
-  border-radius: 4px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
 }
 
 .file-tree {
   flex: 1;
   overflow: auto;
-  padding: 8px 0;
+  padding: 6px 8px;
+}
+
+:deep(.tree-directory) {
+  margin-bottom: 2px;
 }
 
 :deep(.tree-item) {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
+  gap: 8px;
+  padding: 7px 12px;
   cursor: pointer;
-  font-size: 12px;
-  color: var(--text-primary);
-  transition: all 0.15s;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
   user-select: none;
-  border-left: 2px solid transparent;
+  border-radius: 6px;
+  margin: 1px 0;
+  position: relative;
 }
 
 :deep(.tree-item:hover) {
-  background: var(--bg-tertiary);
+  background: rgba(44, 201, 168, 0.08);
+  color: var(--text-primary);
+}
+
+:deep(.tree-item.directory) {
+  font-weight: 500;
+}
+
+:deep(.tree-item.directory:hover) {
+  background: rgba(244, 211, 94, 0.08);
 }
 
 :deep(.tree-item.selected) {
-  background: var(--accent-soft);
-  border-left-color: var(--accent);
+  background: linear-gradient(90deg, var(--accent-soft) 0%, rgba(44, 201, 168, 0.05) 100%);
+  color: var(--text-primary);
+}
+
+:deep(.tree-item.selected::before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
 }
 
 :deep(.tree-item.modified .item-name) {
@@ -1081,14 +1414,15 @@ watch(terminalOutput, async () => {
 }
 
 :deep(.chevron) {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 8px;
   color: var(--text-muted);
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
+  opacity: 0.7;
 }
 
 :deep(.chevron::before) {
@@ -1097,63 +1431,73 @@ watch(terminalOutput, async () => {
 
 :deep(.chevron.expanded) {
   transform: rotate(90deg);
+  opacity: 1;
+  color: var(--c-duck-yellow);
 }
 
 :deep(.folder-icon) {
-  width: 16px;
-  height: 16px;
-  background: var(--c-duck-yellow);
-  border-radius: 2px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 14px;
+  transition: transform 0.2s;
 }
 
 :deep(.folder-icon::before) {
   content: '📁';
-  font-size: 12px;
+}
+
+:deep(.tree-item.directory:hover .folder-icon) {
+  transform: scale(1.1);
 }
 
 :deep(.file-icon-badge) {
-  width: 18px;
-  height: 18px;
-  border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
   font-weight: 700;
-  font-family: monospace;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s;
+}
+
+:deep(.tree-item:hover .file-icon-badge) {
+  transform: scale(1.05);
 }
 
 :deep(.icon-vue) {
-  background: #42b883;
+  background: linear-gradient(135deg, #42b883 0%, #35a070 100%);
   color: white;
 }
 
 :deep(.icon-ts) {
-  background: #3178c6;
+  background: linear-gradient(135deg, #3178c6 0%, #235a9e 100%);
   color: white;
 }
 
 :deep(.icon-js) {
-  background: #f7df1e;
+  background: linear-gradient(135deg, #f7df1e 0%, #e5c900 100%);
   color: #323330;
 }
 
 :deep(.icon-json) {
-  background: #5a5a5a;
+  background: linear-gradient(135deg, #6d6d6d 0%, #4a4a4a 100%);
   color: #f5d67b;
 }
 
 :deep(.icon-css) {
-  background: #264de4;
+  background: linear-gradient(135deg, #264de4 0%, #1a3cb8 100%);
   color: white;
 }
 
 :deep(.icon-html) {
-  background: #e44d26;
+  background: linear-gradient(135deg, #e44d26 0%, #c73d1a 100%);
   color: white;
 }
 
@@ -1181,58 +1525,78 @@ watch(terminalOutput, async () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid rgba(44, 201, 168, 0.08);
   flex: 1;
   min-width: 0;
+  background: linear-gradient(180deg, #0f1724 0%, #0d1520 100%);
 }
 
 .editor-header {
   padding: 0;
-  background: var(--bg-secondary);
+  background: linear-gradient(180deg, rgba(21, 30, 45, 0.98) 0%, rgba(15, 23, 36, 0.95) 100%);
+  border-bottom: 1px solid rgba(44, 201, 168, 0.06);
 }
 
 .tab-bar {
   display: flex;
-  padding: 0 8px;
+  padding: 0 12px;
+  gap: 4px;
 }
 
 .tab {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  font-size: 12px;
-  color: var(--text-secondary);
+  gap: 10px;
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
   border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: -1px;
+}
+
+.tab:hover {
+  color: var(--text-secondary);
+  background: rgba(44, 201, 168, 0.05);
 }
 
 .tab.active {
   color: var(--text-primary);
   border-bottom-color: var(--accent);
-  background: linear-gradient(180deg, transparent 0%, var(--accent-soft) 100%);
+  background: linear-gradient(180deg, rgba(44, 201, 168, 0.08) 0%, rgba(44, 201, 168, 0.03) 100%);
 }
 
 .tab-name {
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: -0.2px;
 }
 
 .tab-modified {
-  width: 6px;
-  height: 6px;
-  background: var(--warning);
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, var(--c-duck-yellow) 0%, #e5b800 100%);
   border-radius: 50%;
+  box-shadow: 0 0 8px rgba(244, 211, 94, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
 }
 
 .tab-bar-empty {
-  padding: 10px 16px;
+  padding: 12px 18px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-style: italic;
 }
 
 .editor-container {
   flex: 1;
   min-height: 0;
+  border-radius: 0 0 0 8px;
 }
 
 /* Preview Panel */
@@ -1240,22 +1604,23 @@ watch(terminalOutput, async () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--bg-secondary);
+  background: linear-gradient(180deg, rgba(21, 30, 45, 0.9) 0%, rgba(13, 21, 32, 0.95) 100%);
   flex: 1;
   min-width: 0;
 }
 
 .preview-url {
   font-size: 10px;
-  color: var(--text-muted);
-  font-family: monospace;
-  background: var(--bg-primary);
-  padding: 2px 8px;
-  border-radius: 4px;
+  color: var(--c-mint-400);
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(44, 201, 168, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border: 1px solid rgba(44, 201, 168, 0.15);
 }
 
 .preview-content {
@@ -1263,12 +1628,17 @@ watch(terminalOutput, async () => {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  margin: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .preview-frame {
   flex: 1;
   border: none;
   background: white;
+  border-radius: 8px;
 }
 
 .preview-placeholder {
@@ -1277,40 +1647,59 @@ watch(terminalOutput, async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 24px;
+  gap: 20px;
+  padding: 32px;
   text-align: center;
+  background: radial-gradient(ellipse at center, rgba(44, 201, 168, 0.03) 0%, transparent 70%);
 }
 
 .placeholder-logo {
-  width: 80px;
-  height: 80px;
-  opacity: 0.6;
+  width: 120px;
+  height: 120px;
+  opacity: 0.9;
   animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 8px 20px rgba(44, 201, 168, 0.3));
 }
 
 .placeholder-text {
   color: var(--text-muted);
-  font-size: 13px;
-  max-width: 200px;
+  font-size: 14px;
+  max-width: 220px;
+  line-height: 1.6;
 }
 
 .placeholder-text strong {
-  color: var(--accent);
+  color: var(--c-mint-400);
+  font-weight: 600;
+  padding: 2px 8px;
+  background: rgba(44, 201, 168, 0.15);
+  border-radius: 4px;
 }
 
 /* Terminal */
 .terminal-panel {
   display: flex;
   flex-direction: column;
-  background: #0d1117;
-  border-top: 1px solid var(--border);
+  background: linear-gradient(180deg, #0f1419 0%, #0a0e13 100%);
+  border-top: 1px solid rgba(44, 201, 168, 0.1);
   flex-shrink: 0;
+  position: relative;
+}
+
+.terminal-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.2;
 }
 
 .terminal-header {
-  background: #161b22;
-  border-bottom: 1px solid #21262d;
+  background: linear-gradient(180deg, rgba(22, 27, 34, 0.98) 0%, rgba(15, 20, 25, 0.95) 100%);
+  border-bottom: 1px solid rgba(48, 54, 61, 0.5);
 }
 
 .terminal-actions {
@@ -1319,43 +1708,188 @@ watch(terminalOutput, async () => {
 }
 
 .terminal-btn {
-  padding: 3px 10px;
-  background: transparent;
-  border: 1px solid #30363d;
-  border-radius: 4px;
+  padding: 5px 12px;
+  background: rgba(33, 38, 45, 0.6);
+  border: 1px solid rgba(48, 54, 61, 0.8);
+  border-radius: 6px;
   color: #8b949e;
   font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .terminal-btn:hover {
-  background: #21262d;
-  border-color: #8b949e;
-  color: #c9d1d9;
+  background: rgba(33, 38, 45, 0.9);
+  border-color: var(--c-mint-600);
+  color: var(--c-mint-400);
 }
 
 .terminal-output {
   flex: 1;
   overflow: auto;
-  padding: 12px 16px;
+  padding: 14px 18px;
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 12px;
-  line-height: 1.7;
-  color: #c9d1d9;
+  line-height: 1.8;
+  color: #e6edf3;
+  background: linear-gradient(180deg, rgba(13, 17, 23, 0.95) 0%, rgba(10, 14, 19, 0.98) 100%);
 }
 
 .terminal-line {
   white-space: pre-wrap;
   word-break: break-all;
+  padding: 2px 0;
 }
 
 .terminal-empty {
-  color: #484f58;
+  color: #6e7681;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-empty::before {
+  content: '●';
+  color: var(--c-mint-600);
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 .terminal-prompt {
-  color: #58a6ff;
+  color: var(--c-mint-400);
   font-weight: 600;
+}
+
+/* Output Tabs */
+.output-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.output-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #6e7681;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.3px;
+}
+
+.output-tab:hover {
+  color: #adbac7;
+  background: rgba(44, 201, 168, 0.03);
+}
+
+.output-tab.active {
+  color: var(--c-mint-400);
+  border-bottom-color: var(--c-mint-400);
+  background: linear-gradient(180deg, rgba(44, 201, 168, 0.08) 0%, transparent 100%);
+}
+
+.console-badge {
+  background: linear-gradient(135deg, var(--c-mint-500) 0%, var(--c-mint-600) 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(44, 201, 168, 0.3);
+}
+
+/* Console Output */
+.console-output {
+  flex: 1;
+  overflow: auto;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  background: linear-gradient(180deg, rgba(13, 17, 23, 0.95) 0%, rgba(10, 14, 19, 0.98) 100%);
+}
+
+.console-entry {
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  transition: background 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.console-entry:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.console-time {
+  color: #484f58;
+  font-size: 10px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.console-type {
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.console-message {
+  color: #e6edf3;
+  word-break: break-all;
+}
+
+.console-log .console-type {
+  color: #6e7681;
+  background: rgba(110, 118, 129, 0.15);
+}
+
+.console-info .console-type {
+  color: #58a6ff;
+  background: rgba(88, 166, 255, 0.15);
+}
+
+.console-warn {
+  background: rgba(210, 153, 34, 0.08);
+  border-left-color: #d29922;
+}
+
+.console-warn .console-type {
+  color: #d29922;
+  background: rgba(210, 153, 34, 0.2);
+}
+
+.console-error {
+  background: rgba(248, 81, 73, 0.08);
+  border-left-color: #f85149;
+}
+
+.console-error .console-type {
+  color: #f85149;
+  background: rgba(248, 81, 73, 0.2);
+}
+
+.console-error .console-message {
+  color: #ffa198;
 }
 </style>
