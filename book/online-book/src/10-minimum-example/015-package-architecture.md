@@ -12,6 +12,14 @@ With that in mind, I want to always be conscious of the file and directory struc
 
 Let me explain a little about the structure of the official Vue.js. In this refactoring, we will create two directories: "runtime-core" and "runtime-dom".
 
+<KawaikoNote variant="question" title="Why split them?">
+
+"Why split when the code already works?" you might ask.\
+Vue.js is designed to run not only in browsers, but also in SSR (Server-Side Rendering) and native apps (Vue Native).\
+That's why "pure logic" and "DOM operations" are separated!
+
+</KawaikoNote>
+
 To explain what each of them is, "runtime-core" contains the core functionality of Vue.js runtime. It may be difficult to understand what is core and what is not at this stage.
 
 So, I think it would be easier to understand by looking at the relationship with "runtime-dom". As the name suggests, "runtime-dom" is a directory that contains DOM-dependent implementations. Roughly speaking, it can be understood as "browser-dependent operations". It includes DOM operations such as querySelector and createElement.
@@ -141,7 +149,36 @@ Let's take a look at the design of the renderer. To summarize:
 - Implement an object in `runtime-dom/nodeOps` for operations (manipulations) that depend on the DOM.
 - Combine the factory function and `nodeOps` in `runtime-dom/index` to generate the renderer.
 
-These are the concepts of "DIP" and "DI". First, let's talk about DIP (Dependency Inversion Principle). By implementing an interface, we can invert the dependency. What you should pay attention to is the `RendererOptions` interface implemented in `renderer.ts`. Both the factory function and `nodeOps` should adhere to this `RendererOptions` interface (depend on the `RendererOptions` interface). By using this, we perform DI. Dependency Injection (DI) is a technique that reduces dependency by injecting an object that an object depends on from the outside. In this case, the renderer depends on an object that implements `RendererOptions` (in this case, `nodeOps`). Instead of implementing this dependency directly from the renderer, we receive it as an argument to the factory. By using these techniques, we make sure that the renderer does not depend on the DOM.
+These are the concepts of "DIP" and "DI".
+
+<KawaikoNote variant="warning" title="This is a bit tricky">
+
+DI and DIP are among the more challenging design pattern concepts.\
+It's okay to just get a rough idea at first!\
+As you write more code, it will click: "Ah, so that's what it means!"
+
+</KawaikoNote>
+
+First, let's talk about DIP (Dependency Inversion Principle). By implementing an interface, we can invert the dependency. What you should pay attention to is the `RendererOptions` interface implemented in `renderer.ts`. Both the factory function and `nodeOps` should adhere to this `RendererOptions` interface (depend on the `RendererOptions` interface).
+
+<KawaikoNote variant="funny" title="Think of it like cooking">
+
+If DIP were cooking...\
+With a "recipe (interface)", you can make the same dish whether ingredients are domestic or imported.\
+The renderer (chef) just follows "RendererOptions (recipe)" and doesn't need to worry about the actual ingredients (DOM ops or other ops).
+
+</KawaikoNote>
+
+By using this, we perform DI. Dependency Injection (DI) is a technique that reduces dependency by injecting an object that an object depends on from the outside. In this case, the renderer depends on an object that implements `RendererOptions` (in this case, `nodeOps`). Instead of implementing this dependency directly from the renderer, we receive it as an argument to the factory. By using these techniques, we make sure that the renderer does not depend on the DOM.
+
+<KawaikoNote variant="base" title="In summary">
+
+**DIP**: Depend on interfaces (contracts), not concrete implementations\
+**DI**: Receive dependencies from outside (inject them)
+
+Combining these two makes your code flexible and easier to test!
+
+</KawaikoNote>
 
 DI and DIP may be difficult concepts if you are not familiar with them, but they are important techniques that are often used, so I hope you can research and understand them on your own.
 

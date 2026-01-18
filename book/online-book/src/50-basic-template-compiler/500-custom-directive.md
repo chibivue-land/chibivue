@@ -31,10 +31,11 @@ const vFocus = {
 </template>
 ```
 
-<KawaikoNote variant="question" title="When to use?">
+<KawaikoNote variant="warning" title="Honestly, rarely used">
 
-Custom directives are used when you "want to directly touch the DOM".\
-It's recommended to use components for anything that can be handled by components, and use directives only when direct DOM manipulation is truly necessary!
+Custom directives are used when you "want to directly touch the DOM", but honestly they're not used very often.\
+Due to implementation changes in Vapor Mode and poor compatibility with static analysis, **if you don't need to use them, don't use them**.\
+Handle things with components whenever possible!
 
 </KawaikoNote>
 

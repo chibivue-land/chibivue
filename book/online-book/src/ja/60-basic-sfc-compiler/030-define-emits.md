@@ -23,7 +23,7 @@ function handleClick() {
 
 `defineProps` は親から子へのデータの流れ（Props Down），\
 `defineEmits` は子から親へのイベントの流れ（Events Up）を担当します．\
-Vue の双方向データフローの両輪ですね！
+Vue の単方向データフローを支える重要な仕組みです！
 
 </KawaikoNote>
 

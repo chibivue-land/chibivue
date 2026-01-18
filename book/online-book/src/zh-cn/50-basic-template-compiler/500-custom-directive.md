@@ -31,10 +31,11 @@ const vFocus = {
 </template>
 ```
 
-<KawaikoNote variant="question" title="什么时候使用？">
+<KawaikoNote variant="warning" title="说实话很少用">
 
-自定义指令用于"想直接操作 DOM"的场景．\
-建议尽量用组件处理能用组件处理的事情，只在真正需要直接 DOM 操作时才使用指令！
+自定义指令用于"想直接操作 DOM"的场景，但说实话很少被使用。\
+由于 Vapor Mode 的实现变更以及与静态分析的兼容性差，**能不用就不用**。\
+尽量用组件处理能用组件处理的事情！
 
 </KawaikoNote>
 

@@ -2,8 +2,17 @@
 
 ## 今回目指す開発者インタフェース
 
-ここからは Vue.js の醍醐味であるリアクティビティシステムというものについてやっていきます．  
-これ以前の実装は，見た目が Vue.js に似ていれど，それは見た目だけで機能的には全く Vue.js ではありません．  
+ここからは Vue.js の醍醐味であるリアクティビティシステムというものについてやっていきます．
+
+<KawaikoNote variant="surprise" title="いよいよ本番！">
+
+ここからが Vue.js の真髄です！\
+リアクティビティシステムを理解すれば、Vue.js の「魔法」の正体がわかります。\
+少し難しいですが、一緒に頑張りましょう！
+
+</KawaikoNote>
+
+これ以前の実装は，見た目が Vue.js に似ていれど，それは見た目だけで機能的には全く Vue.js ではありません．
 たんに最初の開発者インタフェースを実装し，いろんな HTML を表示できるようにしてみました．
 
 しかし，このままでは一度画面を描画するとその後はそのままで，Web アプリケーションとしてはただの静的なサイトになってしまっています．  
@@ -136,6 +145,14 @@ app.mount('#app')
 
 Proxy と呼ばれるオブジェクトが肝になっています．
 
+<KawaikoNote variant="question" title="Proxy って何？">
+
+Proxy は JavaScript の標準機能で、Vue.js 独自のものではありません。\
+「オブジェクトへのアクセスを監視・カスタマイズできる仕組み」と覚えておきましょう！\
+これを使えば「値が読まれた」「値が変更された」を検知できるのです。
+
+</KawaikoNote>
+
 まず，リアクティビティシステムの実装方法についてではなく，それぞれについての説明をしてみます．
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
@@ -191,6 +208,13 @@ const o = new Proxy(
 ```
 
 ![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+
+<KawaikoNote variant="funny" title="これがリアクティビティの秘密！">
+
+get で「読み取り」、set で「書き込み」を検知できる…\
+つまり、set のタイミングで「画面を更新する処理」を呼べば、**値が変わったら自動で画面が更新される** という魔法が実現できるのです！
+
+</KawaikoNote>
 
 Proxy の理解はこの程度で OK です．
 

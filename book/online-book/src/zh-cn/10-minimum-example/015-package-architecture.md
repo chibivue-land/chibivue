@@ -12,6 +12,14 @@
 
 让我稍微解释一下官方 Vue.js 的结构．在这次重构中，我们将创建两个目录："runtime-core" 和 "runtime-dom"．
 
+<KawaikoNote variant="question" title="为什么要分开？">
+
+「代码已经能运行了，为什么还要拆分？」你可能会这样想。\
+实际上 Vue.js 被设计成不仅可以在浏览器中运行，还可以在 SSR（服务端渲染）和原生应用（Vue Native）等环境中运行。\
+这就是为什么要将「纯逻辑」和「DOM 操作」分离的原因！
+
+</KawaikoNote>
+
 为了解释它们各自是什么，"runtime-core" 包含 Vue.js 运行时的核心功能．在这个阶段，可能很难理解什么是核心，什么不是．
 
 所以，我认为通过查看与 "runtime-dom" 的关系会更容易理解．顾名思义，"runtime-dom" 是一个包含依赖于 DOM 的实现的目录．粗略地说，它可以理解为"依赖于浏览器的操作"．它包括 DOM 操作，如 querySelector 和 createElement．
@@ -141,7 +149,36 @@ const { render } = createRenderer(nodeOps)
 - 在 `runtime-dom/nodeOps` 中实现一个用于依赖于 DOM 的操作（操纵）的对象．
 - 在 `runtime-dom/index` 中结合工厂函数和 `nodeOps` 来生成渲染器．
 
-这些是"DIP"和"DI"的概念．首先，让我们谈谈 DIP（依赖倒置原则）．通过实现接口，我们可以倒置依赖关系．您应该注意的是在 `renderer.ts` 中实现的 `RendererOptions` 接口．工厂函数和 `nodeOps` 都应该遵守这个 `RendererOptions` 接口（依赖于 `RendererOptions` 接口）．通过使用这个，我们执行 DI．依赖注入（DI）是一种通过从外部注入对象所依赖的对象来减少依赖的技术．在这种情况下，渲染器依赖于实现 `RendererOptions` 的对象（在这种情况下是 `nodeOps`）．我们不是直接从渲染器实现这种依赖，而是将其作为工厂的参数接收．通过使用这些技术，我们确保渲染器不依赖于 DOM．
+这些是"DIP"和"DI"的概念．
+
+<KawaikoNote variant="warning" title="这有点难">
+
+DI 和 DIP 是设计模式中比较难理解的概念。\
+一开始只需要有个大概的印象就可以了！\
+随着你写更多的代码，你会恍然大悟：「啊，原来是这样！」
+
+</KawaikoNote>
+
+首先，让我们谈谈 DIP（依赖倒置原则）．通过实现接口，我们可以倒置依赖关系．您应该注意的是在 `renderer.ts` 中实现的 `RendererOptions` 接口．工厂函数和 `nodeOps` 都应该遵守这个 `RendererOptions` 接口（依赖于 `RendererOptions` 接口）．
+
+<KawaikoNote variant="funny" title="用做菜来比喻">
+
+如果把 DIP 比作做菜的话...\
+只要有「食谱（interface）」，无论食材是国产还是进口，都能做出同样的菜。\
+渲染器（厨师）只需要按照「RendererOptions（食谱）」来做，不需要关心实际的食材（DOM 操作或其他操作）。
+
+</KawaikoNote>
+
+通过使用这个，我们执行 DI．依赖注入（DI）是一种通过从外部注入对象所依赖的对象来减少依赖的技术．在这种情况下，渲染器依赖于实现 `RendererOptions` 的对象（在这种情况下是 `nodeOps`）．我们不是直接从渲染器实现这种依赖，而是将其作为工厂的参数接收．通过使用这些技术，我们确保渲染器不依赖于 DOM．
+
+<KawaikoNote variant="base" title="总结一下">
+
+**DIP**: 依赖接口（契约），而不是具体实现\
+**DI**: 从外部接收依赖（注入它们）
+
+结合这两者，可以让代码更灵活、更易于测试！
+
+</KawaikoNote>
 
 如果您不熟悉 DI 和 DIP，它们可能是困难的概念，但它们是经常使用的重要技术，所以我希望您能够自己研究和理解它们．
 

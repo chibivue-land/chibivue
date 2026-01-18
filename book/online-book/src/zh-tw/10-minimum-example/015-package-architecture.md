@@ -12,6 +12,14 @@
 
 讓我稍微解釋一下官方 Vue.js 的結構．在這次重構中，我們將創建兩個目錄：「runtime-core」 和 「runtime-dom」．
 
+<KawaikoNote variant="question" title="為什麼要分開？">
+
+「程式碼已經能運行了，為什麼還要拆分？」你可能會這樣想。\
+實際上 Vue.js 被設計成不僅可以在瀏覽器中運行，還可以在 SSR（伺服器端渲染）和原生應用（Vue Native）等環境中運行。\
+這就是為什麼要將「純邏輯」和「DOM 操作」分離的原因！
+
+</KawaikoNote>
+
 為了解釋它們各自是什麼，「runtime-core」 包含 Vue.js 運行時的核心功能．在這個階段，可能很難理解什麼是核心，什麼不是．
 
 所以，我認為通過查看與 「runtime-dom」 的關係會更容易理解．顧名思義，「runtime-dom」 是一個包含依賴於 DOM 的實現的目錄．粗略地說，它可以理解為「依賴於瀏覽器的操作」．它包括 DOM 操作，如 querySelector 和 createElement．
@@ -141,7 +149,36 @@ const { render } = createRenderer(nodeOps)
 - 在 `runtime-dom/nodeOps` 中實現一個用於依賴於 DOM 的操作（操縱）的對象．
 - 在 `runtime-dom/index` 中結合工廠函數和 `nodeOps` 來生成渲染器．
 
-這些是「DIP」和「DI」的概念．首先，讓我們談談 DIP（依賴倒置原則）．通過實現介面，我們可以倒置依賴關係．您應該注意的是在 `renderer.ts` 中實現的 `RendererOptions` 介面．工廠函數和 `nodeOps` 都應該遵守這個 `RendererOptions` 介面（依賴於 `RendererOptions` 介面）．通過使用這個，我們執行 DI．依賴注入（DI）是一種通過從外部注入對象所依賴的對象來減少依賴的技術．在這種情況下，渲染器依賴於實現 `RendererOptions` 的對象（在這種情況下是 `nodeOps`）．我們不是直接從渲染器實現這種依賴，而是將其作為工廠的參數接收．通過使用這些技術，我們確保渲染器不依賴於 DOM．
+這些是「DIP」和「DI」的概念．
+
+<KawaikoNote variant="warning" title="這有點難">
+
+DI 和 DIP 是設計模式中比較難理解的概念。\
+一開始只需要有個大概的印象就可以了！\
+隨著你寫更多的程式碼，你會恍然大悟：「啊，原來是這樣！」
+
+</KawaikoNote>
+
+首先，讓我們談談 DIP（依賴倒置原則）．通過實現介面，我們可以倒置依賴關係．您應該注意的是在 `renderer.ts` 中實現的 `RendererOptions` 介面．工廠函數和 `nodeOps` 都應該遵守這個 `RendererOptions` 介面（依賴於 `RendererOptions` 介面）．
+
+<KawaikoNote variant="funny" title="用做菜來比喻">
+
+如果把 DIP 比作做菜的話...\
+只要有「食譜（interface）」，無論食材是國產還是進口，都能做出同樣的菜。\
+渲染器（廚師）只需要按照「RendererOptions（食譜）」來做，不需要關心實際的食材（DOM 操作或其他操作）。
+
+</KawaikoNote>
+
+通過使用這個，我們執行 DI．依賴注入（DI）是一種通過從外部注入對象所依賴的對象來減少依賴的技術．在這種情況下，渲染器依賴於實現 `RendererOptions` 的對象（在這種情況下是 `nodeOps`）．我們不是直接從渲染器實現這種依賴，而是將其作為工廠的參數接收．通過使用這些技術，我們確保渲染器不依賴於 DOM．
+
+<KawaikoNote variant="base" title="總結一下">
+
+**DIP**: 依賴介面（契約），而不是具體實現\
+**DI**: 從外部接收依賴（注入它們）
+
+結合這兩者，可以讓程式碼更靈活、更易於測試！
+
+</KawaikoNote>
 
 如果您不熟悉 DI 和 DIP，它們可能是困難的概念，但它們是經常使用的重要技術，所以我希望您能夠自己研究和理解它們．
 

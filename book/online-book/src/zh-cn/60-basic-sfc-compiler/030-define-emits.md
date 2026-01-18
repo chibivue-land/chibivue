@@ -23,7 +23,7 @@ function handleClick() {
 
 `defineProps` 处理从父到子的数据流（Props Down），\
 `defineEmits` 处理从子到父的事件流（Events Up）．\
-它们是 Vue 双向数据流的两个轮子！
+这些是支撑 Vue 单向数据流的重要机制！
 
 </KawaikoNote>
 

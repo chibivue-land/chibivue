@@ -122,6 +122,9 @@ for (const node of scriptSetupAst.body) {
 在生成的代码中，import 语句需要放在 `setup()` 函数外部．\
 提升将 `<script setup>` 内的导入移动到正确的位置．
 
+顺便说一下，`<script setup>` 内的 `export` 会报错。\
+但是 `export type` 是可以的，因为它只是类型信息！
+
 </KawaikoNote>
 
 ## 绑定分析

@@ -122,6 +122,9 @@ for (const node of scriptSetupAst.body) {
 In the generated code, import statements need to be placed outside the `setup()` function.\
 Hoisting moves imports written inside `<script setup>` to the correct position.
 
+By the way, `export` inside `<script setup>` will cause an error.\
+However, `export type` is OK since it's only type information!
+
 </KawaikoNote>
 
 ## Binding Analysis

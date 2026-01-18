@@ -122,6 +122,9 @@ for (const node of scriptSetupAst.body) {
 生成されるコードでは，インポート文は `setup()` 関数の外に配置される必要があります．\
 `<script setup>` 内に書かれたインポートを正しい位置に移動するのがホイストです．
 
+ちなみに `<script setup>` 内での `export` はエラーになります．\
+ただし `export type` は型情報のみなので OK です！
+
 </KawaikoNote>
 
 ## バインディングの解析

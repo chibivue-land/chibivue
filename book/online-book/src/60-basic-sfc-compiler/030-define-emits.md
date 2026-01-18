@@ -23,7 +23,7 @@ function handleClick() {
 
 `defineProps` handles data flow from parent to child (Props Down),\
 `defineEmits` handles event flow from child to parent (Events Up).\
-They are the two wheels of Vue's bidirectional data flow!
+These are key mechanisms that support Vue's unidirectional data flow!
 
 </KawaikoNote>
 
