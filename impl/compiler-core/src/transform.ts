@@ -143,10 +143,7 @@ export function createTransformContext(
     },
     hoist(exp) {
       context.hoists.push(exp);
-      const identifier = createSimpleExpression(
-        `_hoisted_${context.hoists.length}`,
-        false,
-      );
+      const identifier = createSimpleExpression(`_hoisted_${context.hoists.length}`, false);
       return identifier;
     },
   };

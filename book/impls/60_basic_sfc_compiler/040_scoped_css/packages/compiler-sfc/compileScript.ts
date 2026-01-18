@@ -30,9 +30,7 @@ export const enum BindingTypes {
 const DEFINE_PROPS = "defineProps";
 const DEFINE_EMITS = "defineEmits";
 
-export function compileScript(
-  sfc: SFCDescriptor,
-): SFCScriptCompileResult {
+export function compileScript(sfc: SFCDescriptor): SFCScriptCompileResult {
   const { script, scriptSetup } = sfc;
 
   // Handle script setup
@@ -105,7 +103,12 @@ function compileScriptSetup(
       }
     } else if (node.type === "VariableDeclaration") {
       const decl = node.declarations[0];
-      if (decl && decl.init && decl.init.type === "CallExpression" && decl.init.callee.type === "Identifier") {
+      if (
+        decl &&
+        decl.init &&
+        decl.init.type === "CallExpression" &&
+        decl.init.callee.type === "Identifier"
+      ) {
         const calleeName = decl.init.callee.name;
 
         // Check for defineProps call

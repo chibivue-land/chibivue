@@ -15,13 +15,7 @@ import {
   unsetCurrentInstance,
   normalizeVNode,
 } from "../runtime-core";
-import {
-  ShapeFlags,
-  isArray,
-  isFunction,
-  isPromise,
-  isString,
-} from "../shared";
+import { ShapeFlags, isArray, isFunction, isPromise, isString } from "../shared";
 import { ssrRenderAttrs } from "./helpers/ssrRenderAttrs";
 import { escapeHtml, escapeHtmlComment, isVoidTag } from "./helpers/ssrUtils";
 
@@ -70,18 +64,12 @@ export function renderComponentVNode(
   vnode: VNode,
   parentComponent: ComponentInternalInstance | null = null,
 ): SSRBuffer | Promise<SSRBuffer> {
-  const instance = (vnode.component = createComponentInstance(
-    vnode,
-    parentComponent,
-    null as any,
-  ));
+  const instance = (vnode.component = createComponentInstance(vnode, parentComponent, null as any));
   const res = setupComponent(instance);
   const hasAsyncSetup = isPromise(res);
 
   if (hasAsyncSetup) {
-    return (res as Promise<void>).then(() =>
-      renderComponentSubTree(instance),
-    );
+    return (res as Promise<void>).then(() => renderComponentSubTree(instance));
   } else {
     return renderComponentSubTree(instance);
   }
@@ -137,19 +125,11 @@ export function renderVNode(
       push(escapeHtml(children as string));
       break;
     case Comment:
-      push(
-        children
-          ? `<!--${escapeHtmlComment(children as string)}-->`
-          : `<!---->`,
-      );
+      push(children ? `<!--${escapeHtmlComment(children as string)}-->` : `<!---->`);
       break;
     case Fragment:
       push(`<!--[-->`);
-      renderVNodeChildren(
-        push,
-        children as VNodeArrayChildren,
-        parentComponent,
-      );
+      renderVNodeChildren(push, children as VNodeArrayChildren, parentComponent);
       push(`<!--]-->`);
       break;
     default:
@@ -204,11 +184,7 @@ function renderElementVNode(
       if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
         push(escapeHtml(children as string));
       } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-        renderVNodeChildren(
-          push,
-          children as VNodeArrayChildren,
-          parentComponent,
-        );
+        renderVNodeChildren(push, children as VNodeArrayChildren, parentComponent);
       }
     }
     push(`</${tag}>`);

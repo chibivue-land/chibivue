@@ -64,10 +64,7 @@ export async function renderToString(
   if (isVNode(input)) {
     // raw vnode, wrap with app
     const vnode = input;
-    const buffer = await renderComponentVNode(
-      createVNode({ render: () => vnode }),
-      null,
-    );
+    const buffer = await renderComponentVNode(createVNode({ render: () => vnode }), null);
     return unrollBuffer(buffer as SSRBuffer) as Promise<string>;
   }
 

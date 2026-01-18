@@ -15,12 +15,7 @@ export interface AsyncComponentOptions<T = any> {
   errorComponent?: Component;
   delay?: number;
   timeout?: number;
-  onError?: (
-    error: Error,
-    retry: () => void,
-    fail: () => void,
-    attempts: number,
-  ) => any;
+  onError?: (error: Error, retry: () => void, fail: () => void, attempts: number) => any;
 }
 
 export function defineAsyncComponent<T extends Component = { new (): any }>(
@@ -143,10 +138,7 @@ export function defineAsyncComponent<T extends Component = { new (): any }>(
   } as any;
 }
 
-function createInnerComp(
-  comp: Component,
-  parent: ComponentInternalInstance,
-): VNode {
+function createInnerComp(comp: Component, parent: ComponentInternalInstance): VNode {
   const { props, children } = parent.vnode;
   const vnode = createVNode(comp, props, children);
   return vnode;

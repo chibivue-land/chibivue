@@ -81,7 +81,7 @@ export interface ComponentInternalInstance {
   [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 
   // KeepAlive lifecycle hooks
-  a: LifecycleHook;  // activated
+  a: LifecycleHook; // activated
   da: LifecycleHook; // deactivated
 }
 

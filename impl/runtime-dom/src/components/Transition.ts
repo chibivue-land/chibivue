@@ -45,7 +45,9 @@ export interface ElementWithTransition extends HTMLElement {
   _vtc?: Set<string>;
 }
 
-export function resolveTransitionProps(rawProps: TransitionProps): TransitionProps & TransitionHooks {
+export function resolveTransitionProps(
+  rawProps: TransitionProps,
+): TransitionProps & TransitionHooks {
   const {
     name = "v",
     type,
@@ -80,7 +82,11 @@ export function resolveTransitionProps(rawProps: TransitionProps): TransitionPro
   const enterDuration = durations && durations[0];
   const leaveDuration = durations && durations[1];
 
-  const finishEnter = (el: Element & ElementWithTransition, isAppear: boolean, done?: () => void) => {
+  const finishEnter = (
+    el: Element & ElementWithTransition,
+    isAppear: boolean,
+    done?: () => void,
+  ) => {
     removeTransitionClass(el, isAppear ? appearToClass : enterToClass);
     removeTransitionClass(el, isAppear ? appearActiveClass : enterActiveClass);
     done && done();
@@ -192,7 +198,10 @@ interface CSSTransitionInfo {
   hasTransform: boolean;
 }
 
-export function getTransitionInfo(el: Element, expectedType?: TransitionProps["type"]): CSSTransitionInfo {
+export function getTransitionInfo(
+  el: Element,
+  expectedType?: TransitionProps["type"],
+): CSSTransitionInfo {
   const styles = window.getComputedStyle(el) as CSSStyleDeclaration & {
     webkitTransitionDuration?: string;
     webkitTransitionDelay?: string;
@@ -226,7 +235,11 @@ export function getTransitionInfo(el: Element, expectedType?: TransitionProps["t
   } else {
     timeout = Math.max(transitionTimeout, animationTimeout);
     type = timeout > 0 ? (transitionTimeout > animationTimeout ? TRANSITION : ANIMATION) : null;
-    propCount = type ? (type === TRANSITION ? transitionDurations.length : animationDurations.length) : 0;
+    propCount = type
+      ? type === TRANSITION
+        ? transitionDurations.length
+        : animationDurations.length
+      : 0;
   }
 
   const hasTransform =

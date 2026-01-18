@@ -245,30 +245,17 @@ function hoistStatic(root: RootNode, context: TransformContext) {
   );
 }
 
-function isSingleElementRoot(
-  root: RootNode,
-  child: TemplateChildNode,
-): child is ElementNode {
-  return (
-    root.children.length === 1 &&
-    child.type === NodeTypes.ELEMENT
-  );
+function isSingleElementRoot(root: RootNode, child: TemplateChildNode): child is ElementNode {
+  return root.children.length === 1 && child.type === NodeTypes.ELEMENT;
 }
 
-function walk(
-  node: ParentNode,
-  context: TransformContext,
-  doNotHoistNode: boolean = false,
-) {
+function walk(node: ParentNode, context: TransformContext, doNotHoistNode: boolean = false) {
   const { children } = node;
 
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
     // only plain elements are eligible for hoisting
-    if (
-      child.type === NodeTypes.ELEMENT &&
-      child.tagType === ElementTypes.ELEMENT
-    ) {
+    if (child.type === NodeTypes.ELEMENT && child.tagType === ElementTypes.ELEMENT) {
       const constantType = doNotHoistNode
         ? ConstantTypes.NOT_CONSTANT
         : getConstantType(child, context);
@@ -290,20 +277,13 @@ function walk(
       walk(child, context, child.children.length === 1);
     } else if (child.type === NodeTypes.IF) {
       for (let i = 0; i < child.branches.length; i++) {
-        walk(
-          child.branches[i],
-          context,
-          child.branches[i].children.length === 1,
-        );
+        walk(child.branches[i], context, child.branches[i].children.length === 1);
       }
     }
   }
 }
 
-function getConstantType(
-  node: TemplateChildNode,
-  context: TransformContext,
-): ConstantTypes {
+function getConstantType(node: TemplateChildNode, context: TransformContext): ConstantTypes {
   const { constantCache } = context as any;
   switch (node.type) {
     case NodeTypes.ELEMENT:

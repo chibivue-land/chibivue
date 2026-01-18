@@ -135,7 +135,11 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   newline();
 }
 
-function genHoists(hoists: (JSChildNode | null)[], context: CodegenContext, option: CompilerOptions) {
+function genHoists(
+  hoists: (JSChildNode | null)[],
+  context: CodegenContext,
+  option: CompilerOptions,
+) {
   if (!hoists.length) {
     return;
   }

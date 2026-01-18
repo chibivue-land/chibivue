@@ -33,7 +33,12 @@ import {
   isSameVNodeType,
   normalizeVNode,
 } from "./vnode";
-import { isTeleport, Teleport, type TeleportInternals, type TeleportVNode } from "./components/Teleport";
+import {
+  isTeleport,
+  Teleport,
+  type TeleportInternals,
+  type TeleportVNode,
+} from "./components/Teleport";
 import { isKeepAlive, type KeepAliveContext } from "./components/KeepAlive";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
@@ -309,7 +314,12 @@ export function createRenderer(options: RendererOptions): Renderer {
   ) => {
     if (n1 == null) {
       if (n2.shapeFlag & ShapeFlags.COMPONENT_KEPT_ALIVE) {
-        (parentComponent as KeepAliveContext).activate(n2, container, anchor, parentComponent as ComponentInternalInstance);
+        (parentComponent as KeepAliveContext).activate(
+          n2,
+          container,
+          anchor,
+          parentComponent as ComponentInternalInstance,
+        );
       } else {
         mountComponent(n2, container, anchor, parentComponent);
       }

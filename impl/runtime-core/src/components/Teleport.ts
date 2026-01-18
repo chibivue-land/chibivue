@@ -103,10 +103,7 @@ export const Teleport: TeleportImpl = {
     }
   },
 
-  remove(
-    vnode: TeleportVNode,
-    { um: unmount, o: { remove: hostRemove } }: TeleportInternals,
-  ) {
+  remove(vnode: TeleportVNode, { um: unmount, o: { remove: hostRemove } }: TeleportInternals) {
     const { shapeFlag, children, anchor, targetAnchor, target } = vnode;
     if (target) {
       hostRemove(targetAnchor!);
@@ -144,11 +141,7 @@ export interface TeleportInternals {
     parentComponent: ComponentInternalInstance | null,
   ) => void;
   um: (vnode: VNode) => void;
-  m: (
-    vnode: VNode,
-    container: RendererElement,
-    anchor: RendererNode | null,
-  ) => void;
+  m: (vnode: VNode, container: RendererElement, anchor: RendererNode | null) => void;
   o: RendererOptions;
 }
 

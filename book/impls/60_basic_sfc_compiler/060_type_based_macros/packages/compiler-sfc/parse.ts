@@ -71,7 +71,7 @@ export function parse(
         const scriptBlock = createBlock(node, source) as SFCScriptBlock;
         // Check for setup attribute
         const hasSetup = node.props.some(
-          (p) => p.type === NodeTypes.ATTRIBUTE && p.name === "setup"
+          (p) => p.type === NodeTypes.ATTRIBUTE && p.name === "setup",
         );
         scriptBlock.setup = hasSetup;
         if (hasSetup) {
@@ -85,7 +85,7 @@ export function parse(
         const styleBlock = createBlock(node, source) as SFCStyleBlock;
         // Check for scoped attribute
         const hasScoped = node.props.some(
-          (p) => p.type === NodeTypes.ATTRIBUTE && p.name === "scoped"
+          (p) => p.type === NodeTypes.ATTRIBUTE && p.name === "scoped",
         );
         styleBlock.scoped = hasScoped;
         descriptor.styles.push(styleBlock);

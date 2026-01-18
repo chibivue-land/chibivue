@@ -19,9 +19,7 @@ export const enum BindingTypes {
   OPTIONS = "options",
 }
 
-export function compileScript(
-  sfc: SFCDescriptor,
-): SFCScriptCompileResult {
+export function compileScript(sfc: SFCDescriptor): SFCScriptCompileResult {
   const { script, scriptSetup } = sfc;
 
   // Handle script setup

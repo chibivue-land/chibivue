@@ -177,9 +177,13 @@ describe("90_web_application_essentials/030_transition", () => {
   it("should render Transition component with child", () => {
     const app = createApp({
       render() {
-        return h(Transition, { name: "fade" }, {
-          default: () => [h("div", { class: "content" }, "Hello Transition")],
-        });
+        return h(
+          Transition,
+          { name: "fade" },
+          {
+            default: () => [h("div", { class: "content" }, "Hello Transition")],
+          },
+        );
       },
     });
 
@@ -196,9 +200,13 @@ describe("90_web_application_essentials/030_transition", () => {
         return { show };
       },
       render() {
-        return h(Transition, { name: "fade" }, {
-          default: () => show.value ? [h("div", null, "visible")] : [],
-        });
+        return h(
+          Transition,
+          { name: "fade" },
+          {
+            default: () => (show.value ? [h("div", null, "visible")] : []),
+          },
+        );
       },
     });
 
@@ -221,7 +229,7 @@ describe("90_web_application_essentials/030_transition", () => {
           },
           {
             default: () => [h("div", null, "custom classes")],
-          }
+          },
         );
       },
     });
@@ -233,9 +241,13 @@ describe("90_web_application_essentials/030_transition", () => {
   it("should return undefined when no children", () => {
     const app = createApp({
       render() {
-        return h(Transition, { name: "fade" }, {
-          default: () => [],
-        });
+        return h(
+          Transition,
+          { name: "fade" },
+          {
+            default: () => [],
+          },
+        );
       },
     });
 
@@ -247,9 +259,13 @@ describe("90_web_application_essentials/030_transition", () => {
   it("should support mode prop", () => {
     const app = createApp({
       render() {
-        return h(Transition, { name: "fade", mode: "out-in" }, {
-          default: () => [h("div", null, "out-in mode")],
-        });
+        return h(
+          Transition,
+          { name: "fade", mode: "out-in" },
+          {
+            default: () => [h("div", null, "out-in mode")],
+          },
+        );
       },
     });
 

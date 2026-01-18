@@ -4,10 +4,7 @@ export { compileStyle } from "./compileStyle";
 export { compileTemplate } from "./compileTemplate";
 export { rewriteDefault } from "./rewriteDefault";
 
-export type {
-  SFCStyleCompileOptions,
-  SFCStyleCompileResults,
-} from "./compileStyle";
+export type { SFCStyleCompileOptions, SFCStyleCompileResults } from "./compileStyle";
 
 export type {
   SFCTemplateCompileResults,

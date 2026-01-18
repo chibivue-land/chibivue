@@ -71,9 +71,7 @@ function extractEmitsFromTypeLiteral(typeLiteral: TSTypeLiteral): string[] {
   return emitNames;
 }
 
-export function compileScript(
-  sfc: SFCDescriptor,
-): SFCScriptCompileResult {
+export function compileScript(sfc: SFCDescriptor): SFCScriptCompileResult {
   const { script, scriptSetup } = sfc;
 
   // Handle script setup
@@ -146,7 +144,12 @@ function compileScriptSetup(
       }
     } else if (node.type === "VariableDeclaration") {
       const decl = node.declarations[0];
-      if (decl && decl.init && decl.init.type === "CallExpression" && decl.init.callee.type === "Identifier") {
+      if (
+        decl &&
+        decl.init &&
+        decl.init.type === "CallExpression" &&
+        decl.init.callee.type === "Identifier"
+      ) {
         const calleeName = decl.init.callee.name;
 
         // Check for defineProps call
@@ -193,7 +196,7 @@ function compileScriptSetup(
             if (typeArg.type === "TSTypeLiteral") {
               const extractedEmits = extractEmitsFromTypeLiteral(typeArg);
               emitNames.push(...extractedEmits);
-              emitsRuntimeDecl = `[${extractedEmits.map(e => `'${e}'`).join(", ")}]`;
+              emitsRuntimeDecl = `[${extractedEmits.map((e) => `'${e}'`).join(", ")}]`;
             }
           } else {
             // Runtime declaration

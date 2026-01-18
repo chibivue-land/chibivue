@@ -70,7 +70,7 @@ export function parse(
         const scriptBlock = createBlock(node, source) as SFCScriptBlock;
         // Check for setup attribute
         const hasSetup = node.props.some(
-          (p) => p.type === NodeTypes.ATTRIBUTE && p.name === "setup"
+          (p) => p.type === NodeTypes.ATTRIBUTE && p.name === "setup",
         );
         scriptBlock.setup = hasSetup;
         if (hasSetup) {

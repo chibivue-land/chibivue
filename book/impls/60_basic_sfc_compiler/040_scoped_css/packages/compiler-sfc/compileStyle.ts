@@ -46,8 +46,10 @@ function processVBind(css: string, id: string): { code: string; cssVars: string[
   const code = css.replace(vBindRE, (match, expr: string) => {
     // Normalize the expression (remove quotes if present)
     let varName = expr.trim();
-    if ((varName.startsWith("'") && varName.endsWith("'")) ||
-        (varName.startsWith('"') && varName.endsWith('"'))) {
+    if (
+      (varName.startsWith("'") && varName.endsWith("'")) ||
+      (varName.startsWith('"') && varName.endsWith('"'))
+    ) {
       varName = varName.slice(1, -1);
     }
 
@@ -70,9 +72,7 @@ function processVBind(css: string, id: string): { code: string; cssVars: string[
  */
 function escapeCssVarName(name: string): string {
   // Replace dots with escaped version, handle other special chars
-  return name
-    .replace(/\./g, "\\.")
-    .replace(/\s+/g, "_");
+  return name.replace(/\./g, "\\.").replace(/\s+/g, "_");
 }
 
 function applyScopedCss(css: string, scopeId: string): string {
@@ -83,66 +83,63 @@ function applyScopedCss(css: string, scopeId: string): string {
 
   // Match CSS rule selectors (simplified)
   // This handles basic cases like .class, #id, element, etc.
-  return css.replace(
-    /([^\{\}]+)\{/g,
-    (match, selectors: string) => {
-      const scopedSelectors = selectors
-        .split(",")
-        .map((sel: string) => {
-          sel = sel.trim();
-          if (!sel) return sel;
+  return css.replace(/([^\{\}]+)\{/g, (match, selectors: string) => {
+    const scopedSelectors = selectors
+      .split(",")
+      .map((sel: string) => {
+        sel = sel.trim();
+        if (!sel) return sel;
 
-          // Handle :deep() pseudo-selector
-          if (sel.includes(":deep(")) {
-            return sel.replace(/:deep\(([^)]+)\)/g, `${scopeAttr} $1`);
-          }
+        // Handle :deep() pseudo-selector
+        if (sel.includes(":deep(")) {
+          return sel.replace(/:deep\(([^)]+)\)/g, `${scopeAttr} $1`);
+        }
 
-          // Handle :global() pseudo-selector
-          if (sel.includes(":global(")) {
-            return sel.replace(/:global\(([^)]+)\)/g, "$1");
-          }
+        // Handle :global() pseudo-selector
+        if (sel.includes(":global(")) {
+          return sel.replace(/:global\(([^)]+)\)/g, "$1");
+        }
 
-          // Handle :slotted() and ::v-slotted() pseudo-selector
-          // ::v-slotted(.foo) -> .foo[data-v-xxx-s]
-          // The -s suffix indicates this is a slotted content selector
-          if (sel.includes(":slotted(") || sel.includes("::v-slotted(")) {
-            // Extract parts before the slotted selector
-            const slottedMatch = sel.match(/^(.*)(?::slotted|::v-slotted)\(([^)]+)\)(.*)$/);
-            if (slottedMatch) {
-              const [, prefix, innerSelector, suffix] = slottedMatch;
-              // Add the slotted scope attribute to the inner selector's last element
-              const innerParts = innerSelector.trim().split(/\s+/);
-              if (innerParts.length > 0) {
-                innerParts[innerParts.length - 1] += slottedScopeAttr;
-              }
-              // Combine: prefix (if any) + scoped inner selector + suffix (if any)
-              const result = [prefix?.trim(), innerParts.join(" "), suffix?.trim()]
-                .filter(Boolean)
-                .join(" ");
-              return result;
+        // Handle :slotted() and ::v-slotted() pseudo-selector
+        // ::v-slotted(.foo) -> .foo[data-v-xxx-s]
+        // The -s suffix indicates this is a slotted content selector
+        if (sel.includes(":slotted(") || sel.includes("::v-slotted(")) {
+          // Extract parts before the slotted selector
+          const slottedMatch = sel.match(/^(.*)(?::slotted|::v-slotted)\(([^)]+)\)(.*)$/);
+          if (slottedMatch) {
+            const [, prefix, innerSelector, suffix] = slottedMatch;
+            // Add the slotted scope attribute to the inner selector's last element
+            const innerParts = innerSelector.trim().split(/\s+/);
+            if (innerParts.length > 0) {
+              innerParts[innerParts.length - 1] += slottedScopeAttr;
             }
+            // Combine: prefix (if any) + scoped inner selector + suffix (if any)
+            const result = [prefix?.trim(), innerParts.join(" "), suffix?.trim()]
+              .filter(Boolean)
+              .join(" ");
+            return result;
           }
+        }
 
-          // Add scope to regular selectors
-          // For compound selectors, add scope to the last element
-          const parts = sel.split(/\s+/);
-          if (parts.length > 0) {
-            const lastPart = parts[parts.length - 1];
-            // Handle pseudo-elements and pseudo-classes
-            if (lastPart.includes("::") || lastPart.match(/:[a-z-]+$/)) {
-              const [base, ...rest] = lastPart.split(/(::?[a-z-]+.*)/);
-              parts[parts.length - 1] = base + scopeAttr + rest.join("");
-            } else {
-              parts[parts.length - 1] = lastPart + scopeAttr;
-            }
+        // Add scope to regular selectors
+        // For compound selectors, add scope to the last element
+        const parts = sel.split(/\s+/);
+        if (parts.length > 0) {
+          const lastPart = parts[parts.length - 1];
+          // Handle pseudo-elements and pseudo-classes
+          if (lastPart.includes("::") || lastPart.match(/:[a-z-]+$/)) {
+            const [base, ...rest] = lastPart.split(/(::?[a-z-]+.*)/);
+            parts[parts.length - 1] = base + scopeAttr + rest.join("");
+          } else {
+            parts[parts.length - 1] = lastPart + scopeAttr;
           }
-          return parts.join(" ");
-        })
-        .join(", ");
+        }
+        return parts.join(" ");
+      })
+      .join(", ");
 
-      return scopedSelectors + " {";
-    }
-  );
+    return scopedSelectors + " {";
+  });
 }
 
 export function generateScopeId(filename: string): string {
@@ -150,7 +147,7 @@ export function generateScopeId(filename: string): string {
   let hash = 0;
   for (let i = 0; i < filename.length; i++) {
     const char = filename.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32bit integer
   }
   return Math.abs(hash).toString(16).slice(0, 8);

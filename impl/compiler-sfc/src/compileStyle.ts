@@ -9,9 +9,7 @@ export interface SFCStyleCompileResults {
   code: string;
 }
 
-export function compileStyle(
-  options: SFCStyleCompileOptions,
-): SFCStyleCompileResults {
+export function compileStyle(options: SFCStyleCompileOptions): SFCStyleCompileResults {
   const { source, id, scoped } = options;
 
   if (!scoped) {

@@ -15,13 +15,7 @@ import {
   unsetCurrentInstance,
   normalizeVNode,
 } from "@chibivue/runtime-core";
-import {
-  ShapeFlags,
-  isArray,
-  isFunction,
-  isPromise,
-  isString,
-} from "@chibivue/shared";
+import { ShapeFlags, isArray, isFunction, isPromise, isString } from "@chibivue/shared";
 import { ssrRenderAttrs } from "./helpers/ssrRenderAttrs";
 import { escapeHtml, escapeHtmlComment, isVoidTag } from "./helpers/ssrUtils";
 
@@ -70,18 +64,12 @@ export function renderComponentVNode(
   vnode: VNode,
   parentComponent: ComponentInternalInstance | null = null,
 ): SSRBuffer | Promise<SSRBuffer> {
-  const instance = (vnode.component = createComponentInstance(
-    vnode,
-    parentComponent,
-    null,
-  ));
+  const instance = (vnode.component = createComponentInstance(vnode, parentComponent, null));
   const res = setupComponent(instance);
   const hasAsyncSetup = isPromise(res);
 
   if (hasAsyncSetup) {
-    return (res as Promise<void>).then(() =>
-      renderComponentSubTree(instance),
-    );
+    return (res as Promise<void>).then(() => renderComponentSubTree(instance));
   } else {
     return renderComponentSubTree(instance);
   }
@@ -94,7 +82,11 @@ function renderComponentSubTree(
   const { getBuffer, push } = createBuffer();
 
   if (isFunction(comp)) {
-    const root = comp(instance.props, { slots: instance.slots, emit: instance.emit, attrs: instance.attrs });
+    const root = comp(instance.props, {
+      slots: instance.slots,
+      emit: instance.emit,
+      attrs: instance.attrs,
+    });
     if (root) {
       renderVNode(push, normalizeVNode(root), instance);
     }
@@ -133,19 +125,11 @@ export function renderVNode(
       push(escapeHtml(children as string));
       break;
     case Comment:
-      push(
-        children
-          ? `<!--${escapeHtmlComment(children as string)}-->`
-          : `<!---->`,
-      );
+      push(children ? `<!--${escapeHtmlComment(children as string)}-->` : `<!---->`);
       break;
     case Fragment:
       push(`<!--[-->`);
-      renderVNodeChildren(
-        push,
-        children as VNodeArrayChildren,
-        parentComponent,
-      );
+      renderVNodeChildren(push, children as VNodeArrayChildren, parentComponent);
       push(`<!--]-->`);
       break;
     default:
@@ -202,11 +186,7 @@ function renderElementVNode(
       if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
         push(escapeHtml(children as string));
       } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-        renderVNodeChildren(
-          push,
-          children as VNodeArrayChildren,
-          parentComponent,
-        );
+        renderVNodeChildren(push, children as VNodeArrayChildren, parentComponent);
       }
     }
     push(`</${tag}>`);
@@ -254,11 +234,7 @@ function renderTeleportVNode(
 
   // For disabled teleport, render children inline
   if (disabled) {
-    renderVNodeChildren(
-      push,
-      vnode.children as VNodeArrayChildren,
-      parentComponent,
-    );
+    renderVNodeChildren(push, vnode.children as VNodeArrayChildren, parentComponent);
   } else {
     // For enabled teleport, we render a placeholder comment
     push(`<!--teleport start-->`);

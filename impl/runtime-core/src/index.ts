@@ -61,7 +61,11 @@ export { withDirectives } from "./directives";
 export type { CreateAppFunction, App, AppContext } from "./apiCreateApp";
 export { createAppContext } from "./apiCreateApp";
 export { defineComponent } from "./apiDefineComponent";
-export { defineAsyncComponent, type AsyncComponentOptions, type AsyncComponentLoader } from "./apiAsyncComponent";
+export {
+  defineAsyncComponent,
+  type AsyncComponentOptions,
+  type AsyncComponentLoader,
+} from "./apiAsyncComponent";
 
 export {
   type ComponentInternalInstance,

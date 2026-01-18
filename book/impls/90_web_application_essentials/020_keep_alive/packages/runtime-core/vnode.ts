@@ -136,7 +136,7 @@ export function normalizeVNode(child: VNodeChild): VNode {
 }
 
 function cloneIfMounted(child: VNode): VNode {
-  return child.el === null ? child : { ...child, __v_isVNode: true } as VNode;
+  return child.el === null ? child : ({ ...child, __v_isVNode: true } as VNode);
 }
 
 export function isSameVNodeType(n1: VNode, n2: VNode): boolean {

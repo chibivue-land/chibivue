@@ -17,11 +17,7 @@ export const enum ConstantTypes {
 }
 
 export function hoistStatic(root: RootNode, context: TransformContext): void {
-  walk(
-    root,
-    context,
-    new Map(),
-  );
+  walk(root, context, new Map());
 }
 
 function walk(

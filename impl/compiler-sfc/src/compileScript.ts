@@ -453,7 +453,11 @@ export function compileScript(
                 return;
               }
               // Skip if it's a member expression property
-              if (parent.type === "MemberExpression" && parent.property === child && !parent.computed) {
+              if (
+                parent.type === "MemberExpression" &&
+                parent.property === child &&
+                !parent.computed
+              ) {
                 return;
               }
               // Skip if it's a function parameter
@@ -1043,7 +1047,10 @@ function mergePropsDefaults(
         if (prop.value.type === "ObjectExpression") {
           // { type: String } -> { type: String, default: value }
           const hasDefault = prop.value.properties.some(
-            (p: any) => p.type === "ObjectProperty" && p.key.type === "Identifier" && p.key.name === "default",
+            (p: any) =>
+              p.type === "ObjectProperty" &&
+              p.key.type === "Identifier" &&
+              p.key.name === "default",
           );
           if (!hasDefault) {
             props.push(`${key}: { ...${valueCode}, default: ${binding.default} }`);

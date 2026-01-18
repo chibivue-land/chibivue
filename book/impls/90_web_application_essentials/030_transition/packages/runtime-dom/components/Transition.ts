@@ -62,20 +62,14 @@ export function resolveTransitionProps(
   const enterDuration = durations && durations[0];
   const leaveDuration = durations && durations[1];
 
-  const finishEnter = (
-    el: Element & ElementWithTransition,
-    done?: () => void,
-  ) => {
+  const finishEnter = (el: Element & ElementWithTransition, done?: () => void) => {
     removeTransitionClass(el, enterToClass);
     removeTransitionClass(el, enterActiveClass);
     done && done();
     onAfterEnter && onAfterEnter(el);
   };
 
-  const finishLeave = (
-    el: Element & ElementWithTransition,
-    done?: () => void,
-  ) => {
+  const finishLeave = (el: Element & ElementWithTransition, done?: () => void) => {
     removeTransitionClass(el, leaveToClass);
     removeTransitionClass(el, leaveActiveClass);
     done && done();
@@ -122,9 +116,7 @@ export function resolveTransitionProps(
   };
 }
 
-function normalizeDuration(
-  duration: TransitionProps["duration"],
-): [number, number] | null {
+function normalizeDuration(duration: TransitionProps["duration"]): [number, number] | null {
   if (duration == null) {
     return null;
   } else if (typeof duration === "object") {
@@ -140,18 +132,12 @@ function NumberOf(val: unknown): number {
   return isNaN(res) ? 0 : res;
 }
 
-export function addTransitionClass(
-  el: Element & ElementWithTransition,
-  cls: string,
-): void {
+export function addTransitionClass(el: Element & ElementWithTransition, cls: string): void {
   cls.split(/\s+/).forEach((c) => c && el.classList.add(c));
   (el._vtc || (el._vtc = new Set())).add(cls);
 }
 
-export function removeTransitionClass(
-  el: Element & ElementWithTransition,
-  cls: string,
-): void {
+export function removeTransitionClass(el: Element & ElementWithTransition, cls: string): void {
   cls.split(/\s+/).forEach((c) => c && el.classList.remove(c));
   const { _vtc } = el;
   if (_vtc) {
@@ -168,9 +154,7 @@ function nextFrame(cb: () => void): void {
   });
 }
 
-function hasExplicitCallback(
-  hook: ((el: Element, done: () => void) => void) | undefined,
-): boolean {
+function hasExplicitCallback(hook: ((el: Element, done: () => void) => void) | undefined): boolean {
   return hook ? hook.length > 1 : false;
 }
 
@@ -190,17 +174,12 @@ export function getTransitionInfo(
   expectedType?: TransitionProps["type"],
 ): CSSTransitionInfo {
   const styles = window.getComputedStyle(el);
-  const getStyleProperties = (key: keyof CSSStyleDeclaration) =>
-    (styles[key] || "") as string;
+  const getStyleProperties = (key: keyof CSSStyleDeclaration) => (styles[key] || "") as string;
   const transitionDelays = getStyleProperties("transitionDelay").split(", ");
-  const transitionDurations = getStyleProperties("transitionDuration").split(
-    ", ",
-  );
+  const transitionDurations = getStyleProperties("transitionDuration").split(", ");
   const transitionTimeout = getTimeout(transitionDelays, transitionDurations);
   const animationDelays = getStyleProperties("animationDelay").split(", ");
-  const animationDurations = getStyleProperties("animationDuration").split(
-    ", ",
-  );
+  const animationDurations = getStyleProperties("animationDuration").split(", ");
   const animationTimeout = getTimeout(animationDelays, animationDurations);
 
   let type: CSSTransitionInfo["type"] = null;
@@ -221,12 +200,7 @@ export function getTransitionInfo(
     }
   } else {
     timeout = Math.max(transitionTimeout, animationTimeout);
-    type =
-      timeout > 0
-        ? transitionTimeout > animationTimeout
-          ? TRANSITION
-          : ANIMATION
-        : null;
+    type = timeout > 0 ? (transitionTimeout > animationTimeout ? TRANSITION : ANIMATION) : null;
     propCount = type
       ? type === TRANSITION
         ? transitionDurations.length
@@ -235,8 +209,7 @@ export function getTransitionInfo(
   }
 
   const hasTransform =
-    type === TRANSITION &&
-    /\b(transform|all)(,|$)/.test(getStyleProperties("transitionProperty"));
+    type === TRANSITION && /\b(transform|all)(,|$)/.test(getStyleProperties("transitionProperty"));
 
   return {
     type,

@@ -6,10 +6,7 @@ export interface SFCCompileResult {
   code: string;
 }
 
-export function compileSfc(
-  source: string,
-  filename: string = "anonymous.vue",
-): SFCCompileResult {
+export function compileSfc(source: string, filename: string = "anonymous.vue"): SFCCompileResult {
   // Parse the SFC
   const { descriptor } = parse(source, { filename });
 

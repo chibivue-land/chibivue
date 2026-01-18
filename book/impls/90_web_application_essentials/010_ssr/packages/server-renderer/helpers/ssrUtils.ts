@@ -48,8 +48,7 @@ export function escapeHtmlComment(src: string): string {
 }
 
 // void elements
-const VOID_TAGS =
-  "area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr";
+const VOID_TAGS = "area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr";
 
 const isVoidTagSet = new Set(VOID_TAGS.split(","));
 export function isVoidTag(tag: string): boolean {

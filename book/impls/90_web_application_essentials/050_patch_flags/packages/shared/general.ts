@@ -44,7 +44,8 @@ export const invokeArrayFns = (fns: Function[], arg?: any) => {
   }
 };
 
-export const isOn = (key: string) => key.charCodeAt(0) === 111 /* o */ &&
+export const isOn = (key: string) =>
+  key.charCodeAt(0) === 111 /* o */ &&
   key.charCodeAt(1) === 110 /* n */ &&
   (key.charCodeAt(2) > 122 || key.charCodeAt(2) < 97);
 
@@ -62,8 +63,7 @@ export const toDisplayString = (val: unknown): string => {
     : val == null
       ? ""
       : isArray(val) ||
-          (isObject(val) &&
-            (val.toString === objectToString || !isFunction(val.toString)))
+          (isObject(val) && (val.toString === objectToString || !isFunction(val.toString)))
         ? JSON.stringify(val, null, 2)
         : String(val);
 };

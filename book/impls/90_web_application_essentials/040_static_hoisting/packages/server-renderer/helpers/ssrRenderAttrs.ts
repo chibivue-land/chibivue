@@ -1,24 +1,10 @@
-import {
-  isArray,
-  isFunction,
-  isOn,
-  isString,
-  normalizeClass,
-  normalizeStyle,
-} from "../../shared";
+import { isArray, isFunction, isOn, isString, normalizeClass, normalizeStyle } from "../../shared";
 import { escapeHtml } from "./ssrUtils";
 
-export function ssrRenderAttrs(
-  props: Record<string, unknown>,
-  tag?: string,
-): string {
+export function ssrRenderAttrs(props: Record<string, unknown>, tag?: string): string {
   let ret = "";
   for (const key in props) {
-    if (
-      ssrIsIgnoredKey(key) ||
-      isOn(key) ||
-      (tag === "textarea" && key === "value")
-    ) {
+    if (ssrIsIgnoredKey(key) || isOn(key) || (tag === "textarea" && key === "value")) {
       continue;
     }
     const value = props[key];
@@ -34,37 +20,22 @@ export function ssrRenderAttrs(
 }
 
 function ssrIsIgnoredKey(key: string): boolean {
-  return (
-    key === "key" ||
-    key === "ref" ||
-    key === "innerHTML" ||
-    key === "textContent"
-  );
+  return key === "key" || key === "ref" || key === "innerHTML" || key === "textContent";
 }
 
-export function ssrRenderDynamicAttr(
-  key: string,
-  value: unknown,
-  tag?: string,
-): string {
+export function ssrRenderDynamicAttr(key: string, value: unknown, tag?: string): string {
   if (!isRenderableAttrValue(value)) {
     return "";
   }
   const attrKey =
-    tag && (tag.indexOf("-") > 0 || isSVGTag(tag))
-      ? key
-      : propsToAttrMap[key] || key.toLowerCase();
+    tag && (tag.indexOf("-") > 0 || isSVGTag(tag)) ? key : propsToAttrMap[key] || key.toLowerCase();
 
   if (isBooleanAttr(attrKey)) {
     return value === false ? "" : ` ${attrKey}`;
   } else if (isSSRSafeAttrName(attrKey)) {
-    return value === ""
-      ? ` ${attrKey}`
-      : ` ${attrKey}="${escapeHtml(value)}"`;
+    return value === "" ? ` ${attrKey}` : ` ${attrKey}="${escapeHtml(value)}"`;
   } else {
-    console.warn(
-      `[server-renderer] Skipped rendering unsafe attribute name: ${attrKey}`,
-    );
+    console.warn(`[server-renderer] Skipped rendering unsafe attribute name: ${attrKey}`);
     return "";
   }
 }
@@ -99,9 +70,7 @@ export function ssrRenderStyle(raw: unknown): string {
   return escapeHtml(stringifyStyle(styles));
 }
 
-function stringifyStyle(
-  styles: Record<string, string | number> | null,
-): string {
+function stringifyStyle(styles: Record<string, string | number> | null): string {
   let ret = "";
   if (!styles || isString(styles)) {
     return ret;
@@ -129,8 +98,7 @@ const propsToAttrMap: Record<string, string> = {
 };
 
 // Boolean attributes
-const isBooleanAttr = (key: string): boolean =>
-  booleanAttrsSet.has(key);
+const isBooleanAttr = (key: string): boolean => booleanAttrsSet.has(key);
 
 const booleanAttrsSet = new Set(
   (

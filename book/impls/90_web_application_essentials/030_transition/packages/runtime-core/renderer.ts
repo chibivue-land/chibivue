@@ -410,12 +410,7 @@ export function createRenderer(options: RendererOptions) {
     if (n1 == null) {
       if (n2.shapeFlag & ShapeFlags.COMPONENT_KEPT_ALIVE) {
         // Restore from cache
-        (parentComponent as KeepAliveContext).activate(
-          n2,
-          container,
-          anchor,
-          parentComponent,
-        );
+        (parentComponent as KeepAliveContext).activate(n2, container, anchor, parentComponent);
       } else {
         mountComponent(n2, container, anchor, parentComponent);
       }
