@@ -19,8 +19,8 @@
 <KawaikoNote variant="warning" title="角色很多！">
 
 突然出现了很多术语，但不要慌！\
-如果我们一个一个地看每个角色，拼图的碎片就会拼在一起。\
-首先，让我们目标是「大致把握全貌」。
+如果我们一个一个地看每个角色，拼图的碎片就会拼在一起．\
+首先，让我们目标是「大致把握全貌」．
 
 </KawaikoNote>
 
@@ -84,7 +84,7 @@ targetMap 的键是"某个目标"．在这个例子中，state1 和 state2 对�
 
 <KawaikoNote variant="funny" title="简单地想">
 
-**targetMap** 是一个记录「谁影响谁」的笔记本。\
+**targetMap** 是一个记录「谁影响谁」的笔记本．\
 当 `state1.name` 改变时 → 运行 `updateComponent`\
 当 `state2.count` 改变时 → 运行 `onCountUpdated`\
 它记录了这些关系！

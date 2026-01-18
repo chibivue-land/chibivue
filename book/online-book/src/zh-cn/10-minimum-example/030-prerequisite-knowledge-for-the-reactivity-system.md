@@ -7,7 +7,7 @@
 <KawaikoNote variant="surprise" title="重头戏来了！">
 
 这是 Vue.js 的核心！\
-一旦理解了响应式系统，你就会明白 Vue.js 的「魔法」是如何实现的。\
+一旦理解了响应式系统，你就会明白 Vue.js 的「魔法」是如何实现的．\
 虽然有点难，但让我们一起努力吧！
 
 </KawaikoNote>
@@ -147,9 +147,9 @@ app.mount('#app')
 
 <KawaikoNote variant="question" title="Proxy 是什么？">
 
-Proxy 是 JavaScript 的标准功能，不是 Vue.js 发明的。\
+Proxy 是 JavaScript 的标准功能，不是 Vue.js 发明的．\
 可以理解为「监视和自定义对象访问的机制」！\
-通过它，我们可以检测到「值被读取」或「值被修改」。
+通过它，我们可以检测到「值被读取」或「值被修改」．
 
 </KawaikoNote>
 

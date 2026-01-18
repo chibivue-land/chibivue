@@ -299,7 +299,6 @@ console.log(count, message)
 These features could also be considered:
 
 - **Alias support**: Support for `const { count: c } = defineProps(...)`
-- **Array patterns**: Combination with array-style props definition
 
 Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)

@@ -299,7 +299,6 @@ console.log(count, message)
 以下の機能も検討できます：
 
 - **エイリアス対応**: `const { count: c } = defineProps(...)` の対応
-- **配列パターン**: 配列形式の props 定義との組み合わせ
 
 ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)

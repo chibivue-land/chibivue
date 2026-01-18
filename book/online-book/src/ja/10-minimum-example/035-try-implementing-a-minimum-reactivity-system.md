@@ -20,9 +20,9 @@ Proxy を用いた実装の流れについて説明してみます．
 
 <KawaikoNote variant="warning" title="登場人物が多い！">
 
-いきなりたくさんの用語が出てきましたが、焦らないでください！\
-一つずつ役割を見ていけば、パズルのピースがはまるように理解できます。\
-まずは「全体像をぼんやり掴む」ことを目指しましょう。
+いきなりたくさんの用語が出てきましたが，焦らないでください！\
+一つずつ役割を見ていけば，パズルのピースがはまるように理解できます．\
+まずは「全体像をぼんやり掴む」ことを目指しましょう．
 
 </KawaikoNote>
 
@@ -86,7 +86,7 @@ targetMap の key は「ある target」 です．この例では state1 と sta
 
 <KawaikoNote variant="funny" title="シンプルに考えると">
 
-**targetMap** は「誰が誰に影響を与えるか」を記録するメモ帳です。\
+**targetMap** は「誰が誰に影響を与えるか」を記録するメモ帳です．\
 `state1.name` が変わったら → `updateComponent` を実行\
 `state2.count` が変わったら → `onCountUpdated` を実行\
 という関係を記録しています！
@@ -147,8 +147,8 @@ function reactive<T>(target: T) {
 
 <KawaikoNote variant="base" title="ここまでのポイント">
 
-- **track**: 値を「読んだとき」に呼ばれ、「この値が変わったら○○を実行してね」と登録
-- **trigger**: 値を「書き換えたとき」に呼ばれ、登録された処理を実行
+- **track**: 値を「読んだとき」に呼ばれ，「この値が変わったら○○を実行してね」と登録
+- **trigger**: 値を「書き換えたとき」に呼ばれ，登録された処理を実行
 - **reactive**: この仕組みを持った Proxy を作る関数
 
 </KawaikoNote>
@@ -500,8 +500,8 @@ const render: RootRenderFunction = (vnode, container) => {
 <KawaikoNote variant="surprise" title="おめでとう！">
 
 リアクティビティシステムの基本が完成しました！\
-Vue.js の「値を変えたら画面が更新される」魔法の正体、理解できましたか？\
-ここを乗り越えたあなたは、Vue.js の内部をかなり深く理解しています！
+Vue.js の「値を変えたら画面が更新される」魔法の正体，理解できましたか？\
+ここを乗り越えたあなたは，Vue.js の内部をかなり深く理解しています！
 
 </KawaikoNote>
 

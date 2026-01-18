@@ -299,7 +299,6 @@ console.log(count, message)
 可以考虑以下功能：
 
 - **别名支持**：支持 `const { count: c } = defineProps(...)`
-- **数组模式**：与数组形式的 props 定义组合
 
 到此为止的源代码：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)

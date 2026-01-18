@@ -299,7 +299,6 @@ console.log(count, message)
 可以考慮以下功能：
 
 - **別名支援**：支援 `const { count: c } = defineProps(...)`
-- **陣列模式**：與陣列形式的 props 定義組合
 
 到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/050_props_destructure)

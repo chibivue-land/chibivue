@@ -22,7 +22,7 @@ function handleClick() {
 <KawaikoNote variant="question" title="与 defineProps 有什么区别？">
 
 `defineProps` 用于从父组件向子组件传递数据，\
-`defineEmits` 用于从子组件向父组件通知事件。\
+`defineEmits` 用于从子组件向父组件通知事件．\
 记住它们是一对！
 
 </KawaikoNote>

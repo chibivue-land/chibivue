@@ -33,8 +33,8 @@ const vFocus = {
 
 <KawaikoNote variant="warning" title="說實話很少用">
 
-自訂指令用於「想直接操作 DOM」的場景，但說實話很少被使用。\
-由於 Vapor Mode 的實現變更以及與靜態分析的兼容性差，**能不用就不用**。\
+自訂指令用於「想直接操作 DOM」的場景，但說實話很少被使用．\
+由於 Vapor Mode 的實現變更以及與靜態分析的兼容性差，**能不用就不用**．\
 盡量用元件處理能用元件處理的事情！
 
 </KawaikoNote>
