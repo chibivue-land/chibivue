@@ -1,9 +1,20 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
+import { computed } from 'vue'
 import HeroSection from './HeroSection.vue'
 import FeaturesSection from './FeaturesSection.vue'
 
 const { lang } = useData()
+const route = useRoute()
+
+// 現在の言語を取得
+const currentLang = computed(() => {
+  const path = route.path
+  if (path.startsWith('/zh-cn')) return 'zh-cn'
+  if (path.startsWith('/zh-tw')) return 'zh-tw'
+  if (path.startsWith('/ja')) return 'ja'
+  return 'en'
+})
 
 const heroContent: Record<
   string,
@@ -22,8 +33,8 @@ const heroContent: Record<
   ja: {
     tagline:
       "Writing Vue.js: Step by Step, from just one line of 'Hello, World'.",
-    startButton: 'Start Learning',
-    vueButton: 'Vue.js Official',
+    startButton: 'はじめる',
+    vueButton: 'Vue.js 公式',
   },
   'zh-cn': {
     tagline: "编写 Vue.js：从一行 'Hello, World' 开始，循序渐进。",
@@ -147,13 +158,14 @@ const featuresContent: Record<
   ],
 }
 
-const currentHero = heroContent[lang.value] || heroContent.en
-const currentFeatures = featuresContent[lang.value] || featuresContent.en
+const currentHero = computed(() => heroContent[currentLang.value] || heroContent.en)
+const currentFeatures = computed(() => featuresContent[currentLang.value] || featuresContent.en)
 
-const startLink =
-  lang.value === 'en'
+const startLink = computed(() =>
+  currentLang.value === 'en'
     ? '/00-introduction/010-about'
-    : `/${lang.value}/00-introduction/010-about`
+    : `/${currentLang.value}/00-introduction/010-about`
+)
 </script>
 
 <template>
