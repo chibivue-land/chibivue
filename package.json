@@ -51,6 +51,7 @@
     "dotenv": "^16.6.1",
     "fs-extra": "^11.3.3",
     "jsdom": "^26.1.0",
+    "oxc-minify": "^0.109.0",
     "oxfmt": "^0.16.0",
     "oxlint": "^1.39.0",
     "playwright": "^1.52.0",
@@ -64,7 +65,7 @@
     "unplugin-icons": "^23.0.1",
     "vite-hyper-config": "^0.6.1",
     "vite-node": "^3.2.4",
-    "vitepress": "^1.6.4",
+    "vitepress": "2.0.0-alpha.15",
     "vitepress-plugin-mermaid": "^2.0.17",
     "vitest": "^4.0.17"
   },
@@ -76,5 +77,13 @@
     "magic-string": "^0.30.21",
     "monaco-editor": "^0.55.1",
     "vite": "^8.0.0-beta.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "vitepress>vite": "^8.0.0-beta.8"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
