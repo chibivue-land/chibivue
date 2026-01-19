@@ -14,6 +14,7 @@ import {
   setupComponent,
 } from "./component";
 import { updateProps } from "./componentProps";
+import { updateSlots } from "./componentSlots";
 import { renderComponentRoot } from "./componentRenderUtils";
 import { invokeDirectiveHook } from "./directives";
 import { setRef } from "./rendererTemplateRef";
@@ -161,6 +162,22 @@ export function createRenderer(options: RendererOptions): Renderer {
   } = options;
 
   const patch: PatchFn = (n1, n2, container, anchor, parentComponent = null) => {
+    if (n1 === n2) {
+      return;
+    }
+
+    // patching & not same type, unmount old tree
+    if (n1 && !isSameVNodeType(n1, n2)) {
+      // If the old vnode will be kept alive, its element will be moved to storage,
+      // so we can't use it or its siblings as anchor. Use the passed anchor instead.
+      const willBeKeptAlive = n1.shapeFlag & ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
+      if (!willBeKeptAlive) {
+        anchor = getNextHostNode(n1);
+      }
+      unmount(n1, parentComponent as ComponentInternalInstance);
+      n1 = null;
+    }
+
     const { type, ref, shapeFlag } = n2;
     if (isFunction(type)) {
       processVaporComponent(n1, n2, container, anchor, parentComponent);
@@ -436,13 +453,12 @@ export function createRenderer(options: RendererOptions): Renderer {
         const nextTree = renderComponentRoot(instance);
         instance.subTree = nextTree;
 
-        patch(
-          prevTree,
-          nextTree,
-          hostParentNode(prevTree.el!)!,
-          getNextHostNode(prevTree),
-          instance,
-        );
+        // If prevTree will be kept alive, its element will be moved to storage,
+        // so we can't use it as anchor reference. Use null instead.
+        const prevTreeWillBeKeptAlive = prevTree.shapeFlag & ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
+        const anchor = prevTreeWillBeKeptAlive ? null : getNextHostNode(prevTree);
+
+        patch(prevTree, nextTree, hostParentNode(prevTree.el!)!, anchor, instance);
         next.el = nextTree.el;
 
         // updated hook
@@ -467,6 +483,7 @@ export function createRenderer(options: RendererOptions): Renderer {
     instance.vnode = nextVNode;
     instance.next = null;
     updateProps(instance, nextVNode.props);
+    updateSlots(instance, nextVNode.children);
     flushPreFlushCbs();
   };
 

@@ -494,7 +494,10 @@ export function compileScript(
 
   for (const [key, { imported, source }] of Object.entries(userImports)) {
     bindingMetadata[key] =
-      imported === "*" || (imported === "default" && source.endsWith(".vue")) || source === "vue"
+      imported === "*" ||
+      (imported === "default" && source.endsWith(".vue")) ||
+      source === "vue" ||
+      source === "chibivue"
         ? BindingTypes.SETUP_CONST
         : BindingTypes.SETUP_MAYBE_REF;
   }

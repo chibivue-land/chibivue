@@ -1,5 +1,7 @@
 <script>
+import { ref } from 'chibivue'
 import Comp from './Comp.vue'
+
 export default {
   components: {
     Comp,

@@ -1,24 +1,30 @@
-<script>
-import { ref } from 'chibivue'
+<script setup>
+import { ref, KeepAlive } from 'chibivue'
+import CounterComponent from './Counter.vue'
 
-export default {
-  setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
-  },
+const showCounter = ref(true)
+const toggle = () => {
+  showCounter.value = !showCounter.value
 }
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
+  <div class="container">
+    <h2>KeepAlive Example</h2>
+    <button @click="toggle">Toggle Counter</button>
 
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
+    <h3>With KeepAlive (state preserved):</h3>
+    <KeepAlive>
+      <CounterComponent v-if="showCounter" />
+    </KeepAlive>
 
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+    <h3>Without KeepAlive (state reset):</h3>
+    <CounterComponent v-if="showCounter" />
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+</style>
