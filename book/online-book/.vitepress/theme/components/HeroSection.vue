@@ -376,7 +376,8 @@ const version = __CHIBIVUE_VERSION__
 .mascot-container {
   position: absolute;
   bottom: 190px;
-  left: calc(50% + 20px);
+  left: 50%;
+  transform: translateX(-50%);
   animation: mascotBounce 2s ease-in-out infinite;
   animation-delay: 0.6s;
 }
@@ -385,6 +386,7 @@ const version = __CHIBIVUE_VERSION__
   .mascot-container {
     bottom: 230px;
     left: 140px;
+    transform: none;
   }
 }
 
@@ -408,10 +410,22 @@ const version = __CHIBIVUE_VERSION__
 @keyframes mascotBounce {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+@media (min-width: 640px) {
+  @keyframes mascotBounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
   }
 }
 
@@ -434,28 +448,47 @@ const version = __CHIBIVUE_VERSION__
   animation: float 4s ease-in-out infinite;
   backdrop-filter: blur(4px);
   white-space: nowrap;
+  display: none;
 }
 
 @media (min-width: 640px) {
   .snippet {
+    display: block;
     font-size: 0.85rem;
   }
 }
 
 .snippet-1 {
-  top: 5%;
-  right: 0;
+  top: 0;
+  left: 0;
   animation-delay: 0s;
 }
 .snippet-2 {
-  top: 35%;
-  right: -5%;
+  top: 30%;
+  right: 0;
   animation-delay: 1.3s;
 }
 .snippet-3 {
-  bottom: 25%;
-  right: 5%;
+  bottom: 10%;
+  left: 0;
   animation-delay: 2.6s;
+}
+
+@media (min-width: 640px) {
+  .snippet-1 {
+    top: 5%;
+    left: auto;
+    right: 0;
+  }
+  .snippet-2 {
+    top: 35%;
+    right: -5%;
+  }
+  .snippet-3 {
+    bottom: 25%;
+    left: auto;
+    right: 5%;
+  }
 }
 
 @keyframes float {
