@@ -11,7 +11,6 @@
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
 $ pnpm install
-$ pnpm play:generate
 $ pnpm play
 ```
 

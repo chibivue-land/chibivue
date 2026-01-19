@@ -112,7 +112,6 @@ The project includes a WebContainer-based playground (`book/playground`) that al
 To start the playground:
 
 ```sh
-pnpm play:generate  # Generate chapter data from book/impls
 pnpm play           # Start the playground dev server
 ```
 

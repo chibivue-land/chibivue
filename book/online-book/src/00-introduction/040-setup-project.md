@@ -11,7 +11,6 @@ You can edit and run code immediately without any environment setup, so try expe
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
 $ pnpm install
-$ pnpm play:generate
 $ pnpm play
 ```
 
