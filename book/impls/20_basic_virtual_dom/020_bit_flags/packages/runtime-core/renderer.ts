@@ -74,7 +74,7 @@ export function createRenderer(options: RendererOptions) {
     container: RendererElement,
     anchor: RendererElement | null,
   ) => {
-    if (n1 === null) {
+    if (n1 == null) {
       mountElement(n2, container, anchor);
     } else {
       patchElement(n1, n2, anchor);

@@ -99,7 +99,7 @@ export function createRenderer(options: RendererOptions) {
     anchor: RendererElement | null,
     parentComponent: ComponentInternalInstance | null,
   ) => {
-    if (n1 === null) {
+    if (n1 == null) {
       mountElement(n2, container, anchor, parentComponent);
     } else {
       patchElement(n1, n2, anchor, parentComponent);

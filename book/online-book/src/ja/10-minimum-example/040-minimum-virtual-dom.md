@@ -225,7 +225,7 @@ const processElement = (
   n2: VNode,
   container: HostElement,
 ) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountElement(n2, container)
   } else {
     patchElement(n1, n2)
@@ -233,7 +233,7 @@ const processElement = (
 }
 
 const processText = (n1: string | null, n2: string, container: HostElement) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountText(n2, container)
   } else {
     patchText(n1, n2)
@@ -286,7 +286,7 @@ const processElement = (
   n2: VNode,
   container: RendererElement,
 ) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountElement(n2, container)
   } else {
     // patchElement(n1, n2);

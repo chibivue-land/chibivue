@@ -123,6 +123,9 @@ importers:
       vitest:
         specifier: ^4.0.17
         version: 4.0.17(@opentelemetry/api@1.9.0)(@types/node@24.10.9)(@vitest/browser-playwright@4.0.17)(jsdom@26.1.0)(lightningcss@1.30.2)(tsx@4.20.3)
+      vue:
+        specifier: ^3.5.26
+        version: 3.5.26(typescript@5.9.3)
 
   book/playground:
     dependencies:

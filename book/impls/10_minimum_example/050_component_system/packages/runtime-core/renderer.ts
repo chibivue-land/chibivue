@@ -58,7 +58,7 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const processElement = (n1: VNode | null, n2: VNode, container: RendererElement) => {
-    if (n1 === null) {
+    if (n1 == null) {
       mountElement(n2, container);
     } else {
       patchElement(n1, n2);
