@@ -1,6 +1,6 @@
 # First Rendering and createApp API
 
-## Where to start? 🤔
+## Where to start?
 
 Now, let's start implementing chibivue step by step. How should we proceed with the implementation?
 
@@ -18,7 +18,7 @@ Here, "developer" refers to the person who develops web applications using chibi
 In other words, let's refer to the developer interface of the original Vue.js as a reference when developing chibivue. \
 Specifically, let's take a look at what to write when developing web applications with Vue.js.
 
-## Developer Interface Levels? 🤔
+## Developer Interface Levels?
 
 What we need to be careful about here is that Vue.js has multiple developer interfaces, each with a different level. Here, the level refers to how close it is to raw JavaScript. \
 For example, the following are examples of developer interfaces for displaying HTML with Vue:

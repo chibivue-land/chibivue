@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.28.6",
+    "@iconify-json/mdi": "^1.2.3",
     "@types/node": "^24.10.9",
     "@typescript/native-preview": "^7.0.0-dev.20260117.1",
     "@vitejs/plugin-vue": "^5.2.4",
@@ -60,6 +61,7 @@
     "textlint-rule-ja-space-between-half-and-full-width": "^2.4.2",
     "textlint-rule-prh": "^6.1.0",
     "typescript": "^5.9.3",
+    "unplugin-icons": "^23.0.1",
     "vite-hyper-config": "^0.6.1",
     "vite-node": "^3.2.4",
     "vitepress": "^1.6.4",

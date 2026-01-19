@@ -18,14 +18,10 @@ hero:
 features:
   - title: 響應式系統
     details: 從響應式系統的基本原理開始，我們將涵蓋廣泛的實現，從 EffectScope 到 CustomRef 等高級 API。
-    icon: 🔆
   - title: 虛擬 DOM
     details: 我們將涵蓋廣泛的實現，從虛擬 DOM 的基本設置到補丁渲染和調度器實現。
-    icon: ⛅
   - title: 模板編譯器
     details: 從模板編譯器的基礎實現開始，我們將擴展到數據綁定和指令實現。
-    icon: 🔁
   - title: 單文件組件
     details: 從 SFC 的基本實現開始，我們將深入廣泛的領域，從 script setup 到編譯器宏和作用域 CSS 實現。
-    icon: 🎁
 ---

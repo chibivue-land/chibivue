@@ -1,23 +1,32 @@
 <script setup lang="ts">
+import MdiFlash from '~icons/mdi/flash'
+import MdiFileTree from '~icons/mdi/file-tree'
+import MdiCog from '~icons/mdi/cog'
+import MdiPackageVariant from '~icons/mdi/package-variant'
+import MdiStar from '~icons/mdi/star'
+import { markRaw, type Component } from 'vue'
+
 defineProps<{
   icon: string
   title: string
   description: string
 }>()
 
-const iconMap: Record<string, string> = {
-  reactivity: '&#x26A1;',
-  vdom: '&#x1F333;',
-  compiler: '&#x1F527;',
-  sfc: '&#x1F4E6;',
+const iconMap: Record<string, Component> = {
+  reactivity: markRaw(MdiFlash),
+  vdom: markRaw(MdiFileTree),
+  compiler: markRaw(MdiCog),
+  sfc: markRaw(MdiPackageVariant),
 }
+
+const defaultIcon = markRaw(MdiStar)
 </script>
 
 <template>
   <article class="feature-card">
     <div class="feature-icon">
       <span class="icon-glow"></span>
-      <span class="icon-content" v-html="iconMap[icon] || '&#x2728;'"></span>
+      <component :is="iconMap[icon] || defaultIcon" class="icon-content" />
     </div>
     <h3 class="feature-title">{{ title }}</h3>
     <p class="feature-description">{{ description }}</p>

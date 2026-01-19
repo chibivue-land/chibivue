@@ -18,14 +18,10 @@ hero:
 features:
   - title: 响应式系统
     details: 从响应式系统的基本原理开始，我们将涵盖广泛的实现，从 EffectScope 到 CustomRef 等高级 API。
-    icon: 🔆
   - title: 虚拟 DOM
     details: 我们将涵盖广泛的实现，从虚拟 DOM 的基本设置到补丁渲染和调度器实现。
-    icon: ⛅
   - title: 模板编译器
     details: 从模板编译器的基础实现开始，我们将扩展到数据绑定和指令实现。
-    icon: 🔁
   - title: 单文件组件
     details: 从 SFC 的基本实现开始，我们将深入广泛的领域，从 script setup 到编译器宏和作用域 CSS 实现。
-    icon: 🎁
 ---

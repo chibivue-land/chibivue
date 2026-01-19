@@ -1,10 +1,12 @@
 import { defineConfig } from "vitepress";
+import Icons from "unplugin-icons/vite";
 import chibivueThemeDark from "../theme/chibivue-theme.json";
 import chibivueThemeLight from "../theme/chibivue-theme-light.json";
 import pkg from "../../../../package.json";
 
 export const sharedConfig = defineConfig({
   vite: {
+    plugins: [Icons({ compiler: "vue3" })],
     define: {
       __CHIBIVUE_VERSION__: JSON.stringify(pkg.version),
     },

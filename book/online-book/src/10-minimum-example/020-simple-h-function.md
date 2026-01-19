@@ -52,7 +52,7 @@ As a basic usage of the h function, you specify the tag name as the first argume
 Here, I specifically mentioned "basic usage" because the h function actually has multiple syntaxes for its arguments, and you can omit the second argument or not use an array for child elements.  
 However, here we will implement it in the most basic syntax.
 
-## How should we implement it? 🤔
+## How should we implement it?
 
 Now that we understand the developer interface, let's decide how to implement it.  
 The important point to note is how it is used as the return value of the render function.  

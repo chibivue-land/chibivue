@@ -9,7 +9,7 @@ You've now experienced the core parts of Vue.js.
 
 ## Minimal Example section is over!
 
-At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done 😁\
+At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done!\
 If you are interested in Virtual DOM or patch rendering, you can move on to the Basic Virtual DOM section. \
 If you want to extend components further, there is the Basic Component section. If you are interested in richer expressions in templates (such as directives), you can explore the Basic Template Compiler section. \
 If you are interested in script setup or compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do them all if you want!!)\

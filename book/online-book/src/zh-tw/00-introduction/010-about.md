@@ -1,6 +1,6 @@
 # 介紹
 
-## 🎯 本書的目的
+## 本書的目的
 
 感謝您選擇這本書！  
 如果您對這本書哪怕有一點點興趣，我都感到非常高興．  
@@ -19,7 +19,7 @@
 無論您是從頭到尾閱讀，還是只挑選感興趣的部分，都由您決定．  
 如果您發現這本書的哪怕一小部分有用，我都會很高興！
 
-## 🤷‍♂️ 目標讀者
+## 目標讀者
 
 - **有 Vue.js 使用經驗的人**
 - **能夠編寫 TypeScript**
@@ -29,7 +29,7 @@
 但是，如果您遇到不應該用於 Vue.js 或 TypeScript 的術語，我建議您先從相應的資源中學習．  
 （基本功能就足夠了！（不需要深入研究））
 
-## 🙋‍♀️ 本書（和作者）所關注的（並希望實現的）
+## 本書（和作者）所關注的（並希望實現的）
 
 在深入之前，我想分享一些我在寫這本書時特別關注的事情．  
 我希望您在閱讀時記住這些，如果有任何我沒有達到目標的地方，請告訴我．
@@ -54,7 +54,7 @@
   事實上，除了 Vue.js 之外，我還有我的最愛，我經常從用它們構建的見解和服務中受益．  
   這本書的目的純粹是「理解 Vue.js」，不涉及對其他工具的排名或判斷．
 
-## 💡 本線上書籍的主題和結構
+## 本線上書籍的主題和結構
 
 由於這本書變得相當龐大，我設置了成就里程碑並將其分為不同的部分．
 
@@ -150,13 +150,13 @@
 - **Web 應用程式要點部分**
   當我們完成基礎 SFC 編譯器部分時，我們將擁有一套有些實用的 Vue.js 功能．然而，要開發 Web 應用程式，仍然缺少很多東西．例如，我們需要管理全局狀態和路由器的工具．在這一部分中，我們將開發這樣的外部插件，旨在從「Web 應用程式開發」的角度使我們的工具包更加實用．
 
-## 🧑‍🏫 關於本書的意見和問題
+## 關於本書的意見和問題
 
-我打算盡我所能回應關於這本書的問題和反饋．請隨時在 Twitter 上聯繫我（通過 DM 或直接在時間線上）．由於我已經公開了存儲庫，您也可以在那裡發布問題．我知道我自己的理解並不完美，所以我感謝任何反饋．如果您發現任何解釋不清楚或具有挑戰性，請不要猶豫詢問．我的目標是向盡可能多的人傳播清晰正確的解釋，我希望我們能夠一起構建這個 👍．
+我打算盡我所能回應關於這本書的問題和反饋．請隨時在 Twitter 上聯繫我（通過 DM 或直接在時間線上）．由於我已經公開了存儲庫，您也可以在那裡發布問題．我知道我自己的理解並不完美，所以我感謝任何反饋．如果您發現任何解釋不清楚或具有挑戰性，請不要猶豫詢問．我的目標是向盡可能多的人傳播清晰正確的解釋，我希望我們能夠一起構建這個．
 
 https://twitter.com/ubugeeei
 
-## 🦀 關於 Discord 伺服器
+## 關於 Discord 伺服器
 
 我們為這本書創建了一個 Discord 伺服器！（2024/01/01）
 ~~在這裡，我們分享公告，為與這本線上書籍相關的問題和技巧提供支持．~~ \
@@ -176,7 +176,7 @@ https://twitter.com/ubugeeei
 
 ### 如何加入
 
-這是邀請連結 👉 https://discord.gg/aVHvmbmSRy
+這是邀請連結: https://discord.gg/aVHvmbmSRy
 
 您也可以從這本書標題右上角的 Discord 按鈕加入．
 
@@ -187,13 +187,13 @@ https://twitter.com/ubugeeei
 <img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
 
 [Vue.js](https://github.com/vuejs) 成員，[Vue.js Japan User Group](https://github.com/vuejs-jp) 核心工作人員．\
-[chibivue land](https://github.com/chibivue-land) King. 👉 https://chibivue.land
+[chibivue land](https://github.com/chibivue-land) King. https://chibivue.land
 
 我還在開發 [vize](https://github.com/ubugeeei/vize)（Rust 製作的 Vue.js 工具鏈）和 [ox-content](https://github.com/ubugeeei/ox-content)（Rust 製作的文檔工具鏈）．
 
 https://wtrclred.io/
 
-如果您願意，請作為贊助商支持我！ 👉 https://github.com/sponsors/ubugeeei
+如果您願意，請作為贊助商支持我！ https://github.com/sponsors/ubugeeei
 
 <div align="center">
 
