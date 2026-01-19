@@ -1,16 +1,10 @@
-<script>
+<script setup>
 import { ref, KeepAlive } from 'chibivue'
 import CounterComponent from './Counter.vue'
 
-export default {
-  components: { KeepAlive, CounterComponent },
-  setup() {
-    const showCounter = ref(true)
-    const toggle = () => {
-      showCounter.value = !showCounter.value
-    }
-    return { showCounter, toggle }
-  },
+const showCounter = ref(true)
+const toggle = () => {
+  showCounter.value = !showCounter.value
 }
 </script>
 

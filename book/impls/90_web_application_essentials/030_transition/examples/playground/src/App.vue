@@ -1,15 +1,9 @@
-<script>
-import { ref, h, Transition } from 'chibivue'
+<script setup>
+import { ref, Transition } from 'chibivue'
 
-export default {
-  components: { Transition },
-  setup() {
-    const show = ref(true)
-    const toggle = () => {
-      show.value = !show.value
-    }
-    return { show, toggle }
-  },
+const show = ref(true)
+const toggle = () => {
+  show.value = !show.value
 }
 </script>
 
