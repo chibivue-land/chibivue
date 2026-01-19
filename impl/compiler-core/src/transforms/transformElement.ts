@@ -20,6 +20,7 @@ import {
   createSimpleExpression,
   createVNodeCall,
 } from "../ast";
+import { BindingTypes } from "../options";
 import {
   MERGE_PROPS,
   NORMALIZE_CLASS,
@@ -274,7 +275,11 @@ export function resolveComponentType(node: ComponentNode, context: TransformCont
 
   // TODO: 2. built-in components (Teleport, Transition, KeepAlive, Suspense...)
 
-  // TODO: 3. user component (from setup bindings)
+  // 3. user component (from setup bindings)
+  const fromSetup = resolveSetupReference(tag, context);
+  if (fromSetup) {
+    return fromSetup;
+  }
 
   // TODO: 4. Self referencing component (inferred from filename)
   context.helper(RESOLVE_COMPONENT);
@@ -282,6 +287,53 @@ export function resolveComponentType(node: ComponentNode, context: TransformCont
   // 5. user component (resolve)
   context.components.add(tag);
   return toValidAssetId(tag, `component`);
+}
+
+// Built-in components that should NOT be resolved from setup bindings
+// These need special runtime handling
+const BUILTIN_COMPONENTS = new Set([
+  "Transition",
+  "TransitionGroup",
+  "KeepAlive",
+  "Teleport",
+  "Suspense",
+]);
+
+function resolveSetupReference(name: string, context: TransformContext): string | undefined {
+  // Don't resolve built-in components from setup bindings
+  if (BUILTIN_COMPONENTS.has(name)) {
+    return undefined;
+  }
+
+  const bindings = context.bindingMetadata;
+  if (!bindings) {
+    return undefined;
+  }
+
+  const bindingType = bindings[name];
+  if (
+    bindingType === BindingTypes.SETUP_CONST ||
+    bindingType === BindingTypes.SETUP_REACTIVE_CONST
+  ) {
+    return name;
+  }
+
+  // Also check PascalCase version of kebab-case name
+  const pascalName = name
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join("");
+  if (pascalName !== name) {
+    const pascalBindingType = bindings[pascalName];
+    if (
+      pascalBindingType === BindingTypes.SETUP_CONST ||
+      pascalBindingType === BindingTypes.SETUP_REACTIVE_CONST
+    ) {
+      return pascalName;
+    }
+  }
+
+  return undefined;
 }
 
 export function toValidAssetId(name: string, type: "component" | "directive" | "filter"): string {

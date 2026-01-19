@@ -1,25 +1,18 @@
-<script>
+<script setup>
 import { ref, onActivated, onDeactivated } from 'chibivue'
 
-export default {
-  name: 'CounterComponent',
-  setup() {
-    const count = ref(0)
-    const status = ref('active')
+const count = ref(0)
+const status = ref('active')
 
-    onActivated(() => {
-      status.value = 'activated'
-      console.log('Counter activated')
-    })
+onActivated(() => {
+  status.value = 'activated'
+  console.log('Counter activated')
+})
 
-    onDeactivated(() => {
-      status.value = 'deactivated'
-      console.log('Counter deactivated')
-    })
-
-    return { count, status }
-  },
-}
+onDeactivated(() => {
+  status.value = 'deactivated'
+  console.log('Counter deactivated')
+})
 </script>
 
 <template>

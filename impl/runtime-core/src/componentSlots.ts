@@ -36,5 +36,36 @@ export const initSlots = (
   instance: ComponentInternalInstance,
   children: VNodeNormalizedChildren,
 ): void => {
-  instance.slots = toRaw(children as InternalSlots);
+  if (children === null || children === undefined) {
+    instance.slots = {};
+  } else if (Array.isArray(children)) {
+    // Array children should be converted to a default slot function
+    instance.slots = {
+      default: () => children as VNode[],
+    };
+  } else if (typeof children === "object") {
+    // Already an object with slot functions
+    instance.slots = toRaw(children as InternalSlots);
+  } else {
+    instance.slots = {};
+  }
+};
+
+export const updateSlots = (
+  instance: ComponentInternalInstance,
+  children: VNodeNormalizedChildren,
+): void => {
+  if (children === null || children === undefined) {
+    instance.slots = {};
+  } else if (Array.isArray(children)) {
+    // Array children should be converted to a default slot function
+    instance.slots = {
+      default: () => children as VNode[],
+    };
+  } else if (typeof children === "object") {
+    // Already an object with slot functions
+    instance.slots = toRaw(children as InternalSlots);
+  } else {
+    instance.slots = {};
+  }
 };

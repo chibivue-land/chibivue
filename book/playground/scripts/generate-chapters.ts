@@ -178,7 +178,8 @@ const CHAPTER_TO_BOOK_MAPPING: Record<string, string> = {
   "90_web_application_essentials/010_router": "010-plugins/010-router",
   "90_web_application_essentials/020_preprocessors": "010-plugins/020-preprocessors",
   // bonus
-  "bonus/hyper_ultimate_super_extreme_minimal_vue": "hyper-ultimate-super-extreme-minimal-vue/15-min-impl",
+  "bonus/hyper_ultimate_super_extreme_minimal_vue":
+    "hyper-ultimate-super-extreme-minimal-vue/15-min-impl",
 };
 
 // Vue.js documentation URLs mapped by chapter keywords

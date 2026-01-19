@@ -12,7 +12,7 @@ import {
   createSimpleExpression,
   isStaticExp,
 } from "@chibivue/compiler-core";
-import { V_ON_WITH_KEYS, V_ON_WITH_MODIFIERS } from "@chibivue/runtime-dom";
+import { V_ON_WITH_KEYS, V_ON_WITH_MODIFIERS } from "../runtimeHelpers";
 import { capitalize, makeMap } from "@chibivue/shared";
 
 const isEventOptionModifier = makeMap(`passive,once,capture`);
