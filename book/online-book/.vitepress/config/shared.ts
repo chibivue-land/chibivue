@@ -12,7 +12,7 @@ export const sharedConfig = defineConfig({
   title: "The chibivue Book",
   appearance: "dark",
   description: 'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
-  lang: "ja",
+  lang: "en",
   srcDir: "src",
   srcExclude: ["__wip"],
   markdown: {
