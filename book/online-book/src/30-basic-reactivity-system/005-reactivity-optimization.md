@@ -9,7 +9,7 @@ chibivue's implementation has also been updated based on this algorithm.
 
 Vue.js's Reactivity System underwent significant performance optimizations in Vue 3.4. However, Vue 3.5 switched to a pull-based algorithm similar to Preact, changing the direction of the Reactivity System.
 
-To further research push-pull based implementations, Johnson Chu (@nicekid1), a core contributor to Vue, developed [alien-signals](https://github.com/stackblitz/alien-signals) as an independent project.
+To further research push-pull based implementations, Johnson Chu , a core contributor to Vue, developed [alien-signals](https://github.com/stackblitz/alien-signals) as an independent project.
 
 alien-signals is a signal library reimplemented based on Vue 3.4's Reactivity System, featuring:
 

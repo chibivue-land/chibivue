@@ -9,7 +9,7 @@ chibivue 的实现也基于此算法进行了更新．
 
 Vue.js 的响应式系统在 Vue 3.4 中进行了重大性能优化．然而，Vue 3.5 切换到了类似 Preact 的 pull-based 算法，改变了响应式系统的方向．
 
-为了进一步研究 push-pull based 实现，Vue 的核心贡献者 Johnson Chu（@nicekid1）开发了独立项目 [alien-signals](https://github.com/stackblitz/alien-signals)．
+为了进一步研究 push-pull based 实现，Vue 的核心贡献者 Johnson Chu 开发了独立项目 [alien-signals](https://github.com/stackblitz/alien-signals)．
 
 alien-signals 是基于 Vue 3.4 响应式系统重新实现的信号库，具有以下特点：
 
