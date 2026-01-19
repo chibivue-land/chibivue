@@ -4,12 +4,22 @@ import { camelize, capitalize } from "@chibivue/shared";
 import { type ConcreteComponent, currentInstance } from "../component";
 import type { ComponentOptions } from "../componentOptions";
 import { currentRenderingInstance } from "../componentRenderContext";
+import { KeepAlive } from "../components/KeepAlive";
 
 export const COMPONENTS = "components";
 
 export type AssetTypes = typeof COMPONENTS;
 
+// Built-in components that can be resolved by name
+const builtInComponents: Record<string, ConcreteComponent> = {
+  KeepAlive,
+};
+
 export function resolveComponent(name: string): ConcreteComponent | string {
+  // Check built-in components first
+  if (builtInComponents[name]) {
+    return builtInComponents[name];
+  }
   return resolveAsset(COMPONENTS, name) || name;
 }
 

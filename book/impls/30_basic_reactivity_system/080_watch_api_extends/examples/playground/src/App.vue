@@ -1,51 +1,65 @@
 <script>
-import { reactive } from 'chibivue'
+import { ref, watch } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const count = ref(0)
+    const message = ref('')
+    const logs = ref([])
 
-    const changeMessage = () => {
-      state.message += '!'
-    }
+    // Watch with immediate option
+    watch(
+      count,
+      (newVal, oldVal) => {
+        logs.value.push(`[immediate] count changed: ${oldVal} -> ${newVal}`)
+      },
+      { immediate: true }
+    )
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
-    }
+    // Watch with deep option
+    const obj = ref({ nested: { value: 0 } })
+    watch(
+      obj,
+      (newVal) => {
+        logs.value.push(`[deep] nested.value = ${newVal.nested.value}`)
+      },
+      { deep: true }
+    )
 
-    return { state, changeMessage, handleInput }
+    const increment = () => count.value++
+    const updateNested = () => obj.value.nested.value++
+
+    return { count, message, logs, obj, increment, updateNested }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>watch API Extensions Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <p>Count: {{ count }}</p>
+      <button @click="increment">Increment (immediate watch)</button>
+    </div>
 
-    <br />
+    <div>
+      <p>Nested value: {{ obj.nested.value }}</p>
+      <button @click="updateNested">Update nested (deep watch)</button>
+    </div>
 
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
-
-    <p>input value: {{ state.input }}</p>
+    <h3>Logs:</h3>
+    <ul>
+      <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+    </ul>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

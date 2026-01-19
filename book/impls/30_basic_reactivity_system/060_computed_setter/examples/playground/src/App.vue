@@ -1,51 +1,60 @@
 <script>
-import { reactive } from 'chibivue'
+import { ref, computed } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const firstName = ref('Vue')
+    const lastName = ref('chibivue')
 
-    const changeMessage = () => {
-      state.message += '!'
+    // Computed with getter and setter
+    const fullName = computed({
+      get: () => `${firstName.value} ${lastName.value}`,
+      set: (val) => {
+        const parts = val.split(' ')
+        firstName.value = parts[0] || ''
+        lastName.value = parts[1] || ''
+      },
+    })
+
+    const updateFullName = () => {
+      fullName.value = 'Hello World'
     }
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
-    }
-
-    return { state, changeMessage, handleInput }
+    return { firstName, lastName, fullName, updateFullName }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>computed (with setter) Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <label>
+        First Name:
+        <input :value="firstName" @input="firstName = $event.target.value" />
+      </label>
+    </div>
 
-    <br />
+    <div>
+      <label>
+        Last Name:
+        <input :value="lastName" @input="lastName = $event.target.value" />
+      </label>
+    </div>
 
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
+    <p>Full Name (computed): {{ fullName }}</p>
 
-    <p>input value: {{ state.input }}</p>
+    <button @click="updateFullName">Set fullName = "Hello World"</button>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+label {
+  display: block;
+  margin: 8px 0;
 }
 </style>

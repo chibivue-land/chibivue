@@ -48,8 +48,11 @@ const KeepAliveImpl = {
     exclude: [String, RegExp, Array],
     max: [String, Number],
   },
-  setup(props: KeepAliveProps, { slots }: { slots: any }) {
+  setup(props: KeepAliveProps, _setupContext: { slots: any }) {
     const instance = getCurrentInstance()! as KeepAliveContext;
+    // Note: We access instance.slots directly in the render function
+    // instead of using the destructured slots from setupContext,
+    // because slots can be updated during component updates.
     const cache: Map<any, VNode> = new Map();
     const keys: Set<any> = new Set();
     let current: VNode | null = null;
@@ -123,13 +126,26 @@ const KeepAliveImpl = {
     }
 
     return (): VNode | undefined => {
+      // Access instance.slots directly to get the latest slots after updates
+      const slots = instance.slots;
       if (!slots.default) {
         return undefined;
       }
 
       const children = slots.default();
-      const rawVNode = children[0];
-      if (children.length > 1) {
+
+      // Filter out text nodes and find the first component vnode
+      const vnodes = children.filter(
+        (c) => c && typeof c === "object" && c.shapeFlag !== undefined,
+      );
+      const rawVNode = vnodes[0];
+
+      if (!rawVNode) {
+        current = null;
+        return undefined;
+      }
+
+      if (vnodes.length > 1) {
         current = null;
         return children as unknown as VNode;
       } else if (
@@ -163,6 +179,8 @@ const KeepAliveImpl = {
         keys.delete(key);
         keys.add(key);
       } else {
+        // Cache the vnode for future reactivation
+        cache.set(key, vnode);
         keys.add(key);
         if (max && keys.size > parseInt(max as string, 10)) {
           pruneCacheEntry(keys.values().next().value);

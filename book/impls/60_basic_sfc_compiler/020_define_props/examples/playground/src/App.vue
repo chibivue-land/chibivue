@@ -1,24 +1,21 @@
-<script>
+<script setup>
 import { ref } from 'chibivue'
+import ChildComponent from './Child.vue'
 
-export default {
-  setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
-  },
-}
+const message = ref('Hello from Parent!')
+const count = ref(42)
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
-
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
-
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+  <div class="container">
+    <h2>defineProps Example</h2>
+    <ChildComponent :message="message" :count="count" />
+    <button @click="count++">Increment from parent</button>
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+</style>

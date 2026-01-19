@@ -1,51 +1,65 @@
 <script>
-import { reactive } from 'chibivue'
+import { reactive, ref } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    // Object
+    const obj = reactive({ count: 0, name: 'chibivue' })
 
-    const changeMessage = () => {
-      state.message += '!'
-    }
+    // Array
+    const arr = reactive([1, 2, 3])
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
-    }
+    // Map
+    const map = reactive(new Map([['key1', 'value1']]))
 
-    return { state, changeMessage, handleInput }
+    // Set
+    const set = reactive(new Set([1, 2, 3]))
+
+    const updateObj = () => obj.count++
+    const pushArr = () => arr.push(arr.length + 1)
+    const setMap = () => map.set(`key${map.size + 1}`, `value${map.size + 1}`)
+    const addSet = () => set.add(set.size + 1)
+
+    return { obj, arr, map, set, updateObj, pushArr, setMap, addSet }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>Reactive Proxy Target Types Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <h3>Object</h3>
+      <p>{{ obj }}</p>
+      <button @click="updateObj">Increment count</button>
+    </div>
 
-    <br />
+    <div>
+      <h3>Array</h3>
+      <p>{{ arr }}</p>
+      <button @click="pushArr">Push</button>
+    </div>
 
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
+    <div>
+      <h3>Map</h3>
+      <p>Size: {{ map.size }}</p>
+      <button @click="setMap">Set new entry</button>
+    </div>
 
-    <p>input value: {{ state.input }}</p>
+    <div>
+      <h3>Set</h3>
+      <p>Size: {{ set.size }}</p>
+      <button @click="addSet">Add new value</button>
+    </div>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

@@ -1,51 +1,60 @@
 <script>
-import { reactive } from 'chibivue'
+import { ref, onMounted } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    // Template ref
+    const inputRef = ref(null)
+    const divRef = ref(null)
 
-    const changeMessage = () => {
-      state.message += '!'
+    const focusInput = () => {
+      inputRef.value?.focus()
     }
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
+    const logDivContent = () => {
+      if (divRef.value) {
+        console.log('Div content:', divRef.value.textContent)
+        alert('Check console for div content!')
+      }
     }
 
-    return { state, changeMessage, handleInput }
+    onMounted(() => {
+      console.log('Input element:', inputRef.value)
+      console.log('Div element:', divRef.value)
+    })
+
+    return { inputRef, divRef, focusInput, logDivContent }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>Template Refs Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <input ref="inputRef" placeholder="Focus me with the button" />
+      <button @click="focusInput">Focus Input</button>
+    </div>
 
-    <br />
-
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
-
-    <p>input value: {{ state.input }}</p>
+    <div ref="divRef" class="content-box">
+      This is a div with a template ref. Click the button to log its content.
+    </div>
+    <button @click="logDivContent">Log Div Content</button>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+.content-box {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+button {
+  margin-right: 8px;
 }
 </style>

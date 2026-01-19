@@ -1,5 +1,59 @@
 # 本書の進め方と環境構築
 
+## Web Playground について
+
+本書では，各チャプターの実装コードをブラウザ上で直接試せる **Web Playground** を用意しています．
+環境構築なしで，すぐにコードを編集・実行できるので，まずはこちらで chibivue の動作を体験してみてください！
+
+### Playground の起動方法
+
+```sh
+$ git clone https://github.com/chibivue-land/chibivue
+$ cd chibivue
+$ pnpm install
+$ pnpm play:generate
+$ pnpm play
+```
+
+ブラウザで表示された URL (例: `http://localhost:5173/`) にアクセスすると Playground が起動します．
+
+### Playground の構成
+
+![web_playground_initial](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_initial.png)
+
+Playground は以下の 4 つのエリアで構成されています．
+
+| エリア | 説明 |
+|--------|------|
+| **Explorer (左)** | プロジェクトのファイルツリーを表示します．ファイルをクリックするとエディタで開きます |
+| **Editor (中央)** | Monaco Editor でコードを編集できます |
+| **Preview (右)** | WebContainer 上で動作する開発サーバーのプレビューを表示します |
+| **Terminal / Console (下)** | ターミナル出力と console.log の内容を確認できます |
+
+### 使い方
+
+1. **チャプターを選択する**
+   画面上部のドロップダウンから学習したいチャプターを選択します．
+   検索ボックスでチャプター名を絞り込むこともできます．
+
+2. **Run をクリックする**
+   「Run」ボタンをクリックすると，WebContainer が起動し，依存関係のインストールと開発サーバーの起動が行われます．
+   初回は少し時間がかかりますが，しばらく待つと Preview エリアに結果が表示されます．
+
+3. **コードを編集する**
+   エディタでコードを編集し，「Apply」ボタンをクリックすると変更が適用されます．
+   HMR (Hot Module Replacement) により，変更がリアルタイムで反映されます．
+
+4. **コンソールを確認する**
+   「Console」タブをクリックすると，console.log などの出力を確認できます．
+
+![web_playground_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_console.png)
+
+::: tip
+Web Playground は [WebContainer](https://webcontainers.io/) を使用しています．
+一部のブラウザや環境では動作しない場合があります．その場合は，以下のローカル環境構築を参考にしてください．
+:::
+
 ## 本書の進め方
 
 これから早速 Vue.js の実装を小さく行なっていきます．  

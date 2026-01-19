@@ -10,10 +10,11 @@
     "generate": "node --experimental-strip-types scripts/generate-chapters.ts"
   },
   "dependencies": {
-    "vue": "^3.5.16",
+    "@mdi/font": "^7.4.47",
+    "@monaco-editor/loader": "^1.5.0",
     "@webcontainer/api": "^1.5.1",
     "monaco-editor": "^0.52.2",
-    "@monaco-editor/loader": "^1.5.0"
+    "vue": "^3.5.16"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",

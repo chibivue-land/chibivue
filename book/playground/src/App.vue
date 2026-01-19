@@ -8,7 +8,7 @@ import type { Chapter } from "./types";
 
 // State
 const selectedChapterId = ref("");
-const selectedFile = ref<string | null>(null);
+const selectedFile = ref<string | undefined>(undefined);
 const fileContents = ref<Map<string, string>>(new Map());
 const originalContents = ref<Map<string, string>>(new Map());
 const modifiedFiles = ref<Set<string>>(new Set());
@@ -16,7 +16,6 @@ const terminalOutput = ref<string[]>([]);
 const consoleOutput = ref<{ type: string; message: string; timestamp: Date }[]>([]);
 const activeTab = ref<'terminal' | 'console'>('terminal');
 const previewUrl = ref("");
-const previewIframe = ref<HTMLIFrameElement | null>(null);
 const isLoading = ref(false);
 const isBooting = ref(false);
 const isInitializing = ref(true);
@@ -40,44 +39,101 @@ let webcontainer: WebContainer | null = null;
 let editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 let monaco: typeof Monaco | null = null;
 
-// Clean terminal output - strip TUI control sequences
+// Clean terminal output - strip TUI control sequences (keep color codes)
 function cleanTerminalOutput(text: string): string {
   return text
     // Remove cursor movement and screen clearing
     .replace(/\x1b\[\d*[ABCDEFGJKST]/g, '')
     .replace(/\x1b\[\d*;\d*[Hf]/g, '')
     .replace(/\x1b\[\??\d*[hl]/g, '')
-    .replace(/\x1b\[[\d;]*m/g, '') // Remove all color codes for clean output
     .replace(/\x1b\]\d*;[^\x07]*\x07/g, '') // OSC sequences
-    .replace(/\x1b\[[\d;]*[A-Za-z]/g, '') // Any remaining CSI
     .replace(/\x1b[78]/g, '') // Save/restore cursor
     .replace(/\r/g, '') // Carriage returns
     .replace(/\x07/g, '') // Bell
     .trim();
 }
 
+// ANSI color code to CSS class mapping
+const ANSI_COLORS: Record<number, string> = {
+  30: '#6e7681', // black (dim)
+  31: '#f85149', // red
+  32: '#3fb950', // green
+  33: '#d29922', // yellow
+  34: '#58a6ff', // blue
+  35: '#bc8cff', // magenta
+  36: '#39c5cf', // cyan
+  37: '#c9d1d9', // white
+  90: '#6e7681', // bright black (gray)
+  91: '#ff7b72', // bright red
+  92: '#56d364', // bright green
+  93: '#e3b341', // bright yellow
+  94: '#79c0ff', // bright blue
+  95: '#d2a8ff', // bright magenta
+  96: '#56d4dd', // bright cyan
+  97: '#ffffff', // bright white
+};
+
 // ANSI to HTML conversion with full color support
 function ansiToHtml(text: string): string {
-  // First clean up TUI sequences
   const cleaned = cleanTerminalOutput(text);
   if (!cleaned) return '';
 
-  return cleaned;
+  let result = '';
+  let currentColor: string | null = null;
+  let i = 0;
+
+  while (i < cleaned.length) {
+    // Check for ANSI escape sequence
+    if (cleaned[i] === '\x1b' && cleaned[i + 1] === '[') {
+      const endIndex = cleaned.slice(i).search(/m/);
+      if (endIndex !== -1) {
+        const codes = cleaned.slice(i + 2, i + endIndex).split(';').map(Number);
+
+        for (const code of codes) {
+          if (code === 0) {
+            // Reset
+            if (currentColor) {
+              result += '</span>';
+              currentColor = null;
+            }
+          } else if (code === 1) {
+            // Bold - ignore for now
+          } else if (ANSI_COLORS[code]) {
+            if (currentColor) {
+              result += '</span>';
+            }
+            currentColor = ANSI_COLORS[code];
+            result += `<span style="color:${currentColor}">`;
+          }
+        }
+
+        i += endIndex + 1;
+        continue;
+      }
+    }
+
+    // Escape HTML special characters
+    if (cleaned[i] === '<') {
+      result += '&lt;';
+    } else if (cleaned[i] === '>') {
+      result += '&gt;';
+    } else if (cleaned[i] === '&') {
+      result += '&amp;';
+    } else {
+      result += cleaned[i];
+    }
+    i++;
+  }
+
+  if (currentColor) {
+    result += '</span>';
+  }
+
+  return result;
 }
 
 // Computed
 const selectedChapter = computed(() => chapters.find((c) => c.id === selectedChapterId.value));
-
-const groupedChapters = computed(() => {
-  const groups: Record<string, Chapter[]> = {};
-  for (const chapter of chapters) {
-    if (!groups[chapter.section]) {
-      groups[chapter.section] = [];
-    }
-    groups[chapter.section].push(chapter);
-  }
-  return groups;
-});
 
 // Filtered chapters based on search query
 const filteredChapters = computed(() => {
@@ -138,46 +194,12 @@ const fileTree = computed(() => {
   return tree;
 });
 
-const storageKey = computed(() => `chibivue-playground-${selectedChapterId.value}`);
-
 // Methods
-function loadFromStorage() {
-  if (!selectedChapterId.value) return;
-  try {
-    const saved = localStorage.getItem(storageKey.value);
-    if (saved) {
-      const data = JSON.parse(saved);
-      fileContents.value = new Map(Object.entries(data.files || {}));
-      modifiedFiles.value = new Set(data.modified || []);
-    }
-  } catch (e) {
-    console.error("Failed to load from storage:", e);
-  }
-}
-
-function saveToStorage() {
-  if (!selectedChapterId.value) return;
-  try {
-    const data = {
-      files: Object.fromEntries(fileContents.value),
-      modified: Array.from(modifiedFiles.value),
-    };
-    localStorage.setItem(storageKey.value, JSON.stringify(data));
-  } catch (e) {
-    console.error("Failed to save to storage:", e);
-  }
-}
-
-function clearStorage() {
-  if (!selectedChapterId.value) return;
-  localStorage.removeItem(storageKey.value);
-}
-
 async function selectChapter(chapterId: string) {
   if (selectedChapterId.value === chapterId) return;
 
   selectedChapterId.value = chapterId;
-  selectedFile.value = null;
+  selectedFile.value = undefined;
   fileContents.value.clear();
   originalContents.value.clear();
   modifiedFiles.value.clear();
@@ -193,8 +215,6 @@ async function selectChapter(chapterId: string) {
     fileContents.value.set(file.path, file.content);
   }
 
-  loadFromStorage();
-
   for (const file of chapter.files) {
     const firstDir = file.path.split("/")[0];
     if (firstDir !== file.path) {
@@ -202,9 +222,14 @@ async function selectChapter(chapterId: string) {
     }
   }
 
-  const firstFile = chapter.files.find((f) => !f.path.includes("/") || f.path.split("/").length <= 2);
-  if (firstFile) {
-    selectFile(firstFile.path);
+  // Prefer main.ts or src/main.ts as the default file
+  const defaultFile = chapter.files.find((f) => f.path === "src/main.ts")
+    || chapter.files.find((f) => f.path === "main.ts")
+    || chapter.files.find((f) => f.path.endsWith("/main.ts"))
+    || chapter.files.find((f) => f.path.endsWith(".ts") && !f.path.includes("/"))
+    || chapter.files.find((f) => !f.path.includes("/") || f.path.split("/").length <= 2);
+  if (defaultFile) {
+    selectFile(defaultFile.path);
   }
 }
 
@@ -255,8 +280,6 @@ function onEditorChange(value: string) {
   } else {
     modifiedFiles.value.delete(selectedFile.value);
   }
-
-  saveToStorage();
 }
 
 function resetFile() {
@@ -267,7 +290,6 @@ function resetFile() {
     fileContents.value.set(selectedFile.value, original);
     modifiedFiles.value.delete(selectedFile.value);
     updateEditor();
-    saveToStorage();
   }
 }
 
@@ -278,7 +300,6 @@ function resetAllFiles() {
     fileContents.value.set(file.path, file.content);
   }
   modifiedFiles.value.clear();
-  clearStorage();
   updateEditor();
 }
 
@@ -464,12 +485,12 @@ function handleClickOutside(e: MouseEvent) {
   }
 }
 
-// FileTreeItem component
+// FileTreeItem component with MDI icons
 const FileTreeItem = defineComponent({
   name: "FileTreeItem",
   props: {
     item: { type: Object, required: true },
-    selectedFile: { type: String, default: null },
+    selectedFile: { type: String, default: undefined },
     modifiedFiles: { type: Set, required: true },
     expandedDirs: { type: Set, required: true },
     depth: { type: Number, default: 0 },
@@ -482,55 +503,80 @@ const FileTreeItem = defineComponent({
       const isModified = (props.modifiedFiles as Set<string>).has(item.path);
       const isExpanded = (props.expandedDirs as Set<string>).has(item.path);
 
-      const getFileIcon = (name: string) => {
-        if (name.endsWith('.vue')) return { icon: 'V', class: 'icon-vue' };
-        if (name.endsWith('.ts')) return { icon: 'T', class: 'icon-ts' };
-        if (name.endsWith('.js')) return { icon: 'J', class: 'icon-js' };
-        if (name.endsWith('.json')) return { icon: '{', class: 'icon-json' };
-        if (name.endsWith('.css')) return { icon: '#', class: 'icon-css' };
-        if (name.endsWith('.html')) return { icon: '<', class: 'icon-html' };
-        return { icon: 'f', class: 'icon-default' };
+      // File type icons using MDI
+      const getFileIcon = (name: string): { icon: string; color: string } => {
+        if (name.endsWith('.vue')) return { icon: 'mdi-vuejs', color: '#42b883' };
+        if (name.endsWith('.ts') || name.endsWith('.tsx')) return { icon: 'mdi-language-typescript', color: '#3178c6' };
+        if (name.endsWith('.js') || name.endsWith('.jsx')) return { icon: 'mdi-language-javascript', color: '#f7df1e' };
+        if (name.endsWith('.json')) return { icon: 'mdi-code-json', color: '#cbcb41' };
+        if (name.endsWith('.css')) return { icon: 'mdi-language-css3', color: '#264de4' };
+        if (name.endsWith('.html')) return { icon: 'mdi-language-html5', color: '#e44d26' };
+        if (name.endsWith('.md')) return { icon: 'mdi-language-markdown', color: '#519aba' };
+        if (name === 'package.json') return { icon: 'mdi-nodejs', color: '#8bc500' };
+        if (name === 'vite.config.ts') return { icon: 'mdi-flash', color: '#646cff' };
+        if (name === 'tsconfig.json') return { icon: 'mdi-cog', color: '#3178c6' };
+        return { icon: 'mdi-file-outline', color: '#6e7681' };
+      };
+
+      // Folder icon based on name
+      const getFolderIcon = (name: string): { icon: string; color: string } => {
+        if (name === 'src') return { icon: 'mdi-folder-star', color: '#42b883' };
+        if (name === 'packages') return { icon: 'mdi-package-variant', color: '#c678dd' };
+        if (name === 'node_modules') return { icon: 'mdi-folder-cog', color: '#6e7681' };
+        if (name === 'dist') return { icon: 'mdi-folder-zip', color: '#f7df1e' };
+        return { icon: 'mdi-folder', color: '#90a4ae' };
       };
 
       if (item.isDirectory) {
+        const folderInfo = getFolderIcon(item.name);
+        const openIcon = folderInfo.icon.replace('mdi-folder', 'mdi-folder-open').replace('-star', '-star-outline');
         return h("div", { class: "tree-directory" }, [
           h("div", {
-            class: "tree-item directory",
-            style: { paddingLeft: `${props.depth * 14 + 8}px` },
+            class: ["tree-item", "directory", { expanded: isExpanded }],
+            style: { paddingLeft: `${props.depth * 16 + 8}px` },
             onClick: () => emit("toggle", item.path),
           }, [
-            h("span", { class: ["chevron", { expanded: isExpanded }] }),
-            h("span", { class: "folder-icon" }),
+            h("span", { class: ["mdi", isExpanded ? "mdi-chevron-down" : "mdi-chevron-right", "tree-chevron"] }),
+            h("span", {
+              class: ["mdi", isExpanded ? openIcon : folderInfo.icon, "tree-icon"],
+              style: { color: folderInfo.color }
+            }),
             h("span", { class: "item-name" }, item.name),
           ]),
           isExpanded
-            ? (item.children || []).map((child: any) =>
-                h(FileTreeItem, {
-                  item: child,
-                  selectedFile: props.selectedFile,
-                  modifiedFiles: props.modifiedFiles,
-                  expandedDirs: props.expandedDirs,
-                  depth: props.depth + 1,
-                  onSelect: (path: string) => emit("select", path),
-                  onToggle: (path: string) => emit("toggle", path),
-                }),
+            ? h("div", { class: "tree-children" },
+                (item.children || []).map((child: any) =>
+                  h(FileTreeItem, {
+                    item: child,
+                    selectedFile: props.selectedFile,
+                    modifiedFiles: props.modifiedFiles,
+                    expandedDirs: props.expandedDirs,
+                    depth: props.depth + 1,
+                    onSelect: (path: string) => emit("select", path),
+                    onToggle: (path: string) => emit("toggle", path),
+                  }),
+                )
               )
             : null,
         ]);
       }
 
-      const fileIcon = getFileIcon(item.name);
+      const fileInfo = getFileIcon(item.name);
       return h(
         "div",
         {
           class: ["tree-item", "file", { selected: isSelected, modified: isModified }],
-          style: { paddingLeft: `${props.depth * 14 + 24}px` },
+          style: { paddingLeft: `${props.depth * 16 + 8}px` },
           onClick: () => emit("select", item.path),
         },
         [
-          h("span", { class: ["file-icon-badge", fileIcon.class] }, fileIcon.icon),
+          h("span", { class: "tree-chevron-spacer" }),
+          h("span", {
+            class: ["mdi", fileInfo.icon, "tree-icon"],
+            style: { color: fileInfo.color }
+          }),
           h("span", { class: "item-name" }, item.name),
-          isModified ? h("span", { class: "modified-badge" }) : null,
+          isModified ? h("span", { class: "modified-dot" }) : null,
         ],
       );
     };
@@ -540,6 +586,30 @@ const FileTreeItem = defineComponent({
 // Initialize editor after DOM is ready
 async function initEditor() {
   if (!monaco || !editorContainer.value || editor) return;
+
+  // Configure TypeScript compiler options to be lenient with imports
+  monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.ESNext,
+    module: monaco.languages.typescript.ModuleKind.ESNext,
+    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+    allowNonTsExtensions: true,
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    strict: false,
+    noEmit: true,
+    jsx: monaco.languages.typescript.JsxEmit.Preserve,
+  });
+
+  // Disable semantic validation to avoid import errors for unknown modules
+  monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+    noSemanticValidation: true,
+    noSyntaxValidation: false,
+  });
+
+  monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+    noSemanticValidation: true,
+    noSyntaxValidation: false,
+  });
 
   editor = monaco.editor.create(editorContainer.value, {
     value: "",
@@ -657,11 +727,11 @@ watch(consoleOutput, async () => {
         <!-- Custom Chapter Selector -->
         <div ref="selectorRef" class="chapter-selector-custom">
           <button class="selector-trigger" @click="openSelector">
-            <span class="selector-icon">📚</span>
+            <span class="mdi mdi-book-multiple selector-icon"></span>
             <span class="selector-text">
               {{ selectedChapter ? selectedChapter.name : 'Select a chapter...' }}
             </span>
-            <span class="selector-arrow" :class="{ open: isSelectorOpen }">▼</span>
+            <span class="mdi selector-arrow" :class="isSelectorOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'"></span>
           </button>
 
           <!-- Dropdown -->
@@ -669,7 +739,7 @@ watch(consoleOutput, async () => {
             <div v-if="isSelectorOpen" class="selector-dropdown" @keydown="handleSelectorKeydown">
               <div class="selector-header">
                 <div class="search-wrapper">
-                  <span class="search-icon">🔍</span>
+                  <span class="mdi mdi-magnify search-icon"></span>
                   <input
                     ref="searchInputRef"
                     v-model="searchQuery"
@@ -678,7 +748,7 @@ watch(consoleOutput, async () => {
                     placeholder="Search chapters..."
                     @keydown="handleSelectorKeydown"
                   />
-                  <span v-if="searchQuery" class="search-clear" @click="searchQuery = ''">✕</span>
+                  <span v-if="searchQuery" class="mdi mdi-close search-clear" @click="searchQuery = ''"></span>
                 </div>
               </div>
 
@@ -691,7 +761,7 @@ watch(consoleOutput, async () => {
                   >
                     <div class="group-header">{{ section }}</div>
                     <div
-                      v-for="(chapter, idx) in chapterList"
+                      v-for="chapter in chapterList"
                       :key="chapter.id"
                       class="selector-item"
                       :class="{
@@ -701,7 +771,7 @@ watch(consoleOutput, async () => {
                       @click="handleSelectorSelect(chapter.id)"
                       @mouseenter="highlightedIndex = flatFilteredChapters.indexOf(chapter)"
                     >
-                      <span class="item-check" v-if="chapter.id === selectedChapterId">✓</span>
+                      <span class="mdi mdi-check item-check" v-if="chapter.id === selectedChapterId"></span>
                       <span class="item-name">{{ chapter.name }}</span>
                     </div>
                   </div>
@@ -725,11 +795,11 @@ watch(consoleOutput, async () => {
 
         <div v-if="selectedChapter" class="chapter-links">
           <a :href="selectedChapter.bookUrl" target="_blank" class="link-btn link-book">
-            <span class="link-icon">📖</span>
+            <img src="/kawaiko.png" alt="" class="link-icon-img" />
             Book
           </a>
           <a v-if="selectedChapter.vueDocUrl" :href="selectedChapter.vueDocUrl" target="_blank" class="link-btn link-vue">
-            <span class="link-icon">📗</span>
+            <span class="mdi mdi-vuejs link-icon"></span>
             Vue Docs
           </a>
         </div>
@@ -738,15 +808,15 @@ watch(consoleOutput, async () => {
       <div class="header-actions">
         <button @click="bootWebContainer" :disabled="!selectedChapterId || isBooting" class="btn btn-run">
           <span v-if="isBooting" class="btn-spinner"></span>
-          <span v-else class="btn-icon">▶</span>
+          <span v-else class="mdi mdi-play btn-icon"></span>
           {{ isBooting ? "Starting..." : previewUrl ? "Restart" : "Run" }}
         </button>
         <button @click="applyChanges" :disabled="!previewUrl || modifiedFiles.size === 0 || isLoading" class="btn btn-apply">
-          <span class="btn-icon">⟳</span>
+          <span class="mdi mdi-refresh btn-icon"></span>
           Apply
         </button>
         <button @click="resetAllFiles" :disabled="!selectedChapterId || modifiedFiles.size === 0" class="btn btn-reset">
-          <span class="btn-icon">↺</span>
+          <span class="mdi mdi-restore btn-icon"></span>
           Reset
         </button>
       </div>
@@ -1094,7 +1164,8 @@ watch(consoleOutput, async () => {
 }
 
 .selector-icon {
-  font-size: 16px;
+  font-size: 18px;
+  color: var(--c-mint-400);
 }
 
 .selector-text {
@@ -1106,13 +1177,9 @@ watch(consoleOutput, async () => {
 }
 
 .selector-arrow {
-  font-size: 10px;
+  font-size: 18px;
   color: var(--text-muted);
   transition: transform 0.2s;
-}
-
-.selector-arrow.open {
-  transform: rotate(180deg);
 }
 
 /* Selector Dropdown - uses Teleport so needs :global or in global CSS */
@@ -1161,7 +1228,13 @@ watch(consoleOutput, async () => {
 }
 
 .link-icon {
-  font-size: 13px;
+  font-size: 16px;
+}
+
+.link-icon-img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* Actions */
@@ -1205,7 +1278,7 @@ watch(consoleOutput, async () => {
 }
 
 .btn-icon {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .btn-run {
@@ -1402,39 +1475,48 @@ watch(consoleOutput, async () => {
 }
 
 :deep(.tree-directory) {
-  margin-bottom: 1px;
+  /* Directory container */
+}
+
+:deep(.tree-children) {
+  /* Children container */
 }
 
 :deep(.tree-item) {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
+  gap: 4px;
+  padding: 3px 8px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.12s ease;
   user-select: none;
-  border-radius: 6px;
-  margin: 1px 0;
+  border-radius: 4px;
+  margin: 1px 4px;
   position: relative;
 }
 
 :deep(.tree-item:hover) {
-  background: rgba(44, 201, 168, 0.06);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text-primary);
 }
 
 :deep(.tree-item.directory) {
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 :deep(.tree-item.directory:hover) {
-  background: rgba(244, 211, 94, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+:deep(.tree-item.file) {
+  font-weight: 400;
 }
 
 :deep(.tree-item.selected) {
-  background: linear-gradient(90deg, var(--accent-soft) 0%, rgba(44, 201, 168, 0.05) 100%);
+  background: rgba(44, 201, 168, 0.12);
   color: var(--text-primary);
 }
 
@@ -1442,108 +1524,44 @@ watch(consoleOutput, async () => {
   content: '';
   position: absolute;
   left: 0;
-  top: 4px;
-  bottom: 4px;
-  width: 3px;
-  background: var(--accent);
-  border-radius: 0 2px 2px 0;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  background: var(--c-mint-400);
+  border-radius: 0 1px 1px 0;
 }
 
 :deep(.tree-item.modified .item-name) {
-  color: var(--warning);
-}
-
-:deep(.chevron) {
-  width: 14px;
-  height: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  color: var(--text-muted);
-  transition: transform 0.2s ease;
-  opacity: 0.7;
-}
-
-:deep(.chevron::before) {
-  content: '▶';
-}
-
-:deep(.chevron.expanded) {
-  transform: rotate(90deg);
-  opacity: 1;
   color: var(--c-duck-yellow);
 }
 
-:deep(.folder-icon) {
+/* MDI Tree Icons */
+:deep(.tree-chevron) {
+  font-size: 18px;
   width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  transition: transform 0.2s;
-}
-
-:deep(.folder-icon::before) {
-  content: '📁';
-}
-
-:deep(.tree-item.directory:hover .folder-icon) {
-  transform: scale(1.1);
-}
-
-:deep(.file-icon-badge) {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  transition: transform 0.15s;
-}
-
-:deep(.tree-item:hover .file-icon-badge) {
-  transform: scale(1.05);
-}
-
-:deep(.icon-vue) {
-  background: linear-gradient(135deg, #42b883 0%, #35a070 100%);
-  color: white;
-}
-
-:deep(.icon-ts) {
-  background: linear-gradient(135deg, #3178c6 0%, #235a9e 100%);
-  color: white;
-}
-
-:deep(.icon-js) {
-  background: linear-gradient(135deg, #f7df1e 0%, #e5c900 100%);
-  color: #323330;
-}
-
-:deep(.icon-json) {
-  background: linear-gradient(135deg, #6d6d6d 0%, #4a4a4a 100%);
-  color: #f5d67b;
-}
-
-:deep(.icon-css) {
-  background: linear-gradient(135deg, #264de4 0%, #1a3cb8 100%);
-  color: white;
-}
-
-:deep(.icon-html) {
-  background: linear-gradient(135deg, #e44d26 0%, #c73d1a 100%);
-  color: white;
-}
-
-:deep(.icon-default) {
-  background: var(--bg-elevated);
   color: var(--text-muted);
+  transition: color 0.15s ease;
+  flex-shrink: 0;
+}
+
+:deep(.tree-item.directory:hover .tree-chevron) {
+  color: var(--text-secondary);
+}
+
+:deep(.tree-chevron-spacer) {
+  width: 18px;
+  flex-shrink: 0;
+}
+
+:deep(.tree-icon) {
+  font-size: 18px;
+  width: 18px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+:deep(.tree-item:hover .tree-icon) {
+  transform: scale(1.1);
 }
 
 :deep(.item-name) {
@@ -1551,13 +1569,17 @@ watch(consoleOutput, async () => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.4;
+  margin-left: 4px;
 }
 
-:deep(.modified-badge) {
+:deep(.modified-dot) {
   width: 6px;
   height: 6px;
-  background: var(--warning);
+  background: var(--c-duck-yellow);
   border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 4px var(--c-duck-yellow);
 }
 
 /* Editor Panel */

@@ -1,51 +1,51 @@
 <script>
-import { reactive } from 'chibivue'
+import { ref, watchEffect } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const count = ref(0)
+    const name = ref('chibivue')
+    const logs = ref([])
 
-    const changeMessage = () => {
-      state.message += '!'
-    }
+    // watchEffect automatically tracks dependencies
+    watchEffect(() => {
+      logs.value.push(`watchEffect: count=${count.value}, name=${name.value}`)
+    })
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
-    }
+    const increment = () => count.value++
+    const updateName = () => (name.value = name.value + '!')
 
-    return { state, changeMessage, handleInput }
+    return { count, name, logs, increment, updateName }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>watchEffect Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <p>Count: {{ count }}</p>
+      <button @click="increment">Increment</button>
+    </div>
 
-    <br />
+    <div>
+      <p>Name: {{ name }}</p>
+      <button @click="updateName">Add !</button>
+    </div>
 
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
-
-    <p>input value: {{ state.input }}</p>
+    <h3>Logs (watchEffect auto-tracks both):</h3>
+    <ul>
+      <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+    </ul>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

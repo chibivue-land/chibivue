@@ -1,24 +1,26 @@
-<script>
-import { ref } from 'chibivue'
+<script setup>
+import { ref, onMounted } from 'chibivue'
 
-export default {
-  setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
-  },
-}
+const count = ref(0)
+const isClient = ref(false)
+
+onMounted(() => {
+  isClient.value = true
+})
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
-
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
-
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+  <div class="container">
+    <h2>SSR Example</h2>
+    <p>Count: {{ count }}</p>
+    <button @click="count++">Increment</button>
+    <p v-if="isClient">This content is only visible on the client (hydrated)</p>
+    <p v-else>This content is from SSR</p>
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+</style>

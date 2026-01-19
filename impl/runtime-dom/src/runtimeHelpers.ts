@@ -1,9 +1,3 @@
-import { registerRuntimeHelpers } from "@chibivue/compiler-core";
-
-export const V_ON_WITH_MODIFIERS: unique symbol = Symbol();
-export const V_ON_WITH_KEYS: unique symbol = Symbol();
-
-registerRuntimeHelpers({
-  [V_ON_WITH_MODIFIERS]: `withModifiers`,
-  [V_ON_WITH_KEYS]: `withKeys`,
-});
+// Re-export from compiler-dom for backward compatibility
+// The actual symbols are now defined in compiler-dom to avoid circular dependencies
+export { V_ON_WITH_MODIFIERS, V_ON_WITH_KEYS } from "@chibivue/compiler-dom";
