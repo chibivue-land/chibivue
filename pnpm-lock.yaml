@@ -146,12 +146,6 @@ importers:
         specifier: ^6.0.0
         version: 6.2.3(@types/node@24.10.9)(lightningcss@1.30.2)(tsx@4.20.3)
 
-  examples/playground:
-    devDependencies:
-      vite:
-        specifier: ^6.0.0
-        version: 6.2.3(@types/node@24.10.9)(lightningcss@1.30.2)(tsx@4.20.3)
-
   examples/vapor:
     devDependencies:
       vite:
