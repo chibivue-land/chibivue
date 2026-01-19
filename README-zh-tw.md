@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./book/online-book/src/public/logo.png" width="200">
+  <img src="./book/online-book/src/public/og.png" width="480">
 </p>
 
 <h1 align="center">chibivue</h1>
@@ -65,23 +65,6 @@ pnpm dev
 pnpm setup      # 生成 playground
 pnpm impl:dev   # 啟動開發伺服器
 ```
-
-## 實現狀態
-
-### 核心功能
-
-| 分類 | 功能 | 狀態 |
-|------|------|------|
-| 響應式 | ref, reactive, computed, watch, effectScope | ✅ |
-| 虛擬 DOM | h 函數, 補丁渲染, 調度器 | ✅ |
-| 組件 | Options API, Composition API, 生命週期鉤子 | ✅ |
-| 組件 | props, emit, provide/inject, 插槽 | ✅ |
-| 模板 | v-bind, v-on, v-if, v-for, v-model | ✅ |
-| SFC | template, script, style, script setup | ✅ |
-| SFC | defineProps, defineEmits, scoped CSS | ✅ |
-| 擴展 | Router, Store | ✅ |
-| Vapor Mode | 基礎實現 | ✅ |
-| SSR | 伺服器端渲染 | 🚧 |
 
 ## 附加章節
 

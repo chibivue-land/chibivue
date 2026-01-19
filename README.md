@@ -66,23 +66,6 @@ pnpm setup      # Generate playground
 pnpm impl:dev   # Start dev server
 ```
 
-## Implementation Status
-
-### Core Features
-
-| Category | Feature | Status |
-|----------|---------|--------|
-| Reactivity | ref, reactive, computed, watch, effectScope | ✅ |
-| Virtual DOM | h function, patch rendering, scheduler | ✅ |
-| Component | Options API, Composition API, lifecycle hooks | ✅ |
-| Component | props, emit, provide/inject, slots | ✅ |
-| Template | v-bind, v-on, v-if, v-for, v-model | ✅ |
-| SFC | template, script, style, script setup | ✅ |
-| SFC | defineProps, defineEmits, scoped CSS | ✅ |
-| Extensions | Router, Store | ✅ |
-| Vapor Mode | Basic implementation | ✅ |
-| SSR | Server-side rendering | 🚧 |
-
 ## Bonus Track
 
 **Hyper Ultimate Super Extreme Minimal Vue**
