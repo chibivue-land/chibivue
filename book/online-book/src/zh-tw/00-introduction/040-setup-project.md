@@ -1,5 +1,59 @@
 # 如何進行本書學習和環境設置
 
+## Web Playground
+
+本書提供了一個 **Web Playground**，您可以直接在瀏覽器中試用每個章節的實現代碼。
+無需任何環境設置，您可以立即編輯和運行代碼，所以請先在這裡體驗 chibivue 的實際運行！
+
+### 如何啟動 Playground
+
+```sh
+$ git clone https://github.com/chibivue-land/chibivue
+$ cd chibivue
+$ pnpm install
+$ pnpm play:generate
+$ pnpm play
+```
+
+在瀏覽器中訪問顯示的 URL（例如：`http://localhost:5173/`）即可啟動 Playground。
+
+### Playground 佈局
+
+![web_playground_initial](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_initial.png)
+
+Playground 由四個區域組成：
+
+| 區域 | 說明 |
+|------|------|
+| **Explorer（左側）** | 顯示項目文件樹。點擊文件可在編輯器中打開 |
+| **Editor（中央）** | 使用 Monaco Editor 編輯代碼 |
+| **Preview（右側）** | 顯示在 WebContainer 上運行的開發伺服器預覽 |
+| **Terminal / Console（底部）** | 查看終端輸出和 console.log 內容 |
+
+### 使用方法
+
+1. **選擇章節**
+   從螢幕頂部的下拉選單中選擇您想學習的章節。
+   您也可以使用搜尋框過濾章節名稱。
+
+2. **點擊 Run**
+   點擊「Run」按鈕啟動 WebContainer，安裝依賴並啟動開發伺服器。
+   首次運行需要一些時間，稍等片刻後，結果將顯示在 Preview 區域。
+
+3. **編輯代碼**
+   在編輯器中編輯代碼，然後點擊「Apply」按鈕應用更改。
+   通過 HMR（熱模組替換），更改會即時反映。
+
+4. **查看控制台**
+   點擊「Console」標籤頁查看 console.log 等輸出內容。
+
+![web_playground_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_console.png)
+
+::: tip
+Web Playground 使用 [WebContainer](https://webcontainers.io/)。
+在某些瀏覽器或環境中可能無法運行。在這種情況下，請參考下面的本地環境設置。
+:::
+
 ## 如何進行本書學習
 
 我們將立即開始 Vue.js 的簡單實現．以下是一些需要記住的要點，注意事項和其他重要資訊：

@@ -1,51 +1,41 @@
 <script>
-import { reactive } from 'chibivue'
+import { ref } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const count = ref(0)
+    const message = ref('Hello, chibivue!')
 
-    const changeMessage = () => {
-      state.message += '!'
+    const increment = () => {
+      count.value++
     }
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
+    const updateMessage = () => {
+      message.value = `Count is now ${count.value}`
     }
 
-    return { state, changeMessage, handleInput }
+    return { count, message, increment, updateMessage }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>ref Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <p>Count: {{ count }}</p>
+    <p>Message: {{ message }}</p>
 
-    <br />
-
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
-
-    <p>input value: {{ state.input }}</p>
+    <button @click="increment">Increment</button>
+    <button @click="updateMessage">Update Message</button>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

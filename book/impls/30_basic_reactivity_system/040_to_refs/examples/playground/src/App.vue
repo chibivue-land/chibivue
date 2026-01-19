@@ -1,51 +1,54 @@
 <script>
-import { reactive } from 'chibivue'
+import { reactive, toRefs } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const state = reactive({
+      name: 'chibivue',
+      count: 0,
+      version: '1.0.0',
+    })
 
-    const changeMessage = () => {
-      state.message += '!'
+    // Convert all properties to refs
+    const { name, count, version } = toRefs(state)
+
+    const updateName = () => {
+      name.value = 'updated chibivue'
     }
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
+    const incrementCount = () => {
+      count.value++
     }
 
-    return { state, changeMessage, handleInput }
+    return { state, name, count, version, updateName, incrementCount }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>toRefs Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <h3>From reactive object</h3>
+    <p>state.name: {{ state.name }}</p>
+    <p>state.count: {{ state.count }}</p>
+    <p>state.version: {{ state.version }}</p>
 
-    <br />
+    <h3>Via destructured toRefs</h3>
+    <p>name: {{ name }}</p>
+    <p>count: {{ count }}</p>
+    <p>version: {{ version }}</p>
 
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
-
-    <p>input value: {{ state.input }}</p>
+    <button @click="updateName">Update name</button>
+    <button @click="incrementCount">Increment count</button>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

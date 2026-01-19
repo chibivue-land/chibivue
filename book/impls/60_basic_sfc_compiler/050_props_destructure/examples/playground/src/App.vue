@@ -1,24 +1,25 @@
-<script>
+<script setup>
 import { ref } from 'chibivue'
+import ChildComponent from './Child.vue'
 
-export default {
-  setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
-  },
-}
+const title = ref('Props Destructure')
+const count = ref(0)
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
-
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
-
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+  <div class="container">
+    <h2>Props Destructure Example</h2>
+    <ChildComponent :title="title" :count="count" />
+    <button @click="count++">Increment</button>
+    <button @click="title = title + '!'">Update title</button>
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+button {
+  margin-right: 8px;
+}
+</style>

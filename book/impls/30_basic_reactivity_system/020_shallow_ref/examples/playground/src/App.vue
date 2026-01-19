@@ -1,51 +1,54 @@
 <script>
-import { reactive } from 'chibivue'
+import { ref, shallowRef } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const deepRef = ref({ nested: { count: 0 } })
+    const shallow = shallowRef({ nested: { count: 0 } })
 
-    const changeMessage = () => {
-      state.message += '!'
+    const updateDeep = () => {
+      deepRef.value.nested.count++
     }
 
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
+    const updateShallow = () => {
+      // This won't trigger re-render
+      shallow.value.nested.count++
     }
 
-    return { state, changeMessage, handleInput }
+    const replaceShallow = () => {
+      // This will trigger re-render
+      shallow.value = { nested: { count: shallow.value.nested.count + 1 } }
+    }
+
+    return { deepRef, shallow, updateDeep, updateShallow, replaceShallow }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>shallowRef Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <h3>Deep ref</h3>
+      <p>Count: {{ deepRef.nested.count }}</p>
+      <button @click="updateDeep">Update nested (triggers)</button>
+    </div>
 
-    <br />
-
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
-
-    <p>input value: {{ state.input }}</p>
+    <div>
+      <h3>Shallow ref</h3>
+      <p>Count: {{ shallow.nested.count }}</p>
+      <button @click="updateShallow">Update nested (no trigger)</button>
+      <button @click="replaceShallow">Replace value (triggers)</button>
+    </div>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

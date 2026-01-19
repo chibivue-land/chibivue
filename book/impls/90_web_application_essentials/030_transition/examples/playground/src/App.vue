@@ -1,24 +1,48 @@
 <script>
-import { ref } from 'chibivue'
+import { ref, h, Transition } from 'chibivue'
 
 export default {
+  components: { Transition },
   setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
+    const show = ref(true)
+    const toggle = () => {
+      show.value = !show.value
+    }
+    return { show, toggle }
   },
 }
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
+  <div class="container">
+    <h2>Transition Example</h2>
+    <button @click="toggle">Toggle</button>
 
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
-
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+    <Transition name="fade">
+      <div v-if="show" class="box">
+        This content will fade in/out
+      </div>
+    </Transition>
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+.box {
+  padding: 16px;
+  background-color: #42b883;
+  color: white;
+  margin-top: 16px;
+  border-radius: 4px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

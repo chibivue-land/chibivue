@@ -34,6 +34,153 @@ const SECTION_NAMES: Record<string, string> = {
   bonus: "Bonus",
 };
 
+// Display names for chapters (more descriptive than directory names)
+const CHAPTER_DISPLAY_NAMES: Record<string, string> = {
+  // 10_minimum_example
+  "10_minimum_example/010_create_app": "createApp",
+  "10_minimum_example/015_package_architecture": "Package Architecture",
+  "10_minimum_example/020_simple_h_function": "h Function",
+  "10_minimum_example/030_reactive_system": "Reactive System",
+  "10_minimum_example/040_vdom_system": "Virtual DOM",
+  "10_minimum_example/050_component_system": "Component",
+  "10_minimum_example/050_component_system2": "Component Props",
+  "10_minimum_example/050_component_system3": "Component Emits",
+  "10_minimum_example/060_template_compiler": "Template Compiler",
+  "10_minimum_example/060_template_compiler2": "Template Compiler (Impl)",
+  "10_minimum_example/060_template_compiler3": "Complex Parser",
+  "10_minimum_example/070_sfc_compiler": "SFC Parser",
+  "10_minimum_example/070_sfc_compiler2": "SFC Template",
+  "10_minimum_example/070_sfc_compiler3": "SFC Script",
+  "10_minimum_example/070_sfc_compiler4": "SFC Style",
+  // 20_basic_virtual_dom
+  "20_basic_virtual_dom/010_patch_keyed_children": "Keyed Children Patch",
+  "20_basic_virtual_dom/020_bit_flags": "Bit Flags",
+  "20_basic_virtual_dom/040_scheduler": "Scheduler",
+  "20_basic_virtual_dom/050_next_tick": "nextTick",
+  "20_basic_virtual_dom/060_other_props": "Other Props",
+  // 30_basic_reactivity_system
+  "30_basic_reactivity_system/010_ref": "ref",
+  "30_basic_reactivity_system/020_shallow_ref": "shallowRef",
+  "30_basic_reactivity_system/030_to_ref": "toRef",
+  "30_basic_reactivity_system/040_to_refs": "toRefs",
+  "30_basic_reactivity_system/050_computed": "computed",
+  "30_basic_reactivity_system/060_watch": "watch",
+  "30_basic_reactivity_system/070_watch_effect": "watchEffect",
+  "30_basic_reactivity_system/080_reactive_proxy_handlers": "Reactive Proxy",
+  "30_basic_reactivity_system/090_effect_scope": "effectScope",
+  "30_basic_reactivity_system/100_other_apis": "Other APIs",
+  // 40_basic_component_system
+  "40_basic_component_system/010_lifecycle_hooks": "Lifecycle Hooks",
+  "40_basic_component_system/020_provide_inject": "provide / inject",
+  "40_basic_component_system/030_component_proxy": "Component Proxy",
+  "40_basic_component_system/040_slots": "Slots",
+  "40_basic_component_system/050_options_api": "Options API",
+  // 50_basic_template_compiler
+  "50_basic_template_compiler/010_transform": "Transform",
+  "50_basic_template_compiler/020_v_bind": "v-bind",
+  "50_basic_template_compiler/022_transform_expression": "Expression",
+  "50_basic_template_compiler/025_v_on": "v-on",
+  "50_basic_template_compiler/027_event_modifier": "Event Modifier",
+  "50_basic_template_compiler/030_fragment": "Fragment",
+  "50_basic_template_compiler/035_comment": "Comment",
+  "50_basic_template_compiler/040_v_if": "v-if",
+  "50_basic_template_compiler/050_v_for": "v-for",
+  "50_basic_template_compiler/060_v_model": "v-model",
+  "50_basic_template_compiler/070_resolve_component": "resolveComponent",
+  "50_basic_template_compiler/080_slot_outlet": "Slot Outlet",
+  "50_basic_template_compiler/085_slot_insert": "Slot Insert",
+  "50_basic_template_compiler/090_other_directives": "Other Directives",
+  "50_basic_template_compiler/100_chore_compiler": "Compiler Refactor",
+  "50_basic_template_compiler/110_parser_optimization": "Parser Optimization",
+  "50_basic_template_compiler/500_custom_directive": "Custom Directive",
+  // 60_basic_sfc_compiler
+  "60_basic_sfc_compiler/010_script_setup": "script setup",
+  "60_basic_sfc_compiler/020_define_props": "defineProps",
+  "60_basic_sfc_compiler/030_define_emits": "defineEmits",
+  "60_basic_sfc_compiler/040_scoped_css": "Scoped CSS",
+  "60_basic_sfc_compiler/050_props_destructure": "Props Destructure",
+  "60_basic_sfc_compiler/060_type_based_macros": "Type-based Macros",
+  // 90_web_application_essentials
+  "90_web_application_essentials/010_router": "Router",
+  "90_web_application_essentials/020_preprocessors": "Preprocessors",
+  // bonus
+  "bonus/hyper_ultimate_super_extreme_minimal_vue": "15-min Vue",
+};
+
+// Mapping from impl directory names to book page names
+// Format: "section/chapter" -> "book-page-name" (without .md extension)
+const CHAPTER_TO_BOOK_MAPPING: Record<string, string> = {
+  // 10_minimum_example
+  "10_minimum_example/010_create_app": "010-create-app-api",
+  "10_minimum_example/015_package_architecture": "015-package-architecture",
+  "10_minimum_example/020_simple_h_function": "020-simple-h-function",
+  "10_minimum_example/030_reactive_system": "035-try-implementing-a-minimum-reactivity-system",
+  "10_minimum_example/040_vdom_system": "040-minimum-virtual-dom",
+  "10_minimum_example/050_component_system": "050-minimum-component",
+  "10_minimum_example/050_component_system2": "051-component-props",
+  "10_minimum_example/050_component_system3": "052-component-emits",
+  "10_minimum_example/060_template_compiler": "060-template-compiler",
+  "10_minimum_example/060_template_compiler2": "061-template-compiler-impl",
+  "10_minimum_example/060_template_compiler3": "070-more-complex-parser",
+  "10_minimum_example/070_sfc_compiler": "091-parse-sfc",
+  "10_minimum_example/070_sfc_compiler2": "092-compile-sfc-template",
+  "10_minimum_example/070_sfc_compiler3": "093-compile-sfc-script",
+  "10_minimum_example/070_sfc_compiler4": "094-compile-sfc-style",
+  // 20_basic_virtual_dom
+  "20_basic_virtual_dom/010_patch_keyed_children": "010-patch-keyed-children",
+  "20_basic_virtual_dom/020_bit_flags": "020-bit-flags",
+  "20_basic_virtual_dom/040_scheduler": "030-scheduler",
+  "20_basic_virtual_dom/050_next_tick": "030-scheduler",
+  "20_basic_virtual_dom/060_other_props": "040-patch-other-attrs",
+  // 30_basic_reactivity_system
+  "30_basic_reactivity_system/010_ref": "010-ref-api",
+  "30_basic_reactivity_system/020_shallow_ref": "010-ref-api",
+  "30_basic_reactivity_system/030_to_ref": "010-ref-api",
+  "30_basic_reactivity_system/040_to_refs": "010-ref-api",
+  "30_basic_reactivity_system/050_computed": "020-computed-watch",
+  "30_basic_reactivity_system/060_watch": "020-computed-watch",
+  "30_basic_reactivity_system/070_watch_effect": "020-computed-watch",
+  "30_basic_reactivity_system/080_reactive_proxy_handlers": "030-reactive-proxy-handlers",
+  "30_basic_reactivity_system/090_effect_scope": "040-effect-scope",
+  "30_basic_reactivity_system/100_other_apis": "050-other-apis",
+  // 40_basic_component_system
+  "40_basic_component_system/010_lifecycle_hooks": "010-lifecycle-hooks",
+  "40_basic_component_system/020_provide_inject": "020-provide-inject",
+  "40_basic_component_system/030_component_proxy": "030-component-proxy-setup-context",
+  "40_basic_component_system/040_slots": "040-component-slot",
+  "40_basic_component_system/050_options_api": "050-options-api",
+  // 50_basic_template_compiler
+  "50_basic_template_compiler/010_transform": "010-transform",
+  "50_basic_template_compiler/020_v_bind": "020-v-bind",
+  "50_basic_template_compiler/022_transform_expression": "022-transform-expression",
+  "50_basic_template_compiler/025_v_on": "025-v-on",
+  "50_basic_template_compiler/027_event_modifier": "027-event-modifier",
+  "50_basic_template_compiler/030_fragment": "030-fragment",
+  "50_basic_template_compiler/035_comment": "035-comment",
+  "50_basic_template_compiler/040_v_if": "040-v-if-and-structural-directive",
+  "50_basic_template_compiler/050_v_for": "050-v-for",
+  "50_basic_template_compiler/060_v_model": "060-v-model",
+  "50_basic_template_compiler/070_resolve_component": "070-resolve-component",
+  "50_basic_template_compiler/080_slot_outlet": "080-slot",
+  "50_basic_template_compiler/085_slot_insert": "080-slot",
+  "50_basic_template_compiler/090_other_directives": "090-other-directives",
+  "50_basic_template_compiler/100_chore_compiler": "100-chore-compiler",
+  "50_basic_template_compiler/110_parser_optimization": "110-parser-optimization",
+  "50_basic_template_compiler/500_custom_directive": "500-custom-directive",
+  // 60_basic_sfc_compiler
+  "60_basic_sfc_compiler/010_script_setup": "010-script-setup",
+  "60_basic_sfc_compiler/020_define_props": "020-define-props",
+  "60_basic_sfc_compiler/030_define_emits": "030-define-emits",
+  "60_basic_sfc_compiler/040_scoped_css": "040-scoped-css",
+  "60_basic_sfc_compiler/050_props_destructure": "050-props-destructure",
+  "60_basic_sfc_compiler/060_type_based_macros": "060-type-based-macros",
+  // 90_web_application_essentials
+  "90_web_application_essentials/010_router": "010-plugins/010-router",
+  "90_web_application_essentials/020_preprocessors": "010-plugins/020-preprocessors",
+  // bonus
+  "bonus/hyper_ultimate_super_extreme_minimal_vue": "hyper-ultimate-super-extreme-minimal-vue/15-min-impl",
+};
+
 // Vue.js documentation URLs mapped by chapter keywords
 const VUE_DOC_URLS: Record<string, string> = {
   create_app: "https://vuejs.org/api/application.html#createapp",
@@ -82,7 +229,19 @@ function getVueDocUrl(chapterDir: string): string | undefined {
 }
 
 function getBookUrl(section: string, chapterDir: string): string {
-  // Convert underscore to hyphen for URL
+  const key = `${section}/${chapterDir}`;
+  const mappedPage = CHAPTER_TO_BOOK_MAPPING[key];
+
+  if (mappedPage) {
+    const sectionSlug = section.replace(/_/g, "-");
+    // Handle nested paths like "010-plugins/010-router"
+    if (mappedPage.includes("/")) {
+      return `/ja/${sectionSlug}/${mappedPage}.html`;
+    }
+    return `/ja/${sectionSlug}/${mappedPage}.html`;
+  }
+
+  // Fallback: convert underscore to hyphen
   const sectionSlug = section.replace(/_/g, "-");
   const chapterSlug = chapterDir.replace(/_/g, "-");
   return `/ja/${sectionSlug}/${chapterSlug}.html`;
@@ -140,8 +299,14 @@ function readFilesRecursively(dir: string, basePath: string = ""): ChapterFile[]
   return files;
 }
 
-function getChapterName(chapterDir: string): string {
-  // Remove the numeric prefix (e.g., "010_create_app" -> "create_app")
+function getChapterName(section: string, chapterDir: string): string {
+  const key = `${section}/${chapterDir}`;
+  const displayName = CHAPTER_DISPLAY_NAMES[key];
+  if (displayName) {
+    return displayName;
+  }
+
+  // Fallback: Remove the numeric prefix (e.g., "010_create_app" -> "create_app")
   const withoutPrefix = chapterDir.replace(/^\d+_/, "");
   // Convert to title case
   return withoutPrefix
@@ -189,26 +354,9 @@ function loadChapters(): Chapter[] {
         content: f.content,
       }));
 
-      // Console hook script to inject into index.html
-      const consoleHookScript = `<script>
-(function() {
-  const originalConsole = { log: console.log, info: console.info, warn: console.warn, error: console.error };
-  ['log', 'info', 'warn', 'error'].forEach(level => {
-    console[level] = function(...args) {
-      originalConsole[level].apply(console, args);
-      try {
-        window.parent.postMessage({ type: 'console', level, args: args.map(a => {
-          try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
-          catch { return String(a); }
-        })}, '*');
-      } catch {}
-    };
-  });
-  window.onerror = (msg, src, line, col, err) => {
-    window.parent.postMessage({ type: 'console', level: 'error', args: [msg + ' at ' + src + ':' + line] }, '*');
-  };
-})();
-</script>`;
+      // Console hook script to inject into index.html (minified for cleaner output)
+      const consoleHookScript = `<!-- chibivue playground: console hook -->
+    <script>!function(){var o={log:console.log,info:console.info,warn:console.warn,error:console.error};["log","info","warn","error"].forEach(function(e){console[e]=function(){o[e].apply(console,arguments);try{window.parent.postMessage({type:"console",level:e,args:Array.from(arguments).map(function(a){try{return"object"==typeof a?JSON.stringify(a):String(a)}catch(e){return String(a)}})},"*")}catch(e){}}});window.onerror=function(m,s,l){window.parent.postMessage({type:"console",level:"error",args:[m+" at "+s+":"+l]},"*")}}();</script>`;
 
       // Check if this chapter uses vite-plugin-chibivue (needs extra dependencies)
       const viteConfigFile = playgroundFiles.find((f) => f.path === "vite.config.ts");
@@ -265,7 +413,7 @@ function loadChapters(): Chapter[] {
         id: `${section}/${chapterDir}`,
         section: sectionName,
         sectionOrder: section,
-        name: getChapterName(chapterDir),
+        name: getChapterName(section, chapterDir),
         files: allFiles,
         bookUrl: getBookUrl(section, chapterDir),
         ...(vueDocUrl && { vueDocUrl }),

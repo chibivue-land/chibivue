@@ -1,24 +1,30 @@
-<script>
+<script setup lang="ts">
 import { ref } from 'chibivue'
+import ChildComponent from './Child.vue'
 
-export default {
-  setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
-  },
+const message = ref('Hello, Type-based Macros!')
+const count = ref(0)
+const logs = ref<string[]>([])
+
+const handleUpdate = (payload: { message: string; count: number }) => {
+  logs.value.push(`Received: message=${payload.message}, count=${payload.count}`)
 }
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
-
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
-
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+  <div class="container">
+    <h2>Type-based Macros Example</h2>
+    <ChildComponent :message="message" :count="count" @update="handleUpdate" />
+    <button @click="count++">Increment count</button>
+    <h3>Event Logs:</h3>
+    <ul>
+      <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+    </ul>
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+</style>

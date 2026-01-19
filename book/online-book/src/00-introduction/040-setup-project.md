@@ -1,5 +1,59 @@
 # How to Proceed with This Book and Environment Setup
 
+## Web Playground
+
+This book provides a **Web Playground** where you can try the implementation code for each chapter directly in your browser.
+You can edit and run code immediately without any environment setup, so try experiencing chibivue in action here first!
+
+### How to Start the Playground
+
+```sh
+$ git clone https://github.com/chibivue-land/chibivue
+$ cd chibivue
+$ pnpm install
+$ pnpm play:generate
+$ pnpm play
+```
+
+Access the URL displayed in your browser (e.g., `http://localhost:5173/`) to launch the Playground.
+
+### Playground Layout
+
+![web_playground_initial](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_initial.png)
+
+The Playground consists of four areas:
+
+| Area | Description |
+|------|-------------|
+| **Explorer (left)** | Displays the project file tree. Click a file to open it in the editor |
+| **Editor (center)** | Edit code with Monaco Editor |
+| **Preview (right)** | Shows a preview of the dev server running on WebContainer |
+| **Terminal / Console (bottom)** | View terminal output and console.log contents |
+
+### How to Use
+
+1. **Select a chapter**
+   Select the chapter you want to study from the dropdown at the top of the screen.
+   You can also filter chapter names using the search box.
+
+2. **Click Run**
+   Click the "Run" button to start WebContainer, install dependencies, and start the dev server.
+   It takes a little time the first run, but after a while, the results will be displayed in the Preview area.
+
+3. **Edit the code**
+   Edit the code in the editor and click the "Apply" button to apply your changes.
+   Changes are reflected in real-time via HMR (Hot Module Replacement).
+
+4. **Check the console**
+   Click the "Console" tab to view output from console.log and other sources.
+
+![web_playground_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_console.png)
+
+::: tip
+The Web Playground uses [WebContainer](https://webcontainers.io/).
+It may not work in some browsers or environments. In that case, please refer to the local environment setup below.
+:::
+
 ## How to Proceed with This Book
 
 We will promptly start with a simple implementation of Vue.js. Here are some points to keep in mind, precautions, and other essential information:

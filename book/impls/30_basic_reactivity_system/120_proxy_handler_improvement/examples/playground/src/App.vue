@@ -1,51 +1,71 @@
 <script>
-import { reactive } from 'chibivue'
+import { reactive, ref } from 'chibivue'
 
 export default {
   setup() {
-    const state = reactive({ message: 'Hello, chibivue!', input: '' })
+    const state = reactive({
+      count: 0,
+      items: [1, 2, 3],
+      nested: { value: 'hello' },
+    })
 
-    const changeMessage = () => {
-      state.message += '!'
+    // Demonstrate various proxy operations
+    const incrementCount = () => state.count++
+    const pushItem = () => state.items.push(state.items.length + 1)
+    const deleteItem = () => state.items.pop()
+    const updateNested = () => (state.nested.value += '!')
+
+    // Check 'in' operator
+    const hasCount = ref('count' in state)
+
+    // Check keys iteration
+    const keys = ref(Object.keys(state))
+
+    return {
+      state,
+      incrementCount,
+      pushItem,
+      deleteItem,
+      updateNested,
+      hasCount,
+      keys,
     }
-
-    const handleInput = e => {
-      state.input = e.target?.value ?? ''
-    }
-
-    return { state, changeMessage, handleInput }
   },
 }
 </script>
 
 <template>
-  <div class="container" style="text-align: center">
-    <h2>{{ state.message }}</h2>
-    <img
-      width="150px"
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
-      alt="Vue.js Logo"
-    />
-    <p><b>chibivue</b> is the minimal Vue.js</p>
+  <div class="container">
+    <h2>Proxy Handler Improvement Example</h2>
 
-    <button @click="changeMessage">click me!</button>
+    <div>
+      <p>Count: {{ state.count }}</p>
+      <button @click="incrementCount">Increment</button>
+    </div>
 
-    <br />
+    <div>
+      <p>Items: {{ state.items }}</p>
+      <button @click="pushItem">Push</button>
+      <button @click="deleteItem">Pop</button>
+    </div>
 
-    <label>
-      Input Data
-      <input @input="handleInput" />
-    </label>
+    <div>
+      <p>Nested: {{ state.nested.value }}</p>
+      <button @click="updateNested">Update nested</button>
+    </div>
 
-    <p>input value: {{ state.input }}</p>
+    <div>
+      <p>Has 'count' property: {{ hasCount }}</p>
+      <p>Object keys: {{ keys }}</p>
+    </div>
   </div>
 </template>
 
 <style>
 .container {
-  height: 100vh;
   padding: 16px;
-  background-color: #becdbe;
-  color: #2c3e50;
+}
+button {
+  margin-right: 8px;
 }
 </style>

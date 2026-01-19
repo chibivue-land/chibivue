@@ -1,24 +1,34 @@
-<script>
+<script setup>
 import { ref } from 'chibivue'
+import ChildComponent from './Child.vue'
 
-export default {
-  setup() {
-    const msg = ref('Hello, chibivue!')
-    const rawHtml = ref('<span style="color: red">Red text</span>')
-    return { msg, rawHtml }
-  },
+const count = ref(0)
+const logs = ref([])
+
+const handleIncrement = () => {
+  count.value++
+  logs.value.push(`increment event received`)
+}
+
+const handleCustomEvent = (payload) => {
+  logs.value.push(`custom event: ${payload}`)
 }
 </script>
 
 <template>
-  <div>
-    <h2>v-text</h2>
-    <span v-text="msg"></span>
-
-    <h2>v-html</h2>
-    <div v-html="rawHtml"></div>
-
-    <h2>v-pre</h2>
-    <span v-pre>{{ msg }} will not be compiled</span>
+  <div class="container">
+    <h2>defineEmits Example</h2>
+    <p>Parent count: {{ count }}</p>
+    <ChildComponent @increment="handleIncrement" @custom-event="handleCustomEvent" />
+    <h3>Event Logs:</h3>
+    <ul>
+      <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+    </ul>
   </div>
 </template>
+
+<style>
+.container {
+  padding: 16px;
+}
+</style>
