@@ -118,6 +118,13 @@ This chapter does not fully port the alien-signals implementation, but explains 
 For a complete understanding, please refer to the [alien-signals source code](https://github.com/stackblitz/alien-signals) or the [Vue 3.6 PR](https://github.com/vuejs/core/pull/12349).
 :::
 
+<KawaikoNote variant="base" title="Check out Johnson's explanation!">
+
+If you want to learn more about the alien-signals algorithm, we recommend reading the explanation written by the author, Johnson Chu!\
+[https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30)
+
+</KawaikoNote>
+
 ### Doubly Linked List
 
 One of the important optimizations in alien-signals is managing dependencies using a doubly linked list.
@@ -263,5 +270,6 @@ From the next chapter, we will implement APIs like ref and computed on top of th
 ## References
 
 - [stackblitz/alien-signals](https://github.com/stackblitz/alien-signals) - Official alien-signals repository
+- [Detailed explanation of alien-signals algorithm](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30) - Detailed explanation by the author Johnson Chu
 - [vuejs/core#12349](https://github.com/vuejs/core/pull/12349) - Vue 3.6 port PR
 - [Mastering Vue 3.6's Alien Signals](https://medium.com/@revanthkumarpatha/mastering-vue-3-6s-alien-signals-practical-examples-and-use-cases-7df02a159d8a) - Medium article

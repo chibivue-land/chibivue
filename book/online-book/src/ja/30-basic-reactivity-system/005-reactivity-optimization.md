@@ -118,6 +118,13 @@ Vue の `ref` や `reactive` と比較すると:
 完全な実装を理解したい場合は，[alien-signals のソースコード](https://github.com/stackblitz/alien-signals)や [Vue 3.6 の PR](https://github.com/vuejs/core/pull/12349) を参照してください．
 :::
 
+<KawaikoNote variant="base" title="詳しくは Johnson 氏の解説を！">
+
+alien-signals のアルゴリズムについて詳しく知りたい方は，作者である Johnson Chu 氏が書いた解説を読むことをお勧めします！\
+[https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30)
+
+</KawaikoNote>
+
 ### 双方向連結リスト
 
 alien-signals の重要な最適化の一つは，依存関係を双方向連結リスト（Doubly Linked List）で管理することです．
@@ -263,5 +270,6 @@ alien-signals の概念を理解できましたか？\
 ## 参考リンク
 
 - [stackblitz/alien-signals](https://github.com/stackblitz/alien-signals) - alien-signals 公式リポジトリ
+- [alien-signals アルゴリズムの詳細解説](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30) - 作者の Johnson Chu 氏による詳細な解説
 - [vuejs/core#12349](https://github.com/vuejs/core/pull/12349) - Vue 3.6 への移植 PR
 - [Vue 3.6 Alien Signals の解説](https://medium.com/@revanthkumarpatha/mastering-vue-3-6s-alien-signals-practical-examples-and-use-cases-7df02a159d8a) - Medium 記事

@@ -125,6 +125,13 @@ count(3) // 输出 "Count is: 3"
 要完全理解，请参阅 [alien-signals 源代码](https://github.com/stackblitz/alien-signals) 或 [Vue 3.6 的 PR](https://github.com/vuejs/core/pull/12349)．
 :::
 
+<KawaikoNote variant="base" title="请查看 Johnson 的解说！">
+
+如果您想了解更多关于 alien-signals 算法的内容，我们推荐阅读作者 Johnson Chu 撰写的解说！\
+[https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30)
+
+</KawaikoNote>
+
 ### 双向链表
 
 alien-signals 的重要优化之一是使用双向链表管理依赖关系．
@@ -270,5 +277,6 @@ export class ReactiveEffect<T = any> implements Subscriber {
 ## 参考链接
 
 - [stackblitz/alien-signals](https://github.com/stackblitz/alien-signals) - alien-signals 官方仓库
+- [alien-signals 算法详细解说](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30) - 作者 Johnson Chu 撰写的详细解说
 - [vuejs/core#12349](https://github.com/vuejs/core/pull/12349) - Vue 3.6 移植 PR
 - [掌握 Vue 3.6 的 Alien Signals](https://medium.com/@revanthkumarpatha/mastering-vue-3-6s-alien-signals-practical-examples-and-use-cases-7df02a159d8a) - Medium 文章

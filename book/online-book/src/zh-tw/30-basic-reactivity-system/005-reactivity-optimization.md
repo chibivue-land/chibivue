@@ -125,6 +125,13 @@ count(3) // 輸出 "Count is: 3"
 要完全理解，請參閱 [alien-signals 原始碼](https://github.com/stackblitz/alien-signals) 或 [Vue 3.6 的 PR](https://github.com/vuejs/core/pull/12349)．
 :::
 
+<KawaikoNote variant="base" title="請查看 Johnson 的解說！">
+
+如果您想了解更多關於 alien-signals 演算法的內容，我們推薦閱讀作者 Johnson Chu 撰寫的解說！\
+[https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30)
+
+</KawaikoNote>
+
 ### 雙向連結串列
 
 alien-signals 的重要優化之一是使用雙向連結串列管理依賴關係．
@@ -270,5 +277,6 @@ export class ReactiveEffect<T = any> implements Subscriber {
 ## 參考連結
 
 - [stackblitz/alien-signals](https://github.com/stackblitz/alien-signals) - alien-signals 官方儲存庫
+- [alien-signals 演算法詳細解說](https://gist.github.com/johnsoncodehk/59e79a0cfa5bb3421b5d166a08e42f30) - 作者 Johnson Chu 撰寫的詳細解說
 - [vuejs/core#12349](https://github.com/vuejs/core/pull/12349) - Vue 3.6 移植 PR
 - [掌握 Vue 3.6 的 Alien Signals](https://medium.com/@revanthkumarpatha/mastering-vue-3-6s-alien-signals-practical-examples-and-use-cases-7df02a159d8a) - Medium 文章
