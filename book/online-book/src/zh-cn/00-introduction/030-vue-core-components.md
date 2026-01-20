@@ -74,7 +74,7 @@ Vue.js 提供这些语法并将它们转换为纯 JavaScript．\
 
 正如您可能猜到的，这代表单文件组件编译器．\
 它允许您在单个 .vue 文件中定义组件的模板，脚本和样式．\
-在 script setup 中使用的函数，如 [defineProps 或 defineEmits](https://vuejs.org/api/sfc-script-setup#defineprops-defineemits) 也由此编译器提供．\
+在 script setup 中使用的函数，如 [defineProps 或 defineEmits](https://cn.vuejs.org/api/sfc-script-setup#defineprops-defineemits) 也由此编译器提供．\
 这个 SFC 编译器通常与 Webpack 或 Vite 等工具结合使用．\
 作为其他工具插件的实现不在核心仓库中．\
 SFC 编译器的主要功能在核心中，但插件在不同的仓库中实现．\
