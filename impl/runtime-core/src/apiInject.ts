@@ -15,7 +15,8 @@ export function provide<T>(key: InjectionKey<T> | string | number, value: T): vo
 }
 
 export function inject<T>(key: InjectionKey<T> | string): T | undefined;
-export function inject<T>(key: InjectionKey<T> | string) {
+export function inject<T>(key: InjectionKey<T> | string, defaultValue: T): T;
+export function inject<T>(key: InjectionKey<T> | string, defaultValue?: T | null): T | undefined {
   const instance = currentInstance;
   if (instance) {
     const provides =
@@ -24,4 +25,9 @@ export function inject<T>(key: InjectionKey<T> | string) {
       return provides[key as string];
     }
   }
+  return defaultValue as T | undefined;
+}
+
+export function hasInjectionContext(): boolean {
+  return currentInstance !== null;
 }

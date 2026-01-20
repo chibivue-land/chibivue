@@ -1,5 +1,45 @@
-export * from "./reactive";
-export * from "./ref";
+export {
+  reactive,
+  readonly,
+  shallowReactive,
+  isReactive,
+  isReadonly,
+  isProxy,
+  toRaw,
+  markRaw,
+  toReactive,
+  toReadonly,
+  ReactiveFlags,
+  type ShallowReactive,
+  type DeepReadonly,
+  type UnwrapNestedRefs,
+} from "./reactive";
+export {
+  ref,
+  shallowRef,
+  isRef,
+  unref,
+  proxyRefs,
+  customRef,
+  triggerRef,
+  toRef,
+  toRefs,
+  type Ref,
+  type ShallowRef,
+  type MaybeRef,
+  type MaybeRefOrGetter,
+  type ToRef,
+  type ToRefs,
+  type ShallowUnwrapRef,
+  type UnwrapRef,
+  type CustomRefFactory,
+} from "./ref";
 export * from "./computed";
 export * from "./effect";
-export * from "./effectScope";
+export {
+  EffectScope,
+  effectScope,
+  recordEffectScope,
+  getCurrentScope,
+  onScopeDispose,
+} from "./effectScope";

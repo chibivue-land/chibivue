@@ -138,7 +138,7 @@ import { effectScope, markRaw, ref } from "chibivue";
 import { type Store, setActiveStore, storeSymbol } from "./rootStore";
 
 export function createStore(): Store {
-  const scope = effectScope(true);
+  const scope = effectScope();
 
   const state = scope.run(() => ref({}))!;
 
@@ -175,7 +175,7 @@ export function createStore(): Store {
 ```
 
 Key points:
-- `effectScope(true)` creates a detached scope to manage the store's lifecycle
+- `effectScope()` creates a detached scope to manage the store's lifecycle
 - `state` is `ref({})`, centrally managing all store states (for SSR)
 - `markRaw` prevents the store object itself from being made reactive
 - The `install` method calls `app.provide` to make the store available app-wide

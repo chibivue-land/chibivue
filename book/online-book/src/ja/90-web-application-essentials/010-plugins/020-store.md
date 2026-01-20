@@ -138,7 +138,7 @@ import { effectScope, markRaw, ref } from "chibivue";
 import { type Store, setActiveStore, storeSymbol } from "./rootStore";
 
 export function createStore(): Store {
-  const scope = effectScope(true);
+  const scope = effectScope();
 
   const state = scope.run(() => ref({}))!;
 
@@ -175,7 +175,7 @@ export function createStore(): Store {
 ```
 
 ポイント：
-- `effectScope(true)` で detached スコープを作成し，ストアのライフサイクルを管理
+- `effectScope()` で detached スコープを作成し，ストアのライフサイクルを管理
 - `state` は `ref({})` で，すべてのストアの状態を一元管理（SSR 用）
 - `markRaw` でストアオブジェクト自体をリアクティブ化から除外
 - `install` メソッドで `app.provide` を呼び出し，ストアをアプリ全体で利用可能にする

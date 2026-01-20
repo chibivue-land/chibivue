@@ -1,0 +1,108 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Vue",
+  "scopeName": "source.vue",
+  "patterns": [
+    { "include": "#template-tag" },
+    { "include": "#script-tag" },
+    { "include": "#style-tag" }
+  ],
+  "repository": {
+    "template-tag": {
+      "begin": "(<)(template)(\\s[^>]*)?(>)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.begin.html" },
+        "2": { "name": "entity.name.tag.html" },
+        "3": { "patterns": [{ "include": "#tag-attributes" }] },
+        "4": { "name": "punctuation.definition.tag.end.html" }
+      },
+      "end": "(</)(template)(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.begin.html" },
+        "2": { "name": "entity.name.tag.html" },
+        "3": { "name": "punctuation.definition.tag.end.html" }
+      },
+      "contentName": "text.html.basic",
+      "patterns": [
+        { "include": "#vue-interpolation" },
+        { "include": "#vue-directives" },
+        { "include": "text.html.basic" }
+      ]
+    },
+    "script-tag": {
+      "begin": "(<)(script)(\\s[^>]*)?(>)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.begin.html" },
+        "2": { "name": "entity.name.tag.html" },
+        "3": { "patterns": [{ "include": "#tag-attributes" }] },
+        "4": { "name": "punctuation.definition.tag.end.html" }
+      },
+      "end": "(</)(script)(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.begin.html" },
+        "2": { "name": "entity.name.tag.html" },
+        "3": { "name": "punctuation.definition.tag.end.html" }
+      },
+      "contentName": "source.ts",
+      "patterns": [
+        { "include": "source.ts" }
+      ]
+    },
+    "style-tag": {
+      "begin": "(<)(style)(\\s[^>]*)?(>)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.tag.begin.html" },
+        "2": { "name": "entity.name.tag.html" },
+        "3": { "patterns": [{ "include": "#tag-attributes" }] },
+        "4": { "name": "punctuation.definition.tag.end.html" }
+      },
+      "end": "(</)(style)(>)",
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.tag.begin.html" },
+        "2": { "name": "entity.name.tag.html" },
+        "3": { "name": "punctuation.definition.tag.end.html" }
+      },
+      "contentName": "source.css",
+      "patterns": [
+        { "include": "source.css" }
+      ]
+    },
+    "vue-interpolation": {
+      "name": "meta.embedded.expression.vue",
+      "begin": "\\{\\{",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.vue" }
+      },
+      "end": "\\}\\}",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.end.vue" }
+      },
+      "patterns": [
+        { "include": "source.ts" }
+      ]
+    },
+    "vue-directives": {
+      "match": "(v-[a-z-]+|@[a-z-]+|:[a-z-]+)(=\"[^\"]*\")?",
+      "captures": {
+        "1": { "name": "entity.other.attribute-name.directive.vue" },
+        "2": { "name": "string.quoted.double.html" }
+      }
+    },
+    "tag-attributes": {
+      "patterns": [
+        {
+          "match": "(\\w+)(=)(\"[^\"]*\")",
+          "captures": {
+            "1": { "name": "entity.other.attribute-name.html" },
+            "2": { "name": "punctuation.separator.key-value.html" },
+            "3": { "name": "string.quoted.double.html" }
+          }
+        },
+        {
+          "match": "\\w+",
+          "name": "entity.other.attribute-name.html"
+        }
+      ]
+    }
+  }
+}

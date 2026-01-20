@@ -217,7 +217,7 @@ function createOptionsStore<
         computedGetters[key] = markRaw(
           computed(() => {
             setActiveStore(store);
-            const _store = store._s.get(id)!;
+            const _store = store._s.get(id)! as S & { [K in keyof G]: ReturnType<G[K]> };
             return getter.call(_store, _store);
           }),
         );

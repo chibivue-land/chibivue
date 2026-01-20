@@ -306,6 +306,18 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "CSS 预处理器",
                 link: "/zh-cn/90-web-application-essentials/010-plugins/020-preprocessors",
               },
+              {
+                text: "状态管理",
+                link: "/zh-cn/90-web-application-essentials/010-plugins/020-store",
+              },
+              {
+                text: "数据获取",
+                link: "/zh-cn/90-web-application-essentials/010-plugins/030-data-fetch",
+              },
+              {
+                text: "Language Tools",
+                link: "/zh-cn/90-web-application-essentials/010-plugins/040-language-tools",
+              },
             ],
           },
           {

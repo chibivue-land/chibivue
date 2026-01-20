@@ -9,7 +9,7 @@ import {
 } from "./rootStore";
 
 export function createStore(): Store {
-  const scope = effectScope(true);
+  const scope = effectScope();
 
   const state = scope.run<Ref<Record<string, StateTree>>>(() =>
     ref<Record<string, StateTree>>({}),
@@ -50,7 +50,7 @@ export function createStore(): Store {
 /**
  * Dispose a Store instance by stopping its effectScope and removing the state, plugins and stores.
  */
-export function disposeStore(store: Store) {
+export function disposeStore(store: Store): void {
   store._e.stop();
   store._s.clear();
   store._p.splice(0);

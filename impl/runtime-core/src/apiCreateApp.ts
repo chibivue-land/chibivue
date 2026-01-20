@@ -4,11 +4,16 @@ import type { RootRenderFunction } from "./renderer";
 import type { Component } from "./component";
 import type { InjectionKey } from "./apiInject";
 
+export interface AppConfig {
+  globalProperties: Record<string, any>;
+}
+
 export interface App<HostElement = any> {
   use(plugin: Plugin, ...options: any[]): App;
   component(name: string, component: Component): this;
   mount(rootContainer: HostElement | string): void;
   provide<T>(key: InjectionKey<T> | string, value: T): this;
+  config: AppConfig;
   /** @internal */
   _component: Component;
   /** @internal */
@@ -44,10 +49,15 @@ export function createAppAPI<HostElement>(
     const context = createAppContext();
     const installedPlugins = new Set();
 
+    const config: AppConfig = {
+      globalProperties: {},
+    };
+
     const app: App = (context.app = {
       _component: rootComponent,
       _props: null,
       _context: context,
+      config,
 
       use(plugin: Plugin, ...options: any[]) {
         // skip duplicate plugins

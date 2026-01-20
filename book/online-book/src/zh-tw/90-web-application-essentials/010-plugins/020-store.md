@@ -138,7 +138,7 @@ import { effectScope, markRaw, ref } from "chibivue";
 import { type Store, setActiveStore, storeSymbol } from "./rootStore";
 
 export function createStore(): Store {
-  const scope = effectScope(true);
+  const scope = effectScope();
 
   const state = scope.run(() => ref({}))!;
 
@@ -175,7 +175,7 @@ export function createStore(): Store {
 ```
 
 關鍵點：
-- `effectScope(true)` 創建 detached scope，管理 store 的生命週期
+- `effectScope()` 創建 detached scope，管理 store 的生命週期
 - `state` 是 `ref({})`，集中管理所有 store 的狀態（用於 SSR）
 - `markRaw` 使 store 對象本身不被響應式化
 - `install` 方法呼叫 `app.provide` 使 store 在整個應用程式中可用

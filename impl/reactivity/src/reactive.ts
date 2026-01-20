@@ -124,3 +124,16 @@ export function toRaw<T>(observed: T): T {
   const raw = observed && (observed as Target)[ReactiveFlags.RAW];
   return raw ? toRaw(raw) : observed;
 }
+
+export const enum ReactiveMarkerFlags {
+  SKIP = "__v_skip",
+}
+
+export function markRaw<T extends object>(value: T): T {
+  Object.defineProperty(value, ReactiveMarkerFlags.SKIP, {
+    configurable: true,
+    enumerable: false,
+    value: true,
+  });
+  return value;
+}

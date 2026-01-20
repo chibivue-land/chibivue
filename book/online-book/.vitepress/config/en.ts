@@ -306,6 +306,18 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "CSS Preprocessors",
                 link: "/90-web-application-essentials/010-plugins/020-preprocessors",
               },
+              {
+                text: "Store",
+                link: "/90-web-application-essentials/010-plugins/020-store",
+              },
+              {
+                text: "Data Fetch",
+                link: "/90-web-application-essentials/010-plugins/030-data-fetch",
+              },
+              {
+                text: "Language Tools",
+                link: "/90-web-application-essentials/010-plugins/040-language-tools",
+              },
             ],
           },
           {

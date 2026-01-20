@@ -1,4 +1,4 @@
-import type { App, AppContext, VNode, Component, Plugin } from "@chibivue/runtime-core";
+import type { App, AppContext, AppConfig, VNode, Component, Plugin } from "@chibivue/runtime-core";
 import { createAppContext, createVNode } from "@chibivue/runtime-core";
 import type { VaporComponentInternalInstance, VaporComponent } from "./component";
 import { createVaporComponentInstance, initialRenderVaporComponent } from "./component";
@@ -20,12 +20,17 @@ export function createVaporApp(rootComponent: VaporComponent): VaporApp {
   const context = createAppContext();
   const installedPlugins = new Set<Plugin>();
 
+  const config: AppConfig = {
+    globalProperties: {},
+  };
+
   const app: VaporApp = {
     _component: rootComponent,
     _props: null,
     _context: context,
     _container: null,
     _instance: null,
+    config,
 
     use(plugin: Plugin, ...options: any[]) {
       if (installedPlugins.has(plugin)) return app;
@@ -105,12 +110,17 @@ export function createVaporSSRApp(rootComponent: VaporComponent): VaporApp {
   const context = createAppContext();
   const installedPlugins = new Set<Plugin>();
 
+  const config: AppConfig = {
+    globalProperties: {},
+  };
+
   const app: VaporApp = {
     _component: rootComponent,
     _props: null,
     _context: context,
     _container: null,
     _instance: null,
+    config,
 
     use(plugin: Plugin, ...options: any[]) {
       if (installedPlugins.has(plugin)) return app;

@@ -3,18 +3,48 @@
 export {
   // core
   reactive,
+  readonly,
+  shallowReactive,
   ref,
+  shallowRef,
   // utilities
   unref,
   proxyRefs,
   isRef,
+  isReactive,
+  isReadonly,
+  isProxy,
+  toRaw,
+  markRaw,
+  triggerRef,
+  toRef,
+  toRefs,
+  customRef,
   // effect
   ReactiveEffect,
   // effect scope
   EffectScope,
+  effectScope,
   effect,
+  getCurrentScope,
+  onScopeDispose,
 } from "@chibivue/reactivity";
-export type { Ref, ReactiveFlags, ComputedRef } from "@chibivue/reactivity";
+export type {
+  Ref,
+  ShallowRef,
+  ReactiveFlags,
+  ComputedRef,
+  ToRef,
+  ToRefs,
+  ShallowUnwrapRef,
+  UnwrapRef,
+  ShallowReactive,
+  DeepReadonly,
+  UnwrapNestedRefs,
+  MaybeRef,
+  MaybeRefOrGetter,
+  CustomRefFactory,
+} from "@chibivue/reactivity";
 
 export { computed } from "./apiComputed";
 export {
@@ -27,7 +57,14 @@ export {
   onActivated,
   onDeactivated,
 } from "./apiLifecycle";
-export { provide, inject, type InjectionKey } from "./apiInject";
+export { provide, inject, hasInjectionContext, type InjectionKey } from "./apiInject";
+export {
+  watch,
+  watchEffect,
+  type WatchOptions,
+  type WatchSource,
+  type WatchCallback,
+} from "./apiWatch";
 
 export { h } from "./h";
 
@@ -59,7 +96,7 @@ export type { DirectiveBinding, DirectiveHook, ObjectDirective } from "./directi
 
 export { withDirectives } from "./directives";
 
-export type { CreateAppFunction, App, AppContext, Plugin } from "./apiCreateApp";
+export type { CreateAppFunction, App, AppConfig, AppContext, Plugin } from "./apiCreateApp";
 export { createAppContext } from "./apiCreateApp";
 export { defineComponent } from "./apiDefineComponent";
 export {

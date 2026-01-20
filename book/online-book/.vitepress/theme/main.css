@@ -251,19 +251,22 @@ html.dark {
 }
 
 /* Code block frame - Light Mode */
-div[class*='language-'] {
+div[class^='language-'],
+div[class*=' language-'] {
   border: 1px solid #d0d8d5;
   box-shadow: 0 2px 8px rgba(26, 92, 74, 0.08);
 }
 
 /* Code block frame - Dark Mode */
-html.dark div[class*='language-'] {
+html.dark div[class^='language-'],
+html.dark div[class*=' language-'] {
   border: 1px solid #1a2744;
   box-shadow: 0 0 20px rgba(44, 201, 168, 0.1), inset 0 0 60px rgba(0, 0, 0, 0.3);
 }
 
 /* Scanline effect - Dark Mode only */
-html.dark div[class*='language-']::before {
+html.dark div[class^='language-']::before,
+html.dark div[class*=' language-']::before {
   content: '';
   position: absolute;
   top: 0;
@@ -282,7 +285,8 @@ html.dark div[class*='language-']::before {
 }
 
 /* Language label styling - Light Mode */
-div[class*='language-'] > span.lang {
+div[class^='language-'] > span.lang,
+div[class*=' language-'] > span.lang {
   color: #1a8a6e;
   font-weight: 600;
   text-transform: uppercase;
@@ -292,18 +296,21 @@ div[class*='language-'] > span.lang {
 }
 
 /* Language label styling - Dark Mode */
-html.dark div[class*='language-'] > span.lang {
+html.dark div[class^='language-'] > span.lang,
+html.dark div[class*=' language-'] > span.lang {
   color: #2cc9a8;
 }
 
 /* Line numbers - Light Mode */
-div[class*='language-'] .line-numbers {
+div[class^='language-'] .line-numbers,
+div[class*=' language-'] .line-numbers {
   color: #7a9a8a;
   border-right: 1px solid #d0d8d5;
 }
 
 /* Line numbers - Dark Mode */
-html.dark div[class*='language-'] .line-numbers {
+html.dark div[class^='language-'] .line-numbers,
+html.dark div[class*=' language-'] .line-numbers {
   color: #4a5f87;
   border-right: 1px solid #1a2744;
 }

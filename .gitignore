@@ -10,3 +10,8 @@ book/online-book/.vitepress/dist
 
 # for dts-bundle
 temp
+
+# VSCode extension
+*.vsix
+.vscode-test
+out

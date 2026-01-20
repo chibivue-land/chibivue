@@ -306,6 +306,18 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "CSS 預處理器",
                 link: "/zh-tw/90-web-application-essentials/010-plugins/020-preprocessors",
               },
+              {
+                text: "狀態管理",
+                link: "/zh-tw/90-web-application-essentials/010-plugins/020-store",
+              },
+              {
+                text: "資料獲取",
+                link: "/zh-tw/90-web-application-essentials/010-plugins/030-data-fetch",
+              },
+              {
+                text: "Language Tools",
+                link: "/zh-tw/90-web-application-essentials/010-plugins/040-language-tools",
+              },
             ],
           },
           {

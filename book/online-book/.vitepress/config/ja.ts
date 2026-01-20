@@ -303,6 +303,18 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 text: "CSS プリプロセッサ",
                 link: "/ja/90-web-application-essentials/010-plugins/020-preprocessors",
               },
+              {
+                text: "ストア",
+                link: "/ja/90-web-application-essentials/010-plugins/020-store",
+              },
+              {
+                text: "データフェッチ",
+                link: "/ja/90-web-application-essentials/010-plugins/030-data-fetch",
+              },
+              {
+                text: "Language Tools",
+                link: "/ja/90-web-application-essentials/010-plugins/040-language-tools",
+              },
             ],
           },
           {
