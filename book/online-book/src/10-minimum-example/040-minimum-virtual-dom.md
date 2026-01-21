@@ -193,7 +193,11 @@ Therefore, the patch function is divided into two processes: "initial (generatin
 These processes are named "mount" and "patch" respectively. \
 And they are performed separately for ElementNode and TextNode (combined as "process" with the name "mount" and "patch" for each).
 
-![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
+<img   
+    src="https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png"   
+    alt="Patch Function Architecture"   
+    style="background-color: white;"
+/>
 
 ```ts
 const patch = (
