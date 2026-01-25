@@ -185,7 +185,11 @@ patch 函數比較兩個 vnodes，vnode1 和 vnode2．但是，vnode1 最初不�
 這些過程分別命名為「mount」和「patch」．\
 它們分別對 ElementNode 和 TextNode 執行（結合為「process」，每個都有「mount」和「patch」名稱）．
 
-![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
+<img   
+    src="https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png"   
+    alt="Patch Function Architecture"   
+    style="background-color: white;"
+/>
 
 ```ts
 const patch = (

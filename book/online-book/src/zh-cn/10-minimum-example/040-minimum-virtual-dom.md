@@ -193,7 +193,11 @@ patch 函数比较两个 vnodes，vnode1 和 vnode2．但是，vnode1 最初不�
 这些过程分别命名为"mount"和"patch"．\
 它们分别对 ElementNode 和 TextNode 执行（结合为"process"，每个都有"mount"和"patch"名称）．
 
-![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
+<img   
+    src="https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png"   
+    alt="Patch Function Architecture"   
+    style="background-color: white;"
+/>
 
 ```ts
 const patch = (

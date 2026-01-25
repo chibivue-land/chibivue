@@ -204,7 +204,11 @@ patch 関数でやりたいことは 2 つの vnode の比較なので，便宜�
 そしてそれらは ElementNode と TextNode それぞれで行うようにします．\
 それぞれの mount と patch を process と言う名前でまとめてます．
 
-![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
+<img   
+    src="https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png"   
+    alt="Patch Function Architecture"   
+    style="background-color: white;"
+/>
 
 ```ts
 const patch = (
