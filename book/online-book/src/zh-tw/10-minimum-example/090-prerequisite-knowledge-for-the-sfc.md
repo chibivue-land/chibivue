@@ -110,7 +110,7 @@ ni
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
 })
@@ -125,7 +125,7 @@ export default defineConfig({
 import { defineConfig, Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
 })
@@ -156,7 +156,7 @@ function myPlugin(): Plugin {
 
 外掛程式符合 Vite 要求的格式．\
 有各種選項，但由於這是一個簡單的範例，我只使用了 `transform` 選項．\
-我建議查看官方文件和其他資源以獲取更多資訊：https://vitejs.dev/guide/api-plugin.html
+我建議查看官方文件和其他資源以獲取更多資訊：https://vite.dev/guide/api-plugin
 
 在 `transform` 函式中，你可以接收 `code` 和 `id`．\
 你可以將 `code` 視為檔案的內容，將 `id` 視為檔案名．\

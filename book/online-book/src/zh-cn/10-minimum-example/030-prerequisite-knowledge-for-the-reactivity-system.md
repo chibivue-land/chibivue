@@ -64,11 +64,11 @@ https://vuejs.org/api/composition-api-setup.html#usage-with-render-functions
 
 > 响应式对象是 JavaScript 代理，其行为类似于普通对象。不同之处在于 Vue 可以跟踪响应式对象上的属性访问和更改。
 
-[来源](https://v3.vuejs.org/guide/reactivity-fundamentals.html)
+[来源](https://vuejs.org/guide/essentials/reactivity-fundamentals)
 
 > Vue 最独特的功能之一是其谦逊的响应式系统。组件的状态由响应式 JavaScript 对象组成。当状态改变时，视图会更新。
 
-[来源](https://v3.vuejs.org/guide/reactivity-in-depth.html)
+[来源](https://vuejs.org/guide/extras/reactivity-in-depth.html)
 
 总之，"响应式对象在有变化时更新屏幕"．  
 让我们暂时搁置如何实现这一点，并实现前面提到的开发者接口．

@@ -110,7 +110,7 @@ ni
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
 })
@@ -125,7 +125,7 @@ export default defineConfig({
 import { defineConfig, Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
 })
@@ -156,7 +156,7 @@ function myPlugin(): Plugin {
 
 插件符合 Vite 要求的格式．\
 有各种选项，但由于这是一个简单的示例，我只使用了 `transform` 选项．\
-我建议查看官方文档和其他资源以获取更多信息：https://vitejs.dev/guide/api-plugin.html
+我建议查看官方文档和其他资源以获取更多信息：https://vite.dev/guide/api-plugin
 
 在 `transform` 函数中，你可以接收 `code` 和 `id`．\
 你可以将 `code` 视为文件的内容，将 `id` 视为文件名．\

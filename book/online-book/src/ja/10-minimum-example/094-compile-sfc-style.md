@@ -41,7 +41,7 @@ import { msg } from 'virtual:my-module'
 
 のように書くと `export const msg = "from virtual module"` が load されます．
 
-[参考](https://ja.vitejs.dev/guide/api-plugin.html#%E4%BB%AE%E6%83%B3%E3%83%A2%E3%82%B7%E3%82%99%E3%83%A5%E3%83%BC%E3%83%AB%E3%81%AE%E8%A6%8F%E7%B4%84)
+[参考](https://ja.vite.dev/guide/api-plugin)
 
 この仕組みを使って SFC の style ブロックを仮想の css ファイルとして読み込むようにしてみます．  
 最初に言った通り，vite では css という拡張子のファイルを import すれば良いので，${SFC のファイル名}.css という仮想モジュールを作ることを考えてみます．

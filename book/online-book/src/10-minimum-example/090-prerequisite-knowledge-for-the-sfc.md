@@ -117,7 +117,7 @@ Let's take a look at the vite.config.ts file of the created project.
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
 })
@@ -132,7 +132,7 @@ Let's try creating a simple plugin in this project.
 import { defineConfig, Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
 })
@@ -163,7 +163,7 @@ Since it's simple, I think many of you can understand it without explanation, bu
 
 The plugin conforms to the format required by Vite. \
 There are various options, but since this is a simple sample, I only used the `transform` option.\
-I recommend checking the official documentation and other resources for more information: https://vitejs.dev/guide/api-plugin.html
+I recommend checking the official documentation and other resources for more information: https://vite.dev/guide/api-plugin
 
 In the `transform` function, you can receive `code` and `id`. \
 You can think of `code` as the content of the file and `id` as the file name.\

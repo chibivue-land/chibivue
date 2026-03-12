@@ -153,7 +153,7 @@ scope.stop()
 引用自：https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
 
 這個 EffectScope 也作為面向使用者的 API 公開．  
-https://v3.vuejs.org/api/reactivity-advanced.html#effectscope
+https://vuejs.org/api/reactivity-advanced.html#effectscope
 
 ## EffectScope 的實現
 

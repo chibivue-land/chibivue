@@ -13,7 +13,7 @@ hero:
       link: /zh-tw/00-introduction/010-about
     - theme: alt
       text: Vue.js 官方文檔
-      link: https://v3.vuejs.org/
+      link: https://vuejs.org/
 
 features:
   - title: 響應式系統

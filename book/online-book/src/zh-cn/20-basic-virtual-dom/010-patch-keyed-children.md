@@ -84,7 +84,7 @@ app.mount('#app')
 
 > 特殊属性 key 主要用作 Vue 虚拟DOM算法的提示，在比较新旧节点列表时识别 VNode。
 
-https://v3.vuejs.org/guide/migration/key-attribute.html
+https://v3-migration.vuejs.org/breaking-changes/key-attribute.html
 
 正如预期的那样，对吧？你可能听过"不要使用索引作为 v-for 的 key"的建议，但在这一点上，key 被隐式设置为索引，这就是为什么会出现上述问题．（循环基于 c2 的长度，并基于该索引进行补丁）
 

@@ -131,7 +131,7 @@ You should see an error like this:
 
 This is also described in the Vite official documentation as a troubleshooting tip.
 
-[Syntax Error / Type Error Occurs (Vite)](https://vitejs.dev/guide/troubleshooting.html#syntax-error-type-error-occurs)
+[Syntax Error / Type Error Occurs (Vite)](https://vite.dev/guide/troubleshooting.html#syntax-error-type-error-occurs)
 
 As a temporary solution, let's try to generate code that does not include the `with` statement when it is not in browser mode.
 
