@@ -13,7 +13,7 @@ hero:
       link: /zh-cn/00-introduction/010-about
     - theme: alt
       text: Vue.js 官方文档
-      link: https://v3.vuejs.org/
+      link: https://vuejs.org/
 
 features:
   - title: 响应式系统

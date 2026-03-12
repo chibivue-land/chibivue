@@ -64,11 +64,11 @@ https://vuejs.org/api/composition-api-setup.html#usage-with-render-functions
 
 > 響應式對象是 JavaScript 代理，其行為類似於普通對象。不同之處在於 Vue 可以跟蹤響應式對象上的屬性訪問和更改。
 
-[來源](https://v3.vuejs.org/guide/reactivity-fundamentals.html)
+[來源](https://vuejs.org/guide/essentials/reactivity-fundamentals)
 
 > Vue 最獨特的功能之一是其謙遜的響應式系統。組件的狀態由響應式 JavaScript 對象組成。當狀態改變時，視圖會更新。
 
-[來源](https://v3.vuejs.org/guide/reactivity-in-depth.html)
+[來源](https://vuejs.org/guide/extras/reactivity-in-depth.html)
 
 總之，「響應式對象在有變化時更新螢幕」．  
 讓我們暫時擱置如何實現這一點，並實現前面提到的開發者介面．

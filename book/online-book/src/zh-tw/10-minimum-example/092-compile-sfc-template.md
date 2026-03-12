@@ -131,7 +131,7 @@ export default function vitePluginChibivue(): Plugin {
 
 這也在 Vite 官方文件中作為故障排除提示進行了描述．
 
-[Syntax Error / Type Error Occurs (Vite)](https://vitejs.dev/guide/troubleshooting.html#syntax-error-type-error-occurs)
+[Syntax Error / Type Error Occurs (Vite)](https://vite.dev/guide/troubleshooting.html#syntax-error-type-error-occurs)
 
 作為臨時解決方案，讓我們嘗試在非瀏覽器模式下生成不包含 `with` 語句的程式碼．
 

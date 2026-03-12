@@ -153,7 +153,7 @@ scope.stop()
 Quoted from: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
 
 And this EffectScope is also exposed as a user-facing API.  
-https://v3.vuejs.org/api/reactivity-advanced.html#effectscope
+https://vuejs.org/api/reactivity-advanced.html#effectscope
 
 ## Implementation of EffectScope
 

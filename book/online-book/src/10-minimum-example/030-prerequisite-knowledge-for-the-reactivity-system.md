@@ -64,11 +64,11 @@ Let's refer to the official documentation.
 
 > Reactive objects are JavaScript proxies that behave like normal objects. The difference is that Vue can track property access and changes on reactive objects.
 
-[Source](https://v3.vuejs.org/guide/reactivity-fundamentals.html)
+[Source](https://vuejs.org/guide/essentials/reactivity-fundamentals)
 
 > One of Vue's most distinctive features is its modest Reactivity System. The state of a component is composed of reactive JavaScript objects. When the state changes, the view is updated.
 
-[Source](https://v3.vuejs.org/guide/reactivity-in-depth.html)
+[Source](https://vuejs.org/guide/extras/reactivity-in-depth.html)
 
 In summary, "reactive objects update the screen when there are changes".  
 Let's put aside how to achieve this for now and implement the developer interface mentioned earlier.
@@ -217,4 +217,3 @@ So if we call "screen update logic" at set timing, we achieve the magic of **aut
 </KawaikoNote>
 
 This is the extent of understanding Proxy.
-

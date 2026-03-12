@@ -84,7 +84,7 @@ Now, let's take a look at the explanation of the key attribute in the Vue docume
 
 > The special attribute key is primarily used as a hint for Vue's Virtual DOM algorithm to identify VNodes when diffing the new list of nodes against the old list.
 
-https://v3.vuejs.org/guide/migration/key-attribute.html
+https://v3-migration.vuejs.org/breaking-changes/key-attribute.html
 
 As expected, right? You may have heard the advice "do not use index as the key for v-for", but at this point, the key is implicitly set to the index, which is why the above problems occur. (The loop is based on the length of c2, and patching is done based on that index)
 

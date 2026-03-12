@@ -130,7 +130,7 @@ export default function vitePluginChibivue(): Plugin {
 
 これについては Vite の公式ドキュメントの方にもトラブルシューティングとして記載されています．
 
-[Syntax Error / Type Error が発生する (Vite)](https://ja.vitejs.dev/guide/troubleshooting.html#syntax-error-type-error-%E3%81%8B%E3%82%99%E7%99%BA%E7%94%9F%E3%81%99%E3%82%8B)
+[Syntax Error / Type Error が発生する (Vite)](https://ja.vite.dev/guide/troubleshooting.html)
 
 今回は，一時的な対応策として，ブラウザモードでない場合には with 文を含まないコードを生成するようにしてみます．
 

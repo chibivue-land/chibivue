@@ -13,7 +13,7 @@ hero:
       link: /ja/00-introduction/010-about
     - theme: alt
       text: Vue.js Official
-      link: https://v3.vuejs.org/
+      link: https://vuejs.org/
 
 features:
   - title: Reactivity System
