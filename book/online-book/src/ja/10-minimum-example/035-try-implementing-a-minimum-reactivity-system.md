@@ -13,7 +13,7 @@
 また，もう一つ大きな改善として，[feat(reactivity): more efficient reactivity system](https://github.com/vuejs/core/pull/5912) がありますが，こちらも別のチャプターで解説します．
 :::
 
-改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．  
+改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．
 Proxy を用いた実装の流れについて説明してみます．
 
 まず，Vue.js のリアクティビティシステムには `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
@@ -26,9 +26,9 @@ Proxy を用いた実装の流れについて説明してみます．
 
 </KawaikoNote>
 
-まず，targetMap の構造についてです．  
-targetMap はある target の key と dep のマッピングです．  
-target というのはリアクティブにしたいオブジェクト，dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です．  
+まず，targetMap の構造についてです．
+targetMap はある target の key と dep のマッピングです．
+target というのはリアクティブにしたいオブジェクト，dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です．
 コードで表すとこういう感じになります．
 
 ```ts
@@ -72,7 +72,7 @@ export default defineComponent({
 ```
 
 このチャプターではまだ watch は実装していないのですが，イメージのために書いてあります．\
-このコンポーネントでは最終的にかのような targetMap が形成されます．
+このコンポーネントでは最終的にこのような targetMap が形成されます．
 
 ![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
 
@@ -246,19 +246,19 @@ function render() {
 }
 ```
 
-実際にこの関数が走った時，`state.count` の `getter` 関数が実行され，`track` が実行されるようになっています．  
+実際にこの関数が走った時，`state.count` の `getter` 関数が実行され，`track` が実行されるようになっています．
 この状況下で，effect を実行してみます．
 
 ```ts
 effect.run()
 ```
 
-そうすると，まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます．  
-この状態で `track` が走るので，`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます．  
+そうすると，まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます．
+この状態で `track` が走るので，`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます．
 これがリアクティブの形成です．
 
-ここで，increment が実行された時のことを考えてみましょう．  
-increment では `state.count` を書き換えているので `setter` が実行され，`trigger` が実行されます．  
+ここで，increment が実行された時のことを考えてみましょう．
+increment では `state.count` を書き換えているので `setter` が実行され，`trigger` が実行されます．
 `trigger` は `state` と `count` を元に `targetMap` から `effect`(今回の例だと updateComponent)をみつけ，実行します．
 これで画面の更新が行われるようになりました!
 
@@ -270,8 +270,8 @@ increment では `state.count` を書き換えているので `setter` が実行
 
 ## これらを踏まえて実装しよう
 
-一番難しいところは上記までの理解なので，理解ができればあとはソースコードを書くだけです．  
-とは言っても，実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう．  
+一番難しいところは上記までの理解なので，理解ができればあとはソースコードを書くだけです．
+とは言っても，実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう．
 そんな方も一旦ここで実装してみましょう．それから実際のコードを読みながら先ほどのセクションを見返してもらえたらと思います!
 
 まずは必要なファイルを作ります．`packages/reactivity`に作っていきます．
@@ -363,8 +363,8 @@ export function trigger(target: object, key?: unknown) {
 
 track と trigger の中身についてこれまで解説していないのですが，単純に targetMap に登録をしたり取り出して実行したりしているだけなので頑張って読んでみてください．
 
-続いて baseHandler.ts です．ここには reactive proxy のハンドラを定義します．  
-まあ，reactive に直接実装してもいいのですが，本家がこうなっているので真似してみました．  
+続いて baseHandler.ts です．ここには reactive proxy のハンドラを定義します．
+まあ，reactive に直接実装してもいいのですが，本家がこうなっているので真似してみました．
 実際には readonly や shallow などさまざまなプロキシが存在するのでそれらのハンドラをここに実装するイメージです．(今回はやりませんが)
 
 ```ts
@@ -399,9 +399,9 @@ const hasChanged = (value: any, oldValue: any): boolean =>
   !Object.is(value, oldValue)
 ```
 
-ここで，Reflect というものが登場していますが，Proxy と似た雰囲気のものなんですが，Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し，Reflect はあるオブジェクトに対する処理を行うものです．  
-Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で，普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます．  
-そのオブジェクトを変化させる関数を実行したり，読み取る関数を実行したり，key が存在するのかをチェックしたりさまざまなメタ操作ができます．  
+ここで，Reflect というものが登場していますが，Proxy と似た雰囲気のものなんですが，Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し，Reflect はあるオブジェクトに対する処理を行うものです．
+Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で，普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます．
+そのオブジェクトを変化させる関数を実行したり，読み取る関数を実行したり，key が存在するのかをチェックしたりさまざまなメタ操作ができます．
 とりあえず，Proxy = オブジェクトを作る段階でのメタ設定， Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です．
 
 続いて reactive.ts です．
@@ -415,7 +415,7 @@ export function reactive<T extends object>(target: T): T {
 }
 ```
 
-これで reactive 部分の実装は終わりなので，mount する際に実際にこれらを使ってみましょう．  
+これで reactive 部分の実装は終わりなので，mount する際に実際にこれらを使ってみましょう．
 `~/packages/runtime-core/apiCreateApp.ts`です．
 
 ```ts
