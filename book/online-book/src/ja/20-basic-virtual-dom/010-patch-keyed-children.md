@@ -90,7 +90,7 @@ https://ja.vuejs.org/api/built-in-special-attributes.html#key
 
 ## key 属性を元に patch しよう
 
-そしてこれらを実装しているのが，``という関数です．(本家 Vue で探してみましょう．)
+そしてこれらを実装しているのが，`patchKeyedChildren`という関数です．(本家 Vue で探してみましょう．)
 
 方針としては，まず新しい node の key と index のマップを生成します．
 
