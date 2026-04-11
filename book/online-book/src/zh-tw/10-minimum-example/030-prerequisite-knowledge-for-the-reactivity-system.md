@@ -188,7 +188,7 @@ const o = new Proxy(
 具體來說，當訪問（get）此對象的屬性時，原始對象（target）和訪問的鍵名將輸出到控制台．
 讓我們在瀏覽器或其他地方檢查操作．
 
-![proxy_get](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_get.png)
+![Proxy get trap console output](/figures/10-minimum-example/reactivity/proxy-get-trap.png)
 
 您可以看到為從此 Proxy 生成的對象的屬性讀取值而設置的 set 處理正在執行．
 
@@ -207,7 +207,7 @@ const o = new Proxy(
 )
 ```
 
-![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+![Proxy set trap console output](/figures/10-minimum-example/reactivity/proxy-set-trap.png)
 
 <KawaikoNote variant="funny" title="這就是響應式的秘密！">
 

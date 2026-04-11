@@ -72,7 +72,7 @@ export default defineComponent({
 Although we haven't implemented `watch` in this chapter yet, it is written here for the sake of illustration.\
 In this component, the targetMap will eventually be formed as follows.
 
-![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+![targetMap structure](/figures/10-minimum-example/reactivity/target-map-structure.svg)
 
 The key of targetMap is "a certain target". In this example, state1 and state2 correspond to that.\
 The keys that these targets have become the keys of targetMap.\
@@ -141,7 +141,7 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+![reactive track and trigger flow](/figures/10-minimum-example/reactivity/reactive-track-trigger.svg)
 
 <KawaikoNote variant="base" title="Key points so far">
 
@@ -264,7 +264,7 @@ This allows us to achieve reactivity.
 
 It's a bit complicated, so let's summarize it in a diagram.
 
-![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
+![Reactivity setup flow during mount](/figures/10-minimum-example/reactivity/reactivity-setup-flow.svg)
 
 ## Based on these, let's implement it.
 
@@ -474,7 +474,7 @@ The rendering is working fine now, but something seems off.
 Well, it's not surprising because in `updateComponent`, we create elements every time.
 So, let's remove all the elements before each rendering.
 
-![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 Modify the `render` function in `~/packages/runtime-core/renderer.ts` like this:
 
@@ -488,7 +488,7 @@ const render: RootRenderFunction = (vnode, container) => {
 
 Now, how about this?
 
-![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
+![Reactive example rendered in the browser](/figures/10-minimum-example/reactivity/reactive-example-result.png)
 
 Now it seems to be working fine!
 

@@ -138,7 +138,7 @@ export default defineConfig({
 
 让我们尝试在这种状态下启动．
 
-![vite_error](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vite_error.png)
+![Vite error before the SFC plugin is implemented](/figures/10-minimum-example/parse-sfc/vite-error.png)
 
 当然，这会导致错误．做得好（？）．
 
@@ -178,30 +178,7 @@ export default function vitePluginChibivue(): Plugin {
 vite-plugin 的作用是使用 Vite 启用转换，所以解析和编译在主 Vue 包中．\
 那就是 `compiler-sfc` 目录．
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
@@ -403,11 +380,11 @@ export default function vitePluginChibivue(): Plugin {
 
 这段代码在 Vite 运行的进程中运行，这意味着它在 Node 中执行，所以我认为控制台输出会显示在终端中．
 
-![parse_sfc1](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc1.png)
+![SFC descriptor before parser update](/figures/10-minimum-example/parse-sfc/parse-sfc-descriptor-before.png)
 
 /_ 为简洁起见省略 _/
 
-![parse_sfc2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc2.png)
+![SFC descriptor after parser update](/figures/10-minimum-example/parse-sfc/parse-sfc-descriptor-after.png)
 
 看起来解析成功了．做得好！
 

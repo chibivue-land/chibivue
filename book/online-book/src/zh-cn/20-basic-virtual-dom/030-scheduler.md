@@ -33,7 +33,7 @@ app.mount('#app')
 
 当按钮被点击时，`state.message` 上的 `set` 函数被调用两次，所以自然地，`trigger` 函数也会被执行两次．这意味着虚拟 DOM 将被计算两次，补丁也会被执行两次．
 
-![non_scheduled_effect](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/non_scheduled_effect.png)
+![Effect result before scheduler batching](/figures/20-basic-virtual-dom/scheduler/non-scheduled-effect.png)
 
 然而，实际上，补丁只需要执行一次，在第二次触发时．  
 因此，我们将实现一个调度器．调度器负责管理任务的执行顺序和控制．Vue 调度器的作用之一是在队列中管理响应式 effect，并在可能的情况下合并它们．
@@ -174,7 +174,7 @@ app.mount('#app')
 
 尝试点击这个按钮并查看控制台．
 
-![old_state_dom](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/old_state_dom.png)
+![Old DOM state before nextTick](/figures/20-basic-virtual-dom/scheduler/old-state-dom.png)
 
 即使我们在更新 `state.count` 后输出到控制台，信息也是过时的．这是因为当状态更新时，DOM 不会立即更新，在控制台输出时，DOM 仍处于旧状态．
 

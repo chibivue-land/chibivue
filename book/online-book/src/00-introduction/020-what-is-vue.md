@@ -41,6 +41,8 @@ For this, I believe it's clearer to directly quote the official words without ad
 
 For declarative rendering and reactivity, we will delve into them in detail in their respective chapters, so a high-level understanding is fine for now.
 
+![Vue.js as an implementation map](/figures/00-introduction/what-is-vue/vue-implementation-map.svg)
+
 Also, the term "framework" has come up here, and Vue.js promotes itself as a "progressive framework." For more on that, I believe it's best to refer directly to the following section of the documentation:
 
 https://vuejs.org/guide/introduction.html#the-progressive-framework

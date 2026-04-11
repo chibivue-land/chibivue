@@ -413,6 +413,6 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 现在你应该能够渲染了！！！
 
-![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
+![Rendered SFC script result](/figures/10-minimum-example/compile-sfc-script/render-sfc-result.png)
 
 样式没有应用，因为不支持，但现在你可以渲染组件了．

@@ -82,7 +82,7 @@ exp 是右侧．在 v-bind:id="count" 的情况下，包含 count．
 exp 和 arg 都可以动态嵌入变量，所以它们的类型是 ExpressionNode．  
 （因为 arg 也可以像 v-bind:[key]="count" 一样是动态的）
 
-![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/dir_ast.drawio.png)
+![DirectiveNode shape for v-bind](/figures/50-basic-template-compiler/v-bind/directive-node-shape.svg)
 
 ## 解析器修改
 
@@ -175,7 +175,7 @@ function parseAttribute(
 一般来说，必要的项目是 v-bind 是否有参数，是否是 class 或 style．  
 ※ 省略了这次不涉及的处理部分．（请注意这个图不是很严格．）
 
-![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/transform_vbind.drawio.png)
+![v-bind transform flow](/figures/50-basic-template-compiler/v-bind/transform-vbind-flow.svg)
 
 首先，作为前提，由于指令基本上是为元素声明的，  
 与指令相关的转换器从 transformElement 调用．
@@ -224,7 +224,7 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 
 现在我们已经实现到这里，让我们看看它是如何工作的！
 
-![vbind_test](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vbind_test.png)
+![v-bind test result in the browser](/figures/50-basic-template-compiler/v-bind/vbind-test-result.png)
 
 看起来很棒！
 

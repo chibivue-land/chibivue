@@ -221,7 +221,7 @@ const genInterpolation = (
 }
 ```
 
-![compile_sfc_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_sfc_render.png)
+![Compiled SFC template render result](/figures/10-minimum-example/compile-sfc-template/compiled-render-result.png)
 
 It seems that it was compiled successfully. All that's left is to extract the script in the same way and put it into the default exports.
 

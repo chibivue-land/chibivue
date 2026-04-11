@@ -732,6 +732,6 @@ Let's try running it for real!!
 
 It's working properly!
 
-![vif_fizzbuzz](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vif_fizzbuzz.png)
+![v-if FizzBuzz result in the browser](/figures/50-basic-template-compiler/v-if/fizzbuzz-result.png)
 
 Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)

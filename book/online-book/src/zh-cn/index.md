@@ -6,7 +6,7 @@ hero:
   name: "chibivue"
   text: "从一行 \"Hello, World\" 开始，逐步构建"
   tagline: 基于 VitePress 构建
-  image: https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true
+  image: /figures/_brand/logo.png
   actions:
     - theme: brand
       text: 开始阅读 ->

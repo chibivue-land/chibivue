@@ -296,7 +296,7 @@ When `instance.next` doesn't exist, it's a re-render due to changes in the compo
 If the screen is updated, it's OK.\
 Now, you can pass data to the component using props! Great job!
 
-![props](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/props.png)
+![Component props flow in the browser](/figures/10-minimum-example/component-props/props-flow.png)
 
 Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)

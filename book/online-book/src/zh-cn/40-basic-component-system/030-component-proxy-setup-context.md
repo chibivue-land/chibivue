@@ -105,7 +105,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 
 ※ 顺便说一下，我还实现了 defineComponent 和相关类型检查的实现（这允许我们推断代理数据的类型）．
 
-![infer_component_types](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/infer_component_types.png)
+![Component type inference result](/figures/40-basic-component-system/component-proxy-setup-context/infer-component-types.png)
 
 ## setupContext
 
@@ -301,7 +301,7 @@ const Child2 = {
 这只是一个简单的代码，但它不工作．
 它抱怨 state 未定义．
 
-![state_is_not_defined](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/state_is_not_defined.png)
+![state is not defined runtime error](/figures/40-basic-component-system/component-proxy-setup-context/state-is-not-defined.png)
 
 原因是当将代理作为参数传递给 with 语句时，必须定义 has．
 

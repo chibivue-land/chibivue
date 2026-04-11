@@ -150,7 +150,7 @@ app.mount('#app')
 
 画面にメッセージを表示することができました! やったね!
 
-![hello_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_createApp.png)
+![createApp example rendered in the browser](/figures/10-minimum-example/create-app-api/hello-create-app-result.png)
 
 <KawaikoNote variant="surprise" title="第一歩完了！">
 

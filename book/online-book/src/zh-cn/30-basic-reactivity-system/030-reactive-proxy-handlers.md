@@ -36,7 +36,7 @@ app.mount('#app')
 
 如果你检查控制台，你应该看到以下结果：
 
-![reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_html_element.png)
+![Reactive HTML element console output](/figures/30-basic-reactivity-system/reactive-proxy-handlers/reactive-html-element.png)
 
 现在，让我们添加一个焦点函数．
 
@@ -70,7 +70,7 @@ app.mount('#app')
 
 令人惊讶的是，它抛出了一个错误．
 
-![focus_in_reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_reactive_html_element.png)
+![Focus result in a reactive HTML element](/figures/30-basic-reactivity-system/reactive-proxy-handlers/focus-in-reactive-html-element.png)
 
 原因是 `document.getElementById` 获得的元素被用来生成 Proxy 本身．
 
@@ -109,7 +109,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![element_to_string](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/element_to_string.png)
+![HTMLElement toString result](/figures/30-basic-reactivity-system/reactive-proxy-handlers/element-to-string.png)
 
 这允许我们确定对象的类型．虽然有些硬编码，但让我们概括这个确定函数．
 
@@ -169,7 +169,7 @@ export function reactive<T extends object>(target: T): T {
 
 现在，焦点代码应该工作了！
 
-![focus_in_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_element.png)
+![Focus result in a plain HTML element](/figures/30-basic-reactivity-system/reactive-proxy-handlers/focus-in-element.png)
 
 ## 实现 TemplateRefs
 

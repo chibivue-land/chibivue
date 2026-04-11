@@ -154,7 +154,7 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 
 I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together.
 
-https://twitter.com/ubugeeei
+https://x.com/ubugeeei
 
 ## About the Discord Server
 
@@ -184,27 +184,26 @@ You can also join from the Discord button on the top right of this book's header
 
 **ubugeeei (mononokeking)**
 
-<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+<img class="author-avatar" src="/figures/_people/ubugeeei-avatar.jpg" alt="ubugeeei" width="160" height="160">
 
-Member of [Vue.js](https://github.com/vuejs), core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp).\
+Member of the [Vue.js](https://vuejs.org/about/team.html) Core Team, core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp), [Vite+](https://github.com/voidzero-dev/vite-plus) Core Contributor, and Chief Engineer at [Mates](https://github.com/mates-inc).\
 [chibivue land](https://github.com/chibivue-land) King. https://chibivue.land
 
-I'm also developing [vize](https://github.com/ubugeeei/vize) (Vue.js toolchain in Rust) and [ox-content](https://github.com/ubugeeei/ox-content) (documentation toolchain in Rust).
+I build tools and books around Vue, language processors, and developer experience, including [chibivue](https://github.com/chibivue-land/chibivue), [Vize](https://github.com/ubugeeei/vize), [Ox Content](https://github.com/ubugeeei/ox-content), [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor), and [Vapor Moon](https://github.com/ubugeeei/vapor-moon).
 
 https://wtrclred.io/
 
 If you'd like, I would appreciate your support as a sponsor! https://github.com/sponsors/ubugeeei
 
-<div align="center">
-
 ## Sponsors
 
-<a href="https://github.com/sponsors/ubugeeei">
-  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+<div class="sponsors-block">
+<a class="sponsors-image-link" href="https://github.com/sponsors/ubugeeei">
+  <img class="sponsors-image sponsors-image--light" src="/figures/_sponsors/ubugeeei-sponsors.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--dark" src="/figures/_sponsors/ubugeeei-sponsors-dark.png" alt="ubugeeei's sponsors" />
 </a>
 
-If you'd like to support my work, I would greatly appreciate it!
-
-https://github.com/sponsors/ubugeeei
+<p>If you'd like to support my work, I would greatly appreciate it!</p>
+<p><a href="https://github.com/sponsors/ubugeeei">https://github.com/sponsors/ubugeeei</a></p>
 
 </div>

@@ -296,7 +296,7 @@ const setupRenderEffect = (
 如果螢幕更新了，那就沒問題．\
 現在，您可以使用 props 將資料傳遞給組件！做得很好！
 
-![props](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/props.png)
+![Component props flow in the browser](/figures/10-minimum-example/component-props/props-flow.png)
 
 到此為止的原始碼：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)

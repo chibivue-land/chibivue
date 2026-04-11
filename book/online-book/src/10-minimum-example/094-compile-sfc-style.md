@@ -86,14 +86,14 @@ export default function vitePluginChibivue(): Plugin {
 
 Now, let's check in the browser.
 
-![load_virtual_css_module](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module.png)
+![Virtual CSS module request in the browser](/figures/10-minimum-example/compile-sfc-style/load-virtual-css-module.png)
 
 It seems that the styles are applied correctly.
 
 In the browser, you can see that the CSS is imported and a `.vue.css` file is generated virtually.
 
-![load_virtual_css_module2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module2.png)  
-![load_virtual_css_module3](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module3.png)
+![Loaded CSS module in the browser](/figures/10-minimum-example/compile-sfc-style/loaded-css-in-browser.png)
+![Generated Vue CSS module](/figures/10-minimum-example/compile-sfc-style/generated-vue-css-module.png)
 
 Now you can use SFC!
 

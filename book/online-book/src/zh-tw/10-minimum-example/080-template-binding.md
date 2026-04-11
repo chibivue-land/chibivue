@@ -392,7 +392,7 @@ const app = createApp({
 })
 ```
 
-![parse_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_interpolation.png)
+![Interpolation AST output](/figures/10-minimum-example/template-binding/parse-interpolation-ast.png)
 
 看起來不錯！
 
@@ -472,7 +472,7 @@ const setupRenderEffect = (
 
 如果你已經走到這一步，你應該能夠渲染了．讓我們檢查一下！
 
-![render_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_interpolation.png)
+![Rendered interpolation result in the browser](/figures/10-minimum-example/template-binding/render-interpolation-result.png)
 
 這完成了第一個綁定！
 
@@ -698,7 +698,7 @@ const app = createApp({
 })
 ```
 
-![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
+![Compiled directive result in the browser](/figures/10-minimum-example/template-binding/compile-directives-result.png)
 
 你做到了．\
 我們越來越接近 Vue 了！\

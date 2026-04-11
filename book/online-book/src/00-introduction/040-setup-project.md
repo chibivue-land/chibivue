@@ -18,7 +18,7 @@ Access the URL displayed in your browser (e.g., `http://localhost:5173/`) to lau
 
 ### Playground Layout
 
-![web_playground_initial](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_initial.png)
+![Initial Web Playground screen](/figures/00-introduction/setup-project/web-playground-initial.png)
 
 The Playground consists of four areas:
 
@@ -46,7 +46,7 @@ The Playground consists of four areas:
 4. **Check the console**
    Click the "Console" tab to view output from console.log and other sources.
 
-![web_playground_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_console.png)
+![Web Playground console output](/figures/00-introduction/setup-project/web-playground-console.png)
 
 ::: tip
 The Web Playground uses [WebContainer](https://webcontainers.io/).
@@ -282,7 +282,7 @@ pnpm dev
 
 Access the developer server that started with this command. If a message displays, then the setup is complete.
 
-![hello chibivue](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_chibivue.png)
+![Hello chibivue rendered in the browser](/figures/00-introduction/setup-project/hello-chibivue-result.png)
 
 Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls//00_introduction/010_project_setup)

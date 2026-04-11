@@ -148,7 +148,7 @@ app.mount('#app')
 
 We were able to display the message on the screen! Well done!
 
-![hello_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_createApp.png)
+![createApp example rendered in the browser](/figures/10-minimum-example/create-app-api/hello-create-app-result.png)
 
 <KawaikoNote variant="surprise" title="First step complete!">
 

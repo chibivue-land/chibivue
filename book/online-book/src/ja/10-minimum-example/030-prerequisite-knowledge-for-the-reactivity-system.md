@@ -188,7 +188,7 @@ const o = new Proxy(
 具体的には，このオブジェクトのプロパティにアクセス (get) した際に元のオブジェクト (target) とアクセスされた key 名がコンソールに出力されるようになっています．
 実際にブラウザ等で動作を確認してみましょう．
 
-![proxy_get](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_get.png)
+![Proxy get trap console output](/figures/10-minimum-example/reactivity/proxy-get-trap.png)
 
 この Proxy で生成したオブジェクトのプロパティから値を読み取った時に設定された処理が実行されているのがわかるかと思います．
 
@@ -207,7 +207,7 @@ const o = new Proxy(
 )
 ```
 
-![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+![Proxy set trap console output](/figures/10-minimum-example/reactivity/proxy-set-trap.png)
 
 <KawaikoNote variant="funny" title="これがリアクティビティの秘密！">
 

@@ -31,6 +31,8 @@ const vnode = {
 }
 ```
 
+![ShapeFlags pack VNode shape into bits](/figures/20-basic-virtual-dom/bit-flags/shape-flag-overview.svg)
+
 首先，标志的初始值是 0．（为了简单起见，这个解释使用 8 位．）
 
 ```ts

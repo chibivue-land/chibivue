@@ -18,7 +18,7 @@ $ pnpm play
 
 ### Playground 佈局
 
-![web_playground_initial](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_initial.png)
+![Initial Web Playground screen](/figures/00-introduction/setup-project/web-playground-initial.png)
 
 Playground 由四個區域組成：
 
@@ -46,7 +46,7 @@ Playground 由四個區域組成：
 4. **查看控制台**
    點擊「Console」標籤頁查看 console.log 等輸出內容．
 
-![web_playground_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_console.png)
+![Web Playground console output](/figures/00-introduction/setup-project/web-playground-console.png)
 
 ::: tip
 Web Playground 使用 [WebContainer](https://webcontainers.io/)．
@@ -282,7 +282,7 @@ pnpm dev
 
 訪問使用此命令啟動的開發伺服器．如果顯示消息，則設置完成．
 
-![hello chibivue](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_chibivue.png)
+![Hello chibivue rendered in the browser](/figures/00-introduction/setup-project/hello-chibivue-result.png)
 
 到此為止的源代碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls//00_introduction/010_project_setup)

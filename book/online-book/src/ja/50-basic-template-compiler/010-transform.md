@@ -6,7 +6,7 @@
 Minimum Example 部門でやったところから少し時間が空いてしまったので，今の実装がどうなっていたか少しおさらいをしておきましょう．  
 主なキーワードは Parse, AST, Codegen でした．
 
-![me_template_compiler_design](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/me_template_compiler_design.drawio.png)
+![Minimum compiler pipeline](/figures/50-basic-template-compiler/transform/basic-compiler-pipeline.svg)
 
 ```ts
 export function baseCompile(
@@ -42,7 +42,7 @@ export function baseCompile(
 
 今回はこの transform という関数を実装していきます．
 
-![design_with_transformer](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/design_with_transformer.drawio.png)
+![Compiler pipeline with transformer](/figures/50-basic-template-compiler/transform/compiler-pipeline-with-transformer.svg)
 
 ## transform とは?
 
@@ -208,24 +208,7 @@ https://github.com/vuejs/core/tree/37a14a5dae9999bbe684c6de400afc63658ffe90/pack
 
 イメージ ↓
 
-```mermaid
-classDiagram
-
-class NodeTransform
-<<interface>> NodeTransform
-
-class DirectiveTransform
-<<interface>> DirectiveTransform
-
-NodeTransform <|.. transformElement
-NodeTransform <|.. transformExpression
-NodeTransform <|.. other_node_transformers
-
-DirectiveTransform <|.. transformOn
-DirectiveTransform <|.. transformFor
-DirectiveTransform <|.. transformIf
-DirectiveTransform <|.. other_directive_transformers
-```
+![Transform type relationships](/figures/50-basic-template-compiler/transform/transform-type-relationships.svg)
 
 次に context についてですが，TransformContext にはこれらの transform の際に扱う情報や関数を持ちます．  
 今後また追加されていきますが，初めはこれだけで Ok です．

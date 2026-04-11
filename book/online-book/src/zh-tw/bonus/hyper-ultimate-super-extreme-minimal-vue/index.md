@@ -22,6 +22,8 @@
 
 但是，即使是一個檔案，在一個檔案中寫 100,000 行也是沒有意義的，所以我將目標是在少於 150 行內實現它．
 
+![Full source of Hyper Ultimate Super Extreme Minimal Vue in one file](/figures/bonus/hyper-ultimate-super-extreme-minimal-vue/full-source-screenshot.png)
+
 標題是"**Hyper Ultimate Super Extreme Minimal Vue**"．
 
 ::: info 關於名稱

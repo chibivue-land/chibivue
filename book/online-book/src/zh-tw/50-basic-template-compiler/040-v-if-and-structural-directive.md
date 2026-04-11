@@ -732,6 +732,6 @@ function genConditionalExpression(
 
 它工作正常！
 
-![vif_fizzbuzz](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vif_fizzbuzz.png)
+![v-if FizzBuzz result in the browser](/figures/50-basic-template-compiler/v-if/fizzbuzz-result.png)
 
 到此為止的原始碼：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)

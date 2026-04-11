@@ -22,6 +22,8 @@
 
 ただ 1 ファイルといっても 1 ファイルに 10 万行書いてしまっては意味がないですから，150 行ないくらいを目標に実装していきます．
 
+![Full source of Hyper Ultimate Super Extreme Minimal Vue in one file](/figures/bonus/hyper-ultimate-super-extreme-minimal-vue/full-source-screenshot.png)
+
 題して，「**Hyper Ultimate Super Extreme Minimal Vue**」
 
 ::: info 名前の由来について

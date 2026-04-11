@@ -33,7 +33,7 @@ app.mount('#app')
 
 當按鈕被點擊時，`state.message` 上的 `set` 函式被呼叫兩次，所以自然地，`trigger` 函式也會被執行兩次．這意味著虛擬 DOM 將被計算兩次，補丁也會被執行兩次．
 
-![non_scheduled_effect](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/non_scheduled_effect.png)
+![Effect result before scheduler batching](/figures/20-basic-virtual-dom/scheduler/non-scheduled-effect.png)
 
 然而，實際上，補丁只需要執行一次，在第二次觸發時．  
 因此，我們將實現一個調度器．調度器負責管理任務的執行順序和控制．Vue 調度器的作用之一是在佇列中管理響應式 effect，並在可能的情況下合併它們．
@@ -174,7 +174,7 @@ app.mount('#app')
 
 嘗試點擊這個按鈕並查看控制台．
 
-![old_state_dom](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/old_state_dom.png)
+![Old DOM state before nextTick](/figures/20-basic-virtual-dom/scheduler/old-state-dom.png)
 
 即使我們在更新 `state.count` 後輸出到控制台，資訊也是過時的．這是因為當狀態更新時，DOM 不會立即更新，在控制台輸出時，DOM 仍處於舊狀態．
 

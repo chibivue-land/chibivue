@@ -106,7 +106,7 @@ export default { ..._sfc_main, render }
 
 如下所示，在原始實現中，從 `setup` 函式綁定的任何內容都透過 `$setup` 解析．
 
-![resolve_bindings_original](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_bindings_original.png)
+![Original resolve bindings output](/figures/50-basic-template-compiler/transform-expression/resolve-bindings-original.png)
 
 然而，實現這個有點困難，所以我們將簡化它並透過添加 `_ctx.` 來實現．（所有 props 和 setup 都將從 `_ctx` 解析）
 

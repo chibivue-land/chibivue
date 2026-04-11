@@ -25,7 +25,7 @@ Minimal Example 部門，完走おめでとうございます！
 ここらで今現状でのディレクトリと，vuejs/core のディレクトリを見比べてみましょう．
 
 chibivue
-![minimum_example_artifacts](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/minimum_example_artifacts.png)
+![Minimum example implementation artifacts](/figures/10-minimum-example/break/minimum-example-artifacts.png)
 
 ※ 本家のコードはデカくてスクショに収まりきらないので割愛
 

@@ -49,7 +49,7 @@ touch packages/runtime-dom/nodeOps.ts
 
 至於這些文件的角色，僅僅用文字解釋可能很難理解，所以請參考以下圖表：
 
-![refactor_createApp!](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp.png)
+![runtime-core and runtime-dom responsibilities](/figures/10-minimum-example/package-architecture/runtime-core-dom-overview.svg)
 
 #### 渲染器的設計
 
@@ -76,7 +76,7 @@ export const createApp = (options: Options): App => {
 - 在 `runtime-dom/index.ts` 中使用 `nodeOps` 和 `renderer` 的工廠來完成渲染器．
 
 這是圖表中用紅色突出顯示的部分．
-![refactor_createApp_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_render.png)
+![Renderer dependency injection](/figures/10-minimum-example/package-architecture/renderer-dependency-injection.svg)
 
 讓我解釋一下源代碼．此時，虛擬 DOM 的渲染功能尚未實現，所以我們將創建與之前相同功能的代碼．
 
@@ -186,7 +186,7 @@ DI 和 DIP 是設計模式中比較難理解的概念．\
 
 現在，讓我們回到實現．現在渲染器已經生成，我們需要做的就是考慮以下圖表中的紅色區域．
 
-![refactor_createApp_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_createApp.png)
+![createAppAPI factory flow](/figures/10-minimum-example/package-architecture/create-app-api-factory.svg)
 
 然而，這是一個簡單的任務．我們只需要實現 createApp 的工廠函數，以便它可以接受我們之前創建的渲染器．
 

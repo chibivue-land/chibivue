@@ -20,7 +20,7 @@ app.mount('#app')
 
 以下のようなエラーが出てしまうかと思います．
 
-![fragment_error.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/fragment_error.png)
+![Fragment error result in the browser](/figures/50-basic-template-compiler/fragment/fragment-error-result.png)
 
 エラー文をみてみると， Function コンストラクタで起きているようです．
 

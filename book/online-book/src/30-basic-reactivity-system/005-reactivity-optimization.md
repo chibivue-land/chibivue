@@ -62,6 +62,8 @@ The Push-Pull algorithm adopted by alien-signals and Vue 3.6 combines the advant
 signal changes → propagate dirty flag → read computed in effect → recalculate if dirty
 ```
 
+![Push-Pull reactivity overview](/figures/30-basic-reactivity-system/reactivity-optimization/push-pull-overview.svg)
+
 This approach provides:
 - Avoiding unnecessary calculations (advantage of Pull)
 - Efficient dependency tracking (advantage of Push)

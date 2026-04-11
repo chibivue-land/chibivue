@@ -511,6 +511,74 @@ html.dark .vp-doc a:hover {
 }
 
 /**
+ * Component: Book Figures
+ * -------------------------------------------------------------------------- */
+
+.vp-doc img[src^='/figures/'] {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border: 1px solid rgba(154, 170, 196, 0.35);
+  border-radius: 8px;
+  background: #0f1724;
+  box-shadow: 0 12px 28px rgba(26, 39, 68, 0.12);
+}
+
+html.dark .vp-doc img[src^='/figures/'] {
+  border-color: rgba(139, 228, 211, 0.24);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+}
+
+.vp-doc img[src^='/figures/_brand/'],
+.vp-doc img.author-avatar,
+.vp-doc img.sponsors-image {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vp-doc img.author-avatar {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  margin: 1rem 0 1.25rem;
+  border: 1px solid rgba(154, 170, 196, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(26, 39, 68, 0.12);
+}
+
+html.dark .vp-doc img.author-avatar {
+  border-color: rgba(139, 228, 211, 0.24);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+}
+
+.vp-doc .sponsors-block {
+  text-align: center;
+}
+
+.vp-doc a.sponsors-image-link {
+  display: block;
+}
+
+.vp-doc img.sponsors-image {
+  width: min(100%, 560px);
+  margin: 1.5rem auto;
+}
+
+.vp-doc img.sponsors-image--dark {
+  display: none;
+}
+
+html.dark .vp-doc img.sponsors-image--light {
+  display: none;
+}
+
+html.dark .vp-doc img.sponsors-image--dark {
+  display: block;
+}
+
+/**
  * Component: Sponsor Button
  * -------------------------------------------------------------------------- */
 

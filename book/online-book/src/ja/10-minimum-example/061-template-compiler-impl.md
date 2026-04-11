@@ -229,31 +229,7 @@ app.mount('#app')
 そして，ランタイム上のコンパイラ，SFC コンパイラはそれぞれ`compiler-dom`, `compiler-sfc`というディレクトリに実装されています．  
 ぜひ，ここらでこの図を見返してみてください．
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
@@ -417,7 +393,7 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` })
 app.mount('#app')
 ```
 
-![simple_template_compiler](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler.png)
+![Simple template compiler output before cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-before.png)
 
 無事に動いているようです．同じ構造であればコンパイルできるはずなので，少しいじってみて反映されるか確認してみましょう．
 
@@ -428,7 +404,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_template_compiler2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler2.png)
+![Simple template compiler output after cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-after.png)
 
 ちゃんと実装できているようです！
 

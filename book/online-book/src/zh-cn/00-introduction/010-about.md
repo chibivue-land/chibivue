@@ -154,7 +154,7 @@
 
 我打算尽我所能回应关于这本书的问题和反馈．请随时在 Twitter 上联系我（通过 DM 或直接在时间线上）．由于我已经公开了存储库，您也可以在那里发布问题．我知道我自己的理解并不完美，所以我感谢任何反馈．如果您发现任何解释不清楚或具有挑战性，请不要犹豫询问．我的目标是向尽可能多的人传播清晰正确的解释，我希望我们能够一起构建这个．
 
-https://twitter.com/ubugeeei
+https://x.com/ubugeeei
 
 ## 关于 Discord 服务器
 
@@ -184,27 +184,26 @@ https://twitter.com/ubugeeei
 
 **ubugeeei (もののけ王)**
 
-<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+<img class="author-avatar" src="/figures/_people/ubugeeei-avatar.jpg" alt="ubugeeei" width="160" height="160">
 
-[Vue.js](https://github.com/vuejs) 成员，[Vue.js Japan User Group](https://github.com/vuejs-jp) 核心工作人员．\
+[Vue.js](https://vuejs.org/about/team.html) Core Team 成员，[Vue.js Japan User Group](https://github.com/vuejs-jp) Core Staff，[Vite+](https://github.com/voidzero-dev/vite-plus) Core Contributor，[株式会社メイツ](https://github.com/mates-inc) Chief Engineer．\
 [chibivue land](https://github.com/chibivue-land) King. https://chibivue.land
 
-我还在开发 [vize](https://github.com/ubugeeei/vize)（Rust 制作的 Vue.js 工具链）和 [ox-content](https://github.com/ubugeeei/ox-content)（Rust 制作的文档工具链）．
+我在围绕 Vue、语言处理器和开发体验制作工具与书籍，主要包括 [chibivue](https://github.com/chibivue-land/chibivue)、[Vize](https://github.com/ubugeeei/vize)、[Ox Content](https://github.com/ubugeeei/ox-content)、[reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor) 和 [Vapor Moon](https://github.com/ubugeeei/vapor-moon)．
 
 https://wtrclred.io/
 
 如果您愿意，请作为赞助商支持我！ https://github.com/sponsors/ubugeeei
 
-<div align="center">
-
 ## 赞助商
 
-<a href="https://github.com/sponsors/ubugeeei">
-  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+<div class="sponsors-block">
+<a class="sponsors-image-link" href="https://github.com/sponsors/ubugeeei">
+  <img class="sponsors-image sponsors-image--light" src="/figures/_sponsors/ubugeeei-sponsors.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--dark" src="/figures/_sponsors/ubugeeei-sponsors-dark.png" alt="ubugeeei's sponsors" />
 </a>
 
-如果您想支持我的工作，我将非常感激！
-
-https://github.com/sponsors/ubugeeei
+<p>如果您想支持我的工作，我将非常感激！</p>
+<p><a href="https://github.com/sponsors/ubugeeei">https://github.com/sponsors/ubugeeei</a></p>
 
 </div>

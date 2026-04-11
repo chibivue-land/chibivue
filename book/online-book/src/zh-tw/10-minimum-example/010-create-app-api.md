@@ -134,7 +134,7 @@ app.mount('#app')
 
 我們能夠在螢幕上顯示消息！做得好！
 
-![hello_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_createApp.png)
+![createApp example rendered in the browser](/figures/10-minimum-example/create-app-api/hello-create-app-result.png)
 
 到此為止的源代碼：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)

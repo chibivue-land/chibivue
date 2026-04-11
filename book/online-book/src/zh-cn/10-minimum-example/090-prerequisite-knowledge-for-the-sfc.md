@@ -206,9 +206,9 @@ pwd # ~/plugin-sample
 pnpm dev
 ```
 
-![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)
+![Sample Vite plugin console output](/figures/10-minimum-example/sfc-prerequisites/sample-vite-plugin-console.png)
 
-![sample_vite_plugin_source](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_source.png)
+![Sample Vite plugin transformed source](/figures/10-minimum-example/sfc-prerequisites/sample-vite-plugin-source.png)
 
 你可以看到源代码已经被正确修改了．
 

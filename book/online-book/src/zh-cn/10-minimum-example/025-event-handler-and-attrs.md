@@ -229,7 +229,7 @@ app.mount('#app')
 
 我们现在可以使用 h 函数注册事件处理器！
 
-![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
+![Event handler example rendered in the browser](/figures/10-minimum-example/event-handler-and-attrs/event-handler-result.png)
 
 ## 尝试支持其他 props
 
@@ -261,7 +261,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_h_function_attr](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_attr.png)
+![Attribute patching example rendered in the browser](/figures/10-minimum-example/event-handler-and-attrs/attrs-result.png)
 
 现在我们可以处理广泛的 HTML！
 

@@ -85,14 +85,14 @@ export default function vitePluginChibivue(): Plugin {
 
 現在，讓我們在瀏覽器中檢查．
 
-![load_virtual_css_module](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module.png)
+![Virtual CSS module request in the browser](/figures/10-minimum-example/compile-sfc-style/load-virtual-css-module.png)
 
 看起來樣式被正確應用了．
 
 在瀏覽器中，你可以看到 CSS 被匯入，並且虛擬生成了一個 `.vue.css` 檔案．
 
-![load_virtual_css_module2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module2.png)  
-![load_virtual_css_module3](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module3.png)
+![Loaded CSS module in the browser](/figures/10-minimum-example/compile-sfc-style/loaded-css-in-browser.png)
+![Generated Vue CSS module](/figures/10-minimum-example/compile-sfc-style/generated-vue-css-module.png)
 
 現在你可以使用 SFC 了！
 

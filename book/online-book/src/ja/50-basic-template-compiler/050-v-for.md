@@ -314,7 +314,7 @@ export interface ForParseResult {
 
 https://ja.vuejs.org/guide/essentials/list.html#v-for-with-an-object
 
-![v_for_ast.drawio.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for_ast.drawio.png)
+![ForParseResult shape](/figures/50-basic-template-compiler/v-for/for-parse-result.svg)
 
 value に関しては，`{ id, name, color, }` のように分割代入を使用した場合は複数の Identifier を持つことになります．
 
@@ -851,7 +851,7 @@ function createParamsList(
 
 実際に動かしてみましょう！
 
-![v_for](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for.png)
+![v-for result in the browser](/figures/50-basic-template-compiler/v-for/v-for-result.png)
 
 順調そうです．
 
