@@ -21,7 +21,7 @@
 
 ---
 
-**chibivue** 是 [Vue.js](https://github.com/vuejs/core) 的最小化教学实现。
+**chibivue** 是 [Vue.js](https://github.com/vuejs/core) 的最小化教学实现．
 
 - 响应式系统
 - 虚拟 DOM 和补丁渲染
@@ -70,17 +70,17 @@ pnpm impl:dev   # 启动开发服务器
 
 **超极限超极端最小 Vue**
 
-仅用 **110 行**代码实现 createApp、虚拟 DOM、响应式、模板编译器和 SFC 编译器。
+仅用 **110 行**代码实现 createApp，虚拟 DOM，响应式，模板编译器和 SFC 编译器．
 
 [阅读章节](https://book.chibivue.land/zh-cn/bonus/hyper-ultimate-super-extreme-minimal-vue) · [查看源码](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
 ## 贡献
 
-请查看 [contributing.md](.github/contributing.md)。
+请查看 [contributing.md](.github/contributing.md)．
 
 ## 社区
 
-加入我们的 [Discord 服务器](https://discord.gg/aVHvmbmSRy) 参与讨论、提问和获取公告。
+加入我们的 [Discord 服务器](https://discord.gg/aVHvmbmSRy) 参与讨论，提问和获取公告．
 
 ---
 

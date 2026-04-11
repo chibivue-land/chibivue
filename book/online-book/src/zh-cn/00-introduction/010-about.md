@@ -189,7 +189,7 @@ https://x.com/ubugeeei
 [Vue.js](https://vuejs.org/about/team.html) Core Team 成员，[Vue.js Japan User Group](https://github.com/vuejs-jp) Core Staff，[Vite+](https://github.com/voidzero-dev/vite-plus) Core Contributor，[株式会社メイツ](https://github.com/mates-inc) Chief Engineer．\
 [chibivue land](https://github.com/chibivue-land) King. https://chibivue.land
 
-我在围绕 Vue、语言处理器和开发体验制作工具与书籍，主要包括 [chibivue](https://github.com/chibivue-land/chibivue)、[Vize](https://github.com/ubugeeei/vize)、[Ox Content](https://github.com/ubugeeei/ox-content)、[reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor) 和 [Vapor Moon](https://github.com/ubugeeei/vapor-moon)．
+我在围绕 Vue，语言处理器和开发体验制作工具与书籍，主要包括 [chibivue](https://github.com/chibivue-land/chibivue)，[Vize](https://github.com/ubugeeei/vize)，[Ox Content](https://github.com/ubugeeei/ox-content)，[reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor) 和 [Vapor Moon](https://github.com/ubugeeei/vapor-moon)．
 
 https://wtrclred.io/
 
