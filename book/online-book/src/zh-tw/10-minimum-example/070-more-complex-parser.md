@@ -642,7 +642,7 @@ export function baseCompile(template: string) {
 
 螢幕不會顯示任何內容，但讓我們檢查控制台．
 
-![simple_template_compiler_complex_html](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler_complex_html.png)
+![AST output for complex HTML](/figures/10-minimum-example/more-complex-parser/complex-html-ast.png)
 
 看起來解析進展順利．\
 現在，讓我們基於生成的 AST 繼續實現 codegen．
@@ -732,7 +732,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![render_template](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_template.png)
+![Rendered template result in the browser](/figures/10-minimum-example/more-complex-parser/render-template-result.png)
 
 怎麼樣？看起來我們可以很好地渲染螢幕．
 

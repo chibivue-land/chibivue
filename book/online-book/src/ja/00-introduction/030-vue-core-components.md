@@ -104,31 +104,7 @@ https://github.com/vuejs/core/tree/main/packages
 です．
 それぞれの依存関係についてはコントリビュートガイドのこの図がとてもわかりやすいです．
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 

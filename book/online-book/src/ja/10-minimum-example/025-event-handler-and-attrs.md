@@ -236,7 +236,7 @@ app.mount('#app')
 
 h 関数でイベントハンドラを登録できるようになりました！
 
-![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
+![Event handler example rendered in the browser](/figures/10-minimum-example/event-handler-and-attrs/event-handler-result.png)
 
 <KawaikoNote variant="funny" title="invoker の工夫">
 
@@ -275,7 +275,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_h_function_attr](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_attr.png)
+![Attribute patching example rendered in the browser](/figures/10-minimum-example/event-handler-and-attrs/attrs-result.png)
 
 これでかなりの HTML に対応することができました!
 

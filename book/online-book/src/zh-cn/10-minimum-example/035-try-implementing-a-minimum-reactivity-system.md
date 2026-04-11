@@ -72,7 +72,7 @@ export default defineComponent({
 虽然我们在本章中还没有实现 `watch`，但为了说明而写在这里．\
 在这个组件中，targetMap 最终将形成如下：
 
-![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+![targetMap structure](/figures/10-minimum-example/reactivity/target-map-structure.svg)
 
 targetMap 的键是"某个目标"．在这个例子中，state1 和 state2 对应于此．\
 这些目标拥有的键成为 targetMap 的键．
@@ -141,7 +141,7 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+![reactive track and trigger flow](/figures/10-minimum-example/reactivity/reactive-track-trigger.svg)
 
 在这里，您可能会注意到一个缺失的元素．那就是"在 track 中注册哪个函数？"．
 答案是 `activeEffect` 的概念．
@@ -256,7 +256,7 @@ effect.run()
 
 这有点复杂，所以让我们用图表总结一下．
 
-![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
+![Reactivity setup flow during mount](/figures/10-minimum-example/reactivity/reactivity-setup-flow.svg)
 
 ## 基于这些，让我们实现它．
 
@@ -466,7 +466,7 @@ app.mount('#app')
 嗯，这并不奇怪，因为在 `updateComponent` 中，我们每次都创建元素．
 所以，让我们在每次渲染之前删除所有元素．
 
-![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 像这样修改 `~/packages/runtime-core/renderer.ts` 中的 `render` 函数：
 
@@ -480,7 +480,7 @@ const render: RootRenderFunction = (vnode, container) => {
 
 现在，这样如何？
 
-![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
+![Reactive example rendered in the browser](/figures/10-minimum-example/reactivity/reactive-example-result.png)
 
 现在似乎工作正常！
 

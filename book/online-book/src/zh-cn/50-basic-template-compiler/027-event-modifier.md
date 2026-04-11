@@ -110,7 +110,7 @@ function parseAttribute(
 
 当前的配置如下．
 
-![50-027-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
+![Compiler architecture before DOM modifiers](/figures/50-basic-template-compiler/event-modifier/compiler-architecture-core-only.svg)
 
 当你再次理解 compiler-core 和 compiler-dom 的角色时，  
 compiler-core 提供不依赖于 DOM 的编译器功能，如生成和转换 AST．
@@ -164,7 +164,7 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 这是关系的图表．  
 不是从 compiler-dom 传递所有转换器，而是在 compiler-core 中实现默认实现，配置允许添加额外的转换器．
 
-![50-027-new-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
+![Compiler architecture with DOM augmentor](/figures/50-basic-template-compiler/event-modifier/compiler-architecture-dom-augmentor.svg)
 
 通过这样，compiler-core 可以执行不依赖于 DOM 的转换器，compiler-dom 可以在执行 compiler-core 中的转换器的同时实现依赖于 DOM 的处理．
 

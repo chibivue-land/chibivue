@@ -635,7 +635,7 @@ export function baseCompile(template: string) {
 
 画面は何も表示されなくなってしまいますが，コンソールを確認してみましょう．
 
-![simple_template_compiler_complex_html](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler_complex_html.png)
+![AST output for complex HTML](/figures/10-minimum-example/more-complex-parser/complex-html-ast.png)
 
 いい感じにパースができているようです．\
 それではここで生成した AST を元に codegen の方の実装を進めていこうと思います．
@@ -726,7 +726,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![render_template](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_template.png)
+![Rendered template result in the browser](/figures/10-minimum-example/more-complex-parser/render-template-result.png)
 
 どうでしょうか．とってもいいっ感じに画面を描画できているようです．
 

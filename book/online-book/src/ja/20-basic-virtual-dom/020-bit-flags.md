@@ -34,6 +34,8 @@ const vnode = {
 }
 ```
 
+![ShapeFlags pack VNode shape into bits](/figures/20-basic-virtual-dom/bit-flags/shape-flag-overview.svg)
+
 まず，フラグの初期値は 0 です．(簡略化のため 8bit で説明しています．)
 
 ```ts

@@ -295,7 +295,7 @@ const setupRenderEffect = (
 これで画面が更新されるようになれば OK です．\
 これで props を利用することによってコンポーネントにデータを受け渡せるようになりました！　やったね！
 
-![props](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/props.png)
+![Component props flow in the browser](/figures/10-minimum-example/component-props/props-flow.png)
 
 ここまでのソースコード：  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)

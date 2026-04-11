@@ -69,6 +69,8 @@ alien-signals 和 Vue 3.6 采用的 Push-Pull 算法结合了两者的优点：
 signal 变化 → 传播 dirty 标志 → 在 effect 中读取 computed → 如果 dirty 则重新计算
 ```
 
+![Push-Pull reactivity overview](/figures/30-basic-reactivity-system/reactivity-optimization/push-pull-overview.svg)
+
 这种方法提供：
 - 避免不必要的计算（Pull 的优点）
 - 高效的依赖跟踪（Push 的优点）

@@ -114,6 +114,8 @@ Implement `processComponent` similar to `processElement` and `processText` for h
 
 First, let's start with an overview and detailed explanation.
 
+![Component instance flow](/figures/10-minimum-example/minimum-component/component-instance-flow.svg)
+
 ```ts
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
   const { type } = n2

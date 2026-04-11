@@ -221,7 +221,7 @@ const genInterpolation = (
 }
 ```
 
-![compile_sfc_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_sfc_render.png)
+![Compiled SFC template render result](/figures/10-minimum-example/compile-sfc-template/compiled-render-result.png)
 
 看起來編譯成功了．剩下的就是以同樣的方式提取腳本並將其放入預設匯出中．
 

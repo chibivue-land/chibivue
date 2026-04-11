@@ -388,7 +388,7 @@ const app = createApp({
 })
 ```
 
-![parse_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_interpolation.png)
+![Interpolation AST output](/figures/10-minimum-example/template-binding/parse-interpolation-ast.png)
 
 問題なさそうです！
 
@@ -468,7 +468,7 @@ const setupRenderEffect = (
 
 ここまで来ればレンダリングできるようになっているはずです．確認してみましょう！
 
-![render_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_interpolation.png)
+![Rendered interpolation result in the browser](/figures/10-minimum-example/template-binding/render-interpolation-result.png)
 
 これにて初めてのバインディング，完です！
 
@@ -693,7 +693,7 @@ const app = createApp({
 })
 ```
 
-![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
+![Compiled directive result in the browser](/figures/10-minimum-example/template-binding/compile-directives-result.png)
 
 やりました．かなり Vue に近づいてきました！  
 ここまでで小さなテンプレートの実装は完了です．お疲れ様でした．

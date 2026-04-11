@@ -26,7 +26,7 @@ Specifically, starting from the refactoring we did at the beginning, you should 
 Let's compare the current directory and the directory of vuejs/core.
 
 chibivue
-![minimum_example_artifacts](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/minimum_example_artifacts.png)
+![Minimum example implementation artifacts](/figures/10-minimum-example/break/minimum-example-artifacts.png)
 
 \*The original code is too large to fit in a screenshot, so it is omitted.
 

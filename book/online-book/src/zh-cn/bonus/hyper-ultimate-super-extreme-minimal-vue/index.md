@@ -22,6 +22,8 @@
 
 但是，即使是一个文件，在一个文件中写 100,000 行也是没有意义的，所以我将目标是在少于 150 行内实现它．
 
+![Full source of Hyper Ultimate Super Extreme Minimal Vue in one file](/figures/bonus/hyper-ultimate-super-extreme-minimal-vue/full-source-screenshot.png)
+
 标题是"**Hyper Ultimate Super Extreme Minimal Vue**"．
 
 ::: info 关于名称

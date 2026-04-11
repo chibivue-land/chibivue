@@ -194,7 +194,7 @@ These processes are named "mount" and "patch" respectively. \
 And they are performed separately for ElementNode and TextNode (combined as "process" with the name "mount" and "patch" for each).
 
 <img   
-    src="https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png"   
+    src="/figures/10-minimum-example/virtual-dom/patch-function-architecture.svg"
     alt="Patch Function Architecture"   
     style="background-color: white;"
 />
@@ -423,7 +423,7 @@ Here, we aim to understand the implementation and role of Virtual DOM up to a ce
 
 Now that we can perform diff rendering, let's take a look at the playground.
 
-![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
+![patch rendering result in the browser](/figures/10-minimum-example/virtual-dom/patch-rendering-result.png)
 
 We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
 

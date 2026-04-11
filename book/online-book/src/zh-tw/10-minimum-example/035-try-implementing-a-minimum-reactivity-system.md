@@ -72,7 +72,7 @@ export default defineComponent({
 雖然我們在本章中還沒有實現 `watch`，但為了說明而寫在這裡．\
 在這個組件中，targetMap 最終將形成如下：
 
-![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+![targetMap structure](/figures/10-minimum-example/reactivity/target-map-structure.svg)
 
 targetMap 的鍵是「某個目標」．在這個例子中，state1 和 state2 對應於此．\
 這些目標擁有的鍵成為 targetMap 的鍵．
@@ -141,7 +141,7 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+![reactive track and trigger flow](/figures/10-minimum-example/reactivity/reactive-track-trigger.svg)
 
 在這裡，您可能會注意到一個缺失的元素．那就是「在 track 中註冊哪個函數？」．
 答案是 `activeEffect` 的概念．
@@ -256,7 +256,7 @@ effect.run()
 
 這有點複雜，所以讓我們用圖表總結一下．
 
-![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
+![Reactivity setup flow during mount](/figures/10-minimum-example/reactivity/reactivity-setup-flow.svg)
 
 ## 基於這些，讓我們實現它．
 
@@ -466,7 +466,7 @@ app.mount('#app')
 嗯，這並不奇怪，因為在 `updateComponent` 中，我們每次都創建元素．
 所以，讓我們在每次渲染之前刪除所有元素．
 
-![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 像這樣修改 `~/packages/runtime-core/renderer.ts` 中的 `render` 函數：
 
@@ -480,7 +480,7 @@ const render: RootRenderFunction = (vnode, container) => {
 
 現在，這樣如何？
 
-![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
+![Reactive example rendered in the browser](/figures/10-minimum-example/reactivity/reactive-example-result.png)
 
 現在似乎工作正常！
 

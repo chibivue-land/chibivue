@@ -392,7 +392,7 @@ const app = createApp({
 })
 ```
 
-![parse_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_interpolation.png)
+![Interpolation AST output](/figures/10-minimum-example/template-binding/parse-interpolation-ast.png)
 
 It looks fine!
 
@@ -472,7 +472,7 @@ const setupRenderEffect = (
 
 If you have come this far, you should be able to render. Let's check it!
 
-![render_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_interpolation.png)
+![Rendered interpolation result in the browser](/figures/10-minimum-example/template-binding/render-interpolation-result.png)
 
 This completes the first binding!
 
@@ -698,7 +698,7 @@ const app = createApp({
 })
 ```
 
-![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
+![Compiled directive result in the browser](/figures/10-minimum-example/template-binding/compile-directives-result.png)
 
 You did it.\
 We're getting closer to Vue!  

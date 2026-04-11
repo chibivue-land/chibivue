@@ -19,7 +19,7 @@
 让我们比较当前目录和 vuejs/core 的目录．
 
 chibivue
-![minimum_example_artifacts](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/minimum_example_artifacts.png)
+![Minimum example implementation artifacts](/figures/10-minimum-example/break/minimum-example-artifacts.png)
 
 \*原始代码太大，无法在截图中显示，所以省略了．
 

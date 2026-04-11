@@ -138,7 +138,7 @@ export default defineConfig({
 
 Let's try starting in this state.
 
-![vite_error](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vite_error.png)
+![Vite error before the SFC plugin is implemented](/figures/10-minimum-example/parse-sfc/vite-error.png)
 
 Of course, it will result in an error. Well done (?).
 
@@ -178,30 +178,7 @@ Now, this is just a temporary solution, so let's implement a proper solution.\
 The role of vite-plugin is to enable transformation with Vite, so the parsing and compilation are in the main Vue package.\
 That is the `compiler-sfc` directory.
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
@@ -403,11 +380,11 @@ export default function vitePluginChibivue(): Plugin {
 
 This code runs in the process where Vite is running, which means it is executed in Node, so I think the console output is displayed in the terminal.
 
-![parse_sfc1](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc1.png)
+![SFC descriptor before parser update](/figures/10-minimum-example/parse-sfc/parse-sfc-descriptor-before.png)
 
 /_ Omitted for brevity _/
 
-![parse_sfc2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc2.png)
+![SFC descriptor after parser update](/figures/10-minimum-example/parse-sfc/parse-sfc-descriptor-after.png)
 
 It seems that parsing was successful. Great job!
 

@@ -137,7 +137,7 @@ export default defineConfig({
 
 この状態で起動してみましょう．
 
-![vite_error](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vite_error.png)
+![Vite error before the SFC plugin is implemented](/figures/10-minimum-example/parse-sfc/vite-error.png)
 
 もちろんエラーになります．やったね( ？ )
 
@@ -176,30 +176,7 @@ export default function vitePluginChibivue(): Plugin {
 vite-plugin での役割はあくまで vite を利用する際に vite で transform できるようにするためのものなので，パースやコンパイラは vue の本体にあります．  
 それが`compiler-sfc`というディレクトリです．
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
@@ -406,11 +383,11 @@ export default function vitePluginChibivue(): Plugin {
 
 このコードは vite が動いているプロセス，つまり node で実行されるので console はターミナルに出力されているかと思います．\
 
-![parse_sfc1](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc1.png)
+![SFC descriptor before parser update](/figures/10-minimum-example/parse-sfc/parse-sfc-descriptor-before.png)
 
 /_ 途中省略 _/
 
-![parse_sfc2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_sfc2.png)
+![SFC descriptor after parser update](/figures/10-minimum-example/parse-sfc/parse-sfc-descriptor-after.png)
 
 無事にパースできているようです．やったね！
 

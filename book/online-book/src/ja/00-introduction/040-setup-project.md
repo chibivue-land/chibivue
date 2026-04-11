@@ -18,7 +18,7 @@ $ pnpm play
 
 ### Playground の構成
 
-![web_playground_initial](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_initial.png)
+![Initial Web Playground screen](/figures/00-introduction/setup-project/web-playground-initial.png)
 
 Playground は以下の 4 つのエリアで構成されています．
 
@@ -46,7 +46,7 @@ Playground は以下の 4 つのエリアで構成されています．
 4. **コンソールを確認する**
    「Console」タブをクリックすると，console.log などの出力を確認できます．
 
-![web_playground_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/web_playground_console.png)
+![Web Playground console output](/figures/00-introduction/setup-project/web-playground-console.png)
 
 ::: tip
 Web Playground は [WebContainer](https://webcontainers.io/) を使用しています．
@@ -302,7 +302,7 @@ pnpm dev
 
 このコマンドで立ち上がった開発者サーバーにアクセスし，メッセージが表示されていれば完了です！
 
-![hello chibivue](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_chibivue.png)
+![Hello chibivue rendered in the browser](/figures/00-introduction/setup-project/hello-chibivue-result.png)
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/00_introduction/010_project_setup)

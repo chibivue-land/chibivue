@@ -4,7 +4,7 @@
 
 现在，让我们从最小示例部门停下的地方开始更认真地实现模板编译器．距离我们上次处理它已经有一段时间了，所以让我们回顾一下当前的实现．主要关键词是 Parse，AST 和 Codegen．
 
-![me_template_compiler_design](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/me_template_compiler_design.drawio.png)
+![Minimum compiler pipeline](/figures/50-basic-template-compiler/transform/basic-compiler-pipeline.svg)
 
 ```ts
 export function baseCompile(
@@ -39,7 +39,7 @@ export function baseCompile(
 
 这次，我们将实现 `transform` 函数．
 
-![design_with_transformer](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/design_with_transformer.drawio.png)
+![Compiler pipeline with transformer](/figures/50-basic-template-compiler/transform/compiler-pipeline-with-transformer.svg)
 
 ## 什么是 Transform？
 
@@ -196,24 +196,7 @@ https://github.com/vuejs/core/tree/37a14a5dae9999bbe684c6de400afc63658ffe90/pack
 
 图像 ↓
 
-```mermaid
-classDiagram
-
-class NodeTransform
-<<interface>> NodeTransform
-
-class DirectiveTransform
-<<interface>> DirectiveTransform
-
-NodeTransform <|.. transformElement
-NodeTransform <|.. transformExpression
-NodeTransform <|.. other_node_transformers
-
-DirectiveTransform <|.. transformOn
-DirectiveTransform <|.. transformFor
-DirectiveTransform <|.. transformIf
-DirectiveTransform <|.. other_directive_transformers
-```
+![Transform type relationships](/figures/50-basic-template-compiler/transform/transform-type-relationships.svg)
 
 接下来，关于上下文，TransformContext 保存在这些转换期间使用的信息和函数．
 将来会添加更多，但现在这就足够了．

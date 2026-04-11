@@ -28,7 +28,7 @@ export const sharedConfig = defineConfig({
       "link",
       {
         rel: "icon",
-        href: "https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true",
+        href: "/figures/_brand/logo.png",
       },
     ],
 
@@ -71,7 +71,7 @@ export const sharedConfig = defineConfig({
     ["meta", { name: "twitter:image:alt", content: "chibivue" }],
   ],
   themeConfig: {
-    logo: "https://github.com/chibivue-land/chibivue/blob/main/book/images/logo/logo.png?raw=true",
+    logo: "/figures/_brand/logo.png",
     search: { provider: "local" },
     outline: "deep",
     i18nRouting: true,

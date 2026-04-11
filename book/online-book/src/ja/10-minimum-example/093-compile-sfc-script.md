@@ -414,6 +414,6 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 これでレンダリングができるようになっているはずです！！！
 
-![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
+![Rendered SFC script result](/figures/10-minimum-example/compile-sfc-script/render-sfc-result.png)
 
 スタイルの対応をしていないのでスタイルが当たっていないですがこれでレンダリングはできるようになりました．

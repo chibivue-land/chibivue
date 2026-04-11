@@ -253,7 +253,7 @@ app.mount('#app')
 
 やった！ h 関数でいろんなタグを描画できるようになった！
 
-![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+![VNode log from a simple h function](/figures/10-minimum-example/simple-h-function/basic-vnode-log.png)
 
 <KawaikoNote variant="surprise" title="h 関数完成！">
 

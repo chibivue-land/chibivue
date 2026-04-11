@@ -27,12 +27,12 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 这是基于 c2（即下一个 vnode）的长度进行循环的．
 换句话说，它基本上只在 c1 和 c2 相同时才能正常工作．
 
-![c1c2map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map.png)
+![Index-based patch with equal lengths](/figures/20-basic-virtual-dom/patch-keyed-children/same-length-index-patch.svg)
 
 例如，让我们考虑元素被删除的情况．
 由于补丁循环基于 c2，第四个元素的补丁将不会被执行．
 
-![c1c2map_deleted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_deleted.png)
+![Deleted child bug in index-based patching](/figures/20-basic-virtual-dom/patch-keyed-children/deleted-child-bug.svg)
 
 当变成这样时，第一到第三个元素只是简单地更新，而第四个元素仍然是来自 c1 的未被删除的元素．
 
@@ -65,18 +65,18 @@ app.mount('#app')
 
 当你点击更新按钮时，应该是这样的：
 
-![patch_bug](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_bug.png)
+![Stale child bug rendered in the browser](/figures/20-basic-virtual-dom/patch-keyed-children/stale-child-bug-result.png)
 
 虽然列表应该已经更新为 `["e", "f", "g"]`，但 "d" 仍然存在．
 
 实际上，问题不仅仅是这个．让我们考虑元素被插入的情况．
 目前，由于循环基于 c2，它变成这样：
 
-![c1c2map_inserted](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted.png)
+![Inserted child bug in index-based patching](/figures/20-basic-virtual-dom/patch-keyed-children/inserted-child-index-bug.svg)
 
 然而，实际上，"新元素"被插入了，比较应该在 c1 和 c2 的每个 li 1，li 2，li 3 和 li 4 之间进行．
 
-![c1c2map_inserted_correct](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/c1c2map_inserted_correct.png)
+![Inserted child handled with keyed matching](/figures/20-basic-virtual-dom/patch-keyed-children/inserted-child-keyed-match.svg)
 
 这两个问题的共同点是"无法确定 c1 和 c2 中需要被视为相同的节点"．  
 为了解决这个问题，需要为元素分配一个 key，并基于该 key 进行补丁．  

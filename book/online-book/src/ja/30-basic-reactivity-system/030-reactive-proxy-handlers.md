@@ -36,7 +36,7 @@ app.mount('#app')
 
 コンソールを見てみると，以下のようになっていることが観測できるかと思います．
 
-![reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_html_element.png)
+![Reactive HTML element console output](/figures/30-basic-reactivity-system/reactive-proxy-handlers/reactive-html-element.png)
 
 ここで，focus をする処理を加えてみましょう．
 
@@ -70,7 +70,7 @@ app.mount('#app')
 
 なんと，エラーになってしまいます．
 
-![focus_in_reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_reactive_html_element.png)
+![Focus result in a reactive HTML element](/figures/30-basic-reactivity-system/reactive-proxy-handlers/focus-in-reactive-html-element.png)
 
 これの原因としては，document.getElementById によって取得した要素自体を元に Proxy を生成してしまっているためです．
 
@@ -109,7 +109,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![element_to_string](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/element_to_string.png)
+![HTMLElement toString result](/figures/30-basic-reactivity-system/reactive-proxy-handlers/element-to-string.png)
 
 このようにしてどのようなオブジェクトなのかというのを知ることができます．ややハードコードですが，この判定関数を一般化します．
 
@@ -169,7 +169,7 @@ export function reactive<T extends object>(target: T): T {
 
 これで先ほどのフォーカスのコードが動くようになったはずです！
 
-![focus_in_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_element.png)
+![Focus result in a plain HTML element](/figures/30-basic-reactivity-system/reactive-proxy-handlers/focus-in-element.png)
 
 ## TemplateRefs を実装してみる
 

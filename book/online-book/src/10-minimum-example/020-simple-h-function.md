@@ -251,7 +251,7 @@ app.mount('#app')
 
 Yay! Now we can use the h function to render various tags!
 
-![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+![VNode log from a simple h function](/figures/10-minimum-example/simple-h-function/basic-vnode-log.png)
 
 <KawaikoNote variant="surprise" title="h function complete!">
 

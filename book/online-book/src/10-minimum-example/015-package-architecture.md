@@ -49,7 +49,7 @@ touch packages/runtime-dom/nodeOps.ts
 
 As for the roles of these files, it may be difficult to understand just by explaining in words, so please refer to the following diagram:
 
-![refactor_createApp!](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp.png)
+![runtime-core and runtime-dom responsibilities](/figures/10-minimum-example/package-architecture/runtime-core-dom-overview.svg)
 
 #### Design of the Renderer
 
@@ -76,7 +76,7 @@ At this point, the code is short and not complex at all, so it seems fine at fir
 - Use the factories for `nodeOps` and `renderer` in `runtime-dom/index.ts` to complete the renderer.
 
 This is the part highlighted in red in the diagram.
-![refactor_createApp_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_render.png)
+![Renderer dependency injection](/figures/10-minimum-example/package-architecture/renderer-dependency-injection.svg)
 
 Let me explain the source code. At this point, the rendering feature of the Virtual DOM has not been implemented yet, so we will create it with the same functionality as before.
 
@@ -186,7 +186,7 @@ DI and DIP may be difficult concepts if you are not familiar with them, but they
 
 Now, let's get back to the implementation. Now that the renderer has been generated, all we need to do is consider the red area in the following diagram.
 
-![refactor_createApp_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_createApp.png)
+![createAppAPI factory flow](/figures/10-minimum-example/package-architecture/create-app-api-factory.svg)
 
 However, it's a simple task. We just need to implement the factory function for createApp so that it can accept the renderer we created earlier.
 

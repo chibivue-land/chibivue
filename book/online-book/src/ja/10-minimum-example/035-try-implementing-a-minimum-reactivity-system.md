@@ -74,7 +74,7 @@ export default defineComponent({
 このチャプターではまだ watch は実装していないのですが，イメージのために書いてあります．\
 このコンポーネントでは最終的にこのような targetMap が形成されます．
 
-![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+![targetMap structure](/figures/10-minimum-example/reactivity/target-map-structure.svg)
 
 targetMap の key は「ある target」 です．この例では state1 と state2 がそれにあたります．\
 そして，これらの target が持つ key が targetMap の key になります．\
@@ -143,7 +143,7 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+![reactive track and trigger flow](/figures/10-minimum-example/reactivity/reactive-track-trigger.svg)
 
 <KawaikoNote variant="base" title="ここまでのポイント">
 
@@ -266,7 +266,7 @@ increment では `state.count` を書き換えているので `setter` が実行
 
 ちょっとややこしいので図でまとめます．
 
-![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
+![Reactivity setup flow during mount](/figures/10-minimum-example/reactivity/reactivity-setup-flow.svg)
 
 ## これらを踏まえて実装しよう
 
@@ -470,7 +470,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 あっ………
 
@@ -491,7 +491,7 @@ const render: RootRenderFunction = (vnode, container) => {
 
 さてこれでどうでしょう．
 
-![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
+![Reactive example rendered in the browser](/figures/10-minimum-example/reactivity/reactive-example-result.png)
 
 今度は大丈夫そうです!
 

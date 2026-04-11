@@ -20,7 +20,7 @@ app.mount('#app')
 
 你可能會遇到這樣的錯誤：
 
-![fragment_error.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/fragment_error.png)
+![Fragment error result in the browser](/figures/50-basic-template-compiler/fragment/fragment-error-result.png)
 
 查看錯誤訊息，似乎與 Function 建構函式有關．
 

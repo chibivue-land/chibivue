@@ -188,7 +188,7 @@ const o = new Proxy(
 具体来说，当访问（get）此对象的属性时，原始对象（target）和访问的键名将输出到控制台．
 让我们在浏览器或其他地方检查操作．
 
-![proxy_get](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_get.png)
+![Proxy get trap console output](/figures/10-minimum-example/reactivity/proxy-get-trap.png)
 
 您可以看到为从此 Proxy 生成的对象的属性读取值而设置的 set 处理正在执行．
 
@@ -207,7 +207,7 @@ const o = new Proxy(
 )
 ```
 
-![proxy_set](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/proxy_set.png)
+![Proxy set trap console output](/figures/10-minimum-example/reactivity/proxy-set-trap.png)
 
 <KawaikoNote variant="funny" title="这就是响应式的秘密！">
 

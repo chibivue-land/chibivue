@@ -683,7 +683,7 @@ export default defineComponent({
 </template>
 ```
 
-![resolve_components](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_components.png)
+![resolveComponent result in the browser](/figures/50-basic-template-compiler/resolve-component/resolve-components-result.png)
 
 看起来工作正常！太好了！
 

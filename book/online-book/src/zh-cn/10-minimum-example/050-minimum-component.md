@@ -114,6 +114,8 @@ export interface VNode<HostNode = any> {
 
 首先，让我们从概述和详细说明开始．
 
+![Component instance flow](/figures/10-minimum-example/minimum-component/component-instance-flow.svg)
+
 ```ts
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
   const { type } = n2

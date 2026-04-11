@@ -4,7 +4,7 @@
 
 Now, let's implement the template compiler more seriously from where we left off in the Minimum Example department. It has been a while since we worked on it, so let's review the current implementation. The main keywords are Parse, AST, and Codegen.
 
-![me_template_compiler_design](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/me_template_compiler_design.drawio.png)
+![Minimum compiler pipeline](/figures/50-basic-template-compiler/transform/basic-compiler-pipeline.svg)
 
 ```ts
 export function baseCompile(
@@ -39,7 +39,7 @@ It is like this.
 
 This time, we will implement the `transform` function.
 
-![design_with_transformer](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/design_with_transformer.drawio.png)
+![Compiler pipeline with transformer](/figures/50-basic-template-compiler/transform/compiler-pipeline-with-transformer.svg)
 
 ## What is Transform?
 
@@ -196,24 +196,7 @@ https://github.com/vuejs/core/tree/37a14a5dae9999bbe684c6de400afc63658ffe90/pack
 
 image ↓
 
-```mermaid
-classDiagram
-
-class NodeTransform
-<<interface>> NodeTransform
-
-class DirectiveTransform
-<<interface>> DirectiveTransform
-
-NodeTransform <|.. transformElement
-NodeTransform <|.. transformExpression
-NodeTransform <|.. other_node_transformers
-
-DirectiveTransform <|.. transformOn
-DirectiveTransform <|.. transformFor
-DirectiveTransform <|.. transformIf
-DirectiveTransform <|.. other_directive_transformers
-```
+![Transform type relationships](/figures/50-basic-template-compiler/transform/transform-type-relationships.svg)
 
 Next, about the context, TransformContext holds the information and functions used during these transforms.
 More will be added in the future, but for now, this is enough.

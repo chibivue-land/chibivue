@@ -22,6 +22,8 @@ Furthermore, not only the page, but also the "implementation itself will be cont
 
 However, even if it's one file, it's meaningless to write 100,000 lines in one file, so I will aim to implement it in less than 150 lines.
 
+![Full source of Hyper Ultimate Super Extreme Minimal Vue in one file](/figures/bonus/hyper-ultimate-super-extreme-minimal-vue/full-source-screenshot.png)
+
 The title is "**Hyper Ultimate Super Extreme Minimal Vue**".
 
 ::: info About the name

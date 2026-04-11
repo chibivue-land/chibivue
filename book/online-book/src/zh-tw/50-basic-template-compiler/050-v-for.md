@@ -310,7 +310,7 @@ export interface ForParseResult {
 
 https://vuejs.org/v2/guide/list.html#v-for-with-an-object
 
-![v_for_ast.drawio.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for_ast.drawio.png)
+![ForParseResult shape](/figures/50-basic-template-compiler/v-for/for-parse-result.svg)
 
 關於 `value`，如果你使用像 `{ id, name, color, }` 這樣的解構賦值，它將有多個識別符．
 
@@ -844,7 +844,7 @@ function createParamsList(
 
 讓我們嘗試執行它！
 
-![v_for](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for.png)
+![v-for result in the browser](/figures/50-basic-template-compiler/v-for/v-for-result.png)
 
 看起來進展順利．
 
