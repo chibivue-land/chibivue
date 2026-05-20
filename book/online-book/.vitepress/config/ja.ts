@@ -392,6 +392,32 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
+            text: "Hot Paths",
+            collapsed: false,
+            items: [
+              {
+                text: "概要",
+                link: "/ja/bonus/hot-paths/",
+              },
+              {
+                text: "初心者向け 30 分ハンズオン",
+                link: "/ja/bonus/hot-paths/beginner-30-min-hands-on",
+              },
+              {
+                text: "初心者向け 1 時間ハンズオン",
+                link: "/ja/bonus/hot-paths/beginner-60-min-hands-on",
+              },
+              {
+                text: "中級者向け 1 時間ハンズオン",
+                link: "/ja/bonus/hot-paths/intermediate-60-min-hands-on",
+              },
+              {
+                text: "上級者向け 30 分サマリ",
+                link: "/ja/bonus/hot-paths/advanced-30-min-summary",
+              },
+            ],
+          },
+          {
             text: "15 分で Vue を作る",
             collapsed: false,
             items: [
