@@ -395,6 +395,32 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
+            text: "Hot Paths",
+            collapsed: false,
+            items: [
+              {
+                text: "Overview",
+                link: "/bonus/hot-paths/",
+              },
+              {
+                text: "Beginner 30-minute hands-on",
+                link: "/bonus/hot-paths/beginner-30-min-hands-on",
+              },
+              {
+                text: "Beginner 60-minute hands-on",
+                link: "/bonus/hot-paths/beginner-60-min-hands-on",
+              },
+              {
+                text: "Intermediate 60-minute hands-on",
+                link: "/bonus/hot-paths/intermediate-60-min-hands-on",
+              },
+              {
+                text: "Advanced 30-minute summary",
+                link: "/bonus/hot-paths/advanced-30-min-summary",
+              },
+            ],
+          },
+          {
             text: "Writing Vue.js in 15 minutes.",
             collapsed: false,
             items: [
