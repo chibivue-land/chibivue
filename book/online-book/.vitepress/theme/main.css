@@ -336,6 +336,39 @@ html.dark :not(pre) > code {
  * Component: Layout - Wide Display Support
  * -------------------------------------------------------------------------- */
 
+@media (max-width: 639px) {
+  .vp-doc {
+    line-height: 1.85;
+  }
+
+  .vp-doc h1 {
+    font-size: 2.25rem;
+    line-height: 1.18;
+  }
+
+  .vp-doc h2 {
+    margin-top: 40px;
+    font-size: 1.85rem;
+    line-height: 1.25;
+  }
+
+  .vp-doc h3 {
+    font-size: 1.35rem;
+    line-height: 1.35;
+  }
+
+  .vp-doc p,
+  .vp-doc li {
+    line-height: 1.85;
+  }
+
+  .vp-doc div[class*='language-'],
+  .vp-block {
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+}
+
 /* Wide display support */
 @media (min-width: 1600px) {
   :root {
@@ -452,6 +485,73 @@ html.dark .VPSidebarItem.is-active > .item > .text {
 
 html.dark .VPSidebarItem .item:hover .text {
   color: var(--c-mint-400);
+}
+
+/**
+ * Component: Tables
+ * -------------------------------------------------------------------------- */
+
+@media (max-width: 639px) {
+  .vp-doc table {
+    width: 100%;
+    max-width: 100%;
+    margin: 16px 0 24px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .vp-doc table::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .vp-doc table thead,
+  .vp-doc table tbody {
+    display: table;
+    width: 100%;
+    min-width: 440px;
+  }
+
+  .vp-doc table:has(th:nth-child(3)) thead,
+  .vp-doc table:has(th:nth-child(3)) tbody {
+    min-width: 520px;
+  }
+
+  .vp-doc table:has(th:nth-child(4)) thead,
+  .vp-doc table:has(th:nth-child(4)) tbody {
+    min-width: 680px;
+  }
+
+  .vp-doc table:has(th:nth-child(5)) thead,
+  .vp-doc table:has(th:nth-child(5)) tbody {
+    min-width: 800px;
+  }
+
+  .vp-doc th,
+  .vp-doc td {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    vertical-align: top;
+  }
+
+  .vp-doc th {
+    white-space: nowrap;
+  }
+
+  .vp-doc th:first-child,
+  .vp-doc td:first-child {
+    min-width: 7rem;
+  }
+
+  .vp-doc th:not(:last-child),
+  .vp-doc td:not(:last-child) {
+    white-space: nowrap;
+  }
+
+  .vp-doc td:last-child {
+    min-width: 13rem;
+  }
 }
 
 /**

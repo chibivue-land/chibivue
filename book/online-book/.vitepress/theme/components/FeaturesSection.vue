@@ -28,8 +28,14 @@ defineProps<{
 
 <style scoped>
 .features-section {
-  padding: 4rem 2rem 6rem;
+  padding: 3rem 1.25rem 4rem;
   background: var(--features-bg, #0f1724);
+}
+
+@media (min-width: 640px) {
+  .features-section {
+    padding: 4rem 2rem 6rem;
+  }
 }
 
 .features-container {

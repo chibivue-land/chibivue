@@ -81,11 +81,18 @@ const version = __CHIBIVUE_VERSION__
 <style scoped>
 .hero-section {
   position: relative;
-  min-height: 80vh;
+  min-height: auto;
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding: 4rem 2rem;
+  padding: 3rem 1.25rem 4rem;
+}
+
+@media (min-width: 960px) {
+  .hero-section {
+    min-height: 80vh;
+    padding: 4rem 2rem;
+  }
 }
 
 .hero-background {
@@ -163,15 +170,27 @@ const version = __CHIBIVUE_VERSION__
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: clamp(3rem, 10vw, 5rem);
+  font-size: 3.25rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
+}
+
+@media (min-width: 640px) {
+  .gradient-text {
+    font-size: 4rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .gradient-text {
+    font-size: 5rem;
+  }
 }
 
 .version-badge {
   display: inline-block;
   vertical-align: super;
-  font-size: clamp(0.75rem, 2vw, 1rem);
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25em 0.6em;
   margin-left: 0.5rem;
@@ -181,16 +200,35 @@ const version = __CHIBIVUE_VERSION__
   color: var(--c-mint-400, #2cc9a8);
 }
 
+@media (min-width: 640px) {
+  .version-badge {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .version-badge {
+    font-size: 1rem;
+  }
+}
+
 .hero-tagline {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-size: 1rem;
   color: var(--vp-c-text-2);
   margin: 1.5rem 0 2rem;
   line-height: 1.7;
   max-width: 500px;
 }
 
+@media (min-width: 640px) {
+  .hero-tagline {
+    font-size: 1.125rem;
+  }
+}
+
 @media (min-width: 960px) {
   .hero-tagline {
+    font-size: 1.25rem;
     margin: 1.5rem 0 2.5rem;
   }
 }
@@ -265,20 +303,22 @@ const version = __CHIBIVUE_VERSION__
   display: flex;
   justify-content: center;
   align-items: center;
-  order: -1;
+  order: 1;
+  margin-top: 1rem;
 }
 
 @media (min-width: 960px) {
   .hero-visual {
     order: 0;
+    margin-top: 0;
   }
 }
 
 .stairs-container {
   position: relative;
   width: 100%;
-  max-width: 350px;
-  height: 300px;
+  max-width: 280px;
+  height: 240px;
 }
 
 @media (min-width: 640px) {
@@ -290,8 +330,8 @@ const version = __CHIBIVUE_VERSION__
 
 .stair {
   position: absolute;
-  width: 100px;
-  height: 24px;
+  width: 90px;
+  height: 22px;
   background: linear-gradient(
     180deg,
     var(--c-mint-400, #2cc9a8) 0%,
@@ -314,26 +354,26 @@ const version = __CHIBIVUE_VERSION__
 
 .stair-1 {
   bottom: 20px;
-  left: 10%;
+  left: 4%;
   animation-delay: 0.1s;
 }
 .stair-2 {
-  bottom: 60px;
-  left: 20%;
+  bottom: 55px;
+  left: 17%;
   animation-delay: 0.2s;
 }
 .stair-3 {
-  bottom: 100px;
+  bottom: 90px;
   left: 30%;
   animation-delay: 0.3s;
 }
 .stair-4 {
-  bottom: 140px;
+  bottom: 125px;
   left: 40%;
   animation-delay: 0.4s;
 }
 .stair-5 {
-  bottom: 180px;
+  bottom: 160px;
   left: 50%;
   animation-delay: 0.5s;
 }
@@ -375,7 +415,7 @@ const version = __CHIBIVUE_VERSION__
 /* Mascot */
 .mascot-container {
   position: absolute;
-  bottom: 190px;
+  bottom: 170px;
   left: 50%;
   transform: translateX(-50%);
   animation: mascotBounce 2s ease-in-out infinite;

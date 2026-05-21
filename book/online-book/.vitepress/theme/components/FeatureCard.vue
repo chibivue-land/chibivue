@@ -44,7 +44,7 @@ const defaultIcon = markRaw(MdiStar)
     rgba(15, 26, 46, 0.8) 100%
   );
   border: 1px solid rgba(26, 179, 148, 0.15);
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -124,6 +124,22 @@ const defaultIcon = markRaw(MdiStar)
 
 .feature-card:hover .feature-hover-effect {
   transform: scaleX(1);
+}
+
+@media (max-width: 639px) {
+  .feature-card {
+    padding: 1.25rem;
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+  }
+
+  .feature-title {
+    font-size: 1.05rem;
+  }
 }
 </style>
 

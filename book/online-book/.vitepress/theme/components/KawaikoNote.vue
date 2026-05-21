@@ -221,4 +221,26 @@ html.dark .kawaiko-note:hover {
     height: 56px;
   }
 }
+
+@media (max-width: 480px) {
+  .kawaiko-note,
+  .kawaiko-note--right {
+    flex-direction: column;
+  }
+
+  .kawaiko-note__title {
+    margin-bottom: 6px;
+  }
+
+  .kawaiko-note__body {
+    font-size: 0.92rem;
+  }
+
+  .kawaiko-note--sm .kawaiko-note__image,
+  .kawaiko-note--md .kawaiko-note__image,
+  .kawaiko-note--lg .kawaiko-note__image {
+    width: 48px;
+    height: 48px;
+  }
+}
 </style>
