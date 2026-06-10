@@ -44,9 +44,7 @@
         "3": { "name": "punctuation.definition.tag.end.html" }
       },
       "contentName": "source.ts",
-      "patterns": [
-        { "include": "source.ts" }
-      ]
+      "patterns": [{ "include": "source.ts" }]
     },
     "style-tag": {
       "begin": "(<)(style)(\\s[^>]*)?(>)",
@@ -63,9 +61,7 @@
         "3": { "name": "punctuation.definition.tag.end.html" }
       },
       "contentName": "source.css",
-      "patterns": [
-        { "include": "source.css" }
-      ]
+      "patterns": [{ "include": "source.css" }]
     },
     "vue-interpolation": {
       "name": "meta.embedded.expression.vue",
@@ -77,9 +73,7 @@
       "endCaptures": {
         "0": { "name": "punctuation.definition.template-expression.end.vue" }
       },
-      "patterns": [
-        { "include": "source.ts" }
-      ]
+      "patterns": [{ "include": "source.ts" }]
     },
     "vue-directives": {
       "match": "(v-[a-z-]+|@[a-z-]+|:[a-z-]+)(=\"[^\"]*\")?",

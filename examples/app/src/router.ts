@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "chibivue-router";
+import type { Router } from "chibivue-router/router";
 import PagesTop from "./views/index.vue";
 import PagesState from "./views/state.vue";
 import PagesDirective from "./views/directive.vue";
@@ -11,7 +12,7 @@ import PagesInline from "./views/inline";
 import PagesStoreCounter from "./views/store-counter.vue";
 import PagesTodoApp from "./views/todo-list.vue";
 
-export const router = createRouter({
+export const router: Router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/", component: PagesTop },

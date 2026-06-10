@@ -1,4 +1,7 @@
-import { defineConfig, mergeConfig } from "vite";
+import { defineConfig, mergeConfig } from "vite-plus";
+import type { UserConfig } from "vite-plus";
 import sharedConfig from "../../vite.config.shared";
 
-export default mergeConfig(sharedConfig, defineConfig({}));
+const config: UserConfig = mergeConfig(sharedConfig, defineConfig({}));
+
+export default config;

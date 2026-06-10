@@ -1,5 +1,5 @@
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
+import type { Plugin } from "vite-plus";
+import { createFilter } from "vite-plus";
 import { parse } from "../../compiler-sfc";
 
 export default function vitePluginChibivue(): Plugin {

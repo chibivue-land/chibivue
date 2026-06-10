@@ -1,6 +1,6 @@
 import fs from "node:fs";
-import type { Plugin } from "vite";
-import { createFilter } from "vite";
+import type { Plugin } from "vite-plus";
+import { createFilter } from "vite-plus";
 import { parse, rewriteDefault } from "../../compiler-sfc";
 import { compile } from "../../compiler-dom";
 

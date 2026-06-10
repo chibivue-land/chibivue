@@ -26,7 +26,7 @@ export default defineConfig(
       format: "esm",
       entryFileNames: "index.js",
     },
-    external: pkg === "@extensions/vite-plugin-chibivue" ? ["vite"] : [],
+    external: pkg === "@extensions/vite-plugin-chibivue" ? ["vite", "vite-plus"] : [],
     plugins: [dts()],
   })),
 );

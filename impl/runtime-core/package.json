@@ -1,7 +1,7 @@
 {
   "name": "@chibivue/runtime-core",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "license": "MIT",
   "author": "ubugeeei <ubuge1122@gmail.com>",
-  "license": "MIT"
+  "main": "dist/index.js"
 }

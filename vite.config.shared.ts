@@ -1,11 +1,11 @@
 import path from "node:path";
-import { defineConfig } from "vite";
-// @ts-expect-error - dts outputs hashed filenames
-import Chibivue from "./packages/@extensions/vite-plugin-chibivue/dist";
+import { defineConfig } from "vite-plus";
+import type { UserConfig } from "vite-plus";
+import Chibivue from "./impl/@extensions/vite-plugin-chibivue/src";
 
-const resolve = (p: string) => path.resolve(import.meta.dirname, "packages", p);
+const resolve = (p: string) => path.resolve(import.meta.dirname, "impl", p);
 
-export default defineConfig({
+const config: UserConfig = defineConfig({
   resolve: {
     alias: {
       chibivue: resolve("chibivue/src"),
@@ -23,3 +23,5 @@ export default defineConfig({
   },
   plugins: [Chibivue()],
 });
+
+export default config;

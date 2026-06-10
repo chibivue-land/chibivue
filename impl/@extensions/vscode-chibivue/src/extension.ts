@@ -13,7 +13,7 @@ let client: LanguageClient | undefined;
 // Extension Activation
 // ============================================================================
 
-export async function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext): Promise<void> {
   // Find the language server module
   const serverModule = context.asAbsolutePath(
     path.join("node_modules", "@chibivue", "language-server", "dist", "server.js"),
@@ -81,7 +81,7 @@ export async function activate(context: vscode.ExtensionContext) {
 // Extension Deactivation
 // ============================================================================
 
-export async function deactivate() {
+export async function deactivate(): Promise<void> {
   if (client) {
     await client.stop();
     client = undefined;

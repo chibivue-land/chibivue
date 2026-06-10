@@ -1,19 +1,27 @@
 {
   "name": "vscode-chibivue",
   "displayName": "Chibivue",
-  "description": "Language support for chibivue SFC files",
   "version": "0.0.1",
-  "publisher": "chibivue",
-  "engines": {
-    "vscode": "^1.75.0"
-  },
+  "description": "Language support for chibivue SFC files",
   "categories": [
     "Programming Languages"
   ],
-  "activationEvents": [
-    "onLanguage:vue"
-  ],
+  "publisher": "chibivue",
   "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "dev": "npm run build -- --watch"
+  },
+  "dependencies": {
+    "@chibivue/language-server": "workspace:*",
+    "vscode-languageclient": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.120.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.3"
+  },
   "contributes": {
     "languages": [
       {
@@ -53,18 +61,10 @@
       }
     }
   },
-  "scripts": {
-    "vscode:prepublish": "npm run build",
-    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "dev": "npm run build -- --watch"
-  },
-  "dependencies": {
-    "@chibivue/language-server": "workspace:*",
-    "vscode-languageclient": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.75.0",
-    "esbuild": "^0.20.0",
-    "typescript": "^5.0.0"
+  "activationEvents": [
+    "onLanguage:vue"
+  ],
+  "engines": {
+    "vscode": "^1.75.0"
   }
 }

@@ -57,22 +57,13 @@
       }
     },
     {
-      "scope": [
-        "entity.name.function",
-        "meta.function-call",
-        "support.function"
-      ],
+      "scope": ["entity.name.function", "meta.function-call", "support.function"],
       "settings": {
         "foreground": "#0d7d6c"
       }
     },
     {
-      "scope": [
-        "entity.name.type",
-        "entity.name.class",
-        "support.class",
-        "support.type"
-      ],
+      "scope": ["entity.name.type", "entity.name.class", "support.class", "support.type"],
       "settings": {
         "foreground": "#2a7a4a"
       }
@@ -90,11 +81,7 @@
       }
     },
     {
-      "scope": [
-        "variable",
-        "variable.other",
-        "variable.parameter"
-      ],
+      "scope": ["variable", "variable.other", "variable.parameter"],
       "settings": {
         "foreground": "#2a5a4a"
       }
@@ -154,10 +141,7 @@
       }
     },
     {
-      "scope": [
-        "source.directive",
-        "entity.other.attribute-name.directive"
-      ],
+      "scope": ["source.directive", "entity.other.attribute-name.directive"],
       "settings": {
         "foreground": "#2a7a4a"
       }

@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig } from "vite-plus";
 
 // @ts-expect-error
 import Chibivue from "../../packages/@extensions/vite-plugin-chibivue/dist";

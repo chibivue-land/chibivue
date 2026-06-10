@@ -2,23 +2,23 @@
   "name": "@chibivue/language-core",
   "version": "0.0.1",
   "description": "Language core for chibivue SFC (Volar.js based)",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -w -p tsconfig.json"
   },
   "dependencies": {
-    "@volar/language-core": "~2.4.0",
-    "@volar/typescript": "~2.4.0"
+    "@volar/language-core": "~2.4.28",
+    "@volar/typescript": "~2.4.28"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0"
   }
 }

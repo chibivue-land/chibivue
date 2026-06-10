@@ -9,9 +9,10 @@
     "vue": "<%= vuejs_core_absolute_path %>"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.5",
-    "vite": "^8.0.0",
-    "vite-hyper-config": "^0.8.1",
-    "vite-node": "^5.3.0"
+    "@vitejs/plugin-vue": "^6.0.7",
+    "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.24",
+    "vite-hyper-config": "^0.9.0",
+    "vite-node": "^6.0.0",
+    "vite-plus": "^0.1.24"
   }
 }

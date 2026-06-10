@@ -15,7 +15,7 @@ const t0 = () => template('<div><button id="btn-on-vapor">');
 
 const t1 = () => template('<button id="parent-count-incrementor">parent-count-incrementor');
 
-export default ((self: any) => {
+const MyComponent: VaporComponent = (self) => {
   /*
    *
    * compiled from scripts
@@ -54,4 +54,6 @@ export default ((self: any) => {
   createComponent(self, h(Counter, null, []), div);
 
   return div;
-}) satisfies VaporComponent;
+};
+
+export default MyComponent;
