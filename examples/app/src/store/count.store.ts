@@ -1,7 +1,11 @@
 import { ref } from "chibivue";
 import { defineStore } from "chibivue-store";
 
-export const useCounterStore = defineStore("counter", () => {
+export const useCounterStore: () => {
+  count: ReturnType<typeof ref<number>>;
+  increment: () => void;
+  reset: () => void;
+} = defineStore("counter", () => {
   const count = ref(0);
 
   const increment = () => {

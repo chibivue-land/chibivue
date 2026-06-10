@@ -67,7 +67,7 @@ export type CodeSegment =
 // Code Features (what IDE features to enable for code ranges)
 // ============================================================================
 
-export const codeFeatures = {
+export const codeFeatures: Record<string, ChibivueCodeInformation> = {
   all: {
     verification: true,
     completion: true,

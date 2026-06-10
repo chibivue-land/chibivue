@@ -2,7 +2,6 @@
   "name": "@chibivue/language-server",
   "version": "0.0.1",
   "description": "Language server for chibivue SFC",
-  "main": "./dist/index.js",
   "bin": {
     "chibivue-language-server": "./bin/chibivue-language-server.js"
   },
@@ -10,23 +9,24 @@
     "dist",
     "bin"
   ],
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -w -p tsconfig.json"
   },
   "dependencies": {
     "@chibivue/language-core": "workspace:*",
-    "@volar/language-core": "~2.4.0",
-    "@volar/language-server": "~2.4.0",
-    "@volar/language-service": "~2.4.0",
-    "@volar/typescript": "~2.4.0",
-    "volar-service-typescript": "0.0.62",
-    "vscode-uri": "^3.0.0"
+    "@volar/language-core": "~2.4.28",
+    "@volar/language-server": "~2.4.28",
+    "@volar/language-service": "~2.4.28",
+    "@volar/typescript": "~2.4.28",
+    "volar-service-typescript": "0.0.71",
+    "vscode-uri": "^3.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0"
   }
 }

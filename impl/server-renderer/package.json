@@ -1,9 +1,9 @@
 {
   "name": "@chibivue/server-renderer",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "author": "ubugeeei <ubuge1122@gmail.com>",
   "license": "MIT",
+  "author": "ubugeeei <ubuge1122@gmail.com>",
+  "main": "dist/index.js",
   "peerDependencies": {
     "@chibivue/runtime-core": "workspace:*"
   }

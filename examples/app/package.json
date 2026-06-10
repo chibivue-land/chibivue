@@ -1,13 +1,14 @@
 {
   "name": "@examples/app",
   "version": "1.0.0",
+  "license": "MIT",
+  "author": "ubugeeei <ubuge1122@gmail.com>",
   "type": "module",
   "scripts": {
-    "dev": "vite"
+    "dev": "vp dev"
   },
-  "author": "ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
-    "vite": "^8.0.0"
-  },
-  "license": "MIT"
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  }
 }

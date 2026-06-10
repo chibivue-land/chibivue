@@ -1,16 +1,17 @@
 {
   "name": "playground",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "vp dev",
+    "build": "vp check --no-fmt --no-lint && vp build",
+    "preview": "vp preview"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vite": "^8.0.0"
-  },
-  "license": "MIT"
+    "typescript": "^6.0.3",
+    "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.24",
+    "vite-plus": "^0.1.24"
+  }
 }

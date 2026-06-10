@@ -48,53 +48,53 @@ You can choose any name for the repository. Feel free to set other information a
 
 #### Installing the necessary tools
 
-- [Node.js](https://nodejs.org/en) (v24+)
-- [pnpm](https://pnpm.io/) (v10+)
+- [Vite+](https://viteplus.dev/guide/)
 
 ### Getting Started
 
 First, install the dependencies and set up the playground.
 
 ```sh
-pnpm i && pnpm setup
+vp install && vp run setup:dev
 ```
 
 Then, you can start the development server.
 
 ```sh
-pnpm dev
+vp run dev
 ```
 
 ### Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| **Book** | |
-| `dev` | Start online book dev server |
-| `build` | Build online book |
-| `preview` | Preview built online book |
-| `lint:text` | Lint book text |
-| **Setup** | |
-| `setup` | Install dependencies and generate playground |
-| `setup:dev` | Generate playground files to examples/playground |
-| `setup:vue` | Set up Vue.js core comparison environment |
-| `setup:book` | Generate chibivue implementation for book readers |
-| **Implementation** | |
-| `impl:dev` | Start playground dev server |
-| `impl:dev:app` | Start app example dev server |
-| `impl:dev:vapor` | Start vapor mode example dev server |
-| `impl:dev:vue` | Start Vue.js core dev server for comparison |
-| `impl:build` | Build all packages |
-| `impl:clean` | Remove all dist folders |
-| `impl:check` | Run all checks (lint, fmt, typecheck, build, test) |
-| **Quality** | |
-| `check` | Run type checking (tsgo) |
-| `lint` | Run linter (oxlint) |
-| `lint:fix` | Run linter with auto-fix |
-| `fmt` | Format code (oxfmt) |
-| `fmt:check` | Check code formatting |
-| `test` | Run tests once |
-| `test:watch` | Run tests in watch mode |
+| Script             | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| **Book**           |                                                    |
+| `dev`              | Start online book dev server                       |
+| `build`            | Build online book                                  |
+| `preview`          | Preview built online book                          |
+| `lint:text`        | Lint book text                                     |
+| **Setup**          |                                                    |
+| `setup`            | Install dependencies and generate playground       |
+| `setup:dev`        | Generate playground files to examples/playground   |
+| `setup:vue`        | Set up Vue.js core comparison environment          |
+| `setup:book`       | Generate chibivue implementation for book readers  |
+| **Implementation** |                                                    |
+| `impl:dev`         | Start playground dev server                        |
+| `impl:dev:app`     | Start app example dev server                       |
+| `impl:dev:vapor`   | Start vapor mode example dev server                |
+| `impl:dev:vue`     | Start Vue.js core dev server for comparison        |
+| `impl:build`       | Build all packages                                 |
+| `impl:clean`       | Remove all dist folders                            |
+| `impl:check`       | Run all checks (lint, fmt, typecheck, build, test) |
+| **Quality**        |                                                    |
+| `check`            | Run Vite+ format, lint, and type checks            |
+| `check:types`      | Run type checking                                  |
+| `lint`             | Run linter                                         |
+| `lint:fix`         | Run linter with auto-fix                           |
+| `fmt`              | Format code                                        |
+| `fmt:check`        | Check code formatting                              |
+| `test`             | Run tests once                                     |
+| `test:watch`       | Run tests in watch mode                            |
 
 ### Running book chapter implementations
 
@@ -102,7 +102,7 @@ If you want to run the source code for each chapter, you can do so with the foll
 
 ```sh
 cd book/impls/${section-name}/${chapter-name}
-pnpm dev
+vp run dev
 ```
 
 ### Book Playground
@@ -112,17 +112,18 @@ The project includes a WebContainer-based playground (`book/playground`) that al
 To start the playground:
 
 ```sh
-pnpm play           # Start the playground dev server
+vp run play           # Start the playground dev server
 ```
 
 The playground supports:
+
 - Selecting different chapters to explore
 - Editing code with Monaco editor
 - Running the development server in the browser
 - Persisting edits to localStorage
 - Resetting files to their original state
 
-If you modify chapter implementations in `book/impls/`, run `pnpm play:generate` to update the playground data.
+If you modify chapter implementations in `book/impls/`, run `vp run play:generate` to update the playground data.
 
 #### Creating a branch (start making changes)
 
