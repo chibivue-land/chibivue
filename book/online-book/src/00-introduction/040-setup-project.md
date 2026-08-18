@@ -162,7 +162,7 @@ Contents of packages/index.ts
 console.log("Hello, World")
 ```
 
-### ### Building the Playground Side
+### Building the Playground Side
 
 ```sh
 pwd # ~/
