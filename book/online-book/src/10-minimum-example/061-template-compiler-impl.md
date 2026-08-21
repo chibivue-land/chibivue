@@ -257,7 +257,7 @@ export function compile(template: string) {
 ```
 
 You might be thinking: "Wait... so this is just codegen? Then how do we generate the function?" \
-In fact, we still don't generate the function here. The actual function generation happens in packages/index.ts. (In the official Vue source, that would be packages/vue/src/index.ts.)
+In fact, we still don't generate the function here. The actual function generation happens in `packages/index.ts`. (In the official Vue source, that would be [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts).)
 
 Although I would like to implement `packages/index.ts`, there is some preparation work to be done, so let's do that first. \
 The preparation work is to implement a variable in `packages/runtime-core/component.ts` to hold the compiler itself, and a registration function.

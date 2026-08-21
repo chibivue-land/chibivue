@@ -257,7 +257,7 @@ export function compile(template: string) {
 ```
 
 你可能会想："诶？？这样不就只是进行了 codegen 吗？那函数的生成要怎么办？"\
-实际上，这里也没有进行函数生成。真正生成函数的地方是在 packages/index.ts。（对应 Vue 官方源码的话，就是 packages/vue/src/index.ts。）
+实际上，这里也没有进行函数生成。真正生成函数的地方是在 `packages/index.ts`。（对应 Vue 官方源码的话，就是 [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts)。）
 
 虽然我想实现 `packages/index.ts`，但有一些准备工作要做，所以让我们先做那个．\
 准备工作是在 `packages/runtime-core/component.ts` 中实现一个变量来保存编译器本身，以及一个注册函数．

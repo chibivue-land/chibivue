@@ -257,7 +257,7 @@ export function compile(template: string) {
 ```
 
 你可能會想："欸？？這樣不就只是進行了 codegen 嗎？那函式的生成要怎麼辦？"\
-實際上，這裡也沒有進行函式生成．真正生成函式的地方是在 packages/index.ts．（對應 Vue 官方原始碼的話，就是 packages/vue/src/index.ts．）
+實際上，這裡也沒有進行函式生成．真正生成函式的地方是在 `packages/index.ts`．（對應 Vue 官方原始碼的話，就是 [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts)．）
 
 雖然我想實現 `packages/index.ts`，但有一些準備工作要做，所以讓我們先做那個．\
 準備工作是在 `packages/runtime-core/component.ts` 中實現一個變數來保存編譯器本身，以及一個註冊函式．
