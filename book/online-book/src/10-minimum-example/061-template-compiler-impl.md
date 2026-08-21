@@ -238,6 +238,27 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependen
 ## Continued Implementation
 
 We've jumped ahead a bit, but let's continue with the implementation. \
+Considering the discussion just now, what we're implementing is a compiler that runs at runtime, so creating `compiler-dom` next is a good fit.
+
+```sh
+pwd # ~/
+mkdir packages/compiler-dom
+touch packages/compiler-dom/index.ts
+```
+
+We'll implement it in `packages/compiler-dom/index.ts`.
+
+```ts
+import { baseCompile } from '../compiler-core'
+
+export function compile(template: string) {
+  return baseCompile(template)
+}
+```
+
+You might be thinking: "Wait... so this is just codegen? Then how do we generate the function?" \
+In fact, we still don't generate the function here. The actual function generation happens in packages/index.ts. (In the official Vue source, that would be packages/vue/src/index.ts.)
+
 Although I would like to implement `packages/index.ts`, there is some preparation work to be done, so let's do that first. \
 The preparation work is to implement a variable in `packages/runtime-core/component.ts` to hold the compiler itself, and a registration function.
 
@@ -292,7 +313,7 @@ export type ComponentOptions = {
 }
 ```
 
-Now, let's compile the important part.
+Now we get to the key part — compilation — but first we need to do a small refactor of the renderer.
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -378,7 +399,7 @@ app.mount('#app')
 ![Simple template compiler output before cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-before.png)
 
 It seems to be working fine. \
-Let's try making some changes to see if they are reflected.
+Templates with the same structure should all be compilable, so let's tweak it a bit and confirm that the change takes effect.
 
 ```ts
 const app = createApp({
