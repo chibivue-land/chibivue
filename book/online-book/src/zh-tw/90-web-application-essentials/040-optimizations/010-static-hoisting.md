@@ -2,21 +2,21 @@
 
 ## 什麼是 Static Hoisting
 
-Static Hoisting 是模板編譯時的最佳化技術之一．它偵測模板中的靜態節點（沒有響應式依賴的節點），並將它們「提升」（hoist）到渲染函數外部，從而提高重新渲染時的效能．
+Static Hoisting 是模板編譯時的最佳化技術之一。它偵測模板中的靜態節點（沒有響應式相依的節點），並將它們「提升」（hoist）到渲染函式外部，從而提高重新渲染時的效能。
 
 <KawaikoNote variant="question" title="為什麼叫提升（hoist）？">
 
-這與 JavaScript 的「變數提升（hoisting）」是相同的概念．
-透過將渲染函數內的靜態程式碼「提升」到函數外部，
-每次呼叫函數時就不需要重新生成了！
+這與 JavaScript 的「變數提升（hoisting）」是相同的概念。
+透過將渲染函式內的靜態程式碼「提升」到函式外部，
+每次呼叫函式時就不需要重新產生了！
 
 </KawaikoNote>
 
 ### 最佳化效果
 
-1. **跳過 VNode 生成**：靜態節點只生成一次，之後重複使用
+1. **跳過 VNode 產生**：靜態節點只產生一次，之後重複使用
 2. **減少記憶體使用**：重複使用相同的 VNode 物件
-3. **跳過 patch 處理**：靜態節點可以從比較對象中排除
+3. **跳過 patch 處理**：靜態節點可以從比較物件中排除
 
 ## 最佳化前後對比
 
@@ -36,7 +36,7 @@ Static Hoisting 是模板編譯時的最佳化技術之一．它偵測模板中�
 ```js
 function render() {
   return h('div', null, [
-    h('h1', null, 'Hello World'),  // 每次都生成
+    h('h1', null, 'Hello World'),  // 每次都產生
     h('p', null, message.value)
   ])
 }
@@ -45,7 +45,7 @@ function render() {
 ### 套用 Static Hoisting 後
 
 ```js
-const _hoisted_1 = h('h1', null, 'Hello World')  // 在外部只生成一次
+const _hoisted_1 = h('h1', null, 'Hello World')  // 在外部只產生一次
 
 function render() {
   return h('div', null, [
@@ -57,7 +57,7 @@ function render() {
 
 <KawaikoNote variant="funny" title="戲劇性的前後對比！">
 
-從每次都生成 VNode 變成只重複使用一次生成的 VNode．
+從每次都產生 VNode 變成只重複使用一次產生的 VNode。
 像頁首頁尾這樣不變的部分越多，效果就越顯著！
 
 </KawaikoNote>
@@ -66,7 +66,7 @@ function render() {
 
 ### ConstantTypes
 
-表示節點靜態性的列舉型別．
+表示節點靜態性的列舉型別。
 
 ```ts
 export const enum ConstantTypes {
@@ -77,9 +77,9 @@ export const enum ConstantTypes {
 }
 ```
 
-### hoistStatic 函數
+### hoistStatic 函式
 
-在轉換階段之後呼叫，偵測並提升靜態節點．
+在轉換階段之後呼叫，偵測並提升靜態節點。
 
 ```ts
 export function hoistStatic(root: RootNode, context: TransformContext): void {
@@ -87,9 +87,9 @@ export function hoistStatic(root: RootNode, context: TransformContext): void {
 }
 ```
 
-### walk 函數
+### walk 函式
 
-遞迴遍歷 AST，偵測可提升的節點．
+遞迴遍歷 AST，偵測可提升的節點。
 
 ```ts
 function walk(
@@ -133,9 +133,9 @@ function walk(
 3. 將原始 `codegenNode` 替換為 `_hoisted_N` 的參照
 4. 動態節點遞迴檢查子節點
 
-### getConstantType 函數
+### getConstantType 函式
 
-判斷節點是否為靜態．
+判斷節點是否為靜態。
 
 ```ts
 export function getConstantType(
@@ -213,7 +213,7 @@ export function getConstantType(
     return ConstantTypes.CAN_HOIST;
   }
 
-  // 文字節點可提升
+  // 文位元組點可提升
   if (node.type === NodeTypes.TEXT) {
     resultCache.set(node, ConstantTypes.CAN_STRINGIFY);
     return ConstantTypes.CAN_STRINGIFY;
@@ -234,11 +234,11 @@ export function getConstantType(
 1. **元件**：始終是動態的（props 和 slots 可能會變化）
 2. **動態 props**：如果有綁定（`:class`，`:style` 等）則是動態的
 3. **指令**：如果有 `v-if`，`v-for` 等則是動態的
-4. **插值表達式**：`{{ message }}` 是動態的
+4. **插值運算式**：`{{ message }}` 是動態的
 5. **子元素**：只要有一個子元素是動態的，父元素也是動態的
 6. **靜態文字/屬性**：可提升
 
-### 程式碼生成
+### 程式碼產生
 
 ```ts
 function genHoists(
@@ -257,7 +257,7 @@ function genHoists(
 }
 ```
 
-將累積在 `hoists` 陣列中的節點作為常數生成在渲染函數之前．
+將累積在 `hoists` 陣列中的節點作為常數產生在渲染函式之前。
 
 ### TransformContext 的 hoist 方法
 
@@ -272,7 +272,7 @@ hoist(exp) {
 }
 ```
 
-將原始節點新增到 `hoists` 陣列，並回傳 `_hoisted_N` 識別符．這在渲染函數內被參照．
+將原始節點新增到 `hoists` 陣列，並回傳 `_hoisted_N` 識別符。這在渲染函式內被參照。
 
 ## 可提升的範例
 
@@ -319,7 +319,7 @@ export interface TransformOptions {
 }
 ```
 
-## 生成程式碼範例
+## 產生程式碼範例
 
 輸入模板：
 ```vue
@@ -339,7 +339,7 @@ export interface TransformOptions {
 </template>
 ```
 
-生成的程式碼：
+產生的程式碼：
 ```js
 import { createVNode as _createVNode, toDisplayString as _toDisplayString } from 'vue'
 
@@ -370,13 +370,13 @@ Static Hoisting 的實作由以下元素組成：
 2. **getConstantType**：判斷節點是否為靜態
 3. **walk**：遍歷 AST 偵測可提升的節點
 4. **hoist**：將節點新增到提升陣列並回傳參照
-5. **genHoists**：為提升的節點生成程式碼
+5. **genHoists**：為提升的節點產生程式碼
 
-這種最佳化在具有大量靜態內容的大型模板中顯著提高重新渲染效能．特別是對於頁首，頁尾，側邊欄等不變的 UI 部分效果顯著．
+這種最佳化在具有大量靜態內容的大型模板中顯著提高重新渲染效能。特別是對於頁首，頁尾，側邊欄等不變的 UI 部分效果顯著。
 
 <KawaikoNote variant="surprise" title="Static Hoisting 完成！">
 
-編譯器自動判斷「這部分不會變化」並進行最佳化．
+編譯器自動判斷「這部分不會變化」並進行最佳化。
 這是基於模板的框架獨有的優勢！
 
 </KawaikoNote>

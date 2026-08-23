@@ -2,10 +2,10 @@
 
 ## 开发者接口
 
-继 props 之后，让我们实现 emits．\
-emits 的实现相对简单，所以会很快完成．
+继 props 之后，让我们实现 emits。\
+emits 的实现相对简单，所以会很快完成。
 
-在开发者接口方面，emits 将从 setup 函数的第二个参数接收．
+在开发者接口方面，emits 将从 setup 函数的第二个参数接收。
 
 ```ts
 const MyComponent: Component = {
@@ -46,7 +46,7 @@ const app = createApp({
 
 ## 实现
 
-与 props 类似，让我们创建一个名为 `~/packages/runtime-core/componentEmits.ts` 的文件并在那里实现它．\
+与 props 类似，让我们创建一个名为 `~/packages/runtime-core/componentEmits.ts` 的文件并在那里实现它。\
 `~/packages/runtime-core/componentEmits.ts`
 
 ```ts
@@ -101,7 +101,7 @@ export function createComponentInstance(
 }
 ```
 
-您可以将此传递给 setup 函数．
+您可以将此传递给 setup 函数。
 
 `~/packages/runtime-core/componentOptions.ts`
 
@@ -133,8 +133,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
     }
 ```
 
-让我们用我们之前假设的开发者接口示例来测试功能！  
+让我们用我们之前假设的开发者接口示例来测试功能！
 如果它正常工作，您现在可以使用 props/emit 在组件之间进行通信！
 
-到此为止的源代码：  
+到此为止的源代码：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)

@@ -2,7 +2,13 @@
 
 ## 虛擬 DOM 用於什麼？
 
-通過在上一章中引入響應式系統，我們能夠動態更新螢幕．讓我們再次查看當前渲染函數的內容．
+<KawaikoNote variant="question" title="為什麼使用虛擬 DOM？">
+
+虛擬 DOM 的目的在於「差異更新」。它會找出發生變化的部分，只執行必要的 DOM 操作！（不過虛擬 DOM 本身也有額外成本，並非萬靈丹。）
+
+</KawaikoNote>
+
+透過在上一章中引入響應式系統，我們能夠動態更新螢幕。讓我們再次查看目前渲染函式的內容。
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
@@ -12,9 +18,9 @@ const render: RootRenderFunction = (vnode, container) => {
 }
 ```
 
-有些人可能在上一章中注意到這個函數中有很多浪費．
+有些人可能在上一章中注意到這個函式中有很多浪費。
 
-看看遊樂場．
+看看遊樂場。
 
 ```ts
 const app = createApp({
@@ -32,12 +38,12 @@ const app = createApp({
 })
 ```
 
-問題是當執行 increment 時，只有 `count: ${state.count}` 部分發生變化，但在 renderVNode 中，所有 DOM 元素都被刪除並從頭重新創建．這感覺非常浪費．\
-雖然現在看起來工作正常，因為它仍然很小，但您可以很容易地想像，如果您在開發 Web 應用程式時每次都必須從頭重新創建複雜的 DOM，性能將大大降低．\
-因此，由於我們已經有了虛擬 DOM，我們希望實現一個比較當前虛擬 DOM 與之前虛擬 DOM 的實現，並僅使用 DOM 操作更新存在差異的部分．\
-現在，這是本章的主要主題．
+問題是當執行 increment 時，只有 `count: ${state.count}` 部分發生變化，但在 renderVNode 中，所有 DOM 元素都被刪除並從頭重新建立。這感覺非常浪費。\
+雖然現在看起來工作正常，因為它仍然很小，但您可以很容易地想像，如果您在開發 Web 應用程式時每次都必須從頭重新建立複雜的 DOM，效能將大大降低。\
+因此，由於我們已經有了虛擬 DOM，我們希望實作一個比較目前虛擬 DOM 與之前虛擬 DOM 的實作，並僅使用 DOM 操作更新存在差異的部分。\
+現在，這是本章的主要主題。
 
-讓我們看看我們想在源代碼中做什麼．當我們有像上面這樣的組件時，渲染函數的返回值變成如下的虛擬 DOM．在初始渲染時，計數為 0，所以它看起來像這樣：
+讓我們看看我們想在原始碼中做什麼。當我們有像上面這樣的元件時，渲染函式的回傳值變成如下的虛擬 DOM。在初始渲染時，計數為 0，所以它看起來像這樣：
 
 ```ts
 const vnode = {
@@ -58,7 +64,7 @@ const vnode = {
 }
 ```
 
-讓我們保留這個 vnode 並為下一次渲染準備另一個 vnode．以下是第一次點擊按鈕時的 vnode：
+讓我們保留這個 vnode 並為下一次渲染準備另一個 vnode。以下是第一次點擊按鈕時的 vnode：
 
 ```ts
 const nextVnode = {
@@ -79,8 +85,8 @@ const nextVnode = {
 }
 ```
 
-現在，有了這兩個 vnodes，螢幕處於 vnode 的狀態（在它變成 nextVnode 之前）．\
-我們希望將這兩個傳遞給一個名為 patch 的函數，並僅渲染差異．
+現在，有了這兩個 vnodes，螢幕處於 vnode 的狀態（在它變成 nextVnode 之前）。\
+我們希望將這兩個傳遞給一個名為 patch 的函式，並僅渲染差異。
 
 ```ts
 const vnode = {...}
@@ -88,13 +94,13 @@ const nextVnode = {...}
 patch(vnode, nextVnode, container)
 ```
 
-我之前介紹了函數名，但這種差異渲染稱為「patch」．\
-有時也稱為「reconciliation」．通過使用這兩個虛擬 DOM，您可以高效地更新螢幕．
+我之前介紹了函式名，但這種差異渲染稱為「patch」。\
+有時也稱為「reconciliation」。透過使用這兩個虛擬 DOM，您可以高效地更新螢幕。
 
-## 在實現 patch 函數之前
+## 在實作 patch 函式之前
 
-這與主要主題沒有直接關係，但讓我們在這裡做一個輕微的重構（因為這對我們接下來要討論的內容很方便）．\
-讓我們在 vnode.ts 中創建一個名為 createVNode 的函數，並讓 h 函數調用它．
+這與主要主題沒有直接關係，但讓我們在這裡做一個輕微的重構（因為這對我們接下來要討論的內容很方便）。\
+讓我們在 vnode.ts 中建立一個名為 createVNode 的函式，並讓 h 函式呼叫它。
 
 ```ts
 export function createVNode(
@@ -107,7 +113,7 @@ export function createVNode(
 }
 ```
 
-也更改 h 函數．
+也更改 h 函式。
 
 ```ts
 export function h(
@@ -119,10 +125,10 @@ export function h(
 }
 ```
 
-現在，讓我們進入正題．到目前為止，VNode 擁有的小元素的類型一直是 `(Vnode | string)[]`，但僅將 Text 視為字串是不夠的，所以讓我們嘗試將其統一為 VNode．\
-Text 不僅僅是一個字串，它作為 HTML TextElement 存在，所以它包含的資訊比僅僅一個字串更多．\
-我們希望將其視為 VNode 以便處理周圍的資訊．\
-具體來說，讓我們使用符號 Text 將其作為 VNode 的類型．\
+現在，讓我們進入正題。到目前為止，VNode 擁有的小元素的型別一直是 `(Vnode | string)[]`，但僅將 Text 視為字串是不夠的，所以讓我們嘗試將其統一為 VNode。\
+Text 不僅僅是一個字串，它作為 HTML TextElement 存在，所以它包含的資訊比僅僅一個字串更多。\
+我們希望將其視為 VNode 以便處理周圍的資訊。\
+具體來說，讓我們使用符號 Text 將其作為 VNode 的型別。\
 例如，當有像 `"hello"` 這樣的文本時，
 
 ```ts
@@ -133,9 +139,9 @@ Text 不僅僅是一個字串，它作為 HTML TextElement 存在，所以它包
 }
 ```
 
-是表示形式．
+是表示形式。
 
-另外，這裡需要注意的一點是，當執行 h 函數時，我們將繼續使用傳統的表達式，我們將通過在渲染函數中應用名為 normalize 的函數來轉換它，以表示如上所述的 Text．這樣做是為了匹配原始的 Vue.js．
+另外，這裡需要注意的一點是，當執行 h 函式時，我們將繼續使用傳統的運算式，我們將透過在渲染函式中應用名為 normalize 的函式來轉換它，以表示如上所述的 Text。這樣做是為了匹配原始的 Vue.js。
 
 `~/packages/runtime-core/vnode.ts`;
 
@@ -154,7 +160,7 @@ export interface VNodeProps {
   [key: string]: any;
 }
 
-// 規範化後的類型
+// 正規化後的型別
 export type VNodeNormalizedChildren = string | VNodeArrayChildren;
 export type VNodeArrayChildren = Array<VNodeArrayChildren | VNodeChildAtom>;
 
@@ -163,7 +169,7 @@ type VNodeChildAtom = VNode | string;
 
 export function createVNode(..){..} // 省略
 
-// 實現 normalize 函數（在 renderer.ts 中使用）
+// 實作 normalize 函式（在 renderer.ts 中使用）
 export function normalizeVNode(child: VNodeChild): VNode {
   if (typeof child === "object") {
     return { ...child } as VNode;
@@ -174,20 +180,20 @@ export function normalizeVNode(child: VNodeChild): VNode {
 }
 ```
 
-現在 Text 可以被視為 VNode．
+現在 Text 可以被視為 VNode。
 
-## patch 函數的設計
+## patch 函式的設計
 
-首先，讓我們看看代碼庫中 patch 函數的設計．\
-（我們不需要在這裡實現它，只需理解它．）\
-patch 函數比較兩個 vnodes，vnode1 和 vnode2．但是，vnode1 最初不存在．\
-因此，patch 函數分為兩個過程：「初始（從 vnode2 生成 dom）」和「更新 vnode1 和 vnode2 之間的差異」．\
-這些過程分別命名為「mount」和「patch」．\
-它們分別對 ElementNode 和 TextNode 執行（結合為「process」，每個都有「mount」和「patch」名稱）．
+首先，讓我們看看程式碼庫中 patch 函式的設計。\
+（我們不需要在這裡實作它，只需理解它。）\
+patch 函式比較兩個 vnodes，vnode1 和 vnode2。但是，vnode1 最初不存在。\
+因此，patch 函式分為兩個過程：「初始（從 vnode2 產生 dom）」和「更新 vnode1 和 vnode2 之間的差異」。\
+這些過程分別命名為「mount」和「patch」。\
+它們分別對 ElementNode 和 TextNode 執行（結合為「process」，每個都有「mount」和「patch」名稱）。
 
-<img   
+<img
     src="/figures/10-minimum-example/virtual-dom/patch-function-architecture.svg"
-    alt="Patch Function Architecture"   
+    alt="Patch Function Architecture"
     style="background-color: white;"
 />
 
@@ -226,11 +232,11 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 }
 ```
 
-## 實際實現
+## 實際實作
 
-現在讓我們實際實現虛擬 DOM 的 patch 函數．\
-首先，我們希望在 vnode 掛載時在 vnode 中有對實際 DOM 的引用，無論它是 Element 還是 Text．\
-所以我們向 vnode 添加「el」屬性．
+現在讓我們實際實作虛擬 DOM 的 patch 函式。\
+首先，我們希望在 vnode 掛載時在 vnode 中有對實際 DOM 的引用，無論它是 Element 還是 Text。\
+所以我們向 vnode 加入「el」屬性。
 
 `~/packages/runtime-core/vnode.ts`
 
@@ -243,8 +249,8 @@ export interface VNode<HostNode = RendererNode> {
 }
 ```
 
-現在讓我們轉到 `~/packages/runtime-core/renderer.ts`．\
-我們將在 `createRenderer` 函數內部實現它並刪除 `renderVNode` 函數．
+現在讓我們轉到 `~/packages/runtime-core/renderer.ts`。\
+我們將在 `createRenderer` 函式內部實作它並刪除 `renderVNode` 函式。
 
 ```ts
 export function createRenderer(options: RendererOptions) {
@@ -263,7 +269,7 @@ export function createRenderer(options: RendererOptions) {
 }
 ```
 
-讓我們從 `processElement` 和 `mountElement` 開始實現．
+讓我們從 `processElement` 和 `mountElement` 開始實作。
 
 ```ts
 const processElement = (
@@ -295,8 +301,8 @@ const mountElement = (vnode: VNode, container: RendererElement) => {
 }
 ```
 
-由於它是一個元素，我們還需要掛載其子元素．\
-讓我們使用我們之前創建的 `normalize` 函數．
+由於它是一個元素，我們還需要掛載其子元素。\
+讓我們使用我們之前建立的 `normalize` 函式。
 
 ```ts
 const mountChildren = (children: VNode[], container: RendererElement) => {
@@ -307,10 +313,10 @@ const mountChildren = (children: VNode[], container: RendererElement) => {
 }
 ```
 
-這樣，我們已經實現了元素的掛載．\
-接下來，讓我們轉到掛載 Text．\
-但是，這只是一個簡單的 DOM 操作．\
-在設計說明中，我們將其分為 `mountText` 和 `patchText` 函數，但由於處理不多，並且預計將來不會變得更複雜，讓我們直接編寫它．
+這樣，我們已經實作了元素的掛載。\
+接下來，讓我們轉到掛載 Text。\
+但是，這只是一個簡單的 DOM 操作。\
+在設計說明中，我們將其分為 `mountText` 和 `patchText` 函式，但由於處理不多，並且預計將來不會變得更複雜，讓我們直接編寫它。
 
 ```ts
 const processText = (
@@ -326,8 +332,8 @@ const processText = (
 }
 ```
 
-現在，隨著初始渲染的掛載完成，讓我們將一些處理從 `createAppAPI` 中的 `mount` 函數移動到 `render` 函數，以便我們可以保存兩個 vnodes．\
-具體來說，我們將 `rootComponent` 傳遞給 `render` 函數並在其中執行 ReactiveEffect 註冊．
+現在，隨著初始渲染的掛載完成，讓我們將一些處理從 `createAppAPI` 中的 `mount` 函式移動到 `render` 函式，以便我們可以儲存兩個 vnodes。\
+具體來說，我們將 `rootComponent` 傳遞給 `render` 函式並在其中執行 ReactiveEffect 註冊。
 
 ```ts
 return function createApp(rootComponent) {
@@ -359,9 +365,9 @@ const render: RootRenderFunction = (rootComponent, container) => {
 
 現在，讓我們嘗試在遊樂場中渲染，看看它是否工作！
 
-由於我們還沒有實現 patch 函數，螢幕不會更新．
+由於我們還沒有實作 patch 函式，螢幕不會更新。
 
-所以，讓我們繼續編寫 patch 函數．
+所以，讓我們繼續編寫 patch 函式。
 
 ```ts
 const patchElement = (n1: VNode, n2: VNode) => {
@@ -389,7 +395,7 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 }
 ```
 
-Text 節點也是如此．
+Text 節點也是如此。
 
 ```ts
 const processText = (
@@ -400,7 +406,7 @@ const processText = (
   if (n1 == null) {
     hostInsert((n2.el = hostCreateText(n2.children as string)), container)
   } else {
-    // 添加 patch 邏輯
+    // 加入 patch 邏輯
     const el = (n2.el = n1.el!)
     if (n2.children !== n1.children) {
       hostSetText(el, n2.children as string)
@@ -409,14 +415,20 @@ const processText = (
 }
 ```
 
-※ 關於 patchChildren，通常我們需要通過添加 key 屬性來處理動態長度的子元素，但由於我們正在實現一個小的虛擬 DOM，我們不會在這裡涵蓋其實用性．\
-如果您感興趣，請參考基礎虛擬 DOM 部分．\
-在這裡，我們的目標是在一定程度上理解虛擬 DOM 的實現和作用．
+※ 關於 patchChildren，通常我們需要透過加入 key 屬性來處理動態長度的子元素，但由於我們正在實作一個小的虛擬 DOM，我們不會在這裡涵蓋其實用性。\
+如果您感興趣，請參考基礎虛擬 DOM 部分。\
+在這裡，我們的目標是在一定程度上理解虛擬 DOM 的實作和作用。
 
-現在我們可以執行差異渲染，讓我們看看遊樂場．
+現在我們可以執行差異渲染，讓我們看看遊樂場。
 
 ![patch rendering result in the browser](/figures/10-minimum-example/virtual-dom/patch-rendering-result.png)
 
-我們已經成功使用虛擬 DOM 實現了補丁！！！！！恭喜！
+<KawaikoNote variant="surprise" title="虛擬 DOM 完成！">
 
-到此為止的源代碼：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)
+差異偵測機制已經實作完成！這是框架的核心技術。只用幾百行程式碼，就能親自體驗「框架的心臟」如何運作！
+
+</KawaikoNote>
+
+我們已經成功使用虛擬 DOM 實作了補丁！！！！！恭喜！
+
+到此為止的原始碼：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

@@ -2,19 +2,19 @@
 
 ## 什麼是 Patch Flags？
 
-Patch Flags 是編譯器生成的優化提示．透過為 VNode 添加標誌，執行時的差分檢測（diffing）演算法可以跳過不必要的檢查，從而提高效能．
+Patch Flags 是編譯器產生的最佳化提示。透過為 VNode 加入標誌，執行時的差分檢測（diffing）演算法可以跳過不必要的檢查，從而提高效能。
 
-<KawaikoNote variant="question" title="為什麼由編譯器來優化？">
+<KawaikoNote variant="question" title="為什麼由編譯器來最佳化？">
 
 撰寫模板的人類知道「這裡是動態的」「這裡是靜態的」，
-但傳統的 Virtual DOM 並不知道這些．透過讓編譯器將這些資訊傳遞給執行時，
+但傳統的 Virtual DOM 並不知道這些。透過讓編譯器將這些資訊傳遞給執行時，
 就可以省去不必要的比較！
 
 </KawaikoNote>
 
-### 優化的機制
+### 最佳化的機制
 
-在普通的 Virtual DOM 差分檢測中，需要比較所有的屬性和子元素．然而，編譯器在模板解析階段就知道「哪些部分是動態的」．透過將這些資訊作為 Patch Flags 嵌入到 VNode 中，執行時只需檢查可能發生變化的部分．
+在普通的 Virtual DOM 差分檢測中，需要比較所有的屬性和子元素。然而，編譯器在模板解析階段就知道「哪些部分是動態的」。透過將這些資訊作為 Patch Flags 嵌入到 VNode 中，執行時只需檢查可能發生變化的部分。
 
 ## PatchFlags 的定義
 
@@ -88,7 +88,7 @@ export const enum PatchFlags {
   CACHED = -1,
 
   /**
-   * 退出優化模式的提示
+   * 退出最佳化模式的提示
    */
   BAIL = -2,
 }
@@ -96,7 +96,7 @@ export const enum PatchFlags {
 
 ## 透過位元運算進行組合
 
-Patch Flags 被設計為位元標誌，可以組合多個標誌．
+Patch Flags 被設計為位元標誌，可以組合多個標誌。
 
 ```ts
 // 組合標誌
@@ -104,22 +104,22 @@ const flag = PatchFlags.TEXT | PatchFlags.CLASS;  // 3 (0b11)
 
 // 檢查標誌
 if (flag & PatchFlags.TEXT) {
-  // TEXT 標誌已設置
+  // TEXT 標誌已設定
 }
 
 if (flag & PatchFlags.CLASS) {
-  // CLASS 標誌已設置
+  // CLASS 標誌已設定
 }
 ```
 
 <KawaikoNote variant="funny" title="位元運算的魔法">
 
-`1 << 1` 是 `2`，`1 << 2` 是 `4`...只需移動位元就能建立獨立的標誌．
-用 `|`（OR）組合，用 `&`（AND）檢查．簡單但超高效！
+`1 << 1` 是 `2`，`1 << 2` 是 `4`...只需移動位元就能建立獨立的標誌。
+用 `|`（OR）組合，用 `&`（AND）檢查。簡單但超高效！
 
 </KawaikoNote>
 
-## 從模板生成的範例
+## 從模板產生的範例
 
 ### 動態文字
 
@@ -129,7 +129,7 @@ if (flag & PatchFlags.CLASS) {
 </template>
 ```
 
-生成的程式碼：
+產生的程式碼：
 ```js
 // patchFlag = 1 (TEXT)
 createVNode("p", null, toDisplayString(message), 1 /* TEXT */)
@@ -143,7 +143,7 @@ createVNode("p", null, toDisplayString(message), 1 /* TEXT */)
 </template>
 ```
 
-生成的程式碼：
+產生的程式碼：
 ```js
 // patchFlag = 2 (CLASS)
 createVNode("div", { class: dynamicClass }, "Content", 2 /* CLASS */)
@@ -157,7 +157,7 @@ createVNode("div", { class: dynamicClass }, "Content", 2 /* CLASS */)
 </template>
 ```
 
-生成的程式碼：
+產生的程式碼：
 ```js
 // patchFlag = 7 (TEXT | CLASS | STYLE)
 createVNode("div",
@@ -175,7 +175,7 @@ createVNode("div",
 </template>
 ```
 
-生成的程式碼：
+產生的程式碼：
 ```js
 // patchFlag = 8 (PROPS)
 // dynamicProps 明確指定可能變化的 props
@@ -189,7 +189,7 @@ createVNode("input",
 
 ## 在執行時的應用
 
-### patchElement 中的優化
+### patchElement 中的最佳化
 
 ```ts
 function patchElement(n1: VNode, n2: VNode) {
@@ -197,7 +197,7 @@ function patchElement(n1: VNode, n2: VNode) {
   const { patchFlag, dynamicProps } = n2;
 
   if (patchFlag > 0) {
-    // 優化路徑：根據標誌只更新必要的部分
+    // 最佳化路徑：根據標誌只更新必要的部分
 
     if (patchFlag & PatchFlags.CLASS) {
       // 只更新 class
@@ -239,7 +239,7 @@ function patchElement(n1: VNode, n2: VNode) {
 }
 ```
 
-### Fragment 的優化
+### Fragment 的最佳化
 
 ```ts
 function patchFragment(n1: VNode, n2: VNode) {
@@ -262,21 +262,21 @@ function patchFragment(n1: VNode, n2: VNode) {
 
 ### CACHED (-1)
 
-表示靜態 VNode 已被快取．
+表示靜態 VNode 已被快取。
 
 ```js
 const _hoisted_1 = createVNode("div", null, "Static", -1 /* CACHED */);
 ```
 
-快取的 VNode 可以跳過差分檢測．
+快取的 VNode 可以跳過差分檢測。
 
 ### BAIL (-2)
 
-退出優化模式的提示．當使用者使用手寫的 render 函式等編譯器優化無法應用的情況下使用．
+退出最佳化模式的提示。當使用者使用手寫的 render 函式等編譯器最佳化無法應用的情況下使用。
 
 ## dynamicProps
 
-與 `patchFlag` 一起使用的 `dynamicProps` 陣列明確指定哪些 props 是動態的．
+與 `patchFlag` 一起使用的 `dynamicProps` 陣列明確指定哪些 props 是動態的。
 
 ```ts
 // 動態 props 是 value 和 disabled
@@ -288,11 +288,11 @@ createVNode("input",
 )
 ```
 
-這樣，由於 `type` 是靜態的，可以跳過比較，只檢查 `value` 和 `disabled`．
+這樣，由於 `type` 是靜態的，可以跳過比較，只檢查 `value` 和 `disabled`。
 
 ## 與 Block Tree 的協作
 
-Patch Flags 與 Block Tree 優化協同工作．Block 擁有 `dynamicChildren` 陣列，只追蹤動態子節點．
+Patch Flags 與 Block Tree 最佳化協同工作。Block 擁有 `dynamicChildren` 陣列，只追蹤動態子節點。
 
 ```ts
 const block = openBlock();
@@ -303,41 +303,41 @@ const vnode = createBlock("div", null, [
 // block.dynamicChildren = [只有動態的 p]
 ```
 
-更新 Block 時只需遍歷 `dynamicChildren`，因此可以跳過靜態子節點的比較．
+更新 Block 時只需遍歷 `dynamicChildren`，因此可以跳過靜態子節點的比較。
 
-## 優化的效果
+## 最佳化的效果
 
-### 優化前（無標誌）
+### 最佳化前（無標誌）
 ```
 比較所有 props: O(n)
 比較所有子元素: O(m)
 總計: O(n + m)
 ```
 
-### 優化後（有標誌）
+### 最佳化後（有標誌）
 ```
 只比較動態 props: O(k) 其中 k << n
 只比較動態子元素: O(l) 其中 l << m
 總計: O(k + l)
 ```
 
-當模板的大部分是靜態的時候，這種優化會產生顯著的效果．
+當模板的大部分是靜態的時候，這種最佳化會產生顯著的效果。
 
 ## 總結
 
 Patch Flags 的實作由以下要素組成：
 
 1. **位元標誌**：高效地表示多個動態元素
-2. **編譯器整合**：在模板解析時自動生成
-3. **執行時優化**：根據標誌跳過不必要的比較
+2. **編譯器整合**：在模板解析時自動產生
+3. **執行時最佳化**：根據標誌跳過不必要的比較
 4. **dynamicProps**：明確追蹤動態 props
 5. **Block Tree 協作**：只高效更新動態子節點
 
-Patch Flags 是大幅提升 Vue 3 Virtual DOM 效能的重要優化技術．透過編譯器和執行時的協作，最大限度地發揮了基於模板的框架的優勢．
+Patch Flags 是大幅提升 Vue 3 Virtual DOM 效能的重要最佳化技術。透過編譯器和執行時的協作，最大限度地發揮了基於模板的框架的優勢。
 
 <KawaikoNote variant="surprise" title="Patch Flags 完成！">
 
-這項技術源於「既然能解析模板，那也能提供優化提示」的想法．
+這項技術源於「既然能解析模板，那也能提供最佳化提示」的想法。
 請親身體驗 JSX 所沒有的模板編譯器的優勢！
 
 </KawaikoNote>

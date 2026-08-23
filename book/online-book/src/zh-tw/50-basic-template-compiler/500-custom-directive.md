@@ -1,13 +1,13 @@
 # 自訂指令
 
 ::: info 關於本章
-本章實現 Vue 的自訂指令功能．\
-您將學習如何定義像 `v-focus` 這樣的自訂指令，並對元素執行直接操作．
+本章實作 Vue 的自訂指令功能。\
+您將學習如何定義像 `v-focus` 這樣的自訂指令，並對元素執行直接操作。
 :::
 
 ## 什麼是自訂指令？
 
-Vue 的自訂指令是用於對 DOM 元素執行低階操作的功能．當需要進行元件抽象無法處理的直接 DOM 操作時使用．
+Vue 的自訂指令是用於對 DOM 元素執行低階操作的功能。當需要進行元件抽象無法處理的直接 DOM 操作時使用。
 
 典型用例：
 
@@ -33,8 +33,8 @@ const vFocus = {
 
 <KawaikoNote variant="warning" title="說實話很少用">
 
-自訂指令用於「想直接操作 DOM」的場景，但說實話很少被使用．\
-由於 Vapor Mode 的實現變更以及與靜態分析的兼容性差，**能不用就不用**．\
+自訂指令用於「想直接操作 DOM」的場景，但說實話很少被使用。\
+由於 Vapor Mode 的實作變更以及與靜態分析的兼容性差，**能不用就不用**。\
 盡量用元件處理能用元件處理的事情！
 
 </KawaikoNote>
@@ -75,19 +75,19 @@ const myDirective = {
 - `vnode`：對應 el 的 VNode
 - `prevVnode`：更新前的 VNode（僅 beforeUpdate，updated）
 
-## 實現概述
+## 實作概述
 
-自訂指令的實現由三部分組成：
+自訂指令的實作由三部分組成：
 
-1. **執行時端**：指令類型定義和 `withDirectives` 輔助函數
+1. **執行時端**：指令型別定義和 `withDirectives` 輔助函式
 2. **渲染器端**：在每個生命週期呼叫鉤子
-3. **編譯器端**：從模板生成 `withDirectives`
+3. **編譯器端**：從模板產生 `withDirectives`
 
-## 執行時實現
+## 執行時實作
 
-### 指令類型定義
+### 指令型別定義
 
-首先，定義指令類型：
+首先，定義指令型別：
 
 ```ts
 // packages/runtime-core/src/directives.ts
@@ -118,9 +118,9 @@ export interface ObjectDirective<T = any> {
 }
 ```
 
-### withDirectives 輔助函數
+### withDirectives 輔助函式
 
-編譯器生成將帶有指令的元素用 `withDirectives` 包裝的程式碼：
+編譯器產生將帶有指令的元素用 `withDirectives` 包裝的程式碼：
 
 ```ts
 // packages/runtime-core/src/directives.ts
@@ -144,7 +144,7 @@ export function withDirectives<T extends VNode>(
   for (let i = 0; i < directives.length; i++) {
     let [dir, value, arg] = directives[i]
     if (dir) {
-      // 將函數形式的指令轉換為物件形式
+      // 將函式形式的指令轉換為物件形式
       if (isFunction(dir)) {
         dir = {
           mounted: dir,
@@ -166,8 +166,8 @@ export function withDirectives<T extends VNode>(
 
 <KawaikoNote variant="funny" title="簡單！">
 
-`withDirectives` 只是給 VNode 新增 `dirs` 屬性．\
-實際的鉤子呼叫由渲染器完成，所以這個實現只是簡單地將資訊附加到 VNode 上！
+`withDirectives` 只是給 VNode 新增 `dirs` 屬性。\
+實際的鉤子呼叫由渲染器完成，所以這個實作只是簡單地將資訊附加到 VNode 上！
 
 </KawaikoNote>
 
@@ -199,7 +199,7 @@ export function invokeDirectiveHook(
 }
 ```
 
-## 渲染器實現
+## 渲染器實作
 
 渲染器在元素掛載和更新的各個時機呼叫 `invokeDirectiveHook`：
 
@@ -267,7 +267,7 @@ const patchElement = (
 
 ## 向 VNode 新增 dirs 屬性
 
-向 VNode 類型定義新增 `dirs`：
+向 VNode 型別定義新增 `dirs`：
 
 ```ts
 // packages/runtime-core/src/vnode.ts
@@ -284,9 +284,9 @@ export interface VNode<ExtraProps = { [key: string]: any }> {
 }
 ```
 
-## 編譯器實現
+## 編譯器實作
 
-### 註冊 WITH_DIRECTIVES 輔助函數
+### 註冊 WITH_DIRECTIVES 輔助函式
 
 ```ts
 // packages/compiler-core/src/runtimeHelpers.ts
@@ -299,7 +299,7 @@ export const helperNameMap: Record<symbol, string> = {
 }
 ```
 
-### 程式碼生成
+### 程式碼產生
 
 當 VNode 有指令時，用 `withDirectives` 包裝：
 
@@ -327,12 +327,12 @@ function genVNodeCall(node: VNodeCall, context: CodegenContext) {
 }
 ```
 
-生成程式碼範例：
+產生程式碼範例：
 
 ```ts
 // 模板：<input v-focus />
 
-// 生成的程式碼
+// 產生的程式碼
 withDirectives(
   createElementVNode('input'),
   [[vFocus]]
@@ -340,7 +340,7 @@ withDirectives(
 
 // 模板：<div v-my-directive:arg.modifier="value" />
 
-// 生成的程式碼
+// 產生的程式碼
 withDirectives(
   createElementVNode('div'),
   [[vMyDirective, value, 'arg', { modifier: true }]]
@@ -383,11 +383,11 @@ const color = ref('red')
 </template>
 ```
 
-<KawaikoNote variant="base" title="實現完成！">
+<KawaikoNote variant="base" title="實作完成！">
 
-自訂指令的實現完成了！\
-透過執行時，渲染器和編譯器的協同工作，現在可以使用像 `v-focus` 這樣的自訂指令了．\
-v-model 內部也是作為指令實現的，請務必查看！
+自訂指令的實作完成了！\
+透過執行時，渲染器和編譯器的協同工作，現在可以使用像 `v-focus` 這樣的自訂指令了。\
+v-model 內部也是作為指令實作的，請務必查看！
 
 </KawaikoNote>
 
@@ -396,8 +396,8 @@ v-model 內部也是作為指令實現的，請務必查看！
 - 自訂指令是用於直接 DOM 操作的低階 API
 - `withDirectives` 將指令資訊附加到 VNode
 - 渲染器在每個生命週期呼叫鉤子
-- 編譯器從模板生成 `withDirectives`
+- 編譯器從模板產生 `withDirectives`
 
 ## 參考連結
 
-- [Vue.js - 自訂指令](https://vuejs.org/guide/reusability/custom-directives.html) - Vue 官方文件
+- [Vue.js - 自訂指令](https://vuejs.org/guide/reusability/custom-directives.html) - Vue 官方檔案

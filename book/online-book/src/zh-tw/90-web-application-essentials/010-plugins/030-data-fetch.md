@@ -1,14 +1,14 @@
 # Data Fetch
 
-## 什麼是資料獲取庫？
+## 什麼是資料取得庫？
 
-現代 Web 應用程式頻繁地從伺服器獲取資料．在 Vue.js 生態系統中，Pinia Colada 和 TanStack Query 等庫提供了這個功能．
+現代 Web 應用程式頻繁地從伺服器取得資料。在 Vue.js 生態系統中，Pinia Colada 和 TanStack Query 等庫提供了這個功能。
 
-在本章中，我們將實現類似 Pinia Colada 的基本資料獲取功能，作為 chibivue-fetch．
+在本章中，我們將實作類似 Pinia Colada 的基本資料取得功能，作為 chibivue-fetch。
 
 ### 為什麼需要庫？
 
-簡單的資料獲取用 `fetch` 和 `ref` 似乎就足夠了：
+簡單的資料取得用 `fetch` 和 `ref` 似乎就足夠了：
 
 ```ts
 // composables/useUser.ts
@@ -34,26 +34,26 @@ export function useUser(id: number) {
 }
 ```
 
-但是，這個實現有以下問題：
+但是，這個實作有以下問題：
 
-1. **沒有快取**：相同的資料會被多次獲取
-2. **SSR 困難**：無法將伺服器獲取的資料傳輸到客戶端
-3. **重複請求**：相同組件多次掛載會導致重複請求
-4. **錯誤處理**：重試和重新獲取的邏輯變得複雜
+1. **沒有快取**：相同的資料會被多次取得
+2. **SSR 困難**：無法將伺服器取得的資料傳輸到使用者端
+3. **重複請求**：相同元件多次掛載會導致重複請求
+4. **錯誤處理**：重試和重新取得的邏輯變得複雜
 
-資料獲取庫解決了這些問題，並提供了宣告式的 API．
+資料取得庫解決了這些問題，並提供了宣告式的 API。
 
 ## 套件結構
 
-chibivue-fetch 在 `@extensions/chibivue-fetch` 套件中提供．
+chibivue-fetch 在 `@extensions/chibivue-fetch` 套件中提供。
 
 ```
 @extensions/chibivue-fetch/src/
-├── index.ts           # 導出
-├── queryCache.ts      # QueryCache 實現（快取管理）
-├── useQuery.ts        # 資料獲取 hook
+├── index.ts           # 匯出
+├── queryCache.ts      # QueryCache 實作（快取管理）
+├── useQuery.ts        # 資料取得 hook
 ├── useMutation.ts     # 資料變更 hook
-└── types.ts           # 類型定義
+└── types.ts           # 型別定義
 ```
 
 ## Data State 模式
@@ -69,11 +69,11 @@ type DataState<TData, TError> =
   | { status: "success"; data: TData; error: null };
 ```
 
-這種狀態模型可以清楚地追蹤資料狀態．
+這種狀態模型可以清楚地追蹤資料狀態。
 
 ## QueryCache
 
-`QueryCache` 負責快取管理和 SSR 的狀態管理．
+`QueryCache` 負責快取管理和 SSR 的狀態管理。
 
 ```ts
 // queryCache.ts
@@ -99,14 +99,14 @@ export interface QueryCache {
 
 ### 主要方法
 
-- `ensure`: 獲取或創建條目
+- `ensure`: 取得或建立條目
 - `fetch`: 執行查詢（總是執行）
 - `refresh`: 刷新查詢（僅在 stale 或 error 時執行）
 - `invalidate`: 使條目失效（標記為 stale）
 - `invalidateQueries`: 使匹配鍵的條目失效
-- `track` / `untrack`: 追蹤組件依賴關係
+- `track` / `untrack`: 追蹤元件相依關係
 - `setQueryData` / `getQueryData`: 直接操作快取資料
-- `prefetchQuery`: 預先獲取資料並儲存到快取
+- `prefetchQuery`: 預先取得資料並儲存到快取
 
 ### createQueryCache
 
@@ -123,7 +123,7 @@ app.use(queryCache);
 
 ## useQuery
 
-`useQuery` 是用於資料獲取的組合式函式．
+`useQuery` 是用於資料取得的組合式函式。
 
 ```ts
 // useQuery.ts
@@ -158,7 +158,7 @@ export interface UseQueryReturn<TData = unknown, TError = Error> {
 ### 選項
 
 - `key`: 查詢的唯一鍵（作為快取鍵使用）
-- `query`: 獲取資料的非同步函式（接收 `{ signal }`）
+- `query`: 取得資料的非同步函式（接收 `{ signal }`）
 - `staleTime`: 資料變為「stale（過期）」的時間
 - `gcTime`: 保留未使用快取的期間（垃圾回收）
 - `enabled`: 是否啟用查詢
@@ -167,17 +167,17 @@ export interface UseQueryReturn<TData = unknown, TError = Error> {
 
 ### 狀態
 
-- `status`: 當前狀態（`"pending"` | `"error"` | `"success"`）
+- `status`: 目前狀態（`"pending"` | `"error"` | `"success"`）
 - `asyncStatus`: 非同步狀態（`"idle"` | `"loading"`）
 - `isPending`: 還沒有初始資料
-- `isLoading`: 初次獲取中（`isPending` 且 `asyncStatus === "loading"`）
-- `isSuccess`: 獲取成功
-- `isError`: 獲取失敗
+- `isLoading`: 初次取得中（`isPending` 且 `asyncStatus === "loading"`）
+- `isSuccess`: 取得成功
+- `isError`: 取得失敗
 
 ### refresh 和 refetch 的區別
 
-- `refresh()`: 僅在 stale 或 error 時獲取
-- `refetch()`: 總是獲取（先使快取失效）
+- `refresh()`: 僅在 stale 或 error 時取得
+- `refetch()`: 總是取得（先使快取失效）
 
 ### 使用範例
 
@@ -193,7 +193,7 @@ const { data, isLoading, error, refresh } = useQuery({
 
 ## useMutation
 
-`useMutation` 是用於資料變更（POST，PUT，DELETE 等）的組合式函式．
+`useMutation` 是用於資料變更（POST，PUT，DELETE 等）的組合式函式。
 
 ```ts
 // useMutation.ts
@@ -222,9 +222,9 @@ export interface UseMutationReturn<TData, TError, TVariables> {
 }
 ```
 
-### 生命週期回調
+### 生命週期回呼
 
-- `onMutate`: mutation 執行前呼叫（返回 context）
+- `onMutate`: mutation 執行前呼叫（回傳 context）
 - `onSuccess`: 成功時呼叫
 - `onError`: 錯誤時呼叫
 - `onSettled`: 成功或錯誤後最後呼叫
@@ -241,7 +241,7 @@ const { mutate, isLoading, isSuccess } = useMutation({
   }).then((res) => res.json()),
   onSuccess: (data) => {
     console.log("User created:", data);
-    // 使快取失效以觸發重新獲取
+    // 使快取失效以觸發重新取得
     queryCache.invalidateQueries(["users"]);
   },
 });
@@ -254,7 +254,7 @@ mutate({ name: "John", email: "john@example.com" });
 
 ### Entry Key
 
-`key` 作為快取鍵使用．陣列格式可以表示階層式的鍵：
+`key` 作為快取鍵使用。陣列格式可以表示階層式的鍵：
 
 ```ts
 // 簡單的鍵
@@ -267,7 +267,7 @@ key: ["users", userId]
 key: ["users", { status: "active", page: 1 }]
 ```
 
-具有相同 `key` 的查詢共享快取．鍵會被序列化為排序後的 JSON，因此物件屬性的順序不重要．
+具有相同 `key` 的查詢共享快取。鍵會被序列化為排序後的 JSON，因此物件屬性的順序不重要。
 
 ### Stale Time 和 GC Time
 
@@ -278,11 +278,11 @@ key: ["users", { status: "active", page: 1 }]
     data arrives      data is stale         data removed
 ```
 
-- **staleTime**: 資料保持「fresh」的期間．在此期間呼叫 `refresh()` 不會重新獲取
-- **gcTime**: 保留未使用快取的期間．組件卸載後，經過此期間快取會被刪除
+- **staleTime**: 資料保持「fresh」的期間。在此期間呼叫 `refresh()` 不會重新取得
+- **gcTime**: 保留未使用快取的期間。元件卸載後，經過此期間快取會被刪除
 
 ```ts
-// 1分鐘內不重新獲取，保留快取5分鐘
+// 1分鐘內不重新取得，保留快取5分鐘
 useQuery({
   key: ["users"],
   query: fetchUsers,
@@ -291,27 +291,27 @@ useQuery({
 });
 ```
 
-### 依賴關係追蹤
+### 相依關係追蹤
 
-與 Pinia Colada 類似，chibivue-fetch 追蹤每個查詢條目被哪些組件使用：
+與 Pinia Colada 類似，chibivue-fetch 追蹤每個查詢條目被哪些元件使用：
 
 ```ts
-// 組件掛載時追蹤
+// 元件掛載時追蹤
 onMounted(() => {
   queryCache.track(entry, currentInstance);
 });
 
-// 組件卸載時取消追蹤
+// 元件卸載時取消追蹤
 onUnmounted(() => {
   queryCache.untrack(entry, currentInstance);
 });
 ```
 
-當沒有依賴關係時，快取會在 `gcTime` 後被垃圾回收．
+當沒有相依關係時，快取會在 `gcTime` 後被垃圾回收。
 
 ## SSR 支援
 
-chibivue-fetch 支援伺服器端渲染（SSR）．
+chibivue-fetch 支援伺服器端渲染（SSR）。
 
 ### 伺服器端：序列化狀態
 
@@ -323,12 +323,12 @@ import { createQueryCache, serializeQueryCache } from "chibivue-fetch";
 import App from "./App.vue";
 
 export async function render() {
-  // 為每個請求創建新實例
+  // 為每個請求建立新實例
   const queryCache = createQueryCache();
   const app = createApp(App);
   app.use(queryCache);
 
-  // 在伺服器端預先獲取資料
+  // 在伺服器端預先取得資料
   await queryCache.prefetchQuery(
     ["users"],
     ({ signal }) => fetch("http://api/users", { signal }).then((r) => r.json()),
@@ -359,7 +359,7 @@ export async function render() {
 }
 ```
 
-相對時間戳可以處理伺服器和客戶端之間的時間差異．
+相對時間戳可以處理伺服器和使用者端之間的時間差異。
 
 ### 嵌入 HTML
 
@@ -378,7 +378,7 @@ export async function render() {
 </html>
 ```
 
-### 客戶端：水合狀態
+### 使用者端：水合狀態
 
 ```ts
 // main.ts (client)
@@ -400,8 +400,8 @@ app.mount("#app");
 
 <KawaikoNote variant="warning" title="Cross-Request State Pollution">
 
-在 SSR 中，與 Store 類似，您必須注意 **Cross-Request State Pollution**．
-在 `render()` 函式內呼叫 `createQueryCache()`，為每個請求創建新實例．
+在 SSR 中，與 Store 類似，您必須注意 **Cross-Request State Pollution**。
+在 `render()` 函式內呼叫 `createQueryCache()`，為每個請求建立新實例。
 
 </KawaikoNote>
 
@@ -422,7 +422,7 @@ const { data, isLoading } = useQuery({
   query: ({ signal }) => fetchUsers(page.value, filters.value, signal),
 });
 
-// 當 page 或 filters 改變時自動重新獲取
+// 當 page 或 filters 改變時自動重新取得
 function nextPage() {
   page.value++;
 }
@@ -449,7 +449,7 @@ const queryCache = getActiveQueryCache();
 const { mutate: createUser } = useMutation({
   mutation: (newUser) => api.createUser(newUser),
   onSuccess: (createdUser) => {
-    // 方法1：使快取失效並重新獲取
+    // 方法1：使快取失效並重新取得
     queryCache.invalidateQueries(["users"]);
 
     // 方法2：直接更新快取（樂觀更新）
@@ -471,7 +471,7 @@ const { data, error, refresh } = useQuery({
   retryDelay: 1000, // 1秒後重試
 });
 
-// 在組件中
+// 在元件中
 if (error.value) {
   // 顯示錯誤和重試按鈕
 }
@@ -490,20 +490,20 @@ const { data } = useQuery({
 });
 ```
 
-當查詢被取消時（例如，當新請求開始時），`signal` 會被 abort．
+當查詢被取消時（例如，當新請求開始時），`signal` 會被 abort。
 
 ## 總結
 
-chibivue-fetch 實現包括以下要素：
+chibivue-fetch 實作包括以下要素：
 
-1. **QueryCache**：集中式快取管理和依賴關係追蹤
+1. **QueryCache**：集中式快取管理和相依關係追蹤
 2. **Data State 模式**：`pending | error | success` 的三狀態模型
-3. **useQuery**：宣告式資料獲取 API
-4. **useMutation**：資料變更管理和生命週期回調
-5. **快取策略**：通過 staleTime / gcTime 靈活控制
-6. **SSR 支援**：通過 `serializeQueryCache()` / `hydrateQueryCache()` 傳輸狀態
+3. **useQuery**：宣告式資料取得 API
+4. **useMutation**：資料變更管理和生命週期回呼
+5. **快取策略**：透過 staleTime / gcTime 靈活控制
+6. **SSR 支援**：透過 `serializeQueryCache()` / `hydrateQueryCache()` 傳輸狀態
 7. **響應式鍵**：動態查詢鍵支援
 8. **錯誤處理**：自動重試和狀態管理
 9. **AbortController**：請求取消支援
 
-通過最小化實現 Pinia Colada 的核心功能，您可以理解資料獲取的運作方式．
+透過最小化實作 Pinia Colada 的核心功能，您可以理解資料取得的運作方式。

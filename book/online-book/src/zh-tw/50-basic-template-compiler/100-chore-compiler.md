@@ -1,18 +1,18 @@
-# 編譯器細節優化
+# 編譯器細節最佳化
 
-在本章中，我們將對模板編譯器進行一些調整以提高其品質．\
+在本章中，我們將對模板編譯器進行一些調整以提高其品質。\
 主要涉及以下兩個主題：
 
 1. **空白處理** - 刪除和壓縮不必要的空白
-2. **文字節點合併** - 高效合併相鄰的文字節點
+2. **文位元組點合併** - 高效合併相鄰的文位元組點
 
-這些是為了提高生成程式碼品質的優化，而不是可見的功能．
+這些是為了提高產生程式碼品質的最佳化，而不是可見的功能。
 
 ## 空白處理
 
 ### 問題
 
-在當前的實現中，模板中的所有空白都會被原樣保留．\
+在目前的實作中，模板中的所有空白都會被原樣保留。\
 考慮以下模板：
 
 ```html
@@ -22,12 +22,12 @@
 </div>
 ```
 
-在當前實現中，`<div>` 和 `<span>` 之間的換行和縮排會作為文字節點被保留．\
-這會生成不必要的節點，可能影響效能．
+在目前實作中，`<div>` 和 `<span>` 之間的換行和縮排會作為文位元組點被保留。\
+這會產生不必要的節點，可能影響效能。
 
 ### Vue.js 的方法
 
-Vue.js 使用 `whitespace` 選項來控制空白的處理方式．
+Vue.js 使用 `whitespace` 選項來控制空白的處理方式。
 
 ```ts
 type WhitespaceStrategy = 'preserve' | 'condense'
@@ -40,7 +40,7 @@ type WhitespaceStrategy = 'preserve' | 'condense'
 
 在 condense 模式下，空白按照以下規則處理：
 
-1. **開頭/結尾的純空白文字節點** → 刪除
+1. **開頭/結尾的純空白文位元組點** → 刪除
 2. **包含換行的元素間空白** → 刪除
 3. **連續的空白** → 壓縮為單個空格
 4. **不包含換行的元素間空白** → 保留（壓縮為單個空格）
@@ -60,9 +60,9 @@ type WhitespaceStrategy = 'preserve' | 'condense'
 <!-- 結果：元素間的空格被保留（沒有換行） -->
 ```
 
-### 實現
+### 實作
 
-首先，在 `ParserOptions` 中添加 `whitespace` 選項．
+首先，在 `ParserOptions` 中加入 `whitespace` 選項。
 
 `packages/compiler-core/src/options.ts`：
 
@@ -73,7 +73,7 @@ export interface ParserOptions {
 }
 ```
 
-在 `packages/compiler-core/src/parse.ts` 中添加空白處理函數．
+在 `packages/compiler-core/src/parse.ts` 中加入空白處理函式。
 
 ```ts
 function isAllWhitespace(content: string): boolean {
@@ -170,7 +170,7 @@ function condenseWhitespace(
 }
 ```
 
-然後在解析元素時呼叫此函數．
+然後在解析元素時呼叫此函式。
 
 ```ts
 function parseElement(
@@ -194,7 +194,7 @@ function parseElement(
 }
 ```
 
-同樣對根節點應用相同的處理．
+同樣對根節點應用相同的處理。
 
 ```ts
 export const baseParse = (
@@ -208,11 +208,11 @@ export const baseParse = (
 }
 ```
 
-## 文字節點合併 (transformText)
+## 文位元組點合併 (transformText)
 
 ### 問題
 
-在當前實現中，文字節點和 mustache 語法（`{{ }}`）被作為單獨的節點處理．
+在目前實作中，文位元組點和 mustache 語法（`{{ }}`）被作為單獨的節點處理。
 
 ```html
 <div>abc {{ d }} {{ e }}</div>
@@ -224,11 +224,11 @@ export const baseParse = (
 - `TEXT`: " "
 - `INTERPOLATION`: e
 
-在程式碼生成時單獨處理這些節點效率不高．
+在程式碼產生時單獨處理這些節點效率不高。
 
 ### Vue.js 的方法
 
-Vue.js 使用名為 `transformText` 的轉換器將相鄰的文字節點和 mustache 語法合併為一個 `CompoundExpression`．
+Vue.js 使用名為 `transformText` 的轉換器將相鄰的文位元組點和 mustache 語法合併為一個 `CompoundExpression`。
 
 合併後：
 ```ts
@@ -236,11 +236,11 @@ Vue.js 使用名為 `transformText` 的轉換器將相鄰的文字節點和 must
 createCompoundExpression(['abc ', d, ' ', e])
 ```
 
-這允許在程式碼生成時輸出高效的連接操作．
+這允許在程式碼產生時輸出高效的連接操作。
 
-### 實現
+### 實作
 
-建立 `packages/compiler-core/src/transforms/transformText.ts`．
+建立 `packages/compiler-core/src/transforms/transformText.ts`。
 
 ```ts
 import type { NodeTransform } from '../transform'
@@ -255,7 +255,7 @@ import { isText } from '../utils'
 import { CREATE_TEXT } from '../runtimeHelpers'
 import { PatchFlags } from '@chibivue/shared'
 
-// 將相鄰的文字節點和 mustache 合併為單個表達式
+// 將相鄰的文位元組點和 mustache 合併為單個運算式
 // 例如：<div>abc {{ d }} {{ e }}</div> 應該只有一個子節點
 export const transformText: NodeTransform = (node, context) => {
   if (
@@ -283,7 +283,7 @@ export const transformText: NodeTransform = (node, context) => {
                   child.loc,
                 )
               }
-              // 合併相鄰的文字節點
+              // 合併相鄰的文位元組點
               currentContainer.children.push(` + `, next)
               children.splice(j, 1)
               j--
@@ -298,7 +298,7 @@ export const transformText: NodeTransform = (node, context) => {
       if (
         !hasText ||
         // 對於只有單個文字子節點的普通元素，保持原樣
-        // 執行時有直接設定 textContent 的優化路徑
+        // 執行時有直接設定 textContent 的最佳化路徑
         (children.length === 1 &&
           (node.type === NodeTypes.ROOT ||
             (node.type === NodeTypes.ELEMENT &&
@@ -312,7 +312,7 @@ export const transformText: NodeTransform = (node, context) => {
         return
       }
 
-      // 將文字節點轉換為 createTextVNode(text) 呼叫
+      // 將文位元組點轉換為 createTextVNode(text) 呼叫
       for (let i = 0; i < children.length; i++) {
         const child = children[i]
         if (isText(child) || child.type === NodeTypes.COMPOUND_EXPRESSION) {
@@ -322,7 +322,7 @@ export const transformText: NodeTransform = (node, context) => {
           if (child.type !== NodeTypes.TEXT || child.content !== ' ') {
             callArgs.push(child)
           }
-          // 為動態文字添加標誌以在區塊內進行補丁
+          // 為動態文字加入標誌以在區塊內進行補丁
           if (!context.ssr && !isStaticNode(child)) {
             callArgs.push(PatchFlags.TEXT)
           }
@@ -358,7 +358,7 @@ function isStaticNode(node: any): boolean {
 }
 ```
 
-在 `packages/compiler-core/src/utils.ts` 中添加 `isText` 輔助函數．
+在 `packages/compiler-core/src/utils.ts` 中加入 `isText` 輔助函式。
 
 ```ts
 export function isText(
@@ -368,11 +368,11 @@ export function isText(
 }
 ```
 
-在 `packages/compiler-core/src/ast.ts` 中添加 `TEXT_CALL` 節點類型和 `createCallExpression`．
+在 `packages/compiler-core/src/ast.ts` 中加入 `TEXT_CALL` 節點型別和 `createCallExpression`。
 
 ```ts
 export const enum NodeTypes {
-  // ... 現有類型 ...
+  // ... 現有型別 ...
   TEXT_CALL, // [!code ++]
 }
 
@@ -396,7 +396,7 @@ export function createCallExpression(
 }
 ```
 
-在 `packages/compiler-core/src/runtimeHelpers.ts` 中添加 `CREATE_TEXT`．
+在 `packages/compiler-core/src/runtimeHelpers.ts` 中加入 `CREATE_TEXT`。
 
 ```ts
 export const CREATE_TEXT = Symbol('createTextVNode')
@@ -409,7 +409,7 @@ export const helperNameMap: Record<symbol, string> = {
 
 ### 註冊轉換器
 
-在 `packages/compiler-core/src/compile.ts` 中註冊轉換器．
+在 `packages/compiler-core/src/compile.ts` 中註冊轉換器。
 
 ```ts
 import { transformText } from './transforms/transformText'
@@ -432,9 +432,9 @@ export function getBaseTransformPreset(): TransformPreset {
 }
 ```
 
-### 更新程式碼生成
+### 更新程式碼產生
 
-在 `packages/compiler-core/src/codegen.ts` 中添加 `TEXT_CALL` 節點處理．
+在 `packages/compiler-core/src/codegen.ts` 中加入 `TEXT_CALL` 節點處理。
 
 ```ts
 function genNode(node: any, context: CodegenContext) {
@@ -449,7 +449,7 @@ function genNode(node: any, context: CodegenContext) {
 
 ### 更新執行時
 
-在 `packages/runtime-core/src/vnode.ts` 中添加 `createTextVNode`．
+在 `packages/runtime-core/src/vnode.ts` 中加入 `createTextVNode`。
 
 ```ts
 export function createTextVNode(text: string = ' ', flag: number = 0): VNode {
@@ -457,7 +457,7 @@ export function createTextVNode(text: string = ' ', flag: number = 0): VNode {
 }
 ```
 
-從 `packages/runtime-core/src/index.ts` 導出．
+從 `packages/runtime-core/src/index.ts` 匯出。
 
 ```ts
 export { createTextVNode } from './vnode'

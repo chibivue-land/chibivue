@@ -2,14 +2,14 @@
 
 ## 什么是 Hydration？
 
-在上一章中，我们学习了如何使用 `renderToString` 将 Vue 组件渲染为 HTML 字符串．但是，SSR 生成的 HTML 只是静态标记——事件处理器和响应式都不起作用．
+在上一章中，我们学习了如何使用 `renderToString` 将 Vue 组件渲染为 HTML 字符串。但是，SSR 生成的 HTML 只是静态标记——事件处理器和响应式都不起作用。
 
-Hydration（水合）是将服务器生成的 HTML "激活"为客户端 Vue 应用程序的过程．
+Hydration（水合）是将服务器生成的 HTML "激活"为客户端 Vue 应用程序的过程。
 
 <KawaikoNote variant="question" title="为什么叫'水合'？">
 
-"Hydration"（水合）这个名字来自于给静态 HTML "注入生命"的形象．
-就像干枯的植物浇水后会变得生机勃勃一样，我们向静态 HTML 注入事件处理器和响应式．
+"Hydration"（水合）这个名字来自于给静态 HTML "注入生命"的形象。
+就像干枯的植物浇水后会变得生机勃勃一样，我们向静态 HTML 注入事件处理器和响应式。
 
 </KawaikoNote>
 
@@ -34,8 +34,8 @@ Hydration（水合）是将服务器生成的 HTML "激活"为客户端 Vue 应�
 
 <KawaikoNote variant="funny" title="Hydration 的本质">
 
-Hydration 可以理解为"不创建 DOM 的渲染"．
-由于 DOM 已经存在，我们只需要将它与 VNode 关联起来．
+Hydration 可以理解为"不创建 DOM 的渲染"。
+由于 DOM 已经存在，我们只需要将它与 VNode 关联起来。
 
 </KawaikoNote>
 
@@ -43,7 +43,7 @@ Hydration 可以理解为"不创建 DOM 的渲染"．
 
 ### HydrateOptions
 
-定义 Hydration 所需的选项．
+定义 Hydration 所需的选项。
 
 ```ts
 // runtime-core/hydration.ts
@@ -78,7 +78,7 @@ export function createHydrationRenderer(options: HydrateOptions) {
 }
 ```
 
-`hydrate` 函数从容器的第一个子节点开始，并行遍历 VNode 树和 DOM 树．
+`hydrate` 函数从容器的第一个子节点开始，并行遍历 VNode 树和 DOM 树。
 
 ### hydrateNode - 根据节点类型分支
 
@@ -112,7 +112,7 @@ function hydrateNode(
 ```
 
 要点：
-- `vnode.el = node` 是最重要的操作．这使后续更新能够引用正确的 DOM 元素
+- `vnode.el = node` 是最重要的操作。这使后续更新能够引用正确的 DOM 元素
 - 每个函数返回"下一个要处理的 DOM 节点"
 
 ### hydrateElement - HTML 元素的水合
@@ -147,8 +147,8 @@ function hydrateElement(
 
 <KawaikoNote variant="warning" title="只附加事件处理器">
 
-Hydration 时我们只处理事件处理器（以 `on` 开头的 props）．
-像 `class` 或 `style` 这样的属性已经包含在 SSR 的 HTML 中，所以不需要附加．
+Hydration 时我们只处理事件处理器（以 `on` 开头的 props）。
+像 `class` 或 `style` 这样的属性已经包含在 SSR 的 HTML 中，所以不需要附加。
 
 </KawaikoNote>
 
@@ -170,11 +170,11 @@ function hydrateChildren(
 }
 ```
 
-按顺序处理 VNode 子元素和 DOM 子节点．每个 `hydrateNode` 返回下一个兄弟节点，用于继续遍历．
+按顺序处理 VNode 子元素和 DOM 子节点。每个 `hydrateNode` 返回下一个兄弟节点，用于继续遍历。
 
 ### hydrateFragment - Fragment 处理
 
-在 SSR 中，Fragment 被包装在 `<!--[-->` 和 `<!--]-->` 注释节点中渲染．
+在 SSR 中，Fragment 被包装在 `<!--[-->` 和 `<!--]-->` 注释节点中渲染。
 
 ```ts
 function hydrateFragment(
@@ -210,7 +210,7 @@ function hydrateFragment(
 
 ## createSSRApp 实现
 
-`createSSRApp` 与普通的 `createApp` 几乎相同，但在挂载时执行 Hydration．
+`createSSRApp` 与普通的 `createApp` 几乎相同，但在挂载时执行 Hydration。
 
 ```ts
 // runtime-dom/index.ts
@@ -323,7 +323,7 @@ const increment = () => count.value++
 
 ## Hydration 不匹配
 
-在 Hydration 期间，SSR 生成的 HTML 必须与客户端生成的 VNode 匹配．如果不匹配，就会发生"Hydration 不匹配"．
+在 Hydration 期间，SSR 生成的 HTML 必须与客户端生成的 VNode 匹配。如果不匹配，就会发生"Hydration 不匹配"。
 
 ### 常见原因
 
@@ -355,8 +355,8 @@ onMounted(() => {
 
 <KawaikoNote variant="warning" title="注意不匹配！">
 
-当 Hydration 不匹配发生时，Vue 会发出警告，最坏的情况下 DOM 可能会损坏．
-注意确保服务器和客户端产生相同的输出．
+当 Hydration 不匹配发生时，Vue 会发出警告，最坏的情况下 DOM 可能会损坏。
+注意确保服务器和客户端产生相同的输出。
 
 </KawaikoNote>
 
@@ -371,10 +371,10 @@ onMounted(() => {
 
 <KawaikoNote variant="surprise" title="Hydration 完成！">
 
-现在我们拥有了 SSR 的所有部分．
+现在我们拥有了 SSR 的所有部分。
 通过使用 `renderToString` 进行服务器端渲染和
 `createSSRApp` 进行 Hydration，
-我们可以实现完整的 SSR 应用程序．
+我们可以实现完整的 SSR 应用程序。
 
 </KawaikoNote>
 
@@ -389,4 +389,4 @@ Hydration 实现由以下部分组成：
 5. **hydrateFragment**：处理 Fragment（被注释节点包围的区域）
 6. **createSSRApp**：支持 Hydration 的应用程序工厂
 
-Hydration 的本质是"将 VNode 与已存在的 DOM 关联而不重新创建"．这使得 SSR 的快速初始显示和 SPA 的丰富交互性得以兼顾．
+Hydration 的本质是"将 VNode 与已存在的 DOM 关联而不重新创建"。这使得 SSR 的快速初始显示和 SPA 的丰富交互性得以兼顾。

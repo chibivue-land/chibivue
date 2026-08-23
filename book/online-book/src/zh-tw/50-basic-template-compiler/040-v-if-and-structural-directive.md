@@ -1,34 +1,34 @@
 # v-if 和結構指令
 
-現在讓我們繼續實現指令！
+現在讓我們繼續實作指令！
 
-最後，我們將實現 v-if．
+最後，我們將實作 v-if。
 
 ## v-if 指令與之前指令的區別
 
-到目前為止，我們已經實現了 v-bind 和 v-on 等指令．
+到目前為止，我們已經實作了 v-bind 和 v-on 等指令。
 
-現在讓我們實現 v-if，但 v-if 與這些指令略有不同．
+現在讓我們實作 v-if，但 v-if 與這些指令略有不同。
 
-根據 Vue.js 官方文件關於編譯時優化的摘錄，
+根據 Vue.js 官方檔案關於編譯時最佳化的摘錄，
 
 > 在這種情況下，整個模板有一個單一的塊，因為它不包含任何結構指令，如 v-if 和 v-for。
 
 https://vuejs.org/guide/extras/rendering-mechanism.html#tree-flattening
 
-如你所見，可以找到"結構指令"這個詞．（你不必擔心什麼是 Tree Flattening，因為它將單獨解釋．）
+如你所見，可以找到"結構指令"這個詞。（你不必擔心什麼是 Tree Flattening，因為它將單獨解釋。）
 
-如前所述，v-if 和 v-for 被稱為"結構指令"，是涉及結構的指令．
+如前所述，v-if 和 v-for 被稱為"結構指令"，是涉及結構的指令。
 
-在 Angular 的文件中，它們也被明確提及．
+在 Angular 的檔案中，它們也被明確提及。
 
 https://angular.jp/guide/structural-directives
 
-v-if 和 v-for 是不僅改變元素的屬性（以及事件的行為），還透過切換元素的存在或根據列表中項目的數量生成/刪除元素來改變元素結構的指令．
+v-if 和 v-for 是不僅改變元素的屬性（以及事件的行為），還透過切換元素的存在或根據列表中項目的數量產生/刪除元素來改變元素結構的指令。
 
 ## 期望的開發者介面
 
-讓我們考慮如何結合 v-if / v-else-if / v-else 來實現 FizzBuzz．
+讓我們考慮如何結合 v-if / v-else-if / v-else 來實作 FizzBuzz。
 
 ```ts
 import { createApp, defineComponent, ref } from 'chibivue'
@@ -57,9 +57,9 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-首先，讓我們考慮我們想要生成的程式碼．
+首先，讓我們考慮我們想要產生的程式碼。
 
-簡單地說，v-if 和 v-else 被轉換為如下的條件表達式：
+簡單地說，v-if 和 v-else 被轉換為如下的條件運算式：
 
 ```ts
 function render(_ctx) {
@@ -90,42 +90,42 @@ function render(_ctx) {
 }
 ```
 
-如你所見，我們正在向到目前為止實現的程式碼添加結構．
+如你所見，我們正在向到目前為止實作的程式碼加入結構。
 
-要實現將 AST 轉換為此類程式碼的轉換器，我們需要進行一些修改．
+要實作將 AST 轉換為此類程式碼的轉換器，我們需要進行一些修改。
 
 ::: warning
 
-當前實現不處理空白和其他跳過，因此中間可能有不必要的文字節點．
+目前實作不處理空白和其他跳過，因此中間可能有不必要的文位元組點。
 
-但是，v-if 的實現沒有問題（你稍後會看到），所以現在請忽略它．
+但是，v-if 的實作沒有問題（你稍後會看到），所以現在請忽略它。
 
 :::
 
-## 結構指令的實現
+## 結構指令的實作
 
-### 實現與結構相關的方法
+### 實作與結構相關的方法
 
-在實現 v-if 之前，讓我們做一些準備．
+在實作 v-if 之前，讓我們做一些準備。
 
-如前所述，v-if 和 v-for 是修改 AST 節點結構的結構指令．
+如前所述，v-if 和 v-for 是修改 AST 節點結構的結構指令。
 
-為了實現這一點，我們需要在基礎轉換器中實現幾個方法．
+為了實作這一點，我們需要在基礎轉換器中實作幾個方法。
 
-具體來說，我們將在 TransformContext 中實現以下三個方法：
+具體來說，我們將在 TransformContext 中實作以下三個方法：
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
   // .
   // .
   // .
-  replaceNode(node: TemplateChildNode): void // 添加
-  removeNode(node?: TemplateChildNode): void // 添加
-  onNodeRemoved(): void // 添加
+  replaceNode(node: TemplateChildNode): void // 加入
+  removeNode(node?: TemplateChildNode): void // 加入
+  onNodeRemoved(): void // 加入
 }
 ```
 
-由於你已經在實現 traverseChildren，我認為你已經在跟蹤當前父級和子級的索引．你可以使用它們來實現上述方法．
+由於你已經在實作 traverseChildren，我認為你已經在跟蹤目前父級和子級的索引。你可以使用它們來實作上述方法。
 
 <!-- NOTE: You may not need to implement this chapter yet. -->
 
@@ -133,7 +133,7 @@ export interface TransformContext extends Required<TransformOptions> {
 
 這部分：
 
-我認為你已經實現了它，但我會解釋一下，以防萬一，因為我在實現它的章節中沒有詳細解釋．
+我認為你已經實作了它，但我會解釋一下，以防萬一，因為我在實作它的章節中沒有詳細解釋。
 
 ```ts
 export function traverseChildren(
@@ -162,12 +162,12 @@ export function createTransformContext(
     // .
     // .
 
-    // 用給定節點替換當前節點和相應父級的子級
+    // 用給定節點替換目前節點和相應父級的子級
     replaceNode(node) {
       context.parent!.children[context.childIndex] = context.currentNode = node
     },
 
-    // 從當前節點的父級的子級中刪除給定節點
+    // 從目前節點的父級的子級中刪除給定節點
     removeNode(node) {
       const list = context.parent!.children
       const removalIndex = node
@@ -176,7 +176,7 @@ export function createTransformContext(
           ? context.childIndex
           : -1
       if (!node || node === context.currentNode) {
-        // 當前節點被刪除
+        // 目前節點被刪除
         context.currentNode = null
         context.onNodeRemoved()
       } else {
@@ -197,9 +197,9 @@ export function createTransformContext(
 }
 ```
 
-現有實現也需要一些修改．調整 traverseChildren 以處理呼叫 removeNode 的情況．
+現有實作也需要一些修改。調整 traverseChildren 以處理呼叫 removeNode 的情況。
 
-由於刪除節點時索引會發生變化，因此在刪除節點時減少索引．
+由於刪除節點時索引會發生變化，因此在刪除節點時減少索引。
 
 ```ts
 export function traverseChildren(
@@ -221,16 +221,16 @@ export function traverseChildren(
 }
 ```
 
-### createStructuralDirectiveTransform 的實現
+### createStructuralDirectiveTransform 的實作
 
-為了實現 v-if 和 v-for 等指令，我們將實現一個名為 createStructuralDirectiveTransform 的輔助函式．
+為了實作 v-if 和 v-for 等指令，我們將實作一個名為 createStructuralDirectiveTransform 的輔助函式。
 
-這些轉換器只作用於 NodeTypes.ELEMENT，並將每個轉換器的實現應用於 Node 擁有的 DirectiveNode．
+這些轉換器只作用於 NodeTypes.ELEMENT，並將每個轉換器的實作應用於 Node 擁有的 DirectiveNode。
 
-嗯，實現本身並不大，所以我認為如果你實際看到它會更容易理解．它看起來像這樣：
+嗯，實作本身並不大，所以我認為如果你實際看到它會更容易理解。它看起來像這樣：
 
 ```ts
-// 每個轉換器（v-if/v-for 等）都根據此介面實現。
+// 每個轉換器（v-if/v-for 等）都根據此介面實作。
 export type StructuralDirectiveTransform = (
   node: ElementNode,
   dir: DirectiveNode,
@@ -238,7 +238,7 @@ export type StructuralDirectiveTransform = (
 ) => void | (() => void)
 
 export function createStructuralDirectiveTransform(
-  // 名稱也支援正規表達式。
+  // 名稱也支援正規運算式。
   // 例如，在 v-if 的轉換器中，假設接收類似 /^(if|else|else-if)$/ 的東西。
   name: string | RegExp,
   fn: StructuralDirectiveTransform,
@@ -268,19 +268,19 @@ export function createStructuralDirectiveTransform(
 }
 ```
 
-## 實現 v-if
+## 實作 v-if
 
-### AST 實現
+### AST 實作
 
-準備工作到此為止已經完成．從這裡開始，讓我們實現 v-if．
+準備工作到此為止已經完成。從這裡開始，讓我們實作 v-if。
 
-像往常一樣，讓我們從 AST 的定義開始，實現解析器．
+像往常一樣，讓我們從 AST 的定義開始，實作解析器。
 
-我想說，但這次似乎我們不需要解析器．
+我想說，但這次似乎我們不需要解析器。
 
-相反，這次我們將考慮我們希望轉換後的 AST 看起來如何，並實現轉換器來相應地轉換它．
+相反，這次我們將考慮我們希望轉換後的 AST 看起來如何，並實作轉換器來相應地轉換它。
 
-讓我們看看開始時假設的編譯程式碼．
+讓我們看看開始時假設的編譯程式碼。
 
 ```ts
 function render(_ctx) {
@@ -311,20 +311,20 @@ function render(_ctx) {
 }
 ```
 
-可以看出，它最終被轉換為條件表達式（三元運算符）．
+可以看出，它最終被轉換為條件運算式（三元運算符）。
 
-由於我們以前從未處理過條件表達式，似乎我們需要在 Codegen 的 AST 端處理這個．
-基本上，我們想要考慮三個資訊（因為它是"三元"運算符）．
+由於我們以前從未處理過條件運算式，似乎我們需要在 Codegen 的 AST 端處理這個。
+基本上，我們想要考慮三個資訊（因為它是"三元"運算符）。
 
 - **條件**
-  這是 A ? B : C 中對應於 A 的部分．
-  用名稱"condition"表示．
+  這是 A ? B : C 中對應於 A 的部分。
+  用名稱"condition"表示。
 - **條件匹配時的節點**
-  這是 A ? B : C 中對應於 B 的部分．
-  用名稱"consequent"表示．
+  這是 A ? B : C 中對應於 B 的部分。
+  用名稱"consequent"表示。
 - **條件不匹配時的節點**
-  這是 A ? B : C 中對應於 C 的部分．
-  用名稱"alternate"表示．
+  這是 A ? B : C 中對應於 C 的部分。
+  用名稱"alternate"表示。
 
 ```ts
 export const enum NodeTypes {
@@ -367,7 +367,7 @@ export function createConditionalExpression(
 }
 ```
 
-我們將使用這些實現一個 AST 來表示 VIf 節點．
+我們將使用這些實作一個 AST 來表示 VIf 節點。
 
 ```ts
 export const enum NodeTypes {
@@ -399,19 +399,19 @@ export interface IfBranchNode extends Node {
 export type ParentNode = RootNode | ElementNode | IfBranchNode
 ```
 
-### 轉換器的實現
+### 轉換器的實作
 
-現在我們有了 AST，讓我們實現生成此 AST 的轉換器．
+現在我們有了 AST，讓我們實作產生此 AST 的轉換器。
 
-想法是基於幾個 `ElementNode` 生成一個 `IfNode`．
+想法是基於幾個 `ElementNode` 產生一個 `IfNode`。
 
-所謂"幾個"，在這種情況下，意味著如果有多個 `ElementNode`，我們需要生成一個包含從 `v-if` 到 `v-else` 語句的單個 `IfNode`．
+所謂"幾個"，在這種情況下，意味著如果有多個 `ElementNode`，我們需要產生一個包含從 `v-if` 到 `v-else` 語句的單個 `IfNode`。
 
-如果第一個 `v-if` 匹配，我們需要在檢查後續節點是否為 `v-else-if` 或 `v-else` 的同時生成 `IfNode`．
+如果第一個 `v-if` 匹配，我們需要在檢查後續節點是否為 `v-else-if` 或 `v-else` 的同時產生 `IfNode`。
 
-讓我們首先實現整體結構，使用我們之前實現的 `createStructuralDirectiveTransform`．
+讓我們首先實作整體結構，使用我們之前實作的 `createStructuralDirectiveTransform`。
 
-具體來說，由於我們最終想要用我們之前實現的 AST 填充 `codegenNode`，我們將在此轉換器的 `onExit` 中生成 Node．
+具體來說，由於我們最終想要用我們之前實作的 AST 填充 `codegenNode`，我們將在此轉換器的 `onExit` 中產生 Node。
 
 ```ts
 export const transformIf = createStructuralDirectiveTransform(
@@ -451,9 +451,9 @@ export function processIf(
 ```
 
 ```ts
-/// 用於生成 codegenNode 的函式
+/// 用於產生 codegenNode 的函式
 
-// 為分支生成 codegenNode
+// 為分支產生 codegenNode
 function createCodegenNodeForBranch(
   branch: IfBranchNode,
   context: TransformContext,
@@ -462,7 +462,7 @@ function createCodegenNodeForBranch(
     return createConditionalExpression(
       branch.condition,
       createChildrenCodegenNode(branch, context),
-      // alternate 暫時設置為生成註釋。
+      // alternate 暫時設定為產生註釋。
       // 當遇到 v-else-if 或 v-else 時，它將被替換為目標 Node。
       // 這是寫 `parentCondition.alternate = createCodegenNodeForBranch(branch, context);` 的部分。
       // 如果沒有遇到 v-else-if 或 v-else，它將保持為 CREATE_COMMENT Node。
@@ -487,7 +487,7 @@ function createChildrenCodegenNode(
 function getParentCondition(
   node: IfConditionalExpression,
 ): IfConditionalExpression {
-  // 透過從節點追蹤獲取結束 Node
+  // 透過從節點追蹤取得結束 Node
   while (true) {
     if (node.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
       if (node.alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION) {
@@ -500,12 +500,12 @@ function getParentCondition(
 }
 ```
 
-在 `processIf` 中，執行更具體的 AST 節點轉換．
+在 `processIf` 中，執行更具體的 AST 節點轉換。
 
-有 if / else-if / else 的情況，但讓我們首先考慮 `if` 的情況．
+有 if / else-if / else 的情況，但讓我們首先考慮 `if` 的情況。
 
-這非常簡單．我們創建一個 IfNode 並執行 codegenNode 生成．
-此時，我們將當前 Node 生成為 IfBranch 並將其分配給 IfNode，然後用 IfNode 替換它．
+這非常簡單。我們建立一個 IfNode 並執行 codegenNode 產生。
+此時，我們將目前 Node 產生為 IfBranch 並將其分配給 IfNode，然後用 IfNode 替換它。
 
 ```
 - parent
@@ -518,7 +518,7 @@ function getParentCondition(
     - IfBranch (currentNode)
 ```
 
-這是改變結構的圖像．
+這是改變結構的圖像。
 
 ```ts
 export function processIf(
@@ -562,11 +562,11 @@ function createIfBranch(node: ElementNode, dir: DirectiveNode): IfBranchNode {
 }
 ```
 
-讓我們考慮除 v-if 之外的情況．
+讓我們考慮除 v-if 之外的情況。
 
-我們將透過上下文從父級的子級遍歷以獲取兄弟節點．
-我們將循環遍歷節點（從當前節點本身開始）並基於自身生成 IfBranch，將它們推入分支．
-在此過程中，註釋和空文字將被刪除．
+我們將透過上下文從父級的子級遍歷以取得兄弟節點。
+我們將循環遍歷節點（從目前節點本身開始）並基於自身產生 IfBranch，將它們推入分支。
+在此過程中，註釋和空文字將被刪除。
 
 ```ts
 if (dir.name === 'if') {
@@ -604,18 +604,18 @@ if (dir.name === 'if') {
 }
 ```
 
-如你所見，實際上 else-if 和 else 沒有區別．
+如你所見，實際上 else-if 和 else 沒有區別。
 
-即使在 AST 中，如果沒有條件，它被定義為 else，所以沒有什麼特別需要考慮的．
+即使在 AST 中，如果沒有條件，它被定義為 else，所以沒有什麼特別需要考慮的。
 （在 `createIfBranch` 的 `dir.name === "else" ? undefined : dir.exp` 部分被吸收）
 
-重要的是在 `if` 時生成 `IfNode`，對於其他情況，只需將它們推入該 Node 的分支．
+重要的是在 `if` 時產生 `IfNode`，對於其他情況，只需將它們推入該 Node 的分支。
 
-透過這樣，transformIf 的實現就完成了．我們只需要在周圍進行一些調整．
+透過這樣，transformIf 的實作就完成了。我們只需要在周圍進行一些調整。
 
-在 traverseNode 中，我們將為 IfNode 擁有的分支執行 traverseNode．
+在 traverseNode 中，我們將為 IfNode 擁有的分支執行 traverseNode。
 
-我們還將 IfBranch 包含為 traverseChildren 的目標．
+我們還將 IfBranch 包含為 traverseChildren 的目標。
 
 ```ts
 export function traverseNode(
@@ -628,14 +628,14 @@ export function traverseNode(
   switch (node.type) {
     // .
     // .
-    // 添加
+    // 加入
     case NodeTypes.IF:
       for (let i = 0; i < node.branches.length; i++) {
         traverseNode(node.branches[i], context)
       }
       break
 
-    case NodeTypes.IF_BRANCH: // 添加
+    case NodeTypes.IF_BRANCH: // 加入
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
       traverseChildren(node, context)
@@ -644,7 +644,7 @@ export function traverseNode(
 }
 ```
 
-最後，我們只需要在編譯器中將 transformIf 註冊為選項．
+最後，我們只需要在編譯器中將 transformIf 註冊為選項。
 
 ```ts
 export function getBaseTransformPreset(): TransformPreset {
@@ -655,13 +655,13 @@ export function getBaseTransformPreset(): TransformPreset {
 }
 ```
 
-透過這樣，轉換器就實現了！
+透過這樣，轉換器就實作了！
 
-剩下的就是實現 codegen，v-if 就完成了．我們快到了，讓我們加油！
+剩下的就是實作 codegen，v-if 就完成了。我們快到了，讓我們加油！
 
-### codegen 的實現
+### codegen 的實作
 
-剩下的很容易．只需基於 ConditionalExpression 的 Node 生成程式碼．
+剩下的很容易。只需基於 ConditionalExpression 的 Node 產生程式碼。
 
 ```ts
 const genNode = (
@@ -671,7 +671,7 @@ const genNode = (
 ) => {
   switch (node.type) {
     case NodeTypes.ELEMENT:
-    case NodeTypes.IF: // 不要忘記添加這個！
+    case NodeTypes.IF: // 不要忘記加入這個！
       genNode(node.codegenNode!, context, option)
       break
     // .
@@ -722,11 +722,11 @@ function genConditionalExpression(
 }
 ```
 
-像往常一樣，我們只是基於 AST 生成條件表達式，所以沒有什麼特別困難的．
+像往常一樣，我們只是基於 AST 產生條件運算式，所以沒有什麼特別困難的。
 
 ## 完成！！
 
-嗯，自從我們有一個稍微胖的章節以來已經有一段時間了，但透過這樣，v-if 的實現就完成了！（幹得好！）
+嗯，自從我們有一個稍微胖的章節以來已經有一段時間了，但透過這樣，v-if 的實作就完成了！（幹得好！）
 
 讓我們嘗試真正執行它！！
 

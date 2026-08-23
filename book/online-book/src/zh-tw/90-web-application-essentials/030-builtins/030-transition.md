@@ -2,19 +2,19 @@
 
 ## 什麼是 Transition？
 
-`<Transition>` 是一個內建組件，用於在顯示或隱藏元素和組件時應用動畫．它與 CSS 過渡/動畫配合使用，實現平滑的 UI 過渡效果．
+`<Transition>` 是一個內建元件，用於在顯示或隱藏元素和元件時應用動畫。它與 CSS 過渡/動畫配合使用，實作平滑的 UI 過渡效果。
 
 <KawaikoNote variant="question" title="為什麼需要 Transition？">
 
-當你使用 `v-if` 切換元素的顯示/隱藏時，元素會瞬間消失或出現．
-使用 Transition，你可以輕鬆添加淡入/淡出或滑動等動畫效果！
+當你使用 `v-if` 切換元素的顯示/隱藏時，元素會瞬間消失或出現。
+使用 Transition，你可以輕鬆加入淡入/淡出或滑動等動畫效果！
 
 </KawaikoNote>
 
 主要用例：
 
 1. **與 v-if / v-show 組合**：條件渲染時的動畫
-2. **動態組件**：使用 `<component :is>` 時的切換動畫
+2. **動態元件**：使用 `<component :is>` 時的切換動畫
 3. **路由過渡**：頁面之間的過渡效果
 
 ## 基本用法
@@ -90,23 +90,23 @@ export interface TransitionHooks<HostElement = Element> {
 }
 ```
 
-渲染器通過此介面與 Transition 進行協調．
+渲染器透過此介面與 Transition 進行協調。
 
 ## CSS 類別的生命週期
 
-Transition 會自動添加和移除以下 CSS 類別：
+Transition 會自動加入和移除以下 CSS 類別：
 
 ### Enter（顯示元素）
 
-1. **v-enter-from**：開始狀態．在元素插入之前添加，1 幀後移除
-2. **v-enter-active**：啟用狀態．在整個過渡期間應用
-3. **v-enter-to**：結束狀態．開始後 1 幀添加，過渡結束時移除
+1. **v-enter-from**：開始狀態。在元素插入之前加入，1 幀後移除
+2. **v-enter-active**：啟用狀態。在整個過渡期間應用
+3. **v-enter-to**：結束狀態。開始後 1 幀加入，過渡結束時移除
 
 ### Leave（隱藏元素）
 
-1. **v-leave-from**：開始狀態．在 leave 過渡開始時添加，1 幀後移除
-2. **v-leave-active**：啟用狀態．在整個過渡期間應用
-3. **v-leave-to**：結束狀態．開始後 1 幀添加，過渡結束時移除
+1. **v-leave-from**：開始狀態。在 leave 過渡開始時加入，1 幀後移除
+2. **v-leave-active**：啟用狀態。在整個過渡期間應用
+3. **v-leave-to**：結束狀態。開始後 1 幀加入，過渡結束時移除
 
 ```
 Enter:
@@ -126,7 +126,7 @@ Leave:
 
 ### resolveTransitionProps
 
-解析 props 並生成 TransitionHooks．
+解析 props 並產生 TransitionHooks。
 
 ```ts
 export function resolveTransitionProps(
@@ -148,7 +148,7 @@ export function resolveTransitionProps(
   const enterDuration = durations && durations[0];
   const leaveDuration = durations && durations[1];
 
-  // 生成鉤子函數
+  // 產生鉤子函式
   return {
     ...rawProps,
     mode,
@@ -198,11 +198,11 @@ export function removeTransitionClass(
 }
 ```
 
-`_vtc`（Vue Transition Classes）屬性用於追蹤當前應用的過渡類別．
+`_vtc`（Vue Transition Classes）屬性用於追蹤目前應用的過渡類別。
 
 ### nextFrame
 
-為了使 CSS 過渡正常運作，我們需要等待 2 幀後再更改類別．
+為了使 CSS 過渡正常運作，我們需要等待 2 幀後再更改類別。
 
 ```ts
 function nextFrame(cb: () => void): void {
@@ -212,11 +212,11 @@ function nextFrame(cb: () => void): void {
 }
 ```
 
-第一幀讓瀏覽器識別初始狀態，第二幀應用更改，確保過渡可靠觸發．
+第一幀讓瀏覽器識別初始狀態，第二幀應用更改，確保過渡可靠觸發。
 
 <KawaikoNote variant="funny" title="為什麼要等待 2 幀？">
 
-「為什麼要呼叫兩次 `requestAnimationFrame`？」你可能會疑惑．
+「為什麼要呼叫兩次 `requestAnimationFrame`？」你可能會疑惑。
 第一次呼叫告訴瀏覽器「這是初始狀態」，
 第二次呼叫告訴它「這是結束狀態」，
 這樣瀏覽器才能識別過渡！
@@ -245,7 +245,7 @@ const makeEnterHook = (isAppear: boolean) => {
 ```
 
 1. 呼叫使用者定義的鉤子
-2. 2 幀後，移除 from 類別並添加 to 類別
+2. 2 幀後，移除 from 類別並加入 to 類別
 3. 偵測過渡結束並完成處理
 
 ### Leave 鉤子
@@ -273,7 +273,7 @@ leave(el, done) {
 
 ### getTransitionInfo
 
-從 CSS 獲取 transition/animation 資訊．
+從 CSS 取得 transition/animation 資訊。
 
 ```ts
 export function getTransitionInfo(
@@ -317,7 +317,7 @@ export function getTransitionInfo(
 
 ### whenTransitionEnds
 
-在過渡結束時執行回呼．
+在過渡結束時執行回呼。
 
 ```ts
 export function whenTransitionEnds(
@@ -371,7 +371,7 @@ export function whenTransitionEnds(
 
 ### forceReflow
 
-強制重排以確保 CSS 過渡可靠觸發．
+強制重排以確保 CSS 過渡可靠觸發。
 
 ```ts
 export function forceReflow(): number {
@@ -379,16 +379,16 @@ export function forceReflow(): number {
 }
 ```
 
-讀取 `offsetHeight` 強制瀏覽器重新計算樣式．
+讀取 `offsetHeight` 強制瀏覽器重新計算樣式。
 
 <KawaikoNote variant="warning" title="為什麼要強制重排？">
 
-即使連續添加 CSS 類別，瀏覽器也可能為了最佳化而批次進行樣式重新計算．
+即使連續加入 CSS 類別，瀏覽器也可能為了最佳化而批次進行樣式重新計算。
 讀取 `offsetHeight` 可以強制它「立即計算！」
 
 </KawaikoNote>
 
-## Transition 組件主體
+## Transition 元件主體
 
 ```ts
 const Transition = (
@@ -412,7 +412,7 @@ const Transition = (
 };
 ```
 
-Transition 本身不渲染任何 DOM 元素；它只是在子 VNode 上附加一個 `transition` 屬性．渲染器會看到這個屬性並呼叫鉤子．
+Transition 本身不渲染任何 DOM 元素；它只是在子 VNode 上附加一個 `transition` 屬性。渲染器會看到這個屬性並呼叫鉤子。
 
 ## 使用範例
 
@@ -516,7 +516,7 @@ function onLeave(el, done) {
 
 ### VNode.transition 屬性
 
-VNode 有一個 `transition` 屬性，用於儲存 TransitionHooks．
+VNode 有一個 `transition` 屬性，用於儲存 TransitionHooks。
 
 ```ts
 // packages/runtime-core/src/vnode.ts
@@ -528,9 +528,9 @@ export interface VNode<HostNode = any> {
 }
 ```
 
-### 在 Transition 組件中設定
+### 在 Transition 元件中設定
 
-Transition 組件在子 VNode 上設定 `transition` 屬性．
+Transition 元件在子 VNode 上設定 `transition` 屬性。
 
 ```ts
 const Transition = (
@@ -598,31 +598,31 @@ const unmountElement = (vnode) => {
 ## 處理流程
 
 ```
-Transition 組件 render
+Transition 元件 render
   ↓
-使用 resolveTransitionProps 生成 TransitionHooks
+使用 resolveTransitionProps 產生 TransitionHooks
   ↓
 child.transition = innerProps
   ↓
 渲染器 mountElement
   ├── beforeEnter(el)
-  │   └── 添加 enterFromClass/enterActiveClass
+  │   └── 加入 enterFromClass/enterActiveClass
   ├── insert(el, container)
   └── enter(el, done)
       └── 在 nextFrame 中
           ├── 移除 enterFromClass
-          ├── 添加 enterToClass
+          ├── 加入 enterToClass
           └── 使用 whenTransitionEnds 等待完成
               └── done() 呼叫 finishEnter
 
 渲染器 unmountElement
   └── transition.leave(el, remove)
-      ├── 添加 leaveFromClass
+      ├── 加入 leaveFromClass
       ├── forceReflow()
-      ├── 添加 leaveActiveClass
+      ├── 加入 leaveActiveClass
       └── 在 nextFrame 中
           ├── 移除 leaveFromClass
-          ├── 添加 leaveToClass
+          ├── 加入 leaveToClass
           └── 使用 whenTransitionEnds 等待完成
               └── remove() 從 DOM 移除
 ```
@@ -631,19 +631,19 @@ child.transition = innerProps
 
 Transition 的實作由以下元素組成：
 
-1. **CSS 類別管理**：在 enter/leave 的每個階段添加/移除類別
+1. **CSS 類別管理**：在 enter/leave 的每個階段加入/移除類別
 2. **nextFrame**：等待 2 幀以保證過渡觸發
 3. **forceReflow**：強制重排以重新計算樣式
 4. **whenTransitionEnds**：監聽 transitionend/animationend 事件
 5. **JavaScript 鉤子**：支援不使用 CSS 的動畫
 6. **VNode.transition**：供渲染器呼叫鉤子的屬性
 
-Transition 與 CSS 過渡/動畫密切配合，其實作基於對瀏覽器渲染管線的深入理解．
+Transition 與 CSS 過渡/動畫密切配合，其實作基於對瀏覽器渲染管線的深入理解。
 
 <KawaikoNote variant="surprise" title="Transition 完成！">
 
 不僅僅是 CSS 類別操作，還有幀時序控制和重排管理——
-這個實作需要深入理解瀏覽器內部機制．
+這個實作需要深入理解瀏覽器內部機制。
 出乎意料地深奧，不是嗎！
 
 </KawaikoNote>

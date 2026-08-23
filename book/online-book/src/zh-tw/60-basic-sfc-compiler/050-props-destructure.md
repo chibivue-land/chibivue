@@ -1,13 +1,13 @@
 # 支援 Props 解構
 
 ::: info 關於本章
-本章介紹如何實現 Vue 3.5 的響應式 Props 解構功能．\
-學習如何在解構 props 的同時保持響應性．
+本章介紹如何實作 Vue 3.5 的響應式 Props 解構功能。\
+學習如何在解構 props 的同時保持響應性。
 :::
 
 ## 什麼是響應式 Props 解構？
 
-從 Vue 3.5 開始，你可以在 `<script setup>` 中解構 `defineProps` 的回傳值．
+從 Vue 3.5 開始，你可以在 `<script setup>` 中解構 `defineProps` 的回傳值。
 
 ```vue
 <script setup>
@@ -22,19 +22,19 @@ const { count, message = 'default' } = defineProps({
 </template>
 ```
 
-這個功能使存取 props 更加簡單．
+這個功能使存取 props 更加簡單。
 
 <KawaikoNote variant="question" title="為什麼需要特殊處理？">
 
-在普通的 JavaScript 中，解構物件會複製值，並斷開與原始物件的連接．\
-但是 Vue 的 props 需要保持響應性．\
+在普通的 JavaScript 中，解構物件會複製值，並斷開與原始物件的連接。\
+但是 Vue 的 props 需要保持響應性。\
 編譯器將解構存取轉換為 `__props.xxx` 存取來保持響應性！
 
 </KawaikoNote>
 
 ## 工作原理
 
-Props 解構通過以下步驟實現：
+Props 解構透過以下步驟實作：
 
 1. **模式檢測**：檢測 `const { ... } = defineProps(...)`
 2. **綁定註冊**：將每個解構的屬性註冊為 `PROPS`
@@ -74,7 +74,7 @@ export default {
 
 ## 檢測解構模式
 
-檢測 `defineProps` 的回傳值是否被賦值給 `ObjectPattern`（解構模式）．
+檢測 `defineProps` 的回傳值是否被賦值給 `ObjectPattern`（解構模式）。
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -108,7 +108,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## 處理解構
 
-從 `ObjectPattern` 中提取每個屬性並註冊為綁定．
+從 `ObjectPattern` 中提取每個屬性並註冊為綁定。
 
 ```ts
 function processPropsDestructure(pattern: ObjectPattern) {
@@ -117,7 +117,7 @@ function processPropsDestructure(pattern: ObjectPattern) {
       const key = prop.key
       const value = prop.value
 
-      // 獲取屬性名
+      // 取得屬性名
       let propKey: string
       if (key.type === "Identifier") {
         propKey = key.name
@@ -159,7 +159,7 @@ function processPropsDestructure(pattern: ObjectPattern) {
 
 ## 預設值處理
 
-當在解構中指定預設值時，將其合併到 props 定義中．
+當在解構中指定預設值時，將其合併到 props 定義中。
 
 ```ts
 function genRuntimeProps(): string | undefined {
@@ -191,7 +191,7 @@ function mergeDefaults(
   propsString: string,
   defaults: Record<string, string>
 ): string {
-  // 實際實現通過操作 AST 來合併預設值
+  // 實際實作透過操作 AST 來合併預設值
   // 這裡是簡化範例
   const ast = parseExpression(propsString)
   // ... 合併預設值的處理
@@ -201,7 +201,7 @@ function mergeDefaults(
 
 ## 轉換 Props 存取
 
-在模板和腳本中，將解構變數的存取轉換為 `__props.xxx`．
+在模板和腳本中，將解構變數的存取轉換為 `__props.xxx`。
 
 ```ts
 function processPropsAccess(source: string): string {
@@ -234,7 +234,7 @@ function processPropsAccess(source: string): string {
 
 ## Rest 模式支援
 
-也可以支援 `...rest` 模式．
+也可以支援 `...rest` 模式。
 
 ```vue
 <script setup>
@@ -250,7 +250,7 @@ function processPropsDestructure(pattern: ObjectPattern) {
       if (prop.argument.type === "Identifier") {
         const restName = prop.argument.name
         // rest 需要特殊處理
-        // 實際上使用 computed 來獲取剩餘的 props
+        // 實際上使用 computed 來取得剩餘的 props
         bindingMetadata[restName] = BindingTypes.SETUP_REACTIVE_CONST
       }
     }
@@ -294,7 +294,7 @@ console.log(count, message)
 </template>
 ```
 
-## 未來擴展
+## 未來擴充
 
 可以考慮以下功能：
 
@@ -312,5 +312,5 @@ console.log(count, message)
 
 ## 參考連結
 
-- [Vue.js - 響應式 Props 解構](https://vuejs.org/guide/components/props.html#reactive-props-destructure) - Vue 官方文件
+- [Vue.js - 響應式 Props 解構](https://vuejs.org/guide/components/props.html#reactive-props-destructure) - Vue 官方檔案
 - [RFC - Reactive Props Destructure](https://github.com/vuejs/rfcs/discussions/502) - Vue RFC

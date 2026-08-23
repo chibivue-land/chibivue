@@ -1,23 +1,23 @@
-# 基於類型的 defineProps / defineEmits
+# 基於型別的 defineProps / defineEmits
 
 ::: info 關於本章
-本章介紹如何使用 TypeScript 類型參數實現 `defineProps` 和 `defineEmits`．\
-學習如何從類型定義生成執行時定義．
+本章介紹如何使用 TypeScript 型別參數實作 `defineProps` 和 `defineEmits`。\
+學習如何從型別定義產生執行時定義。
 :::
 
-## 什麼是基於類型的宣告？
+## 什麼是基於型別的宣告？
 
-在 Vue 3 中，你可以使用 TypeScript 泛型宣告 `defineProps` 和 `defineEmits`．
+在 Vue 3 中，你可以使用 TypeScript 泛型宣告 `defineProps` 和 `defineEmits`。
 
 ```vue
 <script setup lang="ts">
-// 基於類型的 defineProps
+// 基於型別的 defineProps
 const props = defineProps<{
   count: number
   message?: string
 }>()
 
-// 基於類型的 defineEmits
+// 基於型別的 defineEmits
 const emit = defineEmits<{
   (e: 'change', value: string): void
   (e: 'update', id: number): void
@@ -25,21 +25,21 @@ const emit = defineEmits<{
 </script>
 ```
 
-<KawaikoNote variant="question" title="為什麼基於類型更方便？">
+<KawaikoNote variant="question" title="為什麼基於型別更方便？">
 
 執行時宣告使用 `Number`，`String` 等，\
-但基於類型的宣告可以直接使用 TypeScript 的類型系統！\
-IDE 的補全和錯誤檢查也更加強大．
+但基於型別的宣告可以直接使用 TypeScript 的型別系統！\
+IDE 的補全和錯誤檢查也更加強大。
 
 </KawaikoNote>
 
 ## 工作原理
 
-基於類型的巨集通過以下步驟處理：
+基於型別的巨集透過以下步驟處理：
 
-1. **類型參數檢測**：檢測 `defineProps<T>()` 中的泛型
-2. **類型解析**：解析 TypeScript 類型定義
-3. **執行時定義生成**：從類型生成執行時 props/emits
+1. **型別參數檢測**：檢測 `defineProps<T>()` 中的泛型
+2. **型別解析**：解析 TypeScript 型別定義
+3. **執行時定義產生**：從型別產生執行時 props/emits
 4. **程式碼輸出**：作為普通執行時宣告輸出
 
 ### 轉換範例
@@ -67,9 +67,9 @@ export default {
 }
 ```
 
-## 檢測類型參數
+## 檢測型別參數
 
-檢測 `defineProps` 或 `defineEmits` 是否有類型參數．
+檢測 `defineProps` 或 `defineEmits` 是否有型別參數。
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -83,7 +83,7 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
   const callExpr = node as CallExpression
 
-  // 檢查類型參數
+  // 檢查型別參數
   if (callExpr.typeParameters) {
     const typeArg = callExpr.typeParameters.params[0]
     if (typeArg) {
@@ -99,13 +99,13 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 }
 ```
 
-## 解析類型
+## 解析型別
 
-解析 TypeScript 類型字面量以提取屬性資訊．
+解析 TypeScript 型別字面值以提取屬性資訊。
 
 ```ts
 interface PropTypeData {
-  type: string[]      // 類型陣列（支援聯合類型）
+  type: string[]      // 型別陣列（支援聯合型別）
   required: boolean   // 是否必需
 }
 
@@ -126,7 +126,7 @@ function extractPropsFromType(
       const propName = key.name
       const isOptional = !!member.optional
 
-      // 解析類型
+      // 解析型別
       const types = member.typeAnnotation
         ? resolveType(member.typeAnnotation.typeAnnotation)
         : ["null"]
@@ -142,9 +142,9 @@ function extractPropsFromType(
 }
 ```
 
-## 類型到建構函數的轉換
+## 型別到建構函式的轉換
 
-將 TypeScript 類型轉換為 JavaScript 建構函數．
+將 TypeScript 型別轉換為 JavaScript 建構函式。
 
 ```ts
 function resolveType(node: TSType): string[] {
@@ -169,7 +169,7 @@ function resolveType(node: TSType): string[] {
       return ["Object"]
 
     case "TSUnionType":
-      // 聯合類型返回多個建構函數
+      // 聯合型別回傳多個建構函式
       const types: string[] = []
       for (const t of node.types) {
         // 排除 null/undefined
@@ -181,10 +181,10 @@ function resolveType(node: TSType): string[] {
       return types
 
     case "TSTypeReference":
-      // 自訂類型和參照
+      // 自訂型別和參照
       if (node.typeName.type === "Identifier") {
         const name = node.typeName.name
-        // 內建類型對映
+        // 內建型別對映
         if (name === "Array") return ["Array"]
         if (name === "Function") return ["Function"]
         if (name === "Object") return ["Object"]
@@ -199,9 +199,9 @@ function resolveType(node: TSType): string[] {
 }
 ```
 
-## 生成執行時定義
+## 產生執行時定義
 
-從解析的類型資訊生成執行時 props 定義．
+從解析的型別資訊產生執行時 props 定義。
 
 ```ts
 function genRuntimePropsFromType(
@@ -225,9 +225,9 @@ function genRuntimePropsFromType(
 }
 ```
 
-## defineEmits 的類型處理
+## defineEmits 的型別處理
 
-`defineEmits` 同樣處理類型參數．
+`defineEmits` 同樣處理型別參數。
 
 ```ts
 let emitsTypeDecl: TSFunctionType[] | undefined
@@ -253,7 +253,7 @@ function processDefineEmits(node: Node, declId?: LVal): boolean {
 function resolveEmitsTypeElements(
   typeArg: TSType
 ): TSFunctionType[] | undefined {
-  // 函數多載形式
+  // 函式多載形式
   if (typeArg.type === "TSTypeLiteral") {
     return typeArg.members
       .filter((m): m is TSCallSignatureDeclaration =>
@@ -265,7 +265,7 @@ function resolveEmitsTypeElements(
 }
 ```
 
-## 生成 emits 執行時定義
+## 產生 emits 執行時定義
 
 ```ts
 function genRuntimeEmitsFromType(
@@ -313,7 +313,7 @@ export default {
 
 ## withDefaults 支援
 
-要為基於類型的 props 指定預設值，使用 `withDefaults`．
+要為基於型別的 props 指定預設值，使用 `withDefaults`。
 
 ```vue
 <script setup lang="ts">
@@ -383,26 +383,26 @@ function handleClick() {
 </template>
 ```
 
-## 未來擴展
+## 未來擴充
 
 可以考慮以下功能：
 
-- **介面參照**：參照其他檔案中定義的類型
-- **對映類型**：`Partial<T>` 等變換類型
-- **泛型組件**：帶有泛型類型參數的組件
-- **僅類型導入**：處理 `import type`
+- **介面參照**：參照其他檔案中定義的型別
+- **對映型別**：`Partial<T>` 等變換型別
+- **泛型元件**：帶有泛型型別參數的元件
+- **僅型別匯入**：處理 `import type`
 
 到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/60_basic_sfc_compiler/060_type_based_macros)
 
 ## 總結
 
-- 基於類型的 defineProps/defineEmits 使用 TypeScript 類型參數
-- 編譯器解析類型並生成執行時定義
-- TypeScript 類型對映到 JavaScript 建構函數
+- 基於型別的 defineProps/defineEmits 使用 TypeScript 型別參數
+- 編譯器解析型別並產生執行時定義
+- TypeScript 型別對映到 JavaScript 建構函式
 - 可以使用 withDefaults 指定預設值
 
 ## 參考連結
 
-- [Vue.js - 組合式 API 與 TypeScript](https://vuejs.org/guide/typescript/composition-api.html) - Vue 官方文件
-- [Vue.js - 僅類型 props/emit 宣告](https://vuejs.org/api/sfc-script-setup.html#type-only-props-emit-declarations) - Vue 官方文件
+- [Vue.js - 組合式 API 與 TypeScript](https://vuejs.org/guide/typescript/composition-api.html) - Vue 官方檔案
+- [Vue.js - 僅型別 props/emit 宣告](https://vuejs.org/api/sfc-script-setup.html#type-only-props-emit-declarations) - Vue 官方檔案

@@ -1,7 +1,7 @@
 # Vapor 编译器
 
-在上一节中，我们了解了构成 Vapor 模式基础的运行时函数（`template`，`setText`，`on`）．
-在本节中，让我们实现一个编译器，它可以从模板自动生成使用这些函数的代码．
+在上一节中，我们了解了构成 Vapor 模式基础的运行时函数（`template`，`setText`，`on`）。
+在本节中，让我们实现一个编译器，它可以从模板自动生成使用这些函数的代码。
 
 ## Vapor 编译器的目标
 
@@ -49,7 +49,7 @@ Vapor 代码 (string)
 
 ## 什么是 IR（中间表示）？
 
-IR（中间表示）是位于 AST 和最终代码之间的数据结构．
+IR（中间表示）是位于 AST 和最终代码之间的数据结构。
 使用 IR 的好处包括：
 
 1. **关注点分离**：清晰地分离解析和代码生成
@@ -117,8 +117,8 @@ interface SetPropIRNode {
 
 ## Transformer 的作用
 
-Transformer 将 AST 转换为 IR．
-它遍历每个 AST 节点并生成适当的 IR 节点．
+Transformer 将 AST 转换为 IR。
+它遍历每个 AST 节点并生成适当的 IR 节点。
 
 ### TransformContext
 
@@ -224,8 +224,8 @@ registerEffect(expressions: SimpleExpressionNode[], operations: OperationNode[])
 
 ## 什么是 renderEffect？
 
-`renderEffect` 是 Vapor 模式的核心函数．
-与虚拟 DOM 基于差异的方法不同，它直接跟踪响应式依赖并在变化时更新 DOM．
+`renderEffect` 是 Vapor 模式的核心函数。
+与虚拟 DOM 基于差异的方法不同，它直接跟踪响应式依赖并在变化时更新 DOM。
 
 ### 工作原理
 
@@ -388,4 +388,4 @@ Vapor 编译器通过以下流程将模板转换为代码：
 - 只有更改的部分才会被有效更新
 - 自动处理生命周期钩子（onBeforeUpdate，onUpdated）
 
-在下一节中，我们将了解如何使用 SSR 支持在服务器上渲染 Vapor 组件．
+在下一节中，我们将了解如何使用 SSR 支持在服务器上渲染 Vapor 组件。

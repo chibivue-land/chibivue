@@ -1,13 +1,13 @@
 # 自定义指令
 
 ::: info 关于本章
-本章实现 Vue 的自定义指令功能．\
-您将学习如何定义像 `v-focus` 这样的自定义指令，并对元素执行直接操作．
+本章实现 Vue 的自定义指令功能。\
+您将学习如何定义像 `v-focus` 这样的自定义指令，并对元素执行直接操作。
 :::
 
 ## 什么是自定义指令？
 
-Vue 的自定义指令是用于对 DOM 元素执行低级操作的功能．当需要进行组件抽象无法处理的直接 DOM 操作时使用．
+Vue 的自定义指令是用于对 DOM 元素执行低级操作的功能。当需要进行组件抽象无法处理的直接 DOM 操作时使用。
 
 典型用例：
 
@@ -33,8 +33,8 @@ const vFocus = {
 
 <KawaikoNote variant="warning" title="说实话很少用">
 
-自定义指令用于"想直接操作 DOM"的场景，但说实话很少被使用．\
-由于 Vapor Mode 的实现变更以及与静态分析的兼容性差，**能不用就不用**．\
+自定义指令用于"想直接操作 DOM"的场景，但说实话很少被使用。\
+由于 Vapor Mode 的实现变更以及与静态分析的兼容性差，**能不用就不用**。\
 尽量用组件处理能用组件处理的事情！
 
 </KawaikoNote>
@@ -166,7 +166,7 @@ export function withDirectives<T extends VNode>(
 
 <KawaikoNote variant="funny" title="简单！">
 
-`withDirectives` 只是给 VNode 添加 `dirs` 属性．\
+`withDirectives` 只是给 VNode 添加 `dirs` 属性。\
 实际的钩子调用由渲染器完成，所以这个实现只是简单地将信息附加到 VNode 上！
 
 </KawaikoNote>
@@ -386,7 +386,7 @@ const color = ref('red')
 <KawaikoNote variant="base" title="实现完成！">
 
 自定义指令的实现完成了！\
-通过运行时，渲染器和编译器的协同工作，现在可以使用像 `v-focus` 这样的自定义指令了．\
+通过运行时，渲染器和编译器的协同工作，现在可以使用像 `v-focus` 这样的自定义指令了。\
 v-model 内部也是作为指令实现的，请务必查看！
 
 </KawaikoNote>

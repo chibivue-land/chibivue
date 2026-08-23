@@ -21,7 +21,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/00-introduction/030-vue-core-components",
           },
           {
-            text: "本書的方法和環境設置",
+            text: "本書的方法和環境設定",
             link: "/zh-tw/00-introduction/040-setup-project",
           },
         ],
@@ -51,7 +51,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system",
           },
           {
-            text: "嘗試實現一個小型響應式系統",
+            text: "嘗試實作一個小型響應式系統",
             link: "/zh-tw/10-minimum-example/035-try-implementing-a-minimum-reactivity-system",
           },
           {
@@ -59,15 +59,15 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/10-minimum-example/040-minimum-virtual-dom",
           },
           {
-            text: "追求組件導向開發",
+            text: "邁向元件導向開發",
             link: "/zh-tw/10-minimum-example/050-minimum-component",
           },
           {
-            text: "組件 Props",
+            text: "元件 Props",
             link: "/zh-tw/10-minimum-example/051-component-props",
           },
           {
-            text: "組件 Emit",
+            text: "元件事件",
             link: "/zh-tw/10-minimum-example/052-component-emits",
           },
           {
@@ -75,7 +75,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/10-minimum-example/060-template-compiler",
           },
           {
-            text: "實現模板編譯器",
+            text: "實作模板編譯器",
             link: "/zh-tw/10-minimum-example/061-template-compiler-impl",
           },
           {
@@ -165,7 +165,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "基礎組件系統",
+        text: "基礎元件系統",
         collapsed: false,
         items: [
           {
@@ -177,7 +177,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/40-basic-component-system/020-provide-inject",
           },
           {
-            text: "組件代理和 setupContext",
+            text: "元件代理和 setupContext",
             link: "/zh-tw/40-basic-component-system/030-component-proxy-setup-context",
           },
           {
@@ -195,15 +195,15 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "重構 Transformer 的 Codegen 實現",
+            text: "重構 Transformer 的 Codegen 實作",
             link: "/zh-tw/50-basic-template-compiler/010-transform",
           },
           {
-            text: "實現指令（v-bind）",
+            text: "實作指令（v-bind）",
             link: "/zh-tw/50-basic-template-compiler/020-v-bind",
           },
           {
-            text: "在模板中求值表達式",
+            text: "在模板中求值運算式",
             link: "/zh-tw/50-basic-template-compiler/022-transform-expression",
           },
           {
@@ -231,7 +231,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/50-basic-template-compiler/050-v-for",
           },
           {
-            text: "解析組件",
+            text: "解析元件",
             link: "/zh-tw/50-basic-template-compiler/070-resolve-component",
           },
           {
@@ -247,11 +247,11 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/50-basic-template-compiler/090-other-directives",
           },
           {
-            text: "編譯器細節優化",
+            text: "編譯器細節最佳化",
             link: "/zh-tw/50-basic-template-compiler/100-chore-compiler",
           },
           {
-            text: "解析器優化",
+            text: "解析器最佳化",
             link: "/zh-tw/50-basic-template-compiler/110-parser-optimization",
           },
           {
@@ -285,7 +285,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-tw/60-basic-sfc-compiler/050-props-destructure",
           },
           {
-            text: "基於類型的 defineProps/defineEmits",
+            text: "基於型別的 defineProps/defineEmits",
             link: "/zh-tw/60-basic-sfc-compiler/060-type-based-macros",
           },
         ],
@@ -311,7 +311,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/zh-tw/90-web-application-essentials/010-plugins/020-store",
               },
               {
-                text: "資料獲取",
+                text: "資料擷取",
                 link: "/zh-tw/90-web-application-essentials/010-plugins/030-data-fetch",
               },
               {
@@ -339,7 +339,7 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             ],
           },
           {
-            text: "內建組件",
+            text: "內建元件",
             collapsed: false,
             items: [
               {
@@ -395,6 +395,32 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
+            text: "快速學習路線",
+            collapsed: false,
+            items: [
+              {
+                text: "路線概覽",
+                link: "/zh-tw/bonus/hot-paths/",
+              },
+              {
+                text: "初學者 30 分鐘動手實作",
+                link: "/zh-tw/bonus/hot-paths/beginner-30-min-hands-on",
+              },
+              {
+                text: "初學者 60 分鐘動手實作",
+                link: "/zh-tw/bonus/hot-paths/beginner-60-min-hands-on",
+              },
+              {
+                text: "進階 60 分鐘動手實作",
+                link: "/zh-tw/bonus/hot-paths/intermediate-60-min-hands-on",
+              },
+              {
+                text: "高階 30 分鐘概要",
+                link: "/zh-tw/bonus/hot-paths/advanced-30-min-summary",
+              },
+            ],
+          },
+          {
             text: "15分鐘編寫 Vue.js",
             collapsed: false,
             items: [
@@ -403,13 +429,13 @@ export const zhTwConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
                 link: "/zh-tw/bonus/hyper-ultimate-super-extreme-minimal-vue/",
               },
               {
-                text: "實現",
+                text: "實作",
                 link: "/zh-tw/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl",
               },
             ],
           },
           {
-            text: "除錯原始 Vue.js 原始碼",
+            text: "除錯 Vue.js 原始碼",
             link: "/zh-tw/bonus/debug-vuejs-core",
           },
         ],

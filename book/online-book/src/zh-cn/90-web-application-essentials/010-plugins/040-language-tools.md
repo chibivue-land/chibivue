@@ -2,7 +2,7 @@
 
 ## 什么是 Language Tools？
 
-Language Tools 为 `.vue` 单文件组件（SFCs）提供 IDE 支持．它们启用以下功能：
+Language Tools 为 `.vue` 单文件组件（SFCs）提供 IDE 支持。它们启用以下功能：
 
 - 语法高亮
 - 自动补全
@@ -10,11 +10,11 @@ Language Tools 为 `.vue` 单文件组件（SFCs）提供 IDE 支持．它们启
 - 转到定义
 - 错误诊断
 
-在 Vue.js 生态系统中，[vuejs/language-tools](https://github.com/vuejs/language-tools) 提供此功能，它基于 [Volar.js](https://volarjs.dev/) 构建．在本章中，我们将使用 Volar.js 为 chibivue 实现最小化的语言工具．
+在 Vue.js 生态系统中，[vuejs/language-tools](https://github.com/vuejs/language-tools) 提供此功能，它基于 [Volar.js](https://volarjs.dev/) 构建。在本章中，我们将使用 Volar.js 为 chibivue 实现最小化的语言工具。
 
 ## 为什么需要 Language Tools？
 
-TypeScript 的语言服务只能理解 `.ts` 和 `.tsx` 文件．然而 `.vue` 文件包含多种语言混合在一起：
+TypeScript 的语言服务只能理解 `.ts` 和 `.tsx` 文件。然而 `.vue` 文件包含多种语言混合在一起：
 
 ```vue
 <template>
@@ -30,7 +30,7 @@ div { color: red; }  /* CSS */
 </style>
 ```
 
-Language Tools 的作用是将这种复合文件**转换**为 TypeScript 语言服务可以理解的格式．通过这种转换，在 `.vue` 文件中也可以使用 TypeScript 的所有功能（类型检查，自动补全，重构等）．
+Language Tools 的作用是将这种复合文件**转换**为 TypeScript 语言服务可以理解的格式。通过这种转换，在 `.vue` 文件中也可以使用 TypeScript 的所有功能（类型检查，自动补全，重构等）。
 
 ## 架构概述
 
@@ -99,7 +99,7 @@ Language Tools 的作用是将这种复合文件**转换**为 TypeScript 语言�
 
 ### 虚拟代码 (Virtual Code)
 
-Language Tools 的核心概念是**虚拟代码**．通过将 `.vue` 文件转换为 TypeScript，可以利用 TypeScript 语言服务的所有功能．
+Language Tools 的核心概念是**虚拟代码**。通过将 `.vue` 文件转换为 TypeScript，可以利用 TypeScript 语言服务的所有功能。
 
 #### 转换示例
 
@@ -141,7 +141,7 @@ declare const __VLS_template: () => void;
 
 ### 代码映射
 
-**代码映射**将虚拟代码中的位置链接回原始 `.vue` 文件的位置．
+**代码映射**将虚拟代码中的位置链接回原始 `.vue` 文件的位置。
 
 ```txt
 原始 .vue 文件                        虚拟 TypeScript
@@ -167,7 +167,7 @@ const message = ref('Hello')    ←──→  const message = ref('Hello')
 
 ### 类型定义
 
-首先，定义表示 SFC 结构的类型．
+首先，定义表示 SFC 结构的类型。
 
 ```ts
 // types.ts
@@ -218,10 +218,10 @@ export interface SfcDescriptor {
 
 ### SFC 解析器
 
-解析 `.vue` 文件以生成 `SfcDescriptor`．
+解析 `.vue` 文件以生成 `SfcDescriptor`。
 
 ::: tip
-在实际实现中，可以使用 chibivue 的 `@chibivue/compiler-sfc` 包中的 `parse` 函数．这里为了教育目的展示一个简化的解析器．
+在实际实现中，可以使用 chibivue 的 `@chibivue/compiler-sfc` 包中的 `parse` 函数。这里为了教育目的展示一个简化的解析器。
 :::
 
 ```ts
@@ -331,7 +331,7 @@ function parseAttrs(attrsString: string): Record<string, string | true> {
 
 ### 虚拟代码生成
 
-实现 Volar.js 的 `VirtualCode` 接口．这是 Language Tools 的核心．
+实现 Volar.js 的 `VirtualCode` 接口。这是 Language Tools 的核心。
 
 ```ts
 // virtualCode.ts
@@ -528,7 +528,7 @@ function createScriptSnapshot(content: string): ts.IScriptSnapshot {
 
 ### 语言插件
 
-实现告诉 Volar.js 如何处理 `.vue` 文件的插件．
+实现告诉 Volar.js 如何处理 `.vue` 文件的插件。
 
 ```ts
 // languagePlugin.ts
@@ -622,7 +622,7 @@ export function createChibivueLanguagePlugin(): LanguagePlugin<
 
 ### 语言服务器
 
-LSP（语言服务器协议）服务器连接编辑器和语言功能．
+LSP（语言服务器协议）服务器连接编辑器和语言功能。
 
 ```ts
 // server.ts
@@ -638,7 +638,7 @@ import { createChibivueLanguagePlugin } from '@chibivue/language-core';
 /**
  * 关于 LSP（语言服务器协议）
  *
- * LSP 是将编辑器与语言功能分离的协议．
+ * LSP 是将编辑器与语言功能分离的协议。
  *
  * ┌──────────┐                        ┌──────────────────┐
  * │  VSCode  │ ◄───── LSP 通信 ─────► │  Language Server │
@@ -715,7 +715,7 @@ connection.onInitialized(() => {
 
 ### VSCode 扩展
 
-实现将 VSCode 连接到语言服务器的扩展．
+实现将 VSCode 连接到语言服务器的扩展。
 
 ```ts
 // extension.ts
@@ -797,7 +797,7 @@ export function deactivate(): Thenable<void> | undefined {
 
 ### 语法高亮（TextMate 语法）
 
-语法高亮使用 TextMate 语法定义．这使用 VSCode 的内置功能，不涉及语言服务器．
+语法高亮使用 TextMate 语法定义。这使用 VSCode 的内置功能，不涉及语言服务器。
 
 ```json
 // syntaxes/vue.tmLanguage.json
@@ -843,7 +843,7 @@ export function deactivate(): Thenable<void> | undefined {
 
 ## 总结
 
-Language Tools 通过将 `.vue` 文件转换为虚拟 TypeScript 代码，使 SFC 中可以使用 TypeScript 的所有功能．
+Language Tools 通过将 `.vue` 文件转换为虚拟 TypeScript 代码，使 SFC 中可以使用 TypeScript 的所有功能。
 
 **主要组件：**
 
@@ -853,7 +853,7 @@ Language Tools 通过将 `.vue` 文件转换为虚拟 TypeScript 代码，使 SF
 4. **语言服务器** - 通过 LSP 与编辑器通信
 5. **VSCode 扩展** - 将 VSCode 连接到语言服务器
 
-此实现是用于教育目的的最小实现．生产环境使用的 [vuejs/language-tools](https://github.com/vuejs/language-tools) 添加了许多高级功能：
+此实现是用于教育目的的最小实现。生产环境使用的 [vuejs/language-tools](https://github.com/vuejs/language-tools) 添加了许多高级功能：
 
 - 模板指令（`v-if`，`v-for` 等）的类型检查
 - 组件 props 类型验证

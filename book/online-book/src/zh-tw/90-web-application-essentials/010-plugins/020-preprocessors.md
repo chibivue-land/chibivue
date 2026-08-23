@@ -2,20 +2,20 @@
 
 ## 什麼是預處理器？
 
-CSS 預處理器是將擴展的 CSS 語言（SCSS，Less，Stylus 等）轉換為標準 CSS 的工具．這些語言提供了變數，巢狀，混入和函數等功能，使 CSS 編寫更加高效．
+CSS 預處理器是將擴充的 CSS 語言（SCSS，Less，Stylus 等）轉換為標準 CSS 的工具。這些語言提供了變數，巢狀，混入和函式等功能，使 CSS 編寫更加高效。
 
 <KawaikoNote variant="question" title="為什麼使用預處理器？">
 
 純 CSS 有一些限制：
-- 沒有變數（CSS 自訂屬性是後來添加的）
+- 沒有變數（CSS 自訂屬性是後來加入的）
 - 沒有巢狀
 - 程式碼複用困難
 
-預處理器解決了這些問題，使編寫可維護的樣式表成為可能．
+預處理器解決了這些問題，使編寫可維護的樣式表成為可能。
 
 </KawaikoNote>
 
-在 Vue SFC 中，你可以通過在 `<style>` 區塊上指定 `lang` 屬性來使用預處理器．
+在 Vue SFC 中，你可以透過在 `<style>` 區塊上指定 `lang` 屬性來使用預處理器。
 
 ```vue
 <style lang="scss">
@@ -37,14 +37,14 @@ Vue/chibivue 支援以下預處理器：
 |---------|----------|------|
 | **SCSS** | `scss` | 類 CSS 語法，變數，巢狀，混入 |
 | **Sass** | `sass` | 基於縮排的語法（無花括號）|
-| **Less** | `less` | 變數（`@`），混入，函數 |
+| **Less** | `less` | 變數（`@`），混入，函式 |
 | **Stylus** | `styl`, `stylus` | 靈活語法，可選分隔符 |
 
-## 類型定義
+## 型別定義
 
 ### StylePreprocessor
 
-預處理器的通用介面．
+預處理器的通用介面。
 
 ```ts
 // style/preprocessors.ts
@@ -62,18 +62,18 @@ export type StylePreprocessor = (
 
 ### StylePreprocessorResults
 
-表示預處理器結果的類型．
+表示預處理器結果的型別。
 
 ```ts
 export interface StylePreprocessorResults {
   code: string;           // 轉換後的 CSS
   map?: object;          // Source map
   errors: Error[];       // 錯誤列表
-  dependencies: string[]; // 依賴檔案（@import 等）
+  dependencies: string[]; // 相依檔案（@import 等）
 }
 ```
 
-`dependencies` 很重要．它使 Vite 等工具能夠在預處理器中通過 `@import` 匯入的檔案發生變化時觸發重新建置．
+`dependencies` 很重要。它使 Vite 等工具能夠在預處理器中透過 `@import` 匯入的檔案發生變化時觸發重新建置。
 
 ## 處理流程
 
@@ -95,11 +95,11 @@ SFC 檔案 (.vue)
    ├── trimPlugin (空白刪除)
    └── scopedPlugin (scoped CSS)
     ↓
-4. 返回結果
+4. 回傳結果
    { code, map, errors, dependencies }
 ```
 
-## 預處理器實現
+## 預處理器實作
 
 ### SCSS 預處理器
 
@@ -110,7 +110,7 @@ const scss: StylePreprocessor = (source, map, options, load = require) => {
   const nodeSass: typeof import("sass") = load("sass");
   const { compileString, renderSync } = nodeSass;
 
-  // 套用 additionalData（注入公共變數等）
+  // 套用 additionalData（注入公開變數等）
   const data = getSource(source, options.filename, options.additionalData);
 
   let css: string;
@@ -160,15 +160,15 @@ const scss: StylePreprocessor = (source, map, options, load = require) => {
 
 <KawaikoNote variant="warning" title="API 相容性">
 
-Sass 有兩套 API：舊版和新版．
-`compileString` 是新 API，`renderSync` 是舊 API．
-同時支援兩者確保與任何 Sass 版本相容．
+Sass 有兩套 API：舊版和新版。
+`compileString` 是新 API，`renderSync` 是舊 API。
+同時支援兩者確保與任何 Sass 版本相容。
 
 </KawaikoNote>
 
 ### Sass 預處理器
 
-Sass 使用與 SCSS 相同的引擎，但使用基於縮排的語法．
+Sass 使用與 SCSS 相同的引擎，但使用基於縮排的語法。
 
 ```ts
 const sass: StylePreprocessor = (source, map, options, load) =>
@@ -204,7 +204,7 @@ const less: StylePreprocessor = (source, map, options, load = require) => {
 
   if (error) return { code: "", errors: [error], dependencies: [] };
 
-  // Less 通過 imports 屬性返回依賴
+  // Less 透過 imports 屬性回傳相依
   const dependencies = result.imports;
 
   if (map) {
@@ -237,7 +237,7 @@ const styl: StylePreprocessor = (source, map, options, load = require) => {
     if (map) ref.set("sourcemap", { inline: false, comment: false });
 
     const result = ref.render();
-    const dependencies = ref.deps();  // 獲取依賴
+    const dependencies = ref.deps();  // 取得相依
 
     if (map) {
       return {
@@ -255,9 +255,9 @@ const styl: StylePreprocessor = (source, map, options, load = require) => {
 };
 ```
 
-## 使用 additionalData 注入公共樣式
+## 使用 additionalData 注入公開樣式
 
-`additionalData` 選項允許你向所有樣式檔案注入公共程式碼．
+`additionalData` 選項允許你向所有樣式檔案注入公開程式碼。
 
 ```ts
 function getSource(
@@ -267,12 +267,12 @@ function getSource(
 ) {
   if (!additionalData) return source;
 
-  // 如果是函數，動態生成
+  // 如果是函式，動態產生
   if (isFunction(additionalData)) {
     return additionalData(source, filename);
   }
 
-  // 如果是字串，添加到原始碼前面
+  // 如果是字串，加入到原始碼前面
   return additionalData + source;
 }
 ```
@@ -295,8 +295,8 @@ export default defineConfig({
 
 <KawaikoNote variant="funny" title="注入全域變數">
 
-`additionalData` 就像「自動複製貼上到每個樣式檔案的開頭」．
-它省去了每次都要匯入變數和混入的麻煩．
+`additionalData` 就像「自動複製貼上到每個樣式檔案的開頭」。
+它省去了每次都要匯入變數和混入的麻煩。
 
 </KawaikoNote>
 
@@ -316,7 +316,7 @@ export const processors: Record<PreprocessLang, StylePreprocessor> = {
 
 ## 在 compileStyle 中的整合
 
-預處理器在 `compileStyle` 函數中被呼叫．
+預處理器在 `compileStyle` 函式中被呼叫。
 
 ```ts
 // compileStyle.ts
@@ -336,7 +336,7 @@ export function doCompileStyle(options: SFCAsyncStyleCompileOptions) {
   // 如果存在則執行預處理器
   const preProcessedSource = preprocessor && preprocess(options, preprocessor);
 
-  // 獲取 source map（來自預處理器或輸入）
+  // 取得 source map（來自預處理器或輸入）
   const map = preProcessedSource ? preProcessedSource.map : options.inMap;
 
   // CSS 原始碼（轉換後的或原始的）
@@ -348,7 +348,7 @@ export function doCompileStyle(options: SFCAsyncStyleCompileOptions) {
   if (trim) plugins.push(trimPlugin());
   if (scoped) plugins.push(scopedPlugin(longId));
 
-  // 收集依賴
+  // 收集相依
   const dependencies = new Set(
     preProcessedSource ? preProcessedSource.dependencies : []
   );
@@ -432,7 +432,7 @@ secondary = #35495e
 
 ## Source Map 鏈結
 
-預處理器和 PostCSS 都會生成 source map．我們使用 `merge-source-map` 函式庫來正確地鏈結它們．
+預處理器和 PostCSS 都會產生 source map。我們使用 `merge-source-map` 函式庫來正確地鏈結它們。
 
 ```
 SCSS 原始碼
@@ -446,24 +446,24 @@ CSS
 merge(A, B) → 最終 source map
 ```
 
-這使得瀏覽器開發工具在除錯時可以顯示原始 SCSS/Less/Stylus 檔案的行號．
+這使得瀏覽器開發工具在除錯時可以顯示原始 SCSS/Less/Stylus 檔案的行號。
 
 <KawaikoNote variant="surprise" title="除錯更輕鬆！">
 
 有了 source map，當你在瀏覽器中想知道「這個 CSS 是從哪裡來的？」時，
-你可以看到轉換前原始 SCSS 檔案中的確切位置．
+你可以看到轉換前原始 SCSS 檔案中的確切位置。
 
 </KawaikoNote>
 
 ## 總結
 
-CSS 預處理器實現由以下部分組成：
+CSS 預處理器實作由以下部分組成：
 
-1. **通用介面**：用 `StylePreprocessor` 類型抽象每個預處理器
+1. **通用介面**：用 `StylePreprocessor` 型別抽象每個預處理器
 2. **動態載入**：用 `require()` 或 `customRequire` 載入預處理器
-3. **additionalData**：注入公共樣式（變數，混入等）
-4. **依賴追蹤**：收集 `@import` 的檔案以支援熱重載
+3. **additionalData**：注入公開樣式（變數，混入等）
+4. **相依追蹤**：收集 `@import` 的檔案以支援熱重載
 5. **Source map 鏈結**：合併預處理器和 PostCSS 的 source map
 6. **PostCSS 整合**：將預處理器輸出傳遞給 PostCSS 管道
 
-Vue/chibivue SFC 編譯器抽象了預處理器，允許使用者使用他們喜歡的 CSS 語言．
+Vue/chibivue SFC 編譯器抽象了預處理器，允許使用者使用他們喜歡的 CSS 語言。

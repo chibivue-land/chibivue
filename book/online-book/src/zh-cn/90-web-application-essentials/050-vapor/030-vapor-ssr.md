@@ -1,7 +1,7 @@
 # Vapor SSR
 
-在本节中，我们将探讨如何在服务器端渲染 Vapor 组件．
-由于 Vapor 组件直接操作 DOM，而服务器上不存在 DOM，因此 Vapor 的 SSR（服务器端渲染）面临独特的挑战．
+在本节中，我们将探讨如何在服务器端渲染 Vapor 组件。
+由于 Vapor 组件直接操作 DOM，而服务器上不存在 DOM，因此 Vapor 的 SSR（服务器端渲染）面临独特的挑战。
 
 ## 挑战
 
@@ -9,7 +9,7 @@ Vapor 组件的工作方式：
 1. 使用 `document.createElement` 创建 DOM 元素（通过 `template()`）
 2. 使用 `textContent`，`addEventListener` 等直接操作这些元素
 
-在服务器上，没有 `document` 对象．我们需要一种不同的方法来从 Vapor 组件生成 HTML 字符串．
+在服务器上，没有 `document` 对象。我们需要一种不同的方法来从 Vapor 组件生成 HTML 字符串。
 
 ## 解决方案
 
@@ -18,7 +18,7 @@ Vapor SSR 有两种主要方法：
 1. **Mock DOM**：创建一个捕获操作并将其转换为 HTML 的假 DOM 环境
 2. **重用 VNode SSR**：在服务器端使用标准的 VNode 基础 SSR，在客户端作为 Vapor 进行水合
 
-Vue.js 的 [PR #13226](https://github.com/vuejs/core/pull/13226) 采用了第二种方法．chibivue 也实现了类似的方法．
+Vue.js 的 [PR #13226](https://github.com/vuejs/core/pull/13226) 采用了第二种方法。chibivue 也实现了类似的方法。
 
 <KawaikoNote variant="base" title="Vue.js 的方法">
 Vue.js 的 Vapor SSR 在服务器端使用现有的 VNode 基础 SSR（compiler-ssr），在客户端使用 `createVaporSSRApp` 进行水合。这消除了创建单独 SSR 编译器的需要。
@@ -28,7 +28,7 @@ Vue.js 的 Vapor SSR 在服务器端使用现有的 VNode 基础 SSR（compiler-
 
 ### 服务器端：使用 VNode SSR
 
-在 Vapor SSR 中，Vapor 组件在服务器端被编译为常规的 VNode 基础组件．这允许直接使用 `@chibivue/compiler-ssr`．
+在 Vapor SSR 中，Vapor 组件在服务器端被编译为常规的 VNode 基础组件。这允许直接使用 `@chibivue/compiler-ssr`。
 
 ```ts
 // compiler-sfc/src/compileTemplate.ts
@@ -59,11 +59,11 @@ export function compileTemplate({
 }
 ```
 
-`__vapor` 标志表示在水合时应使用 Vapor 模式．
+`__vapor` 标志表示在水合时应使用 Vapor 模式。
 
 ### 客户端：createVaporSSRApp
 
-在客户端，使用 `createVaporSSRApp` 来水合 SSR 渲染的 HTML．
+在客户端，使用 `createVaporSSRApp` 来水合 SSR 渲染的 HTML。
 
 ```ts
 // runtime-vapor/src/apiCreateVaporApp.ts
@@ -97,7 +97,7 @@ export function createVaporSSRApp(rootComponent: VaporComponent): VaporApp {
 
 ### 水合
 
-水合过程重用现有的 DOM 元素，同时设置响应性和事件监听器．
+水合过程重用现有的 DOM 元素，同时设置响应性和事件监听器。
 
 ```ts
 // runtime-vapor/src/hydration.ts
@@ -139,7 +139,7 @@ export function hydrateVaporComponent(
 
 ## Mock DOM 方法
 
-chibivue 也在 `server-renderer` 中实现了 Mock DOM 方法．当不使用 VNode SSR 时，这可以作为后备方案．
+chibivue 也在 `server-renderer` 中实现了 Mock DOM 方法。当不使用 VNode SSR 时，这可以作为后备方案。
 
 ### SSR 元素
 
@@ -270,4 +270,4 @@ Vapor SSR 的工作方式如下：
 2. **客户端**：使用 `createVaporSSRApp` 进行水合
 3. **水合**：重用现有的 DOM 元素，同时设置响应性
 
-这种方法允许 Vapor 组件享受 SSR 的好处，同时在客户端获得直接 DOM 操作的性能优势．
+这种方法允许 Vapor 组件享受 SSR 的好处，同时在客户端获得直接 DOM 操作的性能优势。

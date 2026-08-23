@@ -1,13 +1,13 @@
 # 支援 script setup
 
 ::: info 關於本章
-本章介紹如何實現 Vue 3 的 `<script setup>` 語法．\
-學習 script setup 的工作原理，以更簡潔的方式編寫組件．
+本章介紹如何實作 Vue 3 的 `<script setup>` 語法。\
+學習 script setup 的工作原理，以更簡潔的方式編寫元件。
 :::
 
 ## 什麼是 script setup？
 
-`<script setup>` 是 Vue 3.2 引入的編譯時語法糖．與傳統的 Options API 或 Composition API 相比，它可以更簡潔地編寫組件．
+`<script setup>` 是 Vue 3.2 引入的編譯時語法糖。與傳統的 Options API 或 Composition API 相比，它可以更簡潔地編寫元件。
 
 ```vue
 <!-- 傳統寫法 -->
@@ -37,23 +37,23 @@ const increment = () => count.value++
 
 <KawaikoNote variant="surprise" title="簡潔多了！">
 
-使用 script setup，不需要 `export default` 或 `return`，匯入的組件也會自動註冊．\
+使用 script setup，不需要 `export default` 或 `return`，匯入的元件也會自動註冊。\
 程式碼變得非常乾淨！
 
 </KawaikoNote>
 
-## 實現概述
+## 實作概述
 
 script setup 的編譯包含以下步驟：
 
 1. **匯入分析和提升**：提取 import 語句並移動到檔案頂部
-2. **綁定分析**：追蹤變數宣告和函數定義
+2. **綁定分析**：追蹤變數宣告和函式定義
 3. **巨集處理**：處理 defineProps，defineEmits 等（後續章節介紹）
-4. **程式碼轉換**：轉換為 setup 函數並生成 return 語句
+4. **程式碼轉換**：轉換為 setup 函式並產生 return 語句
 
-## compileScript 函數
+## compileScript 函式
 
-`compileScript` 函數是編譯 SFC 腳本部分的核心函數．
+`compileScript` 函式是編譯 SFC 腳本部分的核心函式。
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -88,7 +88,7 @@ export function compileScript(
 
 ## 匯入提升
 
-script setup 內的 import 語句需要移動（提升）到生成程式碼的開頭．
+script setup 內的 import 語句需要移動（提升）到產生程式碼的開頭。
 
 ```ts
 // 1.2 walk import declarations of <script setup>
@@ -119,17 +119,17 @@ for (const node of scriptSetupAst.body) {
 
 <KawaikoNote variant="question" title="為什麼需要提升？">
 
-在生成的程式碼中，import 語句需要放在 `setup()` 函數外部．\
-提升將 `<script setup>` 內的匯入移動到正確的位置．
+在產生的程式碼中，import 語句需要放在 `setup()` 函式外部。\
+提升將 `<script setup>` 內的匯入移動到正確的位置。
 
-順便說一下，`<script setup>` 內的 `export` 會報錯．\
-但是 `export type` 是可以的，因為它只是類型資訊！
+順便說一下，`<script setup>` 內的 `export` 會報錯。\
+但是 `export type` 是可以的，因為它只是型別資訊！
 
 </KawaikoNote>
 
 ## 綁定分析
 
-為了正確解析模板中引用的變數，我們需要分析腳本中的綁定．
+為了正確解析模板中引用的變數，我們需要分析腳本中的綁定。
 
 ```ts
 function walkDeclaration(
@@ -163,9 +163,9 @@ function walkDeclaration(
 }
 ```
 
-綁定類型決定了變數在模板中的引用方式：
+綁定型別決定了變數在模板中的引用方式：
 
-| 類型 | 描述 | 模板引用 |
+| 型別 | 描述 | 模板引用 |
 |------|------|---------|
 | `SETUP_REF` | 用 ref() 建立 | 自動新增 `.value` |
 | `SETUP_REACTIVE_CONST` | 用 reactive() 建立 | 直接引用 |
@@ -174,7 +174,7 @@ function walkDeclaration(
 
 ## 內聯模板
 
-使用 script setup 時，模板可以內聯到 setup 函數內部．
+使用 script setup 時，模板可以內聯到 setup 函式內部。
 
 ```ts
 // 10. generate return statement
@@ -197,7 +197,7 @@ if (options.inlineTemplate) {
 s.appendRight(endOffset, `\nreturn ${returned}\n`)
 ```
 
-生成程式碼範例：
+產生程式碼範例：
 
 ```ts
 // 輸入
@@ -225,7 +225,7 @@ export default {
 
 ## 與 Vite 外掛整合
 
-Vite 外掛檢測並編譯 script setup．
+Vite 外掛檢測並編譯 script setup。
 
 ```ts
 // packages/@extensions/vite-plugin-chibivue/src/script.ts
@@ -269,11 +269,11 @@ const increment = () => {
 </template>
 ```
 
-<KawaikoNote variant="base" title="實現完成！">
+<KawaikoNote variant="base" title="實作完成！">
 
-script setup 的基本實現完成了！\
-與傳統寫法相比，現在可以更簡潔地編寫組件．\
-下一章我們將學習如何實現 `defineProps` 和 `defineEmits` 巨集．
+script setup 的基本實作完成了！\
+與傳統寫法相比，現在可以更簡潔地編寫元件。\
+下一章我們將學習如何實作 `defineProps` 和 `defineEmits` 巨集。
 
 </KawaikoNote>
 
@@ -285,9 +285,9 @@ script setup 的基本實現完成了！\
 - `<script setup>` 是更簡潔編寫 Composition API 的語法糖
 - `compileScript` 處理核心轉換邏輯
 - 匯入提升和綁定分析是重要步驟
-- 模板被內聯到 setup 函數內部
+- 模板被內聯到 setup 函式內部
 
 ## 參考連結
 
-- [Vue.js - script setup](https://vuejs.org/api/sfc-script-setup.html) - Vue 官方文件
+- [Vue.js - script setup](https://vuejs.org/api/sfc-script-setup.html) - Vue 官方檔案
 - [RFC: script setup](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md) - Vue RFC
