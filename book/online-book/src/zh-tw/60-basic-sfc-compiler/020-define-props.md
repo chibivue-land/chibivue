@@ -1,13 +1,13 @@
 # 支援 defineProps
 
 ::: info 關於本章
-本章介紹如何實現 `<script setup>` 中使用的 `defineProps` 巨集．\
-學習編譯器巨集的工作原理以及 props 宣告的處理方式．
+本章介紹如何實作 `<script setup>` 中使用的 `defineProps` 巨集。\
+學習編譯器巨集的工作原理以及 props 宣告的處理方式。
 :::
 
 ## 什麼是 defineProps？
 
-`defineProps` 是一個編譯器巨集，用於在 `<script setup>` 內宣告組件的 props．
+`defineProps` 是一個編譯器巨集，用於在 `<script setup>` 內宣告元件的 props。
 
 ```vue
 <script setup>
@@ -26,23 +26,23 @@ console.log(props.title)
 
 <KawaikoNote variant="question" title="什麼是編譯器巨集？">
 
-`defineProps` 不是普通函數．它是**編譯器巨集**．\
-它在編譯時會被特殊處理，在執行時會被擦除．\
+`defineProps` 不是普通函式。它是**編譯器巨集**。\
+它在編譯時會被特殊處理，在執行時會被擦除。\
 這就是為什麼不需要匯入就可以使用！
 
 </KawaikoNote>
 
-## 實現概述
+## 實作概述
 
 defineProps 的處理包含以下步驟：
 
 1. **檢測巨集呼叫**：在 AST 中找到 `defineProps()` 呼叫
-2. **提取參數**：獲取 props 定義物件
+2. **提取參數**：取得 props 定義物件
 3. **刪除程式碼**：刪除原始的 `defineProps()` 呼叫
 4. **新增到選項**：作為 `props` 選項新增到輸出
-5. **註冊綁定**：將 props 註冊為 `PROPS` 類型
+5. **註冊綁定**：將 props 註冊為 `PROPS` 型別
 
-## processDefineProps 函數
+## processDefineProps 函式
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -72,12 +72,12 @@ function processDefineProps(node: Node, declId?: LVal): boolean {
 
 ## AST 遍歷
 
-遍歷 `<script setup>` 的主體來檢測 `defineProps`．
+遍歷 `<script setup>` 的主體來檢測 `defineProps`。
 
 ```ts
 // 2.2 process <script setup> body
 for (const node of scriptSetupAst.body) {
-  // 表達式語句（單獨呼叫 defineProps()）
+  // 運算式語句（單獨呼叫 defineProps()）
   if (node.type === "ExpressionStatement") {
     const expr = node.expression
     if (processDefineProps(expr)) {
@@ -105,7 +105,7 @@ for (const node of scriptSetupAst.body) {
 
 ## 註冊 Props 綁定
 
-作為 props 宣告的變數會被註冊到綁定元資料中，以便從模板中引用．
+作為 props 宣告的變數會被註冊到綁定元資料中，以便從模板中引用。
 
 ```ts
 // 7. analyze binding metadata
@@ -116,11 +116,11 @@ if (propsRuntimeDecl) {
 }
 ```
 
-通過註冊為 `BindingTypes.PROPS`，模板編譯器可以正確處理對 props 的存取．
+透過註冊為 `BindingTypes.PROPS`，模板編譯器可以正確處理對 props 的存取。
 
 ## 處理 Props 識別符
 
-當賦值給變數如 `const props = defineProps(...)` 時，需要使該變數可存取．
+當賦值給變數如 `const props = defineProps(...)` 時，需要使該變數可存取。
 
 ```ts
 // 9. finalize setup() argument signature
@@ -133,7 +133,7 @@ if (propsIdentifier) {
 
 ## 新增到選項
 
-最終，props 定義作為組件選項輸出．
+最終，props 定義作為元件選項輸出。
 
 ```ts
 // 11. finalize default export
@@ -216,7 +216,7 @@ const fullName = computed(() => `${props.firstName} ${props.lastName}`)
 </template>
 ```
 
-父組件：
+父元件：
 
 ```vue
 <script setup>
@@ -228,11 +228,11 @@ import ChildComponent from './ChildComponent.vue'
 </template>
 ```
 
-<KawaikoNote variant="base" title="實現完成！">
+<KawaikoNote variant="base" title="實作完成！">
 
-defineProps 的實現完成了！\
-現在你理解了編譯器巨集的基本機制．\
-下一章我們將學習如何實現 `defineEmits` 巨集．
+defineProps 的實作完成了！\
+現在你理解了編譯器巨集的基本機制。\
+下一章我們將學習如何實作 `defineEmits` 巨集。
 
 </KawaikoNote>
 
@@ -248,4 +248,4 @@ defineProps 的實現完成了！\
 
 ## 參考連結
 
-- [Vue.js - defineProps](https://vuejs.org/api/sfc-script-setup.html#defineprops-defineemits) - Vue 官方文件
+- [Vue.js - defineProps](https://vuejs.org/api/sfc-script-setup.html#defineprops-defineemits) - Vue 官方檔案

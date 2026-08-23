@@ -2,15 +2,15 @@
 
 ## 什麼是 SSR
 
-伺服器端渲染（SSR）是一種在伺服器上將 Vue.js 應用程式渲染為 HTML 字串並發送到客戶端的技術．這提供了以下優勢：
+伺服器端渲染（SSR）是一種在伺服器上將 Vue.js 應用程式渲染為 HTML 字串並發送到使用者端的技術。這提供了以下優勢：
 
-1. **改善 SEO**：搜尋引擎爬蟲可以獲取完整的內容
+1. **改善 SEO**：搜尋引擎爬蟲可以取得完整的內容
 2. **更快的首次顯示**：瀏覽器無需等待 JavaScript 執行即可顯示 HTML
 3. **效能改善**：在低速裝置或網路環境下特別有效
 
 ## 套件結構
 
-chibivue 的 SSR 實作在 `@chibivue/server-renderer` 套件中提供．
+chibivue 的 SSR 實作在 `@chibivue/server-renderer` 套件中提供。
 
 ```
 packages/server-renderer/src/
@@ -26,7 +26,7 @@ packages/server-renderer/src/
 
 ### SSRBuffer
 
-在 SSR 中，我們使用名為 `SSRBuffer` 的資料結構來高效構建渲染結果．
+在 SSR 中，我們使用名為 `SSRBuffer` 的資料結構來高效建置渲染結果。
 
 ```ts
 // packages/server-renderer/src/render.ts
@@ -42,7 +42,7 @@ export type PushFn = (item: SSRBufferItem) => void;
 
 ### SSRContext
 
-保存 SSR 期間的上下文資訊．
+儲存 SSR 期間的上下文資訊。
 
 ```ts
 export type SSRContext = {
@@ -94,7 +94,7 @@ export async function renderToString(
 
 ### 緩衝區展開
 
-遞迴展開巢狀的緩衝區和 Promise．
+遞迴展開巢狀的緩衝區和 Promise。
 
 ```ts
 function nestedUnrollBuffer(
@@ -158,7 +158,7 @@ function unrollBufferSync(buffer: SSRBuffer): string {
 
 ## createBuffer 實作
 
-用於高效構建緩衝區的工廠函式．
+用於高效建置緩衝區的工廠函式。
 
 ```ts
 // packages/server-renderer/src/render.ts
@@ -172,7 +172,7 @@ export function createBuffer(): { getBuffer: () => SSRBuffer; push: PushFn } {
     push(item: SSRBufferItem): void {
       const isStringItem = isString(item);
       if (appendable && isStringItem) {
-        // 連續字串自動拼接優化
+        // 連續字串自動拼接最佳化
         buffer[buffer.length - 1] += item as string;
         return;
       }
@@ -267,7 +267,7 @@ function renderComponentSubTree(
 
 ### renderVNode
 
-根據各種 VNode 型別進行渲染．
+根據各種 VNode 型別進行渲染。
 
 ```ts
 export function renderVNode(
@@ -312,7 +312,7 @@ export function renderVNode(
 
 ### renderElementVNode
 
-將 HTML 元素渲染為字串．
+將 HTML 元素渲染為字串。
 
 ```ts
 function renderElementVNode(
@@ -361,7 +361,7 @@ function renderElementVNode(
 
 ### renderVNodeChildren
 
-按順序渲染子元素．
+按順序渲染子元素。
 
 ```ts
 export function renderVNodeChildren(
@@ -377,7 +377,7 @@ export function renderVNodeChildren(
 
 ### renderTeleportVNode
 
-Teleport 元件的 SSR 支援．
+Teleport 元件的 SSR 支援。
 
 ```ts
 function renderTeleportVNode(
@@ -454,7 +454,7 @@ function ssrIsIgnoredKey(key: string): boolean {
 
 ### ssrRenderDynamicAttr
 
-渲染動態屬性．
+渲染動態屬性。
 
 ```ts
 export function ssrRenderDynamicAttr(
@@ -545,11 +545,11 @@ function applySSRDirectives(
 }
 ```
 
-如果指令實作了 `getSSRProps`，其結果將合併到 props 中．
+如果指令實作了 `getSSRProps`，其結果將合併到 props 中。
 
 ## 跳脫處理
 
-防止 XSS 的 HTML 跳脫．
+防止 XSS 的 HTML 跳脫。
 
 ```ts
 // packages/server-renderer/src/helpers/ssrUtils.ts
@@ -649,7 +649,7 @@ HTML 字串
 
 chibivue 的 SSR 實作由以下元素組成：
 
-1. **SSRBuffer**：用於高效字串構建的緩衝系統（字串自動拼接，非同步支援）
+1. **SSRBuffer**：用於高效字串建置的緩衝系統（字串自動拼接，非同步支援）
 2. **renderComponentVNode**：將元件 VNode 轉換為 HTML（非同步 setup 支援）
 3. **renderVNode**：根據各種 VNode 型別進行渲染分支
 4. **renderElementVNode**：HTML 元素的字串化（void 標籤，特殊屬性支援）
@@ -657,7 +657,7 @@ chibivue 的 SSR 實作由以下元素組成：
 6. **跳脫處理**：防止 XSS 的 HTML 跳脫
 7. **指令支援**：透過 `getSSRProps` 在 SSR 時進行屬性注入
 
-在下一節中，我們將學習 hydration，它在客戶端「恢復」SSR 生成的 HTML．
+在下一節中，我們將學習 hydration，它在使用者端「恢復」SSR 產生的 HTML。
 
 到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/010_ssr)

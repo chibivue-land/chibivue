@@ -1,13 +1,13 @@
 # 支援 defineEmits
 
 ::: info 關於本章
-本章介紹如何實現 `<script setup>` 中使用的 `defineEmits` 巨集．\
-學習子組件向父組件發送事件的機制．
+本章介紹如何實作 `<script setup>` 中使用的 `defineEmits` 巨集。\
+學習子元件向父元件發送事件的機制。
 :::
 
 ## 什麼是 defineEmits？
 
-`defineEmits` 是一個編譯器巨集，用於在 `<script setup>` 內宣告組件發出的事件．
+`defineEmits` 是一個編譯器巨集，用於在 `<script setup>` 內宣告元件發出的事件。
 
 ```vue
 <script setup>
@@ -21,23 +21,23 @@ function handleClick() {
 
 <KawaikoNote variant="question" title="與 defineProps 有什麼區別？">
 
-`defineProps` 用於從父組件向子組件傳遞資料，\
-`defineEmits` 用於從子組件向父組件通知事件．\
+`defineProps` 用於從父元件向子元件傳遞資料，\
+`defineEmits` 用於從子元件向父元件通知事件。\
 記住它們是一對！
 
 </KawaikoNote>
 
-## 實現概述
+## 實作概述
 
 defineEmits 的處理與 defineProps 非常相似：
 
 1. **檢測巨集呼叫**：在 AST 中找到 `defineEmits()` 呼叫
-2. **提取參數**：獲取事件定義陣列或物件
+2. **提取參數**：取得事件定義陣列或物件
 3. **刪除程式碼**：刪除原始的 `defineEmits()` 呼叫
 4. **新增到選項**：作為 `emits` 選項新增到輸出
-5. **提供 emit 函數**：從 setup 的上下文中獲取 `emit`
+5. **提供 emit 函式**：從 setup 的上下文中取得 `emit`
 
-## processDefineEmits 函數
+## processDefineEmits 函式
 
 ```ts
 // packages/compiler-sfc/src/compileScript.ts
@@ -70,7 +70,7 @@ function processDefineEmits(node: Node, declId?: LVal): boolean {
 
 ## AST 遍歷
 
-與 defineProps 類似，遍歷 `<script setup>` 的主體來檢測 `defineEmits`．
+與 defineProps 類似，遍歷 `<script setup>` 的主體來檢測 `defineEmits`。
 
 ```ts
 // 2.2 process <script setup> body
@@ -99,9 +99,9 @@ for (const node of scriptSetupAst.body) {
 }
 ```
 
-## 設定 emit 函數
+## 設定 emit 函式
 
-從 `defineEmits` 獲取的 emit 函數從 setup 函數的第二個參數（SetupContext）中獲取．
+從 `defineEmits` 取得的 emit 函式從 setup 函式的第二個參數（SetupContext）中取得。
 
 ```ts
 // 9. finalize setup() argument signature
@@ -119,7 +119,7 @@ if (destructureElements.length) {
 }
 ```
 
-這會生成如下程式碼：
+這會產生如下程式碼：
 
 ```ts
 // 對於 const emit = defineEmits(['change'])
@@ -183,10 +183,10 @@ export default {
 
 <KawaikoNote variant="funny" title="與 defineProps 對稱！">
 
-`defineEmits` 的實現與 `defineProps` 幾乎相同：
+`defineEmits` 的實作與 `defineProps` 幾乎相同：
 1. 檢測巨集呼叫
 2. 將參數移動到 `emits` 選項
-3. 如果有變數，轉換為從 SetupContext 獲取
+3. 如果有變數，轉換為從 SetupContext 取得
 
 容易記住！
 
@@ -194,7 +194,7 @@ export default {
 
 ## 測試
 
-子組件：
+子元件：
 
 ```vue
 <script setup>
@@ -214,7 +214,7 @@ function updateValue(e) {
 </template>
 ```
 
-父組件：
+父元件：
 
 ```vue
 <script setup>
@@ -230,11 +230,11 @@ const text = ref('')
 </template>
 ```
 
-<KawaikoNote variant="base" title="實現完成！">
+<KawaikoNote variant="base" title="實作完成！">
 
-defineEmits 的實現完成了！\
-現在可以使用 props 和 emits 兩個編譯器巨集了．\
-下一章我們將學習如何實現 scoped CSS．
+defineEmits 的實作完成了！\
+現在可以使用 props 和 emits 兩個編譯器巨集了。\
+下一章我們將學習如何實作 scoped CSS。
 
 </KawaikoNote>
 
@@ -245,9 +245,9 @@ defineEmits 的實現完成了！\
 
 - `defineEmits` 是宣告子到父事件發送的巨集
 - 處理模式與 `defineProps` 非常相似
-- emit 函數從 SetupContext 解構獲取
-- 作為 `emits` 選項新增到組件
+- emit 函式從 SetupContext 解構取得
+- 作為 `emits` 選項新增到元件
 
 ## 參考連結
 
-- [Vue.js - defineEmits](https://vuejs.org/api/sfc-script-setup.html#defineprops-defineemits) - Vue 官方文件
+- [Vue.js - defineEmits](https://vuejs.org/api/sfc-script-setup.html#defineprops-defineemits) - Vue 官方檔案

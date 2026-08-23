@@ -2,39 +2,39 @@
 
 ## 什麼是路由器？
 
-在單頁應用（SPA）中，我們需要根據 URL 顯示不同的組件．在 Vue.js 生態系統中，Vue Router 提供了這個功能．
+在單頁應用（SPA）中，我們需要根據 URL 顯示不同的元件。在 Vue.js 生態系統中，Vue Router 提供了這個功能。
 
 <KawaikoNote variant="question" title="SPA 路由？">
 
-在傳統網站中，每次 URL 變化時都會從伺服器獲取新的 HTML 頁面．
-在 SPA 中，頁面切換由 JavaScript 處理，無需請求伺服器即可更新螢幕．
-這被稱為「客戶端路由」．
+在傳統網站中，每次 URL 變化時都會從伺服器取得新的 HTML 頁面。
+在 SPA 中，頁面切換由 JavaScript 處理，無需請求伺服器即可更新螢幕。
+這被稱為「使用者端路由」。
 
 </KawaikoNote>
 
-在本章中，我們將實現基本的 Vue Router 功能，命名為 chibivue-router．
+在本章中，我們將實作基本的 Vue Router 功能，命名為 chibivue-router。
 
 ## 套件結構
 
-chibivue-router 位於 `@extensions/chibivue-router` 套件中．
+chibivue-router 位於 `@extensions/chibivue-router` 套件中。
 
 ```
 @extensions/chibivue-router/src/
 ├── index.ts              # 匯出
 ├── router.ts             # 主路由邏輯
 ├── history.ts            # History API 封裝
-├── RouterView.ts         # RouterView 組件
+├── RouterView.ts         # RouterView 元件
 ├── useApi.ts             # Composition API 鉤子
-├── injectionSymbols.ts   # 依賴注入鍵
+├── injectionSymbols.ts   # 相依注入鍵
 └── types/
-    └── index.ts          # 類型定義
+    └── index.ts          # 型別定義
 ```
 
-## 類型定義
+## 型別定義
 
 ### RouteLocationNormalizedLoaded
 
-表示當前路由資訊的類型．
+表示目前路由資訊的型別。
 
 ```ts
 // types/index.ts
@@ -46,7 +46,7 @@ export interface RouteLocationNormalizedLoaded {
 
 ### RouteRecord
 
-表示路由定義的類型．
+表示路由定義的型別。
 
 ```ts
 // router.ts
@@ -58,7 +58,7 @@ export interface RouteRecord {
 
 ### Router 介面
 
-定義路由器的公開 API．
+定義路由器的公開 API。
 
 ```ts
 // router.ts
@@ -71,7 +71,7 @@ export interface Router {
 
 ## History API 抽象
 
-封裝瀏覽器的 History API，使其更易於在路由器中使用．
+封裝瀏覽器的 History API，使其更易於在路由器中使用。
 
 ### RouterHistory 介面
 
@@ -85,7 +85,7 @@ export interface RouterHistory {
 }
 ```
 
-### createWebHistory 函數
+### createWebHistory 函式
 
 ```ts
 // history.ts
@@ -106,21 +106,21 @@ export const createWebHistory = (): RouterHistory => {
 ```
 
 要點：
-- `pushState`：向歷史記錄添加新條目（可以用返回按鈕返回）
-- `replaceState`：替換當前歷史記錄條目（不會保留在歷史記錄中）
+- `pushState`：向歷史記錄加入新條目（可以用回傳按鈕回傳）
+- `replaceState`：替換目前歷史記錄條目（不會保留在歷史記錄中）
 - `go`：在歷史記錄中前進或後退
 
 <KawaikoNote variant="funny" title="pushState vs replaceState">
 
-可以把 `pushState` 想像成「在書架上添加一本新書」．
-`replaceState` 就像「用另一本書替換你正在讀的書」．
-返回按鈕就像「回到你之前讀的書」．
+可以把 `pushState` 想像成「在書架上加入一本新書」。
+`replaceState` 就像「用另一本書替換你正在讀的書」。
+回傳按鈕就像「回到你之前讀的書」。
 
 </KawaikoNote>
 
-## 依賴注入鍵
+## 相依注入鍵
 
-定義用於通過 provide/inject 共享路由相關值的鍵．
+定義用於透過 provide/inject 共享路由相關值的鍵。
 
 ```ts
 // injectionSymbols.ts
@@ -131,7 +131,7 @@ import type { RouteLocationNormalizedLoaded } from "./types";
 // 路由器本身
 export const routerKey = Symbol() as InjectionKey<Router>;
 
-// 當前路由（包裝在 computed 中）
+// 目前路由（包裝在 computed 中）
 export const routeLocationKey = Symbol() as InjectionKey<
   ComputedRef<RouteLocationNormalizedLoaded>
 >;
@@ -144,10 +144,10 @@ export const routerViewLocationKey = Symbol() as InjectionKey<
 
 需要三個獨立鍵的原因：
 1. `routerKey`：用於存取導航方法（`push`，`replace`）
-2. `routeLocationKey`：用於通過 `useRoute()` 獲取當前路由資訊（通過 computed 實現響應式）
-3. `routerViewLocationKey`：用於 RouterView 組件確定顯示哪個組件
+2. `routeLocationKey`：用於透過 `useRoute()` 取得目前路由資訊（透過 computed 實作響應式）
+3. `routerViewLocationKey`：用於 RouterView 元件確定顯示哪個元件
 
-## createRouter 實現
+## createRouter 實作
 
 ### 路由解析
 
@@ -162,7 +162,7 @@ const resolve = (to: string) => {
 };
 ```
 
-當前實現僅支援精確匹配．Vue Router 的實際實現還支援參數（`/user/:id`）和正規表達式．
+目前實作僅支援精確匹配。Vue Router 的實際實作還支援參數（`/user/:id`）和正規運算式。
 
 ### 狀態管理
 
@@ -174,7 +174,7 @@ const currentRoute = ref<RouteLocationNormalizedLoaded>({
 });
 ```
 
-當前路由資訊使用 `ref` 管理．這使得路由變化時 RouterView 可以自動重新渲染．
+目前路由資訊使用 `ref` 管理。這使得路由變化時 RouterView 可以自動重新渲染。
 
 ### 導航方法
 
@@ -191,7 +191,7 @@ function replace(to: string) {
 }
 ```
 
-同時更改 URL 和響應式狀態．
+同時更改 URL 和響應式狀態。
 
 ### 外掛安裝
 
@@ -200,7 +200,7 @@ function replace(to: string) {
 install(app: App) {
   const router = this;
 
-  // 全域註冊 RouterView 組件
+  // 全域註冊 RouterView 元件
   app.component("RouterView", RouterViewImpl);
 
   // 建立響應式路由資訊
@@ -213,11 +213,11 @@ install(app: App) {
 }
 ```
 
-當呼叫 `app.use(router)` 時，會執行這個 `install` 方法．
+當呼叫 `app.use(router)` 時，會執行這個 `install` 方法。
 
-## RouterView 組件
+## RouterView 元件
 
-顯示與當前路由對應的組件．
+顯示與目前路由對應的元件。
 
 ```ts
 // RouterView.ts
@@ -245,18 +245,18 @@ export const RouterViewImpl: ComponentOptions = {
 
 <KawaikoNote variant="warning" title="key 屬性很重要！">
 
-通過指定 `fullPath` 作為 `key`，每當路由變化時組件都會完全重新掛載．
-如果沒有這個，相同的組件會被重用，`setup` 不會重新執行．
+透過指定 `fullPath` 作為 `key`，每當路由變化時元件都會完全重新掛載。
+如果沒有這個，相同的元件會被重用，`setup` 不會重新執行。
 
 </KawaikoNote>
 
-包裝在 Fragment 中的原因是為了確保正確的子元素補丁行為．
+包裝在 Fragment 中的原因是為了確保正確的子元素補丁行為。
 
 ## Composition API 鉤子
 
 ### useRouter
 
-獲取路由器實例．
+取得路由器實例。
 
 ```ts
 // useApi.ts
@@ -273,7 +273,7 @@ router.push('/about')
 
 ### useRoute
 
-獲取當前路由資訊．
+取得目前路由資訊。
 
 ```ts
 // useApi.ts
@@ -360,7 +360,7 @@ router.install(app)
   ↓
 RouterView 渲染
   ↓
-inject(routerViewLocationKey) 獲取 currentRoute
+inject(routerViewLocationKey) 取得 currentRoute
   ↓
 渲染 currentRoute.value.component
 
@@ -374,36 +374,36 @@ currentRoute.value = resolve('/about')  ← 狀態更新
   ↓
 RouterView 重新渲染
   ↓
-顯示新組件
+顯示新元件
 ```
 
-## 未來擴展
+## 未來擴充
 
-當前實現是最小化的，但 Vue Router 還有以下功能：
+目前實作是最小化的，但 Vue Router 還有以下功能：
 
-1. **RouterLink 組件**：包裝 `<a>` 標籤的導航組件
+1. **RouterLink 元件**：包裝 `<a>` 標籤的導航元件
 2. **路由參數**：動態片段如 `/user/:id`
 3. **查詢參數**：解析 `?key=value`
 4. **導航守衛**：`beforeEach`，`afterEach` 等鉤子
-5. **popstate 事件**：處理瀏覽器返回/前進按鈕
+5. **popstate 事件**：處理瀏覽器回傳/前進按鈕
 6. **巢狀路由**：定義子路由
 
-<KawaikoNote variant="surprise" title="實現完成！">
+<KawaikoNote variant="surprise" title="實作完成！">
 
-我們完成了一個簡單的路由器．
-用大約 100 行程式碼，我們實現了 SPA 路由．
-這應該是理解 Vue Router 工作原理的一個好起點．
+我們完成了一個簡單的路由器。
+用大約 100 行程式碼，我們實作了 SPA 路由。
+這應該是理解 Vue Router 工作原理的一個好起點。
 
 </KawaikoNote>
 
 ## 總結
 
-chibivue-router 實現由以下部分組成：
+chibivue-router 實作由以下部分組成：
 
 1. **History API 封裝**：用 `createWebHistory` 抽象瀏覽器歷史操作
-2. **響應式狀態管理**：用 `ref` 管理當前路由
-3. **依賴注入**：通過 `provide/inject` 在組件樹中共享路由資訊
-4. **RouterView 組件**：動態顯示與當前路由對應的組件
-5. **Composition API 鉤子**：通過 `useRouter` 和 `useRoute` 輕鬆存取
+2. **響應式狀態管理**：用 `ref` 管理目前路由
+3. **相依注入**：透過 `provide/inject` 在元件樹中共享路由資訊
+4. **RouterView 元件**：動態顯示與目前路由對應的元件
+5. **Composition API 鉤子**：透過 `useRouter` 和 `useRoute` 輕鬆存取
 
-通過結合 Vue 的外掛系統，provide/inject 和響應式系統，我們實現了客戶端路由．
+透過結合 Vue 的外掛系統，provide/inject 和響應式系統，我們實作了使用者端路由。

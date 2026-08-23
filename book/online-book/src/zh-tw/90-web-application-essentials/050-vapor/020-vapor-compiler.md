@@ -1,7 +1,7 @@
 # Vapor 編譯器
 
-在上一節中，我們了解了構成 Vapor 模式基礎的運行時函數（`template`，`setText`，`on`）．
-在本節中，讓我們實現一個編譯器，它可以從模板自動生成使用這些函數的代碼．
+在上一節中，我們了解了構成 Vapor 模式基礎的執行期函式（`template`，`setText`，`on`）。
+在本節中，讓我們實作一個編譯器，它可以從模板自動產生使用這些函式的程式碼。
 
 ## Vapor 編譯器的目標
 
@@ -11,7 +11,7 @@ Vapor 編譯器的目標是將這樣的模板：
 <button @click="count++">{{ count }}</button>
 ```
 
-轉換成這樣的代碼：
+轉換成這樣的程式碼：
 
 ```ts
 import { template as _template, setText as _setText, on as _on, renderEffect as _renderEffect } from "@chibivue/runtime-vapor"
@@ -29,8 +29,8 @@ import { template as _template, setText as _setText, on as _on, renderEffect as 
 
 關鍵點是：
 
-1. **靜態部分變成模板字串**：HTML 結構被預先創建為字串
-2. **動態部分通過 renderEffect 處理**：響應式值的變化觸發直接的 DOM 更新
+1. **靜態部分變成模板字串**：HTML 結構被預先建立為字串
+2. **動態部分透過 renderEffect 處理**：響應式值的變化觸發直接的 DOM 更新
 3. **事件處理器直接附加**：沒有虛擬 DOM 事件委託
 
 ## 編譯器架構
@@ -44,22 +44,22 @@ AST (抽象語法樹)
   ↓ [Transform]
 IR (中間表示)
   ↓ [Codegen]
-Vapor 代碼 (string)
+Vapor 程式碼 (string)
 ```
 
 ## 什麼是 IR（中間表示）？
 
-IR（中間表示）是位於 AST 和最終代碼之間的數據結構．
+IR（中間表示）是位於 AST 和最終程式碼之間的資料結構。
 使用 IR 的好處包括：
 
-1. **關注點分離**：清晰地分離解析和代碼生成
-2. **易於優化**：在 IR 層面更容易進行靜態分析和優化
-3. **可擴展性**：添加新功能更加簡單
+1. **關注點分離**：清晰地分離解析和程式碼產生
+2. **易於最佳化**：在 IR 層面更容易進行靜態分析和最佳化
+3. **可擴充性**：加入新功能更加簡單
 
 ### IR 結構
 
 ```ts
-// IR 節點類型
+// IR 節點型別
 enum IRNodeTypes {
   ROOT = "root",
   BLOCK = "block",
@@ -77,12 +77,12 @@ interface BlockIRNode {
   dynamic: IRDynamicInfo;
   effect: IREffect[];      // 響應式操作
   operation: OperationNode[]; // 非響應式操作
-  returns: number[];       // 要返回的元素 ID
+  returns: number[];       // 要回傳的元素 ID
 }
 
-// Effect - 響應式依賴和操作的集合
+// Effect - 響應式相依和操作的集合
 interface IREffect {
-  expressions: SimpleExpressionNode[]; // 依賴的表達式
+  expressions: SimpleExpressionNode[]; // 相依的運算式
   operations: OperationNode[];         // 要執行的操作
 }
 ```
@@ -117,8 +117,8 @@ interface SetPropIRNode {
 
 ## Transformer 的作用
 
-Transformer 將 AST 轉換為 IR．
-它遍歷每個 AST 節點並生成適當的 IR 節點．
+Transformer 將 AST 轉換為 IR。
+它遍歷每個 AST 節點並產生適當的 IR 節點。
 
 ### TransformContext
 
@@ -153,7 +153,7 @@ export function transform(ast: RootNode, source: string): RootIRNode {
   // 遞迴轉換子元素
   transformChildren(ast.children, context);
 
-  // 保存模板字串
+  // 儲存模板字串
   ir.template.push(context.template);
 
   return ir;
@@ -162,7 +162,7 @@ export function transform(ast: RootNode, source: string): RootIRNode {
 
 ### 指令轉換
 
-每個指令由專用的轉換函數處理：
+每個指令由專用的轉換函式處理：
 
 ```ts
 // v-on 轉換
@@ -199,16 +199,16 @@ function transformVBind(dir: DirectiveNode, elementId: number, context: Transfor
 }
 ```
 
-### 常量表達式優化
+### 常量運算式最佳化
 
-`registerEffect` 檢查表達式是否為常量，如果是，則將其註冊為普通 `operation` 而不是 `effect`：
+`registerEffect` 檢查運算式是否為常量，如果是，則將其註冊為普通 `operation` 而不是 `effect`：
 
 ```ts
 registerEffect(expressions: SimpleExpressionNode[], operations: OperationNode[]): void {
-  // 過濾掉常量表達式
+  // 過濾掉常量運算式
   const reactiveExpressions = expressions.filter((exp) => !isConstantExpression(exp));
 
-  // 如果沒有響應式依賴，註冊為操作
+  // 如果沒有響應式相依，註冊為操作
   if (reactiveExpressions.length === 0) {
     context.registerOperation(...operations);
     return;
@@ -224,8 +224,8 @@ registerEffect(expressions: SimpleExpressionNode[], operations: OperationNode[])
 
 ## 什麼是 renderEffect？
 
-`renderEffect` 是 Vapor 模式的核心函數．
-與虛擬 DOM 基於差異的方法不同，它直接追蹤響應式依賴並在變化時更新 DOM．
+`renderEffect` 是 Vapor 模式的核心函式。
+與虛擬 DOM 基於差異的方法不同，它直接追蹤響應式相依並在變化時更新 DOM。
 
 ### 工作原理
 
@@ -233,20 +233,20 @@ registerEffect(expressions: SimpleExpressionNode[], operations: OperationNode[])
 /**
  * renderEffect - Vapor 模式中響應式 DOM 更新的核心機制
  *
- * 1. 將 DOM 更新函數包裝在響應式效果中
- * 2. 自動追蹤訪問了哪些響應式值
- * 3. 當追蹤的值發生變化時重新運行更新函數
+ * 1. 將 DOM 更新函式包裝在響應式效果中
+ * 2. 自動追蹤存取了哪些響應式值
+ * 3. 當追蹤的值發生變化時重新執行更新函式
  * 4. 只更新需要更改的特定 DOM 節點
  *
  * 重要：renderEffect 還處理生命週期鉤子：
- * - 在每次更新前調用 onBeforeUpdate 鉤子（初始掛載後）
- * - 在每次更新後調用 onUpdated 鉤子（初始掛載後）
+ * - 在每次更新前呼叫 onBeforeUpdate 鉤子（初始掛載後）
+ * - 在每次更新後呼叫 onUpdated 鉤子（初始掛載後）
  */
 export const renderEffect = (fn: () => void): void => {
   const instance = currentInstance;
 
   effect(() => {
-    // 更新前：調用 onBeforeUpdate 鉤子（僅在掛載後）
+    // 更新前：呼叫 onBeforeUpdate 鉤子（僅在掛載後）
     if (instance?.isMounted) {
       const { bu } = instance;
       if (bu) invokeArrayFns(bu);
@@ -255,7 +255,7 @@ export const renderEffect = (fn: () => void): void => {
     // 執行更新
     fn();
 
-    // 更新後：調用 onUpdated 鉤子（僅在掛載後）
+    // 更新後：呼叫 onUpdated 鉤子（僅在掛載後）
     if (instance?.isMounted) {
       const { u } = instance;
       if (u) {
@@ -266,7 +266,7 @@ export const renderEffect = (fn: () => void): void => {
 };
 ```
 
-### 生成的代碼示例
+### 產生的程式碼示例
 
 ```ts
 // 模板: <span>{{ count }}</span>
@@ -276,48 +276,48 @@ renderEffect(() => {
 })
 
 // 當 count.value 變化時：
-// 1. 調用 onBeforeUpdate 鉤子
+// 1. 呼叫 onBeforeUpdate 鉤子
 // 2. 更新文本內容
-// 3. 調用 onUpdated 鉤子（在微任務中）
+// 3. 呼叫 onUpdated 鉤子（在微任務中）
 ```
 
 ### 與虛擬 DOM 的比較
 
 | 方面 | 虛擬 DOM | Vapor (renderEffect) |
 |------|----------|---------------------|
-| 更新粒度 | 重新渲染整個組件 | 只更新變化的部分 |
-| 追蹤方法 | 差異算法 | 響應式依賴追蹤 |
-| 開銷 | VNode 創建和比較 | 無（直接 DOM 操作） |
+| 更新粒度 | 重新渲染整個元件 | 只更新變化的部分 |
+| 追蹤方法 | 差異算法 | 響應式相依追蹤 |
+| 開銷 | VNode 建立和比較 | 無（直接 DOM 操作） |
 
-## Codegen 實現
+## Codegen 實作
 
-Codegen 從 IR 生成代碼：
+Codegen 從 IR 產生程式碼：
 
 ```ts
 export function generateVaporFromIR(ir: RootIRNode, options = {}): VaporCodegenResult {
   const context = createVaporCodegenContext();
 
-  // 生成前導（導入等）
+  // 產生前導（匯入等）
   genVaporPreamble(context, options.isBrowser);
 
-  // 生成組件函數
+  // 產生元件函式
   push(`((_self) => {`);
   indent();
 
-  // 生成 template() 調用
+  // 產生 template() 呼叫
   push(`const _root = _template(\`${ir.template[0]}\`);`);
 
-  // 生成元素引用
+  // 產生元素引用
   for (let i = 0; i < elementCount; i++) {
     push(`const _el${i} = _root${generateElementPath(i)};`);
   }
 
-  // 生成非響應式操作
+  // 產生非響應式操作
   for (const op of block.operation) {
     genOperation(op, context);
   }
 
-  // 生成響應式效果
+  // 產生響應式效果
   for (const effect of block.effect) {
     push(`_renderEffect(() => {`);
     indent();
@@ -371,16 +371,16 @@ import { template as _template, setText as _setText, on as _on, setClass as _set
 
 ## 總結
 
-Vapor 編譯器通過以下流程將模板轉換為代碼：
+Vapor 編譯器透過以下流程將模板轉換為程式碼：
 
 1. **Parse**：將模板轉換為 AST
-2. **Transform**：將 AST 轉換為 IR（包括優化）
-3. **Codegen**：從 IR 生成代碼
+2. **Transform**：將 AST 轉換為 IR（包括最佳化）
+3. **Codegen**：從 IR 產生程式碼
 
 使用 IR 可以：
-- 更容易進行靜態分析和優化
-- 提高代碼可維護性
-- 簡化新功能的添加
+- 更容易進行靜態分析和最佳化
+- 提高程式碼可維護性
+- 簡化新功能的加入
 
 使用 `renderEffect`：
 - 可以進行細粒度的響應式更新
@@ -388,4 +388,4 @@ Vapor 編譯器通過以下流程將模板轉換為代碼：
 - 只有更改的部分才會被有效更新
 - 自動處理生命週期鉤子（onBeforeUpdate，onUpdated）
 
-在下一節中，我們將了解如何使用 SSR 支持在伺服器上渲染 Vapor 組件．
+在下一節中，我們將了解如何使用 SSR 支援在伺服器上渲染 Vapor 元件。

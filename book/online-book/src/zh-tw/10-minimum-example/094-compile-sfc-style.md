@@ -2,16 +2,16 @@
 
 ## 虛擬模組
 
-讓我們也支援樣式．\
-在 Vite 中，你可以通過使用 `.css` 副檔名來匯入 CSS 檔案．
+讓我們也支援樣式。\
+在 Vite 中，你可以透過使用 `.css` 副檔名來匯入 CSS 檔案。
 
 ```js
 import 'app.css'
 ```
 
-我們將通過使用 Vite 的虛擬模組來實現這一點．\
-虛擬模組允許你將不存在的檔案保存在記憶體中，就像它們存在一樣．\
-你可以使用 `load` 和 `resolveId` 選項來實現虛擬模組．
+我們將透過使用 Vite 的虛擬模組來實作這一點。\
+虛擬模組允許你將不存在的檔案儲存在記憶體中，就像它們存在一樣。\
+你可以使用 `load` 和 `resolveId` 選項來實作虛擬模組。
 
 ```ts
 export default function myPlugin() {
@@ -33,13 +33,13 @@ export default function myPlugin() {
 }
 ```
 
-使用這種機制，我們將把 SFC 的樣式區塊作為虛擬 CSS 檔案載入．\
-如前所述，在 Vite 中，匯入帶有 `.css` 副檔名的檔案就足夠了，所以我們將考慮創建一個名為 `${SFC 檔案名}.css` 的虛擬模組．
+使用這種機制，我們將把 SFC 的樣式區塊作為虛擬 CSS 檔案載入。\
+如前所述，在 Vite 中，匯入帶有 `.css` 副檔名的檔案就足夠了，所以我們將考慮建立一個名為 `${SFC 檔案名}.css` 的虛擬模組。
 
-## 實現包含 SFC 樣式區塊內容的虛擬模組
+## 實作包含 SFC 樣式區塊內容的虛擬模組
 
-對於這個範例，讓我們考慮一個名為 "App.vue" 的檔案，並為其樣式部分實現一個名為 "App.vue.css" 的虛擬模組．\
-過程很簡單：當載入名為 `**.vue.css` 的檔案時，我們將使用 `fs.readFileSync` 從不帶 `.css` 的檔案路徑（即原始 Vue 檔案）檢索 SFC，解析它以提取樣式標籤的內容，並將該內容作為程式碼返回．
+對於這個範例，讓我們考慮一個名為 "App.vue" 的檔案，並為其樣式部分實作一個名為 "App.vue.css" 的虛擬模組。\
+過程很簡單：當載入名為 `**.vue.css` 的檔案時，我們將使用 `fs.readFileSync` 從不帶 `.css` 的檔案路徑（即原始 Vue 檔案）檢索 SFC，解析它以提取樣式標籤的內容，並將該內容作為程式碼回傳。
 
 ```ts
 export default function vitePluginChibivue(): Plugin {
@@ -51,10 +51,10 @@ export default function vitePluginChibivue(): Plugin {
     //  ,
     //  ,
     resolveId(id) {
-      // 這個 ID 是一個不存在的路徑，但我們在 load 中虛擬處理它，所以我們返回 ID 以表明它可以被載入
+      // 這個 ID 是一個不存在的路徑，但我們在 load 中虛擬處理它，所以我們回傳 ID 以表明它可以被載入
       if (id.match(/\.vue\.css$/)) return id
 
-      // 對於這裡沒有返回的 ID，如果檔案實際存在，檔案將被解析，如果不存在，將拋出錯誤
+      // 對於這裡沒有回傳的 ID，如果檔案實際存在，檔案將被解析，如果不存在，將拋出錯誤
     },
     load(id) {
       // 處理載入 .vue.css 時（當宣告 import 並載入時）
@@ -63,7 +63,7 @@ export default function vitePluginChibivue(): Plugin {
         const content = fs.readFileSync(filename, 'utf-8') // 正常檢索 SFC 檔案
         const { descriptor } = parse(content, { filename }) // 解析 SFC
 
-        // 連接內容並將其作為結果返回
+        // 連接內容並將其作為結果回傳
         const styles = descriptor.styles.map(it => it.content).join('\n')
         return { code: styles }
       }
@@ -83,18 +83,18 @@ export default function vitePluginChibivue(): Plugin {
 }
 ```
 
-現在，讓我們在瀏覽器中檢查．
+現在，讓我們在瀏覽器中檢查。
 
 ![Virtual CSS module request in the browser](/figures/10-minimum-example/compile-sfc-style/load-virtual-css-module.png)
 
-看起來樣式被正確應用了．
+看起來樣式被正確應用了。
 
-在瀏覽器中，你可以看到 CSS 被匯入，並且虛擬生成了一個 `.vue.css` 檔案．
+在瀏覽器中，你可以看到 CSS 被匯入，並且虛擬產生了一個 `.vue.css` 檔案。
 
 ![Loaded CSS module in the browser](/figures/10-minimum-example/compile-sfc-style/loaded-css-in-browser.png)
 ![Generated Vue CSS module](/figures/10-minimum-example/compile-sfc-style/generated-vue-css-module.png)
 
 現在你可以使用 SFC 了！
 
-到此為止的原始碼：  
+到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/070_sfc_compiler4)

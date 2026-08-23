@@ -5,7 +5,7 @@
 <h1 align="center">chibivue</h1>
 
 <p align="center">
-  <b>編寫 Vue.js：從一行 "Hello, World" 開始，逐步構建。</b>
+  <b>編寫 Vue.js：從一行 "Hello, World" 開始，逐步建構。</b>
 </p>
 
 <p align="center">
@@ -21,11 +21,11 @@
 
 ---
 
-**chibivue** 是 [Vue.js](https://github.com/vuejs/core) 的最小化教學實現．
+**chibivue** 是 [Vue.js](https://github.com/vuejs/core) 的最小化教學實作。
 
 - 響應式系統
-- 虛擬 DOM 和補丁渲染
-- 組件系統
+- 虛擬 DOM 和 patch 渲染
+- 元件系統
 - 模板編譯器
 - SFC 編譯器
 - Vapor Mode（實驗性）
@@ -59,10 +59,10 @@ pnpm install
 pnpm dev
 ```
 
-### 嘗試實現
+### 嘗試實作
 
 ```sh
-pnpm setup      # 生成 playground
+pnpm setup      # 產生 playground
 pnpm impl:dev   # 啟動開發伺服器
 ```
 
@@ -70,17 +70,17 @@ pnpm impl:dev   # 啟動開發伺服器
 
 **超極限超極端最小 Vue**
 
-僅用 **110 行**程式碼實現 createApp，虛擬 DOM，響應式，模板編譯器和 SFC 編譯器．
+僅用 **110 行**程式碼實作 createApp，虛擬 DOM，響應式，模板編譯器和 SFC 編譯器。
 
 [閱讀章節](https://book.chibivue.land/zh-tw/bonus/hyper-ultimate-super-extreme-minimal-vue) · [查看原始碼](https://github.com/chibivue-land/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
 ## 貢獻
 
-請查看 [contributing.md](.github/contributing.md)．
+請查看 [contributing.md](.github/contributing.md)。
 
 ## 社群
 
-加入我們的 [Discord 伺服器](https://discord.gg/aVHvmbmSRy) 參與討論，提問和獲取公告．
+加入我們的 [Discord 伺服器](https://discord.gg/aVHvmbmSRy) 參與討論，提問和取得公告。
 
 ---
 

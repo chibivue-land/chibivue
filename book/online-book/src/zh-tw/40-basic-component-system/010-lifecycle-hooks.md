@@ -1,20 +1,20 @@
-# 生命週期鉤子（基礎組件系統開始）
+# 生命週期鉤子（基礎元件系統開始）
 
-## 讓我們實現生命週期鉤子
+## 讓我們實作生命週期鉤子
 
-實現生命週期鉤子非常簡單．
-你只需要在 ComponentInternalInstance 中註冊函式，並在渲染期間的指定時機執行它們．
-API 本身將在 runtime-core/apiLifecycle.ts 中實現．
+實作生命週期鉤子非常簡單。
+你只需要在 ComponentInternalInstance 中註冊函式，並在渲染期間的指定時機執行它們。
+API 本身將在 runtime-core/apiLifecycle.ts 中實作。
 
-需要注意的一點是，你需要考慮 onMounted/onUnmounted/onUpdated 的調度．
-註冊的函式應該在掛載，卸載和更新完全完成後執行．
+需要注意的一點是，你需要考慮 onMounted/onUnmounted/onUpdated 的調度。
+註冊的函式應該在掛載，卸載和更新完全完成後執行。
 
-因此，我們將在調度器中實現一種名為"post"的新佇列類型．這是在現有佇列刷新完成後才會被刷新的佇列．
+因此，我們將在排程器中實作一種名為"post"的新佇列型別。這是在現有佇列刷新完成後才會被刷新的佇列。
 圖像 ↓
 
 ```ts
-const queue: SchedulerJob[] = [] // 現有實現
-const pendingPostFlushCbs: SchedulerJob[] = [] // 這次要創建的新佇列
+const queue: SchedulerJob[] = [] // 現有實作
+const pendingPostFlushCbs: SchedulerJob[] = [] // 這次要建立的新佇列
 
 function queueFlush() {
   queue.forEach(job => job())
@@ -22,8 +22,8 @@ function queueFlush() {
 }
 ```
 
-同時，透過這個，讓我們實現一個入佇列到 pendingPostFlushCbs 的 API．
-並且讓我們使用它將渲染器中的 effect 入佇列到 pendingPostFlushCbs．
+同時，透過這個，讓我們實作一個入佇列到 pendingPostFlushCbs 的 API。
+並且讓我們使用它將渲染器中的 effect 入佇列到 pendingPostFlushCbs。
 
 這次要支援的生命週期鉤子：
 
@@ -34,7 +34,7 @@ function queueFlush() {
 - onBeforeUpdate
 - onBeforeUnmount
 
-讓我們實現它，目標是使以下程式碼工作！
+讓我們實作它，目標是使以下程式碼工作！
 
 ```ts
 import {
@@ -101,5 +101,5 @@ const app = createApp({
 app.mount('#app')
 ```
 
-到此為止的原始碼：  
+到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/010_lifecycle_hooks)

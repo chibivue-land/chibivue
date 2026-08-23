@@ -1,4 +1,4 @@
-# 實現註釋
+# 實作註釋
 
 ## 目標開發者介面
 
@@ -10,7 +10,7 @@ const App = defineComponent({
   <!-- this is header. -->
   <header>header</header>
 
-  <!-- 
+  <!--
     this is main.
     main content is here!
   -->
@@ -25,18 +25,18 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-無需進一步解釋．
+無需進一步解釋。
 
-## AST 和解析器的實現
+## AST 和解析器的實作
 
-關於如何實現註釋，乍一看，似乎我們可以在解析時簡單地忽略它．
+關於如何實作註釋，乍一看，似乎我們可以在解析時簡單地忽略它。
 
-然而，在 Vue 中，模板中編寫的註釋會按原樣作為 HTML 輸出．
+然而，在 Vue 中，模板中編寫的註釋會按原樣作為 HTML 輸出。
 
-換句話說，註釋也需要被渲染，所以需要在 VNode 上有一個表示，編譯器也需要輸出該程式碼．
-此外，還需要一個生成註釋節點的操作．
+換句話說，註釋也需要被渲染，所以需要在 VNode 上有一個表示，編譯器也需要輸出該程式碼。
+此外，還需要一個產生註釋節點的操作。
 
-首先，讓我們實現 AST 和解析器．
+首先，讓我們實作 AST 和解析器。
 
 ### AST
 
@@ -64,7 +64,7 @@ export type TemplateChildNode =
 
 ### 解析器
 
-現在，讓我們拋出一個錯誤．
+現在，讓我們拋出一個錯誤。
 
 ```ts
 function parseChildren(
@@ -131,9 +131,9 @@ function parseComment(context: ParserContext): CommentNode {
 }
 ```
 
-## 程式碼生成
+## 程式碼產生
 
-向 runtime-core 添加表示 Comment 的 VNode．
+向 runtime-core 加入表示 Comment 的 VNode。
 
 ```ts
 export const Comment = Symbol()
@@ -145,9 +145,9 @@ export type VNodeTypes =
   | typeof Fragment
 ```
 
-實現一個名為 createCommentVNode 的函式並將其作為輔助函式公開．
+實作一個名為 createCommentVNode 的函式並將其作為輔助函式公開。
 
-在 codegen 中，生成呼叫 createCommentVNode 的程式碼．
+在 codegen 中，產生呼叫 createCommentVNode 的程式碼。
 
 ```ts
 export function createCommentVNode(text: string = ''): VNode {
@@ -182,11 +182,11 @@ function genComment(node: CommentNode, context: CodegenContext) {
 
 ## 渲染
 
-讓我們實現渲染器．
+讓我們實作渲染器。
 
-像往常一樣，在 patch 中分支 Comment 的情況，並在掛載時生成註釋．
+像往常一樣，在 patch 中分支 Comment 的情況，並在掛載時產生註釋。
 
-關於 patch，由於這次是靜態的，我不會做任何特殊的事情．（在程式碼中，它只是設置為按原樣分配．）
+關於 patch，由於這次是靜態的，我不會做任何特殊的事情。（在程式碼中，它只是設定為按原樣分配。）
 
 ```ts
 const patch = (
@@ -214,7 +214,7 @@ const processCommentNode = (
 ) => {
   if (n1 == null) {
     hostInsert(
-      (n2.el = hostCreateComment((n2.children as string) || '')), // 在 nodeOps 端實現 hostCreateComment！
+      (n2.el = hostCreateComment((n2.children as string) || '')), // 在 nodeOps 端實作 hostCreateComment！
       container,
       anchor,
     )
@@ -224,6 +224,6 @@ const processCommentNode = (
 }
 ```
 
-好了，你現在應該已經實現了註釋．讓我們檢查實際操作！
+好了，你現在應該已經實作了註釋。讓我們檢查實際操作！
 
 到此為止的原始碼：[GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)

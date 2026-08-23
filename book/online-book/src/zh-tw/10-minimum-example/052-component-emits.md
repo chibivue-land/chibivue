@@ -1,11 +1,11 @@
-# 組件 Emits
+# 元件 Emits
 
 ## 開發者介面
 
-繼 props 之後，讓我們實現 emits．\
-emits 的實現相對簡單，所以會很快完成．
+繼 props 之後，讓我們實作 emits。\
+emits 的實作相對簡單，所以會很快完成。
 
-在開發者介面方面，emits 將從 setup 函式的第二個參數接收．
+在開發者介面方面，emits 將從 setup 函式的第二個參數接收。
 
 ```ts
 const MyComponent: Component = {
@@ -44,9 +44,9 @@ const app = createApp({
 })
 ```
 
-## 實現
+## 實作
 
-與 props 類似，讓我們創建一個名為 `~/packages/runtime-core/componentEmits.ts` 的檔案並在那裡實現它．\
+與 props 類似，讓我們建立一個名為 `~/packages/runtime-core/componentEmits.ts` 的檔案並在那裡實作它。\
 `~/packages/runtime-core/componentEmits.ts`
 
 ```ts
@@ -101,7 +101,7 @@ export function createComponentInstance(
 }
 ```
 
-您可以將此傳遞給 setup 函式．
+您可以將此傳遞給 setup 函式。
 
 `~/packages/runtime-core/componentOptions.ts`
 
@@ -133,8 +133,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
     }
 ```
 
-讓我們用我們之前假設的開發者介面示例來測試功能！  
-如果它正常工作，您現在可以使用 props/emit 在組件之間進行通訊！
+讓我們用我們之前假設的開發者介面示例來測試功能！
+如果它正常工作，您現在可以使用 props/emit 在元件之間進行通訊！
 
-到此為止的原始碼：  
+到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/050_component_system3)

@@ -2,15 +2,15 @@
 
 ## 什麼是 SSR 編譯器？
 
-SSR 編譯器（`@chibivue/compiler-ssr`）是一個將模板編譯為 SSR 優化代碼的套件．
+SSR 編譯器（`@chibivue/compiler-ssr`）是一個將模板編譯為 SSR 最佳化程式碼的套件。
 
-普通的客戶端編譯會輸出生成 VNode 的代碼，而 SSR 編譯器直接輸出生成 HTML 字串的代碼．這提高了伺服器端的渲染效率．
+普通的使用者端編譯會輸出產生 VNode 的程式碼，而 SSR 編譯器直接輸出產生 HTML 字串的程式碼。這提高了伺服器端的渲染效率。
 
-<KawaikoNote variant="base" title="客戶端與 SSR 的區別">
+<KawaikoNote variant="base" title="使用者端與 SSR 的區別">
 
-在客戶端：
+在使用者端：
 ```js
-// 返回 VNode
+// 回傳 VNode
 return _createElementVNode("div", { class: "hello" }, "Hello")
 ```
 
@@ -20,7 +20,7 @@ return _createElementVNode("div", { class: "hello" }, "Hello")
 _push(`<div class="hello">Hello</div>`)
 ```
 
-SSR 不經過 VNode 直接生成字串，所以效率更高！
+SSR 不經過 VNode 直接產生字串，所以效率更高！
 
 </KawaikoNote>
 
@@ -29,11 +29,11 @@ SSR 不經過 VNode 直接生成字串，所以效率更高！
 ```
 packages/compiler-ssr/src/
 ├── index.ts                    # 主入口點
-├── runtimeHelpers.ts           # SSR 輔助函數定義
-├── ssrCodegenTransform.ts      # SSR 代碼生成轉換
+├── runtimeHelpers.ts           # SSR 輔助函式定義
+├── ssrCodegenTransform.ts      # SSR 程式碼產生轉換
 └── transforms/
     ├── ssrTransformElement.ts   # 元素轉換
-    ├── ssrTransformComponent.ts # 組件轉換
+    ├── ssrTransformComponent.ts # 元件轉換
     ├── ssrVIf.ts               # v-if 轉換
     └── ssrVFor.ts              # v-for 轉換
 ```
@@ -44,8 +44,8 @@ SSR 編譯按以下步驟進行：
 
 1. **解析**：將模板轉換為 AST（使用 `@chibivue/compiler-dom` 的 `parse`）
 2. **轉換**：應用 SSR NodeTransform
-3. **SSR Codegen Transform**：將 AST 轉換為 SSR 代碼生成節點
-4. **代碼生成**：生成最終的 JavaScript 代碼
+3. **SSR Codegen Transform**：將 AST 轉換為 SSR 程式碼產生節點
+4. **程式碼產生**：產生最終的 JavaScript 程式碼
 
 ```ts
 // packages/compiler-ssr/src/index.ts
@@ -73,7 +73,7 @@ export function compile(source: string | RootNode, options: CompilerOptions = {}
 
 ## SSR Transform Context
 
-SSR 轉換中使用的上下文．
+SSR 轉換中使用的上下文。
 
 ```ts
 // packages/compiler-ssr/src/ssrCodegenTransform.ts
@@ -91,7 +91,7 @@ export interface SSRTransformContext {
 
 ### pushStringPart
 
-將字串部分添加到緩衝區．連續的字串會自動合併．
+將字串部分加入到緩衝區。連續的字串會自動合併。
 
 ```ts
 pushStringPart(part) {
@@ -114,11 +114,11 @@ pushStringPart(part) {
 
 ### pushStatement
 
-將控制流語句（if/for）添加到緩衝區．
+將控制流語句（if/for）加入到緩衝區。
 
 ```ts
 pushStatement(statement) {
-  // 關閉當前字串緩衝區
+  // 關閉目前字串緩衝區
   currentString = null;
   body.push(statement);
 }
@@ -128,7 +128,7 @@ pushStatement(statement) {
 
 ### ssrTransformElement
 
-將 HTML 元素轉換為 SSR 代碼．
+將 HTML 元素轉換為 SSR 程式碼。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrTransformElement.ts
@@ -160,13 +160,13 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
 #### 屬性綁定
 
 - **靜態屬性**：直接作為字串輸出
-- **v-bind:class**：使用 `ssrRenderClass` 輔助函數
-- **v-bind:style**：使用 `ssrRenderStyle` 輔助函數
+- **v-bind:class**：使用 `ssrRenderClass` 輔助函式
+- **v-bind:style**：使用 `ssrRenderStyle` 輔助函式
 - **其他動態屬性**：使用 `ssrRenderAttr` 或 `ssrRenderDynamicAttr`
 
 ### ssrProcessElement
 
-處理轉換後的元素以生成代碼．
+處理轉換後的元素以產生程式碼。
 
 ```ts
 export function ssrProcessElement(node: PlainElementNode, context: SSRTransformContext): void {
@@ -191,9 +191,9 @@ export function ssrProcessElement(node: PlainElementNode, context: SSRTransformC
 }
 ```
 
-## 組件轉換
+## 元件轉換
 
-組件通過 `ssrRenderComponent` 在運行時渲染．
+元件透過 `ssrRenderComponent` 在執行期渲染。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrTransformComponent.ts
@@ -222,7 +222,7 @@ export function ssrProcessComponent(
 
 ## v-if 轉換
 
-v-if 被轉換為 JavaScript if 語句．
+v-if 被轉換為 JavaScript if 語句。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrVIf.ts
@@ -271,7 +271,7 @@ if (show) {
 
 ## v-for 轉換
 
-v-for 使用 `ssrRenderList` 輔助函數進行轉換．
+v-for 使用 `ssrRenderList` 輔助函式進行轉換。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrVFor.ts
@@ -302,9 +302,9 @@ _ssrRenderList(items, (item) => {
 _push(`<!--]-->`)
 ```
 
-## SSR 輔助函數
+## SSR 輔助函式
 
-SSR 編譯器使用以下運行時輔助函數，由 `@chibivue/server-renderer` 提供．
+SSR 編譯器使用以下執行期輔助函式，由 `@chibivue/server-renderer` 提供。
 
 ```ts
 // packages/compiler-ssr/src/runtimeHelpers.ts
@@ -320,21 +320,21 @@ export const SSR_RENDER_COMPONENT: unique symbol = Symbol(`ssrRenderComponent`);
 export const SSR_RENDER_VNODE: unique symbol = Symbol(`ssrRenderVNode`);
 ```
 
-### 輔助函數的作用
+### 輔助函式的作用
 
-| 輔助函數 | 作用 |
+| 輔助函式 | 作用 |
 |---------|------|
 | `ssrInterpolate` | 轉義文本插值 |
 | `ssrRenderAttrs` | 渲染物件格式的屬性 |
 | `ssrRenderClass` | 渲染 class |
 | `ssrRenderStyle` | 渲染 style |
 | `ssrRenderList` | v-for 迭代 |
-| `ssrRenderComponent` | 創建組件 VNode |
+| `ssrRenderComponent` | 建立元件 VNode |
 | `ssrRenderVNode` | 將 VNode 轉換為 HTML 字串 |
 
 ## SFC 整合
 
-compiler-sfc 支援 SSR 模式的編譯．
+compiler-sfc 支援 SSR 模式的編譯。
 
 ```ts
 // packages/compiler-sfc/src/compileTemplate.ts
@@ -358,9 +358,9 @@ export function compileTemplate({
 }
 ```
 
-指定 `ssr: true` 會自動使用 SSR 編譯器．
+指定 `ssr: true` 會自動使用 SSR 編譯器。
 
-## 生成的代碼示例
+## 產生的程式碼示例
 
 輸入模板：
 ```html
@@ -372,7 +372,7 @@ export function compileTemplate({
 </div>
 ```
 
-生成的代碼：
+產生的程式碼：
 ```js
 import { ssrInterpolate as _ssrInterpolate, ssrRenderList as _ssrRenderList } from 'chibivue/server-renderer'
 
@@ -389,7 +389,7 @@ function ssrRender(_ctx, _push, _parent, _attrs) {
 
 使用 SSR 編譯器可以：
 - 沒有 VNode 開銷
-- 使用模板字面量高效生成字串
+- 使用模板字面值高效產生字串
 - 靜態部分直接作為字串輸出
 
 這些提高了伺服器端渲染的效能！

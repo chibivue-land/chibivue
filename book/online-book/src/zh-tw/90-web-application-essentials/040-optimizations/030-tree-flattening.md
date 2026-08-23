@@ -2,13 +2,13 @@
 
 ## 什麼是 Tree Flattening？
 
-Tree Flattening（Block Tree）是 Vue 3 引入的高級最佳化技術．它「扁平化」並收集模板內的動態節點，允許在更新時直接更新動態節點，而不是遍歷整個樹．
+Tree Flattening（Block Tree）是 Vue 3 引入的高階最佳化技術。它「扁平化」並收集模板內的動態節點，允許在更新時直接更新動態節點，而不是遍歷整個樹。
 
 <KawaikoNote variant="question" title="為什麼叫『扁平化』？">
 
-傳統的 Virtual DOM 在更新時需要遞迴遍歷整個樹．
+傳統的 Virtual DOM 在更新時需要遞迴遍歷整個樹。
 Tree Flattening 將動態節點「扁平化」到陣列中，
-允許直接存取而忽略巢狀結構．
+允許直接存取而忽略巢狀結構。
 
 </KawaikoNote>
 
@@ -67,7 +67,7 @@ dynamicChildren = [p]
 
 如果 1000 個節點中只有 10 個是動態的：
 傳統方法需要 1000 次比較，
-但 Tree Flattening 只需要 10 次比較．
+但 Tree Flattening 只需要 10 次比較。
 
 </KawaikoNote>
 
@@ -75,7 +75,7 @@ dynamicChildren = [p]
 
 ### 什麼是 Block？
 
-Block 是「具有穩定結構的 VNode 子樹」．在 Block 內，保證以下幾點：
+Block 是「具有穩定結構的 VNode 子樹」。在 Block 內，保證以下幾點：
 
 1. 子節點數量不變
 2. 子節點順序不變
@@ -88,7 +88,7 @@ Block 是「具有穩定結構的 VNode 子樹」．在 Block 內，保證以下
 - 根元素
 - `v-if` 的每個分支
 - `v-for` 的每個項目
-- 組件
+- 元件
 
 ```vue
 <template>
@@ -109,11 +109,11 @@ Block 是「具有穩定結構的 VNode 子樹」．在 Block 內，保證以下
 </template>
 ```
 
-## VNode 擴展
+## VNode 擴充
 
 ### dynamicChildren
 
-向 VNode 添加 `dynamicChildren` 屬性來收集動態子節點．
+向 VNode 加入 `dynamicChildren` 屬性來收集動態子節點。
 
 ```ts
 export interface VNode {
@@ -141,10 +141,10 @@ export interface VNode {
 
 ### Block 追蹤
 
-Block 的建立通過 `openBlock` 和 `createBlock` 配對完成．
+Block 的建立透過 `openBlock` 和 `createBlock` 配對完成。
 
 ```ts
-// 當前追蹤的 Block
+// 目前追蹤的 Block
 let currentBlock: VNode[] | null = null;
 
 export function openBlock(): void {
@@ -170,7 +170,7 @@ export function createBlock(
 
 ### 收集動態節點
 
-在 `createVNode` 中，有 patchFlag 的 VNode 會被添加到 currentBlock．
+在 `createVNode` 中，有 patchFlag 的 VNode 會被加入到 currentBlock。
 
 ```ts
 export function createVNode(
@@ -191,7 +191,7 @@ export function createVNode(
   };
 
   // 有 patchFlag = 動態節點
-  // 如果 currentBlock 存在則添加
+  // 如果 currentBlock 存在則加入
   if (patchFlag !== undefined && patchFlag > 0 && currentBlock) {
     currentBlock.push(vnode);
   }
@@ -200,7 +200,7 @@ export function createVNode(
 }
 ```
 
-## 生成的程式碼
+## 產生的程式碼
 
 ### 模板
 
@@ -214,7 +214,7 @@ export function createVNode(
 </template>
 ```
 
-### 生成的渲染函數
+### 產生的渲染函式
 
 ```js
 import { openBlock, createBlock, createVNode, toDisplayString } from 'vue'
@@ -241,9 +241,9 @@ function render(_ctx) {
 // }
 ```
 
-## patchBlockChildren 實現
+## patchBlockChildren 實作
 
-更新 Block 時，只遍歷 `dynamicChildren`．
+更新 Block 時，只遍歷 `dynamicChildren`。
 
 ```ts
 function patchBlockChildren(
@@ -316,14 +316,14 @@ function patchElement(
 - **僅 Patch Flags**：遍歷 1000 個節點（屬性比較被最佳化）
 - **Tree Flattening**：只遍歷動態節點（1 個）
 
-動態節點越少，Tree Flattening 的效果就越大．
+動態節點越少，Tree Flattening 的效果就越大。
 
 ## Block 失效的情況
 
-在以下情況下，Block 最佳化會被禁用（BAIL 模式）：
+在以下情況下，Block 最佳化會被停用（BAIL 模式）：
 
 1. **結構性指令**：`v-if`，`v-for` 建立新的 Block
-2. **動態組件**：`<component :is="...">`
+2. **動態元件**：`<component :is="...">`
 3. **插槽出口**：`<slot />`
 
 ```vue
@@ -342,7 +342,7 @@ function patchElement(
 
 ## 與 Static Hoisting 的整合
 
-Tree Flattening 與 Static Hoisting 結合時效果最佳．
+Tree Flattening 與 Static Hoisting 結合時效果最佳。
 
 ```ts
 // 靜態節點被提升，不包含在 dynamicChildren 中
@@ -362,7 +362,7 @@ function render() {
 }
 ```
 
-1. **Static Hoisting**：將靜態節點提升到函數外部（跳過 VNode 生成）
+1. **Static Hoisting**：將靜態節點提升到函式外部（跳過 VNode 產生）
 2. **Tree Flattening**：只收集動態節點（限制 diff 目標）
 3. **Patch Flags**：只更新動態屬性（最佳化屬性比較）
 
@@ -374,14 +374,14 @@ function render() {
   ↓
 偵測靜態節點 → Static Hoisting
   ↓
-偵測動態節點 → 添加 Patch Flags
+偵測動態節點 → 加入 Patch Flags
   ↓
 識別 Block 邊界 → 插入 openBlock/createBlock
 
 [執行時]
 openBlock() → currentBlock = []
   ↓
-createVNode (靜態) → 不添加到 currentBlock
+createVNode (靜態) → 不加入到 currentBlock
   ↓
 createVNode (動態) → currentBlock.push(vnode)
   ↓
@@ -399,11 +399,11 @@ patchBlockChildren(n1.dynamicChildren, n2.dynamicChildren)
 
 ## 總結
 
-Tree Flattening（Block Tree）實現由以下部分組成：
+Tree Flattening（Block Tree）實作由以下部分組成：
 
 1. **dynamicChildren**：收集動態子節點的陣列
 2. **openBlock / createBlock**：Block 建立和追蹤
 3. **patchBlockChildren**：只 patch 動態節點
 4. **Block 邊界管理**：用 `v-if`，`v-for` 等建立新 Block
 
-這個最佳化使 Vue 3 即使在大規模應用程式中也能實現快速更新．與 Static Hoisting 和 Patch Flags 結合時，可以實現基於模板的框架特有的最佳化．
+這個最佳化使 Vue 3 即使在大規模應用程式中也能實作快速更新。與 Static Hoisting 和 Patch Flags 結合時，可以實作基於模板的框架特有的最佳化。
