@@ -2,13 +2,13 @@
 
 ## 什么是 Tree Flattening？
 
-Tree Flattening（Block Tree）是 Vue 3 引入的高级优化技术．它"扁平化"并收集模板内的动态节点，允许在更新时直接更新动态节点，而不是遍历整个树．
+Tree Flattening（Block Tree）是 Vue 3 引入的高级优化技术。它"扁平化"并收集模板内的动态节点，允许在更新时直接更新动态节点，而不是遍历整个树。
 
 <KawaikoNote variant="question" title="为什么叫'扁平化'？">
 
-传统的 Virtual DOM 在更新时需要递归遍历整个树．
+传统的 Virtual DOM 在更新时需要递归遍历整个树。
 Tree Flattening 将动态节点"扁平化"到数组中，
-允许直接访问而忽略嵌套结构．
+允许直接访问而忽略嵌套结构。
 
 </KawaikoNote>
 
@@ -67,7 +67,7 @@ dynamicChildren = [p]
 
 如果 1000 个节点中只有 10 个是动态的：
 传统方法需要 1000 次比较，
-但 Tree Flattening 只需要 10 次比较．
+但 Tree Flattening 只需要 10 次比较。
 
 </KawaikoNote>
 
@@ -75,7 +75,7 @@ dynamicChildren = [p]
 
 ### 什么是 Block？
 
-Block 是"具有稳定结构的 VNode 子树"．在 Block 内，保证以下几点：
+Block 是"具有稳定结构的 VNode 子树"。在 Block 内，保证以下几点：
 
 1. 子节点数量不变
 2. 子节点顺序不变
@@ -113,7 +113,7 @@ Block 是"具有稳定结构的 VNode 子树"．在 Block 内，保证以下几�
 
 ### dynamicChildren
 
-向 VNode 添加 `dynamicChildren` 属性来收集动态子节点．
+向 VNode 添加 `dynamicChildren` 属性来收集动态子节点。
 
 ```ts
 export interface VNode {
@@ -141,7 +141,7 @@ export interface VNode {
 
 ### Block 追踪
 
-Block 的创建通过 `openBlock` 和 `createBlock` 配对完成．
+Block 的创建通过 `openBlock` 和 `createBlock` 配对完成。
 
 ```ts
 // 当前追踪的 Block
@@ -170,7 +170,7 @@ export function createBlock(
 
 ### 收集动态节点
 
-在 `createVNode` 中，有 patchFlag 的 VNode 会被添加到 currentBlock．
+在 `createVNode` 中，有 patchFlag 的 VNode 会被添加到 currentBlock。
 
 ```ts
 export function createVNode(
@@ -243,7 +243,7 @@ function render(_ctx) {
 
 ## patchBlockChildren 实现
 
-更新 Block 时，只遍历 `dynamicChildren`．
+更新 Block 时，只遍历 `dynamicChildren`。
 
 ```ts
 function patchBlockChildren(
@@ -316,7 +316,7 @@ function patchElement(
 - **仅 Patch Flags**：遍历 1000 个节点（属性比较被优化）
 - **Tree Flattening**：只遍历动态节点（1 个）
 
-动态节点越少，Tree Flattening 的效果就越大．
+动态节点越少，Tree Flattening 的效果就越大。
 
 ## Block 失效的情况
 
@@ -342,7 +342,7 @@ function patchElement(
 
 ## 与 Static Hoisting 的集成
 
-Tree Flattening 与 Static Hoisting 结合时效果最佳．
+Tree Flattening 与 Static Hoisting 结合时效果最佳。
 
 ```ts
 // 静态节点被提升，不包含在 dynamicChildren 中
@@ -406,4 +406,4 @@ Tree Flattening（Block Tree）实现由以下部分组成：
 3. **patchBlockChildren**：只 patch 动态节点
 4. **Block 边界管理**：用 `v-if`，`v-for` 等创建新 Block
 
-这个优化使 Vue 3 即使在大规模应用程序中也能实现快速更新．与 Static Hoisting 和 Patch Flags 结合时，可以实现基于模板的框架特有的优化．
+这个优化使 Vue 3 即使在大规模应用程序中也能实现快速更新。与 Static Hoisting 和 Patch Flags 结合时，可以实现基于模板的框架特有的优化。

@@ -2,12 +2,12 @@
 
 ## 什么是 KeepAlive
 
-`<KeepAlive>` 是一个内置组件，它可以缓存并复用组件实例而不销毁它们．通常，当组件切换时，旧组件会被卸载，状态也会丢失．但是，通过使用 KeepAlive，您可以在切换组件时保留它们的状态．
+`<KeepAlive>` 是一个内置组件，它可以缓存并复用组件实例而不销毁它们。通常，当组件切换时，旧组件会被卸载，状态也会丢失。但是，通过使用 KeepAlive，您可以在切换组件时保留它们的状态。
 
 <KawaikoNote variant="question" title="为什么需要 KeepAlive？">
 
-例如，想象一个带有标签页切换的界面，其中一个标签页正在填写表单．
-如果您切换到另一个标签页再切换回来，输入的内容消失了会很令人沮丧．
+例如，想象一个带有标签页切换的界面，其中一个标签页正在填写表单。
+如果您切换到另一个标签页再切换回来，输入的内容消失了会很令人沮丧。
 KeepAlive 就是为了满足这种"保留状态"的需求！
 
 </KawaikoNote>
@@ -48,7 +48,7 @@ type MatchPattern = string | RegExp | (string | RegExp)[];
 
 ### KeepAliveContext
 
-KeepAlive 组件有一个用于与渲染器交互的特殊上下文．
+KeepAlive 组件有一个用于与渲染器交互的特殊上下文。
 
 ```ts
 export interface KeepAliveContext extends ComponentInternalInstance {
@@ -79,11 +79,11 @@ let current: VNode | null = null;
 const storageContainer = instance.renderer.o.createElement("div");
 ```
 
-KeepAlive 使用 `cache` Map 来缓存组件的 VNode．`keys` Set 用于 LRU（最近最少使用）算法的顺序管理．
+KeepAlive 使用 `cache` Map 来缓存组件的 VNode。`keys` Set 用于 LRU（最近最少使用）算法的顺序管理。
 
 ### activate 函数
 
-从缓存中恢复组件并显示它．
+从缓存中恢复组件并显示它。
 
 ```ts
 instance.activate = (vnode, container, anchor, _parentComponent) => {
@@ -109,7 +109,7 @@ instance.activate = (vnode, container, anchor, _parentComponent) => {
 
 ### deactivate 函数
 
-隐藏并缓存组件．
+隐藏并缓存组件。
 
 ```ts
 instance.deactivate = (vnode: VNode) => {
@@ -126,18 +126,18 @@ instance.deactivate = (vnode: VNode) => {
 };
 ```
 
-与正常卸载不同，DOM 元素不会被删除，只是移动到隐藏容器中．
+与正常卸载不同，DOM 元素不会被删除，只是移动到隐藏容器中。
 
 <KawaikoNote variant="funny" title="隐藏容器技巧">
 
-被隐藏的组件会被移动到屏幕外的"藏身处"．
+被隐藏的组件会被移动到屏幕外的"藏身处"。
 需要时，只需从"藏身处"取出即可，省去了重建的麻烦！
 
 </KawaikoNote>
 
 ### render 函数
 
-这是 KeepAlive 的核心逻辑．
+这是 KeepAlive 的核心逻辑。
 
 ```ts
 return (): VNode | undefined => {
@@ -207,7 +207,7 @@ return (): VNode | undefined => {
 
 ### 通过 ShapeFlags 控制
 
-KeepAlive 使用 ShapeFlags 与渲染器协调．
+KeepAlive 使用 ShapeFlags 与渲染器协调。
 
 ```ts
 // 此组件应由 KeepAlive 管理
@@ -217,7 +217,7 @@ vnode.shapeFlag |= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
 vnode.shapeFlag |= ShapeFlags.COMPONENT_KEPT_ALIVE;
 ```
 
-渲染器检查这些标志，并调用 activate/deactivate 而不是正常的 mount/unmount．
+渲染器检查这些标志，并调用 activate/deactivate 而不是正常的 mount/unmount。
 
 ### include/exclude 匹配
 
@@ -329,7 +329,7 @@ export default {
 
 ## 与渲染器的集成
 
-KeepAlive 与渲染器紧密协调工作．
+KeepAlive 与渲染器紧密协调工作。
 
 ### mountComponent 中的 KeepAlive 检测
 
@@ -451,8 +451,8 @@ deactivate
 
 <KawaikoNote variant="warning" title="注意内存使用！">
 
-被 KeepAlive 缓存的组件会一直保留在内存中．
-缓存太多会占用内存，所以请使用 `max` 属性设置上限．
+被 KeepAlive 缓存的组件会一直保留在内存中。
+缓存太多会占用内存，所以请使用 `max` 属性设置上限。
 它会通过 LRU（删除最近最少使用的项目）自动管理！
 
 </KawaikoNote>
@@ -470,7 +470,7 @@ KeepAlive 的实现由以下元素组成：
 5. **渲染器注入**：KeepAlive 持有 patch/move/unmount 函数的引用
 6. **include/exclude/max**：灵活的缓存控制
 
-KeepAlive 是一个强大的功能，可以在保留组件状态的同时提高性能，但需要权衡内存使用，因此设置适当的 `max` 值很重要．
+KeepAlive 是一个强大的功能，可以在保留组件状态的同时提高性能，但需要权衡内存使用，因此设置适当的 `max` 值很重要。
 
 <KawaikoNote variant="surprise" title="KeepAlive 完成！">
 

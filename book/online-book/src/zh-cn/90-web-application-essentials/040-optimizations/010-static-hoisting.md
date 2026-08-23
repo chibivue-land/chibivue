@@ -2,11 +2,11 @@
 
 ## 什么是 Static Hoisting
 
-Static Hoisting 是模板编译时的优化技术之一．它检测模板中的静态节点（没有响应式依赖的节点），并将它们"提升"（hoist）到渲染函数外部，从而提高重新渲染时的性能．
+Static Hoisting 是模板编译时的优化技术之一。它检测模板中的静态节点（没有响应式依赖的节点），并将它们"提升"（hoist）到渲染函数外部，从而提高重新渲染时的性能。
 
 <KawaikoNote variant="question" title="为什么叫提升（hoist）？">
 
-这与 JavaScript 的"变量提升（hoisting）"是相同的概念．
+这与 JavaScript 的"变量提升（hoisting）"是相同的概念。
 通过将渲染函数内的静态代码"提升"到函数外部，
 每次调用函数时就不需要重新生成了！
 
@@ -57,7 +57,7 @@ function render() {
 
 <KawaikoNote variant="funny" title="戏剧性的前后对比！">
 
-从每次都生成 VNode 变成只重复使用一次生成的 VNode．
+从每次都生成 VNode 变成只重复使用一次生成的 VNode。
 像页眉页脚这样不变的部分越多，效果就越显著！
 
 </KawaikoNote>
@@ -66,7 +66,7 @@ function render() {
 
 ### ConstantTypes
 
-表示节点静态性的枚举类型．
+表示节点静态性的枚举类型。
 
 ```ts
 export const enum ConstantTypes {
@@ -79,7 +79,7 @@ export const enum ConstantTypes {
 
 ### hoistStatic 函数
 
-在变换阶段之后调用，检测并提升静态节点．
+在变换阶段之后调用，检测并提升静态节点。
 
 ```ts
 export function hoistStatic(root: RootNode, context: TransformContext): void {
@@ -89,7 +89,7 @@ export function hoistStatic(root: RootNode, context: TransformContext): void {
 
 ### walk 函数
 
-递归遍历 AST，检测可提升的节点．
+递归遍历 AST，检测可提升的节点。
 
 ```ts
 function walk(
@@ -135,7 +135,7 @@ function walk(
 
 ### getConstantType 函数
 
-判断节点是否为静态．
+判断节点是否为静态。
 
 ```ts
 export function getConstantType(
@@ -257,7 +257,7 @@ function genHoists(
 }
 ```
 
-将累积在 `hoists` 数组中的节点作为常量生成在渲染函数之前．
+将累积在 `hoists` 数组中的节点作为常量生成在渲染函数之前。
 
 ### TransformContext 的 hoist 方法
 
@@ -272,7 +272,7 @@ hoist(exp) {
 }
 ```
 
-将原始节点添加到 `hoists` 数组，并返回 `_hoisted_N` 标识符．这在渲染函数内被引用．
+将原始节点添加到 `hoists` 数组，并返回 `_hoisted_N` 标识符。这在渲染函数内被引用。
 
 ## 可提升的示例
 
@@ -372,11 +372,11 @@ Static Hoisting 的实现由以下元素组成：
 4. **hoist**：将节点添加到提升数组并返回引用
 5. **genHoists**：为提升的节点生成代码
 
-这种优化在具有大量静态内容的大型模板中显著提高重新渲染性能．特别是对于页眉，页脚，侧边栏等不变的 UI 部分效果显著．
+这种优化在具有大量静态内容的大型模板中显著提高重新渲染性能。特别是对于页眉，页脚，侧边栏等不变的 UI 部分效果显著。
 
 <KawaikoNote variant="surprise" title="Static Hoisting 完成！">
 
-编译器自动判断"这部分不会变化"并进行优化．
+编译器自动判断"这部分不会变化"并进行优化。
 这是基于模板的框架独有的优势！
 
 </KawaikoNote>

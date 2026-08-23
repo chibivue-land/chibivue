@@ -2,9 +2,9 @@
 
 ## 什么是数据获取库？
 
-现代 Web 应用程序频繁地从服务器获取数据．在 Vue.js 生态系统中，Pinia Colada 和 TanStack Query 等库提供了这个功能．
+现代 Web 应用程序频繁地从服务器获取数据。在 Vue.js 生态系统中，Pinia Colada 和 TanStack Query 等库提供了这个功能。
 
-在本章中，我们将实现类似 Pinia Colada 的基本数据获取功能，作为 chibivue-fetch．
+在本章中，我们将实现类似 Pinia Colada 的基本数据获取功能，作为 chibivue-fetch。
 
 ### 为什么需要库？
 
@@ -41,11 +41,11 @@ export function useUser(id: number) {
 3. **重复请求**：相同组件多次挂载会导致重复请求
 4. **错误处理**：重试和重新获取的逻辑变得复杂
 
-数据获取库解决了这些问题，并提供了声明式的 API．
+数据获取库解决了这些问题，并提供了声明式的 API。
 
 ## 包结构
 
-chibivue-fetch 在 `@extensions/chibivue-fetch` 包中提供．
+chibivue-fetch 在 `@extensions/chibivue-fetch` 包中提供。
 
 ```
 @extensions/chibivue-fetch/src/
@@ -69,11 +69,11 @@ type DataState<TData, TError> =
   | { status: "success"; data: TData; error: null };
 ```
 
-这种状态模型可以清楚地追踪数据状态．
+这种状态模型可以清楚地追踪数据状态。
 
 ## QueryCache
 
-`QueryCache` 负责缓存管理和 SSR 的状态管理．
+`QueryCache` 负责缓存管理和 SSR 的状态管理。
 
 ```ts
 // queryCache.ts
@@ -123,7 +123,7 @@ app.use(queryCache);
 
 ## useQuery
 
-`useQuery` 是用于数据获取的组合式函数．
+`useQuery` 是用于数据获取的组合式函数。
 
 ```ts
 // useQuery.ts
@@ -193,7 +193,7 @@ const { data, isLoading, error, refresh } = useQuery({
 
 ## useMutation
 
-`useMutation` 是用于数据变更（POST，PUT，DELETE 等）的组合式函数．
+`useMutation` 是用于数据变更（POST，PUT，DELETE 等）的组合式函数。
 
 ```ts
 // useMutation.ts
@@ -254,7 +254,7 @@ mutate({ name: "John", email: "john@example.com" });
 
 ### Entry Key
 
-`key` 作为缓存键使用．数组格式可以表示层级式的键：
+`key` 作为缓存键使用。数组格式可以表示层级式的键：
 
 ```ts
 // 简单的键
@@ -267,7 +267,7 @@ key: ["users", userId]
 key: ["users", { status: "active", page: 1 }]
 ```
 
-具有相同 `key` 的查询共享缓存．键会被序列化为排序后的 JSON，因此对象属性的顺序不重要．
+具有相同 `key` 的查询共享缓存。键会被序列化为排序后的 JSON，因此对象属性的顺序不重要。
 
 ### Stale Time 和 GC Time
 
@@ -278,8 +278,8 @@ key: ["users", { status: "active", page: 1 }]
     data arrives      data is stale         data removed
 ```
 
-- **staleTime**: 数据保持「fresh」的期间．在此期间调用 `refresh()` 不会重新获取
-- **gcTime**: 保留未使用缓存的期间．组件卸载后，经过此期间缓存会被删除
+- **staleTime**: 数据保持「fresh」的期间。在此期间调用 `refresh()` 不会重新获取
+- **gcTime**: 保留未使用缓存的期间。组件卸载后，经过此期间缓存会被删除
 
 ```ts
 // 1分钟内不重新获取，保留缓存5分钟
@@ -307,11 +307,11 @@ onUnmounted(() => {
 });
 ```
 
-当没有依赖关系时，缓存会在 `gcTime` 后被垃圾回收．
+当没有依赖关系时，缓存会在 `gcTime` 后被垃圾回收。
 
 ## SSR 支持
 
-chibivue-fetch 支持服务器端渲染（SSR）．
+chibivue-fetch 支持服务器端渲染（SSR）。
 
 ### 服务器端：序列化状态
 
@@ -359,7 +359,7 @@ export async function render() {
 }
 ```
 
-相对时间戳可以处理服务器和客户端之间的时间差异．
+相对时间戳可以处理服务器和客户端之间的时间差异。
 
 ### 嵌入 HTML
 
@@ -400,8 +400,8 @@ app.mount("#app");
 
 <KawaikoNote variant="warning" title="Cross-Request State Pollution">
 
-在 SSR 中，与 Store 类似，您必须注意 **Cross-Request State Pollution**．
-在 `render()` 函数内调用 `createQueryCache()`，为每个请求创建新实例．
+在 SSR 中，与 Store 类似，您必须注意 **Cross-Request State Pollution**。
+在 `render()` 函数内调用 `createQueryCache()`，为每个请求创建新实例。
 
 </KawaikoNote>
 
@@ -490,7 +490,7 @@ const { data } = useQuery({
 });
 ```
 
-当查询被取消时（例如，当新请求开始时），`signal` 会被 abort．
+当查询被取消时（例如，当新请求开始时），`signal` 会被 abort。
 
 ## 总结
 
@@ -506,4 +506,4 @@ chibivue-fetch 实现包括以下要素：
 8. **错误处理**：自动重试和状态管理
 9. **AbortController**：请求取消支持
 
-通过最小化实现 Pinia Colada 的核心功能，您可以理解数据获取的工作方式．
+通过最小化实现 Pinia Colada 的核心功能，您可以理解数据获取的工作方式。

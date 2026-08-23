@@ -2,7 +2,7 @@
 
 ## 什么是预处理器？
 
-CSS 预处理器是将扩展的 CSS 语言（SCSS，Less，Stylus 等）转换为标准 CSS 的工具．这些语言提供了变量，嵌套，混入和函数等功能，使 CSS 编写更加高效．
+CSS 预处理器是将扩展的 CSS 语言（SCSS，Less，Stylus 等）转换为标准 CSS 的工具。这些语言提供了变量，嵌套，混入和函数等功能，使 CSS 编写更加高效。
 
 <KawaikoNote variant="question" title="为什么使用预处理器？">
 
@@ -11,11 +11,11 @@ CSS 预处理器是将扩展的 CSS 语言（SCSS，Less，Stylus 等）转换�
 - 没有嵌套
 - 代码复用困难
 
-预处理器解决了这些问题，使编写可维护的样式表成为可能．
+预处理器解决了这些问题，使编写可维护的样式表成为可能。
 
 </KawaikoNote>
 
-在 Vue SFC 中，你可以通过在 `<style>` 块上指定 `lang` 属性来使用预处理器．
+在 Vue SFC 中，你可以通过在 `<style>` 块上指定 `lang` 属性来使用预处理器。
 
 ```vue
 <style lang="scss">
@@ -44,7 +44,7 @@ Vue/chibivue 支持以下预处理器：
 
 ### StylePreprocessor
 
-预处理器的通用接口．
+预处理器的通用接口。
 
 ```ts
 // style/preprocessors.ts
@@ -62,7 +62,7 @@ export type StylePreprocessor = (
 
 ### StylePreprocessorResults
 
-表示预处理器结果的类型．
+表示预处理器结果的类型。
 
 ```ts
 export interface StylePreprocessorResults {
@@ -73,7 +73,7 @@ export interface StylePreprocessorResults {
 }
 ```
 
-`dependencies` 很重要．它使 Vite 等工具能够在预处理器中通过 `@import` 导入的文件发生变化时触发重新构建．
+`dependencies` 很重要。它使 Vite 等工具能够在预处理器中通过 `@import` 导入的文件发生变化时触发重新构建。
 
 ## 处理流程
 
@@ -160,15 +160,15 @@ const scss: StylePreprocessor = (source, map, options, load = require) => {
 
 <KawaikoNote variant="warning" title="API 兼容性">
 
-Sass 有两套 API：旧版和新版．
-`compileString` 是新 API，`renderSync` 是旧 API．
-同时支持两者确保与任何 Sass 版本兼容．
+Sass 有两套 API：旧版和新版。
+`compileString` 是新 API，`renderSync` 是旧 API。
+同时支持两者确保与任何 Sass 版本兼容。
 
 </KawaikoNote>
 
 ### Sass 预处理器
 
-Sass 使用与 SCSS 相同的引擎，但使用基于缩进的语法．
+Sass 使用与 SCSS 相同的引擎，但使用基于缩进的语法。
 
 ```ts
 const sass: StylePreprocessor = (source, map, options, load) =>
@@ -257,7 +257,7 @@ const styl: StylePreprocessor = (source, map, options, load = require) => {
 
 ## 使用 additionalData 注入公共样式
 
-`additionalData` 选项允许你向所有样式文件注入公共代码．
+`additionalData` 选项允许你向所有样式文件注入公共代码。
 
 ```ts
 function getSource(
@@ -295,8 +295,8 @@ export default defineConfig({
 
 <KawaikoNote variant="funny" title="注入全局变量">
 
-`additionalData` 就像"自动复制粘贴到每个样式文件的开头"．
-它省去了每次都要导入变量和混入的麻烦．
+`additionalData` 就像"自动复制粘贴到每个样式文件的开头"。
+它省去了每次都要导入变量和混入的麻烦。
 
 </KawaikoNote>
 
@@ -316,7 +316,7 @@ export const processors: Record<PreprocessLang, StylePreprocessor> = {
 
 ## 在 compileStyle 中的集成
 
-预处理器在 `compileStyle` 函数中被调用．
+预处理器在 `compileStyle` 函数中被调用。
 
 ```ts
 // compileStyle.ts
@@ -432,7 +432,7 @@ secondary = #35495e
 
 ## Source Map 链接
 
-预处理器和 PostCSS 都会生成 source map．我们使用 `merge-source-map` 库来正确地链接它们．
+预处理器和 PostCSS 都会生成 source map。我们使用 `merge-source-map` 库来正确地链接它们。
 
 ```
 SCSS 源代码
@@ -446,12 +446,12 @@ CSS
 merge(A, B) → 最终 source map
 ```
 
-这使得浏览器开发工具在调试时可以显示原始 SCSS/Less/Stylus 文件的行号．
+这使得浏览器开发工具在调试时可以显示原始 SCSS/Less/Stylus 文件的行号。
 
 <KawaikoNote variant="surprise" title="调试更轻松！">
 
 有了 source map，当你在浏览器中想知道"这个 CSS 是从哪里来的？"时，
-你可以看到转换前原始 SCSS 文件中的确切位置．
+你可以看到转换前原始 SCSS 文件中的确切位置。
 
 </KawaikoNote>
 
@@ -466,4 +466,4 @@ CSS 预处理器实现由以下部分组成：
 5. **Source map 链接**：合并预处理器和 PostCSS 的 source map
 6. **PostCSS 集成**：将预处理器输出传递给 PostCSS 管道
 
-Vue/chibivue SFC 编译器抽象了预处理器，允许用户使用他们喜欢的 CSS 语言．
+Vue/chibivue SFC 编译器抽象了预处理器，允许用户使用他们喜欢的 CSS 语言。

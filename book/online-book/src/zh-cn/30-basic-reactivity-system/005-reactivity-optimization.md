@@ -1,15 +1,15 @@
 # 响应式优化
 
 ::: info 关于本章
-本章介绍 Vue 3.6 中将引入的基于 [alien-signals](https://github.com/stackblitz/alien-signals) 的响应式系统优化．\
-chibivue 的实现也基于此算法进行了更新．
+本章介绍 Vue 3.6 中将引入的基于 [alien-signals](https://github.com/stackblitz/alien-signals) 的响应式系统优化。\
+chibivue 的实现也基于此算法进行了更新。
 :::
 
 ## 背景
 
-Vue.js 的响应式系统在 Vue 3.4 中进行了重大性能优化．然而，Vue 3.5 切换到了类似 Preact 的 pull-based 算法，改变了响应式系统的方向．
+Vue.js 的响应式系统在 Vue 3.4 中进行了重大性能优化。然而，Vue 3.5 切换到了类似 Preact 的 pull-based 算法，改变了响应式系统的方向。
 
-为了进一步研究 push-pull based 实现，Vue 的核心贡献者 Johnson Chu 开发了独立项目 [alien-signals](https://github.com/stackblitz/alien-signals)．
+为了进一步研究 push-pull based 实现，Vue 的核心贡献者 Johnson Chu 开发了独立项目 [alien-signals](https://github.com/stackblitz/alien-signals)。
 
 alien-signals 是基于 Vue 3.4 响应式系统重新实现的信号库，具有以下特点：
 
@@ -17,20 +17,20 @@ alien-signals 是基于 Vue 3.4 响应式系统重新实现的信号库，具有
 - **快速**：约为 Vue 3.4 响应式系统的 4 倍（400%）性能
 - **内存高效**：约 13% 的内存使用量减少
 
-这些成果将在 Vue 3.6 中被移植到 Vue 核心的响应式系统中．
+这些成果将在 Vue 3.6 中被移植到 Vue 核心的响应式系统中。
 
 参考：[vuejs/core#12349](https://github.com/vuejs/core/pull/12349)
 
 <KawaikoNote variant="surprise" title="性能提升 4 倍！">
 
 alien-signals 基于 Vue 3.4 的响应式系统重新实现，竟然实现了**约 4 倍**的性能提升！\
-随着这项成果被整合到 Vue 3.6 中，所有 Vue 用户都将受益于这些优化．
+随着这项成果被整合到 Vue 3.6 中，所有 Vue 用户都将受益于这些优化。
 
 </KawaikoNote>
 
 ## Push-Pull 响应式算法
 
-让我们简要解释 alien-signals 采用的 Push-Pull 算法．
+让我们简要解释 alien-signals 采用的 Push-Pull 算法。
 
 ### Push-based 与 Pull-based
 
@@ -38,7 +38,7 @@ alien-signals 基于 Vue 3.4 的响应式系统重新实现，竟然实现了**�
 
 **Push-based（推送型）**
 
-当依赖项发生变化时，立即更新所有依赖的 computed 值．
+当依赖项发生变化时，立即更新所有依赖的 computed 值。
 
 ```
 signal 变化 → 立即更新所有 computed → 执行 effect
@@ -49,7 +49,7 @@ signal 变化 → 立即更新所有 computed → 执行 effect
 
 **Pull-based（拉取型）**
 
-computed 值仅在需要时（读取时）才计算．
+computed 值仅在需要时（读取时）才计算。
 
 ```
 signal 变化 → (不做任何事) → 在 effect 中读取 computed → 此时计算
@@ -77,7 +77,7 @@ signal 变化 → 传播 dirty 标志 → 在 effect 中读取 computed → 如�
 
 <KawaikoNote variant="funny" title="两全其美！">
 
-Push-Pull 算法是一种结合了 Push 和 Pull 两者优点的聪明方法．\
+Push-Pull 算法是一种结合了 Push 和 Pull 两者优点的聪明方法。\
 "发生变化时只传播 dirty 标志，实际计算等到需要时再做"的策略，彻底消除了不必要的计算！
 
 </KawaikoNote>
@@ -123,8 +123,8 @@ count(3) // 输出 "Count is: 3"
 ## 实现概述
 
 ::: warning
-本章不会完全移植 alien-signals 的实现，而是解释其概念和基本机制．\
-要完全理解，请参阅 [alien-signals 源代码](https://github.com/stackblitz/alien-signals) 或 [Vue 3.6 的 PR](https://github.com/vuejs/core/pull/12349)．
+本章不会完全移植 alien-signals 的实现，而是解释其概念和基本机制。\
+要完全理解，请参阅 [alien-signals 源代码](https://github.com/stackblitz/alien-signals) 或 [Vue 3.6 的 PR](https://github.com/vuejs/core/pull/12349)。
 :::
 
 <KawaikoNote variant="base" title="请查看 Johnson 的解说！">
@@ -136,7 +136,7 @@ count(3) // 输出 "Count is: 3"
 
 ### 双向链表
 
-alien-signals 的重要优化之一是使用双向链表管理依赖关系．
+alien-signals 的重要优化之一是使用双向链表管理依赖关系。
 
 传统的 Vue 实现使用 Set 管理依赖：
 
@@ -208,7 +208,7 @@ function computedGetter(computed: ComputedRef) {
 
 ## chibivue 中的实现
 
-chibivue 基于 alien-signals 算法实现响应式系统．
+chibivue 基于 alien-signals 算法实现响应式系统。
 
 主要文件：
 - `packages/reactivity/dep.ts` - 依赖管理
@@ -257,12 +257,12 @@ export class ReactiveEffect<T = any> implements Subscriber {
 }
 ```
 
-后续章节将基于这个优化的响应式系统进行构建．
+后续章节将基于这个优化的响应式系统进行构建。
 
 <KawaikoNote variant="base" title="继续前进">
 
 你理解 alien-signals 的概念了吗？\
-链表和版本管理一开始可能感觉很难，但随着你编写代码，自然会理解的．\
+链表和版本管理一开始可能感觉很难，但随着你编写代码，自然会理解的。\
 让我们在下一章中基于这个优化的机制实现 ref 和 computed！
 
 </KawaikoNote>
@@ -274,7 +274,7 @@ export class ReactiveEffect<T = any> implements Subscriber {
 - 双向链表的依赖管理提高内存效率
 - 基于版本号的 dirty 检查避免不必要的重新计算
 
-从下一章开始，我们将在这个优化的响应式系统之上实现 ref 和 computed 等 API．
+从下一章开始，我们将在这个优化的响应式系统之上实现 ref 和 computed 等 API。
 
 ## 参考链接
 

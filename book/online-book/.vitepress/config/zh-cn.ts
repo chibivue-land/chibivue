@@ -67,7 +67,7 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/zh-cn/10-minimum-example/051-component-props",
           },
           {
-            text: "组件 Emit",
+            text: "组件事件",
             link: "/zh-cn/10-minimum-example/052-component-emits",
           },
           {
@@ -394,6 +394,32 @@ export const zhCnConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         text: "附录",
         collapsed: false,
         items: [
+          {
+            text: "快速学习路线",
+            collapsed: false,
+            items: [
+              {
+                text: "路线概览",
+                link: "/zh-cn/bonus/hot-paths/",
+              },
+              {
+                text: "初学者 30 分钟动手实践",
+                link: "/zh-cn/bonus/hot-paths/beginner-30-min-hands-on",
+              },
+              {
+                text: "初学者 60 分钟动手实践",
+                link: "/zh-cn/bonus/hot-paths/beginner-60-min-hands-on",
+              },
+              {
+                text: "进阶 60 分钟动手实践",
+                link: "/zh-cn/bonus/hot-paths/intermediate-60-min-hands-on",
+              },
+              {
+                text: "高级 30 分钟概要",
+                link: "/zh-cn/bonus/hot-paths/advanced-30-min-summary",
+              },
+            ],
+          },
           {
             text: "15分钟编写 Vue.js",
             collapsed: false,

@@ -2,9 +2,9 @@
 
 ## 什么是 SSR 编译器？
 
-SSR 编译器（`@chibivue/compiler-ssr`）是一个将模板编译为 SSR 优化代码的包．
+SSR 编译器（`@chibivue/compiler-ssr`）是一个将模板编译为 SSR 优化代码的包。
 
-普通的客户端编译会输出生成 VNode 的代码，而 SSR 编译器直接输出生成 HTML 字符串的代码．这提高了服务器端的渲染效率．
+普通的客户端编译会输出生成 VNode 的代码，而 SSR 编译器直接输出生成 HTML 字符串的代码。这提高了服务器端的渲染效率。
 
 <KawaikoNote variant="base" title="客户端与 SSR 的区别">
 
@@ -73,7 +73,7 @@ export function compile(source: string | RootNode, options: CompilerOptions = {}
 
 ## SSR Transform Context
 
-SSR 转换中使用的上下文．
+SSR 转换中使用的上下文。
 
 ```ts
 // packages/compiler-ssr/src/ssrCodegenTransform.ts
@@ -91,7 +91,7 @@ export interface SSRTransformContext {
 
 ### pushStringPart
 
-将字符串部分添加到缓冲区．连续的字符串会自动合并．
+将字符串部分添加到缓冲区。连续的字符串会自动合并。
 
 ```ts
 pushStringPart(part) {
@@ -114,7 +114,7 @@ pushStringPart(part) {
 
 ### pushStatement
 
-将控制流语句（if/for）添加到缓冲区．
+将控制流语句（if/for）添加到缓冲区。
 
 ```ts
 pushStatement(statement) {
@@ -128,7 +128,7 @@ pushStatement(statement) {
 
 ### ssrTransformElement
 
-将 HTML 元素转换为 SSR 代码．
+将 HTML 元素转换为 SSR 代码。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrTransformElement.ts
@@ -164,9 +164,65 @@ export const ssrTransformElement: NodeTransform = (node, context) => {
 - **v-bind:style**：使用 `ssrRenderStyle` 辅助函数
 - **其他动态属性**：使用 `ssrRenderAttr` 或 `ssrRenderDynamicAttr`
 
+### ssrProcessElement
+
+处理转换后的元素并生成代码。
+
+```ts
+export function ssrProcessElement(node: PlainElementNode, context: SSRTransformContext): void {
+  // 输出开始标签
+  for (const element of node.ssrCodegenNode!.elements) {
+    context.pushStringPart(element);
+  }
+  context.pushStringPart(`>`);
+
+  // 处理 v-html
+  const vHtml = node.props.find(p => p.type === NodeTypes.DIRECTIVE && p.name === "html");
+  if (vHtml && vHtml.exp) {
+    context.pushStringPart(vHtml.exp);
+  } else if (node.children.length) {
+    processChildren(node, context);
+  }
+
+  // 结束标签（void 元素除外）
+  if (!isVoidTag(node.tag)) {
+    context.pushStringPart(`</${node.tag}>`);
+  }
+}
+```
+
+## 组件转换
+
+组件在运行时通过 `ssrRenderComponent` 进行渲染。
+
+```ts
+// packages/compiler-ssr/src/transforms/ssrTransformComponent.ts
+export function ssrProcessComponent(
+  node: ComponentNode,
+  context: SSRTransformContext,
+  parent: { children: any[] },
+): void {
+  const vnodeCall = createCallExpression(context.helper(SSR_RENDER_VNODE), [
+    `_push`,
+    createCallExpression(context.helper(SSR_RENDER_COMPONENT), [
+      createSimpleExpression(`_component_${node.tag}`, false),
+      // props
+      node.props.length ? /* props object */ : createSimpleExpression(`null`, false),
+      // slots
+      createSimpleExpression(`null`, false),
+      // parent component
+      `_parent`,
+    ]),
+    `_parent`,
+  ]);
+
+  context.pushStatement(vnodeCall);
+}
+```
+
 ## v-if 转换
 
-v-if 被转换为 JavaScript if 语句．
+v-if 被转换为 JavaScript if 语句。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrVIf.ts
@@ -215,7 +271,7 @@ if (show) {
 
 ## v-for 转换
 
-v-for 使用 `ssrRenderList` 辅助函数进行转换．
+v-for 使用 `ssrRenderList` 辅助函数进行转换。
 
 ```ts
 // packages/compiler-ssr/src/transforms/ssrVFor.ts
@@ -248,7 +304,7 @@ _push(`<!--]-->`)
 
 ## SSR 辅助函数
 
-SSR 编译器使用以下运行时辅助函数，由 `@chibivue/server-renderer` 提供．
+SSR 编译器使用以下运行时辅助函数，由 `@chibivue/server-renderer` 提供。
 
 ```ts
 // packages/compiler-ssr/src/runtimeHelpers.ts
@@ -278,7 +334,7 @@ export const SSR_RENDER_VNODE: unique symbol = Symbol(`ssrRenderVNode`);
 
 ## SFC 集成
 
-compiler-sfc 支持 SSR 模式的编译．
+compiler-sfc 支持 SSR 模式的编译。
 
 ```ts
 // packages/compiler-sfc/src/compileTemplate.ts
@@ -302,7 +358,7 @@ export function compileTemplate({
 }
 ```
 
-指定 `ssr: true` 会自动使用 SSR 编译器．
+指定 `ssr: true` 会自动使用 SSR 编译器。
 
 ## 生成的代码示例
 

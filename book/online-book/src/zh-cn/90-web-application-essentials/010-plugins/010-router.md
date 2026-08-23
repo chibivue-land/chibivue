@@ -2,21 +2,21 @@
 
 ## 什么是路由器？
 
-在单页应用（SPA）中，我们需要根据 URL 显示不同的组件．在 Vue.js 生态系统中，Vue Router 提供了这个功能．
+在单页应用（SPA）中，我们需要根据 URL 显示不同的组件。在 Vue.js 生态系统中，Vue Router 提供了这个功能。
 
 <KawaikoNote variant="question" title="SPA 路由？">
 
-在传统网站中，每次 URL 变化时都会从服务器获取新的 HTML 页面．
-在 SPA 中，页面切换由 JavaScript 处理，无需请求服务器即可更新屏幕．
-这被称为"客户端路由"．
+在传统网站中，每次 URL 变化时都会从服务器获取新的 HTML 页面。
+在 SPA 中，页面切换由 JavaScript 处理，无需请求服务器即可更新屏幕。
+这被称为"客户端路由"。
 
 </KawaikoNote>
 
-在本章中，我们将实现基本的 Vue Router 功能，命名为 chibivue-router．
+在本章中，我们将实现基本的 Vue Router 功能，命名为 chibivue-router。
 
 ## 包结构
 
-chibivue-router 位于 `@extensions/chibivue-router` 包中．
+chibivue-router 位于 `@extensions/chibivue-router` 包中。
 
 ```
 @extensions/chibivue-router/src/
@@ -34,7 +34,7 @@ chibivue-router 位于 `@extensions/chibivue-router` 包中．
 
 ### RouteLocationNormalizedLoaded
 
-表示当前路由信息的类型．
+表示当前路由信息的类型。
 
 ```ts
 // types/index.ts
@@ -46,7 +46,7 @@ export interface RouteLocationNormalizedLoaded {
 
 ### RouteRecord
 
-表示路由定义的类型．
+表示路由定义的类型。
 
 ```ts
 // router.ts
@@ -58,7 +58,7 @@ export interface RouteRecord {
 
 ### Router 接口
 
-定义路由器的公共 API．
+定义路由器的公共 API。
 
 ```ts
 // router.ts
@@ -71,7 +71,7 @@ export interface Router {
 
 ## History API 抽象
 
-封装浏览器的 History API，使其更易于在路由器中使用．
+封装浏览器的 History API，使其更易于在路由器中使用。
 
 ### RouterHistory 接口
 
@@ -112,15 +112,15 @@ export const createWebHistory = (): RouterHistory => {
 
 <KawaikoNote variant="funny" title="pushState vs replaceState">
 
-可以把 `pushState` 想象成"在书架上添加一本新书"．
-`replaceState` 就像"用另一本书替换你正在读的书"．
-后退按钮就像"回到你之前读的书"．
+可以把 `pushState` 想象成"在书架上添加一本新书"。
+`replaceState` 就像"用另一本书替换你正在读的书"。
+后退按钮就像"回到你之前读的书"。
 
 </KawaikoNote>
 
 ## 依赖注入键
 
-定义用于通过 provide/inject 共享路由相关值的键．
+定义用于通过 provide/inject 共享路由相关值的键。
 
 ```ts
 // injectionSymbols.ts
@@ -162,7 +162,7 @@ const resolve = (to: string) => {
 };
 ```
 
-当前实现仅支持精确匹配．Vue Router 的实际实现还支持参数（`/user/:id`）和正则表达式．
+当前实现仅支持精确匹配。Vue Router 的实际实现还支持参数（`/user/:id`）和正则表达式。
 
 ### 状态管理
 
@@ -174,7 +174,7 @@ const currentRoute = ref<RouteLocationNormalizedLoaded>({
 });
 ```
 
-当前路由信息使用 `ref` 管理．这使得路由变化时 RouterView 可以自动重新渲染．
+当前路由信息使用 `ref` 管理。这使得路由变化时 RouterView 可以自动重新渲染。
 
 ### 导航方法
 
@@ -191,7 +191,7 @@ function replace(to: string) {
 }
 ```
 
-同时更改 URL 和响应式状态．
+同时更改 URL 和响应式状态。
 
 ### 插件安装
 
@@ -213,11 +213,11 @@ install(app: App) {
 }
 ```
 
-当调用 `app.use(router)` 时，会执行这个 `install` 方法．
+当调用 `app.use(router)` 时，会执行这个 `install` 方法。
 
 ## RouterView 组件
 
-显示与当前路由对应的组件．
+显示与当前路由对应的组件。
 
 ```ts
 // RouterView.ts
@@ -245,18 +245,18 @@ export const RouterViewImpl: ComponentOptions = {
 
 <KawaikoNote variant="warning" title="key 属性很重要！">
 
-通过指定 `fullPath` 作为 `key`，每当路由变化时组件都会完全重新挂载．
-如果没有这个，相同的组件会被重用，`setup` 不会重新执行．
+通过指定 `fullPath` 作为 `key`，每当路由变化时组件都会完全重新挂载。
+如果没有这个，相同的组件会被重用，`setup` 不会重新执行。
 
 </KawaikoNote>
 
-包装在 Fragment 中的原因是为了确保正确的子元素补丁行为．
+包装在 Fragment 中的原因是为了确保正确的子元素补丁行为。
 
 ## Composition API 钩子
 
 ### useRouter
 
-获取路由器实例．
+获取路由器实例。
 
 ```ts
 // useApi.ts
@@ -273,7 +273,7 @@ router.push('/about')
 
 ### useRoute
 
-获取当前路由信息．
+获取当前路由信息。
 
 ```ts
 // useApi.ts
@@ -390,9 +390,9 @@ RouterView 重新渲染
 
 <KawaikoNote variant="surprise" title="实现完成！">
 
-我们完成了一个简单的路由器．
-用大约 100 行代码，我们实现了 SPA 路由．
-这应该是理解 Vue Router 工作原理的一个好起点．
+我们完成了一个简单的路由器。
+用大约 100 行代码，我们实现了 SPA 路由。
+这应该是理解 Vue Router 工作原理的一个好起点。
 
 </KawaikoNote>
 
@@ -406,4 +406,4 @@ chibivue-router 实现由以下部分组成：
 4. **RouterView 组件**：动态显示与当前路由对应的组件
 5. **Composition API 钩子**：通过 `useRouter` 和 `useRoute` 轻松访问
 
-通过结合 Vue 的插件系统，provide/inject 和响应式系统，我们实现了客户端路由．
+通过结合 Vue 的插件系统，provide/inject 和响应式系统，我们实现了客户端路由。

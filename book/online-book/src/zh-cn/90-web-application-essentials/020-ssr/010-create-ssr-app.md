@@ -2,7 +2,7 @@
 
 ## 什么是 SSR
 
-服务端渲染（SSR）是一种在服务器上将 Vue.js 应用程序渲染为 HTML 字符串并发送到客户端的技术．这提供了以下优势：
+服务端渲染（SSR）是一种在服务器上将 Vue.js 应用程序渲染为 HTML 字符串并发送到客户端的技术。这提供了以下优势：
 
 1. **改善 SEO**：搜索引擎爬虫可以获取完整的内容
 2. **更快的首次显示**：浏览器无需等待 JavaScript 执行即可显示 HTML
@@ -10,7 +10,7 @@
 
 ## 包结构
 
-chibivue 的 SSR 实现在 `@chibivue/server-renderer` 包中提供．
+chibivue 的 SSR 实现在 `@chibivue/server-renderer` 包中提供。
 
 ```
 packages/server-renderer/src/
@@ -26,7 +26,7 @@ packages/server-renderer/src/
 
 ### SSRBuffer
 
-在 SSR 中，我们使用名为 `SSRBuffer` 的数据结构来高效构建渲染结果．
+在 SSR 中，我们使用名为 `SSRBuffer` 的数据结构来高效构建渲染结果。
 
 ```ts
 // packages/server-renderer/src/render.ts
@@ -42,7 +42,7 @@ export type PushFn = (item: SSRBufferItem) => void;
 
 ### SSRContext
 
-保存 SSR 期间的上下文信息．
+保存 SSR 期间的上下文信息。
 
 ```ts
 export type SSRContext = {
@@ -94,7 +94,7 @@ export async function renderToString(
 
 ### 缓冲区展开
 
-递归展开嵌套的缓冲区和 Promise．
+递归展开嵌套的缓冲区和 Promise。
 
 ```ts
 function nestedUnrollBuffer(
@@ -158,7 +158,7 @@ function unrollBufferSync(buffer: SSRBuffer): string {
 
 ## createBuffer 实现
 
-用于高效构建缓冲区的工厂函数．
+用于高效构建缓冲区的工厂函数。
 
 ```ts
 // packages/server-renderer/src/render.ts
@@ -267,7 +267,7 @@ function renderComponentSubTree(
 
 ### renderVNode
 
-根据各种 VNode 类型进行渲染．
+根据各种 VNode 类型进行渲染。
 
 ```ts
 export function renderVNode(
@@ -312,7 +312,7 @@ export function renderVNode(
 
 ### renderElementVNode
 
-将 HTML 元素渲染为字符串．
+将 HTML 元素渲染为字符串。
 
 ```ts
 function renderElementVNode(
@@ -361,7 +361,7 @@ function renderElementVNode(
 
 ### renderVNodeChildren
 
-按顺序渲染子元素．
+按顺序渲染子元素。
 
 ```ts
 export function renderVNodeChildren(
@@ -377,7 +377,7 @@ export function renderVNodeChildren(
 
 ### renderTeleportVNode
 
-Teleport 组件的 SSR 支持．
+Teleport 组件的 SSR 支持。
 
 ```ts
 function renderTeleportVNode(
@@ -454,7 +454,7 @@ function ssrIsIgnoredKey(key: string): boolean {
 
 ### ssrRenderDynamicAttr
 
-渲染动态属性．
+渲染动态属性。
 
 ```ts
 export function ssrRenderDynamicAttr(
@@ -545,11 +545,11 @@ function applySSRDirectives(
 }
 ```
 
-如果指令实现了 `getSSRProps`，其结果将合并到 props 中．
+如果指令实现了 `getSSRProps`，其结果将合并到 props 中。
 
 ## 转义处理
 
-防止 XSS 的 HTML 转义．
+防止 XSS 的 HTML 转义。
 
 ```ts
 // packages/server-renderer/src/helpers/ssrUtils.ts
@@ -657,7 +657,7 @@ chibivue 的 SSR 实现由以下元素组成：
 6. **转义处理**：防止 XSS 的 HTML 转义
 7. **指令支持**：通过 `getSSRProps` 在 SSR 时进行属性注入
 
-在下一节中，我们将学习 hydration，它在客户端"恢复"SSR 生成的 HTML．
+在下一节中，我们将学习 hydration，它在客户端"恢复"SSR 生成的 HTML。
 
 到此为止的源代码：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/90_web_application_essentials/010_ssr)
