@@ -237,9 +237,30 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependen
 
 ## 继续实现
 
-我们跳得有点快，但让我们继续实现。\
-虽然我想实现 `packages/index.ts`，但有一些准备工作要做，所以让我们先做那个。\
-准备工作是在 `packages/runtime-core/component.ts` 中实现一个变量来保存编译器本身，以及一个注册函数。
+我们跳得有点快，但让我们继续实现．\
+考虑到刚才的讨论，我们现在正在实现的是一个运行时中运行的编译器，因此接下来创建 `compiler-dom` 会比较合适。
+
+```sh
+pwd # ~/
+mkdir packages/compiler-dom
+touch packages/compiler-dom/index.ts
+```
+
+在 `packages/compiler-dom/index.ts` 中实现．
+
+```ts
+import { baseCompile } from '../compiler-core'
+
+export function compile(template: string) {
+  return baseCompile(template)
+}
+```
+
+你可能会想："诶？？这样不就只是进行了 codegen 吗？那函数的生成要怎么办？"\
+实际上，这里也没有进行函数生成。真正生成函数的地方是在 `packages/index.ts`。（对应 Vue 官方源码的话，就是 [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts)。）
+
+虽然我想实现 `packages/index.ts`，但有一些准备工作要做，所以让我们先做那个．\
+准备工作是在 `packages/runtime-core/component.ts` 中实现一个变量来保存编译器本身，以及一个注册函数．
 
 `packages/runtime-core/component.ts`
 
@@ -292,7 +313,7 @@ export type ComponentOptions = {
 }
 ```
 
-现在，让我们编译重要部分。
+现在进入关键的编译部分，不过我们需要先对 renderer 做一些小的重构。
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -377,8 +398,8 @@ app.mount('#app')
 
 ![Simple template compiler output before cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-before.png)
 
-看起来工作正常。\
-让我们尝试做一些更改，看看它们是否得到反映。
+看起来工作正常．\
+由于相同结构的模板应该都可以被编译，我们稍微修改一下，确认修改是否能够生效。
 
 ```ts
 const app = createApp({
