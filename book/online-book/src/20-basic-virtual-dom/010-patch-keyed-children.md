@@ -84,7 +84,7 @@ Now, let's take a look at the explanation of the key attribute in the Vue docume
 
 > The special attribute key is primarily used as a hint for Vue's Virtual DOM algorithm to identify VNodes when diffing the new list of nodes against the old list.
 
-https://v3-migration.vuejs.org/breaking-changes/key-attribute.html
+https://vuejs.org/api/built-in-special-attributes.html#key
 
 As expected, right? You may have heard the advice "do not use index as the key for v-for", but at this point, the key is implicitly set to the index, which is why the above problems occur. (The loop is based on the length of c2, and patching is done based on that index)
 
@@ -120,7 +120,8 @@ In the original Vue, this `patchKeyedChildren` is divided into five parts:
 4. common sequence + unmount
 5. unknown sequence
 
-However, the last part, `unknown sequence`, is the only one that is functionally necessary, so we will start by reading and implementing that part.
+However, the first four are optimizations, so functionally it can work with just the `unknown sequence` part.
+So, let's start by reading through and implementing the `unknown sequence` part.
 
 First, forget about moving elements and patch VNodes based on the key.
 Using the `keyToNewIndexMap` we created earlier, calculate the pairs of n1 and n2 and patch them.
@@ -364,3 +365,6 @@ Now that we have explained the approach in detail, let's actually implement `pat
 5. Perform `move` based on the subsequence obtained in step 4 and `c2`.
 
 You can refer to the original Vue implementation or the chibivue implementation for guidance. (I recommend reading the original Vue implementation while following along.)
+
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/010_patch_keyed_children)

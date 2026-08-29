@@ -84,7 +84,7 @@ app.mount('#app')
 
 > 特殊属性 key 主要用作 Vue 虚拟DOM算法的提示，在比较新旧节点列表时识别 VNode。
 
-https://v3-migration.vuejs.org/breaking-changes/key-attribute.html
+https://cn.vuejs.org/api/built-in-special-attributes.html#key
 
 正如预期的那样，对吧？你可能听过"不要使用索引作为 v-for 的 key"的建议，但在这一点上，key 被隐式设置为索引，这就是为什么会出现上述问题。（循环基于 c2 的长度，并基于该索引进行补丁）
 
@@ -120,7 +120,8 @@ for (i = s2; i <= e2; i++) {
 4. common sequence + unmount
 5. unknown sequence
 
-然而，最后一部分 `unknown sequence` 是唯一在功能上必需的，所以我们将从阅读和实现该部分开始。
+然而，上面 4 个更像是优化，所以在功能上只靠最后的 `unknown sequence` 也能工作。
+因此，我们先阅读并实现 `unknown sequence` 这一部分。
 
 首先，忘记移动元素，基于 key 对 VNode 进行补丁。
 使用我们之前创建的 `keyToNewIndexMap`，计算 n1 和 n2 的配对并对它们进行补丁。
@@ -364,3 +365,6 @@ for (i = toBePatched - 1; i >= 0; i--) {
 5. 基于步骤 4 中获得的子序列和 `c2` 执行 `move`。
 
 你可以参考原始 Vue 实现或 chibivue 实现作为指导。（我建议在跟随的同时阅读原始 Vue 实现。）
+
+到此为止的源代码：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/010_patch_keyed_children)
