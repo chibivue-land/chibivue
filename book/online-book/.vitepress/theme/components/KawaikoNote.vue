@@ -144,6 +144,7 @@ html.dark .kawaiko-note:hover {
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--vp-c-text-2);
+  overflow-wrap: anywhere;
 }
 
 .kawaiko-note__body :deep(p) {
@@ -226,6 +227,7 @@ html.dark .kawaiko-note:hover {
   .kawaiko-note,
   .kawaiko-note--right {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .kawaiko-note__title {
