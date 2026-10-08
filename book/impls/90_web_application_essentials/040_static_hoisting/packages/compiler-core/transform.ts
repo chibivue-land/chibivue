@@ -262,7 +262,7 @@ function walk(node: ParentNode, context: TransformContext, doNotHoistNode: boole
 
       if (constantType > ConstantTypes.NOT_CONSTANT) {
         if (constantType >= ConstantTypes.CAN_HOIST) {
-          (child.codegenNode as any).patchFlag = -1 /* HOISTED */;
+          (child.codegenNode as any).patchFlag = -1; /* HOISTED */
           child.codegenNode = context.hoist(child.codegenNode!);
           continue;
         }

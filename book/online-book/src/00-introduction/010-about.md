@@ -199,8 +199,8 @@ If you'd like, I would appreciate your support as a sponsor! https://github.com/
 
 <div class="sponsors-block">
 <a class="sponsors-image-link" href="https://github.com/sponsors/ubugeeei">
-  <img class="sponsors-image sponsors-image--light" src="/figures/_sponsors/ubugeeei-sponsors.png" alt="ubugeeei's sponsors" />
-  <img class="sponsors-image sponsors-image--dark" src="/figures/_sponsors/ubugeeei-sponsors-dark.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--light" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent-dark.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--dark" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent.png" alt="ubugeeei's sponsors" />
 </a>
 
 <p>If you'd like to support my work, I would greatly appreciate it!</p>

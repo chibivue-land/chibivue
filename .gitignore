@@ -5,8 +5,8 @@ examples/vuejs-core
 .env
 tools/translator/ja2en/input.md
 tools/translator/ja2en/output.md
-book/online-book/.vitepress/cache
-book/online-book/.vitepress/dist
+book/online-book/.cache
+.playwright-mcp
 
 # for dts-bundle
 temp

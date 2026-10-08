@@ -1,0 +1,454 @@
+/**
+ * chibivue Book theme — layered on top of the Ox Content default theme.
+ * Brand: Mint/Turquoise + Navy (see public/og.png).
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --c-mint-300: #50d6bd;
+  --c-mint-400: #2cc9a8;
+  --c-mint-500: #1ab394;
+  --c-mint-600: #159d82;
+  --c-mint-700: #0f8770;
+  --c-navy-900: #1a2744;
+  --c-navy-700: #2e3f60;
+  --c-duck-yellow: #f4d35e;
+  --c-danger: #e85d75;
+
+  --chibivue-note-bg-info: rgba(26, 179, 148, 0.06);
+  --chibivue-note-bg-tip: rgba(44, 201, 168, 0.08);
+  --chibivue-note-bg-success: rgba(26, 179, 148, 0.1);
+  --chibivue-note-bg-warning: rgba(244, 211, 94, 0.1);
+  --chibivue-note-bg-danger: rgba(232, 93, 117, 0.08);
+  --chibivue-figure-border: rgba(154, 170, 196, 0.35);
+}
+
+[data-theme="dark"] {
+  --chibivue-note-bg-info: rgba(26, 179, 148, 0.08);
+  --chibivue-note-bg-tip: rgba(44, 201, 168, 0.1);
+  --chibivue-note-bg-success: rgba(26, 179, 148, 0.12);
+  --chibivue-note-bg-warning: rgba(244, 211, 94, 0.12);
+  --chibivue-note-bg-danger: rgba(232, 93, 117, 0.1);
+  --chibivue-figure-border: rgba(139, 228, 211, 0.24);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --chibivue-note-bg-info: rgba(26, 179, 148, 0.08);
+    --chibivue-note-bg-tip: rgba(44, 201, 168, 0.1);
+    --chibivue-note-bg-success: rgba(26, 179, 148, 0.12);
+    --chibivue-note-bg-warning: rgba(244, 211, 94, 0.12);
+    --chibivue-note-bg-danger: rgba(232, 93, 117, 0.1);
+      --chibivue-figure-border: rgba(139, 228, 211, 0.24);
+  }
+}
+
+/**
+ * Header
+ * -------------------------------------------------------------------------- */
+
+.header-title {
+  margin-right: 24px;
+  white-space: nowrap;
+}
+
+/**
+ * Code blocks — retro terminal style, ported from the VitePress theme
+ * (chibivue-theme.json / chibivue-theme-light.json). No shadow.
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --octc-font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --octc-font-mono:
+    ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+  --octc-code-pad-block: 20px;
+  --octc-code-pad-inline: 24px;
+
+  --octc-color-code-bg: #f5f5f0;
+  --octc-color-code-text: #1a5c4a;
+  --octc-color-code-frame-border: #d0d8d5;
+  --octc-color-code-line-number: #7a9a8a;
+  --octc-color-code-line-add: rgba(26, 138, 110, 0.12);
+  --octc-color-code-line-remove: rgba(192, 64, 80, 0.1);
+  --octc-color-code-line-highlight: rgba(26, 138, 110, 0.2);
+  --octc-syntax-background: #f5f5f0;
+  --octc-syntax-foreground: #2a5a4a;
+  --octc-syntax-token-keyword: #1a8a6e;
+  --octc-syntax-token-punctuation: #2a5a4a;
+  --octc-syntax-token-string: #b8860b;
+  --octc-syntax-token-string-expression: #1a8a6e;
+  --octc-syntax-token-constant: #c06000;
+  --octc-syntax-token-function: #0d7d6c;
+  --octc-syntax-token-parameter: #2a5a4a;
+  --octc-syntax-token-comment: #5a7a6a;
+  --chibivue-inline-code-bg: #f0f5f3;
+  --chibivue-inline-code-text: #1a5c4a;
+  --chibivue-inline-code-border: #d0d8d5;
+  --chibivue-diff-add-mark: #1a8a6e;
+  --chibivue-diff-remove-mark: #c04050;
+}
+
+[data-theme="dark"] {
+  --octc-color-code-bg: #0a0f14;
+  --octc-color-code-text: #8be4d3;
+  --octc-color-code-frame-border: #1a2744;
+  --octc-color-code-line-number: #4a5f87;
+  --octc-color-code-line-add: rgba(44, 201, 168, 0.14);
+  --octc-color-code-line-remove: rgba(232, 93, 117, 0.14);
+  --octc-color-code-line-highlight: rgba(44, 201, 168, 0.2);
+  --octc-syntax-background: #0a0f14;
+  --octc-syntax-foreground: #b8e4d8;
+  --octc-syntax-token-keyword: #2cc9a8;
+  --octc-syntax-token-punctuation: #6b9e8a;
+  --octc-syntax-token-string: #f4d35e;
+  --octc-syntax-token-string-expression: #2cc9a8;
+  --octc-syntax-token-constant: #e8a545;
+  --octc-syntax-token-function: #5dddc2;
+  --octc-syntax-token-parameter: #b8e4d8;
+  --octc-syntax-token-comment: #4a5f87;
+  --chibivue-inline-code-bg: #0a0f14;
+  --chibivue-inline-code-text: #8be4d3;
+  --chibivue-inline-code-border: #1a2744;
+  --chibivue-diff-add-mark: #2cc9a8;
+  --chibivue-diff-remove-mark: #e85d75;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --octc-color-code-bg: #0a0f14;
+    --octc-color-code-text: #8be4d3;
+    --octc-color-code-frame-border: #1a2744;
+    --octc-color-code-line-number: #4a5f87;
+    --octc-color-code-line-add: rgba(44, 201, 168, 0.14);
+    --octc-color-code-line-remove: rgba(232, 93, 117, 0.14);
+    --octc-color-code-line-highlight: rgba(44, 201, 168, 0.2);
+    --octc-syntax-background: #0a0f14;
+    --octc-syntax-foreground: #b8e4d8;
+    --octc-syntax-token-keyword: #2cc9a8;
+    --octc-syntax-token-punctuation: #6b9e8a;
+    --octc-syntax-token-string: #f4d35e;
+    --octc-syntax-token-string-expression: #2cc9a8;
+    --octc-syntax-token-constant: #e8a545;
+    --octc-syntax-token-function: #5dddc2;
+    --octc-syntax-token-parameter: #b8e4d8;
+    --octc-syntax-token-comment: #4a5f87;
+    --chibivue-inline-code-bg: #0a0f14;
+    --chibivue-inline-code-text: #8be4d3;
+    --chibivue-inline-code-border: #1a2744;
+    --chibivue-diff-add-mark: #2cc9a8;
+    --chibivue-diff-remove-mark: #e85d75;
+  --chibivue-diff-add-mark: #2cc9a8;
+  --chibivue-diff-remove-mark: #e85d75;
+  }
+}
+
+.content pre,
+.content pre.ox-code-block {
+  position: relative;
+  margin: 16px 0;
+  border: 1px solid var(--octc-color-code-frame-border);
+  border-radius: 8px;
+  box-shadow: none;
+  line-height: 1.55;
+}
+
+.content pre code {
+  font-family: var(--octc-font-mono);
+  font-size: 0.875em;
+}
+
+.content pre.ox-code-block .ox-code-line--add,
+.content pre.ox-code-block .ox-code-line--remove {
+  border-left: 0;
+}
+
+/* A +/- gutter mark, like VitePress, so diffs read without relying on color. */
+.content pre.ox-code-block .ox-code-line--add::before,
+.content pre.ox-code-block .ox-code-line--remove::before {
+  position: absolute;
+  left: 8px;
+  font-weight: 600;
+}
+
+.content pre.ox-code-block .ox-code-line--add::before {
+  content: "+";
+  color: var(--chibivue-diff-add-mark);
+}
+
+.content pre.ox-code-block .ox-code-line--remove::before {
+  content: "-";
+  color: var(--chibivue-diff-remove-mark);
+}
+
+/* Scanline effect — dark mode only */
+[data-theme="dark"] .content pre::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.05) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .content pre::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.05),
+      rgba(0, 0, 0, 0.05) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+.content :not(pre) > code {
+  background-color: var(--chibivue-inline-code-bg);
+  color: var(--chibivue-inline-code-text);
+  border: 1px solid var(--chibivue-inline-code-border);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/**
+ * Custom containers
+ * -------------------------------------------------------------------------- */
+
+.content .ox-container--tip,
+.content .ox-container--info {
+  border-color: var(--c-mint-400);
+}
+
+.content .ox-container--warning {
+  border-color: var(--c-duck-yellow);
+}
+
+.content .ox-container--danger {
+  border-color: var(--c-danger);
+}
+
+/**
+ * Book figures
+ * -------------------------------------------------------------------------- */
+
+.content img[src*="/figures/"] {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border: 1px solid var(--chibivue-figure-border);
+  border-radius: 8px;
+  background: #0f1724;
+}
+
+.content img[src*="/figures/_brand/"],
+.content img.author-avatar,
+.content img.sponsors-image {
+  border: 0;
+  background: transparent;
+}
+
+.content img.author-avatar {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  margin: 1rem 0 1.25rem;
+  border: 1px solid var(--chibivue-figure-border);
+  border-radius: 8px;
+}
+
+.content .sponsors-block {
+  text-align: center;
+}
+
+.content a.sponsors-image-link {
+  display: block;
+}
+
+.content a.sponsors-image-link .ox-external-icon {
+  display: none;
+}
+
+.content img.sponsors-image {
+  width: min(100%, 560px);
+  margin: 1.5rem auto;
+}
+
+.content img.sponsors-image--dark {
+  display: none;
+}
+
+[data-theme="dark"] .content img.sponsors-image--light {
+  display: none;
+}
+
+[data-theme="dark"] .content img.sponsors-image--dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .content img.sponsors-image--light {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .content img.sponsors-image--dark {
+    display: block;
+  }
+}
+
+/**
+ * Kawaiko notes (rendered by theme/kawaiko-note.ts)
+ * -------------------------------------------------------------------------- */
+
+.kawaiko-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 12px;
+  border: 1px solid var(--octc-color-border);
+  background: var(--octc-color-bg-alt);
+}
+
+.kawaiko-note--right {
+  flex-direction: row-reverse;
+}
+
+.kawaiko-note__mascot {
+  flex-shrink: 0;
+}
+
+.content .kawaiko-note__image {
+  display: block;
+  margin: 0;
+  border: 0;
+  border-radius: 8px;
+  object-fit: contain;
+  background: transparent;
+}
+
+.kawaiko-note--sm .kawaiko-note__image {
+  width: 48px;
+  height: 48px;
+}
+
+.kawaiko-note--md .kawaiko-note__image {
+  width: 72px;
+  height: 72px;
+}
+
+.kawaiko-note--lg .kawaiko-note__image {
+  width: 96px;
+  height: 96px;
+}
+
+.kawaiko-note__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.kawaiko-note__title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--octc-color-text);
+}
+
+.kawaiko-note__body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--octc-color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.kawaiko-note__body p {
+  margin: 0;
+}
+
+.kawaiko-note__body p + p {
+  margin-top: 8px;
+}
+
+.kawaiko-note--info {
+  border-color: var(--c-mint-300);
+  background: var(--chibivue-note-bg-info);
+}
+
+.kawaiko-note--tip {
+  border-color: var(--c-mint-400);
+  background: var(--chibivue-note-bg-tip);
+}
+
+.kawaiko-note--success {
+  border-color: var(--c-mint-500);
+  background: var(--chibivue-note-bg-success);
+}
+
+.kawaiko-note--warning {
+  border-color: var(--c-duck-yellow);
+  background: var(--chibivue-note-bg-warning);
+}
+
+.kawaiko-note--danger {
+  border-color: var(--c-danger);
+  background: var(--chibivue-note-bg-danger);
+}
+
+@media (max-width: 640px) {
+  .kawaiko-note {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .kawaiko-note--md .kawaiko-note__image,
+  .kawaiko-note--lg .kawaiko-note__image {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kawaiko-note,
+  .kawaiko-note--right {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kawaiko-note__body {
+    font-size: 0.92rem;
+  }
+
+  .kawaiko-note--sm .kawaiko-note__image,
+  .kawaiko-note--md .kawaiko-note__image,
+  .kawaiko-note--lg .kawaiko-note__image {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/**
+ * Entry page
+ * -------------------------------------------------------------------------- */
+
+.hero-image img,
+.content .hero-image img[src*="/figures/"] {
+  width: auto;
+  height: 220px;
+  margin: 0 auto;
+  border: 0;
+  background: transparent;
+}

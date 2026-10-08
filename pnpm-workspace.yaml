@@ -4,9 +4,9 @@ packages:
   - "!examples/vuejs-core"
 
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@^0.1.24
-  vite-plus: ^0.1.24
-  vitest: npm:@voidzero-dev/vite-plus-test@^0.1.24
+  vite: npm:@voidzero-dev/vite-plus-core@^0.3.2
+  vite-plus: ^0.3.3
+  vitest: ^4.1.11
 
 overrides:
   vite: "catalog:"

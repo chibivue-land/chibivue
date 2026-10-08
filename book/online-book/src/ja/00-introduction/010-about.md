@@ -208,8 +208,8 @@ https://wtrclred.io/
 
 <div class="sponsors-block">
 <a class="sponsors-image-link" href="https://github.com/sponsors/ubugeeei">
-  <img class="sponsors-image sponsors-image--light" src="/figures/_sponsors/ubugeeei-sponsors.png" alt="ubugeeei's sponsors" />
-  <img class="sponsors-image sponsors-image--dark" src="/figures/_sponsors/ubugeeei-sponsors-dark.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--light" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent-dark.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--dark" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent.png" alt="ubugeeei's sponsors" />
 </a>
 
 <p>もしよろしければ，私の仕事を応援していただけると嬉しいです！</p>
