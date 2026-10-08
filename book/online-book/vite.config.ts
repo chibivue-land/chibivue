@@ -130,7 +130,12 @@ export default defineConfig({
 <meta name="description" content="${DESCRIPTION.replace(/"/g, "&quot;")}">
 <meta name="twitter:site" content="@ubugeeei">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0f1724" media="(prefers-color-scheme: dark)">`,
+<meta name="theme-color" content="#0f1724" media="(prefers-color-scheme: dark)">
+<link rel="expect" href="#chibivue-content-end" blocking="render">`,
+            // Paired with the rel="expect" link above: hold the first paint until the
+            // article is parsed, so a navigation never shows a frame with the
+            // header and sidebar but an empty content area.
+            contentAfter: `<div id="chibivue-content-end" hidden></div>`,
             sidebarAfter: `<script>${readFileSync(fromHere("theme/restore-sidebar.js"), "utf8")}</script>`,
           },
           css: ["theme/style.css", "theme/home.css"]
