@@ -142,7 +142,7 @@
   border: 1px solid var(--octc-color-code-frame-border);
   border-radius: 8px;
   box-shadow: none;
-  line-height: 1.7;
+  line-height: 1.55;
 }
 
 .content pre code {
