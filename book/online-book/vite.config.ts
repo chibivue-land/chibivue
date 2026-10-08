@@ -125,7 +125,10 @@ export default defineConfig({
           embed: {
             head: `<link rel="icon" href="/figures/_brand/logo.png">
 <meta name="description" content="${DESCRIPTION.replace(/"/g, "&quot;")}">
-<meta name="twitter:site" content="@ubugeeei">`,
+<meta name="twitter:site" content="@ubugeeei">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1724" media="(prefers-color-scheme: dark)">`,
+            sidebarAfter: `<script>${readFileSync(fromHere("theme/restore-sidebar.js"), "utf8")}</script>`,
           },
           css: ["theme/style.css", "theme/home.css"]
             .map((file) => readFileSync(fromHere(file), "utf8"))
