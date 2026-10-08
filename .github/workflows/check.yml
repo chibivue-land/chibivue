@@ -67,7 +67,7 @@ jobs:
         run: vp install
 
       - name: Check text
-        run: vp run text:lint
+        run: vp run lint:text
 
   typecheck:
     runs-on: ubuntu-latest
@@ -107,7 +107,7 @@ jobs:
         run: vp install
 
       - name: Build impl
-        run: vp run impl:bundle
+        run: vp run impl:build
 
   test:
     runs-on: ubuntu-latest
@@ -149,5 +149,18 @@ jobs:
       - name: Install dependencies
         run: vp install
 
+      - name: Install Chromium and CJK fonts for OG images
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          vp exec playwright install --with-deps chromium
+
+      - name: Cache OG images
+        uses: actions/cache@v4
+        with:
+          path: book/online-book/.cache
+          key: og-images-${{ hashFiles('book/online-book/src/**/*.md', 'book/online-book/theme/og-image.ts') }}
+          restore-keys: og-images-
+
       - name: Build book
-        run: vp run book:build
+        run: vp run build

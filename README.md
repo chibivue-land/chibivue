@@ -48,22 +48,22 @@
 ### Requirements
 
 - [Node.js](https://nodejs.org/) v24+
-- [pnpm](https://pnpm.io/) v10+
+- [Vite+](https://viteplus.dev/) (`vp`)
 
 ### Read the Book Locally
 
 ```sh
 git clone https://github.com/chibivue-land/chibivue
 cd chibivue
-pnpm install
-pnpm dev
+vp install
+vp run dev
 ```
 
 ### Try the Implementation
 
 ```sh
-pnpm setup      # Generate playground
-pnpm impl:dev   # Start dev server
+vp run setup     # Generate playground
+vp run impl:dev  # Start dev server
 ```
 
 ## Bonus Track

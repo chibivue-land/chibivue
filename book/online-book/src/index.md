@@ -1,12 +1,17 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
+title: The chibivue Book
+description: "Step by Step, from just one line of \"Hello, World\"."
 
 hero:
   name: "chibivue"
   text: "Step by Step, from just one line of \"Hello, World\"."
-  tagline: powered by VitePress
-  image: /figures/_brand/logo.png
+  tagline: powered by Ox Content
+  image:
+    src: /figures/_brand/logo.png
+    alt: chibivue
+    width: 160
+    height: 220
   actions:
     - theme: brand
       text: Dive into book ->

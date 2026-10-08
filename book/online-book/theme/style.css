@@ -1,0 +1,295 @@
+/**
+ * chibivue Book theme — layered on top of the Ox Content default theme.
+ * Brand: Mint/Turquoise + Navy (see public/og.png).
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --c-mint-300: #50d6bd;
+  --c-mint-400: #2cc9a8;
+  --c-mint-500: #1ab394;
+  --c-mint-600: #159d82;
+  --c-mint-700: #0f8770;
+  --c-navy-900: #1a2744;
+  --c-navy-700: #2e3f60;
+  --c-duck-yellow: #f4d35e;
+  --c-danger: #e85d75;
+
+  --chibivue-note-bg-info: rgba(26, 179, 148, 0.06);
+  --chibivue-note-bg-tip: rgba(44, 201, 168, 0.08);
+  --chibivue-note-bg-success: rgba(26, 179, 148, 0.1);
+  --chibivue-note-bg-warning: rgba(244, 211, 94, 0.1);
+  --chibivue-note-bg-danger: rgba(232, 93, 117, 0.08);
+  --chibivue-inline-code-bg: rgba(26, 179, 148, 0.1);
+  --chibivue-figure-border: rgba(154, 170, 196, 0.35);
+}
+
+[data-theme="dark"] {
+  --chibivue-note-bg-info: rgba(26, 179, 148, 0.08);
+  --chibivue-note-bg-tip: rgba(44, 201, 168, 0.1);
+  --chibivue-note-bg-success: rgba(26, 179, 148, 0.12);
+  --chibivue-note-bg-warning: rgba(244, 211, 94, 0.12);
+  --chibivue-note-bg-danger: rgba(232, 93, 117, 0.1);
+  --chibivue-inline-code-bg: rgba(44, 201, 168, 0.12);
+  --chibivue-figure-border: rgba(139, 228, 211, 0.24);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --chibivue-note-bg-info: rgba(26, 179, 148, 0.08);
+    --chibivue-note-bg-tip: rgba(44, 201, 168, 0.1);
+    --chibivue-note-bg-success: rgba(26, 179, 148, 0.12);
+    --chibivue-note-bg-warning: rgba(244, 211, 94, 0.12);
+    --chibivue-note-bg-danger: rgba(232, 93, 117, 0.1);
+    --chibivue-inline-code-bg: rgba(44, 201, 168, 0.12);
+    --chibivue-figure-border: rgba(139, 228, 211, 0.24);
+  }
+}
+
+/**
+ * Header
+ * -------------------------------------------------------------------------- */
+
+.header-title {
+  margin-right: 24px;
+  white-space: nowrap;
+}
+
+/**
+ * Code blocks: a plain frame, no shadow or scanlines.
+ * -------------------------------------------------------------------------- */
+
+.content pre.ox-code-block,
+.content pre.ox-highlight {
+  border: 1px solid var(--octc-color-border);
+  box-shadow: none;
+}
+
+.content :not(pre) > code {
+  background: var(--chibivue-inline-code-bg);
+}
+
+/**
+ * Custom containers
+ * -------------------------------------------------------------------------- */
+
+.content .ox-container--tip,
+.content .ox-container--info {
+  border-color: var(--c-mint-400);
+}
+
+.content .ox-container--warning {
+  border-color: var(--c-duck-yellow);
+}
+
+.content .ox-container--danger {
+  border-color: var(--c-danger);
+}
+
+/**
+ * Book figures
+ * -------------------------------------------------------------------------- */
+
+.content img[src*="/figures/"] {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border: 1px solid var(--chibivue-figure-border);
+  border-radius: 8px;
+  background: #0f1724;
+}
+
+.content img[src*="/figures/_brand/"],
+.content img.author-avatar,
+.content img.sponsors-image {
+  border: 0;
+  background: transparent;
+}
+
+.content img.author-avatar {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  margin: 1rem 0 1.25rem;
+  border: 1px solid var(--chibivue-figure-border);
+  border-radius: 8px;
+}
+
+.content .sponsors-block {
+  text-align: center;
+}
+
+.content a.sponsors-image-link {
+  display: block;
+}
+
+.content img.sponsors-image {
+  width: min(100%, 560px);
+  margin: 1.5rem auto;
+}
+
+.content img.sponsors-image--dark {
+  display: none;
+}
+
+[data-theme="dark"] .content img.sponsors-image--light {
+  display: none;
+}
+
+[data-theme="dark"] .content img.sponsors-image--dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .content img.sponsors-image--light {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .content img.sponsors-image--dark {
+    display: block;
+  }
+}
+
+/**
+ * Kawaiko notes (rendered by theme/kawaiko-note.ts)
+ * -------------------------------------------------------------------------- */
+
+.kawaiko-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 12px;
+  border: 1px solid var(--octc-color-border);
+  background: var(--octc-color-bg-alt);
+}
+
+.kawaiko-note--right {
+  flex-direction: row-reverse;
+}
+
+.kawaiko-note__mascot {
+  flex-shrink: 0;
+}
+
+.content .kawaiko-note__image {
+  display: block;
+  margin: 0;
+  border: 0;
+  border-radius: 8px;
+  object-fit: contain;
+  background: transparent;
+}
+
+.kawaiko-note--sm .kawaiko-note__image {
+  width: 48px;
+  height: 48px;
+}
+
+.kawaiko-note--md .kawaiko-note__image {
+  width: 72px;
+  height: 72px;
+}
+
+.kawaiko-note--lg .kawaiko-note__image {
+  width: 96px;
+  height: 96px;
+}
+
+.kawaiko-note__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.kawaiko-note__title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--octc-color-text);
+}
+
+.kawaiko-note__body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--octc-color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.kawaiko-note__body p {
+  margin: 0;
+}
+
+.kawaiko-note__body p + p {
+  margin-top: 8px;
+}
+
+.kawaiko-note--info {
+  border-color: var(--c-mint-300);
+  background: var(--chibivue-note-bg-info);
+}
+
+.kawaiko-note--tip {
+  border-color: var(--c-mint-400);
+  background: var(--chibivue-note-bg-tip);
+}
+
+.kawaiko-note--success {
+  border-color: var(--c-mint-500);
+  background: var(--chibivue-note-bg-success);
+}
+
+.kawaiko-note--warning {
+  border-color: var(--c-duck-yellow);
+  background: var(--chibivue-note-bg-warning);
+}
+
+.kawaiko-note--danger {
+  border-color: var(--c-danger);
+  background: var(--chibivue-note-bg-danger);
+}
+
+@media (max-width: 640px) {
+  .kawaiko-note {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .kawaiko-note--md .kawaiko-note__image,
+  .kawaiko-note--lg .kawaiko-note__image {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kawaiko-note,
+  .kawaiko-note--right {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kawaiko-note__body {
+    font-size: 0.92rem;
+  }
+
+  .kawaiko-note--sm .kawaiko-note__image,
+  .kawaiko-note--md .kawaiko-note__image,
+  .kawaiko-note--lg .kawaiko-note__image {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/**
+ * Entry page
+ * -------------------------------------------------------------------------- */
+
+.hero-image img,
+.content .hero-image img[src*="/figures/"] {
+  width: auto;
+  height: 220px;
+  margin: 0 auto;
+  border: 0;
+  background: transparent;
+}

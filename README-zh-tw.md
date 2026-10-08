@@ -48,22 +48,22 @@
 ### 環境要求
 
 - [Node.js](https://nodejs.org/) v24+
-- [pnpm](https://pnpm.io/) v10+
+- [Vite+](https://viteplus.dev/) (`vp`)
 
 ### 本地閱讀書籍
 
 ```sh
 git clone https://github.com/chibivue-land/chibivue
 cd chibivue
-pnpm install
-pnpm dev
+vp install
+vp run dev
 ```
 
 ### 嘗試實作
 
 ```sh
-pnpm setup      # 產生 playground
-pnpm impl:dev   # 啟動開發伺服器
+vp run setup     # 產生 playground
+vp run impl:dev  # 啟動開發伺服器
 ```
 
 ## 附加章節

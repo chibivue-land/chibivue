@@ -30,7 +30,7 @@ Now, let's take a closer look at the book directory.
 ```sh
 book
   |- images # Contains image files used in the online book.
-  |- online-book # The main body of the online book. It is a Vitepress project.
+  |- online-book # The main body of the online book. It is an Ox Content project.
   |- impls # Contains the source code for each chapter.
 ```
 

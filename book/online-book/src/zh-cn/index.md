@@ -1,12 +1,17 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
+title: The chibivue Book
+description: "从一行 \"Hello, World\" 开始，逐步构建"
 
 hero:
   name: "chibivue"
   text: "从一行 \"Hello, World\" 开始，逐步构建"
-  tagline: 基于 VitePress 构建
-  image: /figures/_brand/logo.png
+  tagline: 基于 Ox Content 构建
+  image:
+    src: /figures/_brand/logo.png
+    alt: chibivue
+    width: 160
+    height: 220
   actions:
     - theme: brand
       text: 开始阅读 ->
