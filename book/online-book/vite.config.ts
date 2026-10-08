@@ -14,9 +14,10 @@ const fromHere = (path: string) => new URL(path, import.meta.url);
 
 // The OG template runs in a headless browser; inline the logo so rendering
 // never reaches for the network.
-process.env.CHIBIVUE_OG_LOGO = `data:image/png;base64,${readFileSync(
-  fromHere("src/public/figures/_brand/logo.png"),
-).toString("base64")}`;
+const inlinePng = (path: string) =>
+  `data:image/png;base64,${readFileSync(fromHere(path)).toString("base64")}`;
+process.env.CHIBIVUE_OG_LOGO = inlinePng("src/public/figures/_brand/logo.png");
+process.env.CHIBIVUE_OG_KAWAIKO = inlinePng("theme/assets/kawaiko.png");
 
 export default defineConfig({
   root: fromHere(".").pathname,
