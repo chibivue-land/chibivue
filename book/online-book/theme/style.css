@@ -69,8 +69,8 @@
   --octc-color-code-text: #1a5c4a;
   --octc-color-code-frame-border: #d0d8d5;
   --octc-color-code-line-number: #7a9a8a;
-  --octc-color-code-line-add: rgba(26, 138, 110, 0.4);
-  --octc-color-code-line-remove: rgba(192, 64, 80, 0.3);
+  --octc-color-code-line-add: rgba(26, 138, 110, 0.12);
+  --octc-color-code-line-remove: rgba(192, 64, 80, 0.1);
   --octc-color-code-line-highlight: rgba(26, 138, 110, 0.2);
   --octc-syntax-background: #f5f5f0;
   --octc-syntax-foreground: #2a5a4a;
@@ -85,6 +85,8 @@
   --chibivue-inline-code-bg: #f0f5f3;
   --chibivue-inline-code-text: #1a5c4a;
   --chibivue-inline-code-border: #d0d8d5;
+  --chibivue-diff-add-mark: #1a8a6e;
+  --chibivue-diff-remove-mark: #c04050;
 }
 
 [data-theme="dark"] {
@@ -92,8 +94,8 @@
   --octc-color-code-text: #8be4d3;
   --octc-color-code-frame-border: #1a2744;
   --octc-color-code-line-number: #4a5f87;
-  --octc-color-code-line-add: rgba(44, 201, 168, 0.35);
-  --octc-color-code-line-remove: rgba(232, 93, 117, 0.28);
+  --octc-color-code-line-add: rgba(44, 201, 168, 0.14);
+  --octc-color-code-line-remove: rgba(232, 93, 117, 0.14);
   --octc-color-code-line-highlight: rgba(44, 201, 168, 0.2);
   --octc-syntax-background: #0a0f14;
   --octc-syntax-foreground: #b8e4d8;
@@ -108,6 +110,8 @@
   --chibivue-inline-code-bg: #0a0f14;
   --chibivue-inline-code-text: #8be4d3;
   --chibivue-inline-code-border: #1a2744;
+  --chibivue-diff-add-mark: #2cc9a8;
+  --chibivue-diff-remove-mark: #e85d75;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -116,8 +120,8 @@
     --octc-color-code-text: #8be4d3;
     --octc-color-code-frame-border: #1a2744;
     --octc-color-code-line-number: #4a5f87;
-    --octc-color-code-line-add: rgba(44, 201, 168, 0.35);
-    --octc-color-code-line-remove: rgba(232, 93, 117, 0.28);
+    --octc-color-code-line-add: rgba(44, 201, 168, 0.14);
+    --octc-color-code-line-remove: rgba(232, 93, 117, 0.14);
     --octc-color-code-line-highlight: rgba(44, 201, 168, 0.2);
     --octc-syntax-background: #0a0f14;
     --octc-syntax-foreground: #b8e4d8;
@@ -132,6 +136,10 @@
     --chibivue-inline-code-bg: #0a0f14;
     --chibivue-inline-code-text: #8be4d3;
     --chibivue-inline-code-border: #1a2744;
+    --chibivue-diff-add-mark: #2cc9a8;
+    --chibivue-diff-remove-mark: #e85d75;
+  --chibivue-diff-add-mark: #2cc9a8;
+  --chibivue-diff-remove-mark: #e85d75;
   }
 }
 
@@ -153,6 +161,24 @@
 .content pre.ox-code-block .ox-code-line--add,
 .content pre.ox-code-block .ox-code-line--remove {
   border-left: 0;
+}
+
+/* A +/- gutter mark, like VitePress, so diffs read without relying on color. */
+.content pre.ox-code-block .ox-code-line--add::before,
+.content pre.ox-code-block .ox-code-line--remove::before {
+  position: absolute;
+  left: 8px;
+  font-weight: 600;
+}
+
+.content pre.ox-code-block .ox-code-line--add::before {
+  content: "+";
+  color: var(--chibivue-diff-add-mark);
+}
+
+.content pre.ox-code-block .ox-code-line--remove::before {
+  content: "-";
+  color: var(--chibivue-diff-remove-mark);
 }
 
 /* Scanline effect — dark mode only */

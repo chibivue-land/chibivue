@@ -77,6 +77,9 @@ export default defineConfig({
         theme: defineTheme({
           extends: defaultTheme,
           aside: true,
+          // The cross-document cross-fade rasterizes both pages, so even the
+          // unchanged header and sidebar shimmer on every navigation.
+          viewTransitions: false,
           colors: {
             primary: "#159d82",
             primaryHover: "#0f8770",
