@@ -43,6 +43,28 @@
 }
 
 /**
+ * Text is shown exactly as written in the book: no CSS case transforms
+ * (the base theme uppercases sidebar groups, container titles, the TOC title…).
+ * -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  text-transform: none !important;
+}
+
+/* Those labels were letter-spaced for capitals; mixed case reads better without. */
+.nav-title,
+.toc-title,
+.mobile-footer-label,
+.search-result-scope,
+.content .ox-callout-title,
+.content .ox-container-title,
+.content .ox-container summary {
+  letter-spacing: normal;
+}
+
+/**
  * Header
  * -------------------------------------------------------------------------- */
 
