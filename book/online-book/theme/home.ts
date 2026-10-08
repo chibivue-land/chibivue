@@ -33,7 +33,6 @@ function escapeHtml(value: string): string {
 
 function renderHero(home: HomeFrontmatter): string {
   return `<section class="hero-section">
-  <div class="hero-background"><div class="code-pattern"></div><div class="gradient-overlay"></div></div>
   <div class="hero-content">
     <div class="hero-text">
       <h1 class="hero-title">
@@ -71,7 +70,7 @@ function renderFeatures(home: HomeFrontmatter): string {
   const cards = home.features
     .map(
       (feature) => `<article class="feature-card">
-      <div class="feature-icon"><span class="icon-glow"></span><svg class="icon-content" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><path fill="currentColor" d="${ICON_PATHS[feature.icon]}"/></svg></div>
+      <div class="feature-icon"><svg class="icon-content" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><path fill="currentColor" d="${ICON_PATHS[feature.icon]}"/></svg></div>
       <h3 class="feature-title">${escapeHtml(feature.title)}</h3>
       <p class="feature-description">${escapeHtml(feature.details)}</p>
       <div class="feature-hover-effect"></div>

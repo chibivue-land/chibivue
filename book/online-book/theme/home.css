@@ -4,9 +4,6 @@
  * -------------------------------------------------------------------------- */
 
 :root {
-  --home-overlay: linear-gradient(135deg, #f8faf9 0%, #edf4f2 100%);
-  --home-pattern-1: rgba(26, 179, 148, 0.12);
-  --home-pattern-2: rgba(44, 201, 168, 0.1);
   --home-tagline: #3d4f5f;
   --home-btn-secondary-bg: #ffffff;
   --home-btn-secondary-border: #2cc9a8;
@@ -23,17 +20,11 @@
   --home-card-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 252, 250, 0.98) 100%);
   --home-card-border: rgba(26, 179, 148, 0.25);
   --home-card-hover-border: rgba(26, 179, 148, 0.4);
-  --home-card-shadow: 0 4px 16px rgba(26, 179, 148, 0.08);
-  --home-card-hover-shadow: 0 12px 32px rgba(26, 179, 148, 0.15), 0 0 24px rgba(26, 179, 148, 0.08);
-  --home-snippet-shadow: 0 4px 16px rgba(26, 179, 148, 0.12);
   --home-card-title: #1a2744;
   --home-card-text: #3d4f5f;
 }
 
 [data-theme="dark"] {
-  --home-overlay: linear-gradient(135deg, #0f1724 0%, #0d121b 100%);
-  --home-pattern-1: rgba(26, 179, 148, 0.1);
-  --home-pattern-2: rgba(44, 201, 168, 0.08);
   --home-tagline: #b8c9d4;
   --home-btn-secondary-bg: transparent;
   --home-btn-secondary-border: #2a3a50;
@@ -50,18 +41,12 @@
   --home-card-bg: linear-gradient(145deg, rgba(26, 39, 68, 0.6) 0%, rgba(15, 26, 46, 0.8) 100%);
   --home-card-border: rgba(26, 179, 148, 0.15);
   --home-card-hover-border: rgba(26, 179, 148, 0.4);
-  --home-card-shadow: none;
-  --home-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(26, 179, 148, 0.1);
-  --home-snippet-shadow: none;
   --home-card-title: #e2ebf0;
   --home-card-text: #b8c9d4;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --home-overlay: linear-gradient(135deg, #0f1724 0%, #0d121b 100%);
-    --home-pattern-1: rgba(26, 179, 148, 0.1);
-    --home-pattern-2: rgba(44, 201, 168, 0.08);
     --home-tagline: #b8c9d4;
     --home-btn-secondary-bg: transparent;
     --home-btn-secondary-border: #2a3a50;
@@ -78,9 +63,6 @@
     --home-card-bg: linear-gradient(145deg, rgba(26, 39, 68, 0.6) 0%, rgba(15, 26, 46, 0.8) 100%);
     --home-card-border: rgba(26, 179, 148, 0.15);
     --home-card-hover-border: rgba(26, 179, 148, 0.4);
-    --home-card-shadow: none;
-    --home-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(26, 179, 148, 0.1);
-    --home-snippet-shadow: none;
     --home-card-title: #e2ebf0;
     --home-card-text: #b8c9d4;
   }
@@ -127,28 +109,6 @@
     min-height: 80vh;
     padding: 4rem 2rem;
   }
-}
-
-.hero-background {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.code-pattern {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 50%, var(--home-pattern-1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, var(--home-pattern-2) 0%, transparent 40%);
-  opacity: 0.6;
-}
-
-.gradient-overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--home-overlay);
-  opacity: 0.95;
 }
 
 .hero-content {
@@ -299,7 +259,6 @@
   background: #159d82;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(26, 179, 148, 0.3);
 }
 
 .btn-primary .arrow {
@@ -360,9 +319,6 @@
   height: 22px;
   background: linear-gradient(180deg, #2cc9a8 0%, #1ab394 100%);
   border-radius: 4px;
-  box-shadow:
-    0 4px 20px rgba(26, 179, 148, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   animation: stairAppear 0.6s ease-out forwards;
   opacity: 0;
 }
@@ -515,7 +471,6 @@
   background: var(--home-snippet-bg);
   border: 1px solid var(--home-snippet-border);
   border-radius: 6px;
-  box-shadow: var(--home-snippet-shadow);
   font-size: 0.75rem;
   animation: float 4s ease-in-out infinite;
   backdrop-filter: blur(4px);
@@ -631,7 +586,6 @@
   background: var(--home-card-bg);
   border: 1px solid var(--home-card-border);
   border-radius: 8px;
-  box-shadow: var(--home-card-shadow);
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -639,7 +593,6 @@
 .feature-card:hover {
   transform: translateY(-4px);
   border-color: var(--home-card-hover-border);
-  box-shadow: var(--home-card-hover-shadow);
 }
 
 .feature-icon {
@@ -650,21 +603,9 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 1.25rem;
-  color: #2cc9a8;
-}
-
-.icon-glow {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #2cc9a8 0%, #1ab394 100%);
+  color: #1ab394;
+  background: rgba(26, 179, 148, 0.12);
   border-radius: 12px;
-  opacity: 0.2;
-  filter: blur(8px);
-  transition: opacity 0.3s;
-}
-
-.feature-card:hover .icon-glow {
-  opacity: 0.4;
 }
 
 .icon-content {
