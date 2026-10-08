@@ -3,6 +3,7 @@ import { defineConfig } from "vite-plus";
 import { oxContent, defineTheme, defaultTheme } from "@ox-content/vite-plugin";
 import { nav } from "./config/nav";
 import { sidebar } from "./config/sidebar";
+import { home } from "./theme/home";
 import { kawaikoNote } from "./theme/kawaiko-note";
 
 const SITE_URL = "https://book.chibivue.land";
@@ -32,7 +33,7 @@ export default defineConfig({
       highlight: true,
       containers: true,
       codeAnnotations: { notation: "vitepress" },
-      transformers: [kawaikoNote],
+      transformers: [home, kawaikoNote],
       icons: { include: ["mdi:github", "mdi:twitter", "mdi:discord", "mdi:heart"] },
 
       ogImage: true,
@@ -72,6 +73,7 @@ export default defineConfig({
         readerChrome: true,
         a11y: true,
         notFound: true,
+        pageChrome: true,
         theme: defineTheme({
           extends: defaultTheme,
           aside: true,
@@ -89,8 +91,6 @@ export default defineConfig({
             text: "#e2ebf0",
             textMuted: "#b8c9d4",
             border: "#2a3a50",
-            codeBackground: "#0a0f14",
-            codeBackgroundTop: "#0a0f14",
           },
           header: {
             logo: "/figures/_brand/logo.png",
@@ -127,7 +127,9 @@ export default defineConfig({
 <meta name="description" content="${DESCRIPTION.replace(/"/g, "&quot;")}">
 <meta name="twitter:site" content="@ubugeeei">`,
           },
-          css: readFileSync(fromHere("theme/style.css"), "utf8"),
+          css: ["theme/style.css", "theme/home.css"]
+            .map((file) => readFileSync(fromHere(file), "utf8"))
+            .join("\n"),
           // Remember the reader's language for the Netlify locale redirect.
           js: `document.cookie = "nf_lang=" + document.documentElement.lang.toLowerCase() + "; expires=Mon, 1 Jan 2030 00:00:00 UTC; path=/";`,
         }),
