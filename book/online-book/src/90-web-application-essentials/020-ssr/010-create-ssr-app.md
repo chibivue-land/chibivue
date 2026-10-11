@@ -8,6 +8,14 @@ Server Side Rendering (SSR) is a technique that renders Vue.js applications to H
 2. **Faster initial display**: Browsers can display HTML without waiting for JavaScript execution
 3. **Better performance**: Especially effective on slow devices or network environments
 
+<KawaikoNote variant="question" title="What's the difference between SSR and an SPA?">
+
+In a typical SPA, the client receives empty HTML and builds the DOM with JavaScript.
+With SSR, the server sends completed HTML, so users can see the content immediately.
+The key point is that content appears without waiting for JavaScript to download and execute!
+
+</KawaikoNote>
+
 ## Package Structure
 
 The SSR implementation of chibivue is provided in the `@chibivue/server-renderer` package.
@@ -191,6 +199,14 @@ Key points:
 1. Consecutive strings are automatically concatenated (memory efficiency)
 2. `appendable` flag tracks whether concatenation is possible
 3. `hasAsync` flag is set if there are async elements
+
+<KawaikoNote variant="funny" title="A clever buffer optimization">
+
+For consecutive strings such as "Hello" and "World," combining them into
+"HelloWorld" is more memory-efficient than storing them separately in an array.
+The `appendable` flag handles this automatically!
+
+</KawaikoNote>
 
 ## Component Rendering
 
@@ -549,6 +565,14 @@ If a directive implements `getSSRProps`, its result is merged into props.
 
 ## Escape Processing
 
+<KawaikoNote variant="warning" title="Security is extremely important!">
+
+In SSR, user input may be output directly into HTML.
+Without escaping, the application can become vulnerable to XSS (cross-site scripting) attacks.
+`escapeHtml` is an essential security measure for SSR!
+
+</KawaikoNote>
+
 HTML escaping to prevent XSS.
 
 ```ts
@@ -644,6 +668,14 @@ unrollBuffer(buffer)
   ↓
 HTML string
 ```
+
+<KawaikoNote variant="surprise" title="The SSR basics are complete!">
+
+`renderToString` can now convert VNode into HTML strings.
+Combined with hydration, which we'll cover in the next section,
+this enables an interactive SPA while retaining the benefits of SSR!
+
+</KawaikoNote>
 
 ## Summary
 
