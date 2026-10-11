@@ -205,6 +205,8 @@ v-bind:id="count"
 
 正如你从流程中可以看到的，transformElement 检查指令的 arg，如果它不存在，它不执行 transformVBind，而是将其转换为对 mergeProps 的函数调用。
 
+这个函数会合并以 `v-bind="hoge"` 形式传入的参数和其他 props。
+
 ```vue
 <p v-bind="bindingObject" class="my-class">hello</p>
 ```
@@ -227,6 +229,80 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 ![v-bind test result in the browser](/figures/50-basic-template-compiler/v-bind/vbind-test-result.png)
 
 看起来很棒！
+
+## Same-name Shorthand (Vue 3.4+)
+
+从 Vue 3.4 开始，当属性名和变量名相同时，支持同名简写语法。
+
+```vue
+<!-- 传统写法 -->
+<div :id="id" :class="class" :style="style"></div>
+
+<!-- Same-name Shorthand -->
+<div :id :class :style></div>
+```
+
+要实现此功能，需要修改解析器和转换器。
+
+### 解析器中的处理
+
+当像 `:prop` 这样省略值时，`exp` 会是 undefined。
+
+```ts
+return {
+  type: NodeTypes.DIRECTIVE,
+  name: dirName,
+  exp: value && {  // 没有 value 时 exp 为 undefined
+    type: NodeTypes.SIMPLE_EXPRESSION,
+    content: value.content,
+    isStatic: false,
+    loc: value.loc,
+  },
+  loc,
+  arg,
+};
+```
+
+### 转换器中的处理
+
+在 `transformBind` 中，当 `exp` 为 undefined 时，使用 `arg` 的内容作为 `exp`。
+
+```ts
+export const transformBind: DirectiveTransform = (dir, _node, context) => {
+  let { exp } = dir;
+  const arg = dir.arg!;
+
+  // 同名简写：:prop 等同于 :prop="prop"
+  if (!exp) {
+    if (arg.type !== NodeTypes.SIMPLE_EXPRESSION || !arg.isStatic) {
+      // 不支持动态参数
+      context.onError(
+        createCompilerError(ErrorCodes.X_V_BIND_NO_EXPRESSION, dir.loc)
+      );
+      return { props: [] };
+    }
+    // 使用 arg 的内容作为 exp
+    const propName = camelize(arg.content);
+    exp = {
+      type: NodeTypes.SIMPLE_EXPRESSION,
+      content: propName,
+      isStatic: false,
+      loc: arg.loc,
+    };
+  }
+
+  if (arg.type !== NodeTypes.SIMPLE_EXPRESSION) {
+    arg.children.unshift(`(`);
+    arg.children.push(`) || ""`);
+  } else if (!arg.isStatic) {
+    arg.content = `${arg.content} || ""`;
+  }
+
+  return { props: [createObjectProperty(arg, exp)] };
+};
+```
+
+这样，只写 `:id` 就与 `:id="id"` 表示相同的含义。
 
 下次，我们将实现 v-on。
 

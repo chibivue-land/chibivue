@@ -205,6 +205,8 @@ Quoted from: https://github.com/vuejs/core/blob/623ba514ec0f5adc897db90c0f986b1b
 
 As you can see from the flow, transformElement checks the arg of the directive and if it does not exist, it does not execute transformVBind but converts it to a function call to mergeProps.
 
+This function merges the argument passed in the form `v-bind="hoge"` with the other props.
+
 ```vue
 <p v-bind="bindingObject" class="my-class">hello</p>
 ```
@@ -227,6 +229,80 @@ Now that we have implemented this far, let's see how it works!
 ![v-bind test result in the browser](/figures/50-basic-template-compiler/v-bind/vbind-test-result.png)
 
 Looks great!
+
+## Same-name Shorthand (Vue 3.4+)
+
+Vue 3.4 supports shorthand syntax when the attribute name and variable name are the same.
+
+```vue
+<!-- Traditional syntax -->
+<div :id="id" :class="class" :style="style"></div>
+
+<!-- Same-name Shorthand -->
+<div :id :class :style></div>
+```
+
+To implement this feature, we need to modify the parser and transformer.
+
+### Parser Modification
+
+When the value is omitted, as in `:prop`, `exp` will be undefined.
+
+```ts
+return {
+  type: NodeTypes.DIRECTIVE,
+  name: dirName,
+  exp: value && {  // If there is no value, exp is undefined
+    type: NodeTypes.SIMPLE_EXPRESSION,
+    content: value.content,
+    isStatic: false,
+    loc: value.loc,
+  },
+  loc,
+  arg,
+};
+```
+
+### Transformer Modification
+
+In `transformBind`, when `exp` is undefined, use the contents of `arg` as `exp`.
+
+```ts
+export const transformBind: DirectiveTransform = (dir, _node, context) => {
+  let { exp } = dir;
+  const arg = dir.arg!;
+
+  // Same-name shorthand: :prop is equivalent to :prop="prop"
+  if (!exp) {
+    if (arg.type !== NodeTypes.SIMPLE_EXPRESSION || !arg.isStatic) {
+      // Dynamic arguments are not supported
+      context.onError(
+        createCompilerError(ErrorCodes.X_V_BIND_NO_EXPRESSION, dir.loc)
+      );
+      return { props: [] };
+    }
+    // Use the contents of arg as exp
+    const propName = camelize(arg.content);
+    exp = {
+      type: NodeTypes.SIMPLE_EXPRESSION,
+      content: propName,
+      isStatic: false,
+      loc: arg.loc,
+    };
+  }
+
+  if (arg.type !== NodeTypes.SIMPLE_EXPRESSION) {
+    arg.children.unshift(`(`);
+    arg.children.push(`) || ""`);
+  } else if (!arg.isStatic) {
+    arg.content = `${arg.content} || ""`;
+  }
+
+  return { props: [createObjectProperty(arg, exp)] };
+};
+```
+
+With this, writing only `:id` has the same meaning as `:id="id"`.
 
 Next time, we will implement v-on.
 
