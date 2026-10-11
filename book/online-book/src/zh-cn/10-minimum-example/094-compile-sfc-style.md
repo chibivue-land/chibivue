@@ -33,6 +33,17 @@ export default function myPlugin() {
 }
 ```
 
+可以在 `resolveId` 中任意设置要解析的模块 id，再由 `load` 处理该 id，从而加载模块。\
+上例中的 `virtual:my-module` 文件实际并不存在，但写成
+
+```ts
+import { msg } from 'virtual:my-module'
+```
+
+时，就会加载 `export const msg = "from virtual module"`。
+
+[参考](https://cn.vite.dev/guide/api-plugin)
+
 使用这种机制，我们将把 SFC 的样式块作为虚拟 CSS 文件加载。\
 如前所述，在 Vite 中，导入带有 `.css` 扩展名的文件就足够了，所以我们将考虑创建一个名为 `${SFC 文件名}.css` 的虚拟模块。
 

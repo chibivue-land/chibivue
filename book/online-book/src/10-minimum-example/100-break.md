@@ -139,6 +139,8 @@ const nextVNode = component.render()
 patch(prevVNode, nextVNode)
 ```
 
+## We now know how component structure and communication between components are achieved
+
 I understood how the structure of components and the interaction between components are achieved.
 
 ```ts
@@ -197,6 +199,8 @@ const app = createApp({
 })
 ```
 
+## We now know what a compiler is and how template functionality is implemented
+
 I understood what the compiler is and how the template functionality is implemented.
 
 By understanding what the compiler is and implementing the template compiler, I gained an understanding of how to achieve a more raw HTML-like implementation and how to implement Vue-specific features such as Mustache syntax.
@@ -250,6 +254,8 @@ const app = createApp({
   `,
 })
 ```
+
+## We now understand how an SFC compiler is implemented through a Vite plugin
 
 I understood how to achieve the SFC compiler through the Vite plugin.
 

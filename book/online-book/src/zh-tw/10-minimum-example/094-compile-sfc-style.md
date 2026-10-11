@@ -33,6 +33,17 @@ export default function myPlugin() {
 }
 ```
 
+在 `resolveId` 中任意設定要解析的模組 id，並在 `load` 中處理該 id，就能載入模組。\
+在上面的範例中，名為 `virtual:my-module` 的檔案實際上並不存在，但如果像下面這樣編寫，
+
+```ts
+import { msg } from 'virtual:my-module'
+```
+
+就會載入 `export const msg = "from virtual module"`。
+
+[參考](https://vite.dev/guide/api-plugin)
+
 使用這種機制，我們將把 SFC 的樣式區塊作為虛擬 CSS 檔案載入。\
 如前所述，在 Vite 中，匯入帶有 `.css` 副檔名的檔案就足夠了，所以我們將考慮建立一個名為 `${SFC 檔案名}.css` 的虛擬模組。
 

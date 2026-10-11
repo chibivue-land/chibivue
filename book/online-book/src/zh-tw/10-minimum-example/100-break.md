@@ -138,7 +138,7 @@ const nextVNode = component.render()
 patch(prevVNode, nextVNode)
 ```
 
-我了解了元件的結構以及元件之間的交互是如何實作的。
+## 我們了解了元件的結構，以及如何實作元件之間的互動
 
 ```ts
 export interface ComponentInternalInstance {
@@ -196,7 +196,7 @@ const app = createApp({
 })
 ```
 
-我了解了編譯器是什麼以及模板功能是如何實作的。
+## 我們了解了編譯器是什麼，以及模板功能如何實作
 
 透過了解編譯器是什麼並實作模板編譯器，我獲得了如何實作更原始的類似 HTML 的實作以及如何實作 Vue 特定功能（如 Mustache 語法）的理解。
 
@@ -250,7 +250,7 @@ const app = createApp({
 })
 ```
 
-我了解了如何透過 Vite 外掛程式實作 SFC 編譯器。
+## 我們了解了如何透過 Vite 外掛程式實作 SFC 編譯器
 
 透過實作模板編譯器並透過 Vite 外掛程式利用它，我獲得了如何實作將腳本，模板和樣式組合到一個檔案中的原始檔案格式的理解。\
 我還了解了 Vite 外掛程式可以做什麼，以及 transform 和虛擬模組。

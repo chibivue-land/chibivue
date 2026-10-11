@@ -138,7 +138,7 @@ const nextVNode = component.render()
 patch(prevVNode, nextVNode)
 ```
 
-我了解了组件的结构以及组件之间的交互是如何实现的。
+## 我们理解了组件结构以及如何实现组件间通信
 
 ```ts
 export interface ComponentInternalInstance {
@@ -196,7 +196,7 @@ const app = createApp({
 })
 ```
 
-我了解了编译器是什么以及模板功能是如何实现的。
+## 我们理解了编译器是什么，以及模板功能如何实现
 
 通过了解编译器是什么并实现模板编译器，我获得了如何实现更原始的类似 HTML 的实现以及如何实现 Vue 特定功能（如 Mustache 语法）的理解。
 
@@ -250,7 +250,7 @@ const app = createApp({
 })
 ```
 
-我了解了如何通过 Vite 插件实现 SFC 编译器。
+## 我们理解了如何通过 Vite 插件实现 SFC 编译器
 
 通过实现模板编译器并通过 Vite 插件利用它，我获得了如何实现将脚本，模板和样式组合到一个文件中的原始文件格式的理解。\
 我还了解了 Vite 插件可以做什么，以及 transform 和虚拟模块。
