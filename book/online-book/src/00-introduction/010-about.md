@@ -148,13 +148,13 @@ Since this book has turned out quite voluminous, I've set achievement milestones
   At this point, the experience will be quite close to using regular Vue.
 
 - **Web Application Essentials Section**  
-  By the time we finish the Basic SFC Compiler section, we'll have a somewhat practical set of Vue.js features. However, to develop a web application, there's still a lot missing. For instance, we'll need tools to manage global state and routers. In this section, we'll develop such external plugins, aiming to make our toolkit even more practical from a "web application development" perspective.
+  By the time we finish the Basic SFC Compiler section, we'll have a somewhat practical set of Vue.js features. However, to develop a web application, there's still a lot missing. For instance, we'll need tools to manage global state and routers. In this section, we'll develop such external plugins, aiming to make our toolkit even more practical from a "web application development" perspective. We will also implement some of Vue.js's optimizations.
 
 ## About opinions and questions on this book
 
-I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together.
+I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also open issues or submit PRs there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together.
 
-https://x.com/ubugeeei
+X: https://x.com/ubugeeei
 
 ## About the Discord Server
 
