@@ -48,7 +48,8 @@ Babel is a toolchain used to convert JavaScript into backward-compatible version
 In simple terms, it is a compiler (transpiler) from JS to JS. 
 
 In this case, I will use Babel not only as a compiler but also as a parser. \
-Babel has an internal parser for converting to AST, as it plays the role of a compiler. 
+Babel has an internal parser for converting to AST, as it plays the role of a compiler. \
+We will use that parser as a library.
 
 AST stands for Abstract Syntax Tree, which is a representation of JavaScript code. \
 You can find the AST specification here (https://github.com/estree/estree). \

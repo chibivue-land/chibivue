@@ -47,6 +47,8 @@ const app = createApp({
 ## Implementation
 
 Similar to props, let's create a file called `~/packages/runtime-core/componentEmits.ts` and implement it there.\
+The emit implementation is simple: add an emit function to the instance, then when it runs, find and invoke the handler in the vnode's props.
+
 `~/packages/runtime-core/componentEmits.ts`
 
 ```ts
