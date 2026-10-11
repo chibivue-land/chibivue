@@ -99,7 +99,7 @@ patch(vnode, nextVnode, container)
 
 <KawaikoNote variant="funny" title="patch 這個名稱">
 
-「patch」是「補綴」的意思。就像修補破損的衣服一樣，可以把它想像成只「補上」發生變化的部分！
+「patch」的意思是「修補」。就像修補破損的衣服一樣，只針對發生變化的部分進行「修補」式的修改。
 
 </KawaikoNote>
 
