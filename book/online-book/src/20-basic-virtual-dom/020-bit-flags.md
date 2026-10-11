@@ -77,3 +77,6 @@ Here's what you need to do:
 - Implement branching logic based on the shape in the renderer.
 
 That's it for the explanation of this chapter. Let's start implementing it!
+
+Source code up to this point:
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/020_bit_flags)

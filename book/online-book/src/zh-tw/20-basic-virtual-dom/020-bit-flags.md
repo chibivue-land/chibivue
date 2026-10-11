@@ -77,3 +77,6 @@ export const enum ShapeFlags {
 - 在渲染器中基於 shape 實作分支邏輯。
 
 這就是本章的解釋。讓我們開始實作吧！
+
+到此為止的原始碼：
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/020_bit_flags)

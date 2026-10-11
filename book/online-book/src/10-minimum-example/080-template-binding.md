@@ -173,6 +173,8 @@ I believe that there are many people who are not familiar with the `with` statem
 
 And for good reason, this feature is deprecated.
 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
+
 According to MDN:
 
 > Although still supported by some browsers, it has been deprecated from the Web standards. However, it may still be in use for various purposes, such as compatibility with legacy code. Avoid using it, and update existing code if possible.
