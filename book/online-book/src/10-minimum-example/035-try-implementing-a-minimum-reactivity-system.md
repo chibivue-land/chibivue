@@ -468,13 +468,14 @@ const app = createApp({
 app.mount('#app')
 ```
 
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
+
 Oops...
 
 The rendering is working fine now, but something seems off.
 Well, it's not surprising because in `updateComponent`, we create elements every time.
+From the second rendering onward, the old elements remain while new elements are created alongside them.
 So, let's remove all the elements before each rendering.
-
-![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 Modify the `render` function in `~/packages/runtime-core/renderer.ts` like this:
 

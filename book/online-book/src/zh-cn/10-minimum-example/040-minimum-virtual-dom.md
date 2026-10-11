@@ -99,6 +99,12 @@ patch(vnode, nextVnode, container)
 我之前介绍了函数名，但这种差异渲染称为"patch"。\
 有时也称为"reconciliation"。通过使用这两个虚拟 DOM，您可以高效地更新屏幕。
 
+<KawaikoNote variant="funny" title="patch 这个名称">
+
+「patch」是「补缀」的意思。就像修补破了的衣服一样，只「补上」发生变化的部分！
+
+</KawaikoNote>
+
 ## 在实现 patch 函数之前
 
 这与主要主题没有直接关系，但让我们在这里做一个轻微的重构（因为这对我们接下来要讨论的内容很方便）。\
