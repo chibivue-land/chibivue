@@ -226,6 +226,8 @@ const app = createApp({
 app.mount('#app')
 ```
 
+![DOM state after nextTick](/figures/20-basic-virtual-dom/scheduler/next-tick.png)
+
 Now, let's actually rewrite the implementation of the current scheduler to keep "currentFlushPromise" and implement "nextTick"!
 
 Source code up to this point:  

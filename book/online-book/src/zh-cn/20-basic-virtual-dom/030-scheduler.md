@@ -226,6 +226,8 @@ const app = createApp({
 app.mount('#app')
 ```
 
+![DOM state after nextTick](/figures/20-basic-virtual-dom/scheduler/next-tick.png)
+
 现在，让我们实际重写当前调度器的实现以保持"currentFlushPromise"并实现"nextTick"！
 
 到此为止的源代码：
