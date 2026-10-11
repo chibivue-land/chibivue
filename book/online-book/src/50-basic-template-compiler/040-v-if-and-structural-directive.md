@@ -405,7 +405,16 @@ Now that we have the AST, let's implement the transformer that generates this AS
 
 The idea is to generate an `IfNode` based on several `ElementNode`s.
 
-By "several", in this case, it means that if there are multiple `ElementNode`s, we need to generate a single `IfNode` that includes `v-if` to `v-else` statements.
+By "several", I mean that this time we are not transforming one Node into a different Node.
+
+```html
+<p v-if="n % 5 === 0 && n % 3 === 0">FizzBuzz</p>
+<p v-else-if="n % 5 === 0">Buzz</p>
+<p v-else-if="n % 3 === 0">Fizz</p>
+<p v-else>{{ n }}</p>
+```
+
+When there are multiple `ElementNode`s like the ones above, we need to generate a single `IfNode` that covers from `v-if` through `v-else`.
 
 If the first `v-if` matches, we need to generate the `IfNode` while checking if the subsequent nodes are `v-else-if` or `v-else`.
 

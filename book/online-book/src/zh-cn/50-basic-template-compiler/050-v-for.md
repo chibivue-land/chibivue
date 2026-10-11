@@ -525,8 +525,11 @@ export function processExpression(
 ```ts
 // 将 asParams 转换为类似函数参数的形式
 const source = `(${rawExp})${asParams ? `=>{}` : ``}`
+```
 
-// walkIdentifiers 稍微复杂一些。
+`walkIdentifiers` 稍微复杂一些。
+
+```ts
 export function walkIdentifiers(
   root: Node,
   onIdentifier: (node: Identifier) => void,
