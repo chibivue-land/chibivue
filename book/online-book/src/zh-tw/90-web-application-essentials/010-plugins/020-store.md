@@ -268,51 +268,94 @@ interface StoreOptions<Id extends string, S extends StateTree, G extends _Getter
 ### useStore 函式的實作
 
 ```ts
-function useStore(outerStore?: Store | null) {
-  const currentInstance = getCurrentInstance();
-  let store = currentInstance && inject(storeSymbol);
-  if (store) setActiveStore(store);
-  store = outerStore ?? activeStore!;
+function useStore(outerStore?: Store | null): StoreGeneric {
+  const hasContext = hasInjectionContext();
+  // 從 injection context 取得 store，若不存在則退回 activeStore
+  outerStore =
+    outerStore || (hasContext ? inject(storeSymbol, null) : null);
+
+  if (outerStore) setActiveStore(outerStore);
+
+  if (__DEV__ && !activeStore) {
+    throw new Error(
+      `[chibivue-store]: "getActiveStore()" was called but there was no active Store. ` +
+        `Are you trying to use a store before calling "app.use(createStore())"?`,
+    );
+  }
+
+  const store = activeStore!;
 
   if (!store._s.has(id)) {
-    if (setup) {
-      createSetupStore(id, setup, store);
+    if (isSetupStore) {
+      createSetupStore(id, setup!, store);
     } else if (options) {
       createOptionsStore(id, options, store);
     }
   }
 
-  const _store = store!._s.get(id)!;
-  return _store;
+  return store._s.get(id)!;
 }
 ```
 
 處理流程如下：
 
-1. 使用 `getCurrentInstance()` 取得元件實例
-2. 使用 `inject(storeSymbol)` 取得根 store
-3. 如果 store 尚不存在，則透過 `createSetupStore` 或 `createOptionsStore` 建立
+1. 使用 `hasInjectionContext()` 確認是否存在 injection context
+2. 若存在 context，便透過 `inject(storeSymbol)` 取得根 store；否則退回 `activeStore`
+3. 若 store 尚未建立，便透過 `createSetupStore` 或 `createOptionsStore` 建立
 4. 回傳建立好的 store
+
+<KawaikoNote variant="warning" title="hasInjectionContext 的重要性">
+
+`hasInjectionContext()` 在 SSR 中扮演重要角色。
+setup 函式內存在 injection context，因此能透過 `inject()` 取得每個請求各自的 store。
+若不存在 context（例如在其他 store 內部），則會退回 `activeStore`。
+
+</KawaikoNote>
 
 ### createSetupStore（用於 Composition API）
 
 ```ts
 function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, store: Store) {
-  const setupStore = setup();
+  // 在根 state 中初始化此 store 的狀態
+  if (!store.state.value[id]) {
+    store.state.value[id] = {};
+  }
+
+  const initialState = store.state.value[id];
+  const setupStore = store._e.run(() => setup())!;
+
+  // 處理 setup store 的回傳值
+  for (const key in setupStore) {
+    const prop = setupStore[key];
+
+    // 將 ref 或 reactive 值同步到根 state
+    if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
+      // SSR hydration：若有初始狀態便加以還原
+      if (initialState && key in initialState) {
+        if (isRef(prop)) {
+          prop.value = initialState[key];
+        } else {
+          Object.assign(prop, initialState[key]);
+        }
+      }
+      // 同步到根 state
+      store.state.value[id][key] = prop;
+    }
+  }
 
   const _store = reactive({
     $id: id,
     ...setupStore,
     $patch(partialState: Partial<StateTree> | ((state: StateTree) => void)) {
       if (typeof partialState === "function") {
-        partialState(setupStore);
+        partialState(store.state.value[id]);
       } else {
         for (const key in partialState) {
-          const value = setupStore[key];
+          const value = store.state.value[id][key];
           if (isRef(value)) {
             value.value = partialState[key];
           } else {
-            setupStore[key] = partialState[key];
+            store.state.value[id][key] = partialState[key];
           }
         }
       }
@@ -325,6 +368,11 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
   store._s.set(id, _store);
 }
 ```
+
+要點：
+- 使用 `store._e.run()` 在 EffectScope 內執行 setup
+- 將 ref/reactive 值同步到 `store.state.value[id]`（用於 SSR）
+- hydration 時從 `initialState` 還原值
 
 <KawaikoNote variant="warning" title="$reset 的限制">
 
@@ -343,44 +391,67 @@ function createOptionsStore<
 >(id: Id, options: Omit<StoreOptions<Id, S, G, A>, "id">, store: Store) {
   const { state: stateFn, getters, actions } = options;
 
-  const initialState = stateFn ? stateFn() : ({} as S);
-  const state = reactive({ ...initialState }) as S;
+  // 從根 state 取得初始狀態（用於 SSR hydration）
+  const initialState = store.state.value[id] as S | undefined;
 
-  // 將 getters 建立為 computed 屬性
-  const computedGetters: Record<string, ComputedRef<unknown>> = {};
-  if (getters) {
-    for (const key in getters) {
-      const getter = getters[key];
-      computedGetters[key] = computed(() => getter.call(state, state));
+  function setup() {
+    // 若沒有初始狀態，便執行 state()
+    if (!initialState) {
+      store.state.value[id] = stateFn ? stateFn() : {};
     }
-  }
 
-  // 將 actions 綁定到 state
-  const boundActions: Record<string, (...args: any[]) => any> = {};
-  if (actions) {
-    for (const key in actions) {
-      const action = actions[key];
-      boundActions[key] = function (this: any, ...args: any[]) {
-        return action.apply(
-          { ...state, ...computedGetters, ...boundActions },
-          args,
+    const localState = toRefs(store.state.value[id]);
+
+    // 將 getters 轉換為 computed
+    const computedGetters: Record<string, ComputedRef<unknown>> = {};
+    if (getters) {
+      for (const key in getters) {
+        const getter = getters[key];
+        computedGetters[key] = markRaw(
+          computed(() => {
+            setActiveStore(store);
+            const _store = store._s.get(id)!;
+            return getter.call(_store, _store);
+          }),
         );
-      };
+      }
     }
+
+    return {
+      ...localState,
+      ...computedGetters,
+      ...actions,
+    };
   }
+
+  const setupStore = store._e.run(() => setup())!;
 
   const _store = reactive({
     $id: id,
-    $state: state,
-    ...state,
-    ...computedGetters,
+    ...setupStore,
     ...boundActions,
-    $patch(partialState: Partial<S> | ((state: S) => void)) { /* ... */ },
+    $patch(partialState: Partial<S> | ((state: S) => void)) {
+      if (typeof partialState === "function") {
+        partialState(store.state.value[id] as S);
+      } else {
+        mergeReactiveObjects(store.state.value[id], partialState);
+      }
+    },
     $reset() {
       const newState = stateFn ? stateFn() : ({} as S);
-      for (const key in newState) {
-        (state as any)[key] = newState[key];
-      }
+      this.$patch(($state: S) => {
+        Object.assign($state, newState);
+      });
+    },
+  });
+
+  // 將 $state 定義為 getter/setter
+  Object.defineProperty(_store, "$state", {
+    get: () => store.state.value[id],
+    set: (state) => {
+      _store.$patch(($state: S) => {
+        Object.assign($state, state);
+      });
     },
   });
 
@@ -390,10 +461,11 @@ function createOptionsStore<
 
 重點如下：
 
-- 使用 `reactive` 讓 `state` 具有響應性
-- 將 `getters` 轉換為 `computed`
-- 綁定 `actions`，使其能夠存取 state 和 getters
-- `$reset` 透過重新執行 `state` 函式恢復初始值
+- 狀態儲存在 `store.state.value[id]`（與 Pinia 採用相同模式）
+- 使用 `toRefs` 將狀態轉換為 ref，以維持響應式
+- 使用 `store._e.run()` 在 EffectScope 內執行 setup
+- 將 `getters` 轉換為 `computed`，並以 `markRaw` 避免響應式轉換
+- 將 `$state` 定義為 getter/setter，以便存取完整狀態
 
 ## 使用範例
 
@@ -444,10 +516,19 @@ export const useCounterStore = defineStore("counter", {
     doubleCount(state) {
       return state.count * 2;
     },
+    // 使用 this 存取其他 getter
+    quadrupleCount() {
+      return this.doubleCount * 2;
+    },
   },
 
   actions: {
     increment() {
+      this.count++;
+    },
+    // 也支援非同步 action
+    async incrementAsync() {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       this.count++;
     },
   },
