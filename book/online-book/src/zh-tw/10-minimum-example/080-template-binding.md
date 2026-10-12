@@ -173,6 +173,8 @@ const app = createApp({
 
 這是有充分理由的，這個功能已被棄用。
 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
+
 根據 MDN：
 
 > 雖然仍然被一些瀏覽器支援，但它已從 Web 標準中棄用。但是，它可能仍在用於各種目的，例如與遺留程式碼的相容性。避免使用它，如果可能的話更新現有程式碼。
