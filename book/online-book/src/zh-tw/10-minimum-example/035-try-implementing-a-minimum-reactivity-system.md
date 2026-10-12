@@ -468,13 +468,14 @@ const app = createApp({
 app.mount('#app')
 ```
 
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
+
 哎呀...
 
 渲染現在工作正常，但似乎有些不對勁。
 嗯，這並不奇怪，因為在 `updateComponent` 中，我們每次都建立元素。
+因此，從第二次渲染開始，舊元素會被保留下來，同時還會建立新元素。
 所以，讓我們在每次渲染之前刪除所有元素。
-
-![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 像這樣修改 `~/packages/runtime-core/renderer.ts` 中的 `render` 函式：
 

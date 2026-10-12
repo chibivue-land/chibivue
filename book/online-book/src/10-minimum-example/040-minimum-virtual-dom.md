@@ -99,6 +99,13 @@ patch(vnode, nextVnode, container)
 I introduced the function name earlier, but this differential rendering is called "patch". \
 It is also sometimes called "reconciliation". By using these two Virtual DOMs, you can efficiently update the screen.
 
+<KawaikoNote variant="funny" title="Why is it called patch?">
+
+"Patch" means "to mend." Like repairing torn clothing,
+the idea is to fix only the parts that changed!
+
+</KawaikoNote>
+
 ## Before implementing the patch function
 
 This is not directly related to the main topic, but let's do a slight refactoring here (because it is convenient for what we are going to talk about next). \
