@@ -101,7 +101,7 @@ patch(vnode, nextVnode, container)
 
 <KawaikoNote variant="funny" title="patch 这个名称">
 
-“patch”的意思是“修补”。就像修补破损的衣服一样，只对发生变化的部分进行“修补”式的修改。！
+“patch”的意思是“修补”。就像修补破损的衣服一样，只对发生变化的部分进行“修补”式的修改！
 
 </KawaikoNote>
 
