@@ -47,6 +47,8 @@ const app = createApp({
 ## 實作
 
 與 props 類似，讓我們建立一個名為 `~/packages/runtime-core/componentEmits.ts` 的檔案並在那裡實作它。\
+emit 的實現其實很簡單，只需要在 instance 上實現用於 emit 的函式，執行時則從 vnode 所持有的 props 中尋找對應的處理器並執行。
+
 `~/packages/runtime-core/componentEmits.ts`
 
 ```ts
