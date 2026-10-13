@@ -8,6 +8,6 @@
   "main": "index.js",
   "devDependencies": {
     "@types/node": "^25.9.2",
-    "vite-plus": "^0.1.24"
+    "vite-plus": "^1.1.0"
   }
 }
