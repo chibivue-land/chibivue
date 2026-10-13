@@ -47,7 +47,7 @@
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/) v24+
+- [Node.js](https://nodejs.org/) v26+
 - [Vite+](https://viteplus.dev/) (`vp`)
 
 ### Read the Book Locally
