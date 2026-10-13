@@ -46,7 +46,7 @@ const app = createApp({
 
 ## 实现
 
-emit 的实现很简单：在实例上设置一个用于 emit 的函数，执行时从 vnode 持有的 props 中查找并调用对应的处理器。
+emit 的实现其实很简单，只需要在 instance 上实现用于 emit 的函数，执行时则从 vnode 所持有的 props 中查找对应的处理器并执行。
 
 与 props 类似，让我们创建一个名为 `~/packages/runtime-core/componentEmits.ts` 的文件并在那里实现它。\
 `~/packages/runtime-core/componentEmits.ts`

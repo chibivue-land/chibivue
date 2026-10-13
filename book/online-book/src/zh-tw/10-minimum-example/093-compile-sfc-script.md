@@ -49,7 +49,7 @@ Babel 是一個用於將 JavaScript 轉換為向後相容版本的工具鏈。\
 
 在這種情況下，我將使用 Babel 不僅作為編譯器，還作為解析器。\
 Babel 有一個內部解析器用於轉換為 AST，因為它扮演編譯器的角色。\
-我們會把這個解析器作為函式庫來使用。
+將該解析器作為函式庫來使用。
 
 AST 代表抽象語法樹，它是 JavaScript 程式碼的表示。\
 你可以在這裡找到 AST 規範 (https://github.com/estree/estree)。\
