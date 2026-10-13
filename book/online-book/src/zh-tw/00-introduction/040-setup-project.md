@@ -69,9 +69,9 @@ Web Playground 使用 [WebContainer](https://webcontainers.io/)。
 現在，讓我們快速進入環境設定！\
 我將列出我們將使用的工具和版本：
 
-- 執行期：[Node.js](https://nodejs.org/en) v24
+- 執行期：[Node.js](https://nodejs.org/en) v26
 - 語言：[TypeScript](https://www.typescriptlang.org/)
-- 套件管理器：[pnpm](https://pnpm.io/) v10
+- 套件管理器：[pnpm](https://pnpm.io/) v12
 - 建置工具：[Vite](https://vite.dev/) v8
 - 工具鏈：[Vite+](https://viteplus.dev/guide/)
 

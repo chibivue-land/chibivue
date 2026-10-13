@@ -69,9 +69,9 @@ We will promptly start with a simple implementation of Vue.js. Here are some poi
 Now, let's quickly move on to setting up the environment! \
 I'll list the tools and versions we'll be using:
 
-- Runtime: [Node.js](https://nodejs.org/en) v24
+- Runtime: [Node.js](https://nodejs.org/en) v26
 - Language: [TypeScript](https://www.typescriptlang.org/)
-- Package Manager: [pnpm](https://pnpm.io/) v10
+- Package Manager: [pnpm](https://pnpm.io/) v12
 - Build Tool: [Vite](https://vite.dev/) v8
 - Toolchain: [Vite+](https://viteplus.dev/guide/)
 

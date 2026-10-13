@@ -47,7 +47,7 @@
 
 ### 环境要求
 
-- [Node.js](https://nodejs.org/) v24+
+- [Node.js](https://nodejs.org/) v26+
 - [Vite+](https://viteplus.dev/) (`vp`)
 
 ### 本地阅读书籍
