@@ -83,7 +83,7 @@ export default defineConfig({
       dev: { command: `vp dev ${BOOK}`, cache: false },
       build: {
         command: `vp build ${BOOK}`,
-        output: [{ pattern: `${BOOK}/dist/**`, base: "workspace" }],
+        cache: { output: [{ pattern: `${BOOK}/dist/**`, base: "workspace" }] },
       },
       preview: { command: `vp preview ${BOOK}`, dependsOn: ["build"], cache: false },
 
@@ -111,10 +111,12 @@ export default defineConfig({
       // impl
       "impl:build": {
         command: "vp pack",
-        output: [
-          { pattern: "impl/*/dist/**", base: "workspace" },
-          { pattern: "impl/@extensions/*/dist/**", base: "workspace" },
-        ],
+        cache: {
+          output: [
+            { pattern: "impl/*/dist/**", base: "workspace" },
+            { pattern: "impl/@extensions/*/dist/**", base: "workspace" },
+          ],
+        },
       },
       "impl:clean": {
         command: "vp exec rimraf impl/*/dist impl/@extensions/*/dist",
