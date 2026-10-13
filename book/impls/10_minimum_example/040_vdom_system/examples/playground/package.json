@@ -4,11 +4,6 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "scripts": {
-    "dev": "vp dev",
-    "build": "vp check --no-fmt --no-lint && vp build",
-    "preview": "vp preview"
-  },
   "devDependencies": {
     "typescript": "^6.0.3",
     "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.24",

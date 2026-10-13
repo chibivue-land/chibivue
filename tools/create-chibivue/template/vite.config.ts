@@ -1,9 +1,9 @@
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      chibivue: `${process.cwd()}/../../packages`,
+  run: {
+    tasks: {
+      dev: { command: "vp run playground#dev", cache: false },
     },
   },
 });

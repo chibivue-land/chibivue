@@ -10,9 +10,11 @@
 ```sh
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
-$ pnpm install
-$ pnpm play
+$ vp install
+$ vp run play
 ```
+
+运行这些命令需要 [Vite+](https://viteplus.dev/guide/)（`vp`）。
 
 在浏览器中访问显示的 URL（例如：`http://localhost:5173/`）即可启动 Playground。
 
@@ -71,6 +73,7 @@ Web Playground 使用 [WebContainer](https://webcontainers.io/)。
 - 语言：[TypeScript](https://www.typescriptlang.org/)
 - 包管理器：[pnpm](https://pnpm.io/) v10
 - 构建工具：[Vite](https://vite.dev/) v8
+- 工具链：[Vite+](https://viteplus.dev/guide/)
 
 ## 安装 Node.js
 
@@ -80,6 +83,12 @@ Web Playground 使用 [WebContainer](https://webcontainers.io/)。
 
 你们中的许多人可能通常使用 npm 或 yarn。对于这本书，我们将使用 pnpm，所以请也安装它。命令大多与 npm 相似。
 https://pnpm.io/installation
+
+## 安装 Vite+
+
+在本书中，我们使用 Vite+ 的 `vp` 命令来创建项目和启动开发服务器。  
+请一并安装它。  
+https://viteplus.dev/guide/
 
 
 ## 创建项目
@@ -100,7 +109,8 @@ https://pnpm.io/installation
 
    ```sh
    $ cd chibivue
-   $ pnpm setup:book ../my-chibivue-project
+   $ vp install
+   $ vp run setup:book ../my-chibivue-project
    ```
 
 :::
@@ -115,11 +125,16 @@ https://pnpm.io/installation
 |    |- playground
 |
 |- packages
-|- tsconfig.js
+|- pnpm-workspace.yaml
+|- tsconfig.json
+|- vite.config.ts
 ```
 
 我们将在名为"examples"的目录中实现游乐场。
 我们将在"packages"中实现 chibivue 的核心 TypeScript 文件，并从示例端导入它们。
+
+整个项目将构成一个 pnpm workspace，"examples" 下的游乐场作为 workspace 的包来处理。  
+启动开发服务器等命令不使用 npm scripts，而是定义为 Vite+ 的任务运行器 [Vite Task](https://viteplus.dev/guide/run)（`vp run`）的任务。
 
 以下是构建它的步骤。
 
@@ -129,11 +144,21 @@ https://pnpm.io/installation
 ## 请创建一个专门用于 chibivue 的目录并导航到其中。（此后将省略此类注释。）
 pwd # ~/
 pnpm init
-pnpm add -D @types/node
+vp add -D @types/node vite-plus
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
+touch pnpm-workspace.yaml
 ```
+
+pnpm-workspace.yaml 的内容
+
+```yaml
+packages:
+  - examples/*
+```
+
+这样，"examples" 下的目录就会被当作 workspace 的包来处理。
 
 tsconfig.json 的内容
 
@@ -168,12 +193,12 @@ console.log("Hello, World")
 pwd # ~/
 mkdir examples
 cd examples
-pnpm dlx create-vite
+vp create vite --no-interactive --no-agent --no-hooks -- playground --template vanilla-ts
 
-## --------- 使用 Vite CLI 设置
+## --------- 指定的内容
 ## Project name: playground
-## Select a framework: Vanilla
-## Select a variant: TypeScript
+## Framework: Vanilla
+## Variant: TypeScript
 ```
 
 从用 Vite 创建的项目中删除不必要的项目。
@@ -214,17 +239,12 @@ import "chibivue"
 
 在 Vite 项目中配置别名，以便能够导入您在 chibivue 中实现的内容。
 
-```sh
-pwd # ~/examples/playground
-touch vite.config.js
-```
-
-vite.config.js 的内容
+用以下内容创建 vite.config.ts。（如果已经存在，请改写它。）
 
 ```ts
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite-plus'
 
 const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))
 export default defineConfig({
@@ -233,8 +253,21 @@ export default defineConfig({
       chibivue: path.resolve(dirname, '../../packages'),
     },
   },
+  run: {
+    tasks: {
+      dev: { command: 'vp dev', cache: false },
+      build: 'vp build',
+      preview: { command: 'vp preview', dependsOn: ['build'], cache: false },
+    },
+  },
 })
 ```
+
+`run.tasks` 是 Vite Task 的任务定义。  
+`command` 中写要执行的命令，`dependsOn` 中写需要先执行的任务。（`preview` 会在 `build` 完成之后执行。）  
+对于开发服务器这样不会结束的任务，或者不想缓存结果的任务，请指定 `cache: false`。
+
+既然已经定义为任务，`vp create vite` 在 package.json 中生成的 `scripts`（`dev` / `build` / `preview`）就不再需要了。让我们把它们删除。
 
 按如下方式修改 tsconfig.json。
 
@@ -263,22 +296,32 @@ export default defineConfig({
 }
 ```
 
-最后，让我们在 chibivue 项目的 package.json 中添加一个命令来启动游乐场并尝试启动它！
+最后，让我们在 chibivue 项目的根目录定义一个启动游乐场的任务并尝试启动它！
 
-将以下内容附加到 ~/package.json
+用以下内容创建 ~/vite.config.ts。
 
-```json
-{
-  "scripts": {
-    "dev": "cd examples/playground && pnpm i && pnpm run dev"
-  }
-}
+```ts
+import { defineConfig } from 'vite-plus'
+
+export default defineConfig({
+  run: {
+    tasks: {
+      dev: { command: 'vp run playground#dev', cache: false },
+    },
+  },
+})
 ```
+
+`playground#dev` 的意思是「`playground` 包的 `dev` 任务」。  
+像这样写成 `包名#任务名`，就可以指定 workspace 内其他包的任务。
 
 ```sh
 pwd # ~
-pnpm dev
+vp install
+vp run dev
 ```
+
+`vp install` 会一次性安装整个 workspace（根目录和 examples/playground）的依赖。
 
 访问使用此命令启动的开发服务器。如果显示消息，则设置完成。
 
