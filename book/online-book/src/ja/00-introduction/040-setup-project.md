@@ -138,12 +138,17 @@ https://viteplus.dev/guide/
 | |- playground
 |
 |- packages
+|- pnpm-workspace.yaml
 |- tsconfig.json
+|- vite.config.ts
 
 ```
 
 examples というディレクトリにプレイグラウンドを実装します．
 packages に chibivue 本体の TypeScript ファイル群を実装して，example 側からそれを import する形にします．
+
+プロジェクト全体は pnpm の workspace として構成し，examples 配下のプレイグラウンドを workspace のパッケージとして扱います．  
+開発サーバーの起動などのコマンドは npm scripts ではなく，Vite+ のタスクランナーである [Vite Task](https://viteplus.dev/guide/run) (`vp run`) のタスクとして定義していきます．
 
 以下はそれを構築する手順です．
 
@@ -153,11 +158,21 @@ packages に chibivue 本体の TypeScript ファイル群を実装して，exam
 ## 実際はchibivue用のディレクトリを作って移動してください (以下、同様の注釈は省略します。)
 pwd # ~/
 pnpm init
-vp add -D @types/node
+vp add -D @types/node vite-plus
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
+touch pnpm-workspace.yaml
 ```
+
+pnpm-workspace.yaml の内容
+
+```yaml
+packages:
+  - examples/*
+```
+
+これで examples 配下のディレクトリが workspace のパッケージとして扱われるようになります．
 
 tsconfig.json の内容
 
@@ -237,7 +252,7 @@ index.html を以下のように書き換えます．
 
 Vite で作成したプロジェクトで chibivue で実装したものを import できるようにエイリアスの設定をします．
 
-vite.config.ts の中身を以下のように書き換えます．
+vite.config.ts を以下の内容で作成します．(既にある場合は書き換えてください)
 
 ```ts
 import path from 'node:path'
@@ -251,8 +266,21 @@ export default defineConfig({
       chibivue: path.resolve(dirname, '../../packages'),
     },
   },
+  run: {
+    tasks: {
+      dev: { command: 'vp dev', cache: false },
+      build: 'vp build',
+      preview: { command: 'vp preview', dependsOn: ['build'], cache: false },
+    },
+  },
 })
 ```
+
+`run.tasks` が Vite Task のタスク定義です．  
+`command` に実行するコマンドを，`dependsOn` に先に実行しておきたいタスクを書きます．(`preview` は `build` が終わってから実行されます)  
+開発サーバーのように終了しないタスクや，結果をキャッシュしたくないタスクには `cache: false` を指定します．
+
+タスクとして定義したので，`vp create vite` が package.json に生成した `scripts` (`dev` / `build` / `preview`) は不要です．削除しておきましょう．
 
 tsconfig.json の中身を以下のように書き換えます．
 
@@ -288,22 +316,32 @@ tsconfig.json の中身を以下のように書き換えます．
 }
 ```
 
-最後に，chibivue プロジェクトの package.json に playground を起動するコマンドを記述して実際に起動してみましよう！
+最後に，chibivue プロジェクトのルートに playground を起動するタスクを定義して実際に起動してみましよう！
 
-~/package.json に以下を追記
+~/vite.config.ts を以下の内容で作成します．
 
-```json
-{
-  "scripts": {
-    "dev": "cd examples/playground && vp install && vp run dev"
-  }
-}
+```ts
+import { defineConfig } from 'vite-plus'
+
+export default defineConfig({
+  run: {
+    tasks: {
+      dev: { command: 'vp run playground#dev', cache: false },
+    },
+  },
+})
 ```
+
+`playground#dev` は「`playground` パッケージの `dev` タスク」という意味です．  
+このように `パッケージ名#タスク名` と書くことで，workspace 内の別のパッケージのタスクを指定できます．
 
 ```sh
 pwd # ~
-pnpm dev
+vp install
+vp run dev
 ```
+
+`vp install` は workspace 全体 (ルートと examples/playground) の依存関係をまとめてインストールします．
 
 このコマンドで立ち上がった開発者サーバーにアクセスし，メッセージが表示されていれば完了です！
 

@@ -388,14 +388,18 @@ function loadChapters(): Chapter[] {
           const fixedContent = f.content.replace(/<head>/i, `<head>\n${consoleHookScript}`);
           return { ...f, content: fixedContent };
         }
-        // Add extra dependencies to package.json if using vite-plugin-chibivue
-        if (f.path === "package.json" && usesVitePlugin) {
+        if (f.path === "package.json") {
           try {
             const pkg = JSON.parse(f.content);
-            pkg.dependencies = pkg.dependencies || {};
-            pkg.dependencies["@babel/parser"] = "^7.28.6";
-            pkg.dependencies["magic-string"] = "^0.30.21";
-            pkg.dependencies["estree-walker"] = "^3.0.3";
+            // The WebContainer runs the playground standalone (outside its workspace) via `pnpm run dev`
+            pkg.scripts = { dev: "vp dev" };
+            // Add extra dependencies to package.json if using vite-plugin-chibivue
+            if (usesVitePlugin) {
+              pkg.dependencies = pkg.dependencies || {};
+              pkg.dependencies["@babel/parser"] = "^7.28.6";
+              pkg.dependencies["magic-string"] = "^0.30.21";
+              pkg.dependencies["estree-walker"] = "^3.0.3";
+            }
             return { ...f, content: JSON.stringify(pkg, null, 2) + "\n" };
           } catch {
             return f;

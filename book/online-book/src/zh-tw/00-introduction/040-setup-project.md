@@ -10,9 +10,11 @@
 ```sh
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
-$ pnpm install
-$ pnpm play
+$ vp install
+$ vp run play
 ```
+
+執行這些命令需要 [Vite+](https://viteplus.dev/guide/)（`vp`）。
 
 在瀏覽器中開啟顯示的 URL（例如：`http://localhost:5173/`）即可使用 Playground。
 
@@ -71,6 +73,7 @@ Web Playground 使用 [WebContainer](https://webcontainers.io/)。
 - 語言：[TypeScript](https://www.typescriptlang.org/)
 - 套件管理器：[pnpm](https://pnpm.io/) v10
 - 建置工具：[Vite](https://vite.dev/) v8
+- 工具鏈：[Vite+](https://viteplus.dev/guide/)
 
 ## 安裝 Node.js
 
@@ -80,6 +83,12 @@ Web Playground 使用 [WebContainer](https://webcontainers.io/)。
 
 你們中的許多人可能通常使用 npm 或 yarn。對於這本書，我們將使用 pnpm，所以請也安裝它。命令大多與 npm 相似。
 https://pnpm.io/installation
+
+## 安裝 Vite+
+
+在本書中，我們使用 Vite+ 的 `vp` 命令來建立專案和啟動開發伺服器。  
+請一併安裝它。  
+https://viteplus.dev/guide/
 
 
 ## 建立專案
@@ -100,7 +109,8 @@ https://pnpm.io/installation
 
    ```sh
    $ cd chibivue
-   $ pnpm setup:book ../my-chibivue-project
+   $ vp install
+   $ vp run setup:book ../my-chibivue-project
    ```
 
 :::
@@ -115,11 +125,16 @@ https://pnpm.io/installation
 |    |- playground
 |
 |- packages
-|- tsconfig.js
+|- pnpm-workspace.yaml
+|- tsconfig.json
+|- vite.config.ts
 ```
 
 我們將在名為「examples」的目錄中實作遊樂場。
 我們將在「packages」中實作 chibivue 的核心 TypeScript 檔案，並從示例端匯入它們。
+
+整個專案將構成一個 pnpm workspace，「examples」下的遊樂場作為 workspace 的套件來處理。  
+啟動開發伺服器等命令不使用 npm scripts，而是定義為 Vite+ 的任務執行器 [Vite Task](https://viteplus.dev/guide/run)（`vp run`）的任務。
 
 以下是建置它的步驟。
 
@@ -129,11 +144,21 @@ https://pnpm.io/installation
 ## 請建立一個專門用於 chibivue 的目錄並導航到其中。（此後將省略此類註釋。）
 pwd # ~/
 pnpm init
-pnpm add -D @types/node
+vp add -D @types/node vite-plus
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
+touch pnpm-workspace.yaml
 ```
+
+pnpm-workspace.yaml 的內容
+
+```yaml
+packages:
+  - examples/*
+```
+
+這樣，「examples」下的目錄就會被當作 workspace 的套件來處理。
 
 tsconfig.json 的內容
 
@@ -168,12 +193,12 @@ console.log("Hello, World")
 pwd # ~/
 mkdir examples
 cd examples
-pnpm dlx create-vite
+vp create vite --no-interactive --no-agent --no-hooks -- playground --template vanilla-ts
 
-## --------- 使用 Vite CLI 設定
+## --------- 指定的內容
 ## Project name: playground
-## Select a framework: Vanilla
-## Select a variant: TypeScript
+## Framework: Vanilla
+## Variant: TypeScript
 ```
 
 從用 Vite 建立的專案中移除不必要的檔案。
@@ -214,17 +239,12 @@ import "chibivue"
 
 在 Vite 專案中設定別名，以便能夠匯入您在 chibivue 中實作的內容。
 
-```sh
-pwd # ~/examples/playground
-touch vite.config.js
-```
-
-vite.config.js 的內容
+用以下內容建立 vite.config.ts。（如果已經存在，請改寫它。）
 
 ```ts
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite-plus'
 
 const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))
 export default defineConfig({
@@ -233,8 +253,21 @@ export default defineConfig({
       chibivue: path.resolve(dirname, '../../packages'),
     },
   },
+  run: {
+    tasks: {
+      dev: { command: 'vp dev', cache: false },
+      build: 'vp build',
+      preview: { command: 'vp preview', dependsOn: ['build'], cache: false },
+    },
+  },
 })
 ```
+
+`run.tasks` 是 Vite Task 的任務定義。  
+`command` 中寫要執行的命令，`dependsOn` 中寫需要先執行的任務。（`preview` 會在 `build` 完成之後執行。）  
+對於開發伺服器這樣不會結束的任務，或者不想快取結果的任務，請指定 `cache: false`。
+
+既然已經定義為任務，`vp create vite` 在 package.json 中產生的 `scripts`（`dev` / `build` / `preview`）就不再需要了。讓我們把它們刪除。
 
 按如下方式修改 tsconfig.json。
 
@@ -263,22 +296,32 @@ export default defineConfig({
 }
 ```
 
-最後，讓我們在 chibivue 專案的 package.json 中加入一個命令來啟動遊樂場並嘗試啟動它！
+最後，讓我們在 chibivue 專案的根目錄定義一個啟動遊樂場的任務並嘗試啟動它！
 
-將以下內容附加到 ~/package.json
+用以下內容建立 ~/vite.config.ts。
 
-```json
-{
-  "scripts": {
-    "dev": "cd examples/playground && pnpm i && pnpm run dev"
-  }
-}
+```ts
+import { defineConfig } from 'vite-plus'
+
+export default defineConfig({
+  run: {
+    tasks: {
+      dev: { command: 'vp run playground#dev', cache: false },
+    },
+  },
+})
 ```
+
+`playground#dev` 的意思是「`playground` 套件的 `dev` 任務」。  
+像這樣寫成 `套件名#任務名`，就可以指定 workspace 內其他套件的任務。
 
 ```sh
 pwd # ~
-pnpm dev
+vp install
+vp run dev
 ```
+
+`vp install` 會一次安裝整個 workspace（根目錄和 examples/playground）的相依套件。
 
 在瀏覽器中開啟此命令啟動的開發伺服器。如果畫面顯示訊息，就表示設定完成。
 

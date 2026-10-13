@@ -10,9 +10,11 @@ You can edit and run code immediately without any environment setup, so try expe
 ```sh
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
-$ pnpm install
-$ pnpm play
+$ vp install
+$ vp run play
 ```
+
+Running these commands requires [Vite+](https://viteplus.dev/guide/) (`vp`).
 
 Access the URL displayed in your browser (e.g., `http://localhost:5173/`) to launch the Playground.
 
@@ -71,6 +73,7 @@ I'll list the tools and versions we'll be using:
 - Language: [TypeScript](https://www.typescriptlang.org/)
 - Package Manager: [pnpm](https://pnpm.io/) v10
 - Build Tool: [Vite](https://vite.dev/) v8
+- Toolchain: [Vite+](https://viteplus.dev/guide/)
 
 ## Installing Node.js
 
@@ -80,6 +83,12 @@ Most of you are probably familiar with this step. Please set it up on your own. 
 
 Many of you might typically use npm or yarn. For this book, we will be using pnpm, so please install it as well. The commands are mostly similar to npm.
 https://pnpm.io/installation
+
+## Installing Vite+
+
+In this book, we use the `vp` command from Vite+ to create the project and start the dev server.  
+Please install it as well.  
+https://viteplus.dev/guide/
 
 
 ## Creating the Project
@@ -100,7 +109,8 @@ If you find the manual process tedious, please feel free to use this tool!
 
    ```sh
    $ cd chibivue
-   $ pnpm setup:book ../my-chibivue-project
+   $ vp install
+   $ vp run setup:book ../my-chibivue-project
    ```
 
 :::
@@ -115,11 +125,16 @@ This time, we will separate the main "chibivue" from a playground to test its fu
 |    |- playground
 |
 |- packages
-|- tsconfig.js
+|- pnpm-workspace.yaml
+|- tsconfig.json
+|- vite.config.ts
 ```
 
 We will implement the playground in a directory named "examples."
 We will implement the core TypeScript files for chibivue in "packages" and import them from the example side.
+
+The whole project is set up as a pnpm workspace, and the playground under "examples" is treated as a workspace package.  
+Instead of npm scripts, commands such as starting the dev server are defined as tasks for [Vite Task](https://viteplus.dev/guide/run) (`vp run`), the task runner of Vite+.
 
 Below are the steps to construct it.
 
@@ -129,11 +144,21 @@ Below are the steps to construct it.
 ## Please create a directory specifically for chibivue and navigate into it. (Such notes will be omitted hereafter.)
 pwd # ~/
 pnpm init
-pnpm add -D @types/node
+vp add -D @types/node vite-plus
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
+touch pnpm-workspace.yaml
 ```
+
+Contents of pnpm-workspace.yaml
+
+```yaml
+packages:
+  - examples/*
+```
+
+With this, the directories under "examples" are treated as workspace packages.
 
 Contents of tsconfig.json
 
@@ -168,12 +193,12 @@ console.log("Hello, World")
 pwd # ~/
 mkdir examples
 cd examples
-pnpm dlx create-vite
+vp create vite --no-interactive --no-agent --no-hooks -- playground --template vanilla-ts
 
-## --------- Setting up with the Vite CLI
+## --------- What these options specify
 ## Project name: playground
-## Select a framework: Vanilla
-## Select a variant: TypeScript
+## Framework: Vanilla
+## Variant: TypeScript
 ```
 
 Remove unnecessary items from the project created with Vite.
@@ -214,17 +239,12 @@ Modify index.html as follows.
 
 Configure an alias in the Vite project to be able to import what you implemented in chibivue.
 
-```sh
-pwd # ~/examples/playground
-touch vite.config.js
-```
-
-Contents of vite.config.js
+Create vite.config.ts with the following contents. (If it already exists, rewrite it.)
 
 ```ts
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite-plus'
 
 const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))
 export default defineConfig({
@@ -233,8 +253,21 @@ export default defineConfig({
       chibivue: path.resolve(dirname, '../../packages'),
     },
   },
+  run: {
+    tasks: {
+      dev: { command: 'vp dev', cache: false },
+      build: 'vp build',
+      preview: { command: 'vp preview', dependsOn: ['build'], cache: false },
+    },
+  },
 })
 ```
+
+`run.tasks` holds the Vite Task definitions.  
+`command` is the command to run, and `dependsOn` lists the tasks that must run first. (`preview` runs after `build` finishes.)  
+Specify `cache: false` for tasks that never exit, such as the dev server, or whose results you don't want cached.
+
+Now that they are defined as tasks, the `scripts` (`dev` / `build` / `preview`) that `vp create vite` generated in package.json are no longer needed. Let's remove them.
 
 Modify tsconfig.json as follows.
 
@@ -263,22 +296,32 @@ Modify tsconfig.json as follows.
 }
 ```
 
-Lastly, let's add a command to the package.json of the chibivue project to launch the playground and try starting it!
+Lastly, let's define a task at the root of the chibivue project to launch the playground and try starting it!
 
-Append the following to ~/package.json
+Create ~/vite.config.ts with the following contents.
 
-```json
-{
-  "scripts": {
-    "dev": "cd examples/playground && pnpm i && pnpm run dev"
-  }
-}
+```ts
+import { defineConfig } from 'vite-plus'
+
+export default defineConfig({
+  run: {
+    tasks: {
+      dev: { command: 'vp run playground#dev', cache: false },
+    },
+  },
+})
 ```
+
+`playground#dev` means "the `dev` task of the `playground` package".  
+By writing `package-name#task-name` like this, you can refer to a task of another package in the workspace.
 
 ```sh
 pwd # ~
-pnpm dev
+vp install
+vp run dev
 ```
+
+`vp install` installs the dependencies of the whole workspace (the root and examples/playground) at once.
 
 Access the developer server that started with this command. If a message displays, then the setup is complete.
 
