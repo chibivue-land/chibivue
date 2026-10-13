@@ -47,8 +47,9 @@
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/) v26+
 - [Vite+](https://viteplus.dev/) (`vp`)
+
+Node.js and pnpm are managed by Vite+ (`vp env`): the versions pinned in `package.json` (Node.js v26, pnpm v12) are used automatically.
 
 ### Read the Book Locally
 

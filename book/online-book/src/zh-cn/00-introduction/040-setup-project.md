@@ -75,20 +75,23 @@ Web Playground 使用 [WebContainer](https://webcontainers.io/)。
 - 构建工具：[Vite](https://vite.dev/) v8
 - 工具链：[Vite+](https://viteplus.dev/guide/)
 
-## 安装 Node.js
-
-你们大多数人可能都熟悉这一步。请自行设置。我们将跳过这里的详细解释。
-
-## 安装 pnpm
-
-你们中的许多人可能通常使用 npm 或 yarn。对于这本书，我们将使用 pnpm，所以请也安装它。命令大多与 npm 相似。
-https://pnpm.io/installation
-
 ## 安装 Vite+
 
 在本书中，我们使用 Vite+ 的 `vp` 命令来创建项目和启动开发服务器。  
-请一并安装它。  
+请先安装它。  
 https://viteplus.dev/guide/
+
+## 安装 Node.js 和 pnpm
+
+Node.js 和 pnpm 也通过 Vite+（`vp env`）来管理。  
+你们中的许多人可能通常使用 npm 或 yarn。对于这本书，我们将使用 pnpm，命令大多与 npm 相似。
+
+```sh
+vp env use 26 pnpm@12
+```
+
+这样当前的 shell 会话就会使用 Node.js v26 和 pnpm v12（如果本地没有，会自动下载）。  
+https://viteplus.dev/guide/env
 
 
 ## 创建项目

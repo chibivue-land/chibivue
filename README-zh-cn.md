@@ -47,8 +47,9 @@
 
 ### 环境要求
 
-- [Node.js](https://nodejs.org/) v26+
 - [Vite+](https://viteplus.dev/) (`vp`)
+
+Node.js 和 pnpm 由 Vite+（`vp env`）管理：会自动使用 `package.json` 中固定的版本（Node.js v26、pnpm v12）。
 
 ### 本地阅读书籍
 
