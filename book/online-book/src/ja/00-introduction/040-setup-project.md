@@ -10,9 +10,11 @@
 ```sh
 $ git clone https://github.com/chibivue-land/chibivue
 $ cd chibivue
-$ pnpm install
-$ pnpm play
+$ vp install
+$ vp run play
 ```
+
+コマンドの実行には [Vite+](https://viteplus.dev/guide/) (`vp`) が必要です．
 
 ブラウザで表示された URL (例: `http://localhost:5173/`) にアクセスすると Playground が起動します．
 
@@ -78,6 +80,7 @@ Web Playground は [WebContainer](https://webcontainers.io/) を使用してい�
 - 言語: [TypeScript](https://www.typescriptlang.org/)
 - パッケージマネージャ: [pnpm](https://pnpm.io/) v10
 - ビルドツール: [Vite](https://vite.dev/) v8
+- ツールチェーン: [Vite+](https://viteplus.dev/guide/)
 
 ## Node.js インストール
 
@@ -90,6 +93,12 @@ Web Playground は [WebContainer](https://webcontainers.io/) を使用してい�
 今回は pnpm を使っていくので，こちらの方も合わせてインストールしてください．  
 基本的なコマンドは npm とほとんど一緒です．  
 https://pnpm.io/installation
+
+## Vite+ のインストール
+
+本書では，プロジェクトの作成や開発サーバーの起動に Vite+ の `vp` コマンドを使います．  
+こちらも合わせてインストールしてください．  
+https://viteplus.dev/guide/
 
 
 ## プロジェクトの作成
@@ -109,7 +118,8 @@ https://pnpm.io/installation
 
    ```sh
    $ cd chibivue
-   $ pnpm setup:book ../my-chibivue-project
+   $ vp install
+   $ vp run setup:book ../my-chibivue-project
    ```
 
 :::
@@ -143,7 +153,7 @@ packages に chibivue 本体の TypeScript ファイル群を実装して，exam
 ## 実際はchibivue用のディレクトリを作って移動してください (以下、同様の注釈は省略します。)
 pwd # ~/
 pnpm init
-pnpm add -D @types/node
+vp add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -182,12 +192,12 @@ console.log("Hello, World");
 pwd # ~/
 mkdir examples
 cd examples
-pnpm dlx create-vite
+vp create vite --no-interactive --no-agent --no-hooks -- playground --template vanilla-ts
 
-## --------- create vite cliの設定
+## --------- 指定している内容
 ## Project name: playground
-## Select a framework: Vanilla
-## Select a variant: TypeScript
+## Framework: Vanilla
+## Variant: TypeScript
 ```
 
 vite で作成したプロジェクトのうち，不要なものを削除します．
@@ -227,17 +237,12 @@ index.html を以下のように書き換えます．
 
 Vite で作成したプロジェクトで chibivue で実装したものを import できるようにエイリアスの設定をします．
 
-```sh
-pwd # ~/examples/playground
-touch vite.config.js
-```
-
-vite.config.js の内容
+vite.config.ts の中身を以下のように書き換えます．
 
 ```ts
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite-plus'
 
 const dirname = path.dirname(fileURLToPath(new URL(import.meta.url)))
 export default defineConfig({
@@ -290,7 +295,7 @@ tsconfig.json の中身を以下のように書き換えます．
 ```json
 {
   "scripts": {
-    "dev": "cd examples/playground && pnpm i && pnpm run dev"
+    "dev": "cd examples/playground && vp install && vp run dev"
   }
 }
 ```
