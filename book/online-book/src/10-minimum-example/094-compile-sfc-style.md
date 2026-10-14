@@ -33,6 +33,17 @@ export default function myPlugin() {
 }
 ```
 
+You can load a module by assigning an arbitrary ID to the module you want to resolve in resolveId, then handling that ID in load.  
+In the example above, the file `virtual:my-module` does not actually exist,
+
+```ts
+import { msg } from 'virtual:my-module'
+```
+
+but if you write it like the above, `export const msg = "from virtual module"` is loaded.
+
+[Reference](https://vite.dev/guide/api-plugin)
+
 Using this mechanism, we will load the style block of an SFC as a virtual CSS file.  
 As mentioned earlier, in Vite, importing a file with the `.css` extension is sufficient, so we will consider creating a virtual module named `${SFC file name}.css`.
 
