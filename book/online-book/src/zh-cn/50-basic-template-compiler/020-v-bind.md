@@ -246,13 +246,13 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 
 ### 解析器中的处理
 
-当像 `:prop` 这样省略值时，`exp` 会是 undefined。
+当省略 `:prop` 这类写法的值时`exp` 会是 undefined。
 
 ```ts
 return {
   type: NodeTypes.DIRECTIVE,
   name: dirName,
-  exp: value && {  // 没有 value 时 exp 为 undefined
+  exp: value && {  // 没有 value 时，exp 为 undefined
     type: NodeTypes.SIMPLE_EXPRESSION,
     content: value.content,
     isStatic: false,
@@ -265,14 +265,14 @@ return {
 
 ### 转换器中的处理
 
-在 `transformBind` 中，当 `exp` 为 undefined 时，使用 `arg` 的内容作为 `exp`。
+在 `transformBind` 中，当 `exp` 为 undefined 时，将 `arg` 的值用作 `exp`。
 
 ```ts
 export const transformBind: DirectiveTransform = (dir, _node, context) => {
   let { exp } = dir;
   const arg = dir.arg!;
 
-  // 同名简写：:prop 等同于 :prop="prop"
+  // Same-name shorthand：:prop 等同于 :prop="prop"
   if (!exp) {
     if (arg.type !== NodeTypes.SIMPLE_EXPRESSION || !arg.isStatic) {
       // 不支持动态参数
@@ -281,7 +281,7 @@ export const transformBind: DirectiveTransform = (dir, _node, context) => {
       );
       return { props: [] };
     }
-    // 使用 arg 的内容作为 exp
+    // 使用 arg 的值作为 exp
     const propName = camelize(arg.content);
     exp = {
       type: NodeTypes.SIMPLE_EXPRESSION,
@@ -302,7 +302,7 @@ export const transformBind: DirectiveTransform = (dir, _node, context) => {
 };
 ```
 
-这样，只写 `:id` 就与 `:id="id"` 表示相同的含义。
+这样一来，只要写成 `:id`，就与 `:id="id"` 具有相同的含义。
 
 下次，我们将实现 v-on。
 

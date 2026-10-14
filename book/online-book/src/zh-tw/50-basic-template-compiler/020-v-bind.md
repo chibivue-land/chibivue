@@ -230,7 +230,7 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 
 看起來很棒！
 
-## 同名簡寫（Vue 3.4+）
+## Same-name Shorthand (Vue 3.4+)
 
 從 Vue 3.4 開始，當屬性名稱與變數名稱相同時，可以使用簡寫語法。
 
@@ -244,7 +244,7 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 
 若要實作此功能，需要修改解析器與轉換器。
 
-### 解析器的處理
+### 解析器中的處理
 
 當省略 `:prop` 這類寫法的值時，`exp` 會是 undefined。
 
@@ -263,7 +263,7 @@ return {
 };
 ```
 
-### 轉換器的處理
+### 轉換器中的處理
 
 當 `transformBind` 中的 `exp` 為 undefined 時，使用 `arg` 的內容作為 `exp`。
 
@@ -272,7 +272,7 @@ export const transformBind: DirectiveTransform = (dir, _node, context) => {
   let { exp } = dir;
   const arg = dir.arg!;
 
-  // 同名簡寫：:prop 與 :prop="prop" 相同
+  // Same-name shorthand：:prop 等同于 :prop="prop"
   if (!exp) {
     if (arg.type !== NodeTypes.SIMPLE_EXPRESSION || !arg.isStatic) {
       // 不支援動態參數
@@ -281,7 +281,7 @@ export const transformBind: DirectiveTransform = (dir, _node, context) => {
       );
       return { props: [] };
     }
-    // 使用 arg 的內容作為 exp
+    // 使用 arg 的值作為 exp
     const propName = camelize(arg.content);
     exp = {
       type: NodeTypes.SIMPLE_EXPRESSION,
@@ -302,7 +302,7 @@ export const transformBind: DirectiveTransform = (dir, _node, context) => {
 };
 ```
 
-如此一來，只要寫成 `:id`，就能表達與 `:id="id"` 相同的含義。
+如此一來，只要寫成 `:id`，就與 `:id="id"` 具有相同的含義。
 
 下次，我們將實作 v-on。
 

@@ -244,7 +244,7 @@ Vue 3.4 supports shorthand syntax when the attribute name and variable name are 
 
 To implement this feature, we need to modify the parser and transformer.
 
-### Parser Modification
+### Handling in the Parser
 
 When the value is omitted, as in `:prop`, `exp` will be undefined.
 
@@ -263,7 +263,7 @@ return {
 };
 ```
 
-### Transformer Modification
+### Handling in the Transformer
 
 In `transformBind`, when `exp` is undefined, use the contents of `arg` as `exp`.
 
