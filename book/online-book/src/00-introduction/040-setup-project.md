@@ -69,26 +69,29 @@ We will promptly start with a simple implementation of Vue.js. Here are some poi
 Now, let's quickly move on to setting up the environment! \
 I'll list the tools and versions we'll be using:
 
-- Runtime: [Node.js](https://nodejs.org/en) v24
+- Runtime: [Node.js](https://nodejs.org/en) v26
 - Language: [TypeScript](https://www.typescriptlang.org/)
-- Package Manager: [pnpm](https://pnpm.io/) v10
+- Package Manager: [pnpm](https://pnpm.io/) v12
 - Build Tool: [Vite](https://vite.dev/) v8
 - Toolchain: [Vite+](https://viteplus.dev/guide/)
-
-## Installing Node.js
-
-Most of you are probably familiar with this step. Please set it up on your own. We will skip the detailed explanation here.
-
-## Installing pnpm
-
-Many of you might typically use npm or yarn. For this book, we will be using pnpm, so please install it as well. The commands are mostly similar to npm.
-https://pnpm.io/installation
 
 ## Installing Vite+
 
 In this book, we use the `vp` command from Vite+ to create the project and start the dev server.  
-Please install it as well.  
+Please install it first.  
 https://viteplus.dev/guide/
+
+## Installing Node.js and pnpm
+
+Node.js and pnpm are also managed with Vite+ (`vp env`).  
+For this book, we will be using pnpm. Many of you might typically use npm or yarn, but the commands are mostly similar to npm.
+
+```sh
+vp env use 26 pnpm@12
+```
+
+This activates Node.js v26 and pnpm v12 for the current shell session, downloading them if needed.  
+https://viteplus.dev/guide/env
 
 
 ## Creating the Project

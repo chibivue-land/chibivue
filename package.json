@@ -17,7 +17,7 @@
     "@babel/types": "^7.29.7",
     "@iconify-json/mdi": "^1.2.3",
     "@ox-content/vite-plugin": "3.2.13",
-    "@types/node": "^25.9.2",
+    "@types/node": "^26.6.5",
     "@typescript/native-preview": "7.0.0-dev.20260609.1",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vitest/browser-playwright": "5.0.3",
@@ -40,13 +40,15 @@
     "vitest": "catalog:",
     "vue": "^3.5.35"
   },
-  "engines": {
-    "node": ">=24"
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "26.11.1",
+      "onFail": "download"
+    }
   },
-  "packageManager": "pnpm@10.28.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
-  }
+  "engines": {
+    "node": ">=26"
+  },
+  "packageManager": "pnpm@12.11.2"
 }
