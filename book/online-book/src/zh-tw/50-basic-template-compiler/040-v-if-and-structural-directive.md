@@ -414,9 +414,9 @@ export type ParentNode = RootNode | ElementNode | IfBranchNode
 <p v-else>{{ n }}</p>
 ```
 
-如果有像上面這樣的多個 `ElementNode`，就必須把從 `v-if` 到 `v-else` 的部分產生為一個 `IfNode`。
+如果有像上面這樣的多個 ElementNode，就必須將從 v-if 到 v-else 的整段內容生成為一個 IfNode。
 
-當第一個 v-if 匹配時，我們會一邊判斷後續 Node 是否為 v-else-if 或 v-else，一邊產生 IfNode。
+如果第一個 `v-if` 匹配，我們需要在檢查後續節點是否為 `v-else-if` 或 `v-else` 的同時產生 `IfNode`。
 
 讓我們首先實作整體結構，使用我們之前實作的 `createStructuralDirectiveTransform`。
 

@@ -122,7 +122,7 @@ Now that we have grasped the flow, let's confirm what kind of Node we will handl
 Ultimately, we will handle the following Nodes.
 https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/packages/compiler-core/src/ast.ts#L43C1-L51C23
 
-The Nodes whose names start with "JS," together with VNODE_CALL, form the AST focused on the output (hereafter referred to as CodegenNode).
+The Nodes whose names start with "JS", together with VNODE_CALL, form the AST focused on the output (hereafter referred to as CodegenNode).
 However, CodegenNode is not composed entirely of these Nodes; it also includes ElementNode, InterpolationNode, and others.
 
 ```ts

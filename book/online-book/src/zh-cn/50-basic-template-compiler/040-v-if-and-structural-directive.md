@@ -414,7 +414,7 @@ export type ParentNode = RootNode | ElementNode | IfBranchNode
 <p v-else>{{ n }}</p>
 ```
 
-如果存在像上面这样的多个 `ElementNode`，就需要把从 `v-if` 到 `v-else` 的部分生成为一个 `IfNode`。
+如果存在像上面这样的多个 ElementNode，就需要将从 v-if 到 v-else 的整段内容生成为一个 IfNode。
 
 如果第一个 `v-if` 匹配，我们需要在检查后续节点是否为 `v-else-if` 或 `v-else` 的同时生成 `IfNode`。
 

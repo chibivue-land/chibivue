@@ -414,7 +414,7 @@ By "several", I mean that this time we are not transforming one Node into a diff
 <p v-else>{{ n }}</p>
 ```
 
-When there are multiple `ElementNode`s like the ones above, we need to generate a single `IfNode` that covers from `v-if` through `v-else`.
+When there are multiple ElementNodes like the ones above, we need to generate a single IfNode that covers from v-if through v-else.
 
 If the first `v-if` matches, we need to generate the `IfNode` while checking if the subsequent nodes are `v-else-if` or `v-else`.
 

@@ -122,8 +122,7 @@ type TemplateChildNode = ElementNode | InterpolationNode | TextNode
 最終會處理以下 Node。
 https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/packages/compiler-core/src/ast.ts#L43C1-L51C23
 
-這些以「JS」開頭的 Node 加上 VNODE_CALL，就是著重於 output 的 AST（以下稱為 CodegenNode）。
-不過，CodegenNode 並非全都只由這些 Node 構成，也會包含 ElementNode、InterpolationNode 等。
+這些以「JS」開頭的 Node 與 VNODE_CALL 構成了一個著眼於輸出的 AST（以下稱為 CodegenNode）。不過，CodegenNode 並非完全由這些 Node 構成，其中也會包含 ElementNode、InterpolationNode 等。
 
 ```ts
 export interface SimpleExpressionNode extends Node {
