@@ -76,29 +76,29 @@ Web Playground は [WebContainer](https://webcontainers.io/) を使用してい�
 さて，早速ですが環境構築からやっていきましょう！\
 一応先に今回構築する環境の内容を列挙しておきます
 
-- ランタイム: [Node.js](https://nodejs.org/en) v24
+- ランタイム: [Node.js](https://nodejs.org/en) v26
 - 言語: [TypeScript](https://www.typescriptlang.org/)
-- パッケージマネージャ: [pnpm](https://pnpm.io/) v10
+- パッケージマネージャ: [pnpm](https://pnpm.io/) v12
 - ビルドツール: [Vite](https://vite.dev/) v8
 - ツールチェーン: [Vite+](https://viteplus.dev/guide/)
-
-## Node.js インストール
-
-おそらくここは大丈夫でしょう．各自で用意してください．
-説明については省略します．
-
-## pnpm のインストール
-
-もしかすると普段は npm や yarn を使っている方が多いかもしれません．  
-今回は pnpm を使っていくので，こちらの方も合わせてインストールしてください．  
-基本的なコマンドは npm とほとんど一緒です．  
-https://pnpm.io/installation
 
 ## Vite+ のインストール
 
 本書では，プロジェクトの作成や開発サーバーの起動に Vite+ の `vp` コマンドを使います．  
-こちらも合わせてインストールしてください．  
+まずはこちらをインストールしてください．  
 https://viteplus.dev/guide/
+
+## Node.js と pnpm のインストール
+
+Node.js と pnpm も Vite+ (`vp env`) で管理します．  
+もしかすると普段は npm や yarn を使っている方が多いかもしれません．今回は pnpm を使っていきますが，基本的なコマンドは npm とほとんど一緒です．
+
+```sh
+vp env use 26 pnpm@12
+```
+
+これで現在のシェルセッションで Node.js v26 と pnpm v12 が使われるようになります．(手元にない場合は自動でダウンロードされます)  
+https://viteplus.dev/guide/env
 
 
 ## プロジェクトの作成

@@ -20,7 +20,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
@@ -60,7 +60,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
@@ -80,7 +80,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
@@ -100,7 +100,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
@@ -120,7 +120,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
@@ -143,7 +143,7 @@ jobs:
       - name: Setup Vite+
         uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "24"
+          node-version-file: package.json
           cache: true
 
       - name: Install dependencies
