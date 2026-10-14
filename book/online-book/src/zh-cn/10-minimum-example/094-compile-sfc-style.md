@@ -33,14 +33,14 @@ export default function myPlugin() {
 }
 ```
 
-可以在 `resolveId` 中任意设置要解析的模块 id，再由 `load` 处理该 id，从而加载模块。\
-上例中的 `virtual:my-module` 文件实际并不存在，但写成
+可以在 resolveId 中任意设置要解析的模块 id，再由 load 处理该 id，从而加载模块。\
+上例中的 `virtual:my-module` 文件实际并不存在，
 
 ```ts
 import { msg } from 'virtual:my-module'
 ```
 
-时，就会加载 `export const msg = "from virtual module"`。
+但是如果你像上面这样写时，就会加载 `export const msg = "from virtual module"`。
 
 [参考](https://cn.vite.dev/guide/api-plugin)
 

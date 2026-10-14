@@ -138,7 +138,7 @@ const nextVNode = component.render()
 patch(prevVNode, nextVNode)
 ```
 
-## 我們了解了元件的結構，以及如何實作元件之間的互動
+## 我們了解了元件的結構以及如何實作元件之間的通訊
 
 ```ts
 export interface ComponentInternalInstance {
@@ -196,7 +196,7 @@ const app = createApp({
 })
 ```
 
-## 我們了解了編譯器是什麼，以及模板功能如何實作
+## 我們了解了編譯器是什麼，以及模板功能是如何實作的
 
 透過了解編譯器是什麼並實作模板編譯器，我獲得了如何實作更原始的類似 HTML 的實作以及如何實作 Vue 特定功能（如 Mustache 語法）的理解。
 

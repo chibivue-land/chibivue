@@ -33,14 +33,14 @@ export default function myPlugin() {
 }
 ```
 
-在 `resolveId` 中任意設定要解析的模組 id，並在 `load` 中處理該 id，就能載入模組。\
-在上面的範例中，名為 `virtual:my-module` 的檔案實際上並不存在，但如果像下面這樣編寫，
+在 resolveId 中任意設定要解析的模組 id，並在 load 中處理該 id，就能載入模組。\
+在上面的範例中，名為 `virtual:my-module` 的檔案實際上並不存在，
 
 ```ts
 import { msg } from 'virtual:my-module'
 ```
 
-就會載入 `export const msg = "from virtual module"`。
+但是如果你像上面這樣寫時，就會載入 `export const msg = "from virtual module"`。
 
 [參考](https://vite.dev/guide/api-plugin)
 

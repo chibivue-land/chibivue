@@ -33,14 +33,14 @@ export default function myPlugin() {
 }
 ```
 
-By assigning an arbitrary module id in `resolveId` and handling that id in `load`, you can load the module.  
-In the example above, the file `virtual:my-module` does not actually exist, but if you write:
+You can load a module by assigning an arbitrary ID to the module you want to resolve in resolveId, then handling that ID in load.  
+In the example above, the file `virtual:my-module` does not actually exist,
 
 ```ts
 import { msg } from 'virtual:my-module'
 ```
 
-then `export const msg = "from virtual module"` is loaded.
+but if you write it like the above, `export const msg = "from virtual module"` is loaded.
 
 [Reference](https://vite.dev/guide/api-plugin)
 
