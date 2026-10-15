@@ -65,11 +65,9 @@
 }
 
 /**
- * Current chapter in the sidebar. The active wash uses 20% of the site
- * primary mixed with transparency, so the row follows the light and dark mint.
- */
-.nav-link.active,
-.nav-link.active:hover {
+ * Current chapter in the sidebar
+ * -------------------------------------------------------------------------- */
+.nav-link.active {
   --octc-color-bg-alt: color-mix(in srgb, var(--octc-color-primary) 20%, transparent);
 }
 
