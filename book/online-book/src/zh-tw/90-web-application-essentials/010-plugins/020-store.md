@@ -270,7 +270,7 @@ interface StoreOptions<Id extends string, S extends StateTree, G extends _Getter
 ```ts
 function useStore(outerStore?: Store | null): StoreGeneric {
   const hasContext = hasInjectionContext();
-  // 從 injection context 取得 store，若不存在則退回 activeStore
+  // 從 injection context 取得 store；若不存在，則回退至 activeStore
   outerStore =
     outerStore || (hasContext ? inject(storeSymbol, null) : null);
 
@@ -302,13 +302,13 @@ function useStore(outerStore?: Store | null): StoreGeneric {
 1. 使用 `hasInjectionContext()` 確認是否存在 injection context
 2. 若存在 context，便透過 `inject(storeSymbol)` 取得根 store；否則退回 `activeStore`
 3. 若 store 尚未建立，便透過 `createSetupStore` 或 `createOptionsStore` 建立
-4. 回傳建立好的 store
+4. 回傳已經建立的 store
 
 <KawaikoNote variant="warning" title="hasInjectionContext 的重要性">
 
-`hasInjectionContext()` 在 SSR 中扮演重要角色。
-setup 函式內存在 injection context，因此能透過 `inject()` 取得每個請求各自的 store。
-若不存在 context（例如在其他 store 內部），則會退回 `activeStore`。
+`hasInjectionContext()` 在 SSR 中發揮著重要作用。
+在 setup 函式中存在 injection context，因此可以透過 `inject()` 取得每個請求的 store。
+沒有 context 時（例如在其他 store 內部），會回退到 `activeStore`。
 
 </KawaikoNote>
 
@@ -330,7 +330,7 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
 
     // 將 ref 或 reactive 值同步到根 state
     if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
-      // SSR hydration：若有初始狀態便加以還原
+      // SSR hydration：如果有初始狀態，則還原
       if (initialState && key in initialState) {
         if (isRef(prop)) {
           prop.value = initialState[key];
@@ -395,7 +395,7 @@ function createOptionsStore<
   const initialState = store.state.value[id] as S | undefined;
 
   function setup() {
-    // 若沒有初始狀態，便執行 state()
+    // 如果沒有初始狀態，則執行 state()
     if (!initialState) {
       store.state.value[id] = stateFn ? stateFn() : {};
     }
@@ -459,13 +459,13 @@ function createOptionsStore<
 }
 ```
 
-重點如下：
+要點：
 
-- 狀態儲存在 `store.state.value[id]`（與 Pinia 採用相同模式）
-- 使用 `toRefs` 將狀態轉換為 ref，以維持響應式
+- 狀態儲存在 `store.state.value[id]` 中（與 Pinia 的模式相同）
+- 使用 `toRefs` 將狀態轉換為 ref，並保持響應式
 - 使用 `store._e.run()` 在 EffectScope 內執行 setup
-- 將 `getters` 轉換為 `computed`，並以 `markRaw` 避免響應式轉換
-- 將 `$state` 定義為 getter/setter，以便存取完整狀態
+- 將 `getters` 轉換為 `computed`，並透過 `markRaw` 避免響應式化
+- 將 `$state` 定義為 getter/setter，以存取整個狀態
 
 ## 使用範例
 

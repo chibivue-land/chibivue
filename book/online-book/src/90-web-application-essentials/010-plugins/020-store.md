@@ -301,14 +301,14 @@ function useStore(outerStore?: Store | null): StoreGeneric {
 Processing flow:
 1. Check whether an injection context exists with `hasInjectionContext()`
 2. If a context exists, get the root store with `inject(storeSymbol)`; otherwise, fall back to `activeStore`
-3. If store doesn't exist, create with `createSetupStore` or `createOptionsStore`
+3. If the store doesn't yet exist, create it with `createSetupStore` or `createOptionsStore`
 4. Return the created store
 
 <KawaikoNote variant="warning" title="Why hasInjectionContext matters">
 
 `hasInjectionContext()` plays an important role in SSR.
 Inside a setup function, an injection context exists, so `inject()` can retrieve the
-store for the current request.
+store for each request.
 When there is no context, such as inside another store, the implementation falls back
 to `activeStore`.
 
@@ -330,9 +330,9 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
   for (const key in setupStore) {
     const prop = setupStore[key];
 
-    // Sync ref or reactive values with the root state
+    // Sync a ref or reactive value to the root state
     if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
-      // SSR hydration: restore an existing initial state
+      // SSR hydration: restore the initial state if it exists
       if (initialState && key in initialState) {
         if (isRef(prop)) {
           prop.value = initialState[key];
@@ -340,7 +340,7 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
           Object.assign(prop, initialState[key]);
         }
       }
-      // Sync with the root state
+      // Sync to the root state
       store.state.value[id][key] = prop;
     }
   }
@@ -373,7 +373,7 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
 
 Key points:
 - Run setup within the EffectScope using `store._e.run()`
-- Sync ref/reactive values with `store.state.value[id]` for SSR
+- Sync ref/reactive values to `store.state.value[id]` for SSR
 - During hydration, restore values from `initialState`
 
 <KawaikoNote variant="warning" title="$reset Limitation">
@@ -466,8 +466,7 @@ Key points:
 - State is stored in `store.state.value[id]`, following the same pattern as Pinia
 - `toRefs` converts state properties to refs while preserving reactivity
 - Setup runs within the EffectScope using `store._e.run()`
-- `getters` are converted to `computed`
-- `markRaw` prevents computed getters themselves from being made reactive
+- `getters` are converted to `computed`, and `markRaw` prevents the computed values from being made reactive
 - `$state` is defined as a getter/setter for access to the entire state
 
 ## Usage Examples

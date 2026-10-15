@@ -270,7 +270,7 @@ interface StoreOptions<Id extends string, S extends StateTree, G extends _Getter
 ```ts
 function useStore(outerStore?: Store | null): StoreGeneric {
   const hasContext = hasInjectionContext();
-  // 从 injection context 获取 store，如果没有则回退到 activeStore
+  // 从 injection context 获取 store；若不存在，则回退到 activeStore
   outerStore =
     outerStore || (hasContext ? inject(storeSymbol, null) : null);
 
@@ -307,8 +307,8 @@ function useStore(outerStore?: Store | null): StoreGeneric {
 <KawaikoNote variant="warning" title="hasInjectionContext 的重要性">
 
 `hasInjectionContext()` 在 SSR 中发挥着重要作用。
-在 setup 函数中存在 injection context，因此可以通过 `inject()` 获取每个请求对应的 store。
-没有 context 时（例如在其他 store 内部），则回退到 `activeStore`。
+在 setup 函数中存在 injection context，因此可以通过 `inject()` 获取每个请求的 store。
+没有 context 时（例如在其他 store 内部），会回退到 `activeStore`。
 
 </KawaikoNote>
 
@@ -330,7 +330,7 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
 
     // 将 ref 或 reactive 值同步到根 state
     if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
-      // SSR hydration：如果存在初始状态则恢复
+      // SSR hydration：如果有初始状态，则恢复
       if (initialState && key in initialState) {
         if (isRef(prop)) {
           prop.value = initialState[key];
@@ -369,7 +369,7 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
 }
 ```
 
-要点如下：
+要点：
 
 - 使用 `store._e.run()` 在 EffectScope 内执行 setup
 - 将 ref/reactive 值同步到 `store.state.value[id]`（用于 SSR）
@@ -396,7 +396,7 @@ function createOptionsStore<
   const initialState = store.state.value[id] as S | undefined;
 
   function setup() {
-    // 如果没有初始状态则执行 state()
+    // 如果没有初始状态，则执行 state()
     if (!initialState) {
       store.state.value[id] = stateFn ? stateFn() : {};
     }
@@ -460,7 +460,7 @@ function createOptionsStore<
 }
 ```
 
-要点如下：
+要点：
 
 - 状态保存在 `store.state.value[id]` 中（与 Pinia 的模式相同）
 - 使用 `toRefs` 将状态转换为 ref，并保持响应式
