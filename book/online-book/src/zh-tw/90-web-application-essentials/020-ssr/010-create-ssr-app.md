@@ -8,6 +8,14 @@
 2. **更快的首次顯示**：瀏覽器無需等待 JavaScript 執行即可顯示 HTML
 3. **效能改善**：在低速裝置或網路環境下特別有效
 
+<KawaikoNote variant="question" title="SSR 與 SPA 的差異">
+
+在一般的 SPA 中，用戶端會收到空的 HTML，再由 JavaScript 建立 DOM。
+在 SSR 中，伺服器會傳送在伺服器端渲染完成的 HTML，因此使用者可以立即看到內容。
+重點是無需等待 JavaScript 下載和執行就能顯示內容！
+
+</KawaikoNote>
+
 ## 套件結構
 
 chibivue 的 SSR 實作在 `@chibivue/server-renderer` 套件中提供。
@@ -191,6 +199,14 @@ export function createBuffer(): { getBuffer: () => SSRBuffer; push: PushFn } {
 1. 連續字串自動拼接（記憶體效率）
 2. `appendable` 標誌追蹤是否可以拼接
 3. 如果有非同步元素，設定 `hasAsync` 標誌
+
+<KawaikoNote variant="funny" title="緩衝區的小巧思">
+
+與其將「你好」和「世界」兩個連續字串分開放入陣列，
+不如將它們合併成「你好世界」，這樣記憶體效率更高。
+`appendable` 標誌會自動完成這件事！
+
+</KawaikoNote>
 
 ## 元件渲染
 
@@ -549,6 +565,14 @@ function applySSRDirectives(
 
 ## 跳脫處理
 
+<KawaikoNote variant="warning" title="安全性非常重要！">
+
+在 SSR 中，使用者輸入可能會直接輸出到 HTML。
+若忽略跳脫處理，就可能成為 XSS（跨網站指令碼）攻擊的目標。
+`escapeHtml` 是 SSR 不可或缺的安全措施！
+
+</KawaikoNote>
+
 防止 XSS 的 HTML 跳脫。
 
 ```ts
@@ -644,6 +668,14 @@ unrollBuffer(buffer)
   ↓
 HTML 字串
 ```
+
+<KawaikoNote variant="surprise" title="SSR 的基礎已經完成了！">
+
+現在可以使用 `renderToString` 將 VNode 轉換為 HTML 字串了。
+將它與下一節介紹的 hydration 結合起來，
+就能在享有 SSR 優勢的同時實現互動式 SPA！
+
+</KawaikoNote>
 
 ## 總結
 
