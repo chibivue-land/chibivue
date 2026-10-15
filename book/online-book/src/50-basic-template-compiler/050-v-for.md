@@ -525,8 +525,11 @@ Since we assume local variables defined as function arguments, we will convert t
 ```ts
 // Convert asParams like function arguments
 const source = `(${rawExp})${asParams ? `=>{}` : ``}`
+```
 
-// walkIdentifiers is slightly more complex.
+The `walkIdentifiers` function is slightly more complex.
+
+```ts
 export function walkIdentifiers(
   root: Node,
   onIdentifier: (node: Identifier) => void,

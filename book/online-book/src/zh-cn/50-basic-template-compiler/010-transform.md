@@ -119,6 +119,11 @@ type TemplateChildNode = ElementNode | InterpolationNode | TextNode
 
 现在我们已经掌握了流程，让我们确认我们将处理什么样的节点（我们想要转换什么样的节点）。我将在枚举它们并提供注释的同时进行解释。请参考源代码获取准确信息，因为某些部分被省略了。
 
+最终将处理以下 Node。
+https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/packages/compiler-core/src/ast.ts#L43C1-L51C23
+
+这些以“JS”开头的 Node 与 VNODE_CALL 构成了一个着眼于 output 的 AST（下文称为 CodegenNode）。不过，CodegenNode 并非完全由这些 Node 构成，其中还会包含 ElementNode、InterpolationNode 等。
+
 ```ts
 export interface SimpleExpressionNode extends Node {
   type: NodeTypes.SIMPLE_EXPRESSION

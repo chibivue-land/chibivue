@@ -405,7 +405,16 @@ export type ParentNode = RootNode | ElementNode | IfBranchNode
 
 想法是基於幾個 `ElementNode` 產生一個 `IfNode`。
 
-所謂"幾個"，在這種情況下，意味著如果有多個 `ElementNode`，我們需要產生一個包含從 `v-if` 到 `v-else` 語句的單個 `IfNode`。
+這裡之所以說「幾個」，是因為這次並不是把某一個 Node 轉換成另一個 Node。
+
+```html
+<p v-if="n % 5 === 0 && n % 3 === 0">FizzBuzz</p>
+<p v-else-if="n % 5 === 0">Buzz</p>
+<p v-else-if="n % 3 === 0">Fizz</p>
+<p v-else>{{ n }}</p>
+```
+
+如果有像上面這樣的多個 ElementNode，就必須將從 v-if 到 v-else 的整段內容生成為一個 IfNode。
 
 如果第一個 `v-if` 匹配，我們需要在檢查後續節點是否為 `v-else-if` 或 `v-else` 的同時產生 `IfNode`。
 
