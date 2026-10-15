@@ -5,6 +5,7 @@ import { nav } from "./config/nav";
 import { sidebar } from "./config/sidebar";
 import { home } from "./theme/home";
 import { kawaikoNote } from "./theme/kawaiko-note";
+import { localizeHeaderLogoPlugins } from "./theme/localize-header-logo";
 
 const SITE_URL = "https://book.chibivue.land";
 const DESCRIPTION = 'Writing Vue.js: Step by Step, from just one line of "Hello, World".';
@@ -26,6 +27,7 @@ export default defineConfig({
     outDir: "dist",
   },
   plugins: [
+    ...localizeHeaderLogoPlugins(),
     oxContent({
       srcDir: "src",
       outDir: "dist",
