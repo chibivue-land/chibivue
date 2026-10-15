@@ -10,9 +10,9 @@
 
 <KawaikoNote variant="question" title="SSR 與 SPA 的差異">
 
-在一般的 SPA 中，使用者端會收到空的 HTML，再由 JavaScript 建立 DOM。
-SSR 則會傳送伺服器上完成的 HTML，因此使用者能立即看到內容。
-重點是無需等待 JavaScript 下載及執行就能顯示內容！
+在一般的 SPA 中，用戶端會收到空的 HTML，再由 JavaScript 建立 DOM。
+在 SSR 中，伺服器會傳送在伺服器端渲染完成的 HTML，因此使用者可以立即看到內容。
+重點是無需等待 JavaScript 下載和執行就能顯示內容！
 
 </KawaikoNote>
 
@@ -200,11 +200,11 @@ export function createBuffer(): { getBuffer: () => SSRBuffer; push: PushFn } {
 2. `appendable` 標誌追蹤是否可以拼接
 3. 如果有非同步元素，設定 `hasAsync` 標誌
 
-<KawaikoNote variant="funny" title="緩衝區的巧妙設計">
+<KawaikoNote variant="funny" title="緩衝區的小巧思">
 
 與其將「你好」和「世界」兩個連續字串分開放入陣列，
-合併成「你好世界」會更節省記憶體。
-`appendable` 標誌會自動完成這項最佳化！
+不如將它們合併成「你好世界」，這樣記憶體效率更高。
+`appendable` 標誌會自動完成這件事！
 
 </KawaikoNote>
 
@@ -567,8 +567,8 @@ function applySSRDirectives(
 
 <KawaikoNote variant="warning" title="安全性非常重要！">
 
-SSR 可能會直接將使用者輸入輸出為 HTML。
-若忽略跳脫處理，應用程式便可能遭受 XSS（跨網站指令碼）攻擊。
+在 SSR 中，使用者輸入可能會直接輸出到 HTML。
+若忽略跳脫處理，就可能成為 XSS（跨網站指令碼）攻擊的目標。
 `escapeHtml` 是 SSR 不可或缺的安全措施！
 
 </KawaikoNote>
@@ -669,11 +669,11 @@ unrollBuffer(buffer)
 HTML 字串
 ```
 
-<KawaikoNote variant="surprise" title="SSR 的基礎完成了！">
+<KawaikoNote variant="surprise" title="SSR 的基礎已經完成了！">
 
-現在可以使用 `renderToString` 將 VNode 轉換為 HTML 字串。
-再結合下一節介紹的 hydration，
-就能同時享有 SSR 的優勢與互動式 SPA！
+現在可以使用 `renderToString` 將 VNode 轉換為 HTML 字串了。
+將它與下一節介紹的 hydration 結合起來，
+就能在享有 SSR 優勢的同時實現互動式 SPA！
 
 </KawaikoNote>
 

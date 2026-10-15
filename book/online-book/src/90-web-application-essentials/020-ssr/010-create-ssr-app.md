@@ -200,7 +200,7 @@ Key points:
 2. `appendable` flag tracks whether concatenation is possible
 3. `hasAsync` flag is set if there are async elements
 
-<KawaikoNote variant="funny" title="A clever buffer optimization">
+<KawaikoNote variant="funny" title="A clever buffer trick">
 
 For consecutive strings such as "Hello" and "World," combining them into
 "HelloWorld" is more memory-efficient than storing them separately in an array.

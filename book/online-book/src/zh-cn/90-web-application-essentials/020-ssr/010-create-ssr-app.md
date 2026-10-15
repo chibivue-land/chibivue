@@ -10,9 +10,9 @@
 
 <KawaikoNote variant="question" title="SSR 与 SPA 的区别">
 
-在普通的 SPA 中，客户端会收到空的 HTML，再通过 JavaScript 构建 DOM。
-在 SSR 中，服务器会发送完整的 HTML，因此用户可以立即看到内容。
-关键在于，无需等待 JavaScript 下载和执行就能显示内容！
+在普通的 SPA 中，客户端会收到空的 HTML，再由 JavaScript 构建 DOM。
+在 SSR 中，服务器会发送在服务器端渲染完成的 HTML，因此用户可以立即看到内容。
+重点是无需等待 JavaScript 下载和执行就能显示内容！
 
 </KawaikoNote>
 
@@ -200,11 +200,11 @@ export function createBuffer(): { getBuffer: () => SSRBuffer; push: PushFn } {
 2. `appendable` 标志跟踪是否可以拼接
 3. 如果有异步元素，设置 `hasAsync` 标志
 
-<KawaikoNote variant="funny" title="缓冲区的巧妙设计">
+<KawaikoNote variant="funny" title="缓冲区的小巧思">
 
-与其把“你好”和“世界”这两个连续字符串分别放入数组，
-不如将它们合并成“你好世界”，这样内存效率更高。
-`appendable` 标志会自动完成这项工作！
+与其把"你好"和"世界"这两个连续字符串分别放入数组，
+不如将它们合并成"你好世界"，这样内存效率更高。
+`appendable` 标志会自动完成这件事！
 
 </KawaikoNote>
 
@@ -669,11 +669,11 @@ unrollBuffer(buffer)
 HTML 字符串
 ```
 
-<KawaikoNote variant="surprise" title="SSR 的基础完成了！">
+<KawaikoNote variant="surprise" title="SSR 的基础已经完成了！">
 
 现在可以使用 `renderToString` 将 VNode 转换为 HTML 字符串了。
 将它与下一节介绍的 hydration 结合起来，
-就可以在享受 SSR 优势的同时实现交互式 SPA！
+就可以在享有 SSR 优势的同时实现交互式 SPA！
 
 </KawaikoNote>
 
