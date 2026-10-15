@@ -269,50 +269,95 @@ For example, in `actions` you can access state via `this.count` and getters via 
 ### useStore Function Implementation
 
 ```ts
-function useStore(outerStore?: Store | null) {
-  const currentInstance = getCurrentInstance();
-  let store = currentInstance && inject(storeSymbol);
-  if (store) setActiveStore(store);
-  store = outerStore ?? activeStore!;
+function useStore(outerStore?: Store | null): StoreGeneric {
+  const hasContext = hasInjectionContext();
+  // Get the store from the injection context, or fall back to activeStore
+  outerStore =
+    outerStore || (hasContext ? inject(storeSymbol, null) : null);
+
+  if (outerStore) setActiveStore(outerStore);
+
+  if (__DEV__ && !activeStore) {
+    throw new Error(
+      `[chibivue-store]: "getActiveStore()" was called but there was no active Store. ` +
+        `Are you trying to use a store before calling "app.use(createStore())"?`,
+    );
+  }
+
+  const store = activeStore!;
 
   if (!store._s.has(id)) {
-    if (setup) {
-      createSetupStore(id, setup, store);
+    if (isSetupStore) {
+      createSetupStore(id, setup!, store);
     } else if (options) {
       createOptionsStore(id, options, store);
     }
   }
 
-  const _store = store!._s.get(id)!;
-  return _store;
+  return store._s.get(id)!;
 }
 ```
 
 Processing flow:
-1. Get component instance with `getCurrentInstance()`
-2. Get root store with `inject(storeSymbol)`
-3. If store doesn't exist, create with `createSetupStore` or `createOptionsStore`
+1. Check whether an injection context exists with `hasInjectionContext()`
+2. If a context exists, get the root store with `inject(storeSymbol)`; otherwise, fall back to `activeStore`
+3. If the store doesn't yet exist, create it with `createSetupStore` or `createOptionsStore`
 4. Return the created store
+
+<KawaikoNote variant="warning" title="Why hasInjectionContext matters">
+
+`hasInjectionContext()` plays an important role in SSR.
+Inside a setup function, an injection context exists, so `inject()` can retrieve the
+store for each request.
+When there is no context, such as inside another store, the implementation falls back
+to `activeStore`.
+
+</KawaikoNote>
 
 ### createSetupStore (for Composition API)
 
 ```ts
 function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, store: Store) {
-  const setupStore = setup();
+  // Initialize this store's state in the root state
+  if (!store.state.value[id]) {
+    store.state.value[id] = {};
+  }
+
+  const initialState = store.state.value[id];
+  const setupStore = store._e.run(() => setup())!;
+
+  // Process the setup store's returned values
+  for (const key in setupStore) {
+    const prop = setupStore[key];
+
+    // Sync a ref or reactive value to the root state
+    if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
+      // SSR hydration: restore the initial state if it exists
+      if (initialState && key in initialState) {
+        if (isRef(prop)) {
+          prop.value = initialState[key];
+        } else {
+          Object.assign(prop, initialState[key]);
+        }
+      }
+      // Sync to the root state
+      store.state.value[id][key] = prop;
+    }
+  }
 
   const _store = reactive({
     $id: id,
     ...setupStore,
     $patch(partialState: Partial<StateTree> | ((state: StateTree) => void)) {
       if (typeof partialState === "function") {
-        partialState(setupStore);
+        partialState(store.state.value[id]);
       } else {
         for (const key in partialState) {
-          const value = setupStore[key];
+          const value = store.state.value[id][key];
           if (isRef(value)) {
             value.value = partialState[key];
           } else {
-            setupStore[key] = partialState[key];
+            store.state.value[id][key] = partialState[key];
           }
         }
       }
@@ -325,6 +370,11 @@ function createSetupStore<Id extends string>(id: Id, setup: () => StateTree, sto
   store._s.set(id, _store);
 }
 ```
+
+Key points:
+- Run setup within the EffectScope using `store._e.run()`
+- Sync ref/reactive values to `store.state.value[id]` for SSR
+- During hydration, restore values from `initialState`
 
 <KawaikoNote variant="warning" title="$reset Limitation">
 
@@ -344,44 +394,67 @@ function createOptionsStore<
 >(id: Id, options: Omit<StoreOptions<Id, S, G, A>, "id">, store: Store) {
   const { state: stateFn, getters, actions } = options;
 
-  const initialState = stateFn ? stateFn() : ({} as S);
-  const state = reactive({ ...initialState }) as S;
+  // Get the initial state from the root state (for SSR hydration)
+  const initialState = store.state.value[id] as S | undefined;
 
-  // Create getters as computed properties
-  const computedGetters: Record<string, ComputedRef<unknown>> = {};
-  if (getters) {
-    for (const key in getters) {
-      const getter = getters[key];
-      computedGetters[key] = computed(() => getter.call(state, state));
+  function setup() {
+    // Execute state() when no initial state exists
+    if (!initialState) {
+      store.state.value[id] = stateFn ? stateFn() : {};
     }
-  }
 
-  // Bind actions to state
-  const boundActions: Record<string, (...args: any[]) => any> = {};
-  if (actions) {
-    for (const key in actions) {
-      const action = actions[key];
-      boundActions[key] = function (this: any, ...args: any[]) {
-        return action.apply(
-          { ...state, ...computedGetters, ...boundActions },
-          args,
+    const localState = toRefs(store.state.value[id]);
+
+    // Convert getters to computed values
+    const computedGetters: Record<string, ComputedRef<unknown>> = {};
+    if (getters) {
+      for (const key in getters) {
+        const getter = getters[key];
+        computedGetters[key] = markRaw(
+          computed(() => {
+            setActiveStore(store);
+            const _store = store._s.get(id)!;
+            return getter.call(_store, _store);
+          }),
         );
-      };
+      }
     }
+
+    return {
+      ...localState,
+      ...computedGetters,
+      ...actions,
+    };
   }
+
+  const setupStore = store._e.run(() => setup())!;
 
   const _store = reactive({
     $id: id,
-    $state: state,
-    ...state,
-    ...computedGetters,
+    ...setupStore,
     ...boundActions,
-    $patch(partialState: Partial<S> | ((state: S) => void)) { /* ... */ },
+    $patch(partialState: Partial<S> | ((state: S) => void)) {
+      if (typeof partialState === "function") {
+        partialState(store.state.value[id] as S);
+      } else {
+        mergeReactiveObjects(store.state.value[id], partialState);
+      }
+    },
     $reset() {
       const newState = stateFn ? stateFn() : ({} as S);
-      for (const key in newState) {
-        (state as any)[key] = newState[key];
-      }
+      this.$patch(($state: S) => {
+        Object.assign($state, newState);
+      });
+    },
+  });
+
+  // Define $state as a getter/setter
+  Object.defineProperty(_store, "$state", {
+    get: () => store.state.value[id],
+    set: (state) => {
+      _store.$patch(($state: S) => {
+        Object.assign($state, state);
+      });
     },
   });
 
@@ -390,10 +463,11 @@ function createOptionsStore<
 ```
 
 Key points:
-- `state` is made reactive with `reactive`
-- `getters` are converted to `computed`
-- `actions` are bound to access state and getters
-- `$reset` re-executes the `state` function to restore initial values
+- State is stored in `store.state.value[id]`, following the same pattern as Pinia
+- `toRefs` converts state properties to refs while preserving reactivity
+- Setup runs within the EffectScope using `store._e.run()`
+- `getters` are converted to `computed`, and `markRaw` prevents the computed values from being made reactive
+- `$state` is defined as a getter/setter for access to the entire state
 
 ## Usage Examples
 
