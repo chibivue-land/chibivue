@@ -65,6 +65,13 @@
 }
 
 /**
+ * Current chapter in the sidebar
+ * -------------------------------------------------------------------------- */
+.nav-link.active {
+  --octc-color-bg-alt: color-mix(in srgb, var(--octc-color-primary) 20%, transparent);
+}
+
+/**
  * Header
  * -------------------------------------------------------------------------- */
 
