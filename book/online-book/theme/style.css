@@ -283,6 +283,11 @@
   background: #0f1724;
 }
 
+.content video {
+  /* Screen recordings are often wider than the column; keep them inside it. */
+  max-width: 100%;
+}
+
 .content img[src*="/figures/_brand/"],
 .content img.author-avatar,
 .content img.sponsors-image {
